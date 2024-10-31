@@ -22,6 +22,7 @@ const config = {
     extend: {
       fontFamily: {
         lexend: ["var(--font-lexend)", ...fontFamily.sans],
+        airnt: ["var(--font-airnt)", ...fontFamily.sans],
         code: ["var(--font-code)", ...fontFamily.sans],
       },
       colors: {

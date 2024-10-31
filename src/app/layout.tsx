@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
+import localFont from "next/font/local";
+
 import "@/styles/globals.css";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -7,6 +9,11 @@ import App from "@/components/app";
 import Head from "next/head";
 
 const lexend = Lexend({ subsets: ["latin"], variable: "--font-lexend" });
+const airnt = localFont({
+  src: "../fonts/Airnt.ttf",
+  variable: "--font-airnt",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -30,8 +37,8 @@ export default function RootLayout({
       </Head>
       <body
         className={cn(
-          "min-h-screen antialiased font-lexend bg-background",
-          lexend.variable
+          "min-h-screen antialiased font-airnt bg-background",
+          airnt.variable
         )}
       >
         <App>{children}</App>
