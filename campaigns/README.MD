@@ -76,8 +76,6 @@ The following steps outline the process of registering for and conducting a succ
 
 A review is considered successful if it follows the process outlined above and is ultimately merged to the main repository. In particular, this requires that:
 
-Here's the formatted checklist in markdown:
-
 - [ ] Registration of a protocol/chain by submitting a draft PR (not yet in review)
 - [ ] Complete and submit final PR with accurate review within 2 weeks after registration
 - [ ] Assist DeFi Collective team with final corrections and cleanups, merge PR within 1 week after final PR submission
