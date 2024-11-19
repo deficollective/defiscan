@@ -8,7 +8,7 @@ DeFiScan is built and maintained by the [DeFi Collective](https://DeFiCollective
 
 ## 🌟 Community Program
 
-Join DeFiScan’s Community Review Program and help enhance the coverage of Decentralization of DeFi protocols! 💪
+💪 Join DeFiScan’s Community Review Program and help enhance the coverage of Decentralization of DeFi protocols!
 
 💰 Total Prize Pool: 10,000 LUSD! Each successful review earns you 500 LUSD. Your contributions will make a real impact on the DeFi ecosystem! ✨
 
