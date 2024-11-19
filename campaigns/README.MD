@@ -4,7 +4,7 @@ Are you deep in the trenches, knowing the protocols you use in and out? It’s t
 
 After the successful release of [DeFiScan](https://defiscan.info) and the “How much De is in my Fi” competition last week during Devcon, we will now shift gears and focus on increasing coverage of the reviewed DeFi protocols. And how better to do this than through an incentivized community program with a total prize pool of 10,000 LUSD!
 
-This article outlines the details of the program.
+## TL;DR
 
 - Key Information
 - The total payout for community submitted protocol reviews is LUSD 10,000
@@ -18,6 +18,9 @@ This article outlines the details of the program.
 ## Scope
 
 At this stage, and although all submissions are welcome, only the reviews of the following protocols (on the chains indicated in brackets) are eligible for the prize payout:
+
+<details>
+<summary>Protocols</summary>
 
 - Lido (Ethereum)
 - Aave v3 (Ethereum, Arbitrum, Avalanche, Polygon, Base, Optimism, Scroll, BSC, Gnosis)
@@ -46,6 +49,8 @@ At this stage, and although all submissions are welcome, only the reviews of the
 - Curve DEX (Ethereum, Arbitrum)
 - Curve crvUSD (Ethereum)
 
+</details>
+
 ## Getting Started
 
 The following steps outline the process of registering for and conducting a successful protocol review. Make sure you understand and follow this process:
@@ -68,7 +73,7 @@ Here's the formatted checklist in markdown:
 - [ ] Complete and submit final PR with accurate review within 2 weeks after registration
 - [ ] Assist DeFi Collective team with final corrections and cleanups, merge PR within 1 week after final PR submission
 
-" The prize of 500 LUSD is only awarded to successful reviews and paid out in LUSD on Optimism.
+> The prize of 500 LUSD is only awarded to successful reviews and paid out in LUSD on Optimism.
 
 ## Final Notes
 
