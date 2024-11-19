@@ -6,7 +6,7 @@ github: "https://github.com/projectgithub"
 defillama_slug: "the slug used by https://defillama.com"
 chain: "the name of the chain on which the protocol is deployed"
 stage: 0
-risks: ["x","x","x","x","x"]
+risks: ["x", "x", "x", "x", "x"]
 author: ["author-1", "author-2"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
@@ -22,23 +22,23 @@ Add a summary of the protocols. What is it? What does it do? etc.
 
 ## Chain
 
-See http://localhost:3000/learn-more#chain for more guidance.
+See http://defiscan.info/learn-more#chain for more guidance.
 
 ## Upgradeability
 
-See http://localhost:3000/learn-more#upgradability for more guidance.
+See http://defiscan.info/learn-more#upgradability for more guidance.
 
 ## Autonomy
 
-See http://localhost:3000/learn-more#autonomy for more guidance.
+See http://defiscan.info/learn-more#autonomy for more guidance.
 
 ## Exit Window
 
-See http://localhost:3000/learn-more#exit-window for more guidance.
+See http://defiscan.info/learn-more#exit-window for more guidance.
 
 ## Accessibility
 
-See http://localhost:3000/learn-more#accessibility for more guidance.
+See http://defiscan.info/learn-more#accessibility for more guidance.
 
 # Technical Analysis
 
@@ -71,7 +71,7 @@ insert text
 
 # Security Council
 
-See http://localhost:3000/learn-more#security-council-requirements for guidance.
+See http://defiscan.info/learn-more#security-council-requirements for guidance.
 
 change ✅ or ❌ accordingly
 
