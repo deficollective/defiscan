@@ -16,7 +16,7 @@ DeFiScan is built and maintained by the [DeFi Collective](https://DeFiCollective
 
 Check details on the program 👉 [here](./campaigns/README.MD) 👈
 
-## Getting started
+## Run App
 
 To run the website on your local machine, follow these steps:
 

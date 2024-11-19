@@ -1,4 +1,4 @@
-# DeFiScan Community Review Program
+# ⭐️ DeFiScan Community Review Program
 
 Are you deep in the trenches, knowing the protocols you use in and out? It’s time to put that knowledge to work, doing a service for the whole industry and getting paid for it!
 
