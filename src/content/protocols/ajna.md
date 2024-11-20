@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Ajna Protocol is a noncustodial, peer-to-pool, permissionless lending, borrowing and trading system that requires no governance or external price feeds to function. The protocol consists of pools with lenders and borrowers.
+The Ajna Protocol is a decentralized, noncustodial system for permissionless lending and borrowing that functions without governance or external price feeds. It operates through isolated pools where lenders provide liquidity at market-driven price levels, and borrowers secure loans using fungible or non-fungible collateral, ensuring autonomy, fairness, and resilience.
 
 # Overview
 
