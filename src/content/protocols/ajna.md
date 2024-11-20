@@ -22,17 +22,7 @@ The Ajna Protocol is a noncustodial, peer-to-pool, permissionless lending, borro
 
 ## Chain
 
-The Ajna Protocol is deployed on Ethereum mainnet. The protocol code is also deployed on the following L2's and operate with burn-wrapped bridge tokens:
-
-* Arbitrum One
-* Base
-* Polygon
-* Optimism Mainnet
-* Gnosis
-* Blast
-* Filecoin Mainnet
-* Mode Mainnet
-* RARI Chain
+The Ajna Protocol is deployed on Ethereum mainnet.
 
 > Chain score: L
 
