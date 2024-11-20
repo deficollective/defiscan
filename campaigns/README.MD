@@ -68,6 +68,7 @@ The following steps outline the process of registering for and conducting a succ
 ## Rules
 
 1. One PR per reviewer at once
+   - Exception: If the same protocol is analysed on different chains
 2. The review includes only one chain deployment (as we want to see all the specific params in the report, e.g. ownership entity can be different on different chains, and our reports look at a protocol on only one chain (see framework))
 3. The reviewer can start after we confirmed the draft PR. The reviewer has 2 weeks time before the specific Protocol is open for other people to complete.
 4. The schema for the PR name is `protocol name | chain | deadline (now+2weeks)`
