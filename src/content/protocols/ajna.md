@@ -54,6 +54,12 @@ A list of third-party frontends can be found [here](https://www.ajna.finance/).
 
 # Technical Analysis
 
+Ajna Finance enables borrowing and lending without external oracles by relying on a market-driven mechanism where lenders specify the price (in terms of quote tokens per unit of collateral) they are willing to lend at. This design eliminates the need for external price feeds by aggregating lender inputs into "price buckets," which act as discrete pricing tiers for collateral. Borrowers can access liquidity by pledging collateral against these buckets, while the protocol automatically adjusts interest rates based on pool utilization and collateralization levels. This ensures stability and fairness through self-regulating market dynamics, independent of external dependencies​.
+
+Ajna's liquidation works without oracles by triggering auctions when a loan's collateralization falls below the pool's Lowest Utilized Price (LUP). Liquidation is initiated by users posting a bond and proceeds through a Dutch auction, where collateral is sold at decaying prices until the debt is repaid. This market-driven process ensures fair price discovery, with penalties discouraging unnecessary liquidations and rewards incentivizing valid ones.
+
+See [Whitepaper: AJNA PROTOCOL: Automated Lending Markets](https://www.ajna.finance/pdf/Ajna_Protocol_Whitepaper_01-11-2024.pdf)
+
 ## Contracts
 
 | Contract Name            | Address                                    |
@@ -69,22 +75,20 @@ A list of third-party frontends can be found [here](https://www.ajna.finance/).
 
 ## Permission owners
 
-None. Ajna Protocol is ownerless by design. Copies of the code can be deployed permissionlessly on compatible EVMs.
+None. Ajna does not have any permissioned owners because it operates as a fully decentralized, governance-free protocol, with all functions controlled by deterministic smart contract rules. Anyone can deploy the protocol on compatible EVMs, ensuring its accessibility and independence from centralized authority or ownership.
 
 ## Permissions
 
-None. Ajna Protocol is permissionless by design.
+None. Ajna does not require ownership permissions because it is fully decentralized and permissionless, allowing anyone to create, lend, or borrow in pools without the need for approval. Its governance-free design eliminates centralized control, relying on deterministic smart contract rules and market-driven mechanisms to ensure fair and transparent operations.
 
 ## Dependencies
 
-None. Ajna Protocol has no external dependencies. No oracles, no governance. Mechanism design is incentive-based.
+None. Ajna eliminates external dependencies by using a market-driven system where lenders specify lending prices and borrowers provide collateral, removing the need for oracles or governance. Its self-regulating mechanisms, such as price buckets and utilization-based interest rate adjustments, ensure fair and efficient market operation without reliance on external price feeds or active oversight​.
 
 ## Exit Window
 
-The protocol is completely immutable, thus no exit window is required 🎉
-
-Pools are isolated from each other so damage caused by a market failure or technical flaw in a specific collateral is isolated to the individual pool.
+Ajna does not require an exit window because lenders can withdraw their deposits at any time, as long as the withdrawal does not compromise the collateralization of active loans within the pool. Each pool is isolated, meaning its operations and solvency are entirely independent of other pools, ensuring that activity in one pool cannot affect the liquidity or stability of another​.
 
 # Security Council
 
-The protocol is completely immutable, thus no Security Council is required 🎉
+Ajna does not require a security council because its protocol is fully decentralized and permissionless, with deterministic rules governing operations such as interest rates, liquidations, and collateral management. By eliminating governance and relying on market-driven mechanisms, Ajna avoids the need for centralized oversight or decision-making. Additionally, the protocol underwent eight external audits prior to launch, ensuring its security and reliability from the outset.
