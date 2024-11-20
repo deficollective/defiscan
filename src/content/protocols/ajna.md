@@ -91,4 +91,4 @@ Ajna does not require an exit window because lenders can withdraw their deposits
 
 # Security Council
 
-Ajna does not require a security council because its protocol is fully decentralized and permissionless, with deterministic rules governing operations such as interest rates, liquidations, and collateral management. By eliminating governance and relying on market-driven mechanisms, Ajna avoids the need for centralized oversight or decision-making. Additionally, the protocol underwent eight external audits prior to launch, ensuring its security and reliability from the outset.
+Ajna does not require a security council because its protocol is fully decentralized and permissionless, with deterministic rules governing operations such as interest rates, liquidations, and collateral management. By eliminating governance and relying on market-driven mechanisms, Ajna avoids the need for centralized oversight or decision-making. Additionally, the protocol underwent eight external [audits](https://github.com/ajna-finance/audits) prior to launch, ensuring its security and reliability from the outset.
