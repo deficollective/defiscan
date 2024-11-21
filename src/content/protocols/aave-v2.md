@@ -4,7 +4,7 @@ website: "https://aave.com"
 x: "https://x.com/aave"
 github: "https://github.com/aave"
 defillama_slug: "aave-v2"
-chain: "Ethereum, Polygon"
+chain: "Ethereum"
 stage: 0
 risks: ["L","L","L","L","M"]
 author: ["tabish.eth"]
