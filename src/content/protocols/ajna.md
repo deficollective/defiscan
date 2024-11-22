@@ -1,16 +1,16 @@
 ---
-protocol: "Ajna Protocol"
+protocol: "Ajna V2"
 website: "https://ajnafi.com/"
 x: "https://x.com/ajnafi"
 github: "https://github.com/ajna-finance"
-defillama_slug: "ajna-protocol"
+defillama_slug: "ajna-v2"
 chain: "Ethereum"
-stage: 2
-risks: ["L","L","L","L","L"]
+stage: 1
+risks: ["L","L","L","L","M"]
 author: ["brianmcmichael"]
 submission_date: "2024-11-19"
-publish_date: "1970-01-01"
-acknowledge_date: "1970-01-01"
+publish_date: "2024-11-xx"
+acknowledge_date: "2024-11-xx"
 update_date: "1970-01-01"
 ---
 
@@ -30,11 +30,15 @@ The Ajna Protocol is deployed on Ethereum mainnet.
 
 The protocol is immutable and permissionless by design and no heightened permissions are granted by the protocol code.
 
+Ajna does not require ownership permissions because it is fully decentralized and permissionless, allowing anyone to create, lend, or borrow in pools without the need for approval. Its governance-free design eliminates centralized control, relying on deterministic smart contract rules and market-driven mechanisms to ensure fair and transparent operations.
+
 > Upgradeability score: L
 
 ## Autonomy
 
-The protocol relies on a price bucket mechanism managed by lenders and borrowers, negating the need for any oracles or external feeds.
+The protocol has no external dependencies.
+
+Ajna eliminates external dependencies by using a market-driven system where lenders specify lending prices and borrowers provide collateral, removing the need for oracles. Its self-regulating mechanisms, such as price buckets and utilization-based interest rate adjustments, ensure fair and efficient market operation without reliance on external price feeds​.
 
 > Autonomy score: L
 
@@ -50,13 +54,9 @@ Multiple user interfaces exist and are operated by independent actors ensuring a
 
 A list of third-party frontends can be found [here](https://www.ajna.finance/).
 
-> Accessibility score: L
+> Accessibility score: M
 
 # Technical Analysis
-
-Ajna Finance enables borrowing and lending without external oracles by relying on a market-driven mechanism where lenders specify the price (in terms of quote tokens per unit of collateral) they are willing to lend at. This design eliminates the need for external price feeds by aggregating lender inputs into "price buckets," which act as discrete pricing tiers for collateral. Borrowers can access liquidity by pledging collateral against these buckets, while the protocol automatically adjusts interest rates based on pool utilization and collateralization levels. This ensures stability and fairness through self-regulating market dynamics, independent of external dependencies​.
-
-Ajna's liquidation works without oracles by triggering auctions when a loan's collateralization falls below the pool's Lowest Utilized Price (LUP). Liquidation is initiated by users posting a bond and proceeds through a Dutch auction, where collateral is sold at decaying prices until the debt is repaid. This market-driven process ensures fair price discovery, with penalties discouraging unnecessary liquidations and rewards incentivizing valid ones.
 
 See [Whitepaper: AJNA PROTOCOL: Automated Lending Markets](https://www.ajna.finance/pdf/Ajna_Protocol_Whitepaper_01-11-2024.pdf)
 
@@ -79,16 +79,20 @@ None. Ajna does not have any permissioned owners because it operates as a fully 
 
 ## Permissions
 
-None. Ajna does not require ownership permissions because it is fully decentralized and permissionless, allowing anyone to create, lend, or borrow in pools without the need for approval. Its governance-free design eliminates centralized control, relying on deterministic smart contract rules and market-driven mechanisms to ensure fair and transparent operations.
+None. 🎉
 
 ## Dependencies
 
-None. Ajna eliminates external dependencies by using a market-driven system where lenders specify lending prices and borrowers provide collateral, removing the need for oracles or governance. Its self-regulating mechanisms, such as price buckets and utilization-based interest rate adjustments, ensure fair and efficient market operation without reliance on external price feeds or active oversight​.
+None. 
+
+Ajna Finance enables borrowing and lending without external oracles by relying on a market-driven mechanism where lenders specify the price (in terms of quote tokens per unit of collateral) they are willing to lend at. This design eliminates the need for external price feeds by aggregating lender inputs into "price buckets," which act as discrete pricing tiers for collateral. Borrowers can access liquidity by pledging collateral against these buckets, while the protocol automatically adjusts interest rates based on pool utilization and collateralization levels. This ensures stability and fairness through self-regulating market dynamics, independent of external dependencies​.
+
+Ajna's liquidation works without oracles by triggering auctions when a loan's collateralization falls below the pool's Lowest Utilized Price (LUP). Liquidation is initiated by users posting a bond and proceeds through a Dutch auction, where collateral is sold at decaying prices until the debt is repaid. This market-driven process ensures fair price discovery, with penalties discouraging unnecessary liquidations and rewards incentivizing valid ones.
 
 ## Exit Window
 
-Ajna does not require an exit window because lenders can withdraw their deposits at any time, as long as the withdrawal does not compromise the collateralization of active loans within the pool. Each pool is isolated, meaning its operations and solvency are entirely independent of other pools, ensuring that activity in one pool cannot affect the liquidity or stability of another​.
+The protocol is completely immutable, thus no exit window is required. 🎉
 
 # Security Council
 
-Ajna does not require a security council because its protocol is fully decentralized and permissionless, with deterministic rules governing operations such as interest rates, liquidations, and collateral management. By eliminating governance and relying on market-driven mechanisms, Ajna avoids the need for centralized oversight or decision-making. Additionally, the protocol underwent eight external [audits](https://github.com/ajna-finance/audits) prior to launch, ensuring its security and reliability from the outset.
+None. Ajna does not require a security council because its protocol is fully decentralized and permissionless, with deterministic rules governing operations such as interest rates, liquidations, and collateral management. By eliminating governance and relying on market-driven mechanisms, Ajna avoids the need for centralized oversight or decision-making. Additionally, the protocol underwent eight external [audits](https://github.com/ajna-finance/audits) prior to launch, ensuring its security and reliability from the outset.
