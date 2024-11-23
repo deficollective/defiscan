@@ -11,13 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { defiLlama } from "@/services/defillama";
 import { protocols } from "#site/content";
-
-interface Project {
-  name: string;
-  tvl: number;
-  chain: string;
-  stage: number;
-}
+import { Project } from "@/lib/types";
 
 interface VisualisedData {
   key: string;
@@ -45,7 +39,7 @@ const groupBy = (
 ): Record<string, Project[]> => {
   return array.reduce(
     (result, currentValue) => {
-      const groupKey = currentValue[key];
+      const groupKey = String(currentValue[key]);
       if (!result[groupKey]) {
         result[groupKey] = [];
       }
@@ -143,24 +137,9 @@ export const preparePieChartData = async (
   operation: "sum" | "count",
   baseColor: string
 ): Promise<VisualisedData[]> => {
-  const apiData = await defiLlama.getProtocolsWithCache();
-  const filtered = apiData
-    .map((val) => {
-      const res = protocols.find(
-        (protocol) => protocol.defillama_slug === val.slug
-      );
-      if (res)
-        return {
-          name: res.protocol,
-          tvl: val.tvl,
-          chain: res.chain,
-          stage: res.stage,
-        } as Project;
-      return null;
-    })
-    .filter((el): el is Project => el !== null);
+  const merged = await mergeDefiLlamaWithMd();
 
-  const groupedBy = groupBy(filtered, groupByKey);
+  const groupedBy = groupBy(merged, groupByKey);
   const aggregated = aggregateByKey(groupedBy, operation);
   return extendWithColor(aggregated, baseColor);
 };
@@ -177,24 +156,9 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiData = await defiLlama.getProtocolsWithCache();
-      const filtered = apiData
-        .map((val) => {
-          const res = protocols.find(
-            (protocol) => protocol.defillama_slug === val.slug
-          );
-          if (res)
-            return {
-              name: res.protocol,
-              tvl: val.tvl,
-              chain: res.chain,
-              stage: res.stage,
-            } as Project;
-          return null;
-        })
-        .filter((el): el is Project => el !== null);
+      const merged = await mergeDefiLlamaWithMd();
 
-      const groupedBy = groupBy(filtered, groupByKey);
+      const groupedBy = groupBy(merged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
       setData(coloredResults);
@@ -277,3 +241,33 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
+
+export async function mergeDefiLlamaWithMd() {
+  const apiData = await defiLlama.getProtocolsWithCache();
+  const filtered = protocols
+    .map((frontmatterProtocol) => {
+      var tvl = 0;
+      var logo = "";
+      var type = "";
+      for (var slug of frontmatterProtocol.defillama_slug) {
+        const res = apiData.find(
+          (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
+        );
+        type = res?.category || "";
+        logo = res?.logo || "";
+        tvl += res?.tvl || 0;
+      }
+      return {
+        logo: logo,
+        protocol: frontmatterProtocol.protocol,
+        slug: frontmatterProtocol.slug,
+        tvl: tvl,
+        chain: frontmatterProtocol.chain,
+        stage: frontmatterProtocol.stage,
+        type: type,
+        risks: frontmatterProtocol.risks,
+      } as Project;
+    })
+    .filter((el): el is Project => el !== null);
+  return filtered;
+}
