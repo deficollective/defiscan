@@ -3,7 +3,7 @@ protocol: "Aerodrome"
 website: "https://aerodrome.finance/"
 x: "https://x.com/AerodromeFi"
 github: "https://github.com/aerodrome-finance"
-defillama_slug: "aerodrome-v1"
+defillama_slug: ["aerodrome-v1", "aerodrome-slipstream"]
 chain: "Base"
 stage: 0
 risks: ["H", "M", "L", "H", "L"]

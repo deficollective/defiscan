@@ -144,19 +144,25 @@ export const preparePieChartData = async (
   baseColor: string
 ): Promise<VisualisedData[]> => {
   const apiData = await defiLlama.getProtocolsWithCache();
-  const filtered = apiData
-    .map((val) => {
-      const res = protocols.find(
-        (protocol) => protocol.defillama_slug === val.slug
-      );
-      if (res)
-        return {
-          name: res.protocol,
-          tvl: val.tvl,
-          chain: res.chain,
-          stage: res.stage,
-        } as Project;
-      return null;
+  const filtered = protocols
+    .map((frontmatterProtocol) => {
+      var tvl = 0;
+      var type = "";
+      for (var slug of frontmatterProtocol.defillama_slug) {
+        const res = apiData.find(
+          (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
+        );
+        type = res?.category || "";
+        tvl += res?.tvl || 0;
+      }
+      return {
+        name: frontmatterProtocol.protocol,
+
+        tvl: tvl,
+        chain: frontmatterProtocol.chain,
+        stage: frontmatterProtocol.stage,
+        type: type,
+      } as Project;
     })
     .filter((el): el is Project => el !== null);
 
@@ -178,19 +184,25 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       const apiData = await defiLlama.getProtocolsWithCache();
-      const filtered = apiData
-        .map((val) => {
-          const res = protocols.find(
-            (protocol) => protocol.defillama_slug === val.slug
-          );
-          if (res)
-            return {
-              name: res.protocol,
-              tvl: val.tvl,
-              chain: res.chain,
-              stage: res.stage,
-            } as Project;
-          return null;
+      const filtered = protocols
+        .map((frontmatterProtocol) => {
+          var tvl = 0;
+          var type = "";
+          for (var slug of frontmatterProtocol.defillama_slug) {
+            const res = apiData.find(
+              (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
+            );
+            type = res?.category || "";
+            tvl += res?.tvl || 0;
+          }
+          return {
+            name: frontmatterProtocol.protocol,
+
+            tvl: tvl,
+            chain: frontmatterProtocol.chain,
+            stage: frontmatterProtocol.stage,
+            type: type,
+          } as Project;
         })
         .filter((el): el is Project => el !== null);
 

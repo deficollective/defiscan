@@ -9,28 +9,31 @@ import { defiLlama } from "@/services/defillama";
 export const getData = async (): Promise<Project[]> => {
   // fetch
   const data = await defiLlama.getProtocolsWithCache();
-  // merge
-  const merged = data
-    .map((val) => {
-      const res = protocols.find(
-        (protocol) => protocol.defillama_slug == val.slug
-      );
 
-      if (res)
-        return {
-          logo: val.logo,
-          protocol: res.protocol,
-          slug: res.slug,
-          tvl: val.tvl,
-          chain: res.chain,
-          stage: res.stage,
-          type: val.category,
-          risks: res.risks,
-        } as Project;
-      return null;
-    })
-    .filter((el) => el !== null);
-  // return
+  const merged = protocols.map((frontmatterProtocol) => {
+    var tvl = 0;
+    var logo = "";
+    var type = "";
+    for (var slug of frontmatterProtocol.defillama_slug) {
+      const res = data.find(
+        (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
+      );
+      logo = res?.logo || "";
+      type = res?.category || "";
+      tvl += res?.tvl || 0;
+    }
+    return {
+      logo: logo,
+      protocol: frontmatterProtocol.protocol,
+      slug: frontmatterProtocol.slug,
+      tvl: tvl,
+      chain: frontmatterProtocol.chain,
+      stage: frontmatterProtocol.stage,
+      type: type,
+      risks: frontmatterProtocol.risks,
+    } as Project;
+  });
+
   return merged;
 };
 

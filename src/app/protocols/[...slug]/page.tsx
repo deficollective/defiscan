@@ -113,11 +113,13 @@ export default async function ProtocolPageItem({
                   target="_blank"
                   rel="noopener noreferrer"
                   href={
-                    "https://defillama.com/protocol/" + protocol.defillama_slug
+                    "https://defillama.com/protocol/" +
+                    protocol.defillama_slug![0]
                   }
                   className="text-blue-500 hover:underline text-sm md:text-base"
                 >
-                  {"https://defillama.com/protocol/" + protocol.defillama_slug}
+                  {"https://defillama.com/protocol/" +
+                    protocol.defillama_slug![0]}
                 </a>
               </td>
             </tr>
