@@ -109,18 +109,20 @@ export default async function ProtocolPageItem({
             <tr>
               <td className="whitespace-nowrap">Defillama</td>
               <td className="break-all max-w-xs">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={
-                    "https://defillama.com/protocol/" +
-                    protocol.defillama_slug![0]
-                  }
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {"https://defillama.com/protocol/" +
-                    protocol.defillama_slug![0]}
-                </a>
+                <div className="">
+                  {protocol.defillama_slug!.map((slug, index) => (
+                    <a
+                      key={index}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`
+                        ${slug}`}
+                      className="text-blue-500 hover:underline text-sm md:text-base"
+                    >
+                      {index == 0 ? slug : ", " + slug}
+                    </a>
+                  ))}
+                </div>
               </td>
             </tr>
             <tr>
