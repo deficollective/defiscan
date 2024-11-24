@@ -9,8 +9,8 @@ stage: 1
 risks: ["L","L","L","L","M"]
 author: ["brianmcmichael"]
 submission_date: "2024-11-19"
-publish_date: "2024-11-xx"
-acknowledge_date: "2024-11-xx"
+publish_date: "2024-11-23"
+acknowledge_date: "2024-11-22"
 update_date: "1970-01-01"
 ---
 
@@ -50,7 +50,9 @@ Ajna Protocol's contracts are fully immutable, no upgrades or changes can be mad
 
 ## Accessibility
 
-Multiple user interfaces exist and are operated by independent actors ensuring access to the protocol and user funds even if an interface is shutdown or censors a user's transactions.
+Two user interfaces exist and are operated by independent actors. However, on one of the two frontends (summer.fi) users hold their positions not with their EOAs/Smart Account directly but instead with a smart account by summer.fi for which no simple UI exists to withdraw/transfer positions through another UI.
+
+To get a low risk for accessibility, users should be able to at least withdraw their position through a second, independent UI and clear instructions how to do so.
 
 A list of third-party frontends can be found [here](https://www.ajna.finance/).
 
@@ -83,7 +85,7 @@ None. 🎉
 
 ## Dependencies
 
-None. 
+None.
 
 Ajna Finance enables borrowing and lending without external oracles by relying on a market-driven mechanism where lenders specify the price (in terms of quote tokens per unit of collateral) they are willing to lend at. This design eliminates the need for external price feeds by aggregating lender inputs into "price buckets," which act as discrete pricing tiers for collateral. Borrowers can access liquidity by pledging collateral against these buckets, while the protocol automatically adjusts interest rates based on pool utilization and collateralization levels. This ensures stability and fairness through self-regulating market dynamics, independent of external dependencies​.
 
