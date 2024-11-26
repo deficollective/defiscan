@@ -106,7 +106,8 @@ const extendWithColor = (
   }));
 };
 
-// Default label formatters
+// ... (previous imports and interfaces remain the same)
+
 const defaultLabelFormatters = {
   count: (data: VisualisedData[]) => ({
     value: data.find((el) => el.key === "2")?.value.toString() || "0",
@@ -121,7 +122,7 @@ const defaultLabelFormatters = {
       (max, current) => (current.value > max.value ? current : max),
       data[0]
     ).key,
-    description: "Top Source",
+    description: "Most Covered",
   }),
   chainTvl: (data: VisualisedData[]) => ({
     value: data.reduce(
@@ -132,16 +133,33 @@ const defaultLabelFormatters = {
   }),
 };
 
-export const preparePieChartData = async (
-  groupByKey: keyof Project,
-  operation: "sum" | "count",
-  baseColor: string
-): Promise<VisualisedData[]> => {
-  const merged = await mergeDefiLlamaWithMd();
+type FormatterKey = keyof typeof defaultLabelFormatters;
 
-  const groupedBy = groupBy(merged, groupByKey);
-  const aggregated = aggregateByKey(groupedBy, operation);
-  return extendWithColor(aggregated, baseColor);
+const getDefaultFormatter = (
+  operation: "sum" | "count",
+  groupByKey: keyof Project
+): FormatterKey => {
+  // Create a mapping of conditions to formatter keys
+  const formatterMapping = {
+    stage: {
+      count: "count" as const,
+      sum: "tvl" as const,
+    },
+    chain: {
+      count: "chain" as const,
+      sum: "chainTvl" as const,
+    },
+    // Add more mappings for other groupByKey values as needed
+    default: {
+      count: "count" as const,
+      sum: "tvl" as const,
+    },
+  };
+
+  // Get the appropriate mapping based on groupByKey or use default
+  const mapping =
+    (formatterMapping as any)[groupByKey] || formatterMapping.default;
+  return mapping[operation];
 };
 
 export const PieChartComponent: React.FC<PieChartProps> = ({
@@ -157,7 +175,6 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       const merged = await mergeDefiLlamaWithMd();
-
       const groupedBy = groupBy(merged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
@@ -200,11 +217,13 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
                     if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox))
                       return null;
 
+                    const formatterKey = getDefaultFormatter(
+                      operation,
+                      groupByKey
+                    );
                     const formatter =
                       customLabelFormatter ||
-                      defaultLabelFormatters[
-                        operation === "sum" ? "tvl" : "count"
-                      ];
+                      defaultLabelFormatters[formatterKey];
                     const { value, description } = formatter(data);
 
                     return (
@@ -225,7 +244,7 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 10}
-                          className="fill-muted-foreground"
+                          className="fill-muted-foreground text-xxs"
                         >
                           {description}
                         </tspan>
@@ -241,7 +260,6 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
-
 export async function mergeDefiLlamaWithMd() {
   const apiData = await defiLlama.getProtocolsWithCache();
   const filtered = protocols
