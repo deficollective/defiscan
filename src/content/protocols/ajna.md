@@ -52,9 +52,7 @@ Ajna Protocol's contracts are fully immutable, no upgrades or changes can be mad
 
 Two user interfaces exist and are operated by independent actors. However, these user interfaces are not _interoperable_ meaning that positions created on one cannot be managed or closed through the second frontend. This means that if one of the user interfaces is inaccessible or starts censoring users, users' positions and deposited funds are inaccessible or access is only possible at a large cost.
 
-:::info
-The Ajna community has expressed plans to make available an emergency UI or instructions for emergency withdrawals. This situation will be monitored and the score reassessed if needed.
-:::
+> ℹ️The Ajna community has expressed plans to make available an emergency UI or instructions for emergency withdrawals. This situation will be monitored and the score reassessed if needed.
 
 A list of the third-party user interfaces to access the Ajna protocol can be found [here](https://www.ajna.finance/).
 
