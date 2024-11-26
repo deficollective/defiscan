@@ -28,17 +28,17 @@ The Ajna Protocol is deployed on Ethereum mainnet.
 
 ## Upgradeability
 
-The protocol is immutable and permissionless by design and no heightened permissions are granted by the protocol code.
+Ajna is fully permissionless, allowing anyone to create, lend, or borrow in pools without the need for approval.
 
-Ajna does not require ownership permissions because it is fully decentralized and permissionless, allowing anyone to create, lend, or borrow in pools without the need for approval. Its governance-free design eliminates centralized control, relying on deterministic smart contract rules and market-driven mechanisms to ensure fair and transparent operations.
+The protocol further is fully immutable without the ability to upgrade or make changes to the protocol, its functions or parameters.
 
 > Upgradeability score: L
 
 ## Autonomy
 
-The protocol has no external dependencies.
+The protocol has no external dependencies and operates in a fully autonomous manner.
 
-Ajna eliminates external dependencies by using a market-driven system where lenders specify lending prices and borrowers provide collateral, removing the need for oracles. Its self-regulating mechanisms, such as price buckets and utilization-based interest rate adjustments, ensure fair and efficient market operation without reliance on external price feeds​.
+Ajna eliminates external dependencies by using a market-driven system where lenders specify lending prices and borrowers provide collateral, removing the need e.g. for oracles.
 
 > Autonomy score: L
 
@@ -50,11 +50,13 @@ Ajna Protocol's contracts are fully immutable, no upgrades or changes can be mad
 
 ## Accessibility
 
-Two user interfaces exist and are operated by independent actors. However, on one of the two frontends (summer.fi) users hold their positions not with their EOAs/Smart Account directly but instead with a smart account by summer.fi for which no simple UI exists to withdraw/transfer positions through another UI.
+Two user interfaces exist and are operated by independent actors. However, these user interfaces are not _interoperable_ meaning that positions created on one cannot be managed or closed through the second frontend. This means that if one of the user interfaces is inaccessible or starts censoring users, users' positions and deposited funds are inaccessible or access is only possible at a large cost.
 
-To get a low risk for accessibility, users should be able to at least withdraw their position through a second, independent UI and clear instructions how to do so.
+:::info
+The Ajna community has expressed plans to make available an emergency UI or instructions for emergency withdrawals. This situation will be monitored and the score reassessed if needed.
+:::
 
-A list of third-party frontends can be found [here](https://www.ajna.finance/).
+A list of the third-party user interfaces to access the Ajna protocol can be found [here](https://www.ajna.finance/).
 
 > Accessibility score: M
 
@@ -98,3 +100,11 @@ The protocol is completely immutable, thus no exit window is required. 🎉
 # Security Council
 
 None. Ajna does not require a security council because its protocol is fully decentralized and permissionless, with deterministic rules governing operations such as interest rates, liquidations, and collateral management. By eliminating governance and relying on market-driven mechanisms, Ajna avoids the need for centralized oversight or decision-making. Additionally, the protocol underwent eight external [audits](https://github.com/ajna-finance/audits) prior to launch, ensuring its security and reliability from the outset.
+
+# User Interfaces
+
+Two user interfaces to access the Ajna protocol exist and can be found [here](https://www.ajna.finance/).
+
+These interfaces are operated independently offering different ways to access the Ajna protocol. However, the user interfaces are not _interoperable_ as positions created on one cannot (easily) be accessed through the other. 
+
+The reason for this is that one of the interfaces, summer.fi, uses a smart account system in order to offer a better UX to end users. This smart account system effectively results in a smart contract, the smart account, "controlling" positions and users only being able to access their positions through this contract. However, this smart account system is not supported by the second user interface thus making it impossible, or possible only at a high cost, to access positions created through summer.fi on the second interface and vice-versa.
