@@ -3,10 +3,10 @@ protocol: "Ajna V2"
 website: "https://ajnafi.com/"
 x: "https://x.com/ajnafi"
 github: "https://github.com/ajna-finance"
-defillama_slug: "ajna-v2"
+defillama_slug: ["ajna-v2"]
 chain: "Ethereum"
 stage: 1
-risks: ["L","L","L","L","M"]
+risks: ["L", "L", "L", "L", "M"]
 author: ["brianmcmichael"]
 submission_date: "2024-11-19"
 publish_date: "2024-11-23"
@@ -64,16 +64,16 @@ See [Whitepaper: AJNA PROTOCOL: Automated Lending Markets](https://www.ajna.fina
 
 ## Contracts
 
-| Contract Name            | Address                                    |
-| ------------------------ | ------------------------------------------ |
-| AJNA token               | [0x9a96ec9B57Fb64FbC60B423d1f4da7691Bd35079](https://etherscan.io/address/0x9a96ec9B57Fb64FbC60B423d1f4da7691Bd35079)                     |
-| ERC20 factory            | [0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625](https://etherscan.io/address/0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625)                     |
-| ERC721 factory           | [0x27461199d3b7381De66a85D685828E967E35AF4c](https://etherscan.io/address/0x27461199d3b7381De66a85D685828E967E35AF4c)                     |
-| PoolInfoUtils            | [0x30c5eF2997d6a882DE52c4ec01B6D0a5e5B4fAAE](https://etherscan.io/address/0x30c5eF2997d6a882DE52c4ec01B6D0a5e5B4fAAE)                     |
-| PoolInfoUtilsMulticall   | [0xe4e553243264f2bF7C135F1eC3a8c09078731227](https://etherscan.io/address/0xe4e553243264f2bF7C135F1eC3a8c09078731227)                     |
-| PositionManager          | [0x87B0F458d8F1ACD28A83A748bFFbE24bD6B701B1](https://etherscan.io/address/0x87B0F458d8F1ACD28A83A748bFFbE24bD6B701B1)                     |
-| BurnWrapper              | [0x936Ab482d6bd111910a42849D3A51Ff80BB0A711](https://etherscan.io/address/0x936Ab482d6bd111910a42849D3A51Ff80BB0A711)                     |
-| GrantFund                | [0x74d5b005ca64a5C9EE3611Bdc6F6C02D93C84b2f](https://etherscan.io/address/0x74d5b005ca64a5C9EE3611Bdc6F6C02D93C84b2f)                     |
+| Contract Name          | Address                                                                                                               |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| AJNA token             | [0x9a96ec9B57Fb64FbC60B423d1f4da7691Bd35079](https://etherscan.io/address/0x9a96ec9B57Fb64FbC60B423d1f4da7691Bd35079) |
+| ERC20 factory          | [0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625](https://etherscan.io/address/0x6146DD43C5622bB6D12A5240ab9CF4de14eDC625) |
+| ERC721 factory         | [0x27461199d3b7381De66a85D685828E967E35AF4c](https://etherscan.io/address/0x27461199d3b7381De66a85D685828E967E35AF4c) |
+| PoolInfoUtils          | [0x30c5eF2997d6a882DE52c4ec01B6D0a5e5B4fAAE](https://etherscan.io/address/0x30c5eF2997d6a882DE52c4ec01B6D0a5e5B4fAAE) |
+| PoolInfoUtilsMulticall | [0xe4e553243264f2bF7C135F1eC3a8c09078731227](https://etherscan.io/address/0xe4e553243264f2bF7C135F1eC3a8c09078731227) |
+| PositionManager        | [0x87B0F458d8F1ACD28A83A748bFFbE24bD6B701B1](https://etherscan.io/address/0x87B0F458d8F1ACD28A83A748bFFbE24bD6B701B1) |
+| BurnWrapper            | [0x936Ab482d6bd111910a42849D3A51Ff80BB0A711](https://etherscan.io/address/0x936Ab482d6bd111910a42849D3A51Ff80BB0A711) |
+| GrantFund              | [0x74d5b005ca64a5C9EE3611Bdc6F6C02D93C84b2f](https://etherscan.io/address/0x74d5b005ca64a5C9EE3611Bdc6F6C02D93C84b2f) |
 
 ## Permission owners
 
@@ -103,6 +103,6 @@ The protocol is completely immutable, thus no Security Council is required 🎉
 
 Two user interfaces to access the Ajna protocol exist and can be found [here](https://www.ajna.finance/).
 
-These interfaces are operated independently offering different ways to access the Ajna protocol. However, the user interfaces are not _interoperable_ as positions created on one cannot (easily) be accessed through the other. 
+These interfaces are operated independently offering different ways to access the Ajna protocol. However, the user interfaces are not _interoperable_ as positions created on one cannot (easily) be accessed through the other.
 
 The reason for this is that one of the interfaces, summer.fi, uses a smart account system in order to offer a better UX to end users. This smart account system effectively results in a smart contract, the smart account, "controlling" positions and users only being able to access their positions through this contract. However, this smart account system is not supported by the second user interface thus making it impossible, or possible only at a high cost, to access positions created through summer.fi on the second interface and vice-versa.
