@@ -8,18 +8,7 @@ import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
-import { RiskArray } from "@/lib/types";
-
-export type Project = {
-  logo: string;
-  protocol: string;
-  slug: string;
-  stage: number;
-  risks: RiskArray;
-  type: string;
-  chain: string;
-  tvl: number;
-};
+import { Project, RiskArray } from "@/lib/types";
 
 export const columns: ColumnDef<Project>[] = [
   {

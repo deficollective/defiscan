@@ -3,7 +3,7 @@ protocol: "PoolTogether-v5"
 website: "https://pooltogether.com/fr"
 x: "https://twitter.com/PoolTogether_"
 github: "https://github.com/pooltogether"
-defillama_slug: "pooltogether-v5"
+defillama_slug: ["pooltogether-v5"]
 chain: "Ethereum"
 stage: 2
 risks: ["L", "L", "L", "L", "L"]
@@ -32,7 +32,7 @@ PoolTogether V5 is deployed on Ethereum mainnet.
 
 Permissions in the PoolTogether-v5 protocol are fully revoked, the protocol is immutable 🎉
 
-> ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could include upgradeable contracts. It is outside of the scope of this review to analyze these protocols too. 
+> ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could include upgradeable contracts. It is outside of the scope of this review to analyze these protocols too.
 
 > Upgradeability score: L
 
@@ -48,7 +48,7 @@ The protocol relies on the Witnet Oracle for randomness in prize draws. If the o
 
 PoolTogether's contracts are fully immutable, no upgrades or changes can be made, removing the need for an exit window.
 
-> ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could exhibit upgradeable contracts. It is outside of the scope of this review to analyze whether appropriate Exit Windows exist on these protocols too. 
+> ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could exhibit upgradeable contracts. It is outside of the scope of this review to analyze whether appropriate Exit Windows exist on these protocols too.
 
 > Exit Window score: L
 
@@ -62,21 +62,21 @@ PoolTogether provides access to the protocol through multiple independent interf
 
 ## Contracts
 
-| Contract Name                                          | Address                                                                                |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| POOL (Token)                                           | [0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e](https://etherscan.io/address/0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e)                                             |
-| POOL Prize Vault (V5)                                  | [0x9eE31E845fF1358Bf6B1F914d3918c6223c75573](https://etherscan.io/address/0x9eE31E845fF1358Bf6B1F914d3918c6223c75573)                                             |
-| RngWitnet                                              | [0xf93329e78feff1145fce03a79d5b356588dea215](https://etherscan.io/address/0xf93329e78feff1145fce03a79d5b356588dea215)                                             |
-| TwabController                                         | [0x4d5f2cd31701f3e5de77b3f89ee7b80eb87b4acc](https://etherscan.io/address/0x4d5f2cd31701f3e5de77b3f89ee7b80eb87b4acc)                                             |
-| TwabRewards                                            | [0x2589ff8614f74704741ee3b51851b4ae812f1a21](https://etherscan.io/address/0x2589ff8614f74704741ee3b51851b4ae812f1a21)                                             |
-| TpdaLiquidationPairFactory                             | [0xa99b3a8503260ab32753c382eac297acd4a43908](https://etherscan.io/address/0xa99b3a8503260ab32753c382eac297acd4a43908)                                             |
-| TpdaLiquidationRouter                                  | [0x7c210be12bcef8090610914189a0de43e2192ea0](https://etherscan.io/address/0x7c210be12bcef8090610914189a0de43e2192ea0)                                             |
-| PrizeVaultFactory                                      | [0xd499CcF3e93F4cfb335Ac388E3C896D59cdDe7c3](https://etherscan.io/address/0xd499CcF3e93F4cfb335Ac388E3C896D59cdDe7c3)                                             |
-| PrizePool                                              | [0x7865d01da4c9ba2f69b7879e6d2483ab6b354d95](https://etherscan.io/address/0x7865d01da4c9ba2f69b7879e6d2483ab6b354d95)                                             |
-| ClaimerFactory                                         | [0xd84C4c7675e6Eb79eA28D04C001e702cCC679E80](https://etherscan.io/address/0xd84C4c7675e6Eb79eA28D04C001e702cCC679E80)                                             |
+| Contract Name                                          | Address                                                                                                                                                                                                                                      |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POOL (Token)                                           | [0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e](https://etherscan.io/address/0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e)                                                                                                                        |
+| POOL Prize Vault (V5)                                  | [0x9eE31E845fF1358Bf6B1F914d3918c6223c75573](https://etherscan.io/address/0x9eE31E845fF1358Bf6B1F914d3918c6223c75573)                                                                                                                        |
+| RngWitnet                                              | [0xf93329e78feff1145fce03a79d5b356588dea215](https://etherscan.io/address/0xf93329e78feff1145fce03a79d5b356588dea215)                                                                                                                        |
+| TwabController                                         | [0x4d5f2cd31701f3e5de77b3f89ee7b80eb87b4acc](https://etherscan.io/address/0x4d5f2cd31701f3e5de77b3f89ee7b80eb87b4acc)                                                                                                                        |
+| TwabRewards                                            | [0x2589ff8614f74704741ee3b51851b4ae812f1a21](https://etherscan.io/address/0x2589ff8614f74704741ee3b51851b4ae812f1a21)                                                                                                                        |
+| TpdaLiquidationPairFactory                             | [0xa99b3a8503260ab32753c382eac297acd4a43908](https://etherscan.io/address/0xa99b3a8503260ab32753c382eac297acd4a43908)                                                                                                                        |
+| TpdaLiquidationRouter                                  | [0x7c210be12bcef8090610914189a0de43e2192ea0](https://etherscan.io/address/0x7c210be12bcef8090610914189a0de43e2192ea0)                                                                                                                        |
+| PrizeVaultFactory                                      | [0xd499CcF3e93F4cfb335Ac388E3C896D59cdDe7c3](https://etherscan.io/address/0xd499CcF3e93F4cfb335Ac388E3C896D59cdDe7c3)                                                                                                                        |
+| PrizePool                                              | [0x7865d01da4c9ba2f69b7879e6d2483ab6b354d95](https://etherscan.io/address/0x7865d01da4c9ba2f69b7879e6d2483ab6b354d95)                                                                                                                        |
+| ClaimerFactory                                         | [0xd84C4c7675e6Eb79eA28D04C001e702cCC679E80](https://etherscan.io/address/0xd84C4c7675e6Eb79eA28D04C001e702cCC679E80)                                                                                                                        |
 | Claimer                                                | [0x98CC81798954c35c39b960DfcA3d8b170154aa7e](https://etherscan.io/address/0x98CC81798954c35c39b960DfcA3d8b170154aa7e), [0x54aa02cbc223Fc834949FB1fd8C855e4dA126c7D](https://etherscan.io/address/0x54aa02cbc223Fc834949FB1fd8C855e4dA126c7D) |
-| StakingVault (underlying ERC4626 for POOL Prize Vault) | [0x68a100a3729fc04ab26fb4c0862df22ceec2f18b](https://etherscan.io/address/0x68a100a3729fc04ab26fb4c0862df22ceec2f18b)                                             |
-| DrawManager                                            | [0x98305eb9a29d45ec93ce44ba02b315b631c675a7](https://etherscan.io/address/0x98305eb9a29d45ec93ce44ba02b315b631c675a7)                                             |
+| StakingVault (underlying ERC4626 for POOL Prize Vault) | [0x68a100a3729fc04ab26fb4c0862df22ceec2f18b](https://etherscan.io/address/0x68a100a3729fc04ab26fb4c0862df22ceec2f18b)                                                                                                                        |
+| DrawManager                                            | [0x98305eb9a29d45ec93ce44ba02b315b631c675a7](https://etherscan.io/address/0x98305eb9a29d45ec93ce44ba02b315b631c675a7)                                                                                                                        |
 
 ## Permission Owners
 
@@ -111,9 +111,9 @@ The oracle endpoint is referenced in the RngWitnet contract without any way to c
 
 ### Underlying yield source (linked ERC4626 in a Prize Vault)
 
-In normal conditions depositors should always expect to be able to withdraw their full deposit amount and no more as long as global withdrawal limits meet or exceed their balance. However, since the protocol is fully permissionless everyone can create a new prize vault and link yield source and utility contracts to it. The yield source and the utility contracts like LiquidationPair or Claimer can be implemented with malicious intent, stealing underlying principal or stealing prize. 
+In normal conditions depositors should always expect to be able to withdraw their full deposit amount and no more as long as global withdrawal limits meet or exceed their balance. However, since the protocol is fully permissionless everyone can create a new prize vault and link yield source and utility contracts to it. The yield source and the utility contracts like LiquidationPair or Claimer can be implemented with malicious intent, stealing underlying principal or stealing prize.
 
-__While a price vault, or its underlying yield source, can be based on a flawed implementation or be malicious, vaults are strictly isolated meaning that users only assume the risk of a specific vault and yield source but do not inherit risks from other vaults.__
+**While a price vault, or its underlying yield source, can be based on a flawed implementation or be malicious, vaults are strictly isolated meaning that users only assume the risk of a specific vault and yield source but do not inherit risks from other vaults.**
 
 ## Exit Window
 
