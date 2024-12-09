@@ -23,7 +23,7 @@ Ethena is a synthetic dollar protocol built on Ethereum that provides a crypto-n
 
 ## Chain
 
-The Liquity protocol is deployed on Ethereum mainnet.
+The Ethena protocol is deployed on Ethereum mainnet.
 
 > Chain score: L
 
