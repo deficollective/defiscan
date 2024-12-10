@@ -34,7 +34,7 @@ The `RocketStorage` contract acts as the central state repository, storing both 
 
 While governance mechanisms have been implemented to mitigate risks from malicious upgrades or parameter changes, certain aspects of control remain centralized. As such, we can find 4 different entities that have rights over different parts of the protocol:
 
-1. **Oracle DAO (oDAO)**: The oracle DAO consists of **selected Rocket Pool members** whose incentives are closely aligned with Rocket Pool’s vision and who possess specific rights over protocol operations. These include:
+1. **Oracle DAO (oDAO)**: The oracle DAO is composed of **selected Rocket Pool members**, including Ethereum community contributors and teams such as Consensys, Nimbus, Lighthouse and Gitcoin, whose incentives are closely aligned with Rocket Pool's vision. These members possess specific rights over protocol operations, including:
 
     - _On-chain responsibilities_: **Voting on and executing contract upgrades**. Adjusting key protocol parameters.
     - _Off-chain duties_: Automated actions related to routine Rocket Pool operations (e.g., constructing the rewards Merkle tree at the end of each rewards period and uploading it to IPFS). These actions must be pushed on-chain periodically.
@@ -47,7 +47,7 @@ While governance mechanisms have been implemented to mitigate risks from malicio
     - A 7-day wait period on mainnet allows for further deliberation.
     - Members cast on-chain votes (yes/no).
     - A quorum is achieved with 51% approval from oDAO members, concluding the vote.
-    - Once approved, any member can execute the change, updating the protocol’s core contracts.
+    - Once approved, any member can execute the change. However, if the proposal involves an upgrade to the protocol's core contracts, it must still be executed by the pDAO guardian (controlled by the team, see more below).
 
     As of now, 4 of the 9 quorum votes are controlled by the Rocket Pool team, which reduces decentralization. oDAO proposals and votes and can be observed at this [address](https://etherscan.io/address/0xb0ec3F657ef43A615aB480FA8D5A53BF2c2f05d5).
 
@@ -55,14 +55,14 @@ While governance mechanisms have been implemented to mitigate risks from malicio
 
     The pDAO uses an optimistic fraud proof system with on-chain dispute challenges, allowing members to:
 
-    - Propose and vote on parameter adjustements.
+    - Propose and vote on parameter adjustments.
     - Allocate treasury funds.
 
     Parameters controlled by the pDAO are listed in [RPIP-33](https://rpips.rocketpool.net/RPIPs/RPIP-33#parameter-table), influencing various contracts of the protocol (RPL inflation settings, ETH deposit settings, minipool settings, security settings, etc.).
 
     Enforcing on-chain pDAO governance has been activated in **November 2024**, with no mainnet history aside from testing on Holesky. Currently, the quorum required for a pDAO proposal to pass is 30% of initialized voting power (those are node operators who have onboarded to the on-chain governance framework using a command line in their Smart Node).
 
-3. **pDAO guardian**: The pDAO guardian can change pDAO parameters without a vote and without delay. It is an EOA wallet controlled by the Rocket Pool team. This role is intended to transition to the Security Council for enhanced decentralization. The pDAO guardian is this [address](https://etherscan.io/address/0x0cCF14983364A7735d369879603930Afe10df21e).
+3. **pDAO guardian**: The pDAO guardian can change pDAO parameters without a vote and without delay. It is an EOA wallet controlled by the Rocket Pool team. The pDAO guardian is this [address](https://etherscan.io/address/0x0cCF14983364A7735d369879603930Afe10df21e). This role is intended to be phased out in the future once the Security Council is established (see more below).
 
 4. **Security Council**: Introduced alongside on-chain pDAO governance, the Security Council acts as a safeguard with expedited authority to change a limited set of parameters, essentially disabling features of the protocol to protect against loss of funds. As of now, the Rocket Pool team, via the pDAO guardian, is the sole member. Future iterations aim to diversify this council.
 
@@ -100,12 +100,12 @@ In total, a proposal raised by a pDAO member can only be executed on-chain **aft
 
 For the oDAO:
 
--   Once a proposal is submitted on-chain, there is a 7-day deliberation period before voting begins.
--   After the deliberation period, oDAO members vote, and once the quorum is met, the proposal can be executed on-chain instantly.
+-   Once a proposal is submitted on-chain, there is a **7-day deliberation period** before voting begins.
+-   After the deliberation period, oDAO members vote, and once the quorum is met, the proposal can be **executed on-chain instantly**.
 
 > It is important to note that the current governance setup includes the pDAO guardian, which is controlled by the team and has the **authority to bypass all delays for pDAO proposals**. However, no such override exists for oDAO proposals (includes smart contract upgrades).
 
-Additional considerations are the time required to unstake assets for node operators. Unstaking RPL from a minipool currently takes 28 days, while unstaking ETH from a validator depends on the network’s validator exit queue. Additionally, users wishing to swap rETH for ETH natively within Rocket Pool are constrained by the available balance in the `RocketDepositPool` contract (available by calling this [method](https://etherscan.io/address/0xdd3f50f8a6cafbe9b31a427582963f465e745af8#readContract#F1)). As ETH is allocated to minipools, users that are not node operators cannot directly exchange rETH for ETH at the protocol’s native rate and must instead rely on liquidity pools from secondary markets.
+Additional considerations are the time required to unstake assets for node operators. Unstaking RPL from a minipool is subject to a 28-day waiting period since the last staking or restaking action, while unstaking ETH from a validator depends on the network’s validator exit queue. Additionally, users wishing to swap rETH for ETH natively within Rocket Pool are limited by the excess deposit pool balance in the `RocketDepositPool` contract, as well as the rETH contract balance `RocketTokenRETH` (total available can be queried by calling this [method](https://etherscan.io/address/0xae78736Cd615f374D3085123A210448E74Fc6393#readContract#F8)). This limitation arises because ETH is allocated to minipools, leaving insufficient native liquidity for direct exchanges. As a result, non node-operators are unable to exchange rETH for ETH at the protocol's native rate and must rely on liquidity pools from secondary markets (small premium).
 
 > Exit window score: H
 
@@ -113,7 +113,7 @@ Additional considerations are the time required to unstake assets for node opera
 
 ## Accessibility
 
-Rocket Pool provides a unique centralized user interface. However, some DEXes have integrated RP's native contracts, enabling minting and redeeming directly from, their interfaces without relying on liquidity pools ([1inch](https://blog.1inch.io/1inch-optimizes-reth-swaps/), CoW Swap).
+Rocket Pool provides **a unique centralized user interface**. However, some DEXes have integrated RP's native contracts, enabling minting and redeeming directly from, their interfaces without relying on liquidity pools ([1inch](https://blog.1inch.io/1inch-optimizes-reth-swaps/), CoW Swap).
 
 > Exit window score: M
 
