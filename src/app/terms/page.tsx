@@ -2,14 +2,14 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "User Terms v.1",
+  title: "User Terms v.2",
 };
 
 export default function TermsPage() {
   return (
     <div className="container relative mb-20 max-w-6xl py-6 lg:py-10">
       <h1 className="inline-block  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        User Terms v.1 (2024-11-01)
+        User Terms v.2 (2024-12-03)
       </h1>
 
       <p></p>
@@ -20,12 +20,12 @@ export default function TermsPage() {
 
       <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
         <p>
-          These terms and conditions ("Terms") apply to your ("you" or "User")
-          access and use ("use") of the website available on [URL] ("Website")
+          These terms and conditions ("<strong>Terms</strong>") apply to your ("<strong>you</strong>" or "<strong>User</strong>")
+          access and use ("<strong>use</strong>") of the website available on [URL] ("<strong>Website</strong>")
           and (if any) all related content, features and tools (collectively
-          "DeFiScan"). DeFiScan is administered and maintained by the DeFi
+          "<strong>DeFiScan</strong>"). DeFiScan is administered and maintained by the DeFi
           Collective, a non-profit organization to further the decentralization
-          of financial infrastructure ("Collective"), with the support of the
+          of financial infrastructure ("<strong>Collective</strong>"), with the support of the
           DeFi community.
         </p>
 
@@ -47,9 +47,9 @@ export default function TermsPage() {
       <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
         <p>
           DeFiScan is an open platform providing information about the
-          decentralization of third-party DeFi protocols ("Protocols"),
-          including decentralization reviews ("Review(s)") as well as other
-          content, features and tools (collectively "Content"). DeFiScan is
+          decentralization of third-party DeFi protocols ("<strong>Protocols</strong>"),
+          including decentralization reviews ("<strong>Review(s)</strong>") as well as other
+          content, features and tools (collectively "<strong>Content</strong>"). DeFiScan is
           provided as a freely available public good to further decentralization
           in DeFi by creating a common understanding and individualized
           measurement of decentralization in Protocols.
@@ -248,7 +248,7 @@ export default function TermsPage() {
         </p>
 
         <p className="mt-4">
-          <strong>Intellectual property</strong>: DeFiScan and the Content may
+          <strong>Intellectual property of the Collective</strong>: DeFiScan and the Content may
           involve works protected under applicable intellectual property
           legislation, particularly copyright legislation. Other than the
           limited license outlined above, the Collective (or, where applicable,
@@ -257,26 +257,32 @@ export default function TermsPage() {
           domain names, know-how, trade secrets, data and other intangible
           property rights ("<strong>IP Rights</strong>") in any way related to
           DeFiScan and nothing in these Terms or the wider communication of the
-          Collective with respect to the DeFiScan should be understood to the
-          contrary.
+          Collective with respect to the DeFiScan should be understood as an assignment of any IP Rights
+          or any license other than what is outlined in the section above to any User.
         </p>
 
         <p className="mt-4">
-          <strong>User Generated Content and Feedback</strong>: Users, including
-          Protocols, may make content available to the Collective (as further
-          defined by the Collective from time to time), directly on the Website
-          or as part of the Content (collectively "
-          <strong>User Generated Content</strong>"). The respective Users hereby
-          grants the Collective an indefinite and non-revocable license to
-          freely use (or not use), alter, modify and extend such User Generated
-          Content in connection with DeFiScan. Users are solely responsible for
-          any User Generated Content, including but not limited to correctness,
-          completeness, actuality and legal ownership or right of usage of any
-          User Generated Content. If you submit feedback, questions, comments,
-          suggestions and similar (collectively "Feedback") to the Collective,
-          such hereby assign all right, title and interests to such Feedback to
-          the Collective, who may freely use (or not use) such Feedback without
-          compensation.
+          <strong>User Generated Content; assignment of rights to the Collective</strong>: Users, including
+          Protocols, may make feedback and other content generated by such Users (particularly including
+          Reviews, collectively such content the "<strong>User Generated Content</strong>") available to the Collective,
+          to be used by the Collective directly on the Website or to be integrated as part of the Content.
+          By submitting or in any way making available User Generated Content to the Collective, the respective User thereby
+          irrevocably assigns and transfers to the Collective all right, title and interest, whether or not protected by intellectual
+          property legislation such as copyright laws, relating to the User Generated Content, in particular with respect to any software, source code,
+          tools, documentation, know-how, databases, inventions, processes, overviews and similar, free of charge unless explicitly specified
+          otherwise by the Collective. This assignment of rights includes all assignable rights, including the right to first-time publication, application,
+          distribution, amendment, and adaptation. It continues to apply without limitation after any termination or amendment of these Terms. The respective
+          User warrants that the respective User is authorized to concede, assign, transfer and grant all rights stated in this clause and that no third party
+          intellectual property rights will be infringed by any action considered herein. The respective User agrees to fully indemnify the Collective against 
+          all damages, costs (including reasonable attorney fees) and third party claims arising from a breach of the aforementioned warranty. To the extent
+          certain jurisdictions do not provide for the assignability of all rights stated in this clause, the respective User thereby grants the Collective
+          a worldwide, irrevocable, exclsuive, transferable, sub-licensable, royalty-free, unlimited and unrestricted license to use, modify, develop and
+          exploit such rights in any conceivable way and medium. To the extent not all rights stated in this clause can be assigned or licensed to the Collective 
+          due to mandatory legal provisions, the respective User thereby waives all such non-assignable rights for an indefinite term, to the extent permitted
+          by applicable law. The respective User furthermore agrees that the Collective is entitled to pursue any registration necessary to secure all rights
+          in this clause, and the respective User, where necessary, agrees to assist the Collective in such registration as needed. If the respective User is
+          unable to assist as needed, the respective User hereby irrevocably appoints the Collective as his/her agent to act for and on his/her behalf to execute any 
+          such registration and provide any such signatures as needed and as permitted under applicable law.
         </p>
       </div>
 

@@ -3,7 +3,7 @@ protocol: "Liquity"
 website: "https://www.liquity.org"
 x: "https://x.com/LiquityProtocol"
 github: "https://github.com/liquity"
-defillama_slug: "liquity"
+defillama_slug: ["liquity"]
 chain: "Ethereum"
 stage: 2
 risks: ["L", "L", "L", "L", "L"]
@@ -58,8 +58,8 @@ A list of third-party frontends can be found [here](https://www.liquity.org/fron
 
 ## Contracts
 
-| ContractName          | Address                                    |
-| --------------------- | ------------------------------------------ |
+| ContractName          | Address                                                                                                               |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | activePool            | [0xDf9Eb223bAFBE5c5271415C75aeCD68C21fE3D7F](https://etherscan.io/address/0xDf9Eb223bAFBE5c5271415C75aeCD68C21fE3D7F) |
 | borrowerOperations    | [0x24179CD81c9e782A4096035f7eC97fB8B783e007](https://etherscan.io/address/0x24179CD81c9e782A4096035f7eC97fB8B783e007) |
 | troveManager          | [0xA39739EF8b0231DbFA0DcdA07d7e29faAbCf4bb2](https://etherscan.io/address/0xA39739EF8b0231DbFA0DcdA07d7e29faAbCf4bb2) |
