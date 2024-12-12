@@ -12,6 +12,7 @@ import { getRiskDescriptions } from "@/components/rosette/data-converter/data-co
 import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Stage } from "@/lib/types";
 
 interface ProtocolPageItemProps {
   params: {
@@ -179,16 +180,18 @@ export default async function ProtocolPageItem({
 
         <TooltipProvider>
           <Badge
-            stage={protocol.stage!}
+            stage={protocol.stage! as Stage}
             className={`${
-              protocol.stage === 0
-                ? "bg-red-500"
-                : protocol.stage === 1
-                  ? "bg-yellow-500"
-                  : "bg-green-500"
-            } text-white px-2 py-1 rounded`}
+              protocol.stage! === "Review"
+                ? "bg-gray-500"
+                : protocol.stage! === 0
+                  ? "bg-red-500"
+                  : protocol.stage! === 1
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+            } text-white py-1 rounded "text-lg"`}
           >
-            {"Stage " + protocol.stage}
+            {"Stage " + protocol.stage!}
           </Badge>
         </TooltipProvider>
 

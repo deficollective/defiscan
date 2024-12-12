@@ -20,7 +20,7 @@ const protocols = defineCollection({
       github: s.string(),
       defillama_slug: s.array(s.string()),
       chain: s.string(),
-      stage: s.number(),
+      stage: s.number().gte(0).lte(2).or(s.literal("Review")),
       risks: s.tuple([
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
