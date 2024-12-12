@@ -6,12 +6,12 @@ github: "https://github.com/aerodrome-finance"
 defillama_slug: ["aerodrome-v1", "aerodrome-slipstream"]
 chain: "Base"
 stage: 0
-risks: ["H", "M", "L", "H", "L"]
+risks: ["H", "M", "L", "M", "L"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
 acknowledge_date: "1970-01-01"
-update_date: "2024-11-11"
+update_date: "2024-12-12"
 ---
 
 # Summary
@@ -48,9 +48,9 @@ Aerodrome does not have external dependencies 🎉
 
 ## Exit Window
 
-Permissions are not protected by an exit window resulting in users not being able to withdraw funds in case of an unwanted update.
+Existing permissions have a "Medium" risk score and are not protected by an exit window. Users are not able to withdraw funds in case of an unwanted update.
 
-> Exit Window score: H
+> Exit Window score: M
 
 ## Accessibility
 

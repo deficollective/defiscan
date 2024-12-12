@@ -24,6 +24,20 @@ const introContent = {
   },
 };
 
+const introContent2 = {
+  title: "What is DeFiScan NOT?",
+  paragraphs: [
+    "DeFiScan strictly focuses on the analysis and monitoring of the decentralization stage of DeFi protocols. It does NOT assess or make any statement about other aspects like:",
+  ],
+  bulletPoints: [
+    "Smart contract risks",
+    "Regulatory/compliance risks",
+    "UX",
+    "Financial performance",
+    "Any other risk associated with DeFi protocols",
+  ],
+};
+
 const riskData = [
   {
     category: "Chain",
@@ -57,10 +71,10 @@ const riskData = [
   {
     category: "Exit Window",
     risks: {
-      high: "Permissions are NOT protected with an exit window or the exit window is less than 7 days",
+      high: "Upgradeability score is 'High' AND permissions are NOT protected with an exit window or the exit window is less than 7 days",
       medium:
-        "Permissions are protected with an exit window of at least 7 days",
-      low: "Permissions are fully revoked OR transferred to an on-chain governance process AND protected with an exit window of at least 30 days",
+        "Upgradeability score is 'Medium' OR permissions are protected with an exit window of at least 7 days",
+      low: "Upgradeability score is 'Low' OR permissions are transferred to an on-chain governance process AND protected with an exit window of at least 30 days",
     },
     anchor: "exit-window",
   },
@@ -106,6 +120,14 @@ const stagesData = [
       '✅ At least "Low" risk score for Chain, Autonomy, Exit Window, Accessibility',
     ],
   },
+  {
+    stage: "Review",
+    description:
+      "The review of a protocol cannot be completed due to missing information or a change in conditions. As a result, the analysis is incomplete or inaccurate and the Stage unclear.",
+    qualifications: [
+      "✅ Analysis is in the process of being completed, corrected or reviewed"
+    ],
+  },
 ];
 
 const securityCouncilRequirements = [
@@ -143,6 +165,20 @@ const IntroSection = () => (
       ))}
       <ul className="list-disc ml-6">
         {introContent.bulletPoints.map((point, index) => (
+          <li key={index}>{point}</li>
+        ))}
+      </ul>
+      <br></br>
+      <h1 className="inline-block tracking-tight mb-6 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
+        {introContent2.title}
+      </h1>
+      {introContent2.paragraphs.map((paragraph, index) => (
+        <p key={index} className={index > 0 ? "mt-4" : ""}>
+          {paragraph}
+        </p>
+      ))}
+      <ul className="list-disc ml-6">
+        {introContent2.bulletPoints.map((point, index) => (
           <li key={index}>{point}</li>
         ))}
       </ul>
