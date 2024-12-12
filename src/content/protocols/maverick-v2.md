@@ -5,7 +5,7 @@ x: "https://x.com/mavprotocol"
 github: "https://github.com/maverickprotocol"
 defillama_slug: ["maverick-v2"]
 chain: "Ethereum"
-stage: 0
+stage: "Review"
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"

@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "../rosette/tooltip/tooltip";
 import { stageToRequisites } from "@/app/protocols/stageToRequisites";
+import { Stage } from "@/lib/types";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -32,7 +33,7 @@ const badgeVariants = cva(
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
-  stage: number;
+  stage: Stage;
 }
 
 // Badge component
@@ -50,7 +51,7 @@ function Badge({ className, variant, stage, ...props }: BadgeProps) {
 }
 
 // BadgeTooltip component
-export function BadgeTooltip({ stage }: { stage: number }) {
+export function BadgeTooltip({ stage }: { stage: Stage }) {
   return (
     <div className="flex flex-col">
       <span className="text-base font-bold">
@@ -58,11 +59,17 @@ export function BadgeTooltip({ stage }: { stage: number }) {
       </span>
       <div className="flex items-center gap-6">
         <div className="relative flex flex-col justify-center p-4 shadow-md max-w-md">
-          {stageToRequisites[stage].map((item, index) => (
-            <div key={index} className="mt-1">
-              {item}
-            </div>
-          ))}
+          {stage === "Review"
+            ? stageToRequisites[0].map((item, index) => (
+                <div key={index} className="mt-1">
+                  {item}
+                </div>
+              ))
+            : stageToRequisites[stage].map((item, index) => (
+                <div key={index} className="mt-1">
+                  {item}
+                </div>
+              ))}
         </div>
       </div>
     </div>
