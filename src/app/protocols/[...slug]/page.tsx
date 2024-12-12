@@ -194,6 +194,7 @@ export default async function ProtocolPageItem({
             {protocol.stage! === "Review"
               ? "In Review"
               : "Stage " + protocol.stage!}
+
           </Badge>
         </TooltipProvider>
 
