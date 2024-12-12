@@ -191,7 +191,10 @@ export default async function ProtocolPageItem({
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {"Stage " + protocol.stage!}
+            {protocol.stage! === "Review"
+              ? "In Review"
+              : "Stage " + protocol.stage!}
+
           </Badge>
         </TooltipProvider>
 

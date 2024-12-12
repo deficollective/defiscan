@@ -84,7 +84,7 @@ export const columns: ColumnDef<Project>[] = [
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {"Stage " + stage}
+            {stage === "Review" ? "In Review" : "Stage " + stage}
           </Badge>
         </TooltipProvider>
       );
