@@ -1,5 +1,5 @@
 export type RiskLevel = "L" | "M" | "H";
-export type Stage = "Review" | 0 | 1 | 2;
+export type Stage = "R" | 0 | 1 | 2;
 export type RiskArray = [RiskLevel, RiskLevel, RiskLevel, RiskLevel, RiskLevel];
 
 export type Project = {

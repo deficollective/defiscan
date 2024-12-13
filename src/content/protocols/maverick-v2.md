@@ -5,7 +5,7 @@ x: "https://x.com/mavprotocol"
 github: "https://github.com/maverickprotocol"
 defillama_slug: ["maverick-v2"]
 chain: "Ethereum"
-stage: "Review"
+stage: "R"
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
@@ -13,6 +13,8 @@ publish_date: "2024-10-23"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
+
+> ⚠️ MaverickV2Factory is NOT verified on a public block explorer. For the MaverickV2Factory we currently rely on the technical documentation provided by the Maverick Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 # Summary
 
@@ -37,8 +39,6 @@ Permissions on most contracts in the Maverick V2 protocol (e.g. `MaverickV2Incen
 On other contracts permissions still exist and are not protected with adequate restrictions. In particular, the `MaverickToken` (MAV token) integrates with the _LayerZero_ protocol for cross-chain compatibility and exposes a number of permissioned functions. For example the `setTrustedRemote` allows the permission owner to add arbitrary MAV token implementations on other chains which, if flawed or malicious, can result in the arbitrary minting of MAV tokens. Similarly, the `setConfig` function enables designating custom cross-chain transaction data validators (DVNs) which, if flawed or malicious, can result in the operator sending arbitrary transaction data that is wrongly validated and executed.
 
 As a result, these existing permissions potentially result in the arbitrary minting of new MAV tokens that dillute the overall supply and thus lead to the theft or loss of user funds (in particular unclaimed rewards that are distributed in the MAV token).
-
-> ⚠️ MaverickV2Factory is NOT verified on a public block explorer. For the MaverickV2Factory we currently rely on the technical documentation provided by the Maverick Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 > Upgradeability score: H
 

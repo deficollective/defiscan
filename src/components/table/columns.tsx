@@ -75,7 +75,7 @@ export const columns: ColumnDef<Project>[] = [
           <Badge
             stage={stage}
             className={`${
-              stage === "Review"
+              stage === "R"
                 ? "bg-gray-500"
                 : stage === 0
                   ? "bg-red-500"
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Project>[] = [
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {stage === "Review" ? "In Review" : "Stage " + stage}
+            {stage === "R" ? "In Review" : "Stage " + stage}
           </Badge>
         </TooltipProvider>
       );
