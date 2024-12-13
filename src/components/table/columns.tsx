@@ -8,7 +8,7 @@ import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
-import { Project, RiskArray, Stage } from "@/lib/types";
+import { Project, RiskArray } from "@/lib/types";
 
 export const columns: ColumnDef<Project>[] = [
   {
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Project>[] = [
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {stage === "R" ? "Review" : "Stage " + stage}
+            {stage === "R" ? "In Review" : "Stage " + stage}
           </Badge>
         </TooltipProvider>
       );
