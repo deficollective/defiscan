@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Rocket Pool is a decentralized Ethereum staking protocol that allows users to stake their ETH and receive liquid staking tokens (rETH) in return. Additionally, the protocol enables permissionless node operators to participate in ETH staking with reduced ETH requirements (8ETH instead of 32) by pooling funds from stakers into minipools operated by the node operators.
+Rocket Pool is a **decentralized Ethereum staking protocol** that allows users to stake their ETH and receive liquid staking tokens (rETH) in return. Additionally, the protocol enables **permissionless node operators** to participate in ETH staking with reduced ETH requirements (8ETH instead of 32) by pooling funds from stakers into minipools operated by the node operators.
 
 # Overview
 
@@ -161,6 +161,8 @@ Rocket Pool provides **a unique centralized user interface**. However, some DEXe
 | RocketDAOSecurityActions              | [0xeaa442dF4Bb5394c66C8024eFb4979bEc89Eb59a](https://etherscan.io/address/0xeaa442dF4Bb5394c66C8024eFb4979bEc89Eb59a) |
 | RocketDAOSecurityProposals            | [0x6004Fa90a27dB9971aDD200d1A3BB34444db9Fb7](https://etherscan.io/address/0x6004Fa90a27dB9971aDD200d1A3BB34444db9Fb7) |
 | RocketDAOProtocolSettingsSecurity     | [0x1ec364CDD9697F56B8CB17a745B98C2b862CBE29](https://etherscan.io/address/0x1ec364CDD9697F56B8CB17a745B98C2b862CBE29) |
+
+> Please note that all Rocket Pool contracts, which can be found [here](https://docs.rocketpool.net/overview/contracts-integrations), were not included in the analysis as we focused only on contracts that impact protocol parameters, security and liquidity.
 
 ## Permission owners
 
