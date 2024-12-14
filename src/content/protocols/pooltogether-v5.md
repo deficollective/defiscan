@@ -2,7 +2,7 @@
 protocol: "PoolTogether-v5"
 website: "https://pooltogether.com/fr"
 x: "https://twitter.com/PoolTogether_"
-github: "https://github.com/pooltogether"
+github: ["https://github.com/pooltogether"]
 defillama_slug: ["pooltogether-v5"]
 chain: "Ethereum"
 stage: 2

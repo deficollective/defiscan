@@ -2,7 +2,7 @@
 protocol: "Maverick-v2"
 website: "https://app.mav.xyz"
 x: "https://x.com/mavprotocol"
-github: "https://github.com/maverickprotocol"
+github: ["https://github.com/maverickprotocol"]
 defillama_slug: ["maverick-v2"]
 chain: "Ethereum"
 stage: "R"
