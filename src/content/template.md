@@ -26,13 +26,11 @@ See http://defiscan.info/learn-more#chain for more guidance.
 
 ## Upgradeability
 
-See http://defiscan.info/learn-more#upgradability for more guidance.
-
-For some guidance:
-
 In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
 
-This steps help you write a nice report:
+We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
+
+For some practical guidance follow this steps. It will help you in writing a nice report:
 
 1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
 2. Fill in all the permissioned functions in the table (`## Permissions`)
