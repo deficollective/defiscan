@@ -7,7 +7,7 @@ github:
     "https://github.com/Uniswap/v3-core",
     "https://github.com/Uniswap/v3-periphery/",
   ]
-defillama_slug: "uniswap-v3"
+defillama_slug: ["uniswap-v3"]
 chain: "Ethereum"
 stage: 2
 risks: ["L", "L", "L", "L", "L"]
