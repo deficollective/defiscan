@@ -2,7 +2,7 @@
 protocol: "name of the protocol appended by the version if multiple versions exist (use an '-' and no whitespace)"
 website: "https://..."
 x: "https://x.com/projecthandle"
-github: "https://github.com/projectgithub"
+github: ["https://github.com/projectgithub"]
 defillama_slug: ["the slug used by https://defillama.com"]
 chain: "the name of the chain on which the protocol is deployed"
 stage: 0
@@ -27,6 +27,27 @@ See http://defiscan.info/learn-more#chain for more guidance.
 ## Upgradeability
 
 See http://defiscan.info/learn-more#upgradability for more guidance.
+
+For some guidance:
+
+In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+
+This steps help you write a nice report:
+
+1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
+2. Fill in all the permissioned functions in the table (`## Permissions`)
+   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
+3. Get a mechanistic and precise understanding of each permissioned function
+4. Assess impact for each function, look out for
+   - loss/blocking of user funds
+   - loss of unclaimed yield
+   - change expected behavior significantly (blacklisting/kyc/fees/...)
+5. Write the impact column based on your understanding
+   - A good tipp when writing the impact column below, think of least 2,3 sentences:
+   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
+   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
+   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
+6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
 
 ## Autonomy
 
