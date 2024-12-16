@@ -11,13 +11,13 @@ author: ["andrijdavid"]
 submission_date: "2024-12-10"
 publish_date: "1970-01-01"
 acknowledge_date: "1970-01-01"
-update_date: "2024-16-10"
+update_date: "2024-12-16"
 ---
 
 # Summary
 
 
-Ethena is a synthetic dollar protocol built on Ethereum that provides a crypto-native solution for money not reliant on traditional banking system infrastructure. It introduces the 'Internet Bond,' a globally accessible dollar-denominated rewards instrument. Ethena's synthetic dollar, USDe, is fully backed by staked crypto assets (Etherum and Bitcoin) and its corresponding short futures positions. Ethena employs delta-hedging strategies to maintain stability and generate yields for users.
+Ethena is a synthetic dollar protocol built on Ethereum that provides a crypto-native solution for money not reliant on traditional banking system infrastructure. It introduces the 'Internet Bond,' a globally accessible dollar-denominated rewards instrument. Ethena's synthetic dollar, USDe, is fully backed by staked crypto assets (Ethereum and Bitcoin) and its corresponding short futures positions. Ethena employs delta-hedging strategies to maintain stability and generate yields for users.
 
 # Overview
 
@@ -29,7 +29,7 @@ The Ethena protocol is deployed on Ethereum mainnet.
 
 ## Upgradeability
 
-Ethena's smart contracts except [sENA](https://etherscan.io/token/0x8bE3460A480c80728a8C4D7a5D5303c85ba7B3b9) are not upgradable but the ability to set and update roles introduces a level of flexibility and risk. It has a centralized administration structure with a single admin who holds significant control over the system. The admin can grant various roles, revoke roles, add/remove asset as colateral, and manage different aspects of the contract, including setting cooldown durations, vesting period, disable mint and redeem, setting the maximum amount of tokens that can be minted per block, setting the maximum amount of tokens that can be redeemed per block and blacklisting addresses. Changes in these parameters may affect or delay users' ability to claim their reward/yield.
+Ethena's smart contracts except [sENA](https://etherscan.io/token/0x8bE3460A480c80728a8C4D7a5D5303c85ba7B3b9) are non-upgradable but the ability to set and update roles introduces a level of flexibility and risk. It has a centralized administration structure with a single admin who holds significant control over the system. The admin can grant various roles, revoke roles, add/remove asset as collateral, and manage different aspects of the contract, including setting cool-down durations, vesting period, disable mint and redeem, setting the maximum amount of tokens that can be minted per block, setting the maximum amount of tokens that can be redeemed per block and blacklisting addresses. Changes in these parameters may affect or delay users' ability to claim their reward/yield.
 
 There is also an explicit flow for admin transfer, ensuring the current admin has the power to control and transition governance. 
 
