@@ -99,12 +99,20 @@ export default async function ProtocolPageItem({
             <tr>
               <td className="whitespace-nowrap">GitHub</td>
               <td className="break-all max-w-xs">
-                <a
-                  href={protocol.github}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.github}
-                </a>
+                <div>
+                  {protocol.github!.map((slug, index) => (
+                    <a
+                      key={index}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`
+                          ${slug}`}
+                      className="text-blue-500 hover:underline text-sm md:text-base"
+                    >
+                      {index == 0 ? slug : ", " + slug}
+                    </a>
+                  ))}
+                </div>
               </td>
             </tr>
             <tr>
@@ -191,7 +199,7 @@ export default async function ProtocolPageItem({
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {protocol.stage! === "R" ? "In Review" : "Stage " + protocol.stage!}
+            {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
           </Badge>
         </TooltipProvider>
 
