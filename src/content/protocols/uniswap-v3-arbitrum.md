@@ -1,15 +1,19 @@
 ---
-protocol: "uniswap-v3"
-website: "https://app.uniswap.org/"
-x: "https://x.com/Uniswap"
-github: "https://github.com/Uniswap"
-defillama_slug: "uniswap-v3"
-chain: "arbitrum"
-stage: Review
-risks: ["M", "'H'", "L", "H", "M"]
-author: ["CookingCryptos"]
-submission_date: "2024-11-21"
-publish_date: "1970-01-01"
+protocol: "Uniswap-V3"
+website: "https://blog.uniswap.org/uniswap-v3"
+x: "https://x.com/uniswap"
+github:
+  [
+    "https://github.com/Uniswap/v3-core",
+    "https://github.com/Uniswap/v3-periphery/",
+  ]
+defillama_slug: ["uniswap-v3"]
+chain: "Arbitrum"
+stage: 2
+risks: ["M", "L", "L", "L", "L"]
+author: ["mmilien","CookingCryptos"]
+submission_date: "2024-11-12"
+publish_date: "2024-12-16"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
@@ -25,47 +29,40 @@ The protocol is deployed across multiple chains enabling a wide range of use cas
 
 ## Chain
 
-Uniswap v3 is deployed on the Arbitrum chain, an Ethereum L2 in Stage 1 according to L2BEAT.
+Uniswap v3 is deployed on various chains. This review is based on the Arbitrum chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
 > Chain score: M
 
 ## Upgradeability
 
-Uniswap V3 on Arbitrum retains significant upgradability permissions, with most critical functions controlled by an Externally Owned Account (EOA) at 0x2BAD8182C09F50c8318d769245beA52C32Be46CD. These permissions include functions such as setOwner and enableFeeAmount within the UniswapV3Factory contract. This setup allows the EOA to transfer ownership or enable new fee tiers, which introduces governance and operational risks. Additionally, pool-level permissions like setFeeProtocol and collectProtocol, which control fee adjustments and withdrawals, are also under the same ownership, further centralizing control and potentially impacting trading and revenue.
+The Uniswap DAO can change parameters such as fees through the `GorvernorBravoDelegator` contract.
+Apart from the fees set by the governance, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
 
-Proxy contracts in the protocol are managed through the ProxyAdmin contract, which is also owned by the same EOA. This contract holds critical permissions such as upgrade and upgradeAndCall, enabling modifications to implementation contracts. These permissions carry high risks of introducing vulnerabilities or malicious behavior through updates. TransparentUpgradeableProxy contracts are managed by ProxyAdmin, with control over functions like changeAdmin, upgradeTo, and upgradeToAndCall. These permissions, if exploited, could lead to unintended behavior or system disruptions.
+No User funds nor unclaimed yield are affected by the remaining permissions.
 
-Some immutability exists within the protocol. Certain permissions, such as renounceOwnership and transferOwnership in key contracts like TransparentUpgradeableProxy, are owned by the zero address. This effectively makes them unmodifiable and reduces risks in these specific areas. However, the centralized control over critical functions remains a notable concern.
+Note that a `TransparentProxy` with the DAO as admin is used for the `NonFungibleTokenPositionDescriptor`, which is used for token descriptions.
+However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
 
-The EOA ownership of key permissions poses critical risks to the protocol. The ability to update contracts or change governance without decentralized oversight creates vulnerabilities that could impact user funds or the expected performance of the system.
-
-In the course of our analysis, we identified three contracts that are not verified on the blockchain. The three unverified contracts are:
-
-NFTDescriptor: 0x42B24A95702b9986e82d421cC3568932790A48Ec
-NonfungibleTokenPositionDescriptor: 0x91ae842A5Ffd8d12023116943e72A606179294f3
-Multicall: 0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB
-Without access to the source code, we cannot assess the permissions, upgradability, or potential risks associated with these contracts. This introduces an additional layer of uncertainty in the overall evaluation of the protocol.
-
-> Chain score: H
+> Upgradeabillity score: L
 
 ## Autonomy
 
-Uniswap V3 operates independently, with no reliance on external oracles, DeFi protocols, or cross-chain infrastructure. This self-sufficiency minimizes risks from external disruptions, ensuring stable performance.
+There are no particular dependencies for the Uniswap protocol.
 
 > Autonomy score: L
 
 ## Exit Window
 
-Uniswap V3 does not implement an exit window for its permissions. The protocol’s critical permissions, including those controlled by the EOA at 0x2BAD8182C09F50c8318d769245beA52C32Be46CD, do not have a mechanism that allows users to withdraw funds or adjust their positions in response to an unwanted update before it is executed. This lack of an enforced delay or safeguard exposes users to the risk of immediate changes without recourse, particularly given the reliance on a single externally owned account (EOA) for many sensitive permissions.
+No "Medium" or "High" risk permissions are found in the protocol that require protection with an Exit Window, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days Exit Window for approved updates.
 
-> Chain score: H
+> Exit score: L
 
 ## Accessibility
 
-Uniswap V3 offers a primary user interface hosted on its official platform, with the source code available publicly on [GitHub](https://github.com/Uniswap/interface)
- for self-hosting. This ensures that users can deploy their own interface in case of a shutdown of the official website. However, the reliance on a single main interface without other independent platforms or in-wallet integrations limits access options in the event of unexpected downtime.
+Uniswap is accessible through multiple frontends. Uniswap offers main access through their main deployment: https://app.uniswap.org/. In addition to that,
+the frontend app is also hosted on IPFS see here https://github.com/Uniswap/interface/releases. Further details on the maintenance and access of the interface hosted on IPFS can be found [here](https://blog.uniswap.org/uniswap-interface-ipfs). Additionally, users are offered the possibility to self host the frontend from here: https://github.com/Uniswap/interface.
 
-> Accessibility score: M
+> Accessibility score: L
 
 # Technical Analysis
 
@@ -124,13 +121,16 @@ Uniswap V3 offers a primary user interface hosted on its official platform, with
 
 ## Dependencies
 
-Uniswap V3 is designed to function autonomously without dependencies on external oracles, other DeFi protocols, specific assets, other DEXs, cross-chain bridges, or cross-chain infrastructure. This design enhances its resilience and reduces potential points of failure.
+No external dependency has been found.
 
 ## Exit Window
 
-Uniswap V3 on Arbitrum does not implement an exit window mechanism. Critical permissions are controlled by the externally owned address (EOA) 0x2BAD8182C09F50C8318d769245beA52C32Be46CD, allowing changes to be executed immediately without delay. This setup leaves users with no opportunity to react or adjust their positions in response to potential unwanted updates.
+As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol
+fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
+The lock period is at least two days and up to 30 days for governance actions.
+When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
 
 # Security Council
 
-The protocol doesn't use a multisig on Arbitrum
+No security council needed because on-chain governance is in place.
 
