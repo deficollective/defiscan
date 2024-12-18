@@ -24,7 +24,6 @@ Uniswap v3 is an AMM that builds upon Uniswap v2 by introducing a concentrated l
 Uniswap v3 also introduces multiple fee tiers (0.01%, 0.05%, 0.3%, and 1%) to support different asset volatility profiles, allowing LPs to adjust their fee preferences based on expected risk and return. Additionally, it incorporates "range orders," which effectively turn liquidity positions into limit orders, further enhancing LP strategy flexibility.
 The protocol is deployed across multiple chains enabling a wide range of use cases across decentralized finance (DeFi) applications.
 
-
 # Overview
 
 ## Chain
@@ -42,6 +41,10 @@ No User funds nor unclaimed yield are affected by the remaining permissions.
 
 Note that a `TransparentProxy` with the DAO as admin is used for the `NonFungibleTokenPositionDescriptor`, which is used for token descriptions.
 However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
+
+Amendment
+During our analysis, we identified two unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code) and [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
+
 
 > Upgradeabillity score: L
 
@@ -86,38 +89,31 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | Permit2                            | 0x000000000022D473030F116dDEE9F6B43aC78BA3 |
 | UniversalRouter                    | 0x5E325eDA8064b456f4781070C0738d849c824258 |
 | v3StakerAddress                    | 0xe34139463bA50bD61336E0c446Bd8C0867c6fE65 |
+| L2 Alias                           | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
 
 ## Permission owners
 
-| Name               | Account                                                                                                                   | Type     |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------- |
-| Undeclared Address | [0x2BAD8182C09F50c8318d769245beA52C32Be46CD](https://arbiscan.io/address/0x2BAD8182C09F50c8318d769245beA52C32Be46CD)      | EOA      |
-| ProxyAdmin         | [0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2](https://arbiscan.io/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2#code) | Contract |
+| Name               | Account                                                                                                                   | Type           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| L2 Alias Timelock  | [0x2BAD8182C09F50c8318d769245beA52C32Be46CD](https://arbiscan.io/address/0x2BAD8182C09F50c8318d769245beA52C32Be46CD)      | Alias Contract |
+| ProxyAdmin         | [0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2](https://arbiscan.io/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2#code) | Contract       |
 
 ## Permissions
 
-| Contract                                | Function          | Impact                                                                                                                                                                                                                                            | Owner                                      |
-|-----------------------------------------|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
-| UniswapV3Factory                        | setOwner          | The setOwner function allows the current owner of the UniswapV3Factory contract to transfer ownership to a new address (_owner). This could lead to ownership takeover if abused.                                                                 | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| UniswapV3Factory                        | enableFeeAmount   | This function enables a new fee tier for pools by the owner. Incorrect tick spacing or fee settings could lead to operational or security vulnerabilities in the protocol.                                                                        | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| UniswapV3Factory(UniswapV3Pool)         | setFeeProtocol    | This function allows the factory owner to set the fee protocol parameters for token0 and token1. Misuse could lead to excessive fees, impacting users trading in the pool.                                                                        | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| UniswapV3Factory(UniswapV3Pool)         | collectProtocol   | This function allows the factory owner to withdraw accumulated protocol fees. If exploited, it could result in unauthorized withdrawal of fees, reducing the protocol’s revenue and potentially affecting its ability to cover operational costs. | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin(Ownable)                     | renounceOwnership | This function allows the owner to relinquish ownership, leaving the contract without an owner. This disables all onlyOwner functions, making future administration impossible.                                                                    | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin(Ownable)                     | transferOwnership | This function allows the owner to transfer ownership to another address. If misused or compromised, ownership could be transferred to a malicious actor, leading to potential contract exploitation.                                              | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin                              | renounceOwnership | This function allows the owner to relinquish ownership, leaving the contract without an owner. This disables all onlyOwner functions, making future administration impossible.                                                                    | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin                              | transferOwnership | This function allows the owner to transfer ownership to another address. If misused or compromised, ownership could be transferred to a malicious actor, leading to potential contract exploitation.                                              | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin                              | changeProxyAdmin  | This function allows the admin of a proxy to be changed. If compromised, a malicious actor could take over proxy administration, leading to unauthorized upgrades or control.                                                                     | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin                              | upgrade           | This function allows upgrading the implementation of a proxy. A malicious upgrade could introduce vulnerabilities or malicious behavior in the proxy's implementation.                                                                            | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin                              | upgradeAndCall    | Similar to upgrade, but also allows calling a function in the new implementation immediately after the upgrade. This increases the attack surface by enabling arbitrary execution during the upgrade process.                                     | 0x2BAD8182C09F50c8318d769245beA52C32Be46CD |
-| ProxyAdmin(TransparentUpgradeableProxy) | changeAdmin       | Allows the admin of the proxy to be changed. If misused, control of the proxy could be transferred to a malicious actor, compromising all admin-controlled operations.                                                                            | 0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2 |
-| ProxyAdmin(TransparentUpgradeableProxy) | upgradeTo         | Allows the admin to upgrade the proxy to a new implementation. If exploited, a malicious implementation could be deployed, compromising the proxy's functionality.                                                                                | 0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2 |
-| ProxyAdmin(TransparentUpgradeableProxy) | upgradeToAndCall  | Similar to upgradeTo, but with the added risk of allowing arbitrary function calls during the upgrade. This can be exploited to execute malicious actions immediately after upgrading the implementation.                                         | 0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2 |
-| Ownable(TransparentUpgradeableProxy)    | renounceOwnership | This function allows the current owner to renounce ownership, leaving the contract ownerless. This could render the contract non-upgradable and restrict future changes, potentially locking funds or functionality.                              | 0x0000000000000000000000000000000000000000 |
-| Ownable(TransparentUpgradeableProxy)    | transferOwnership | This function allows the current owner to transfer ownership to another address. If misused or called with an invalid address, it could lead to loss of control over the contract.                                                                | 0x0000000000000000000000000000000000000000 |
-| ProxyAdmin(TransparentUpgradeableProxy) | renounceOwnership | Similar to Ownable.renounceOwnership, this function could leave the proxy administration without an owner, effectively disabling upgrades and admin changes for the proxy contract, creating operational and security risks.                      | 0x0000000000000000000000000000000000000000 |
-| ProxyAdmin(TransparentUpgradeableProxy) | transferOwnership | This function enables the transfer of ownership of the proxy administration to a new address. An incorrect transfer could compromise control over all associated proxies, leading to potential exploitation.                                      | 0x0000000000000000000000000000000000000000 |
-| TransparentUpgradeableProxy             | admin             | This function allows the admin to view the current admin address of the proxy. If improperly secured, it could expose sensitive details or allow unauthorized access to privileged functions.                                                     | 0xb753548f6e010e7e680ba186f9ca1bdab2e90cf2 |
-| TransparentUpgradeableProxy             | implementation    | This function reveals the address of the current implementation contract. If improperly secured, it could expose sensitive implementation details, potentially allowing attackers to identify and exploit vulnerabilities in the logic.           | 0xb753548f6e010e7e680ba186f9ca1bdab2e90cf2 |
+| Contract                    | Function          | Impact                                                                                                                                                                                                                                              | Owner             |
+|-----------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| UniswapV3Factory            | setOwner          | Changes the owner to a new address. The DAO can appoint a new owner which can set fees on various pools (setProtocolFee), collect fees on behalf of the protocol and allow new tick spaces for new deployed pools.                                  | L2 Alias Timelock |
+| UniswapV3Factory            | enableFeeAmount   | Enables the creation of new fee tiers for pools by enabling a specific fee amount paired with a corresponding tick spacing.                                                                                                                         | L2 Alias Timelock |
+| UniswapV3Pool               | setFeeProtocol    | Allows the owner to set a fee percentage that is deducted from the LPs fees. It only affects the pool where the function is called. The fee is required to be less than 10% of the total accumulated fees. It only affects future accumulated fees. | L2 Alias Timelock |
+| UniswapV3Pool               | collectProtocol   | Withdraws the accumulated protocol fees to a custom address. The DAO triggers the withdraw and specifies the address.                                                                                                                               | L2 Alias Timelock |
+| ProxyAdmin                  | renounceOwnership | Abandons ownership of the contract. The DAO would renounce the access to the administrative functions of the contracts, which includes upgrading the `NonFungibleTokenPositionDescriptor` contract.                                                 | L2 Alias Timelock |
+| ProxyAdmin                  | transferOwnership | Updates the owner of the `ProxyAdmin` contract: the account with the rights to change the admin of the proxy and upgrade the `NonFungibleTokenPositionDescriptor` contract.                                                                         | L2 Alias Timelock |
+| ProxyAdmin                  | changeProxyAdmin  | Updates the admin of the `TransparentUpgradeableProxy`: the account with the rights to upgrade the proxy's implementation. This would replace the role of the `ProxyAdmin` contract and could be used to upgrade (replace) `ProxyAdmin`.            | L2 Alias Timelock |
+| ProxyAdmin                  | upgrade           | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                            | L2 Alias Timelock |
+| ProxyAdmin                  | upgradeAndCall    | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                               | L2 Alias Timelock |
+| TransparentUpgradeableProxy | changeAdmin       | Updates the proxy's admin: the account with the rights to upgrade the proxy's implementation. This would replace the role of the `ProxyAdmin` contract and could be used to upgrade (replace) `ProxyAdmin`.                                         | ProxyAdmin        |
+| TransparentUpgradeableProxy | upgradeTo         | Upgrades the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                                           | ProxyAdmin        |
+| TransparentUpgradeableProxy | upgradeToAndCall  | Upgrades the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                                              | ProxyAdmin        |
 
 ## Dependencies
 
@@ -129,8 +125,8 @@ As the contracts are immutable the users can always withdraw their funds, but pa
 fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
 The lock period is at least two days and up to 30 days for governance actions.
 When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
+Additionally, governance actions initiated on Ethereum (L1) are enforced on Arbitrum (L2). This cross-chain enforcement ensures that Timelock decisions on L1 are consistently applied to the contracts on L2.
 
 # Security Council
 
-No security council needed because on-chain governance is in place.
-
+No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Arbitrum.
