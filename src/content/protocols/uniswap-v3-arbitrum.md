@@ -9,7 +9,7 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Arbitrum"
-stage: 2
+stage: review
 risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien","CookingCryptos"]
 submission_date: "2024-11-12"
