@@ -12,6 +12,7 @@ import { getRiskDescriptions } from "@/components/rosette/data-converter/data-co
 import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Stage } from "@/lib/types";
 
 interface ProtocolPageItemProps {
   params: {
@@ -98,12 +99,20 @@ export default async function ProtocolPageItem({
             <tr>
               <td className="whitespace-nowrap">GitHub</td>
               <td className="break-all max-w-xs">
-                <a
-                  href={protocol.github}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.github}
-                </a>
+                <div>
+                  {protocol.github!.map((slug, index) => (
+                    <a
+                      key={index}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`
+                          ${slug}`}
+                      className="text-blue-500 hover:underline text-sm md:text-base"
+                    >
+                      {index == 0 ? slug : ", " + slug}
+                    </a>
+                  ))}
+                </div>
               </td>
             </tr>
             <tr>
@@ -179,16 +188,18 @@ export default async function ProtocolPageItem({
 
         <TooltipProvider>
           <Badge
-            stage={protocol.stage!}
+            stage={protocol.stage! as Stage}
             className={`${
-              protocol.stage === 0
-                ? "bg-red-500"
-                : protocol.stage === 1
-                  ? "bg-yellow-500"
-                  : "bg-green-500"
-            } text-white px-2 py-1 rounded`}
+              protocol.stage! === "R"
+                ? "bg-gray-500"
+                : protocol.stage! === 0
+                  ? "bg-red-500"
+                  : protocol.stage! === 1
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+            } text-white py-1 rounded "text-lg"`}
           >
-            {"Stage " + protocol.stage}
+            {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
           </Badge>
         </TooltipProvider>
 
