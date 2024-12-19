@@ -9,7 +9,7 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Arbitrum"
-stage: review
+stage: "R"
 risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien","CookingCryptos"]
 submission_date: "2024-11-12"
@@ -17,6 +17,7 @@ publish_date: "2024-12-16"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
+⚠️ During our analysis, we identified two unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code) and [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
 # Summary
 
@@ -41,10 +42,6 @@ No User funds nor unclaimed yield are affected by the remaining permissions.
 
 Note that a `TransparentProxy` with the DAO as admin is used for the `NonFungibleTokenPositionDescriptor`, which is used for token descriptions.
 However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
-
-Amendment
-During our analysis, we identified two unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code) and [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
-
 
 > Upgradeabillity score: L
 
