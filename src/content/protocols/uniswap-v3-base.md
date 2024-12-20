@@ -109,8 +109,8 @@ As the contracts are immutable the users can always withdraw their funds, but pa
 fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
 The lock period is at least two days and up to 30 days for governance actions.
 When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-Additionally, governance actions initiated on Ethereum (L1) are enforced on Arbitrum (L2). This cross-chain enforcement ensures that Timelock decisions on L1 are consistently applied to the contracts on L2.
+Additionally, governance actions initiated on Ethereum (L1) are enforced on Base (L2). This cross-chain enforcement ensures that Timelock decisions on L1 are consistently applied to the contracts on L2.
 
 # Security Council
 
-No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Arbitrum.
+No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Base.
