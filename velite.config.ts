@@ -17,10 +17,10 @@ const protocols = defineCollection({
       protocol: s.string().max(99),
       website: s.string(),
       x: s.string(),
-      github: s.string(),
+      github: s.array(s.string()),
       defillama_slug: s.array(s.string()),
       chain: s.string(),
-      stage: s.number(),
+      stage: s.number().gte(0).lte(2).or(s.literal("R")),
       risks: s.tuple([
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
         s.literal("L").or(s.literal("M")).or(s.literal("H")),

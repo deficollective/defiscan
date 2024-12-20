@@ -2,7 +2,7 @@
 protocol: "Velodrome-v2"
 website: "https://velodrome.finance/"
 x: "https://twitter.com/VelodromeFi"
-github: "https://github.com/velodrome-finance"
+github: ["https://github.com/velodrome-finance"]
 defillama_slug: ["velodrome-v2", "velodrome-v3"]
 chain: "Optimism"
 stage: 1

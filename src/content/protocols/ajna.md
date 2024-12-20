@@ -2,7 +2,7 @@
 protocol: "Ajna V2"
 website: "https://ajnafi.com/"
 x: "https://x.com/ajnafi"
-github: "https://github.com/ajna-finance"
+github: ["https://github.com/ajna-finance"]
 defillama_slug: ["ajna-v2"]
 chain: "Ethereum"
 stage: 1
