@@ -65,7 +65,7 @@ export function BadgeTooltip({ stage }: { stage: Stage }) {
                   {item}
                 </div>
               ))
-            : stageToRequisites[stage].map((item, index) => (
+            : stageToRequisites.slice(1)[stage].map((item, index) => (
                 <div key={index} className="mt-1">
                   {item}
                 </div>
