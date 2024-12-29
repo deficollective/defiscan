@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { defiLlama } from "@/services/defillama";
 import { protocols } from "#site/content";
-import { Project } from "@/lib/types";
+import { Project, Stage } from "@/lib/types";
 
 interface VisualisedData {
   key: string;
@@ -50,6 +50,22 @@ const groupBy = (
   );
 };
 
+const keyToWord = (key: string) => {
+  if (key === "R") {
+    return "Review";
+  } else if (key === "O") {
+    return "Others";
+  } else if (key === "1") {
+    return "Stage 1";
+  } else if (key === "2") {
+    return "Stage 2";
+  } else if (key === "0") {
+    return "Stage 0";
+  } else {
+    return `${key}`;
+  }
+};
+
 const aggregateByKey = (
   groupedData: Record<string, Project[]>,
   operation: "sum" | "count"
@@ -57,8 +73,10 @@ const aggregateByKey = (
   return Object.entries(groupedData).map(([key, projects]) => {
     if (operation === "sum") {
       const totalTvl = projects.reduce((sum, project) => sum + project.tvl, 0);
+      key = keyToWord(key);
       return { key, value: totalTvl };
     } else {
+      key = keyToWord(key);
       return { key, value: projects.length };
     }
   });
