@@ -20,14 +20,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  othersCount: number;
+  defiCount: number;
 }
 
 // Define the extended ColumnMeta type
@@ -81,6 +81,8 @@ const useResponsiveColumns = (
 export function DataTable<TData, TValue>({
   columns,
   data,
+  othersCount,
+  defiCount,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -146,78 +148,91 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="rounded-md w-full">
-      <div className="flex flex-row items-center pb-8">
-        <Input
-          placeholder="Search protocol"
-          value={
-            (table.getColumn("protocol")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event: any) =>
-            table.getColumn("protocol")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm border border-grey"
-        />
-      </div>
-      <Button
-        onClick={() => setDefiView(true)}
-        variant={defiView ? "default" : "outline"}
-      >
-        {"DeFi"}
-      </Button>
-      <Button
-        onClick={() => setDefiView(false)}
-        variant={defiView ? "outline" : "default"}
-      >
-        {"Others"}
-      </Button>
+    <div className="w-full">
+      <div className="flex space-x-2">
+        <div
+          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
+            defiView
+              ? "bg-primary text-white"
+              : "bg-background border-t border-l border-r text-white-200 hover:bg-primary"
+          }`}
+          onClick={() => setDefiView(true)}
+        >
+          <span className="mr-2">DeFi</span>
+          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+            {defiCount}
+          </span>
+        </div>
 
-      <Table className="">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="hover:bg-background">
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} className="border-b px-4 py-2">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                onClick={() => {
-                  handleRowClick((row as any).original.slug);
-                }}
-                data-state={row.getIsSelected() && "selected"}
-                className="hover:bg-accent cursor-pointer transition"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+        <div
+          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
+            !defiView
+              ? "bg-primary text-white"
+              : "bg-background border-t border-l border-r text-white-200 hover:bg-primary"
+          }`}
+          onClick={() => setDefiView(false)}
+        >
+          <span className="mr-2">Others</span>
+          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+            {othersCount}
+          </span>
+        </div>
+      </div>
+
+      <div className="rounded-b-lg rounded-r-lg border overflow-hidden">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="hover:bg-accent">
+                {headerGroup.headers.map((header, index) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody className="">
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  onClick={() => {
+                    handleRowClick((row as any).original.slug);
+                  }}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-accent cursor-pointer transition"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
