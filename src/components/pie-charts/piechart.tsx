@@ -282,6 +282,7 @@ export async function mergeDefiLlamaWithMd() {
         tvl: tvl,
         chain: frontmatterProtocol.chain,
         stage: frontmatterProtocol.stage,
+        reasons: frontmatterProtocol.reasons,
         type: type,
         risks: frontmatterProtocol.risks,
       } as Project;

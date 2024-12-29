@@ -6,6 +6,7 @@ github: ["https://github.com/liquity"]
 defillama_slug: ["liquity"]
 chain: "Ethereum"
 stage: 2
+reasons: []
 risks: ["L", "L", "L", "L", "L"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"

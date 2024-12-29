@@ -8,10 +8,11 @@ import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
-import { Project, RiskArray } from "@/lib/types";
+import { Project, Reasons, RiskArray, Stage } from "@/lib/types";
 
 export const columns: ColumnDef<Project>[] = [
   {
+    id: "logo",
     accessorKey: "logo",
     header: "",
     cell: ({ row }) => {
@@ -36,6 +37,7 @@ export const columns: ColumnDef<Project>[] = [
     },
   },
   {
+    id: "protocol",
     accessorKey: "protocol",
     header: ({ column }) => {
       return (
@@ -55,6 +57,7 @@ export const columns: ColumnDef<Project>[] = [
     sortingFn: "alphanumeric", // use built-in sorting function by name
   },
   {
+    id: "stage",
     accessorKey: "stage",
     header: ({ column }) => {
       return (
@@ -67,6 +70,10 @@ export const columns: ColumnDef<Project>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    filterFn: (row, columnId, filterValue) => {
+      // Check if the row's stage value is in the filterValue array
+      return filterValue.includes(row.getValue(columnId));
     },
     cell: ({ row }) => {
       const stage = row.getValue("stage") as Stage;
@@ -92,6 +99,37 @@ export const columns: ColumnDef<Project>[] = [
     sortingFn: "alphanumeric", // use built-in sorting function by name
   },
   {
+    id: "reasons",
+    accessorKey: "reasons",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0 text-xs md:text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Reason
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const reasons = row.getValue("reasons") as Reasons;
+      return (
+        <div>
+          {reasons.map((el) => (
+            <TooltipProvider>
+              <Badge className="my-1 bg-red-500" stage={"O"}>
+                {el}
+              </Badge>
+            </TooltipProvider>
+          ))}
+        </div>
+      );
+    },
+    sortingFn: "alphanumeric", // use built-in sorting function by name
+  },
+  {
     accessorKey: "risks",
     header: ({ column }) => {
       return <p className="text-xs md:text-sm">Risks</p>;
@@ -110,6 +148,7 @@ export const columns: ColumnDef<Project>[] = [
     },
   },
   {
+    id: "type",
     accessorKey: "type",
     header: ({ column }) => {
       return (
@@ -137,6 +176,7 @@ export const columns: ColumnDef<Project>[] = [
     },
   },
   {
+    id: "chain",
     accessorKey: "chain",
     header: ({ column }) => {
       return (
@@ -164,6 +204,7 @@ export const columns: ColumnDef<Project>[] = [
     },
   },
   {
+    id: "tvl",
     accessorKey: "tvl",
     header: ({ column }) => {
       return (

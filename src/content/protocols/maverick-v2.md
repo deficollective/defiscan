@@ -5,7 +5,8 @@ x: "https://x.com/mavprotocol"
 github: ["https://github.com/maverickprotocol"]
 defillama_slug: ["maverick-v2"]
 chain: "Ethereum"
-stage: "R"
+stage: "O"
+reasons: ["Unverified Contracts", "Missing Documentation"]
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"

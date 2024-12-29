@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,16 +35,20 @@ type ExtendedColumnMeta = {
   responsiveHidden?: boolean;
 };
 
-const getInitialVisibility = (columns: ColumnDef<any, any>[]) => {
-  const initialState: Record<string, boolean> = {};
-
-  columns.forEach((column) => {
-    // Assuming you add a `responsiveHidden` property to columns you want hidden on mobile
-    if (typeof column.id === "string") {
-      initialState[column.id] = !(column.meta as ExtendedColumnMeta)
-        ?.responsiveHidden;
-    }
-  });
+const getInitialVisibility = (
+  columns: ColumnDef<any, any>[],
+  defiView: boolean
+) => {
+  const initialState: Record<string, boolean> = {
+    logo: true,
+    protocol: true,
+    stage: true,
+    reasons: false, // disable with first load
+    risks: true,
+    type: true,
+    chain: true,
+    tvl: true,
+  };
 
   return initialState;
 };
@@ -85,8 +90,10 @@ export function DataTable<TData, TValue>({
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const [defiView, setDefiView] = useState(true);
+
   const initialVisibility = useMemo(
-    () => getInitialVisibility(columns),
+    () => getInitialVisibility(columns, defiView),
     [columns]
   );
 
@@ -116,6 +123,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    setColumnVisibility((prev) => ({
+      ...prev,
+      stage: defiView,
+      reasons: !defiView,
+    }));
+    if (!defiView) {
+      table.resetColumnFilters();
+      table.getColumn("stage")?.setFilterValue("O");
+    } else {
+      table.resetColumnFilters();
+      table.getColumn("stage")?.setFilterValue([0, 1, 2, "R"]);
+    }
+  }, [defiView, table]);
+
   useResponsiveColumns(table);
 
   // Navigate to the protocol's page when the row is clicked
@@ -137,6 +159,19 @@ export function DataTable<TData, TValue>({
           className="max-w-sm border border-grey"
         />
       </div>
+      <Button
+        onClick={() => setDefiView(true)}
+        variant={defiView ? "default" : "outline"}
+      >
+        {"DeFi"}
+      </Button>
+      <Button
+        onClick={() => setDefiView(false)}
+        variant={defiView ? "outline" : "default"}
+      >
+        {"Others"}
+      </Button>
+
       <Table className="">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

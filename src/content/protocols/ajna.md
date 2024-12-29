@@ -6,6 +6,7 @@ github: ["https://github.com/ajna-finance"]
 defillama_slug: ["ajna-v2"]
 chain: "Ethereum"
 stage: 1
+reasons: []
 risks: ["L", "L", "L", "L", "M"]
 author: ["brianmcmichael"]
 submission_date: "2024-11-19"

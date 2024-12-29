@@ -192,16 +192,43 @@ export default async function ProtocolPageItem({
             className={`${
               protocol.stage! === "R"
                 ? "bg-gray-500"
-                : protocol.stage! === 0
+                : protocol.stage! === 0 || protocol.stage! === "O"
                   ? "bg-red-500"
                   : protocol.stage! === 1
                     ? "bg-yellow-500"
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
+            {protocol.stage! === "R"
+              ? "Review"
+              : protocol.stage! === "O"
+                ? "Other"
+                : "Stage " + protocol.stage!}
           </Badge>
         </TooltipProvider>
+
+        {protocol.stage! === "O" ? (
+          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+            Missing Requirements for Stage 0
+          </h1>
+        ) : (
+          <></>
+        )}
+        {
+          <div>
+            {protocol.stage! === "O" ? (
+              protocol.reasons!.map((el) => (
+                <TooltipProvider>
+                  <Badge className="my-1 bg-red-500" stage={"O"}>
+                    {el}
+                  </Badge>
+                </TooltipProvider>
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        }
 
         <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
           Risks
