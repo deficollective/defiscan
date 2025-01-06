@@ -9,14 +9,16 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Arbitrum"
-stage: "R"
+stage: "O"
+reasons: ["Unverified Contracts"]
 risks: ["M", "L", "L", "L", "L"]
-author: ["mmilien","CookingCryptos"]
+author: ["mmilien", "CookingCryptos"]
 submission_date: "2024-11-12"
 publish_date: "2024-12-16"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
+
 ⚠️ During our analysis, we identified three unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code), [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code) and [Multicall](https://arbiscan.io/address/0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
 # Summary
@@ -69,7 +71,7 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 ## Contracts
 
 | Contrat Name                       | Address                                    |
-|------------------------------------|--------------------------------------------|
+| ---------------------------------- | ------------------------------------------ |
 | UniswapV3Factory                   | 0x1F98431c8aD98523631AE4a59f267346ea31F984 |
 | Multicall                          | 0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB |
 | ProxyAdmin                         | 0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2 |
@@ -90,15 +92,15 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Permission owners
 
-| Name               | Account                                                                                                                   | Type           |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| L2 Alias Timelock  | [0x2BAD8182C09F50c8318d769245beA52C32Be46CD](https://arbiscan.io/address/0x2BAD8182C09F50c8318d769245beA52C32Be46CD)      | Alias Contract |
-| ProxyAdmin         | [0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2](https://arbiscan.io/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2#code) | Contract       |
+| Name              | Account                                                                                                                   | Type           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| L2 Alias Timelock | [0x2BAD8182C09F50c8318d769245beA52C32Be46CD](https://arbiscan.io/address/0x2BAD8182C09F50c8318d769245beA52C32Be46CD)      | Alias Contract |
+| ProxyAdmin        | [0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2](https://arbiscan.io/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2#code) | Contract       |
 
 ## Permissions
 
 | Contract                    | Function          | Impact                                                                                                                                                                                                                                              | Owner             |
-|-----------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| --------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | UniswapV3Factory            | setOwner          | Changes the owner to a new address. The DAO can appoint a new owner which can set fees on various pools (setProtocolFee), collect fees on behalf of the protocol and allow new tick spaces for new deployed pools.                                  | L2 Alias Timelock |
 | UniswapV3Factory            | enableFeeAmount   | Enables the creation of new fee tiers for pools by enabling a specific fee amount paired with a corresponding tick spacing.                                                                                                                         | L2 Alias Timelock |
 | UniswapV3Pool               | setFeeProtocol    | Allows the owner to set a fee percentage that is deducted from the LPs fees. It only affects the pool where the function is called. The fee is required to be less than 10% of the total accumulated fees. It only affects future accumulated fees. | L2 Alias Timelock |

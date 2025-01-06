@@ -10,6 +10,7 @@ github:
 defillama_slug: ["uniswap-v3"]
 chain: "Ethereum"
 stage: 2
+reasons: []
 risks: ["L", "L", "L", "L", "L"]
 author: ["mmilien"]
 submission_date: "2024-11-12"
