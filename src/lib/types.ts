@@ -2,8 +2,8 @@ export type RiskLevel = "L" | "M" | "H";
 export type Stage = "O" | "R" | 0 | 1 | 2;
 export type RiskArray = [RiskLevel, RiskLevel, RiskLevel, RiskLevel, RiskLevel];
 export type Reason =
-  | "Centralized Custody"
-  | "Missing Documentation"
+  | "Central Custody"
+  | "Missing Docs"
   | "Closed-Source"
   | "Unverified Contracts";
 export type Reasons = Array<Reason>;

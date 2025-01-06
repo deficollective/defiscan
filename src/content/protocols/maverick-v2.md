@@ -6,7 +6,7 @@ github: ["https://github.com/maverickprotocol"]
 defillama_slug: ["maverick-v2"]
 chain: "Ethereum"
 stage: "O"
-reasons: ["Unverified Contracts", "Missing Documentation"]
+reasons: ["Unverified Contracts", "Missing Docs"]
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"

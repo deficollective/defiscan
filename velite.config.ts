@@ -11,8 +11,8 @@ const computedFields = <T extends { slug: string }>(data: T) => ({
 
 // Define valid reasons
 const ReasonSchema = s
-  .literal("Centralized Custody")
-  .or(s.literal("Missing Documentation"))
+  .literal("Central Custody")
+  .or(s.literal("Missing Docs"))
   .or(s.literal("Closed-Source"))
   .or(s.literal("Unverified Contracts"));
 
