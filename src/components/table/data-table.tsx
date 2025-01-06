@@ -154,7 +154,7 @@ export function DataTable<TData, TValue>({
           className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
             defiView
               ? "bg-primary text-white"
-              : "bg-background border-t border-l border-r text-white-200 hover:bg-primary"
+              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
           }`}
           onClick={() => setDefiView(true)}
         >
@@ -168,7 +168,7 @@ export function DataTable<TData, TValue>({
           className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
             !defiView
               ? "bg-primary text-white"
-              : "bg-background border-t border-l border-r text-white-200 hover:bg-primary"
+              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
           }`}
           onClick={() => setDefiView(false)}
         >
@@ -179,7 +179,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="rounded-b-lg rounded-r-lg border overflow-hidden">
+      <div className="overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

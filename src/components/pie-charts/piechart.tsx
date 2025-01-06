@@ -128,7 +128,7 @@ const extendWithColor = (
 
 const defaultLabelFormatters = {
   count: (data: VisualisedData[]) => ({
-    value: data.find((el) => el.key === "2")?.value.toString() || "0",
+    value: data.find((el) => el.key === "Stage 2")?.value.toString() || "0",
     description: "Stage-2",
   }),
   tvl: (data: VisualisedData[]) => ({
@@ -289,9 +289,9 @@ export async function mergeDefiLlamaWithMd() {
         const res = apiData.find(
           (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
         );
+        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
         type = res?.category || "";
         logo = res?.logo || "";
-        tvl += res?.tvl || 0;
       }
       return {
         logo: logo,
