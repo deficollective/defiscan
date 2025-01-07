@@ -92,11 +92,11 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Permission owners
 
-| Name          | Account                                                                            | Type     |
-| ------------- | ---------------------------------------------------------------------------------- | -------- |
-| ProxyAdmin    | [address](https://etherscan.io/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2) | Contract |
-| GovernorBravo | [address](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) | Contract |
-| TimeLock      | [address](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC) | Contract |
+| Name          | Account                                                                                                               | Type     |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| ProxyAdmin    | [0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2](https://etherscan.io/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2) | Contract |
+| GovernorBravo | [0x408ED6354d4973f66138C91495F2f2FCbd8724C3](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) | Contract |
+| TimeLock      | [0x1a9C8182C09F50C8318d769245beA52c32BE35BC](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC) | Contract |
 
 ## Permissions
 
