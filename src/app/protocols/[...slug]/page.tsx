@@ -175,32 +175,31 @@ export default async function ProtocolPageItem({
         </p>
 
         {protocol.stage! != "O" ? (
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Stage
-        </h1>
+          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+            Stage
+          </h1>
         ) : (
           <></>
         )}
 
-      {protocol.stage! != "O" ? (
-        <TooltipProvider>
-          <Badge
-            stage={protocol.stage! as Stage}
-            className={`${
-              protocol.stage! === "R"
-                ? "bg-gray-500"
-                : protocol.stage! === 0
-                  ? "bg-red-500"
-                  : protocol.stage! === 1
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-            } text-white py-1 rounded "text-lg"`}
-          >
-            {protocol.stage! === "R"
-              ? "Review"
-                : "Stage " + protocol.stage!}
-          </Badge>
-        </TooltipProvider>
+        {protocol.stage! != "O" ? (
+          <TooltipProvider>
+            <Badge
+              title={"Stage of Decentralisation"}
+              stage={protocol.stage! as Stage}
+              className={`${
+                protocol.stage! === "R"
+                  ? "bg-gray-500"
+                  : protocol.stage! === 0
+                    ? "bg-red-500"
+                    : protocol.stage! === 1
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+              } text-white py-1 rounded "text-lg"`}
+            >
+              {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
+            </Badge>
+          </TooltipProvider>
         ) : (
           <></>
         )}
@@ -217,7 +216,12 @@ export default async function ProtocolPageItem({
             {protocol.stage! === "O" ? (
               protocol.reasons!.map((el) => (
                 <TooltipProvider>
-                  <Badge className="my-1 bg-red-500" stage={"O"}>
+                  <Badge
+                    title={"Reason"}
+                    className="my-1 bg-red-500"
+                    stage={"O"}
+                    reason={el}
+                  >
                     {el}
                   </Badge>
                 </TooltipProvider>

@@ -8,7 +8,7 @@ import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
-import { Project, Reasons, RiskArray, Stage } from "@/lib/types";
+import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 
 export const columns: ColumnDef<Project>[] = [
   {
@@ -81,6 +81,7 @@ export const columns: ColumnDef<Project>[] = [
         <TooltipProvider>
           <Badge
             stage={stage}
+            title="Stage of Decentralisation"
             className={`${
               stage === "R"
                 ? "bg-gray-500"
@@ -119,7 +120,12 @@ export const columns: ColumnDef<Project>[] = [
         <div>
           {reasons.map((el) => (
             <TooltipProvider>
-              <Badge className="my-1 bg-red-500" stage={"O"}>
+              <Badge
+                className="my-1 bg-red-500"
+                stage={"O"}
+                reason={el}
+                title="Reason"
+              >
                 {el}
               </Badge>
             </TooltipProvider>

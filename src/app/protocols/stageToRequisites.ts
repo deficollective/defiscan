@@ -15,3 +15,14 @@ export const stageToRequisites = {
     "Critical permissions have either been revoked or delegated to an on-chain governance system with ample time for users to exit in case of an unwanted protocol update. Risks from external dependencies have been further reduced such that users’ funds and unclaimed yield remain unaffected by a failure. In addition, different independent user interfaces and a fully decentralized underlying chain guarantee access to users’ funds at any time.",
   ],
 };
+
+export const reasonToText = {
+  "Central Custody":
+    "All or some assets are in custody by a centralized entity.",
+  "Missing Docs":
+    "All or some protocol components and expected performance is not publicly documented.",
+  "Closed-Source":
+    "All or some smart contracts are not published with available source code.",
+  "Unverified Contracts":
+    "All or some smart contracts are not verified with a public blockchain explorer.",
+};
