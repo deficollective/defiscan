@@ -44,7 +44,6 @@ const protocols = defineCollection({
       author: s.array(s.string()),
       submission_date: s.isodate(),
       publish_date: s.isodate(),
-      acknowledge_date: s.isodate(),
       update_date: s.isodate(),
       body: s.mdx(),
     })

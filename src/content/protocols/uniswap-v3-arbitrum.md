@@ -15,7 +15,6 @@ risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
 submission_date: "2024-11-12"
 publish_date: "2024-12-16"
-acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
