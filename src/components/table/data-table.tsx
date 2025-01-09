@@ -20,13 +20,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 
 import { useEffect, useMemo, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  othersCount: number;
+  defiCount: number;
 }
 
 // Define the extended ColumnMeta type
@@ -34,16 +35,20 @@ type ExtendedColumnMeta = {
   responsiveHidden?: boolean;
 };
 
-const getInitialVisibility = (columns: ColumnDef<any, any>[]) => {
-  const initialState: Record<string, boolean> = {};
-
-  columns.forEach((column) => {
-    // Assuming you add a `responsiveHidden` property to columns you want hidden on mobile
-    if (typeof column.id === "string") {
-      initialState[column.id] = !(column.meta as ExtendedColumnMeta)
-        ?.responsiveHidden;
-    }
-  });
+const getInitialVisibility = (
+  columns: ColumnDef<any, any>[],
+  defiView: boolean
+) => {
+  const initialState: Record<string, boolean> = {
+    logo: true,
+    protocol: true,
+    stage: true,
+    reasons: false, // disable with first load
+    risks: true,
+    type: true,
+    chain: true,
+    tvl: true,
+  };
 
   return initialState;
 };
@@ -76,6 +81,8 @@ const useResponsiveColumns = (
 export function DataTable<TData, TValue>({
   columns,
   data,
+  othersCount,
+  defiCount,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -85,8 +92,10 @@ export function DataTable<TData, TValue>({
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const [defiView, setDefiView] = useState(true);
+
   const initialVisibility = useMemo(
-    () => getInitialVisibility(columns),
+    () => getInitialVisibility(columns, defiView),
     [columns]
   );
 
@@ -116,6 +125,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    setColumnVisibility((prev) => ({
+      ...prev,
+      stage: defiView,
+      reasons: !defiView,
+    }));
+    if (!defiView) {
+      table.resetColumnFilters();
+      table.getColumn("stage")?.setFilterValue("O");
+    } else {
+      table.resetColumnFilters();
+      table.getColumn("stage")?.setFilterValue([0, 1, 2, "R"]);
+    }
+  }, [defiView, table]);
+
   useResponsiveColumns(table);
 
   // Navigate to the protocol's page when the row is clicked
@@ -124,65 +148,91 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="rounded-md w-full">
-      <div className="flex flex-row items-center py-2">
-        <Input
-          placeholder="Search protocol"
-          value={
-            (table.getColumn("protocol")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event: any) =>
-            table.getColumn("protocol")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm border border-grey"
-        />
+    <div className="w-full">
+      <div className="flex space-x-2">
+        <div
+          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
+            defiView
+              ? "bg-primary text-white"
+              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
+          }`}
+          onClick={() => setDefiView(true)}
+        >
+          <span className="mr-2">DeFi</span>
+          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+            {defiCount}
+          </span>
+        </div>
+
+        <div
+          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
+            !defiView
+              ? "bg-primary text-white"
+              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
+          }`}
+          onClick={() => setDefiView(false)}
+        >
+          <span className="mr-2">Others</span>
+          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+            {othersCount}
+          </span>
+        </div>
       </div>
-      <Table className="">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="hover:bg-background">
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} className="border-b px-4 py-2">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                onClick={() => {
-                  handleRowClick((row as any).original.slug);
-                }}
-                data-state={row.getIsSelected() && "selected"}
-                className="hover:bg-accent cursor-pointer transition"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+
+      <div className="overflow-hidden">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="hover:bg-accent">
+                {headerGroup.headers.map((header, index) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody className="">
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  onClick={() => {
+                    handleRowClick((row as any).original.slug);
+                  }}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-accent cursor-pointer transition"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

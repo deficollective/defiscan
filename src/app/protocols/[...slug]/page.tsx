@@ -154,14 +154,6 @@ export default async function ProtocolPageItem({
           {protocol.publish_date!.split("T")[0]}.
         </p>
         <p>
-          The {protocol.protocol} team has{" "}
-          {protocol.acknowledge_date!.split("T")[0] === "1970-01-01"
-            ? "NOT acknowledged the review"
-            : "acknowledged the review on " +
-              protocol.acknowledge_date!.split("T")[0]}
-          .
-        </p>
-        <p>
           {protocol.update_date!.split("T")[0] === "1970-01-01"
             ? "The review has not been updated since the initial submission"
             : "The last update to the review was made on " +
@@ -182,26 +174,63 @@ export default async function ProtocolPageItem({
           .
         </p>
 
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Stage
-        </h1>
+        {protocol.stage! != "O" ? (
+          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+            Stage
+          </h1>
+        ) : (
+          <></>
+        )}
 
-        <TooltipProvider>
-          <Badge
-            stage={protocol.stage! as Stage}
-            className={`${
-              protocol.stage! === "R"
-                ? "bg-gray-500"
-                : protocol.stage! === 0
-                  ? "bg-red-500"
-                  : protocol.stage! === 1
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-            } text-white py-1 rounded "text-lg"`}
-          >
-            {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
-          </Badge>
-        </TooltipProvider>
+        {protocol.stage! != "O" ? (
+          <TooltipProvider>
+            <Badge
+              title={"Stage of Decentralisation"}
+              stage={protocol.stage! as Stage}
+              className={`${
+                protocol.stage! === "R"
+                  ? "bg-gray-500"
+                  : protocol.stage! === 0
+                    ? "bg-red-500"
+                    : protocol.stage! === 1
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+              } text-white py-1 rounded "text-lg"`}
+            >
+              {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
+            </Badge>
+          </TooltipProvider>
+        ) : (
+          <></>
+        )}
+
+        {protocol.stage! === "O" ? (
+          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+            Missing Requirements for Stage 0
+          </h1>
+        ) : (
+          <></>
+        )}
+        {
+          <div>
+            {protocol.stage! === "O" ? (
+              protocol.reasons!.map((el) => (
+                <TooltipProvider>
+                  <Badge
+                    title={"Reason"}
+                    className="my-1 bg-red-500"
+                    stage={"O"}
+                    reason={el}
+                  >
+                    {el}
+                  </Badge>
+                </TooltipProvider>
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        }
 
         <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
           Risks

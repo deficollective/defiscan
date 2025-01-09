@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { defiLlama } from "@/services/defillama";
 import { protocols } from "#site/content";
-import { Project } from "@/lib/types";
+import { Project, Stage } from "@/lib/types";
 
 interface VisualisedData {
   key: string;
@@ -50,6 +50,22 @@ const groupBy = (
   );
 };
 
+const keyToWord = (key: string) => {
+  if (key === "R") {
+    return "Review";
+  } else if (key === "O") {
+    return "Others";
+  } else if (key === "1") {
+    return "Stage 1";
+  } else if (key === "2") {
+    return "Stage 2";
+  } else if (key === "0") {
+    return "Stage 0";
+  } else {
+    return `${key}`;
+  }
+};
+
 const aggregateByKey = (
   groupedData: Record<string, Project[]>,
   operation: "sum" | "count"
@@ -57,8 +73,10 @@ const aggregateByKey = (
   return Object.entries(groupedData).map(([key, projects]) => {
     if (operation === "sum") {
       const totalTvl = projects.reduce((sum, project) => sum + project.tvl, 0);
+      key = keyToWord(key);
       return { key, value: totalTvl };
     } else {
+      key = keyToWord(key);
       return { key, value: projects.length };
     }
   });
@@ -110,7 +128,7 @@ const extendWithColor = (
 
 const defaultLabelFormatters = {
   count: (data: VisualisedData[]) => ({
-    value: data.find((el) => el.key === "2")?.value.toString() || "0",
+    value: data.find((el) => el.key === "Stage 2")?.value.toString() || "0",
     description: "Stage-2",
   }),
   tvl: (data: VisualisedData[]) => ({
@@ -271,9 +289,9 @@ export async function mergeDefiLlamaWithMd() {
         const res = apiData.find(
           (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
         );
+        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
         type = res?.category || "";
         logo = res?.logo || "";
-        tvl += res?.tvl || 0;
       }
       return {
         logo: logo,
@@ -282,6 +300,7 @@ export async function mergeDefiLlamaWithMd() {
         tvl: tvl,
         chain: frontmatterProtocol.chain,
         stage: frontmatterProtocol.stage,
+        reasons: frontmatterProtocol.reasons,
         type: type,
         risks: frontmatterProtocol.risks,
       } as Project;
