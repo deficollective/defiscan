@@ -34,13 +34,13 @@ Uniswap v3 is deployed on various chains. This review is based on the Polygon Po
 
 ## Upgradeability
 
-The Uniswap DAO can change parameters such as fees through the `GorvernorBravoDelegator` contract.
-Apart from the fees set by the governance, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
+The Uniswap DAO can change parameters such as fees through the GovernorBravoDelegator contract on Ethereum. These changes are relayed to Polygon via the EthereumProxy contract at 0x8a1B966aC46F42275860f905dbC75EfBfDC12374. This proxy contract ensures that all governance actions are validated and executed cross-chain.
 
-No User funds nor unclaimed yield are affected by the remaining permissions.
+Apart from the fees set by the governance, the protocol's contracts on Polygon remain immutable. No party on Polygon is able to pause, revert trade execution, or otherwise change the behavior of the protocol autonomously without authorization from Ethereum.
 
-Note that a `TransparentProxy` with the DAO as admin is used for the `NonFungibleTokenPositionDescriptor`, which is used for token descriptions.
-However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
+No user funds nor unclaimed yield are affected by the remaining permissions.
+
+Note that a TransparentProxy with the DAO as admin is used for the NonFungibleTokenPositionDescriptor, which is responsible for token descriptions. However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
 
 > Upgradeabillity score: L
 
@@ -85,20 +85,26 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | Permit2                            | 0x000000000022D473030F116dDEE9F6B43aC78BA3 |
 | UniversalRouter                    | 0xec7BE89e9d109e7e3Fec59c222CF297125FEFda2 |
 | v3StakerAddress                    | 0xe34139463bA50bD61336E0c446Bd8C0867c6fE65 |
+| EthereumProxy                      | 0x8a1B966aC46F42275860f905dbC75EfBfDC12374 |
 
 
 ## Permission owners
 
-| Name               | Account                                                                                                                   | Type           |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
-|   | [](https://polygonscan.com/address/)      |  |
-| | [](https://polygonscan.com/address/) |  |
+| Name               | Account                                                                                                                       | Type                       |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| EthereumProxy      | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374#code) | Cross-chain proxy contract |
 
 ## Permissions
 
-| Contract                    | Function          | Impact                                                                                                                                                                                                                                              | Owner             |
-|-----------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-
+| Contract         | Function          | Impact                                                                                                                                                                                                                                   | Owner                                                                             |
+|------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| UniswapV3Factory | setOwner          | Changes the owner to a new address. The DAO can appoint a new owner which can set fees on various pools (setProtocolFee), collect fees on behalf of the protocol and allow new tick spaces for new deployed pools.                       | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+| UniswapV3Factory | enableFeeAmount   | Enables the creation of new fee tiers for pools by enabling a specific fee amount paired with a corresponding tick spacing.                                                                                                              | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+| ProxyAdmin       | renounceOwnership | Abandons ownership of the contract. The DAO would renounce the access to the administrative functions of the contracts, which includes upgrading the `NonFungibleTokenPositionDescriptor` contract.                                      | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+| ProxyAdmin       | changeProxyAdmin  | Updates the admin of the `TransparentUpgradeableProxy`: the account with the rights to upgrade the proxy's implementation. This would replace the role of the `ProxyAdmin` contract and could be used to upgrade (replace) `ProxyAdmin`. | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+| ProxyAdmin       | transferOwnership | Updates the owner of the `ProxyAdmin` contract: the account with the rights to change the admin of the proxy and upgrade the `NonFungibleTokenPositionDescriptor` contract.                                                              | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+| ProxyAdmin       | upgrade           | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                 | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+| ProxyAdmin       | upgradeAndCall    | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                    | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 
 ## Dependencies
 
@@ -106,11 +112,11 @@ No external dependency has been found.
 
 ## Exit Window
 
-As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol
-fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
-The lock period is at least two days and up to 30 days for governance actions.
-When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-Additionally, governance actions initiated on Ethereum (L1) are enforced on Polygon (L2). This cross-chain enforcement ensures that Timelock decisions on L1 are consistently applied to the contracts on L2.
+As the contracts on Polygon are immutable, users can always withdraw their funds, but parameters such as protocol fees can be changed by the DAO on Ethereum. A Timelock protects the contracts, and updates are governed by the GovernorBravo contract on Ethereum (L1). Governance actions initiated on Ethereum are relayed to Polygon via the EthereumProxy contract at 0x8a1B966aC46F42275860f905dbC75EfBfDC12374, which ensures that only authorized updates from the DAO are executed.
+
+The lock period is at least two days and up to 30 days for governance actions. When a proposal is created (requiring at least 2.5M UNI), the community can cast their votes during a 3-day voting period. If a majority, and at least 4M votes, are cast in favor of the proposal, it is queued in the Timelock and may be executed after a minimum delay of 2 days.
+
+This cross-chain enforcement mechanism ensures that Timelock decisions on Ethereum (L1) are consistently applied to contracts on Polygon (L2), maintaining the same level of security and predictability.
 
 # Security Council
 
