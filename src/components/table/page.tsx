@@ -27,9 +27,21 @@ export default function Table() {
     fetchData();
   }, []);
 
+  let othersCount = 0;
+  let defiCount = 0;
+  data?.forEach((el) => {
+    if (el.stage === "O") othersCount++;
+    else defiCount++;
+  });
+
   return (
     <div className="mx-auto w-full">
-      <DataTable columns={columns} data={data || []} />
+      <DataTable
+        columns={columns}
+        data={data || []}
+        othersCount={othersCount}
+        defiCount={defiCount}
+      />
     </div>
   );
 }

@@ -6,11 +6,11 @@ github: ["https://github.com/PossumLabsCrypto"]
 defillama_slug: ["possum-labs"]
 chain: "Arbitrum"
 stage: 0
+reasons: []
 risks: ["M", "H", "H", "M", "H"]
 author: ["stengarl", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
-acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 

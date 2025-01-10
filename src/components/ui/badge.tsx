@@ -7,8 +7,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../rosette/tooltip/tooltip";
-import { stageToRequisites } from "@/app/protocols/stageToRequisites";
-import { Stage } from "@/lib/types";
+import {
+  reasonToText,
+  stageToRequisites,
+} from "@/app/protocols/stageToRequisites";
+import { Reason, Stage } from "@/lib/types";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -34,42 +37,58 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
   stage: Stage;
+  reason?: Reason;
+  title: string;
 }
 
 // Badge component
-function Badge({ className, variant, stage, ...props }: BadgeProps) {
+function Badge({
+  className,
+  variant,
+  stage,
+  reason,
+  title,
+  ...props
+}: BadgeProps) {
   return (
     <Tooltip>
-      <TooltipTrigger className="flex size-4/5 lg:size-full items-center justify-start">
+      <TooltipTrigger className="-mr-8 flex size-3/5 size-full items-center justify-start">
         <div className={cn(badgeVariants({ variant }), className)} {...props} />
       </TooltipTrigger>
       <TooltipContent fitContent>
-        <BadgeTooltip stage={stage} />
+        <BadgeTooltip stage={stage} reason={reason} title={title} />
       </TooltipContent>
     </Tooltip>
   );
 }
 
 // BadgeTooltip component
-export function BadgeTooltip({ stage }: { stage: Stage }) {
+export function BadgeTooltip({
+  stage,
+  reason,
+  title,
+}: {
+  stage: Stage;
+  reason?: Reason;
+  title: string;
+}) {
   return (
     <div className="flex flex-col">
       <span className="text-base font-bold">
-        <span className="mr-2">Stage of Decentralisation</span>
+        <span className="mr-2">{title}</span>
       </span>
       <div className="flex items-center gap-6">
         <div className="relative flex flex-col justify-center p-4 shadow-md max-w-md">
-          {stage === "R"
-            ? stageToRequisites[0].map((item, index) => (
-                <div key={index} className="mt-1">
-                  {item}
-                </div>
-              ))
-            : stageToRequisites[stage].map((item, index) => (
-                <div key={index} className="mt-1">
-                  {item}
-                </div>
-              ))}
+          {stage == "O" ? (
+            <></>
+          ) : (
+            stageToRequisites[stage].map((item, index) => (
+              <div key={index} className="mt-1">
+                {item}
+              </div>
+            ))
+          )}
+          {reason ? <div className="mt-1">{reasonToText[reason]}</div> : <></>}
         </div>
       </div>
     </div>
