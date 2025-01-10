@@ -84,19 +84,22 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | Permit2                            | 0x000000000022D473030F116dDEE9F6B43aC78BA3 |
 | UniversalRouter                    | 0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD |
 | v3StakerAddress                    | 0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1 |
+| CrossChainAccount                  | 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9 |
 
 
 ## Permission owners
 
-| Name               | Account                                                                                                                   | Type           |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
-|   | [](https://basescan.org/address/)      |  |
-| | [](https://basescan.org/address/) |  |
+| Name              | Account                                                                                                                    | Type     |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------|----------|
+| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9#code) | Contract |
 
 ## Permissions
 
-| Contract                    | Function          | Impact                                                                                                                                                                                                                                              | Owner             |
-|-----------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| Contract         | Function        | Impact                                                                                                                                                                                                             | Owner             |
+|------------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| UniswapV3Factory | setOwner        | Changes the owner to a new address. The DAO can appoint a new owner which can set fees on various pools (setProtocolFee), collect fees on behalf of the protocol and allow new tick spaces for new deployed pools. | CrossChainAccount |
+| UniswapV3Factory | enableFeeAmount | Enables the creation of new fee tiers for pools by enabling a specific fee amount paired with a corresponding tick spacing.                                                                                        | CrossChainAccount |
+
 
 
 ## Dependencies
