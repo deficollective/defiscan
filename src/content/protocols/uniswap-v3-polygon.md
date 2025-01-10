@@ -34,13 +34,11 @@ Uniswap v3 is deployed on various chains. This review is based on the Polygon Po
 
 ## Upgradeability
 
-The Uniswap DAO can change parameters such as fees through the GovernorBravoDelegator contract on Ethereum. These changes are relayed to Polygon via the EthereumProxy contract at 0x8a1B966aC46F42275860f905dbC75EfBfDC12374. This proxy contract ensures that all governance actions are validated and executed cross-chain.
+The Uniswap DAO can change parameters such as fees through the GorvernorBravoDelegator contract. Apart from the fees set by the governance, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
 
-Apart from the fees set by the governance, the protocol's contracts on Polygon remain immutable. No party on Polygon is able to pause, revert trade execution, or otherwise change the behavior of the protocol autonomously without authorization from Ethereum.
+No User funds nor unclaimed yield are affected by the remaining permissions.
 
-No user funds nor unclaimed yield are affected by the remaining permissions.
-
-Note that a TransparentProxy with the DAO as admin is used for the NonFungibleTokenPositionDescriptor, which is responsible for token descriptions. However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
+Note that a TransparentProxy with the DAO as admin is used for the NonFungibleTokenPositionDescriptor, which is used for token descriptions. However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
 
 > Upgradeabillity score: L
 
@@ -112,11 +110,7 @@ No external dependency has been found.
 
 ## Exit Window
 
-As the contracts on Polygon are immutable, users can always withdraw their funds, but parameters such as protocol fees can be changed by the DAO on Ethereum. A Timelock protects the contracts, and updates are governed by the GovernorBravo contract on Ethereum (L1). Governance actions initiated on Ethereum are relayed to Polygon via the EthereumProxy contract at 0x8a1B966aC46F42275860f905dbC75EfBfDC12374, which ensures that only authorized updates from the DAO are executed.
-
-The lock period is at least two days and up to 30 days for governance actions. When a proposal is created (requiring at least 2.5M UNI), the community can cast their votes during a 3-day voting period. If a majority, and at least 4M votes, are cast in favor of the proposal, it is queued in the Timelock and may be executed after a minimum delay of 2 days.
-
-This cross-chain enforcement mechanism ensures that Timelock decisions on Ethereum (L1) are consistently applied to contracts on Polygon (L2), maintaining the same level of security and predictability.
+As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol fees can be changed by the DAO. A Timelock protects the contracts and updates are governed by the GovernorBravo contract. The lock period is at least two days and up to 30 days for governance actions. When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days. Additionally, governance actions initiated on Ethereum (L1) are enforced on Polygon (L2). This cross-chain enforcement ensures that Timelock decisions on L1 are consistently applied to the contracts on L2.
 
 # Security Council
 
