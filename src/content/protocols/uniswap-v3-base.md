@@ -9,14 +9,15 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Base"
-stage: "R"
+stage: "O"
+reasons: ["Unverified Contracts"]
 risks: ["H", "L", "L", "L", "L"]
-author: ["mmilien","CookingCryptos"]
+author: ["mmilien", "CookingCryptos"]
 submission_date: "2024-11-12"
 publish_date: "2024-12-16"
-acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
+
 ⚠️ During our analysis, we identified two unverified contracts, [ProxyAdmin](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9#code) and [TransparentUpgradeableProxy](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463#code), on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
 # Summary
@@ -35,15 +36,16 @@ Uniswap v3 is deployed on various chains. This review is based on the Base chain
 
 ## Upgradeability
 
-The Uniswap DAO can change parameters such as fees through the `GorvernorBravoDelegator` contract.
-Apart from the fees set by the governance, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
+Two potential upgrades can be implemented for the contracts deployed on Arbitrum that comprise the Uniswap V3 deployment:
 
-No User funds nor unclaimed yield are affected by the remaining permissions.
+1. Adjusting the Fee Parameter
+2. Updating the `NonFungibleTokenPositionDescriptor` Implementation (via the proxy upgradeable pattern)
 
-Note that a `TransparentProxy` with the DAO as admin is used for the `NonFungibleTokenPositionDescriptor`, which is used for token descriptions.
-However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
+Beyond these, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions.
 
-> Upgradeabillity score: L
+The above-mentioned changes must be initiated through L1 governance on the Ethereum Mainnet, using the [GovernorBravoDelegator](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3#code) contract. If a proposal is approved by vote, it enters a timelock, preventing immediate enforcement. Once the designated time period elapses, the approved changes are transmitted cross-chain to Base. Upon receipt, the message is dispatched and enforced on the Base network (via [0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9](https://basescan.org/address/0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9)).
+
+> Upgradeability score: L
 
 ## Autonomy
 
@@ -68,39 +70,50 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Contracts
 
-| Contrat Name                       | Address                                    |
-|------------------------------------|--------------------------------------------|
-| UniswapV3Factory                   | 0x33128a8fC17869897dcE68Ed026d694621f6FDfD |
-| Multicall                          | 0x091e99cb1C49331a94dD62755D168E941AbD0693 |
-| ProxyAdmin                         | 0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9 |
-| TickLens                           | 0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d |
-| NFTDescriptor                      | 0xF9d1077fd35670d4ACbD27af82652a8d84577d9F |
-| NonfungibleTokenPositionDescriptor | 0x4f225937EDc33EFD6109c4ceF7b560B2D6401009 |
-| TransparentUpgradeableProxy        | 0x4615C383F85D0a2BbED973d83ccecf5CB7121463 |
-| NonfungiblePositionManager         | 0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1 |
-| V3Migrator                         | 0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7 |
-| QuoterV2                           | 0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a |
-| SwapRouter02                       | 0x2626664c2603336E57B271c5C0b26F421741e481 |
-| Permit2                            | 0x000000000022D473030F116dDEE9F6B43aC78BA3 |
-| UniversalRouter                    | 0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD |
-| v3StakerAddress                    | 0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1 |
-| CrossChainAccount                  | 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9 |
-
+| Contract Name                      | Address                                                                                                             |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| UniswapV3Factory                   | [0x33128a8fC17869897dcE68Ed026d694621f6FDfD]https://basescan.org/address/0x33128a8fC17869897dcE68Ed026d694621f6FDfD |
+| Multicall                          | [0x091e99cb1C49331a94dD62755D168E941AbD0693]https://basescan.org/address/0x091e99cb1C49331a94dD62755D168E941AbD0693 |
+| ProxyAdmin                         | [0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9]https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9 |
+| TickLens                           | [0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d]https://basescan.org/address/0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d |
+| NFTDescriptor                      | [0xF9d1077fd35670d4ACbD27af82652a8d84577d9F]https://basescan.org/address/0xF9d1077fd35670d4ACbD27af82652a8d84577d9F |
+| NonfungibleTokenPositionDescriptor | [0x4f225937EDc33EFD6109c4ceF7b560B2D6401009]https://basescan.org/address/0x4f225937EDc33EFD6109c4ceF7b560B2D6401009 |
+| TransparentUpgradeableProxy        | [0x4615C383F85D0a2BbED973d83ccecf5CB7121463]https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463 |
+| NonfungiblePositionManager         | [0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1]https://basescan.org/address/0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1 |
+| V3Migrator                         | [0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7]https://basescan.org/address/0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7 |
+| QuoterV2                           | [0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a]https://basescan.org/address/0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a |
+| SwapRouter02                       | [0x2626664c2603336E57B271c5C0b26F421741e481]https://basescan.org/address/0x2626664c2603336E57B271c5C0b26F421741e481 |
+| Permit2                            | [0x000000000022D473030F116dDEE9F6B43aC78BA3]https://basescan.org/address/0x000000000022D473030F116dDEE9F6B43aC78BA3 |
+| UniversalRouter                    | [0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD]https://basescan.org/address/0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD |
+| v3StakerAddress                    | [0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1]https://basescan.org/address/0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1 |
+| CrossChainAccount                  | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9]https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9 |
 
 ## Permission owners
 
 | Name              | Account                                                                                                                    | Type     |
-|-------------------|----------------------------------------------------------------------------------------------------------------------------|----------|
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------- | -------- |
 | CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9#code) | Contract |
 
 ## Permissions
 
 | Contract         | Function        | Impact                                                                                                                                                                                                             | Owner             |
-|------------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
 | UniswapV3Factory | setOwner        | Changes the owner to a new address. The DAO can appoint a new owner which can set fees on various pools (setProtocolFee), collect fees on behalf of the protocol and allow new tick spaces for new deployed pools. | CrossChainAccount |
 | UniswapV3Factory | enableFeeAmount | Enables the creation of new fee tiers for pools by enabling a specific fee amount paired with a corresponding tick spacing.                                                                                        | CrossChainAccount |
 
+## L1 -> L2 Governance Decision Enforcement
 
+When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract which calls `executeTransaction` on the Timelock contract.
+
+If a vote has passed and is queued that has changes for the Base deployment the payload must specify as target the L1 contract for Cross-chain messaging by Base called [L1CrossDomainMessenger](https://etherscan.io/address/0x866E82a600A1414e583f7F13623F1aC5d58b0Afa).
+
+When the transaction for executing the payload arrives at the L1CrossDomainMessenger and the triggered subsequent cross-chain handling succeeded as well (fulfilled with the OP Stack), the Base chain includes a transaction where [L2CrossDomainMessenger](https://basescan.org/address/0x4200000000000000000000000000000000000007) calls the function ` forward(address target, bytes memory data)` on the [CrossChainAccount](https://basescan.org/address/0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9).
+
+By calling `forward` on the CrossChainAccount, the `target` gets called with the `data`.
+
+`(bool success, bytes memory res) = target.call(data);`
+
+Only the Timelock contract on the L1 is allowed to trigger this on the L2. The target and data could e.g specify `UniswapV3Factory` (target) and `enableFeeAmount` with arguments `uint24 fee, int24 tickSpacing` (data) to set fees for V3 Pools on Base.
 
 ## Dependencies
 
