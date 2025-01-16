@@ -114,7 +114,7 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | TransparentUpgradeableProxy | upgradeTo         | Upgrades the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                                           | ProxyAdmin        |
 | TransparentUpgradeableProxy | upgradeToAndCall  | Upgrades the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                                              | ProxyAdmin        |
 
-## L1 -> L2 Governance Decision Enforcement
+## Governance Decision Enforcement from L1 to Arbitrum
 
 When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract to call `executeTransaction` on the Timelock contract.
 

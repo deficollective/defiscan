@@ -9,12 +9,12 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Polygon"
-stage: "Stage 0"
+stage: 0
+reasons: []
 risks: ["H", "L", "L", "L", "L"]
-author: ["mmilien","CookingCryptos"]
+author: ["mmilien", "CookingCryptos", "sagaciousyves"]
 submission_date: "2024-11-12"
 publish_date: "2024-12-16"
-acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
@@ -34,13 +34,16 @@ Uniswap v3 is deployed on various chains. This review is based on the Polygon Po
 
 ## Upgradeability
 
-The Uniswap DAO can change parameters such as fees through the GorvernorBravoDelegator contract. Apart from the fees set by the governance, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
+Two potential upgrades can be implemented for the contracts deployed on Arbitrum that comprise the Uniswap V3 deployment:
 
-No User funds nor unclaimed yield are affected by the remaining permissions.
+1. Adjusting the Fee Parameter
+2. Updating the `NonFungibleTokenPositionDescriptor` Implementation (via the proxy upgradeable pattern)
 
-Note that a TransparentProxy with the DAO as admin is used for the NonFungibleTokenPositionDescriptor, which is used for token descriptions. However, this does not impact user funds or otherwise materially change the expected performance of the protocol.
+Beyond these, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions.
 
-> Upgradeabillity score: L
+The above-mentioned changes must be initiated through L1 governance on the Ethereum Mainnet, using the [GovernorBravoDelegator](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3#code) contract. If a proposal is approved by vote, it enters a timelock, preventing immediate enforcement. Once the designated time period elapses, the approved changes are transmitted cross-chain to Polygon PoS. Upon receipt, the message is dispatched and enforced on the Polygon network (via [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9)).
+
+> Upgradeability score: L
 
 ## Autonomy
 
@@ -65,8 +68,8 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Contracts
 
-| Contrat Name                       | Address                                    |
-|------------------------------------|--------------------------------------------|
+| Contract Name                      | Address                                    |
+| ---------------------------------- | ------------------------------------------ |
 | UniswapV3Factory                   | 0x1F98431c8aD98523631AE4a59f267346ea31F984 |
 | Multicall                          | 0x1F98415757620B543A52E61c46B32eB19261F984 |
 | ProxyAdmin                         | 0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2 |
@@ -85,17 +88,16 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | v3StakerAddress                    | 0xe34139463bA50bD61336E0c446Bd8C0867c6fE65 |
 | EthereumProxy                      | 0x8a1B966aC46F42275860f905dbC75EfBfDC12374 |
 
-
 ## Permission owners
 
-| Name               | Account                                                                                                                       | Type                       |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| EthereumProxy      | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374#code) | Cross-chain proxy contract |
+| Name          | Account                                                                                                                       | Type                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| EthereumProxy | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374#code) | Cross-chain proxy contract |
 
 ## Permissions
 
 | Contract         | Function          | Impact                                                                                                                                                                                                                                   | Owner                                                                             |
-|------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| ---------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | UniswapV3Factory | setOwner          | Changes the owner to a new address. The DAO can appoint a new owner which can set fees on various pools (setProtocolFee), collect fees on behalf of the protocol and allow new tick spaces for new deployed pools.                       | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 | UniswapV3Factory | enableFeeAmount   | Enables the creation of new fee tiers for pools by enabling a specific fee amount paired with a corresponding tick spacing.                                                                                                              | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 | ProxyAdmin       | renounceOwnership | Abandons ownership of the contract. The DAO would renounce the access to the administrative functions of the contracts, which includes upgrading the `NonFungibleTokenPositionDescriptor` contract.                                      | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
@@ -103,6 +105,16 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | ProxyAdmin       | transferOwnership | Updates the owner of the `ProxyAdmin` contract: the account with the rights to change the admin of the proxy and upgrade the `NonFungibleTokenPositionDescriptor` contract.                                                              | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 | ProxyAdmin       | upgrade           | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                 | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 | ProxyAdmin       | upgradeAndCall    | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                    | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
+
+## Governance Decision Enforcement from L1 to Polygon
+
+When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract which calls `executeTransaction` on the Timelock contract.
+
+If a vote has passed and is queued that has changes for the Polygon deployment the payload must specify as target the L1 contract for Cross-chain messaging by Polygon called [FxRoot](https://etherscan.io/address/0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2). This in turn calls `syncState` on the [StateSender contract](https://etherscan.io/address/0x28e4F3a7f651294B9564800b2D01f35189A5bFbE). This emits an event `StateSynced(uint256 indexed id, address indexed contractAddress, bytes data)`.
+
+"All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [1].
+
+The Execution Layer Validators pick this up and include a transaction where [StateReceiver](https://polygonscan.com/address/0x0000000000000000000000000000000000001001) calls the function `onStateReceive` on [FxChild](https://polygonscan.com/address/0x8397259c983751DAf40400790063935a11afa28a) which calls the function ` processMessageFromRoot` on the [EthereumProxy](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374).
 
 ## Dependencies
 
@@ -116,3 +128,6 @@ As the contracts are immutable the users can always withdraw their funds, but pa
 
 No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Polygon.
 
+# Source
+
+[1] https://docs.polygon.technology/pos/architecture/bor/state-sync/
