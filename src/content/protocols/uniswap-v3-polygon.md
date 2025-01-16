@@ -112,7 +112,7 @@ When a vote has passed on the [Governor Contract](https://etherscan.io/address/0
 
 If a vote has passed and is queued that has changes for the Polygon deployment the payload must specify as target the L1 contract for Cross-chain messaging by Polygon called [FxRoot](https://etherscan.io/address/0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2). This in turn calls `syncState` on the [StateSender contract](https://etherscan.io/address/0x28e4F3a7f651294B9564800b2D01f35189A5bFbE). This emits an event `StateSynced(uint256 indexed id, address indexed contractAddress, bytes data)`.
 
-"All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [1].
+"All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [[1]](#sources).
 
 The Execution Layer Validators pick this up and include a transaction where [StateReceiver](https://polygonscan.com/address/0x0000000000000000000000000000000000001001) calls the function `onStateReceive` on [FxChild](https://polygonscan.com/address/0x8397259c983751DAf40400790063935a11afa28a) which calls the function ` processMessageFromRoot` on the [EthereumProxy](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374).
 
