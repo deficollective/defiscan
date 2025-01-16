@@ -128,6 +128,6 @@ As the contracts are immutable the users can always withdraw their funds, but pa
 
 No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Polygon.
 
-# Source
+# Sources
 
 [1] https://docs.polygon.technology/pos/architecture/bor/state-sync/
