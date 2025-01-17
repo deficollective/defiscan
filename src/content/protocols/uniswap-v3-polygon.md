@@ -13,9 +13,9 @@ stage: 0
 reasons: []
 risks: ["H", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos", "sagaciousyves"]
-submission_date: "2024-11-12"
-publish_date: "2024-12-16"
-update_date: "1970-01-01"
+submission_date: "2025-01-16"
+publish_date: "2025-01-16"
+update_date: "2025-01-16"
 ---
 
 # Summary
@@ -34,7 +34,7 @@ Uniswap v3 is deployed on various chains. This review is based on the Polygon Po
 
 ## Upgradeability
 
-Two potential upgrades can be implemented for the contracts deployed on Arbitrum that comprise the Uniswap V3 deployment:
+Two potential upgrades can be implemented for the contracts deployed on Polygon that comprise the Uniswap V3 deployment:
 
 1. Adjusting the Fee Parameter
 2. Updating the `NonFungibleTokenPositionDescriptor` Implementation (via the proxy upgradeable pattern)
