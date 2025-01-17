@@ -43,7 +43,7 @@ Two potential upgrades can be implemented for the contracts deployed on Base tha
 
 Beyond these, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions.
 
-The above-mentioned changes must be initiated through L1 governance on the Ethereum Mainnet, using the [GovernorBravoDelegator](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3#code) contract. If a proposal is approved by vote, it enters a timelock, preventing immediate enforcement. Once the designated time period elapses, the approved changes are transmitted cross-chain to Base. Upon receipt, the message is dispatched and enforced on the Base network (via [0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9](https://basescan.org/address/0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9)).
+The aforementioned changes require a governance vote on the Ethereum mainnet chain. The execution of this vote involves a cross-chain messaging protocol which is fully trustless, i.e. does not involve a centralized or trusted intermediary, and thus bears no additional risks.
 
 > Upgradeability score: L
 
