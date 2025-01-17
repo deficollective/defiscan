@@ -41,7 +41,7 @@ Two potential upgrades can be implemented for the contracts deployed on Polygon 
 
 Beyond these, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions.
 
-The above-mentioned changes must be initiated through L1 governance on the Ethereum Mainnet, using the [GovernorBravoDelegator](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3#code) contract. If a proposal is approved by vote, it enters a timelock, preventing immediate enforcement. Once the designated time period elapses, the approved changes are transmitted cross-chain to Polygon PoS. Upon receipt, the message is dispatched and enforced on the Polygon network (via [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9)).
+The aforementioned changes require a governance vote on the Ethereum mainnet chain. The execution of this vote involves the Polygon native cross-chain messaging protocol which can be censored and thus prevent the upgrade (encapsulated with High Risk in [#Chain](#chain) section).
 
 > Upgradeability score: L
 
