@@ -52,7 +52,10 @@ const components = {
       return (
         <a
           id={id}
-          className={cn("", className)}
+          className={cn(
+            "font-medium underline text-primary underline-offset-4",
+            className
+          )}
           href={href}
           onClick={(e) => {
             e.preventDefault();

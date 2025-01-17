@@ -120,9 +120,9 @@ When a vote has passed on the [Governor Contract](https://etherscan.io/address/0
 
 If a vote has passed and is queued that has changes for the Arbitrum deployment the payload must specify as target the L1 contract for Cross-chain messaging by Arbitrum called [Inbox](https://etherscan.io/address/0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f). This contract by Arbitrum belongs to the [Delayed Inbox system](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging#retryable-tickets). The target function on this contract is `createRetryableTicket`.
 
-When the transaction arrives in the inbox (retryable function call by the timelock contract succeeded) and the subsequent cross-chain handling succeeded as well \*, the arbitrum chain includes the transaction with the original sender (Timelock) address being aliased (`L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111`). This is how this address `0x2BAD8182C09F50c8318d769245beA52C32Be46CD` is the L2 equivalent of the Timelock.
+When the transaction arrives in the inbox (retryable function call by the timelock contract succeeded) and the subsequent cross-chain handling succeeded as well \*, the arbitrum chain includes the transaction with the original sender (Timelock) address being aliased (`L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111`). This is how this address `0x2BAD8182C09F50c8318d769245beA52C32Be46CD` is the L2 equivalent of the Timelock on the L1.
 
-This L2Alias calls the specified L2 target (`to`) with the data to execute a function on the behalf of the Timelock on L1 (`bytes calldata data`).
+This `L2Alias` calls the specified L2 target (`to`) with the data to execute a function on the behalf of the Timelock on L1 (`bytes calldata data`).
 
 The target and data could e.g specify `UniswapV3Factory` (target) and `enableFeeAmount` with arguments `uint24 fee, int24 tickSpacing` (data) to set fees for V3 Pools on Arbitrum.
 
@@ -138,7 +138,7 @@ As the contracts are immutable the users can always withdraw their funds, but pa
 fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
 The lock period is at least two days and up to 30 days for governance actions.
 When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-Additionally, governance actions initiated on Ethereum (L1) are enforced on Arbitrum (L2). This cross-chain enforcement ensures that Timelock decisions on L1 are consistently applied to the contracts on L2.
+Subsequently, governance actions initiated on Ethereum (L1) are enforced on Arbitrum (L2) with very strong guarantees (see [Governance Decision Enforcement from L1 to Arbitrum](#governance-decision-enforcement-from-l1-to-arbitrum)).
 
 # Security Council
 
