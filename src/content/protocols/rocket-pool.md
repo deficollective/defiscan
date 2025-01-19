@@ -8,7 +8,7 @@ chain: "Ethereum"
 stage: 0
 risks: ["L", "H", "H", "H", "M"]
 author: ["flbouchut", "Sparadrap1101"]
-submission_date: "2024-11-28"
+submission_date: "2025-01-19"
 publish_date: "1970-01-01"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
@@ -28,7 +28,7 @@ Rocket Pool protocol is deployed on Ethereum mainnet.
 
 ## Upgradeability
 
-Rocket Pool contracts are designed and deployed with upgradability in mind, meaning none of the permissions on the contracts have been revoked.
+Rocket Pool contracts are designed and deployed with upgradability in mind, meaning none of the permissions on the contracts have been revoked, with the exception of `RocketVault`, `RocketTokenRETH` and `RocketTokenRPL`.
 
 The `RocketStorage` contract acts as the central state repository, storing both protocol data and the addresses of other contracts. When an upgrade is necessary, a new contract is deployed, and its address replaces the old reference in `RocketStorage`.
 
@@ -37,7 +37,7 @@ While governance mechanisms have been implemented to mitigate risks from malicio
 1. **Oracle DAO (oDAO)**: The oracle DAO is composed of **selected Rocket Pool members**, including Ethereum community contributors and teams such as Consensys, Nimbus, Lighthouse and Gitcoin, whose incentives are closely aligned with Rocket Pool's vision. These members possess specific rights over protocol operations, including:
 
     - _On-chain responsibilities_: **Voting on and executing contract upgrades**. Adjusting key protocol parameters.
-    - _Off-chain duties_: Automated actions related to routine Rocket Pool operations (e.g., constructing the rewards Merkle tree at the end of each rewards period and uploading it to IPFS). These actions must be pushed on-chain periodically.
+    - _Off-chain duties_: Automated actions related to routine Rocket Pool operations. These actions must be pushed on-chain periodically. These include submitting the RPL price and staked amount to determine RPL collateral requirements, submitting the RPL rewards Merkle tree, and reporting the amount of ETH staked and non-staked within RocketPool, as well as the supply of rETH token, to determine the right rETH exchange rate.
 
     oDAO members are incentivized through a share of RPL inflation and must bond 1750 RPL to cover potential malicious actions. oDAO members are listed [here](https://rocketscan.io/dao/members).
 
@@ -68,11 +68,13 @@ While governance mechanisms have been implemented to mitigate risks from malicio
 
 This analysis highlights that while the RP’s governance incorporates multiple entities and decentralized mechanisms **through a complex governance scheme**, significant aspects of the protocol’s control remain **predominantly centralized under the Rocket Pool team**.
 
+The oDAO is **the sole entity authorized to upgrade RocketPool's core contracts**, with the exception of `RocketVault`, `RocketTokenRETH` and `RocketTokenRPL`. This is significant because all protocol funds are stored in the `RocketVault`, and along with the **rETH** and **RPL** contracts, these are **safeguarded against contract upgrade attacks**. However, malicious upgrades to other core contracts could potentially result in the theft of protocol rewards.
+
+That said, these contracts could still be vulnerable to other types of attacks, as detailed in the **Autonomy** section. Additionally, Rocket Pool’s protocol parameters could be manipulated maliciously, affecting governance, security, minipool settings, protocol fees, RPL's inflation, bond slashing, and the system's core functionality.
+
 > Upgradeability score: H
 
 ## Autonomy
-
-See http://defiscan.info/learn-more#autonomy for more guidance.
 
 The Rocket Pool protocol doesn’t rely on external dependencies but rather on **internal ones**, particularly the oracle DAO members, who hold significant rights over key protocol parameters. While these roles are integral to the protocol’s operations, they also present potential vulnerabilities, as malicious actions or misconfigurations could have severe consequences for the protocol. The oDAO members are specified in the governance section above.
 
@@ -80,10 +82,10 @@ Such an incident already happened in the past where two oDAO nodes controlled by
 
 Below are **key rights held by the oDAO and the potential risks they pose**:
 
--   **Manipulating the rETH/ETH exchange rate**. Malicious changes to this rate could enable an attacker to withdraw ETH from the deposit pool or the rETH contract at no cost. A safeguard is planned to be implemented in the Saturn 1 upgrade ([RPIP-61](https://rpips.rocketpool.net/RPIPs/RPIP-61)), though no ETA has been provided.
--   **Applying penalties to node operators**. The oDAO can penalize node operators for not setting the correct recipient address for MEV rewards, as defined by Rocket Pool. A malicious oDAO could exploit this mechanism to penalize all minipools for their entire stake. All the ETH in the protocol would be redirected to rETH, where an attacker would be able to extract it as explained above. A safeguard is planned to be implemented in the Saturn 1 upgrade ([RPIP-58](https://rpips.rocketpool.net/RPIPs/RPIP-58)), though no ETA has been provided.
--   **Publishing the Merkle tree for protocol rewards**. The oDAO is responsible for publishing the rewards Merkle tree for each period (28 days). A malicious oDAO could extract all rewards from a single period.
--   **Publishing the split of RPL inflation**. A malicious oDAO could extract all RPL token issued for a single period (28 days) in publishing a flawed distribution Merkle tree.
+-   **Manipulating the rETH/ETH exchange rate**. Malicious changes to this rate could enable an attacker to **withdraw ETH from the deposit pool or the rETH contract at no cost**. A safeguard is planned to be implemented in the Saturn 1 upgrade ([RPIP-61](https://rpips.rocketpool.net/RPIPs/RPIP-61)), though no ETA has been provided.
+-   **Applying penalties to node operators**. The oDAO can penalize node operators for not setting the correct recipient address for MEV rewards, as defined by Rocket Pool. A malicious oDAO could exploit this mechanism to penalize all minipools for their entire stake. All the ETH in the protocol would be redirected to rETH, where an **attacker would be able to extract it as explained above**. A safeguard is planned to be implemented in the Saturn 1 upgrade ([RPIP-58](https://rpips.rocketpool.net/RPIPs/RPIP-58)), though no ETA has been provided.
+-   **Publishing the Merkle tree for protocol rewards**. The oDAO is responsible for publishing the rewards Merkle tree for each period (28 days). A malicious oDAO could **extract all rewards from a single period**.
+-   **Publishing the split of RPL inflation**. A malicious oDAO could **extract all RPL token issued for a single period** (28 days) in publishing a flawed distribution Merkle tree.
 
 > Autonomy score: H
 
@@ -118,6 +120,12 @@ Rocket Pool provides **a unique centralized user interface**. However, some DEXe
 > Exit window score: M
 
 # Technical Analysis
+
+![Rocket Pool Governance Architecture](rocket-pool_architecture_v1.png)
+
+This simplified architecture diagram aims to demonstrate the two distinct governance processes managed by the pDAO (and its Guardian) and the oDAO.
+
+For a comprehensive analysis of governance and smart contract attacks and their potential impacts, refer to the **Governance**, **Autonomy** and **Permissions** sections.
 
 ## Contracts
 
@@ -214,7 +222,7 @@ Rocket Pool provides **a unique centralized user interface**. However, some DEXe
 | RocketNetworkPenalties                | submitPenalty             | This function allows oDAO members to submit penalty for node operator non-compliance. If used maliciously, one could exploit this mechanism to penalize all minipools for their entire stake.                                                                                                                                                           | oDAO trusted nodes                |
 | RocketNetworkPrices                   | submitPrices              | This function allows oDAO members to submit the RPL price on-chain. It is used to determine the minimum RPL bond required for new minipool creation and for RPL slashing. If used maliciously, one could create new minipools without providing RPL collateral, though no protocol assets would be at risk.                                             | oDAO trusted nodes                |
 | RocketRewardsPool                     | submitRewardSnapshot      | This function enables oDAO members to submit on-chain data for RPL reward distribution, which they calculate off-chain. If used maliciously, one could redirect all RPL rewards for a single period (28 days) to an entity they control.                                                                                                                | oDAO trusted nodes                |
-| RocketDAOProtocolSettingsProposals    | setSettingUint            | Set integers values for pDAO vote parameters. For instance, this function can modify the quorum required for a proposal to pass or the duration for which a proposal can be voted on. If used maliciously, one could manipulate these settings to pass pDAO proposals more easily.                                                                      | Registered nodes                  |
+| RocketDAOProtocolSettingsProposals    | setSettingUint            | Set integers values for pDAO vote parameters. For instance, this function can modify the quorum required for a proposal to pass or the duration for which a proposal can be voted on. If used maliciously, one could manipulate these settings to pass pDAO proposals more easily.                                                                      | pDAO guardian OR Registered nodes |
 | RocketMerkleDistributorMainnet        | relayRewards              | This function is called by the `RocketRewardsPool` contract to include a snapshot of reward distribution within the distribution contract. If used maliciously, one could redirect all rewards (ETH and RPL) to an entity they control.                                                                                                                 | oDAO trusted nodes                |
 | RocketMinipoolBondReducer             | voteCancelReduction       | This function can be called by trusted nodes to cancel a bond reduction if the validator's balance is too low. If used maliciously, one could cancel a bond reduction even if its not necessary. No assets are at risk.                                                                                                                                 | oDAO trusted nodes                |
 
