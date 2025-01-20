@@ -28,7 +28,7 @@ The protocol is deployed across multiple chains enabling a wide range of use cas
 
 ## Chain
 
-Uniswap v3 is deployed on various chains. This review is based on the Polygon PoS chain, an EVM-compatible, proof-of-stake sidechain for Ethereum. Polygon PoS plans to transition to a Validium model with a state-validating bridge. Currently, the bridge is validated by Polygon validators and supports asset and data movement between Polygon and Ethereum.
+Uniswap v3 is deployed on various chains. This review is based on the Polygon PoS chain, an EVM-compatible, proof-of-stake sidechain for Ethereum. Polygon PoS plans to transition to a Validium model with a state-validating bridge. Currently, the bridge is validated by Polygon validators and supports asset and data movement between Polygon and Ethereum. [[1]](https://l2beat.com/scaling/projects/polygon-pos)
 
 > Chain score: H
 
@@ -112,7 +112,7 @@ When a vote has passed on the [Governor Contract](https://etherscan.io/address/0
 
 If a vote has passed and is queued that has changes for the Polygon deployment the payload must specify as target the L1 contract for Cross-chain messaging by Polygon called [FxRoot](https://etherscan.io/address/0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2). This in turn calls `syncState` on the [StateSender contract](https://etherscan.io/address/0x28e4F3a7f651294B9564800b2D01f35189A5bFbE). This emits an event `StateSynced(uint256 indexed id, address indexed contractAddress, bytes data)`.
 
-> "All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [[1]](#sources).
+> "All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [[2]](#sources).
 
 The Execution Layer (Bor chain) Validators pick this up and include a transaction where [StateReceiver](https://polygonscan.com/address/0x0000000000000000000000000000000000001001) calls the function `onStateReceive` on [FxChild](https://polygonscan.com/address/0x8397259c983751DAf40400790063935a11afa28a) which calls the function ` processMessageFromRoot` on the [EthereumProxy](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374).
 
@@ -133,4 +133,5 @@ No security council needed because on-chain governance on Ethereum is in place, 
 
 # Sources
 
-[1] https://docs.polygon.technology/pos/architecture/bor/state-sync/
+[1] https://l2beat.com/scaling/projects/polygon-pos
+[2] https://docs.polygon.technology/pos/architecture/bor/state-sync/
