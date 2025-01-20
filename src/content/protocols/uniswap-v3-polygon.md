@@ -68,31 +68,31 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Contracts
 
-| Contract Name                      | Address                                    |
-| ---------------------------------- | ------------------------------------------ |
-| UniswapV3Factory                   | 0x1F98431c8aD98523631AE4a59f267346ea31F984 |
-| Multicall                          | 0x1F98415757620B543A52E61c46B32eB19261F984 |
-| ProxyAdmin                         | 0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2 |
-| TickLens                           | 0xbfd8137f7d1516D3ea5cA83523914859ec47F573 |
-| Quoter                             | 0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6 |
-| SwapRouter                         | 0xE592427A0AEce92De3Edee1F18E0157C05861564 |
-| NFTDescriptor                      | 0x42B24A95702b9986e82d421cC3568932790A48Ec |
-| NonfungibleTokenPositionDescriptor | 0x91ae842A5Ffd8d12023116943e72A606179294f3 |
-| TransparentUpgradeableProxy        | 0xEe6A57eC80ea46401049E92587E52f5Ec1c24785 |
-| NonfungiblePositionManager         | 0xC36442b4a4522E871399CD717aBDD847Ab11FE88 |
-| V3Migrator                         | 0xA5644E29708357803b5A882D272c41cC0dF92B34 |
-| QuoterV2                           | 0x61fFE014bA17989E743c5F6cB21bF9697530B21e |
-| SwapRouter02                       | 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45 |
-| Permit2                            | 0x000000000022D473030F116dDEE9F6B43aC78BA3 |
-| UniversalRouter                    | 0xec7BE89e9d109e7e3Fec59c222CF297125FEFda2 |
-| v3StakerAddress                    | 0xe34139463bA50bD61336E0c446Bd8C0867c6fE65 |
-| EthereumProxy                      | 0x8a1B966aC46F42275860f905dbC75EfBfDC12374 |
+| Contract Name                      | Address                                                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| UniswapV3Factory                   | [0x1F98431c8aD98523631AE4a59f267346ea31F984](https://polygonscan.com/address/0x1F98431c8aD98523631AE4a59f267346ea31F984) |
+| Multicall                          | [0x1F98415757620B543A52E61c46B32eB19261F984](https://polygonscan.com/address/0x1F98415757620B543A52E61c46B32eB19261F984) |
+| ProxyAdmin                         | [0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2](https://polygonscan.com/address/0xB753548F6E010e7e680BA186F9Ca1BdAB2E90cf2) |
+| TickLens                           | [0xbfd8137f7d1516D3ea5cA83523914859ec47F573](https://polygonscan.com/address/0xbfd8137f7d1516D3ea5cA83523914859ec47F573) |
+| Quoter                             | [0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6](https://polygonscan.com/address/0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6) |
+| SwapRouter                         | [0xE592427A0AEce92De3Edee1F18E0157C05861564](https://polygonscan.com/address/0xE592427A0AEce92De3Edee1F18E0157C05861564) |
+| NFTDescriptor                      | [0x42B24A95702b9986e82d421cC3568932790A48Ec](https://polygonscan.com/address/0x42B24A95702b9986e82d421cC3568932790A48Ec) |
+| NonfungibleTokenPositionDescriptor | [0x91ae842A5Ffd8d12023116943e72A606179294f3](https://polygonscan.com/address/0x91ae842A5Ffd8d12023116943e72A606179294f3) |
+| TransparentUpgradeableProxy        | [0xEe6A57eC80ea46401049E92587E52f5Ec1c24785](https://polygonscan.com/address/0xEe6A57eC80ea46401049E92587E52f5Ec1c24785) |
+| NonfungiblePositionManager         | [0xC36442b4a4522E871399CD717aBDD847Ab11FE88](https://polygonscan.com/address/0xC36442b4a4522E871399CD717aBDD847Ab11FE88) |
+| V3Migrator                         | [0xA5644E29708357803b5A882D272c41cC0dF92B34](https://polygonscan.com/address/0xA5644E29708357803b5A882D272c41cC0dF92B34) |
+| QuoterV2                           | [0x61fFE014bA17989E743c5F6cB21bF9697530B21e](https://polygonscan.com/address/0x61fFE014bA17989E743c5F6cB21bF9697530B21e) |
+| SwapRouter02                       | [0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45](https://polygonscan.com/address/0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45) |
+| Permit2                            | [0x000000000022D473030F116dDEE9F6B43aC78BA3](https://polygonscan.com/address/0x000000000022D473030F116dDEE9F6B43aC78BA3) |
+| UniversalRouter                    | [0xec7BE89e9d109e7e3Fec59c222CF297125FEFda2](https://polygonscan.com/address/0xec7BE89e9d109e7e3Fec59c222CF297125FEFda2) |
+| v3StakerAddress                    | [0xe34139463bA50bD61336E0c446Bd8C0867c6fE65](https://polygonscan.com/address/0xe34139463bA50bD61336E0c446Bd8C0867c6fE65) |
+| EthereumProxy                      | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374) |
 
 ## Permission owners
 
-| Name          | Account                                                                                                                       | Type                       |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| EthereumProxy | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374#code) | Cross-chain proxy contract |
+| Name          | Account                                                                                                                  | Type                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| EthereumProxy | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374) | Cross-chain proxy contract |
 
 ## Permissions
 
