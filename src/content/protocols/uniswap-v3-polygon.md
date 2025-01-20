@@ -133,5 +133,5 @@ No security council needed because on-chain governance on Ethereum is in place, 
 
 # Sources
 
-[1] https://l2beat.com/scaling/projects/polygon-pos
-[2] https://docs.polygon.technology/pos/architecture/bor/state-sync/
+- [1] https://l2beat.com/scaling/projects/polygon-pos
+- [2] https://docs.polygon.technology/pos/architecture/bor/state-sync/
