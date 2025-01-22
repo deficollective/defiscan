@@ -1,11 +1,11 @@
 ---
-protocol: "Uniswap-v2"
+protocol: "Uniswap-V2"
 website: "https://blog.uniswap.org/uniswap-v2"
 x: "https://x.com/uniswap"
 github: 
   [
-    "https://github.com/Uniswap/v2-core"
-    "https://github.com/Uniswap/v2-periphery"
+    "https://github.com/Uniswap/v2-core",
+    "https://github.com/Uniswap/v2-periphery",
   ]
 defillama_slug: ["uniswap-v2"]
 chain: "Ethereum"
