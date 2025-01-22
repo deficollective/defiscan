@@ -28,20 +28,20 @@ The protocol is deployed across multiple chains enabling a wide range of use cas
 
 ## Chain
 
-Uniswap v3 is deployed on various chains. This review is based on the Polygon PoS chain, an EVM-compatible, proof-of-stake sidechain for Ethereum. Polygon PoS plans to transition to a Validium model with a state-validating bridge. Currently, the bridge is validated by Polygon validators and supports asset and data movement between Polygon and Ethereum. [[1]](https://l2beat.com/scaling/projects/polygon-pos)
+Uniswap v3 is deployed on various chains. This review is based on the Polygon PoS chain, an EVM-compatible, proof-of-stake sidechain for Ethereum. Polygon PoS does not compose over a functional proof system. Instead, the chain relies on "single entities to safely update the state. A malicious proposer can finalize an invalid state, which can cause loss of funds." [[1]](https://l2beat.com/scaling/projects/polygon-pos)
 
 > Chain score: H
 
 ## Upgradeability
 
-Two potential upgrades can be implemented for the contracts deployed on Polygon that comprise the Uniswap V3 deployment:
+Two potential updates can be implemented for the contracts deployed on Polygon that comprise the Uniswap V3 deployment:
 
 1. Adjusting the Fee Parameter
 2. Updating the `NonFungibleTokenPositionDescriptor` Implementation (via the proxy upgradeable pattern)
 
-Beyond these, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions.
+These updates require a governance vote on the Ethereum chain through Uniswap's on-chain governance system. The execution of this vote is trustless but involves the Polygon native cross-chain messaging protocol. This protocol can censor valid governance vote results or include invalid results. The risk of such malicious activity is reflected in the [#Chain](#chain) score.
 
-The aforementioned changes require a governance vote on the Ethereum mainnet chain. The execution of this vote involves the Polygon native cross-chain messaging protocol which can be censored and thus prevent the upgrade (encapsulated with High Risk in [#Chain](#chain) section).
+Beyond these updates, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any other way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions or by the risk of manipulating Uniswap governance vote results through Polygon's cross-chain messaging protocol.
 
 > Upgradeability score: L
 
@@ -116,7 +116,9 @@ If a vote has passed and is queued that has changes for the Polygon deployment t
 
 The Execution Layer (Bor chain) Validators pick this up and include a transaction where [StateReceiver](https://polygonscan.com/address/0x0000000000000000000000000000000000001001) calls the function `onStateReceive` on [FxChild](https://polygonscan.com/address/0x8397259c983751DAf40400790063935a11afa28a) which calls the function ` processMessageFromRoot` on the [EthereumProxy](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374).
 
-Note that due to the limited permissions of the Upgradeability, the impact of a censored/malicious governance vote by the Validators remains low though.
+This means that a sufficiently large validator set has the ability to censor Uniswap governance vote results that are to be executed on the Polygon chain or include invalid governance vote results.
+
+However, due to the limited permissions given to Uniswap governance, the impact of a censored/malicious governance vote result by the validators remains low.
 
 ## Dependencies
 
