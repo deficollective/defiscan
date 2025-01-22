@@ -70,16 +70,11 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | Timelock          | [0x1a9C8182C09F50C8318d769245beA52c32BE35BC](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC) |
 | GovernorBravo     | [0x408ED6354d4973f66138C91495F2f2FCbd8724C3](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) |
 
-
-
-
-
-
 ## Permission owners
 
 | Name          | Account                                                                                                               | Type     |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- | ---------|
-| feeToSetter   | [0x18e433c7Bf8A2E1d0197CE5d8f9AFAda1A771360](https://etherscan.io/address/0x18e433c7Bf8A2E1d0197CE5d8f9AFAda1A771360) | Contract |
+| FeeToSetter   | [0x18e433c7Bf8A2E1d0197CE5d8f9AFAda1A771360](https://etherscan.io/address/0x18e433c7Bf8A2E1d0197CE5d8f9AFAda1A771360) | Contract |
 | GovernorBravo | [0x408ED6354d4973f66138C91495F2f2FCbd8724C3](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) | Contract |
 | TimeLock      | [0x1a9C8182C09F50C8318d769245beA52c32BE35BC](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC) | Contract |
 
@@ -87,11 +82,11 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 | Contract               | Function            | Impact                                                                                                                                                                                                                                        | Owner                                   |
 |------------------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
-| UniswapV2Factory       | setFeeTo            | This function allows the feeToSetter to set the address where protocol fees are collected. If abused, fees could be redirected to an unauthorized address, leading to loss of user funds                                                      | feeToSetter                             |
-| UniswapV2Factory       | setFeeToSetter      | This function permits the current feeToSetter to assign a new feeToSetter. A malicious actor could take control and redirect fees or alter the fee settings.                                                                                  | feeToSetter                             |
-| FeeToSetter            | setOwner            | Allows the current owner to transfer full control to a new address. A transfer to a malicious owner could compromise fee management.                                                                                                          | TimeLocked DAO contract                 |
-| FeeToSetter            | setFeeToSetter      | Changes the feeToSetter address in UniswapV2Factory after the vesting period. This could redirect control to an external entity.                                                                                                              | TimeLocked DAO contract                 |
-| FeeToSetter            | toggleFees          | Enables or disables fees in the factory. A malicious owner could manipulate this function to impact users or disrupt revenue flows.                                                                                                           | TimeLocked DAO contract                 |
+| UniswapV2Factory       | setFeeTo            | This function allows the feeToSetter to set the address where protocol fees are collected. If abused, fees could be redirected to an unauthorized address, leading to loss of user funds                                                      | FeeToSetter                             |
+| UniswapV2Factory       | setFeeToSetter      | This function permits the current feeToSetter to assign a new feeToSetter. A malicious actor could take control and redirect fees or alter the fee settings.                                                                                  | FeeToSetter                             |
+| FeeToSetter            | setOwner            | Allows the current owner to transfer full control to a new address. A transfer to a malicious owner could compromise fee management.                                                                                                          | Timelock                                |
+| FeeToSetter            | setFeeToSetter      | Changes the feeToSetter address in UniswapV2Factory after the vesting period. This could redirect control to an external entity.                                                                                                              | Timelock                                |
+| FeeToSetter            | toggleFees          | Enables or disables fees in the factory. A malicious owner could manipulate this function to impact users or disrupt revenue flows.                                                                                                           | Timelock                                |
 | TimeLock               | queueTransaction    | Queues a transaction that can be executed once a delay (between 2 and 30 days) has passed. This can impact the own `TimeLock`'s settings (change admin, set delays) or interaction with any other contract the `TimeLock` has permissions on. | GovernorBravoDelegator                  |
 | TimeLock               | cancelTransaction   | Cancels a pending transaction and removes it from the queue. This allows the DAO to cancel one of its own decision before it is executed.                                                                                                     | GovernorBravoDelegator                  |
 | TimeLock               | executeTransaction  | Executes a transaction that was previously queued, if the corresponding delay has passed.                                                                                                                                                     | GovernorBravoDelegator                  |
@@ -107,7 +102,6 @@ As the contracts are immutable the users can always withdraw their funds, but pa
 fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
 The lock period is at least two days and up to 30 days for governance actions.
 When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-
 
 # Security Council
 
