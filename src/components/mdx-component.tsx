@@ -17,8 +17,9 @@ const useMDXComponent = (code: string) => {
 type ComponentsProps = HTMLAttributes<HTMLElement>;
 
 const components = {
-  h1: ({ className, ...props }: ComponentsProps) => (
+  h1: ({ className, id, ...props }: ComponentsProps) => (
     <h1
+      id={id}
       className={cn(
         "mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight",
         className
@@ -44,23 +45,42 @@ const components = {
       {...props}
     />
   ),
-  a: ({ className, href = "", ...props }: AnchorProps) => {
+  a: ({ className, id, href = "", ...props }: AnchorProps) => {
     const isInternal = href.startsWith("#") || href.startsWith("/");
+
+    if (isInternal && href.startsWith("#")) {
+      return (
+        <a
+          id={id}
+          className={cn(
+            "font-medium underline text-primary underline-offset-4",
+            className
+          )}
+          href={href}
+          onClick={(e) => {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            const element = document.getElementById(targetId);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+              // Update URL without causing a page jump
+              window.history.pushState(null, "", href);
+            }
+          }}
+          {...props}
+        />
+      );
+    }
 
     return (
       <a
         className={cn(
           "font-medium underline text-primary underline-offset-4",
-          !isInternal ? "text-xs sm:text-sm md:text-base" : "",
           className
         )}
+        target={isInternal ? undefined : "_blank"}
+        rel={isInternal ? undefined : "noopener noreferrer"}
         href={href}
-        {...(!isInternal
-          ? {
-              target: "_blank",
-              rel: "noopener noreferrer",
-            }
-          : {})}
         {...props}
       />
     );
