@@ -41,9 +41,9 @@ Two potential upgrades can be implemented for the contracts deployed on Base tha
 1. Adjusting the Fee Parameter
 2. Updating the `NonFungibleTokenPositionDescriptor` Implementation (via the proxy upgradeable pattern)
 
-Beyond these, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions.
+These updates require a governance vote on the Ethereum chain through Uniswap's on-chain governance system. The execution of this vote is trustless but involves the Base (Optimism stack) native cross-chain messaging protocol. This protocol cannot censor governance vote results and hence does not introduce new risks.
 
-The aforementioned changes require a governance vote on the Ethereum mainnet chain. The execution of this vote involves a cross-chain messaging protocol which is fully trustless, i.e. does not involve a centralized or trusted intermediary, and thus bears no additional risks.
+Beyond these updates, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any other way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions or by the risk of manipulating Uniswap governance vote results through Base's cross-chain messaging protocol.
 
 > Upgradeability score: L
 
@@ -114,6 +114,8 @@ By calling `forward` on the CrossChainAccount, the `target` gets called with the
 `(bool success, bytes memory res) = target.call(data);`
 
 Only the Timelock contract on the L1 is allowed to trigger this on the L2. The target and data could e.g specify `UniswapV3Factory` (target) and `enableFeeAmount` with arguments `uint24 fee, int24 tickSpacing` (data) to set fees for V3 Pools on Base.
+
+Furthermore, Base's cross-chain messaging protocol cannot be censored by intermediaries and thus this protocol does not introduce new risks for Uniswap's cross-chain governance system.
 
 ## Dependencies
 
