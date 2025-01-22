@@ -14,7 +14,7 @@ reasons: ["Unverified Contracts"]
 risks: ["H", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
 submission_date: "2025-01-16"
-publish_date: "2025-01-16"
+publish_date: "2025-01-22"
 update_date: "1970-01-01"
 ---
 
@@ -70,29 +70,29 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Contracts
 
-| Contract Name                      | Address                                                                                                             |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| UniswapV3Factory                   | [0x33128a8fC17869897dcE68Ed026d694621f6FDfD]https://basescan.org/address/0x33128a8fC17869897dcE68Ed026d694621f6FDfD |
-| Multicall                          | [0x091e99cb1C49331a94dD62755D168E941AbD0693]https://basescan.org/address/0x091e99cb1C49331a94dD62755D168E941AbD0693 |
-| ProxyAdmin                         | [0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9]https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9 |
-| TickLens                           | [0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d]https://basescan.org/address/0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d |
-| NFTDescriptor                      | [0xF9d1077fd35670d4ACbD27af82652a8d84577d9F]https://basescan.org/address/0xF9d1077fd35670d4ACbD27af82652a8d84577d9F |
-| NonfungibleTokenPositionDescriptor | [0x4f225937EDc33EFD6109c4ceF7b560B2D6401009]https://basescan.org/address/0x4f225937EDc33EFD6109c4ceF7b560B2D6401009 |
-| TransparentUpgradeableProxy        | [0x4615C383F85D0a2BbED973d83ccecf5CB7121463]https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463 |
-| NonfungiblePositionManager         | [0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1]https://basescan.org/address/0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1 |
-| V3Migrator                         | [0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7]https://basescan.org/address/0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7 |
-| QuoterV2                           | [0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a]https://basescan.org/address/0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a |
-| SwapRouter02                       | [0x2626664c2603336E57B271c5C0b26F421741e481]https://basescan.org/address/0x2626664c2603336E57B271c5C0b26F421741e481 |
-| Permit2                            | [0x000000000022D473030F116dDEE9F6B43aC78BA3]https://basescan.org/address/0x000000000022D473030F116dDEE9F6B43aC78BA3 |
-| UniversalRouter                    | [0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD]https://basescan.org/address/0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD |
-| v3StakerAddress                    | [0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1]https://basescan.org/address/0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1 |
-| CrossChainAccount                  | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9]https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9 |
+| Contract Name                      | Address                                                                                                               |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| UniswapV3Factory                   | [0x33128a8fC17869897dcE68Ed026d694621f6FDfD](https://basescan.org/address/0x33128a8fC17869897dcE68Ed026d694621f6FDfD) |
+| Multicall                          | [0x091e99cb1C49331a94dD62755D168E941AbD0693](https://basescan.org/address/0x091e99cb1C49331a94dD62755D168E941AbD0693) |
+| ProxyAdmin                         | [0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9) |
+| TickLens                           | [0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d](https://basescan.org/address/0x0CdeE061c75D43c82520eD998C23ac2991c9ac6d) |
+| NFTDescriptor                      | [0xF9d1077fd35670d4ACbD27af82652a8d84577d9F](https://basescan.org/address/0xF9d1077fd35670d4ACbD27af82652a8d84577d9F) |
+| NonfungibleTokenPositionDescriptor | [0x4f225937EDc33EFD6109c4ceF7b560B2D6401009](https://basescan.org/address/0x4f225937EDc33EFD6109c4ceF7b560B2D6401009) |
+| TransparentUpgradeableProxy        | [0x4615C383F85D0a2BbED973d83ccecf5CB7121463](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463) |
+| NonfungiblePositionManager         | [0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1](https://basescan.org/address/0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1) |
+| V3Migrator                         | [0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7](https://basescan.org/address/0x23cF10b1ee3AdfCA73B0eF17C07F7577e7ACd2d7) |
+| QuoterV2                           | [0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a](https://basescan.org/address/0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a) |
+| SwapRouter02                       | [0x2626664c2603336E57B271c5C0b26F421741e481](https://basescan.org/address/0x2626664c2603336E57B271c5C0b26F421741e481) |
+| Permit2                            | [0x000000000022D473030F116dDEE9F6B43aC78BA3](https://basescan.org/address/0x000000000022D473030F116dDEE9F6B43aC78BA3) |
+| UniversalRouter                    | [0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD](https://basescan.org/address/0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD) |
+| v3StakerAddress                    | [0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1](https://basescan.org/address/0x42bE4D6527829FeFA1493e1fb9F3676d2425C3C1) |
+| CrossChainAccount                  | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) |
 
 ## Permission owners
 
-| Name              | Account                                                                                                                    | Type     |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------- | -------- |
-| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9#code) | Contract |
+| Name              | Account                                                                                                               | Type     |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) | Contract |
 
 ## Permissions
 
