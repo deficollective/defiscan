@@ -125,7 +125,7 @@ export default async function ProtocolPageItem({
                       target="_blank"
                       rel="noopener noreferrer"
                       href={`
-                        ${slug}`}
+                        https://defillama.com/protocol/${slug}`}
                       className="text-blue-500 hover:underline text-sm md:text-base"
                     >
                       {index == 0 ? slug : ", " + slug}
