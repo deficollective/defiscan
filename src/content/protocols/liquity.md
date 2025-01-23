@@ -3,7 +3,7 @@ protocol: "Liquity"
 website: "https://www.liquity.org"
 x: "https://x.com/LiquityProtocol"
 github: ["https://github.com/liquity"]
-defillama_slug: ["liquity"]
+defillama_slug: ["liquity-v1"]
 chain: "Ethereum"
 stage: 2
 reasons: []
