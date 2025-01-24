@@ -1,6 +1,6 @@
 ---
 protocol: "Uniswap-V2"
-website: "https://blog.uniswap.org/uniswap-v2"
+website: "https://app.uniswap.org"
 x: "https://x.com/uniswap"
 github:
   [
@@ -34,7 +34,9 @@ Uniswap v2 is deployed on various chains. This review is based on the Ethereum m
 
 ## Upgradeability
 
-The Uniswap V2 protocol allows governance via the GovernorBravoDelegator contract to manage parameters such as fees through the FeeToSetter and Timelock contracts. While these permissions enable fee management and address updates, the core contracts (UniswapV2Factory, UniswapV2Pair) are not upgradable, ensuring no entity can alter core functionalities, pause trades, or disrupt protocol behavior.
+The Uniswap V2 protocol allows UNI token holders to update certain fee parameters through an on-chain governance process. These updates enable the token holders to activate and deactivate protocol fees and to change the recipient of such fees.
+
+Apart from these fee parameters, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
 
 > Upgradeabillity score: L
 
