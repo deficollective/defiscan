@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/chart";
 import { defiLlama } from "@/services/defillama";
 import { protocols, reviews } from "#site/content";
-import { Project, Stage } from "@/lib/types";
+import { Project, Review, Stage } from "@/lib/types";
 import { loadReviews } from "@/lib/data/utils";
+
+type ProjectWithReview = Project & Review;
 
 interface VisualisedData {
   key: string;
@@ -21,7 +23,7 @@ interface VisualisedData {
 }
 
 export interface PieChartProps {
-  groupByKey: keyof Project;
+  groupByKey: keyof Review;
   operation: "sum" | "count";
   baseColor: string;
   chartTitle: string;
@@ -35,9 +37,9 @@ export interface PieChartProps {
 
 // Helper functions
 const groupBy = (
-  array: Project[],
-  key: keyof Project
-): Record<string, Project[]> => {
+  array: ProjectWithReview[],
+  key: keyof ProjectWithReview
+): Record<string, ProjectWithReview[]> => {
   return array.reduce(
     (result, currentValue) => {
       const groupKey = String(currentValue[key]);
@@ -47,7 +49,7 @@ const groupBy = (
       result[groupKey].push(currentValue);
       return result;
     },
-    {} as Record<string, Project[]>
+    {} as Record<string, ProjectWithReview[]>
   );
 };
 
@@ -68,7 +70,7 @@ const keyToWord = (key: string) => {
 };
 
 const aggregateByKey = (
-  groupedData: Record<string, Project[]>,
+  groupedData: Record<string, ProjectWithReview[]>,
   operation: "sum" | "count"
 ): { key: string; value: number }[] => {
   return Object.entries(groupedData).map(([key, projects]) => {
@@ -156,7 +158,7 @@ type FormatterKey = keyof typeof defaultLabelFormatters;
 
 const getDefaultFormatter = (
   operation: "sum" | "count",
-  groupByKey: keyof Project
+  groupByKey: keyof Review
 ): FormatterKey => {
   // Create a mapping of conditions to formatter keys
   const formatterMapping = {
@@ -198,7 +200,7 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
       const merged = projects
         .map((project) => {
           const { reviews, ...rest } = project;
-          return reviews.map((review) => ({ ...rest, ...review }));
+          return reviews.map((review) => ({ ...rest, ...review, reviews: [] }));
         })
         .flat();
 

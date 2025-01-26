@@ -1,7 +1,10 @@
 "use client";
 
 import { Metadata } from "next";
-import { protocols as allProtocols } from "#site/content";
+import {
+  reviews as allReviews,
+  protocols as allProtocols,
+} from "#site/content";
 import "@/styles/mdx.css";
 import { Mdx } from "@/components/mdx-component";
 import { ChevronLeft } from "lucide-react";
@@ -13,6 +16,7 @@ import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Stage } from "@/lib/types";
+import { StageBadge } from "@/components/stage";
 
 interface ProtocolPageItemProps {
   params: {
@@ -21,12 +25,13 @@ interface ProtocolPageItemProps {
 }
 
 async function getProtocolFromParams(slug: string[]) {
-  const slugString = slug.join("/");
-  const protocol = allProtocols.find(
-    (protocol) => protocol.slugAsParams === slugString
-  );
+  const id = slug[0];
+  const protocol = allProtocols.find((p) => p.id === id);
 
-  return { ...protocol };
+  const reviewSlug = slug.join("/");
+  const review = allReviews.find((r) => r.slugAsParams === reviewSlug);
+
+  return { ...protocol, ...review };
 }
 
 // export async function generateMetadata({
@@ -89,10 +94,10 @@ export default async function ProtocolPageItem({
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={protocol.x}
+                  href={protocol.socials?.x}
                   className="text-blue-500 hover:underline text-sm md:text-base"
                 >
-                  {protocol.x}
+                  {protocol.socials?.x}
                 </a>
               </td>
             </tr>
@@ -174,63 +179,24 @@ export default async function ProtocolPageItem({
           .
         </p>
 
-        {protocol.stage! != "O" ? (
+        {protocol.stage! != "O" && (
           <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
             Stage
           </h1>
-        ) : (
-          <></>
         )}
 
-        {protocol.stage! != "O" ? (
-          <TooltipProvider>
-            <Badge
-              title={"Stage of Decentralisation"}
-              stage={protocol.stage! as Stage}
-              className={`${
-                protocol.stage! === "R"
-                  ? "bg-gray-500"
-                  : protocol.stage! === 0
-                    ? "bg-red-500"
-                    : protocol.stage! === 1
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
-              } text-white py-1 rounded "text-lg"`}
-            >
-              {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
-            </Badge>
-          </TooltipProvider>
-        ) : (
-          <></>
-        )}
-
-        {protocol.stage! === "O" ? (
+        {protocol.stage! === "O" && (
           <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
             Missing Requirements for Stage 0
           </h1>
-        ) : (
-          <></>
         )}
-        {
-          <div>
-            {protocol.stage! === "O" ? (
-              protocol.reasons!.map((el) => (
-                <TooltipProvider>
-                  <Badge
-                    title={"Reason"}
-                    className="my-1 bg-red-500"
-                    stage={"O"}
-                    reason={el}
-                  >
-                    {el}
-                  </Badge>
-                </TooltipProvider>
-              ))
-            ) : (
-              <></>
-            )}
-          </div>
-        }
+
+        <div className="flex">
+          <StageBadge
+            stage={protocol.stage! as Stage}
+            reasons={protocol.reasons}
+          />
+        </div>
 
         <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
           Risks
