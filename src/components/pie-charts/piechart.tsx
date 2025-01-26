@@ -10,8 +10,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { defiLlama } from "@/services/defillama";
-import { protocols } from "#site/content";
+import { protocols, reviews } from "#site/content";
 import { Project, Stage } from "@/lib/types";
+import { loadReviews } from "@/lib/data/utils";
 
 interface VisualisedData {
   key: string;
@@ -192,7 +193,15 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const merged = await mergeDefiLlamaWithMd();
+      const projects = await loadReviews();
+
+      const merged = projects
+        .map((project) => {
+          const { reviews, ...rest } = project;
+          return reviews.map((review) => ({ ...rest, ...review }));
+        })
+        .flat();
+
       const groupedBy = groupBy(merged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
@@ -278,33 +287,3 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
-export async function mergeDefiLlamaWithMd() {
-  const apiData = await defiLlama.getProtocolsWithCache();
-  const filtered = protocols
-    .map((frontmatterProtocol) => {
-      var tvl = 0;
-      var logo = "";
-      var type = "";
-      for (var slug of frontmatterProtocol.defillama_slug) {
-        const res = apiData.find(
-          (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
-        );
-        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
-        type = res?.category || "";
-        logo = res?.logo || "";
-      }
-      return {
-        logo: logo,
-        protocol: frontmatterProtocol.protocol,
-        slug: frontmatterProtocol.slug,
-        tvl: tvl,
-        chain: frontmatterProtocol.chain,
-        stage: frontmatterProtocol.stage,
-        reasons: frontmatterProtocol.reasons,
-        type: type,
-        risks: frontmatterProtocol.risks,
-      } as Project;
-    })
-    .filter((el): el is Project => el !== null);
-  return filtered;
-}
