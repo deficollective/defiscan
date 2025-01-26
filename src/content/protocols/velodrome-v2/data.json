@@ -1,0 +1,10 @@
+{
+  "id": "velodrome-v2",
+  "protocol": "Velodrome-v2",
+  "website": "https://velodrome.finance/",
+  "defillama_slug": ["velodrome-v2", "velodrome-v3"],
+  "socials": {
+    "x": "https://twitter.com/VelodromeFi"
+  },
+  "github": ["https://github.com/velodrome-finance"]
+}

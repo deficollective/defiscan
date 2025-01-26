@@ -1,9 +1,4 @@
 ---
-protocol: "Dyad"
-website: "https://dyadstable.xyz"
-x: "https://x.com/0xDYAD"
-github: ["https://github.com/DyadStablecoin"]
-defillama_slug: ["dyad"]
 chain: "Ethereum"
 stage: 0
 reasons: []

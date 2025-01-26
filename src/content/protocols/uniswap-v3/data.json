@@ -1,0 +1,13 @@
+{
+  "id": "uniswap-v3",
+  "protocol": "Uniswap V3",
+  "website": "https://blog.uniswap.org/uniswap-v3",
+  "defillama_slug": ["uniswap-v3"],
+  "socials": {
+    "x": "https://x.com/uniswap"
+  },
+  "github": [
+    "https://github.com/Uniswap/v3-core",
+    "https://github.com/Uniswap/v3-periphery/"
+  ]
+}

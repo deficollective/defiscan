@@ -1,0 +1,10 @@
+{
+  "id": "maverick-v2",
+  "protocol": "Maverick-v2",
+  "website": "https://app.mav.xyz",
+  "defillama_slug": ["maverick-v2"],
+  "socials": {
+    "x": "https://x.com/mavprotocol"
+  },
+  "github": ["https://github.com/maverickprotocol"]
+}

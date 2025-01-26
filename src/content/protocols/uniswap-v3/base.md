@@ -1,13 +1,4 @@
 ---
-protocol: "Uniswap-V3"
-website: "https://blog.uniswap.org/uniswap-v3"
-x: "https://x.com/uniswap"
-github:
-  [
-    "https://github.com/Uniswap/v3-core",
-    "https://github.com/Uniswap/v3-periphery/",
-  ]
-defillama_slug: ["uniswap-v3"]
 chain: "Base"
 stage: "O"
 reasons: ["Unverified Contracts"]

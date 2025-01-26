@@ -1,9 +1,4 @@
 ---
-protocol: "Possum-Portals-v2"
-website: "https://www.possumlabs.io"
-x: "https://x.com/Possum_Labs"
-github: ["https://github.com/PossumLabsCrypto"]
-defillama_slug: ["possum-labs"]
 chain: "Arbitrum"
 stage: 0
 reasons: []
