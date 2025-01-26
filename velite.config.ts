@@ -20,17 +20,32 @@ const ReasonSetSchema = s
   .array(ReasonSchema)
   .transform((reasons) => Array.from(new Set(reasons))); // Remove duplicates
 
+
+
 const protocols = defineCollection({
-  name: "Protocols",
+  name: "protocols",
+  pattern: "protocols/**/data.json",
+  schema: s.object({
+    id: s.string(),
+    slug: s.path(),
+    protocol: s.string().max(99),
+    website: s.string().url(),
+    defillama_slug: s.array(s.string()),
+    socials: s.object({
+      x: s.string()
+    }),
+    github: s.array(s.string().url())
+  })
+})
+
+
+
+const reviews = defineCollection({
+  name: "reviews",
   pattern: "protocols/**/*.md",
   schema: s
     .object({
       slug: s.path(),
-      protocol: s.string().max(99),
-      website: s.string(),
-      x: s.string(),
-      github: s.array(s.string()),
-      defillama_slug: s.array(s.string()),
       chain: s.string(),
       stage: s.number().gte(0).lte(2).or(s.literal("R")).or(s.literal("O")),
       risks: s.tuple([
@@ -59,7 +74,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[text]",
     clean: true,
   },
-  collections: { protocols },
+  collections: { protocols, reviews },
   mdx: {
     rehypePlugins: [
       rehypeSlug as any,
