@@ -72,11 +72,7 @@ export function PremadeFilters({ table, filters }: PremadeFiltersProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className=" border-dashed border-border w-9 h-9"
-        >
+        <Button variant="outline" size="icon" className="border-border w-9 h-9">
           <Filter className="w-3 h-3" />
         </Button>
       </DropdownMenuTrigger>

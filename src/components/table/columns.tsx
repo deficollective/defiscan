@@ -84,24 +84,23 @@ export const columns: ColumnDef<Project>[] = [
     },
     sortingFn: "alphanumeric", // use built-in sorting function by name
   },
-
   {
     accessorKey: "risks",
     header: ({ column }) => {
-      return <p className="text-xs md:text-sm">Risks</p>;
+      return <p className="text-xs md:text-sm text-center">Risks</p>;
     },
     cell: ({ row }) => {
       const risks = row.getValue("risks") as RiskArray;
 
-      if (!risks) return <div>-</div>;
+      if (!risks) return <div className="w-full text-center">-</div>;
 
       return (
-        <TooltipProvider>
+        <div className="flex w-full justify-center">
           <PizzaRosetteCell
             values={getRiskDescriptions(risks)}
             isUnderReview={false}
           />
-        </TooltipProvider>
+        </div>
       );
     },
   },
