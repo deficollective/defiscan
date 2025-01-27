@@ -59,12 +59,18 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     filterFn: (row, columnId, filterValue) => {
-      // Check if the row's stage value is in the filterValue array
+      // Handle filtering by staged for grouped.
+      if (row.depth === 0 && row.original.children) {
+        const stages = row.original.children.map((r) => r.stage);
+
+        return filterValue.some((v: Stage) => stages.includes(v));
+      }
+
       return filterValue.includes(row.getValue(columnId));
     },
     cell: ({ row }) => {
       let stage = row.getValue("stage") as Stage;
-      let reasons = row.original.reasons as Reason[];
+      const reasons = row.original.reasons as Reason[];
 
       // No stage means its a wrapper for different chains.
       // Therefore we assign the stage to variable.
@@ -206,7 +212,6 @@ export const columns: ColumnDef<Project>[] = [
     },
   },
 ];
-
 // {
 //   id: "reasons",
 //   accessorKey: "reasons",

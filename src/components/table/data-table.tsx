@@ -27,8 +27,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { TableToolbar } from "./toolbar";
+import { defi_stages } from "@/lib/consts";
 
 const openProtocolReview = (slug: string) => (window.location.href = slug);
 
@@ -140,27 +142,19 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  // const [sorting, setSorting] = useState<SortingState>([
-  //   {
-  //     id: "tvl",
-  //     desc: true,
-  //   },
-  // ]);
-  // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  // const [defiView, setDefiView] = useState(true);
-
-  // const initialVisibility = useMemo(
-  //   () => getInitialVisibility(columns, defiView),
-  //   [columns]
-  // );
-
-  // const [columnVisibility, setColumnVisibility] = useState(initialVisibility);
-
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    { id: "stage", value: defi_stages },
+  ]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
+
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "tvl",
+      desc: true,
+    },
+  ]);
 
   const table = useReactTable({
     data,
@@ -201,56 +195,11 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  // const table = useReactTable({
-  //   data,
-  //   columns,
-  //   getCoreRowModel: getCoreRowModel(),
-  //   onSortingChange: setSorting,
-  //   getSortedRowModel: getSortedRowModel(),
-  //   onColumnVisibilityChange: setColumnVisibility,
-  //   onColumnFiltersChange: setColumnFilters,
-  //   getFilteredRowModel: getFilteredRowModel(),
-  //   state: {
-  //     sorting,
-  //     columnFilters,
-  //     columnVisibility,
-  //   },
-  //   initialState: {
-  //     sorting: [
-  //       {
-  //         id: "tvl",
-  //         desc: true,
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   setColumnVisibility((prev) => ({
-  //     ...prev,
-  //     stage: defiView,
-  //     reasons: !defiView,
-  //   }));
-  //   if (!defiView) {
-  //     table.resetColumnFilters();
-  //     table.getColumn("stage")?.setFilterValue("O");
-  //   } else {
-  //     table.resetColumnFilters();
-  //     table.getColumn("stage")?.setFilterValue([0, 1, 2, "R"]);
-  //   }
-  // }, [defiView, table]);
-
   useResponsiveColumns(table);
-
-  // Navigate to the protocol's page when the row is clicked
-  const handleRowClick = (slug: string) => {
-    window.location.href = slug;
-  };
 
   return (
     <div className="w-full">
-      <div>TODO: display unqualified toggle.</div>
-
+      <TableToolbar table={table} />
       <div className="overflow-hidden">
         <Table>
           <TableHeader>

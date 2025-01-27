@@ -22,7 +22,7 @@ const requisites: { [K in Stage]: (reasons?: Reason[]) => React.JSX.Element } =
       <div>
         <p>Project does currently not meet following Stage 0 requirements:</p>
         {reasons!.map((r: Reason) => (
-          <p>
+          <p key={r}>
             <b>{r}:</b> {risks[r]}
           </p>
         ))}
