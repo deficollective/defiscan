@@ -14,6 +14,12 @@ import {
 import { Filter } from "lucide-react";
 import { Table as TableType } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
+import {
+  defi_stages,
+  stage_filter_options,
+  unqualified_stages,
+} from "@/lib/consts";
+import { MultiSelectFilter } from "./multi-select-filter";
 
 export interface PremadeFilter {
   label: string;
@@ -21,12 +27,34 @@ export interface PremadeFilter {
   onClick: (table: TableType<any>) => void;
 }
 
+const premade_filters: PremadeFilter[] = [
+  {
+    label: "DeFi Projects",
+    shortcut: "1",
+    onClick: (table) => {
+      table.resetColumnFilters();
+      table.getColumn("stage")?.setFilterValue(defi_stages);
+    },
+  },
+  {
+    label: "Unqualified Projects",
+    shortcut: "2",
+    onClick: (table) => {
+      table.resetColumnFilters();
+      table.getColumn("stage")?.setFilterValue(unqualified_stages);
+    },
+  },
+];
+
 interface PremadeFiltersProps {
   table: TableType<any>;
   filters: PremadeFilter[];
 }
 
-export function PremadeFilters({ table, filters }: PremadeFiltersProps) {
+export function PremadeFilters({
+  table,
+  filters = premade_filters,
+}: PremadeFiltersProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
