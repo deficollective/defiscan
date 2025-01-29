@@ -53,8 +53,11 @@ async function getProtocolFromParams(slug: string[]) {
 
   const reviewSlug = slug.join("/");
   const review = allReviews.find((r) => r.slugAsParams === reviewSlug);
+  const chains = allReviews
+    .filter((r) => r.slugAsParams.includes(id))
+    .map((r) => r.chain);
 
-  return { ...protocol, ...review };
+  return { ...protocol, ...review, chains };
 }
 
 // export async function generateMetadata({
@@ -81,6 +84,7 @@ async function getProtocolFromParams(slug: string[]) {
 // }
 
 const ProtocolLinks = ({ protocol }: { protocol: any }) => {
+  console.log("pc:: ", protocol.chains);
   return (
     <div className="flex flex-col gap-1">
       <Button variant="outline" size="sm" asChild className="border-border">
@@ -97,7 +101,7 @@ const ProtocolLinks = ({ protocol }: { protocol: any }) => {
             <ChevronDown className="w-3 h-3 ml-auto " />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end" className="min-w-48 w-full">
           <DropdownMenuItem>
             <a
               target="_blank"
@@ -119,7 +123,7 @@ const ProtocolLinks = ({ protocol }: { protocol: any }) => {
             <ChevronDown className="w-3 h-3 ml-auto " />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end" className="min-w-48 w-full">
           {protocol.github!.map((slug: string, index: number) => (
             <DropdownMenuItem key={index}>
               <a
@@ -144,7 +148,7 @@ const ProtocolLinks = ({ protocol }: { protocol: any }) => {
             <ChevronDown className="w-3 h-3 ml-auto " />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end" className="min-w-48 w-full">
           {protocol.defillama_slug!.map((slug: string, index: number) => (
             // TODO: create a proper defillama link
             <DropdownMenuItem key={index}>
@@ -170,8 +174,14 @@ const ProtocolLinks = ({ protocol }: { protocol: any }) => {
             <ChevronDown className="w-3 h-3 ml-auto " />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>{protocol.chain}</DropdownMenuItem>
+        <DropdownMenuContent align="end" className="min-w-48 w-full">
+          {protocol.chains.map((c: string, i: number) => (
+            <DropdownMenuItem key={`chain-${i}`} asChild>
+              <Link href={`/protocols/${protocol.id}/${c.toLowerCase()}`}>
+                {c}
+              </Link>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -262,8 +272,6 @@ export default async function ProtocolPageItem({
     return <div>Protocol not found</div>; // Handle not found case
   }
 
-  console.log("reasons?:: ", protocol.reasons);
-
   return (
     <article className="container relative mx-auto py-6 lg:py-10">
       <div>
@@ -304,7 +312,9 @@ export default async function ProtocolPageItem({
           </div>
         </div>
 
-        <Mdx code={protocol.body!} />
+        <div className="mt-12">
+          <Mdx code={protocol.body!} />
+        </div>
         <hr className="mt-12" />
         <div className="flex justify-center py-6 lg:py-10">
           <Link href="/" className={cn(buttonVariants({ variant: "ghost" }))}>
