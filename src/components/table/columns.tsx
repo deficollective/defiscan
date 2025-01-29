@@ -5,15 +5,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PizzaRosetteCell } from "../rosette/rosette-cell";
 import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
 import { Button } from "../ui/button";
-import {
-  ArrowUpDown,
-  Asterisk,
-  ChevronDown,
-  ChevronRight,
-  CircleChevronDown,
-  PanelTopOpen,
-} from "lucide-react";
-import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
+import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
+import { Project, Reason, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { StageBadge } from "../stage";
@@ -164,7 +157,7 @@ export const columns: ColumnDef<Project>[] = [
       if (!risks) {
         return (
           <div className="w-full flex justify-center">
-            <CircleChevronDown className="w-4 h-4" />
+            <Minus className="w-4 h-4" />
           </div>
         );
       }
