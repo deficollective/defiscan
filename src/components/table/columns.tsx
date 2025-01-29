@@ -2,12 +2,10 @@
 
 import { cn, formatUsd } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { TooltipProvider } from "../rosette/tooltip/tooltip";
 import { PizzaRosetteCell } from "../rosette/rosette-cell";
 import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown, ChevronRight } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "../ui/avatar";
@@ -19,7 +17,7 @@ export const columns: ColumnDef<Project>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-left justify-start text-xs h-8 !w-full"
+          className="text-left justify-start text-xs h-8 !w-full pl-6"
           variant="ghost"
           size="sm"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -30,14 +28,23 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     cell: ({ row }) => {
-      const { logo, protocol } = row.original;
+      const { logo, protocol, children } = row.original;
+      const collapsible = children && children.length > 1;
 
       return (
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center">
+          <div className="w-6">
+            {collapsible &&
+              (row.getIsExpanded() ? (
+                <ChevronDown className="w-4 h-4" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              ))}
+          </div>
           <Avatar className={cn("border", row.depth > 0 && "w-8 h-8 ml-4")}>
             <AvatarImage src={logo} alt={protocol || ""} />
           </Avatar>
-          <span>{protocol}</span>
+          <span className="ml-2">{protocol}</span>
         </div>
       );
     },
