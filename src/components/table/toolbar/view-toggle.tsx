@@ -2,7 +2,7 @@
 
 import { Table as TableType } from "@tanstack/react-table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { defi_stages, unqualified_stages } from "@/lib/consts";
 import { Stage } from "@/lib/types";
 
@@ -38,6 +38,11 @@ export function ViewToggle({ table }: ViewToggleProps) {
 
     setView(nextView);
   };
+
+  useEffect(
+    () => table.getColumn("stage")?.setFilterValue(filters[view]),
+    [table]
+  );
 
   // Calculate the count reivews for each filter.
   const facets = table.getColumn("stage")?.getFacetedUniqueValues();

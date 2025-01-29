@@ -17,7 +17,7 @@ export const columns: ColumnDef<Project>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-left justify-start text-xs h-8 !w-full pl-6"
+          className="text-left justify-start text-xs h-8 pl-6"
           variant="ghost"
           size="sm"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -49,6 +49,53 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     sortingFn: "alphanumeric", // use built-in sorting function by name
+  },
+  {
+    id: "chain",
+    accessorKey: "chain",
+    header: ({ column }) => {
+      return (
+        <Button
+          // Remove hidden class to prevent layout shift
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Chain
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const chain = row.getValue("chain");
+
+      // No chain means the current row is expandable,
+      // i.e. a wrapper for reviews on multiple chains.
+      if (!chain) {
+        const chains = row.original.children!.map((c) => c.chain);
+
+        return (
+          <div className="flex items-center justify-center">
+            {chains.map((c, i) => (
+              <Chain
+                key={`chain-${i}`}
+                name={c as ChainNames}
+                className={cn(i > 0 && "-ml-3")}
+              />
+            ))}
+          </div>
+        );
+      }
+
+      return (
+        <div className="flex items-center justify-center">
+          <Chain name={chain as ChainNames} />
+        </div>
+      );
+    },
+    sortingFn: "alphanumeric",
+    meta: {
+      // responsiveHidden: true, // This column will hide on mobile
+    },
   },
   {
     id: "stage",
@@ -110,6 +157,9 @@ export const columns: ColumnDef<Project>[] = [
         </div>
       );
     },
+    meta: {
+      responsiveHidden: true, // This column will hide on mobile
+    },
   },
   {
     id: "type",
@@ -139,54 +189,7 @@ export const columns: ColumnDef<Project>[] = [
       responsiveHidden: true, // This column will hide on mobile
     },
   },
-  {
-    id: "chain",
-    accessorKey: "chain",
-    header: ({ column }) => {
-      return (
-        <Button
-          // Remove hidden class to prevent layout shift
-          className="md:flex hidden w-0 md:w-auto overflow-hidden p-0 mx-auto"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <span className="hidden md:inline">Chain</span>
-          <ArrowUpDown className="ml-2 h-4 w-4 hidden md:inline" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const chain = row.getValue("chain");
 
-      // No chain means the current row is expandable,
-      // i.e. a wrapper for reviews on multiple chains.
-      if (!chain) {
-        const chains = row.original.children!.map((c) => c.chain);
-
-        return (
-          <div className="flex items-center justify-center">
-            {chains.map((c, i) => (
-              <Chain
-                key={`chain-${i}`}
-                name={c as ChainNames}
-                className={cn(i > 0 && "-ml-3")}
-              />
-            ))}
-          </div>
-        );
-      }
-
-      return (
-        <div className="flex items-center justify-center">
-          <Chain name={chain as ChainNames} />
-        </div>
-      );
-    },
-    sortingFn: "alphanumeric",
-    meta: {
-      responsiveHidden: true, // This column will hide on mobile
-    },
-  },
   {
     id: "tvl",
     accessorKey: "tvl",

@@ -30,7 +30,7 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { TableToolbar } from "./toolbar";
-import { defi_stages } from "@/lib/consts";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 const openProtocolReview = (slug: string) => (window.location.href = slug);
 
@@ -144,9 +144,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    { id: "stage", value: defi_stages },
-  ]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -200,7 +198,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       <TableToolbar table={table} />
-      <div className="overflow-hidden">
+      <ScrollArea className="w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -220,7 +218,8 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>{renderTableBody(table, columns)}</TableBody>
         </Table>
-      </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 }
