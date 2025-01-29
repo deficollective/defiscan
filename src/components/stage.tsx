@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Badge } from "@/components/ui/badge";
+import { Badge as BadgeRaw } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Reason, Stage } from "@/lib/types";
+import { Reason, STAGE, Stage } from "@/lib/types";
 import { HoverCard } from "./ui/hover-card";
 import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 
@@ -92,44 +92,95 @@ const requisites: { [K in Stage]: (reasons?: Reason[]) => React.JSX.Element } =
 const buildStageInfo = (stage: Stage, reasons?: Reason[]) =>
   requisites[stage](reasons);
 
-export interface BadgeProps {
-  className?: string;
+interface SubStage {
+  chain: string;
   stage: Stage;
   reasons?: Reason[];
 }
 
-// colors
+export interface BadgeProps {
+  className?: string;
+  stage: Stage;
+  reasons?: Reason[];
+  subStages?: SubStage[];
+}
 
-export function StageBadge({ className, stage, reasons }: BadgeProps) {
+const stage_text = {
+  [STAGE.STAGE_0]: "Stage 0",
+  [STAGE.STAGE_1]: "Stage 1",
+  [STAGE.STAGE_2]: "Stage 2",
+  [STAGE.UNDER_REVIEW]: "Review",
+  [STAGE.UNQUALIFIED]: "Unqualified",
+  [STAGE.VARIABLE]: "Variable",
+};
+
+const Badge = ({ stage, className }: { stage: Stage; className?: string }) => {
+  return (
+    <BadgeRaw
+      variant="outline"
+      className={cn(
+        "border-none text-white rounded mx-auto bg-gray-500 hover:bg-gray-600 flex justify-center",
+        stage === "O" && "bg-red-300 hover:bg-red-400",
+        stage === 0 && "bg-red-500 hover:bg-red-primary",
+        stage === 1 && "bg-yellow-500 hover:bg-yellow-primary",
+        stage === 2 && "bg-green-500 hover:bg-green-primary",
+        className
+      )}
+    >
+      {stage_text[stage]}
+    </BadgeRaw>
+  );
+};
+
+const SubStagesTable = ({ items }: { items: SubStage[] }) => {
+  if (items.length == 0) return;
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Chain</th>
+          <th>Stage</th>
+          <th>Reasons</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map(({ stage, chain, reasons }, index) => (
+          <tr key={`substage-${stage}-${chain}-${index}`}>
+            <td>{chain}</td>
+            <td>
+              <Badge stage={stage} />
+            </td>
+            <td>{reasons?.join(", ")}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export function StageBadge({
+  className,
+  stage,
+  reasons,
+  subStages = [],
+}: BadgeProps) {
   return (
     <HoverCard>
       <HoverCardTrigger>
-        <Badge
-          variant="outline"
-          className={cn(
-            "border-none text-white rounded mx-auto bg-gray-500 hover:bg-gray-600 flex justify-center",
-            stage === "O" && "bg-red-300 hover:bg-red-400",
-            stage === 0 && "bg-red-500 hover:bg-red-primary",
-            stage === 1 && "bg-yellow-500 hover:bg-yellow-primary",
-            stage === 2 && "bg-green-500 hover:bg-green-primary",
-            className
-          )}
-        >
-          {stage === "R" && "Review"}
-          {stage === "V" && "Variable"}
-          {stage === "O" && "Unqualified"}
-          {typeof stage === "number" && `Stage ${stage}`}
-        </Badge>
+        <Badge stage={stage} className={className} />
       </HoverCardTrigger>
       <HoverCardContent
-        className="z-50 p-4 rounded-md bg-white"
         side="top"
         sideOffset={4}
+        className="z-50 p-4 rounded-md bg-white"
       >
         <div className="prose-sm max-w-md">
           <h3 className="mr-2">Stage of Decentralisation</h3>
 
           {buildStageInfo(stage, reasons)}
+
+          <SubStagesTable items={subStages} />
         </div>
       </HoverCardContent>
     </HoverCard>

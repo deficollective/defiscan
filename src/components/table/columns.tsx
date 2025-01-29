@@ -126,13 +126,21 @@ export const columns: ColumnDef<Project>[] = [
       let stage = row.getValue("stage") as Stage;
       const reasons = row.original.reasons as Reason[];
 
+      // Provides us with more information about the stages on different chains.
+      const subStages =
+        row.original.children?.map((c) => ({
+          chain: c.chain,
+          stage: c.stage,
+          reasons: c.reasons,
+        })) || [];
+
       // No stage means its a wrapper for different chains.
       // Therefore we assign the stage to variable.
       if (stage === undefined) stage = "V";
 
       return (
         <div className="w-full flex justify-center">
-          <StageBadge stage={stage} reasons={reasons} />
+          <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
         </div>
       );
     },
