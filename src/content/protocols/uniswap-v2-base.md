@@ -9,7 +9,7 @@ github:
   ]
 defillama_slug: ["uniswap-v2"]
 chain: "Base"
-stage: "0"
+stage: 0
 reasons: []
 risks: ["H", "L", "L", "L", "L"]
 author: ["CookingCryptos"]
