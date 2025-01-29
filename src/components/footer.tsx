@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
-      <div className="container max-w-7xl mx-auto flex flex-col-reverse gap-2 sm:flex-row justify-between items-center">
+      <div className="container mx-auto flex flex-col-reverse gap-2 sm:flex-row justify-between items-center">
         <div className="text-gray-500 text-sm">
           &copy; {new Date().getFullYear()}{" "}
           <a

@@ -4,11 +4,11 @@ import { cn, formatUsd } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { PizzaRosetteCell } from "../rosette/rosette-cell";
 import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
 import { Project, Reason, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { StageBadge } from "../stage";
 
 export const columns: ColumnDef<Project>[] = [

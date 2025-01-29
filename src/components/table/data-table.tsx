@@ -30,7 +30,7 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { TableToolbar } from "./toolbar";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const openProtocolReview = (slug: string) => (window.location.href = slug);
 

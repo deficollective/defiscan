@@ -1,45 +1,24 @@
-"use client";
-
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import {
   reviews as allReviews,
   protocols as allProtocols,
 } from "#site/content";
-import "@/styles/mdx.css";
-import { Mdx } from "@/components/mdx-component";
-import {
-  ChevronDown,
-  ChevronLeft,
-  ExternalLink,
-  Globe,
-  Waypoints,
-} from "lucide-react";
-import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { BigPizzaRosette } from "@/components/rosette/big-rosette";
-import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
-import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
-import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
+import { Mdx } from "@/components/mdx-component";
+import { ProtocolLinks } from "@/components/protocol/links";
+import { ReviewTimeline } from "@/components/protocol/timeline";
+import { Separator } from "@/components/ui/separator";
 import { Stage } from "@/lib/types";
 import { StageBadge } from "@/components/stage";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { FaXTwitter } from "react-icons/fa6";
-import { FaGithub } from "react-icons/fa";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
+import Link from "next/link";
+
+import "@/styles/mdx.css";
 
 interface ProtocolPageItemProps {
   params: {
@@ -83,186 +62,6 @@ async function getProtocolFromParams(slug: string[]) {
 //   };
 // }
 
-const ProtocolLinks = ({ protocol }: { protocol: any }) => {
-  console.log("pc:: ", protocol.chains);
-  return (
-    <div className="flex flex-col gap-1">
-      <Button variant="outline" size="sm" asChild className="border-border">
-        <a target="_blank" rel="noopener noreferrer" href={protocol.website}>
-          <Globe className="w-4 h-4 mr-2" />
-          Website
-          <ExternalLink className="w-3 h-3 ml-auto " />
-        </a>
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="border-border">
-            <Waypoints className="w-4 h-4 mr-2" /> Socials
-            <ChevronDown className="w-3 h-3 ml-auto " />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-48 w-full">
-          <DropdownMenuItem>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={protocol.socials.x}
-              className="flex items-center "
-            >
-              <FaXTwitter className="w-4 h-4 mr-2" /> @
-              {protocol.socials.x?.replace("https://x.com/", "")}
-              <ExternalLink className="w-3 h-3 ml-4" />
-            </a>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="border-border">
-            <FaGithub className="w-4 h-4 mr-2" /> Github
-            <ChevronDown className="w-3 h-3 ml-auto " />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-48 w-full">
-          {protocol.github!.map((slug: string, index: number) => (
-            <DropdownMenuItem key={index}>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`
-                          ${slug}`}
-                className="w-full flex justify-between items-center"
-              >
-                {slug}
-                <ExternalLink className="w-3 h-3 ml-4" />
-              </a>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="border-border">
-            DefiLlama
-            <ChevronDown className="w-3 h-3 ml-auto " />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-48 w-full">
-          {protocol.defillama_slug!.map((slug: string, index: number) => (
-            // TODO: create a proper defillama link
-            <DropdownMenuItem key={index}>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`
-                        ${slug}`}
-                className="flex items-center justify-between w-full"
-              >
-                {slug}
-                <ExternalLink className="w-3 h-3 ml-4" />
-              </a>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="border-border">
-            {protocol.chain}
-            <ChevronDown className="w-3 h-3 ml-auto " />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-48 w-full">
-          {protocol.chains.map((c: string, i: number) => (
-            <DropdownMenuItem key={`chain-${i}`} asChild>
-              <Link href={`/protocols/${protocol.id}/${c.toLowerCase()}`}>
-                {c}
-              </Link>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
-
-const ReviewTimeline = ({
-  protocol,
-  className,
-}: {
-  protocol: any;
-  className: string;
-}) => {
-  return (
-    <Card className={cn(className)}>
-      <CardHeader>Review Timeline</CardHeader>
-      <CardContent>
-        <div className="flex flex-col justify-end">
-          <ul className="font-mono text-xs list-disc list-inside pb-4">
-            <li>
-              This review has been submitted by {protocol.author!.join(", ")} on{" "}
-              {protocol.submission_date!.split("T")[0]}.
-            </li>
-            <li>
-              It was reviewed and published by the DeFi Collective team on{" "}
-              {protocol.publish_date!.split("T")[0]}.
-            </li>
-            <li>
-              {protocol.update_date!.split("T")[0] === "1970-01-01"
-                ? "The review has not been updated since the initial submission"
-                : "The last update to the review was made on " +
-                  protocol.update_date!.split("T")[0]}
-              .
-            </li>
-
-            {/* 
-            <li>
-              This review has been submitted by {protocol.author!.join(", ")} on{" "}
-              {protocol.submission_date!.split("T")[0]}.
-            </li>
-            <li>
-              It was reviewed and published by the DeFi Collective team on{" "}
-              {protocol.publish_date!.split("T")[0]}.
-            </li>
-            <li>
-              The {protocol.protocol} team has{" "}
-              {protocol.submission_date!.split("T")[0] === "1970-01-01"
-                ? "NOT acknowledged the review"
-                : "acknowledged the review on " +
-                  protocol.acknowledge_date!.split("T")[0]}
-              .
-            </li>
-            <li>
-              {protocol.update_date!.split("T")[0] === "1970-01-01"
-                ? "The review has not been updated since the initial submission"
-                : "The last update to the review was made on " +
-                  protocol.update_date!.split("T")[0]}
-              .
-            </li> */}
-          </ul>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <p className="text-xs">
-          This content is provided "as is" and "as available". Read more in our
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={"../../terms"}
-            className="text-blue-500 hover:underline"
-          >
-            {" "}
-            Terms
-          </a>
-          .
-        </p>
-      </CardFooter>
-    </Card>
-  );
-};
-
 export default async function ProtocolPageItem({
   params,
 }: ProtocolPageItemProps) {
@@ -273,13 +72,12 @@ export default async function ProtocolPageItem({
   }
 
   return (
-    <article className="container relative mx-auto py-6 lg:py-10">
+    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl">
       <div>
         <div className="grid gap-2 grid-cols-4 lg:grid-rows-1">
           <div className="flex flex-col col-span-full sm:col-span-2 lg:col-span-1">
             <div className="flex flex-col w-full gap-2">
               <div className="flex items-end gap-4 py-2">
-                {/* <div className="w-10 h-10 aspect-square border "></div> */}
                 <h1 className="text-3xl shrink-0 text-primary">
                   {protocol.protocol}
                 </h1>
