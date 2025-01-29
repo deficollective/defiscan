@@ -136,7 +136,7 @@ const SubStagesTable = ({ items }: { items: SubStage[] }) => {
   if (items.length == 0) return;
 
   return (
-    <table>
+    <table className="mt-8">
       <thead>
         <tr>
           <th>Chain</th>
