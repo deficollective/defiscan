@@ -10,14 +10,14 @@ reason: ["no alternative front-end"]
 risks: ["L", "M", "M", "M", "H"]
 author: ["Alice Rozengarden"]
 submission_date: "1970-01-01"
-publish_date: "1970-01-01"
+publish_date: "2025-01-30"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
 # Summary
 
-Cat in a Box is a CDP protocol that allow an user to mint synthetic ether (called BoxETH) backed by said-users-deposited stETH up to a 100% LTV. Instead of charging a borrowing rate the protocol take a share of the stETH yield and redistribute some of it back to the depositor depending on their effective Collateral ratio, incentivizing either low CR or high CR depending on user choice (called v1 and v1.1 respectively).
+Cat in a Box is a CDP protocol that allow a user to mint synthetic ether (called BoxETH) backed by said-users-deposited stETH up to a 100% LTV. Instead of charging a borrowing rate the protocol take a share of the stETH yield and redistribute some of it back to the depositor depending on their effective Collateral ratio, incentivizing either low CR or high CR depending on user choice (called v1 and v1.1 respectively).
 
 # Overview
 
