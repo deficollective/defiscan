@@ -1,9 +1,4 @@
 ---
-protocol: "name of the protocol appended by the version if multiple versions exist (use an '-' and no whitespace)"
-website: "https://..."
-x: "https://x.com/projecthandle"
-github: ["https://github.com/projectgithub"]
-defillama_slug: ["the slug used by https://defillama.com"]
 chain: "the name of the chain on which the protocol is deployed"
 stage: 0
 reasons: ["remove", "if none"]
