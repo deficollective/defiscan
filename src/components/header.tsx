@@ -2,6 +2,35 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface NavItem {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
+const MainNav = ({
+  className,
+  items,
+}: {
+  className: string;
+  items: NavItem[];
+}) => {
+  return (
+    <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
+      {items.map((item, i) => (
+        <Link
+          key={`main-nav-item-${i}`}
+          href={item.href}
+          className="text-sm font-normal transition-colors hover:text-primary"
+        >
+          {item.label}
+        </Link>
+      ))}
+    </nav>
+  );
+};
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,7 +42,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background">
-      <div className="container px-4 mx-auto">
+      <div className="container px-4 mx-auto max-w-7xl">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
@@ -21,23 +50,13 @@ export default function Navbar() {
               <img
                 src="/images/defiscan_by_dc_color_for_light_background.svg"
                 alt="Logo"
-                className="w-40 md:w-56"
+                className="w-32 md:w-44"
               />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <MainNav items={navLinks} className="hidden md:flex" />
 
           {/* Mobile Menu Button */}
           <button

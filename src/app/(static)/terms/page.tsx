@@ -7,29 +7,25 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="container relative mb-20 max-w-6xl py-6 lg:py-10">
-      <h1 className="inline-block  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        User Terms v.2 (2024-12-03)
-      </h1>
+    <div className="container mb-20 max-w-6xl py-6 lg:py-10 prose prose-headings:text-primary">
+      <h1>User Terms v.2 (2024-12-03)</h1>
 
-      <p></p>
+      <h2>Scope</h2>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Scope
-      </h1>
-
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
-          These terms and conditions ("<strong>Terms</strong>") apply to your ("<strong>you</strong>" or "<strong>User</strong>")
-          access and use ("<strong>use</strong>") of the website available on [URL] ("<strong>Website</strong>")
-          and (if any) all related content, features and tools (collectively
-          "<strong>DeFiScan</strong>"). DeFiScan is administered and maintained by the DeFi
-          Collective, a non-profit organization to further the decentralization
-          of financial infrastructure ("<strong>Collective</strong>"), with the support of the
-          DeFi community.
+          These terms and conditions ("<strong>Terms</strong>") apply to your ("
+          <strong>you</strong>" or "<strong>User</strong>") access and use ("
+          <strong>use</strong>") of the website available on [URL] ("
+          <strong>Website</strong>") and (if any) all related content, features
+          and tools (collectively "<strong>DeFiScan</strong>"). DeFiScan is
+          administered and maintained by the DeFi Collective, a non-profit
+          organization to further the decentralization of financial
+          infrastructure ("<strong>Collective</strong>"), with the support of
+          the DeFi community.
         </p>
 
-        <p className="mt-4">
+        <p>
           Please read these Terms carefully. They contain important information
           regarding the use of DeFiScan, important disclaimers, limitation of
           liability, intellectual property rights and submission to
@@ -40,24 +36,23 @@ export default function TermsPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        DeFiScan; Important Disclaimers
-      </h1>
+      <h2>DeFiScan; Important Disclaimers</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           DeFiScan is an open platform providing information about the
-          decentralization of third-party DeFi protocols ("<strong>Protocols</strong>"),
-          including decentralization reviews ("<strong>Review(s)</strong>") as well as other
-          content, features and tools (collectively "<strong>Content</strong>"). DeFiScan is
-          provided as a freely available public good to further decentralization
-          in DeFi by creating a common understanding and individualized
-          measurement of decentralization in Protocols.
+          decentralization of third-party DeFi protocols ("
+          <strong>Protocols</strong>"), including decentralization reviews ("
+          <strong>Review(s)</strong>") as well as other content, features and
+          tools (collectively "<strong>Content</strong>"). DeFiScan is provided
+          as a freely available public good to further decentralization in DeFi
+          by creating a common understanding and individualized measurement of
+          decentralization in Protocols.
         </p>
 
-        <p className="mt-4">You understand and acknowledge that:</p>
+        <p>You understand and acknowledge that:</p>
 
-        <ul className="mt-4 pl-5 list-disc list-outside">
+        <ul>
           <li>
             <strong>Informational purposes only</strong>: DeFiScan and all
             Content is provided solely for informational purposes.
@@ -135,7 +130,7 @@ export default function TermsPage() {
           </li>
         </ul>
 
-        <p className="mt-4">
+        <p>
           You furthermore understand and acknowledge that DeFi technology in
           particular, and smart contracts, blockchains, cryptographic tokens,
           and related systems and software in general, are nascent, highly
@@ -149,11 +144,9 @@ export default function TermsPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Limitation of liability; indemnification
-      </h1>
+      <h2>Limitation of liability; indemnification</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           <strong>Limitation of liability</strong>: To the maximum extent
           permitted by applicable law, the Collective and its directors and
@@ -166,11 +159,11 @@ export default function TermsPage() {
           contributor cannot be held liable should Users do so.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>Indemnification</strong>: To the maximum extent permitted by
           applicable law, you agree to indemnify and hold the Collective, its
           directors and contributors (each individually and collectively)
-          harmless from any claim or demand (including attorneys’ fees and any
+          harmless from any claim or demand (including attorneys' fees and any
           losses, fines, fees or penalties imposed by any regulatory authority)
           arising out of your breach of these Terms, your violation of any law
           or regulation or your use of the DeFiScan or any claim that any
@@ -185,18 +178,16 @@ export default function TermsPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Prohibited use
-      </h1>
+      <h2>Prohibited use</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           In connection with your use of the DeFiScan, you agree that you will
           not and will not attempt to or assists others in doing or attempting
           to:
         </p>
 
-        <ul className="mt-4 pl-5 list-disc list-outside">
+        <ul>
           <li>Violate any law, statute or regulation;</li>
           <li>Defraud, mislead or similar the Collective or any other user;</li>
           <li>Provide false, inaccurate, or misleading information;</li>
@@ -222,12 +213,12 @@ export default function TermsPage() {
         </ul>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
+      <h2>
         Limited license; intellectual property; community generated content and
         feedback
-      </h1>
+      </h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           <strong>Limited license for User</strong>: Subject to these Terms and
           your full compliance therewith, you are granted a limited, personal,
@@ -247,50 +238,72 @@ export default function TermsPage() {
           any way exploit DeFiScan or the Content in any manner.
         </p>
 
-        <p className="mt-4">
-          <strong>Intellectual property of the Collective</strong>: DeFiScan and the Content may
-          involve works protected under applicable intellectual property
-          legislation, particularly copyright legislation. Other than the
-          limited license outlined above, the Collective (or, where applicable,
-          third-parties) retain all rights, titles and interests to any of the
-          intellectual property, including copyrights, trademarks, designs,
-          domain names, know-how, trade secrets, data and other intangible
-          property rights ("<strong>IP Rights</strong>") in any way related to
-          DeFiScan and nothing in these Terms or the wider communication of the
-          Collective with respect to the DeFiScan should be understood as an assignment of any IP Rights
-          or any license other than what is outlined in the section above to any User.
+        <p>
+          <strong>Intellectual property of the Collective</strong>: DeFiScan and
+          the Content may involve works protected under applicable intellectual
+          property legislation, particularly copyright legislation. Other than
+          the limited license outlined above, the Collective (or, where
+          applicable, third-parties) retain all rights, titles and interests to
+          any of the intellectual property, including copyrights, trademarks,
+          designs, domain names, know-how, trade secrets, data and other
+          intangible property rights ("<strong>IP Rights</strong>") in any way
+          related to DeFiScan and nothing in these Terms or the wider
+          communication of the Collective with respect to the DeFiScan should be
+          understood as an assignment of any IP Rights or any license other than
+          what is outlined in the section above to any User.
         </p>
 
-        <p className="mt-4">
-          <strong>User Generated Content; assignment of rights to the Collective</strong>: Users, including
-          Protocols, may make feedback and other content generated by such Users (particularly including
-          Reviews, collectively such content the "<strong>User Generated Content</strong>") available to the Collective,
-          to be used by the Collective directly on the Website or to be integrated as part of the Content.
-          By submitting or in any way making available User Generated Content to the Collective, the respective User thereby
-          irrevocably assigns and transfers to the Collective all right, title and interest, whether or not protected by intellectual
-          property legislation such as copyright laws, relating to the User Generated Content, in particular with respect to any software, source code,
-          tools, documentation, know-how, databases, inventions, processes, overviews and similar, free of charge unless explicitly specified
-          otherwise by the Collective. This assignment of rights includes all assignable rights, including the right to first-time publication, application,
-          distribution, amendment, and adaptation. It continues to apply without limitation after any termination or amendment of these Terms. The respective
-          User warrants that the respective User is authorized to concede, assign, transfer and grant all rights stated in this clause and that no third party
-          intellectual property rights will be infringed by any action considered herein. The respective User agrees to fully indemnify the Collective against 
-          all damages, costs (including reasonable attorney fees) and third party claims arising from a breach of the aforementioned warranty. To the extent
-          certain jurisdictions do not provide for the assignability of all rights stated in this clause, the respective User thereby grants the Collective
-          a worldwide, irrevocable, exclsuive, transferable, sub-licensable, royalty-free, unlimited and unrestricted license to use, modify, develop and
-          exploit such rights in any conceivable way and medium. To the extent not all rights stated in this clause can be assigned or licensed to the Collective 
-          due to mandatory legal provisions, the respective User thereby waives all such non-assignable rights for an indefinite term, to the extent permitted
-          by applicable law. The respective User furthermore agrees that the Collective is entitled to pursue any registration necessary to secure all rights
-          in this clause, and the respective User, where necessary, agrees to assist the Collective in such registration as needed. If the respective User is
-          unable to assist as needed, the respective User hereby irrevocably appoints the Collective as his/her agent to act for and on his/her behalf to execute any 
-          such registration and provide any such signatures as needed and as permitted under applicable law.
+        <p>
+          <strong>
+            User Generated Content; assignment of rights to the Collective
+          </strong>
+          : Users, including Protocols, may make feedback and other content
+          generated by such Users (particularly including Reviews, collectively
+          such content the "<strong>User Generated Content</strong>") available
+          to the Collective, to be used by the Collective directly on the
+          Website or to be integrated as part of the Content. By submitting or
+          in any way making available User Generated Content to the Collective,
+          the respective User thereby irrevocably assigns and transfers to the
+          Collective all right, title and interest, whether or not protected by
+          intellectual property legislation such as copyright laws, relating to
+          the User Generated Content, in particular with respect to any
+          software, source code, tools, documentation, know-how, databases,
+          inventions, processes, overviews and similar, free of charge unless
+          explicitly specified otherwise by the Collective. This assignment of
+          rights includes all assignable rights, including the right to
+          first-time publication, application, distribution, amendment, and
+          adaptation. It continues to apply without limitation after any
+          termination or amendment of these Terms. The respective User warrants
+          that the respective User is authorized to concede, assign, transfer
+          and grant all rights stated in this clause and that no third party
+          intellectual property rights will be infringed by any action
+          considered herein. The respective User agrees to fully indemnify the
+          Collective against all damages, costs (including reasonable attorney
+          fees) and third party claims arising from a breach of the
+          aforementioned warranty. To the extent certain jurisdictions do not
+          provide for the assignability of all rights stated in this clause, the
+          respective User thereby grants the Collective a worldwide,
+          irrevocable, exclsuive, transferable, sub-licensable, royalty-free,
+          unlimited and unrestricted license to use, modify, develop and exploit
+          such rights in any conceivable way and medium. To the extent not all
+          rights stated in this clause can be assigned or licensed to the
+          Collective due to mandatory legal provisions, the respective User
+          thereby waives all such non-assignable rights for an indefinite term,
+          to the extent permitted by applicable law. The respective User
+          furthermore agrees that the Collective is entitled to pursue any
+          registration necessary to secure all rights in this clause, and the
+          respective User, where necessary, agrees to assist the Collective in
+          such registration as needed. If the respective User is unable to
+          assist as needed, the respective User hereby irrevocably appoints the
+          Collective as his/her agent to act for and on his/her behalf to
+          execute any such registration and provide any such signatures as
+          needed and as permitted under applicable law.
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Supporting the Collective
-      </h1>
+      <h2>Supporting the Collective</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           There are numerous ways in which you can support the Collective.
           Please refer to our Website and our Donation Terms or reach out
@@ -300,11 +313,9 @@ export default function TermsPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Miscellaneous
-      </h1>
+      <h2>Miscellaneous</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           <strong>Privacy policy</strong>: The Collective is committed to
           maintain to protecting your personal information and helping you
@@ -313,7 +324,7 @@ export default function TermsPage() {
           DeFiScan - for more details.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>Third party links and content: </strong>DeFiScan may contain
           links to third-party websites as well as third-party content. Your use
           of such third-party websites or contents is entirely at your own risk.
@@ -324,7 +335,7 @@ export default function TermsPage() {
           affiliation with or similar.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>
             Modification, suspension or discontinuance of DeFiScan:{" "}
           </strong>
@@ -334,24 +345,24 @@ export default function TermsPage() {
           any liability whatsoever to you or any third-party.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>Changes to Terms: </strong>The Collective may, at any time and
           in its sole and absolute discretion, make changes to these Terms
           without prior notification. Changes become effective immediately.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>Entire agreement</strong>: These Terms constitute the entire
           agreement between you and the Collective with respect to the subject
           matter thereof and supersede any prior agreement, if any.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>No assignment</strong>: You may not assign any of your rights,
           obligations or claims under these Terms.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>Severability</strong>: If any provision of these Terms (in
           whole or in part) is held to be illegal, invalid or otherwise
           unenforceable, the other provisions will remain in full force and
@@ -360,7 +371,7 @@ export default function TermsPage() {
           industry.
         </p>
 
-        <p className="mt-4">
+        <p>
           <strong>Governing law and jurisdiction</strong>: These Terms, and all
           claims arising out of or related to these Terms shall be governed by
           and construed in accordance with the substantive laws of Switzerland,
@@ -369,7 +380,7 @@ export default function TermsPage() {
           courts at the seat of the Collective have exclusive jurisdiction.
         </p>
 
-        <p className="mt-4">
+        <p>
           If you have questions, concerns or suggestions, please contact the
           Collective at{" "}
           <a href="mailto:hello@deficollective.org">hello@deficollective.org</a>{" "}

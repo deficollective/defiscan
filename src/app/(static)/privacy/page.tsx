@@ -7,38 +7,32 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="container relative mb-20 max-w-6xl py-6 lg:py-10">
-      <h1 className="inline-block  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Privacy Policy v.1 (2024-11-01)
-      </h1>
+    <div className="container relative mb-20 max-w-6xl py-6 lg:py-10 prose prose-headings:text-primary">
+      <h1>Privacy Policy v.1 (2024-11-01)</h1>
 
-      <p></p>
+      <h2>About us</h2>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        About us
-      </h1>
-
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           This privacy policy ("<strong>Privacy Policy</strong>") explains how
           we process and protect your personal data when you use this Website
-          provided via https://deficollective.org or DeFiScan provided at https://defiscan.info
-          (collectively the "<strong>Website</strong>").
+          provided via https://deficollective.org or DeFiScan provided at
+          https://defiscan.info (collectively the "<strong>Website</strong>").
         </p>
 
-        <p className="mt-4">
+        <p>
           The Collective will not monetize your personal data and is committed
           to absolutely minimizing its impact on your privacy.
         </p>
 
-        <p className="mt-4">
+        <p>
           The Website is operated by DeFi Collective, Dammstrasse 16, 6300 Zug
           (the "<strong>Collective</strong>", "<strong>we</strong>", "
           <strong>our</strong>", or "<strong>us"</strong>). The Collective is
           the controller for the data processing described below.
         </p>
 
-        <p className="mt-4">
+        <p>
           Unless otherwise defined in this Privacy Policy or our Terms, the
           definitions used in this Privacy Policy have the same meaning as in
           the Swiss Federal Act on Data Protection or the EU General Data
@@ -46,11 +40,9 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Personal data we collect
-      </h1>
+      <h2>Personal data we collect</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           We may collect or receive personal information for a number of
           purposes connected with our operations when you use our Website or
@@ -60,11 +52,9 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        How we collect your personal data
-      </h1>
+      <h2>How we collect your personal data</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           We may collect information about our users when they use our Website,
           including taking certain actions within it. This includes when users
@@ -73,36 +63,34 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Legal Basis and purpose
-      </h1>
+      <h2>Legal Basis and purpose</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           Our legal basis for collecting and using the personal data described
           in this Privacy Policy depends on the personal data we collect and the
           specific purposes for which we collect it.
         </p>
 
-        <ul className="mt-4 pl-5 list-decimal list-outside">
+        <ul>
           <li>
             <strong>Contract</strong>: To perform our contractual obligations or
             take steps linked to a contract (e.g., our Terms) with you. In
             particular:
           </li>
 
-          <ul className="mt-2 pl-5 list-disc list-outside">
+          <ul>
             <li>To provide our Website and our content.</li>
             <li>To coordinate your support of the Collective.</li>
             <li>To recruit you.</li>
           </ul>
 
-          <li className="mt-2">
+          <li>
             <strong>Consent</strong>: We may rely on your freely given consent
             at the time you provided your personal data. In particular:
           </li>
 
-          <ul className="mt-2 pl-5 list-disc list-outside">
+          <ul>
             <li>
               To answer your requests, your reach-outs or similar contact you
               may establish with us.
@@ -119,37 +107,35 @@ export default function PrivacyPage() {
             </li>
           </ul>
 
-          <li className="mt-2">
+          <li>
             <strong>Legitimate interests</strong>: We may rely on legitimate
             interests based on our assessment that the processing is fair and
             reasonable and does not override your interests or fundamental
             rights and freedoms. In particular:
           </li>
 
-          <ul className="mt-2 pl-5 list-disc list-outside">
+          <ul>
             <li>To maintain and improve our Website.</li>
             <li>
               To extend our activities in support of our mission and vision.
             </li>
           </ul>
 
-          <li className="mt-2">
+          <li>
             <strong>Necessity for compliance with legal obligations</strong>: To
             meet regulatory and public interest obligations. In particular:
           </li>
 
-          <ul className="mt-2 pl-5 list-disc list-outside">
+          <ul>
             <li>To comply with applicable regulations and legislation.</li>
             <li>For the legal enforcement of claims and rights.</li>
           </ul>
         </ul>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Data retention
-      </h1>
+      <h2>Data retention</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           We retain personal data for so long as it is needed for the purposes
           for which it was collected or in line with legal and regulatory
@@ -157,22 +143,20 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Service Providers
-      </h1>
+      <h2>Service Providers</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           The Collective may engage third party companies ("
           <strong>Service Providers</strong>") to facilitate the operation of
           our Website, assist in analyzing the usage of the Website, or perform
           Website-related services, such as the provision of IT infrastructure
-          services. These third parties have access to the user’s personal data
+          services. These third parties have access to the user's personal data
           only to the extent necessary to perform these tasks on behalf of the
           Collective.
         </p>
 
-        <p className="mt-4">
+        <p>
           We particularly use the Services of Matomo, an{" "}
           <a href="https://en.wikipedia.org/wiki/Open-source_software">
             open source
@@ -196,7 +180,7 @@ export default function PrivacyPage() {
           .
         </p>
 
-        <p className="mt-4">
+        <p>
           If a third country transfer takes place and there is no adequacy
           decision or appropriate safeguards, it is possible and there is a risk
           that authorities in the third country (e.g. intelligence services) can
@@ -205,17 +189,15 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Data disclosure
-      </h1>
+      <h2>Data disclosure</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           We may disclose your personal data in the good faith belief that such
           action is necessary:
         </p>
 
-        <ul className="mt-4 pl-5 list-disc list-outside">
+        <ul>
           <li>
             To comply with a legal obligation (i.e., if required by law or in
             response to valid requests by public authorities, such as a court or
@@ -232,11 +214,9 @@ export default function PrivacyPage() {
         </ul>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Data security
-      </h1>
+      <h2>Data security</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           We take reasonable technical and organizational security measures that
           we deem appropriate to protect your stored data against manipulation,
@@ -244,7 +224,7 @@ export default function PrivacyPage() {
           our security measures to technological developments.
         </p>
 
-        <p className="mt-4">
+        <p>
           We also take internal data privacy very seriously. Our team and the
           Service Providers that we retain are required to maintain secrecy and
           comply with applicable data protection legislation. In addition, they
@@ -252,7 +232,7 @@ export default function PrivacyPage() {
           for them to carry out their respective tasks or mandate.
         </p>
 
-        <p className="mt-4">
+        <p>
           The security of your personal data is important to us but remember
           that no method of transmission over the Internet or electronic storage
           is 100% secure. While we strive to use commercially acceptable means
@@ -262,11 +242,9 @@ export default function PrivacyPage() {
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Your rights
-      </h1>
+      <h2>Your rights</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           You have the below data protection rights. To exercise these rights,
           you may contact the above address or send an e-mail to:
@@ -274,7 +252,7 @@ export default function PrivacyPage() {
           your identity before responding to such requests.
         </p>
 
-        <ul className="mt-4 pl-5 list-disc list-outside">
+        <ul>
           <li>
             Right of access: You have a right to request a copy of your personal
             data, which we will provide to you in an electronic form.
@@ -338,11 +316,9 @@ export default function PrivacyPage() {
         </ul>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Links to third party apps or sites
-      </h1>
+      <h2>Links to third party apps or sites</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           Our website may contain links to websites or apps that are not
           operated by us. When you click on a third party link, you will be
@@ -351,7 +327,7 @@ export default function PrivacyPage() {
           or practices of any third party websites or services.
         </p>
 
-        <p className="mt-4">
+        <p>
           We maintain online presences on social networks to, among other
           things, communicate with users and to provide information about our
           activities and our vision and mission. If you have an account on the
@@ -369,7 +345,7 @@ export default function PrivacyPage() {
           on which we operate an online presence:
         </p>
 
-        <ul className="mt-4 pl-5 list-disc list-outside">
+        <ul>
           <li>
             Discord:{" "}
             <a
@@ -412,28 +388,24 @@ export default function PrivacyPage() {
         </ul>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Changes to this Privacy Policy
-      </h1>
+      <h2>Changes to this Privacy Policy</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           We may update our Privacy Policy from time to time. We, therefore,
           encourage you to review this Privacy Policy periodically for any
           changes.
         </p>
 
-        <p className="mt-4">
+        <p>
           Changes to this Privacy Policy are effective when they are posted on
           this page.
         </p>
       </div>
 
-      <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Contact us
-      </h1>
+      <h2>Contact us</h2>
 
-      <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <div>
         <p>
           If you have any questions about this Privacy Policy, do not hesitate
           to get in touch with us at: hello@deficollective.org.

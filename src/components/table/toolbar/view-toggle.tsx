@@ -5,6 +5,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState, useEffect } from "react";
 import { defi_stages, unqualified_stages } from "@/lib/consts";
 import { Stage } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
 
 interface ViewToggleProps {
   table: TableType<any>;
@@ -57,15 +58,15 @@ export function ViewToggle({ table }: ViewToggleProps) {
         className="hover:bg-accent/50 hover:text-accent-foreground"
       >
         DeFi
-        <span>{defi_count}</span>
+        <Badge className="px-2 text-xs text-center">{defi_count}</Badge>
       </ToggleGroupItem>
       <ToggleGroupItem
         value={VIEWS.UNQUALIFIED}
         aria-label="Toggle Unqualified"
         className="hover:bg-accent/50 hover:text-accent-foreground"
       >
-        Unaualified
-        <span>{unqualified_count}</span>
+        Unqualified
+        <Badge className="px-2 text-xs text-center">{unqualified_count}</Badge>
       </ToggleGroupItem>
     </ToggleGroup>
   );

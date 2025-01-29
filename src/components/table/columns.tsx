@@ -17,7 +17,7 @@ export const columns: ColumnDef<Project>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-left justify-start text-xs h-8 pl-6"
+          className="text-left justify-start h-8 pl-6"
           variant="ghost"
           size="sm"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}

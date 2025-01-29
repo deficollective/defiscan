@@ -64,7 +64,10 @@ const renderTableBody = <TData, TValue>(
           )}
         >
           {row.getVisibleCells().map((cell) => (
-            <TableCell key={cell.id} className={cell.column.id}>
+            <TableCell
+              key={cell.id}
+              className={cn("first:pl-1", cell.column.id)}
+            >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           ))}
