@@ -95,13 +95,13 @@ If a vote has passed and is queued that has changes for the Base deployment the 
 
 When the transaction for executing the payload arrives at the L1CrossDomainMessenger and the triggered subsequent cross-chain handling succeeded as well (fulfilled with the OP Stack), the Base chain includes a transaction where [L2CrossDomainMessenger](https://basescan.org/address/0x4200000000000000000000000000000000000007) calls the function ` forward(address target, bytes memory data)` on the [CrossChainAccount](https://basescan.org/address/0x31fafd4889fa1269f7a13a66ee0fb458f27d72a9).
 
-By calling `forward` on the CrossChainAccount, the `target` gets called with the `data`.
+By calling `forward` on the CrossChainAccount, the `target` gets called with the `data` as shown in the following code snipped:
 
 `(bool success, bytes memory res) = target.call(data);`
 
 Only the Timelock contract on the L1 is allowed to trigger this on the L2. The target and data could e.g specify `UniswapV2Factory` (target) and `setFeeTo` with arguments `address _feeTo` (data) to set the address where protocol fees are collected.
 
-Furthermore, Base's cross-chain messaging protocol cannot be censored by intermediaries and thus this protocol does not introduce new risks for Uniswap's cross-chain governance system.
+Since Base's native cross-chain messaging protocol cannot be censored by intermediaries, this cross-chain governance process does not introduce new risks for the Uniswap-v2 deployment on Base (apart from the risks captured with the Base chain score). 
 
 ## Dependencies
 
