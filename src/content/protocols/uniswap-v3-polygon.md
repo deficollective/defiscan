@@ -1,6 +1,6 @@
 ---
 protocol: "Uniswap-V3"
-website: "https://blog.uniswap.org/uniswap-v3"
+website: "https://uniswap.org/"
 x: "https://x.com/uniswap"
 github:
   [
@@ -15,7 +15,7 @@ risks: ["H", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos", "sagaciousyves"]
 submission_date: "2025-01-16"
 publish_date: "2025-01-22"
-update_date: "2025-01-22"
+update_date: "2025-01-31"
 ---
 
 # Summary

@@ -1,6 +1,6 @@
 ---
 protocol: "Uniswap-V3"
-website: "https://blog.uniswap.org/uniswap-v3"
+website: "https://uniswap.org/"
 x: "https://x.com/uniswap"
 github:
   [
@@ -15,7 +15,7 @@ risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
 submission_date: "2024-11-12"
 publish_date: "2024-12-16"
-update_date: "2025-01-22"
+update_date: "2025-01-31"
 ---
 
 ⚠️ During our analysis, we identified three unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code), [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code) and [Multicall](https://arbiscan.io/address/0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
