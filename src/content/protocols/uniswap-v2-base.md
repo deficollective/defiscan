@@ -1,6 +1,6 @@
 ---
 protocol: "Uniswap-V2"
-website: "https://app.uniswap.org"
+website: "https://uniswap.org"
 x: "https://x.com/uniswap"
 github:
   [
@@ -63,13 +63,12 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Contracts
 
-| Contract Name                          | Address                                                                                                               |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| UniswapV2Factory                       | [0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6](https://basescan.org/address/0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6) |
-| UniswapV2Pair                          | [0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb](https://basescan.org/address/0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb) |
-| UniswapV2Router02                      | [0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24](https://basescan.org/address/0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24) |
-| CrossChainAccount                      | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) |
-
+| Contract Name     | Address                                                                                                               |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- |
+| UniswapV2Factory  | [0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6](https://basescan.org/address/0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6) |
+| UniswapV2Pair     | [0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb](https://basescan.org/address/0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb) |
+| UniswapV2Router02 | [0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24](https://basescan.org/address/0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24) |
+| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) |
 
 The `UniswapV2Pair`'s address is an example instance of the contract. All pairs share the same implementation (based of Factory Pattern).
 
@@ -81,11 +80,10 @@ The `UniswapV2Pair`'s address is an example instance of the contract. All pairs 
 
 ## Permissions
 
-| Contract               | Function            | Impact                                                                                                                                                                                                                                                                                                                                                                                                                   | Owner             |
-| ---------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
-| UniswapV2Factory       | setFeeTo            | This function allows the `FeeToSetter` to set the address where protocol fees are collected. If `feeTo` is the 0-address no fees are collected on any of the Uniswap V2 Pools. If fees are collected (`feeTo` != 0-address) they are fixed to be 1/6 of the LP collected fees from the moment where the fee switch is activated. If abused by the FeeToSetter role, fees could be redirected to an unauthorized address. | CrossChainAccount |
-| UniswapV2Factory       | setFeeToSetter      | This function permits the current `FeeToSetter` to assign a new `FeeToSetter`. A malicious actor could take control and redirect fees or alter the fee settings (see `setFeeTo`).                                                                                                                                                                                                                                        | CrossChainAccount |
-
+| Contract         | Function       | Impact                                                                                                                                                                                                                                                                                                                                                                                                                   | Owner             |
+| ---------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| UniswapV2Factory | setFeeTo       | This function allows the `FeeToSetter` to set the address where protocol fees are collected. If `feeTo` is the 0-address no fees are collected on any of the Uniswap V2 Pools. If fees are collected (`feeTo` != 0-address) they are fixed to be 1/6 of the LP collected fees from the moment where the fee switch is activated. If abused by the FeeToSetter role, fees could be redirected to an unauthorized address. | CrossChainAccount |
+| UniswapV2Factory | setFeeToSetter | This function permits the current `FeeToSetter` to assign a new `FeeToSetter`. A malicious actor could take control and redirect fees or alter the fee settings (see `setFeeTo`).                                                                                                                                                                                                                                        | CrossChainAccount |
 
 ## Governance Decision Enforcement from L1 to Base
 
@@ -101,7 +99,7 @@ By calling `forward` on the CrossChainAccount, the `target` gets called with the
 
 Only the Timelock contract on the L1 is allowed to trigger this on the L2. The target and data could e.g specify `UniswapV2Factory` (target) and `setFeeTo` with arguments `address _feeTo` (data) to set the address where protocol fees are collected.
 
-Since Base's native cross-chain messaging protocol cannot be censored by intermediaries, this cross-chain governance process does not introduce new risks for the Uniswap-v2 deployment on Base (apart from the risks captured with the Base chain score). 
+Since Base's native cross-chain messaging protocol cannot be censored by intermediaries, this cross-chain governance process does not introduce new risks for the Uniswap-v2 deployment on Base (apart from the risks captured with the Base chain score).
 
 ## Dependencies
 
@@ -116,4 +114,3 @@ When a proposal is created (at least 2.5M Uni), the community can cast their vot
 # Security Council
 
 No security council needed because on-chain governance is in place.
-
