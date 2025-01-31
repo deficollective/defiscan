@@ -2,17 +2,14 @@
 
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { protocols } from "#site/content";
 import { useEffect, useState } from "react";
-import { defiLlama } from "@/services/defillama";
 import { Project } from "@/lib/types";
-import { mergeDefiLlamaWithMd } from "../pie-charts/piechart";
+import { loadReviews } from "@/lib/data/utils";
 
 export const getData = async (): Promise<Project[]> => {
-  // fetch
-  const merged = await mergeDefiLlamaWithMd();
+  const data_new = await loadReviews();
 
-  return merged;
+  return data_new;
 };
 
 export default function Table() {
@@ -27,21 +24,30 @@ export default function Table() {
     fetchData();
   }, []);
 
-  let othersCount = 0;
-  let defiCount = 0;
-  data?.forEach((el) => {
-    if (el.stage === "O") othersCount++;
-    else defiCount++;
-  });
+  const projects = data?.map((project) => {
+    const { protocol: key, reviews, ...protocol } = project;
+
+    // const chains = reviews.map((r) => r.chain);
+    const children = reviews.map((review) => ({
+      protocol: key,
+      ...protocol,
+      ...review,
+    }));
+
+    // There is only 1 review. No need to create a collapsible table row.
+    if (children.length === 1) {
+      const review = children[0];
+
+      return { ...protocol, ...review };
+    }
+
+    // Return protocol with children.
+    return { protocol: key, children, ...protocol };
+  }) as Project[];
 
   return (
     <div className="mx-auto w-full">
-      <DataTable
-        columns={columns}
-        data={data || []}
-        othersCount={othersCount}
-        defiCount={defiCount}
-      />
+      <DataTable columns={columns} data={projects || []} />
     </div>
   );
 }

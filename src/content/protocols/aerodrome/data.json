@@ -1,0 +1,10 @@
+{
+  "id": "aerodrome",
+  "protocol": "Aerodrome",
+  "website": "https://aerodrome.finance/",
+  "defillama_slug": ["aerodrome-v1", "aerodrome-slipstream"],
+  "socials": {
+    "x": "https://x.com/AerodromeFi"
+  },
+  "github": ["https://github.com/aerodrome-finance"]
+}

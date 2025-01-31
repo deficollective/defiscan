@@ -10,11 +10,11 @@ export default function Home() {
         <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
           Verifiable insights into the maturity and risks of DeFi
         </h1>
-        <div className="flex flex-col w-full my-2 lg:flex-row">
+        <div className="flex flex-col w-full my-2 lg:flex-row gap-2">
           <Chart className="w-full border border-secondary lg:w-2/3" />
 
-          <div className="flex flex-col w-full lg:w-1/3 mt-4 lg:mt-0">
-            <div className="flex flex-row lg:w-full">
+          <div className="flex flex-col w-full lg:w-1/3 lg:mt-0 gap-2">
+            <div className="flex flex-row lg:w-full gap-2">
               <PieChartComponent
                 groupByKey="stage"
                 operation="count"
@@ -33,7 +33,7 @@ export default function Home() {
               />
             </div>
 
-            <div className="flex flex-row lg:w-full mt-4 md:mt-0">
+            <div className="flex flex-row lg:w-full md:mt-0 gap-2">
               <PieChartComponent
                 groupByKey="chain"
                 operation="count"

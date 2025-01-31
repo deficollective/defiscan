@@ -10,8 +10,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { defiLlama } from "@/services/defillama";
-import { protocols } from "#site/content";
-import { Project, Stage } from "@/lib/types";
+import { protocols, reviews } from "#site/content";
+import { Project, Review, Stage } from "@/lib/types";
+import { loadReviews } from "@/lib/data/utils";
+
+type ProjectWithReview = Project & Review;
 
 interface VisualisedData {
   key: string;
@@ -20,7 +23,7 @@ interface VisualisedData {
 }
 
 export interface PieChartProps {
-  groupByKey: keyof Project;
+  groupByKey: keyof Review;
   operation: "sum" | "count";
   baseColor: string;
   chartTitle: string;
@@ -34,9 +37,9 @@ export interface PieChartProps {
 
 // Helper functions
 const groupBy = (
-  array: Project[],
-  key: keyof Project
-): Record<string, Project[]> => {
+  array: ProjectWithReview[],
+  key: keyof ProjectWithReview
+): Record<string, ProjectWithReview[]> => {
   return array.reduce(
     (result, currentValue) => {
       const groupKey = String(currentValue[key]);
@@ -46,7 +49,7 @@ const groupBy = (
       result[groupKey].push(currentValue);
       return result;
     },
-    {} as Record<string, Project[]>
+    {} as Record<string, ProjectWithReview[]>
   );
 };
 
@@ -67,7 +70,7 @@ const keyToWord = (key: string) => {
 };
 
 const aggregateByKey = (
-  groupedData: Record<string, Project[]>,
+  groupedData: Record<string, ProjectWithReview[]>,
   operation: "sum" | "count"
 ): { key: string; value: number }[] => {
   return Object.entries(groupedData).map(([key, projects]) => {
@@ -155,7 +158,7 @@ type FormatterKey = keyof typeof defaultLabelFormatters;
 
 const getDefaultFormatter = (
   operation: "sum" | "count",
-  groupByKey: keyof Project
+  groupByKey: keyof Review
 ): FormatterKey => {
   // Create a mapping of conditions to formatter keys
   const formatterMapping = {
@@ -192,7 +195,15 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const merged = await mergeDefiLlamaWithMd();
+      const projects = await loadReviews();
+
+      const merged = projects
+        .map((project) => {
+          const { reviews, ...rest } = project;
+          return reviews.map((review) => ({ ...rest, ...review, reviews: [] }));
+        })
+        .flat();
+
       const groupedBy = groupBy(merged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
@@ -278,33 +289,3 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
-export async function mergeDefiLlamaWithMd() {
-  const apiData = await defiLlama.getProtocolsWithCache();
-  const filtered = protocols
-    .map((frontmatterProtocol) => {
-      var tvl = 0;
-      var logo = "";
-      var type = "";
-      for (var slug of frontmatterProtocol.defillama_slug) {
-        const res = apiData.find(
-          (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
-        );
-        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
-        type = res?.category || "";
-        logo = res?.logo || "";
-      }
-      return {
-        logo: logo,
-        protocol: frontmatterProtocol.protocol,
-        slug: frontmatterProtocol.slug,
-        tvl: tvl,
-        chain: frontmatterProtocol.chain,
-        stage: frontmatterProtocol.stage,
-        reasons: frontmatterProtocol.reasons,
-        type: type,
-        risks: frontmatterProtocol.risks,
-      } as Project;
-    })
-    .filter((el): el is Project => el !== null);
-  return filtered;
-}
