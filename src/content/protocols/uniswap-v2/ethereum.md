@@ -1,13 +1,4 @@
 ---
-protocol: "Uniswap-V2"
-website: "https://uniswap.org"
-x: "https://x.com/uniswap"
-github:
-  [
-    "https://github.com/Uniswap/v2-core",
-    "https://github.com/Uniswap/v2-periphery",
-  ]
-defillama_slug: ["uniswap-v2"]
 chain: "Ethereum"
 stage: 2
 reasons: []
