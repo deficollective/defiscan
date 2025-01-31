@@ -98,48 +98,44 @@ type ExtendedColumnMeta = {
   responsiveHidden?: boolean;
 };
 
-const getInitialVisibility = (
-  columns: ColumnDef<any, any>[],
-  defiView: boolean
-) => {
-  const initialState: Record<string, boolean> = {
-    logo: true,
-    protocol: true,
-    stage: true,
-    reasons: false, // disable with first load
-    risks: true,
-    type: true,
-    chain: true,
-    tvl: true,
-  };
+// const getInitialVisibility = (
+//   columns: ColumnDef<any, any>[],
+//   defiView: boolean
+// ) => {
+//   const initialState: Record<string, boolean> = {
+//     logo: true,
+//     protocol: true,
+//     stage: true,
+//     reasons: false, // disable with first load
+//     risks: true,
+//     type: true,
+//     chain: true,
+//     tvl: true,
+//   };
+//   return initialState;
+// };
 
-  return initialState;
-};
-
-const useResponsiveColumns = (
-  table: TableType<any>,
-  mobileBreakpoint = 800
-) => {
-  useEffect(() => {
-    const handleResize = () => {
-      const isMobile = window.innerWidth < mobileBreakpoint;
-
-      // Get all columns that should be responsive
-      const responsiveColumns = table
-        .getAllColumns()
-        .filter((column: any) => column.columnDef.meta?.responsiveHidden);
-
-      // Toggle visibility for all responsive columns
-      responsiveColumns.forEach((column: any) => {
-        column.toggleVisibility(!isMobile);
-      });
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [table, mobileBreakpoint]);
-};
+// const useResponsiveColumns = (
+//   table: TableType<any>,
+//   mobileBreakpoint = 800
+// ) => {
+//   useEffect(() => {
+//     const handleResize = () => {
+//       const isMobile = window.innerWidth < mobileBreakpoint;
+//       // Get all columns that should be responsive
+//       const responsiveColumns = table
+//         .getAllColumns()
+//         .filter((column: any) => column.columnDef.meta?.responsiveHidden);
+//       // Toggle visibility for all responsive columns
+//       responsiveColumns.forEach((column: any) => {
+//         column.toggleVisibility(!isMobile);
+//       });
+//     };
+//     handleResize();
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, [table, mobileBreakpoint]);
+// };
 
 export function DataTable<TData, TValue>({
   columns,
@@ -196,7 +192,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  useResponsiveColumns(table);
+  // useResponsiveColumns(table);
 
   return (
     <div className="w-full">

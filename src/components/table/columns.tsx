@@ -172,7 +172,7 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     meta: {
-      responsiveHidden: true, // This column will hide on mobile
+      // responsiveHidden: true, // This column will hide on mobile
     },
   },
   {
@@ -182,25 +182,25 @@ export const columns: ColumnDef<Project>[] = [
       return (
         <Button
           // Remove hidden class to prevent layout shift
-          className="md:flex hidden w-0 md:w-auto overflow-hidden p-0"
+          className=" overflow-hidden p-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <span className="hidden md:inline">Type</span>
-          <ArrowUpDown className="ml-2 h-4 w-4 hidden md:inline" />
+          <span>Type</span>
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
-          <span className="hidden md:inline">{row.getValue("type")}</span>
+        <div className="overflow-hidden whitespace-nowrap">
+          <span>{row.getValue("type")}</span>
         </div>
       );
     },
     sortingFn: "alphanumeric",
     meta: {
-      responsiveHidden: true, // This column will hide on mobile
+      // responsiveHidden: true, // This column will hide on mobile
     },
   },
 
@@ -211,27 +211,25 @@ export const columns: ColumnDef<Project>[] = [
       return (
         <Button
           // Remove hidden class to prevent layout shift
-          className="md:flex hidden w-0 md:w-auto overflow-hidden p-0"
+          className="w-0 w-auto overflow-hidden p-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <span className="hidden md:inline">TVL</span>
-          <ArrowUpDown className="ml-2 h-4 w-4 hidden md:inline" />
+          <span>TVL</span>
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
-          <span className="hidden md:inline">
-            {formatUsd(row.getValue("tvl"))}
-          </span>
+        <div className="overflow-hidden whitespace-nowrap">
+          <span className="">{formatUsd(row.getValue("tvl"))}</span>
         </div>
       );
     },
     sortingFn: "alphanumeric",
     meta: {
-      responsiveHidden: true, // This column will hide on mobile
+      // responsiveHidden: true, // This column will hide on mobile
     },
   },
 ];
