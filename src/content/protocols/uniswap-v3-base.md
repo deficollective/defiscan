@@ -1,6 +1,6 @@
 ---
 protocol: "Uniswap-V3"
-website: "https://blog.uniswap.org/uniswap-v3"
+website: "https://app.uniswap.org/"
 x: "https://x.com/uniswap"
 github:
   [
@@ -15,7 +15,7 @@ risks: ["H", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
 submission_date: "2025-01-16"
 publish_date: "2025-01-22"
-update_date: "1970-01-01"
+update_date: "2025-01-31"
 ---
 
 ⚠️ During our analysis, we identified two unverified contracts, [ProxyAdmin](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9#code) and [TransparentUpgradeableProxy](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463#code), on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
