@@ -1,6 +1,6 @@
 ---
 protocol: "Uniswap-V3"
-website: "https://app.uniswap.org/"
+website: "https://uniswap.org/"
 x: "https://x.com/uniswap"
 github:
   [
