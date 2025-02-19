@@ -1,5 +1,5 @@
 ---
-protocol: "Peendle"
+protocol: "Pendle"
 website: "https://www.pendle.finance/"
 x: "https://x.com/pendle_fi"
 github: ["https://github.com/pendle-finance"]
