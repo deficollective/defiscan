@@ -7,7 +7,7 @@ defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "x", "x", "x", "x"]
+risks: ["L", "L", "L", "L", "L"]
 author: ["CookingCryptos"]
 submission_date: "2025-02-19"
 publish_date: "1970-01-01"
@@ -86,8 +86,8 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 ## Contracts
 
-| Contract Name                     | Address                                      |
-|-----------------------------------|----------------------------------------------|
+| Contract Name                     | Address                                    |
+|-----------------------------------|--------------------------------------------|
 | pendle                            | 0x808507121b80c02388fad14726482e061b8da827 |
 | lzEndpoint                        | 0x66A71Dcef29A0fFBDBE3c6a460a3B5BC225Cd675 |
 | wrappedNative                     | 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 |
@@ -143,14 +143,9 @@ insert text
 
 # Security Council
 
-See http://defiscan.info/learn-more#security-council-requirements for guidance.
-
-change ✅ or ❌ accordingly
-
-| ✅ /❌ | Requirement                                             |
-| ------ | ------------------------------------------------------- |
-| ❌     | At least 7 signers                                      |
-| ❌     | At least 51% threshold                                  |
-| ❌     | At least 50% non-team signers                           |
-| ❌     | Signers are publicly announced (with name or pseudonym) |
-
+| Requirement                                             | treasury | governance | devMultisig |
+|---------------------------------------------------------|----------|------------|-------------|
+| At least 7 signers                                      | ❌        | ❌          | ❌           |
+| At least 51% threshold                                  | ❌        | ❌          | ✅           |
+| At least 50% non-team signers                           | ❌        | ❌          | ❌           |
+| Signers are publicly announced (with name or pseudonym) | ❌        | ❌          | ❌           |
