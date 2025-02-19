@@ -91,7 +91,7 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | pendle                            | 0x808507121b80c02388fad14726482e061b8da827 |
 | lzEndpoint                        | 0x66A71Dcef29A0fFBDBE3c6a460a3B5BC225Cd675 |
 | wrappedNative                     | 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 |
-| sySwapper                         | 0x248087C69e72E211b7264720Bf6cC5A954F98CDE |
+| sySwapper                         | 0x248087C69e72E211b7264720Bf6cC5A954F98CDE | Unverified contract
 | baseCodeSplitter                  | 0x35878C2Cff38cC4032E85283183428170BA618A2 |
 | PENDLE                            | 0x808507121b80c02388fad14726482e061b8da827 |
 | governanceProxy                   | 0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e |
@@ -121,13 +121,11 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 ## Permission owners
 
-| Name | Account                                       | Type         |
-| ---- | --------------------------------------------- | ------------ |
-| deployer                          |  0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7  |
-| treasury                          |  0x8270400d528c34e1596EF367eeDEc99080A1b592  |
-| governance                        | 0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1 |
-| devMultisig                       | 0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1 |
-| name | [address](https://etherscan.io/address/0x...) | Multisig x/y |
+| Name        | Account                                                                                                               | Type         |
+| ----------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
+| treasury    | [0x8270400d528c34e1596EF367eeDEc99080A1b592](https://etherscan.io/address/0x8270400d528c34e1596EF367eeDEc99080A1b592) | Multisig 2/6 |
+| governance  | [0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) | Multisig 2/4 |
+| devMultisig | [0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1) | Multisig 2/3 |
 
 ## Permissions
 
