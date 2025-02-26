@@ -24,11 +24,15 @@ SIR is a decentralized trading protocol designed for leveraged positions with a 
 
 Ethereum
 
+> Chain score: L
+
 ## Upgradeability
 
 The protocol operates through six non-upgradable contracts, with SystemControl enabling limited administrative control. The owner can modify specific parameters: adjusting APE/TEA minting fees (with a 10-day delay) and transitioning between protocol states—TrainingWheels (configurable mode), Emergency (minting paused), and Shutdown (terminal state after 20 days in Emergency). Critical actions, like fee changes or shutdown initiation, are time-gated to prevent abrupt misuse. Permanent immutability is achieved via the Unstoppable state, locking all parameters except SIR token reward distribution. Users can withdraw funds in all states except Shutdown.
 
 The system uses Uniswap v3's decentralized oracle and relies on procedural safeguards (delays, irreversible states) rather than a security council, prioritizing user protections while allowing controlled parameter adjustments during the initial phase.
+
+> Upgradeabillity score: H
 
 ## Autonomy
 
@@ -36,13 +40,19 @@ SIR relies on Uniswap v3 oracles for price data. While a critical bug in Uniswap
 
 To further reduce liquidity-related risks, SIR automatically scans for the most liquid fee tiers within Uniswap v3. If liquidity in the primary pool deteriorates, the protocol seamlessly switches to the price feed of a more liquid fee tier, ensuring continuous and reliable price sourcing.
 
+> Autonomy score: L
+
 ## Exit Window
 
-SIR's contracts are fully immutable, no upgrades or changes can be made, removing the need for an exit window.
+The protocol implements time-delayed safeguards for critical administrative actions: fee adjustments require a 10-day activation period, while transitioning from Emergency to Shutdown status mandates a 20-day waiting period. Users retain withdrawal capabilities in all states except Shutdown. Permanent immutability is achieved upon entering the Unstoppable state, which irreversibly locks all parameters except SIR reward distribution. While the 10-day delay for fee changes exceeds the common 7-day threshold, the 20-day window for protocol termination falls short of the 30-day standard required for full exit window compliance.
+
+> Exit score: M
 
 ## Accessibility
 
 Following our recent launch, the current sole user interface is our official application at https://app.sir.trading. Our long-term vision involves establishing an ecosystem of independent third-party frontends, mirroring Liquity's successful model with its network of interface providers. As a final recourse, users can utilize Etherscan (https://etherscan.io) to interact directly with the protocol's smart contracts.
+
+> Accessibility score: M
 
 # Technical Analysis
 
