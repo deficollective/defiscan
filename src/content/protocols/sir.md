@@ -36,7 +36,7 @@ The system uses Uniswap v3's decentralized oracle and relies on procedural safeg
 
 ## Autonomy
 
-SIR relies on Uniswap v3 oracles for price data. While a critical bug in Uniswap v3 could theoretically disrupt SIR’s operations or distort pricing—potentially destabilizing trader and LPer positions—this risk is mitigated by Uniswap v3’s status as a Stage 2 protocol (fully decentralized and immutable), its extensive audits, and its proven track record as one of the most widely adopted AMMs in DeFi. These factors render such a scenario highly improbable.
+SIR relies on Uniswap v3 oracles for price data. While a critical bug in Uniswap v3 could theoretically disrupt SIR's operations or distort pricing—potentially destabilizing trader and LPer positions—this risk is mitigated by Uniswap v3's status as a Stage 2 protocol (fully decentralized and immutable), its extensive audits, and its proven track record as one of the most widely adopted AMMs in DeFi. These factors render such a scenario highly improbable.
 
 To further reduce liquidity-related risks, SIR automatically scans for the most liquid fee tiers within Uniswap v3. If liquidity in the primary pool deteriorates, the protocol seamlessly switches to the price feed of a more liquid fee tier, ensuring continuous and reliable price sourcing.
 
