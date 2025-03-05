@@ -7,7 +7,7 @@ defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "L", "L", "L", "L"]
+risks: ["L", "L", "L", "L", "H"]
 author: ["CookingCryptos"]
 submission_date: "2025-02-19"
 publish_date: "1970-01-01"
@@ -72,7 +72,11 @@ This steps help you write a nice report:
 
 ## Autonomy
 
-See http://defiscan.info/learn-more#autonomy for more guidance.
+The Pendle's protocol token (PENDLE) relies on Ethereum to access key features such as locking, voting, and claiming fees. Other chains, like Arbitrum, only mirror data from Ethereum. To receive boosting benefits, users who provide liquidity on Arbitrum must lock PENDLE on Ethereum and synchronize the information to Arbitrum using cross-chain messages. This synchronization is facilitated by the LayerZero protocol, which uses permissioned validators (DVNs) to validate cross-chain transaction data. Currently, Pendle has configured the "default" validator service which is Google Cloud.
+
+A failure of these validators could require manual intervention and potentially result in the temporary censoring of users or the freezing of their funds. This primarily affects users unclaimed (or claimed) rewards and liquidity boosting benefits across chains.
+
+> Autonomy score: M
 
 ## Exit Window
 
@@ -80,7 +84,9 @@ See http://defiscan.info/learn-more#exit-window for more guidance.
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+Users can only access Pendle through a single user interface: [app.pendle.finance](app.pendle.finance). Currently, there is no backup solution in case the interface is shut down or users are censored.
+
+> Accessibility score: H
 
 # Technical Analysis
 
@@ -171,7 +177,26 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 ## Dependencies
 
-insert text
+Pendle Protocol relies on LayerZero for cross-chain communication and transaction validation.
+
+LayerZero Protocol itself is immutable and fully permissionless. The protocol will exist indefinitely even if Layer0 Labs, the company that developed the LayerZero Protocol, ceases to exist. Layer0 Labs' role in the LayerZero protocol is reduced to deploying immutable Endpoints on new chains. These endpoints reference each other and thereby enable the cross-chain communication network. If Layer0 Labs ceases to exist, no new chains are added to the cross-chain network, but the existing network is not affected.
+
+Pendle relies on LayerZero's default configuration for cross-chain message validation. In the [`PendleMsgSendEndpointUpg`](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract 
+"@dev Initially, currently we will use layer zero's default send and receive version (which is most updated) So we can leave the configuration unset." This means Pendle inherits the security and reliability of LayerZero's default infrastructure, but also depends on it.
+
+The [`PendleMsgSendEndpointUpg`](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract manages message sending across chains through a whitelisted system. While this provides a layer of security, it also means that the protocol's cross-chain functionality is dependent on these whitelisted addresses functioning correctly. A failure in this system could potentially affect cross-chain operations.
+
+Finally, the LayerZero Protocol relies on Executors which trigger queued transactions on destination chains. In Pendle's implementation, this is handled through the `MsgReceiveEndpoint` contracts on each chain. The system is designed to be permissionless at the LayerZero level, meaning that even if Pendle's designated endpoints fail, users transactions cannot be permanently censored.
+
+According to their docs the PENDLE token is currently deployed on the following chains through the LayerZero protocol:
+
+    Mainnet
+    Arbitrum
+    Mantle
+    Base
+    Optimism
+    BNB Chain
+
 
 ## Exit Window
 
@@ -181,7 +206,7 @@ insert text
 
 | Requirement                                             | treasury | governance | devMultisig |
 |---------------------------------------------------------|----------|------------|-------------|
-| At least 7 signers                                      | ❌        | ❌          | ❌           |
-| At least 51% threshold                                  | ❌        | ❌          | ✅           |
-| At least 50% non-team signers                           | ❌        | ❌          | ❌           |
-| Signers are publicly announced (with name or pseudonym) | ❌        | ❌          | ❌           |
+| At least 7 signers                                      | ❌        | ❌          | ❌         |
+| At least 51% threshold                                  | ❌        | ❌          | ✅         |
+| At least 50% non-team signers                           | ❌        | ❌          | ❌         |
+| Signers are publicly announced (with name or pseudonym) | ❌        | ❌          | ❌         |
