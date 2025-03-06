@@ -64,6 +64,8 @@ The minimum delay between approval and execution of a governance proposal is 18 
 
 Sky has a main frontend at [sky.money](sky.money).
 
+Note from discord: Also remember Sky in the past never had a front, you always had to use it through tools like DeFi Saver, Instadapp or SummerFi (ex Oasis), so nothing to worry about with them.
+
 # Technical Analysis
 
 ## Contracts
