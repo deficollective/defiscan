@@ -30,7 +30,7 @@ Additionally, Uniswap v2 integrates price oracles that mitigate manipulation ris
 
 Uniswap v2 is deployed on various chains. This review is based on the Ethereum mainnet deployment of the protocol.
 
-> Chain score: L
+> Chain score: Low
 
 ## Upgradeability
 
@@ -38,26 +38,26 @@ The Uniswap V2 protocol allows UNI token holders to update certain fee parameter
 
 Apart from these fee parameters, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
 
-> Upgradeabillity score: L
+> Upgradeabillity score: Low
 
 ## Autonomy
 
 There are no particular dependencies for the Uniswap protocol.
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 No "Medium" or "High" risk permissions are found in the protocol that require protection with an Exit Window, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days Exit Window for approved updates.
 
-> Exit score: L
+> Exit score: Low
 
 ## Accessibility
 
 Uniswap is accessible through multiple frontends. Uniswap offers main access through their main deployment: https://app.uniswap.org/. In addition to that,
 the frontend app is also hosted on IPFS see here https://github.com/Uniswap/interface/releases. Further details on the maintenance and access of the interface hosted on IPFS can be found [here](https://blog.uniswap.org/uniswap-interface-ipfs). Additionally, users are offered the possibility to self host the frontend from here: https://github.com/Uniswap/interface.
 
-> Accessibility score: L
+> Accessibility score: Low
 
 # Technical Analysis
 
