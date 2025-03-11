@@ -5,7 +5,7 @@ x: "https://x.com/SkyEcosystem"
 github: ["https://github.com/makerdao"]
 defillama_slug: ["makerdao"]
 chain: "Ethereum"
-stage: 1
+stage: 0
 reasons: []
 risks: ["L", "H", "L", "H", "L"]
 author: ["mmilien_"]
@@ -54,11 +54,23 @@ Sky has a main frontend at [sky.money](https://sky.money). The frontend is not s
 
 > Accessibility score: Low
 
+## Conclusion
+
+> Overall score: Unclassified
+
 # Technical Analysis
 
 ## Tokens and Rewards
 
+The contracts related to the tokens and the reward system of the Sky protocol are displayed in the diagram below. Following the _Sky End Game_ plan, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Convversion contracts allow for the swap from legacy to new tokens and back at a fixed rate. A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. A `LitePSM` (Peg-stability-module) allows users to swap other stablecoins for `USDS` with no impact on the peg thanks to pre-attributed reserves. The governance, through its delay contract DSPauseProxy which enforces a delay of 18 hours on actions, has admin privileges over all contracts and could, for example, arbitrarily mint tokens. `DSChief`, the governance contract, is the authority over the `LitePSMMom` and is therefore the contract choosing which account could halt the `LitePSM` in case of emergency. We did not find a way to compute the exact permission that `DSChief` is granting.
+
+![Overview of the sky tokens and rewards module](./sky-tokens.png)
+
 ## Governance
+
+The governance process is highlighted below. Users need to seal `MKR` or `SKY` tokens into the `LockStakeEngine` in order to receive voting rights. Users may receive rewards for their sealed tokens. Withdrawing the tokens is currently subject to a fee starting at 5% and increasing up to 15% overtime. The governance contract is `DSChief`, users can either vote or delegate their vote to other users. A list of _Aligned Delegates_ who vowed to respect the protocl's core values is published on the [governance webpage](https://vote.makerdao.com/delegates). The current aligned delates hold a majority of the voting power and extrem influence over the protocol (see [security council](#security-council)). Each governance proposal comes under the form of a `DssSpell` the points to a `DssSpellAction` contract which holds the logic to be executed upon approval. The governance uses continuous approal, which means there is one proposal being executed at a time and users need to shift their vote to support a new proposal. The proposal with the most votes at any times is the `Hat` that can be executed. Each `Spell` may be executed just once and expires after 30 days if it has not been selected to be the `Hat`. Proposals can be scheduled for executed with the `DSPauseProxy` which enforces a minimal 18 hours delay between approval and execution. Some proposals may exerce non-delayed action to pause some modules of the protocol such as the `LitePSM` (Peg Stability Module), `OSM` (Oracle Security Module), and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (Emergency Shutdown Module) funds sent to the contract cannot be recovered, even if no shutdown happens.
+
+![Overview of the sky governance](./sky-governance.png)
 
 ## Collateral and Liquidation
 
@@ -95,30 +107,30 @@ The list of contract and deployment addresses is available in both the [official
 
 ## Permission owners
 
-| Name                      | Account                                                                                                               | Type     |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
-| DSPause Proxy             | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
-| USDSJoin                  | [0x3c0f895007ca717aa01c8693e59df1e8c3777feb](https://etherscan.io/address/0x3c0f895007ca717aa01c8693e59df1e8c3777feb) | contract |
-| DAIJoin                   | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28) | contract |
-| DaiJoinFab                | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177) | contract |
-| DssLitePsmMom             | [0x467b32b0407Ad764f56304420Cddaa563bDab425](https://etherscan.io/address/0x467b32b0407Ad764f56304420Cddaa563bDab425) | contract |
-| LockstakeClipper          | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239) | contract |
-| Dog                       | [0x135954d155898D42C90D2a57824C690e0c7BEf1B](https://etherscan.io/address/0x135954d155898D42C90D2a57824C690e0c7BEf1B) | contract |
-| SplitterMom               | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e) | contract |
-| Vow                       | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466) | contract |
-| MkrAuthority              | [0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8](https://etherscan.io/address/0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8) | contract |
-| DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
-| MkrSky Converter          | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B) | contract |
-| Flopper                   | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d) | contract |
-| DssVestMintable           | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9) | contract |
-| DssVestMintable           | [0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd](https://etherscan.io/address/0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd) | contract |
-| VestedRewardsDistribution | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9) | contract |
-| Vat                       | [0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B](https://etherscan.io/address/0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B) | contract |
-| ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
-| END                       | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28) | contract |
-| Jug                       | [0x19c0976f590D67707E62397C87829d896Dc0f1F1](https://etherscan.io/address/0x19c0976f590D67707E62397C87829d896Dc0f1F1) | contract |
-| Pot                       | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7) | contract |
-| DssAutoLine               | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3) | contract |
+| Name                      | Account                                                                                                                                     | Type     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| DSPause Proxy             | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB)                       | contract |
+| USDSJoin                  | [0x3c0f895007ca717aa01c8693e59df1e8c3777feb](https://etherscan.io/address/0x3c0f895007ca717aa01c8693e59df1e8c3777feb)                       | contract |
+| DAIJoin                   | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28)                       | contract |
+| DaiJoinFab                | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177)                       | contract |
+| DssLitePsmMom             | [0x467b32b0407Ad764f56304420Cddaa563bDab425](https://etherscan.io/address/0x467b32b0407Ad764f56304420Cddaa563bDab425)                       | contract |
+| LockstakeClipper          | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239)                       | contract |
+| Dog                       | [0x135954d155898D42C90D2a57824C690e0c7BEf1B](https://etherscan.io/address/0x135954d155898D42C90D2a57824C690e0c7BEf1B)                       | contract |
+| SplitterMom               | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e)                       | contract |
+| Vow                       | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466)                       | contract |
+| MkrAuthority              | [0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8](https://etherscan.io/address/0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8)                       | contract |
+| DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0)                       | contract |
+| MkrSky Converter          | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B)                       | contract |
+| Flopper                   | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d)                       | contract |
+| DssVestMintable           | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9)                       | contract |
+| DssVestMintable           | [0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd](https://etherscan.io/address/0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd)                       | contract |
+| VestedRewardsDistribution | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9)                       | contract |
+| Vat                       | [0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B](https://etherscan.io/address/0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B)                       | contract |
+| ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](http![alt text](image.png)s://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
+| END                       | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28)                       | contract |
+| Jug                       | [0x19c0976f590D67707E62397C87829d896Dc0f1F1](https://etherscan.io/address/0x19c0976f590D67707E62397C87829d896Dc0f1F1)                       | contract |
+| Pot                       | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7)                       | contract |
+| DssAutoLine               | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3)                       | contract |
 
 Contracts with mint rights on MKR:
 End : 0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28
@@ -232,9 +244,9 @@ LockstakeClipper, Clipper, End
 | DSChief                               | setUserRole            | Gives a user a specific role. The user will inherite all the capabilities of that role. This may be used to give access to the LitePSM Mom or the OSM Mom contracts.                                                                                                                                                                                                                                                                                   | DSChief, DSChief()                                                                          |
 | DSChief                               | setPublicCapability    | Sets a capability public. A public capability is a function that can be called by any user without specific role requirements. This could potentially make admin functions of the LitePSM Mom and OSM Mom public.                                                                                                                                                                                                                                      | DSChief, DSChief()                                                                          |
 | DSChief                               | setRoleCapability      | Sets a capability for a specific role. Gives a role the right to call a specific function. Gives a role and all its users a specific capability. This could be access to admin function s of the LitePSM Mom and OSM Mom contracts.                                                                                                                                                                                                                    | DSChief, DSChief()                                                                          |
-| DssLitePsmMom                         | setOwner               | Sets the owner of the contract. The owner can change the `authority` and call `halt` either inflow or outflow of `gem` (here USDC) tokens.                                                                                                                                                                                                                                                                                                             | DSPauseProxy (DAO), DSChief()                                                               |
+| DssLitePsmMom                         | setOwner               | Sets the owner of the contract. The owner can change the `authority` and call `halt` either inflow or outflow of `gem` (here USDC) tokens.                                                                                                                                                                                                                                                                                                             | DSPauseProxy (DAO)                                                                          |
 | DssLitePsmMom                         | setAuthority           | Sets the authority of the contract. The authority declares whether callers of permissioned functions are allowed to do so. This is used here to allow non-delayed execution of the `halt` function.                                                                                                                                                                                                                                                    | DSPauseProxy (DAO)                                                                          |
-| DssLitePsmMom                         | halt                   | Halts the inflow or outflow of gem (here `USDC`) token in the `LitePSM` contract. Can be called without delay by governance approved contracts. If the contract is halted users can still swap `USDC` to/from `USDS` by other means, users' funds would not be trapped.                                                                                                                                                                                | DSPauseProxy (DAO)                                                                          |
+| DssLitePsmMom                         | halt                   | Halts the inflow or outflow of gem (here `USDC`) token in the `LitePSM` contract. Can be called without delay by governance approved contracts. If the contract is halted users can still swap `USDC` to/from `USDS` by other means, users' funds would not be trapped.                                                                                                                                                                                | DSPauseProxy (DAO), DSChief(unknown)                                                        |
 | LockstakeClipper                      | rely                   | Grants admin privileges over the contract to a specific address. An admin can disable the contract, set parameters, start auctions, as well as change the recipient of the DAI raised in auctions. A malicious admin could result in loss of user collateral, draining of system funds, and prevention of legitimate auctions.                                                                                                                         | DSPauseProxy (DAO), Dog, End, ClipperMom                                                    |
 | LockstakeClipper                      | deny                   | Revokes admin privileges to a specific address.                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO), Dog, End, ClipperMom                                                    |
 | LockstakeClipper                      | file                   | Changes contract parameters such as incentives, auction reset parameters, auction duration, price modules, recipient of DAI raised, and liquidation module. The contract can also be stopped in three levels: 1) new auction stopped. 2) new auction and redoes stopped. 3) new auction, redoes, and bids stopped. Malicious or wrong manipulation of those parameters can result in unsuable auctions, loss of user colalteral, loss of system funds. | DSPauseProxy (DAO), Dog, End, ClipperMom                                                    |
@@ -312,7 +324,7 @@ LockstakeClipper, Clipper, End
 | LineMom                               | file                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
 | LineMom                               | addIlk                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
 | LineMom                               | delIlk                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
-| wipe                                  | addIlk                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO), DSChief(unknown)                                                        |
+| LineMom                               | wipe                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO), DSChief(unknown)                                                        |
 
 ## Dependencies
 
