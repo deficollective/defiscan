@@ -5,8 +5,8 @@ x: "https://x.com/SkyEcosystem"
 github: ["https://github.com/makerdao"]
 defillama_slug: ["maker"]
 chain: "Ethereum"
-stage: 0
-risks: ["L", "x", "x", "x", "H"]
+stage: 1
+risks: ["L", "H", "L", "H", "L"]
 author: ["mmilien_"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
@@ -43,7 +43,7 @@ The Sky protocol relies on the provider Chronicle for price feeds of collateral 
 
 The minimum delay between approval and execution of a governance proposal is currently 18 hours. Governance proposals have a recurring weekly and monthly schedules. Those proposals had a lock duration of 2-3 days before took effect in the past, but proposals remain possible at any time with the minimum delay. Proposals may include an office-hours modifier that means it can only be executed between 14:00 and 21:00 UTC Monday-Friday. There are no minimum amount of tokens to open a proposal or for it to pass, as the protocol uses continuous approval. This is explained in more details in the [exit window analysis section](#exit-window-1).
 
-Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. In addition to that a _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract.
+Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. In addition to that an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract.
 
 > Exit Window score: High
 
@@ -54,6 +54,12 @@ Sky has a main frontend at [sky.money](sky.money). The frontend is not self-host
 > Accessibility score: Low
 
 # Technical Analysis
+
+## Tokens and Rewards
+
+## Governance
+
+## Collateral and Liquidation
 
 ## Contracts
 
@@ -270,21 +276,19 @@ LockstakeClipper, Clipper, End
 
 The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. An Oracle Security Module enforces a 1 hour window on price updates and the provider (Chronicle) or the governance can freeze the current price value to prevent further updates.
 
-[specific description of Chronicle]
+Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
 
 ## Exit Window
 
 The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any times is accepted and can be executed once its delay has passed.
 
-Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. Currently the `Splitter` contract has such a permission. In addition to that a _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol.
-
-# Security Council
-
-There is no security council to oversee the Sky Protocl. Nonetheless, there is a series of emergency governance actions that can be taken.
-
-Some parameters adjustments can be done without any delay. TODO: MOM contracts, + list https://developers.sky.money/security/security-measures/security-mechanisms
-
-Finally, an `ESM` (Emergency Shutdown Module) allows `MKR` holders to shutdown the system without a central authority. Once 500'000 `MKR` are entered into the `ESM`, emergency shutdown can be executed. Sending funds to the `ESM` is an _irreversible_ action, it is assumed that there are 2 scenarios:
+Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. Currently the `Splitter` contract has such a permission. In addition to that a _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
 
 1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
 2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
+
+# Security Council
+
+There is no security council to oversee the Sky Protocol. Nonetheless, there is a series of emergency governance actions described in [exit-window](#exit-window-1) that can be taken. Unfortunately, the model of continuous approval and vote delegation used in the governance does not qualify for a comparison with a security council, as the top 3 _Aligned Delegates_ could pass both new proposals and emergency actions (exluding the shutdown module) on their own.
+
+WIP note: Some parameters adjustments can be done without any delay. TODO: double check MOM contracts
