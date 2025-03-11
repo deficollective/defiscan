@@ -6,9 +6,10 @@ github: ["https://github.com/makerdao"]
 defillama_slug: ["maker"]
 chain: "Ethereum"
 stage: 1
+reasons: []
 risks: ["L", "H", "L", "H", "L"]
 author: ["mmilien_"]
-submission_date: "1970-01-01"
+submission_date: "2025-03-11"
 publish_date: "1970-01-01"
 acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
@@ -49,7 +50,7 @@ Emergency measures allow the governance to pause certain contracts through a gov
 
 ## Accessibility
 
-Sky has a main frontend at [sky.money](sky.money). The frontend is not self-hostable nor open source, but multiple other access points exist with "stars" such as [Spark](spark.fi) which is self-hostable or third-party apps like DeFiSaver or SummerFi. These apps build an acceptable backup solution in case of failure of the official frontend.
+Sky has a main frontend at [sky.money](https://sky.money). The frontend is not self-hostable nor open source, but multiple other access points exist with "stars" such as [Spark](https://spark.fi) which is self-hostable or third-party apps like DeFiSaver or SummerFi. These apps build an acceptable backup solution in case of failure of the official frontend.
 
 > Accessibility score: Low
 
