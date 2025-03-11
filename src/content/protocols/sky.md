@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Sky protocol is a decentralised protocol developed around the USDS stablecoin. It is managed by Sky ecosystem governance. The Sky Protocol features Sky tokens (USDS, SKY, DAI, MKR), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink.The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker.
+The Sky protocol is a decentralised protocol developed around the USDS stablecoin. It is managed by Sky ecosystem governance. The Sky Protocol features Sky tokens (USDS, SKY, DAI, MKR), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink.The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker. As Sky is built on top of Maker and both protocol's tokens are tied by fixed converison rate, this review also includes the MakerDAO protocol and its contracts.
 
 # Overview
 
