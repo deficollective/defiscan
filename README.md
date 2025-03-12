@@ -6,7 +6,17 @@ Read more about the methodology behind the DeFi stages and risks in this [post](
 
 DeFiScan is built and maintained by the [DeFi Collective](https://DeFiCollective.org), a non-profit organization with the mission to make DeFi more transparent and secure for all.
 
-## Getting started
+## 🌟 Community Program
+
+💪 Join DeFiScan’s Community Review Program and help enhance the coverage of Decentralization of DeFi protocols!
+
+💰 Total Prize Pool: 10,000 LUSD! Each successful review earns you 500 LUSD. Your contributions will make a real impact on the DeFi ecosystem! ✨
+
+🤝 Who Can Participate? Anyone! Whether you're a seasoned expert or just passionate about DeFi, we want your insights. Just submit your reviews via a pull request (PR) on our GitHub. 📝
+
+Check details on the program 👉 [here](./campaigns/README.MD) 👈
+
+## Run App
 
 To run the website on your local machine, follow these steps:
 
@@ -50,7 +60,6 @@ To run the website on your local machine, follow these steps:
 
 ---
 
-
 ## Add New Protocol Review
 
 New protocol reviews can be added as a `.md` files in the `content/protocols` folder.
@@ -59,7 +68,6 @@ New protocol reviews can be added as a `.md` files in the `content/protocols` fo
 
 - Make sure to name the file with dash (`-`) and without space. Example: `liquity-v2.md`
 - The `.md` file needs to follow the protocol report structure outlined [here](src/content/template.md)
-
 
 ## Acknowledgement
 

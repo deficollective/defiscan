@@ -25,8 +25,11 @@ const config = {
         lexend: ["var(--font-lexend)", ...fontFamily.sans],
         code: ["var(--font-code)", ...fontFamily.sans],
       },
+      fontSize: {
+        xxs: "0.6rem", // Example size (10px)
+      },
       colors: {
-        border: "hsl(var(--border))",
+        border: "hsl(var(--secondary))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

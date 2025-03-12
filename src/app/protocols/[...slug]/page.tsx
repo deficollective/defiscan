@@ -12,6 +12,7 @@ import { getRiskDescriptions } from "@/components/rosette/data-converter/data-co
 import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Stage } from "@/lib/types";
 
 interface ProtocolPageItemProps {
   params: {
@@ -98,27 +99,39 @@ export default async function ProtocolPageItem({
             <tr>
               <td className="whitespace-nowrap">GitHub</td>
               <td className="break-all max-w-xs">
-                <a
-                  href={protocol.github}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.github}
-                </a>
+                <div>
+                  {protocol.github!.map((slug, index) => (
+                    <a
+                      key={index}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`
+                          ${slug}`}
+                      className="text-blue-500 hover:underline text-sm md:text-base"
+                    >
+                      {index == 0 ? slug : ", " + slug}
+                    </a>
+                  ))}
+                </div>
               </td>
             </tr>
             <tr>
               <td className="whitespace-nowrap">Defillama</td>
               <td className="break-all max-w-xs">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={
-                    "https://defillama.com/protocol/" + protocol.defillama_slug
-                  }
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {"https://defillama.com/protocol/" + protocol.defillama_slug}
-                </a>
+                <div className="">
+                  {protocol.defillama_slug!.map((slug, index) => (
+                    <a
+                      key={index}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`
+                        https://defillama.com/protocol/${slug}`}
+                      className="text-blue-500 hover:underline text-sm md:text-base"
+                    >
+                      {index == 0 ? slug : ", " + slug}
+                    </a>
+                  ))}
+                </div>
               </td>
             </tr>
             <tr>
@@ -141,14 +154,6 @@ export default async function ProtocolPageItem({
           {protocol.publish_date!.split("T")[0]}.
         </p>
         <p>
-          The {protocol.protocol} team has{" "}
-          {protocol.acknowledge_date!.split("T")[0] === "1970-01-01"
-            ? "NOT acknowledged the review"
-            : "acknowledged the review on " +
-              protocol.acknowledge_date!.split("T")[0]}
-          .
-        </p>
-        <p>
           {protocol.update_date!.split("T")[0] === "1970-01-01"
             ? "The review has not been updated since the initial submission"
             : "The last update to the review was made on " +
@@ -169,24 +174,63 @@ export default async function ProtocolPageItem({
           .
         </p>
 
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Stage
-        </h1>
+        {protocol.stage! != "O" ? (
+          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+            Stage
+          </h1>
+        ) : (
+          <></>
+        )}
 
-        <TooltipProvider>
-          <Badge
-            stage={protocol.stage!}
-            className={`${
-              protocol.stage === 0
-                ? "bg-red-500"
-                : protocol.stage === 1
-                  ? "bg-yellow-500"
-                  : "bg-green-500"
-            } text-white px-2 py-1 rounded`}
-          >
-            {"Stage " + protocol.stage}
-          </Badge>
-        </TooltipProvider>
+        {protocol.stage! != "O" ? (
+          <TooltipProvider>
+            <Badge
+              title={"Stage of Decentralisation"}
+              stage={protocol.stage! as Stage}
+              className={`${
+                protocol.stage! === "R"
+                  ? "bg-gray-500"
+                  : protocol.stage! === 0
+                    ? "bg-red-500"
+                    : protocol.stage! === 1
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+              } text-white py-1 rounded "text-lg"`}
+            >
+              {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
+            </Badge>
+          </TooltipProvider>
+        ) : (
+          <></>
+        )}
+
+        {protocol.stage! === "O" ? (
+          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+            Missing Requirements for Stage 0
+          </h1>
+        ) : (
+          <></>
+        )}
+        {
+          <div>
+            {protocol.stage! === "O" ? (
+              protocol.reasons!.map((el) => (
+                <TooltipProvider>
+                  <Badge
+                    title={"Reason"}
+                    className="my-1 bg-red-500"
+                    stage={"O"}
+                    reason={el}
+                  >
+                    {el}
+                  </Badge>
+                </TooltipProvider>
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        }
 
         <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
           Risks

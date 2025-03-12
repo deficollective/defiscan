@@ -2,15 +2,15 @@
 protocol: "Possum-Portals-v2"
 website: "https://www.possumlabs.io"
 x: "https://x.com/Possum_Labs"
-github: "https://github.com/PossumLabsCrypto"
-defillama_slug: "possum-labs"
+github: ["https://github.com/PossumLabsCrypto"]
+defillama_slug: ["possum-labs"]
 chain: "Arbitrum"
 stage: 0
+reasons: []
 risks: ["M", "H", "H", "M", "H"]
 author: ["stengarl", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
-acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
@@ -71,8 +71,8 @@ Currently, Possum Labs offers only a single user interface without a backup solu
 
 ## Contracts
 
-| **Contract Name**                          | **Address**                                |
-| ------------------------------------------ | ------------------------------------------ |
+| **Contract Name**                          | **Address**                                                                                                          |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | PSM                                        | [0x17A8541B82BF67e10B0874284b4Ae66858cb1fd5](https://arbiscan.io/address/0x17A8541B82BF67e10B0874284b4Ae66858cb1fd5) |
 | PossumCore                                 | [0xb12192f4E3AcCb5D33589Ed683701F69a272EA26](https://arbiscan.io/address/0xb12192f4E3AcCb5D33589Ed683701F69a272EA26) |
 | Virtual LP                                 | [0x212Bbd56F6D4F999B2845adebd8cec147851E383](https://arbiscan.io/address/0x212Bbd56F6D4F999B2845adebd8cec147851E383) |
@@ -105,8 +105,8 @@ Currently, Possum Labs offers only a single user interface without a backup solu
 
 ## Permission Owners
 
-| Name              | Account                                                                                                               | Type         |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Name              | Account                                                                                                              | Type         |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Treasury Multisig | [0xAb845D09933f52af5642FC87Dd8FBbf553fd7B33](https://arbiscan.io/address/0xAb845D09933f52af5642FC87Dd8FBbf553fd7B33) | Multisig 2/3 |
 
 ## Permissions

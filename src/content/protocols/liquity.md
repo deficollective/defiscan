@@ -2,15 +2,15 @@
 protocol: "Liquity"
 website: "https://www.liquity.org"
 x: "https://x.com/LiquityProtocol"
-github: "https://github.com/liquity"
-defillama_slug: "liquity"
+github: ["https://github.com/liquity"]
+defillama_slug: ["liquity-v1"]
 chain: "Ethereum"
 stage: 2
+reasons: []
 risks: ["L", "L", "L", "L", "L"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
-acknowledge_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
@@ -58,8 +58,8 @@ A list of third-party frontends can be found [here](https://www.liquity.org/fron
 
 ## Contracts
 
-| ContractName          | Address                                    |
-| --------------------- | ------------------------------------------ |
+| ContractName          | Address                                                                                                               |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | activePool            | [0xDf9Eb223bAFBE5c5271415C75aeCD68C21fE3D7F](https://etherscan.io/address/0xDf9Eb223bAFBE5c5271415C75aeCD68C21fE3D7F) |
 | borrowerOperations    | [0x24179CD81c9e782A4096035f7eC97fB8B783e007](https://etherscan.io/address/0x24179CD81c9e782A4096035f7eC97fB8B783e007) |
 | troveManager          | [0xA39739EF8b0231DbFA0DcdA07d7e29faAbCf4bb2](https://etherscan.io/address/0xA39739EF8b0231DbFA0DcdA07d7e29faAbCf4bb2) |

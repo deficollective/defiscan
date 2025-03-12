@@ -1,3 +1,4 @@
+// DeFiLlama API Type
 export interface Protocol {
   slug: string;
   tvl: number;
@@ -5,6 +6,11 @@ export interface Protocol {
   category: string;
   name: string;
   chains: string[];
+  chainTvls: ChainTvls;
+}
+
+interface ChainTvls {
+  [chainName: string]: number;
 }
 
 export interface ChainTvlData {
