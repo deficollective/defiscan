@@ -1,8 +1,8 @@
 ---
-protocol: "`SIR`"
+protocol: "SIR"
 website: "https://www.sir.trading/"
 x: "https://x.com/leveragesir"
-github: ["https://github.com/`SIR`-trading"]
+github: ["https://github.com/SIR-trading"]
 defillama_slug: ["sir-trading"]
 chain: "Ethereum"
 stage: 1
