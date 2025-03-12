@@ -82,7 +82,9 @@ Proposals can be scheduled for executed with the `DSPauseProxy` which enforces a
 
 ![Overview of the sky governance](./sky-governance.png)
 
-## Collateral and Liquidation
+## Collaterallized Debt Positions Module
+
+![Overview of the CDP module](./sky-cdp.png)
 
 ## Contracts
 
@@ -117,30 +119,30 @@ The list of contract and deployment addresses is available in both the [official
 
 ## Permission owners
 
-| Name                      | Account                                                                                                                                     | Type     |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| DSPause Proxy             | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB)                       | contract |
-| USDSJoin                  | [0x3c0f895007ca717aa01c8693e59df1e8c3777feb](https://etherscan.io/address/0x3c0f895007ca717aa01c8693e59df1e8c3777feb)                       | contract |
-| DAIJoin                   | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28)                       | contract |
-| DaiJoinFab                | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177)                       | contract |
-| DssLitePsmMom             | [0x467b32b0407Ad764f56304420Cddaa563bDab425](https://etherscan.io/address/0x467b32b0407Ad764f56304420Cddaa563bDab425)                       | contract |
-| LockstakeClipper          | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239)                       | contract |
-| Dog                       | [0x135954d155898D42C90D2a57824C690e0c7BEf1B](https://etherscan.io/address/0x135954d155898D42C90D2a57824C690e0c7BEf1B)                       | contract |
-| SplitterMom               | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e)                       | contract |
-| Vow                       | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466)                       | contract |
-| MkrAuthority              | [0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8](https://etherscan.io/address/0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8)                       | contract |
-| DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0)                       | contract |
-| MkrSky Converter          | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B)                       | contract |
-| Flopper                   | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d)                       | contract |
-| DssVestMintable           | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9)                       | contract |
-| DssVestMintable           | [0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd](https://etherscan.io/address/0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd)                       | contract |
-| VestedRewardsDistribution | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9)                       | contract |
-| Vat                       | [0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B](https://etherscan.io/address/0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B)                       | contract |
-| ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](http![alt text](image.png)s://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
-| END                       | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28)                       | contract |
-| Jug                       | [0x19c0976f590D67707E62397C87829d896Dc0f1F1](https://etherscan.io/address/0x19c0976f590D67707E62397C87829d896Dc0f1F1)                       | contract |
-| Pot                       | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7)                       | contract |
-| DssAutoLine               | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3)                       | contract |
+| Name                      | Account                                                                                                               | Type     |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| DSPause Proxy             | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
+| USDSJoin                  | [0x3c0f895007ca717aa01c8693e59df1e8c3777feb](https://etherscan.io/address/0x3c0f895007ca717aa01c8693e59df1e8c3777feb) | contract |
+| DAIJoin                   | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28) | contract |
+| DaiJoinFab                | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177) | contract |
+| DssLitePsmMom             | [0x467b32b0407Ad764f56304420Cddaa563bDab425](https://etherscan.io/address/0x467b32b0407Ad764f56304420Cddaa563bDab425) | contract |
+| LockstakeClipper          | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239) | contract |
+| Dog                       | [0x135954d155898D42C90D2a57824C690e0c7BEf1B](https://etherscan.io/address/0x135954d155898D42C90D2a57824C690e0c7BEf1B) | contract |
+| SplitterMom               | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e) | contract |
+| Vow                       | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466) | contract |
+| MkrAuthority              | [0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8](https://etherscan.io/address/0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8) | contract |
+| DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
+| MkrSky Converter          | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B) | contract |
+| Flopper                   | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d) | contract |
+| DssVestMintable           | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9) | contract |
+| DssVestMintable           | [0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd](https://etherscan.io/address/0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd) | contract |
+| VestedRewardsDistribution | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9) | contract |
+| Vat                       | [0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B](https://etherscan.io/address/0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B) | contract |
+| ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
+| END                       | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28) | contract |
+| Jug                       | [0x19c0976f590D67707E62397C87829d896Dc0f1F1](https://etherscan.io/address/0x19c0976f590D67707E62397C87829d896Dc0f1F1) | contract |
+| Pot                       | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7) | contract |
+| DssAutoLine               | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3) | contract |
 
 Contracts with mint rights on MKR:
 End : 0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28
@@ -220,7 +222,7 @@ LockstakeClipper, Clipper, End
 | Splitter                              | cage                   | Irreversibly disables the contract.                                                                                                                                                                                                                                                                                                                                                                                                                    | DSPauseProxy (DAO), SplitterMom, Vow                                                        |
 | SplitterMom                           | setOwner               | Sets the owner of the contract. The owner can name a new owner and the authority.                                                                                                                                                                                                                                                                                                                                                                      | DSPauseProxy (DAO)                                                                          |
 | SplitterMom                           | setAuthority           | Sets the authority. The authority has the power to stop the `Splitter` contract without any delay.                                                                                                                                                                                                                                                                                                                                                     | DSPauseProxy (DAO)                                                                          |
-| SplitterMom                           | stop                   | Stops the `Splitter` contract. This action doesn't use `cage` and can be reversed by a governance proposal.                                                                                                                                                                                                                                                                                                                                            | DSChief (DAO without delay)                                                                 |
+| SplitterMom                           | stop                   | Stops the `Splitter` contract. This action doesn't use `cage` and can be reversed by a governance proposal.                                                                                                                                                                                                                                                                                                                                            | DSPauseProxy (DAO), DSChief (Unknown)                                                       |
 | FlapperUniV2                          | rely                   | Grants admin privileges over the contract to a specific address. The admin can change parameters such as `want` and `pip` (price feed) as well as call the `exec` function.                                                                                                                                                                                                                                                                            | DSPauseProxy (DAO), Splitter                                                                |
 | FlapperUniV2                          | deny                   | Revokes admin privileges to a specific address.                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO), Splitter                                                                |
 | FlapperUniV2                          | file                   | Changes a contract parameter such as `pip` or `want`. `pip`is the reference price oracle and `want` is the lower bound price to swap the `USDS` token against `SKY`.                                                                                                                                                                                                                                                                                   | DSPauseProxy (DAO), Splitter                                                                |
