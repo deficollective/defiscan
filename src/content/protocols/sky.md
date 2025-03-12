@@ -17,7 +17,8 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Sky protocol is a decentralised protocol developed around the USDS stablecoin. It is managed by Sky ecosystem governance. The Sky Protocol features Sky tokens (USDS, SKY, DAI, MKR), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink.The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker. As Sky is built on top of Maker and both protocol's tokens are tied by fixed converison rate, this review also includes the MakerDAO protocol and its contracts.
+The Sky protocol is a decentralised protocol developed around the USDS stablecoin. It is managed by the Sky ecosystem governance. The Sky Protocol features Sky tokens (USDS, SKY, DAI, MKR), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink. The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker. As Sky is built on top of Maker and both protocol's tokens are tied by fixed converison rate, this review also includes the MakerDAO protocol and its contracts.
+Maker is a lending protocol centered around `DAI`. Users can borrow `DAI` using a list of accepted collaterals. Fixed rates allow users to go to and from legacy tokens at any time (`DAI` to `USDS`, `MKR` to `SKY`).
 
 # Overview
 
@@ -30,21 +31,21 @@ The Sky protocol is deployed on various chains. This review focuses on the Ether
 ## Upgradeability
 
 Core contracts such as `USDS` and `sUSDS` are upgradeable through governance actions. Governance has a complete control over the protocol and could arbitrarily mint tokens, liquidate positions, and steal collateral.
-Governance is controlled by `MKR`/`SKY` token holders who sealed their tokens to earn voting power which allows them to submit and vote on respective proposals.
+Governance is controlled by `MKR`/`SKY` token holders who sealed their tokens to earn voting power which allows them to submit and vote on respective proposals, or delegate their votes to another user.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. An Oracle Security Module enforces a 1 hour window on price updates and the governance can freeze the current price value to prevent further updates in case of emergency. The Chronicol protocol uses non-upgradeable contracts and a system of decentralized validators (and challengers) to push price updates on-chain. The price feed provider could be changed through a governance proposal.
+The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and the governance can freeze the current price to prevent further updates in case of emergency. The Chronicol protocol uses non-upgradeable contracts and a system of decentralized validators (and challengers) to push price updates on-chain. The price feed provider could be changed through a governance proposal.
 
-> Autonomy score: Low
+> Autonomy score: Medium
 
 ## Exit Window
 
-The minimum delay between approval and execution of a governance proposal is currently 18 hours. Governance proposals have a recurring weekly and monthly schedules. Those proposals had a lock duration of 2-3 days before took effect in the past, but proposals remain possible at any time with the minimum delay. Proposals may include an office-hours modifier that means it can only be executed between 14:00 and 21:00 UTC Monday-Friday. There are no minimum amount of tokens to open a proposal or for it to pass, as the protocol uses continuous approval. This is explained in more details in the [exit window analysis section](#exit-window-1).
+The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedules. Those proposals usually have a courtesy lock duration of 2-3 days before take, but proposals remain possible at any time with the minimum delay. Proposals may (but do not have to) include an office-hours modifier that means it can only be executed between 14:00 and 21:00 UTC Monday-Friday. There are no minimum amount of tokens to open a proposal or for it to pass, as the protocol uses continuous approval. This is explained in more details in the [exit window analysis section](#exit-window-1).
 
-Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. In addition to that an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract.
+Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that an _Emergency Shutdown Module_ exists and can definitively shutdown the entire protocol if **500'000** `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract.
 
 > Exit Window score: High
 
@@ -56,13 +57,20 @@ Sky has a main frontend at [sky.money](https://sky.money). The frontend is not s
 
 ## Conclusion
 
+Overall the Sky protocol has unfortunately a high upgradeability and exit window scores. A security council could potentially
+allow the protocol to reach Stage 1, but the current repartition of voting power, with the top-3 _aligned delegates_ having to themselves
+the right to pass proposals, does not qualify for a comparison to a Security council. We encourage the protocol to take measures towards a
+diversification of delegates and voting power. Those scores would grant the rank of Stage 0 to the Sky protocol.
+
+Unfortunatly, we discovered multiple permissions during our analysis that we cannot verify. All the _Mom_ contracts that have privileges to stop some contract in the protocol rely on an authority that does not list its permission holders in any verifiable way (eg. events). For those reasons we cannot currently grant the stage 0, and Sky remains unclassified until those permissions can be identified.
+
 > Overall score: Unclassified
 
 # Technical Analysis
 
 ## Tokens and Rewards
 
-The contracts related to the tokens and the reward system of the Sky protocol are displayed in the diagram below. Following the _Sky End Game_ plan, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Conversion contracts allow for the swap from legacy to new tokens and back at a fixed rate.
+The contracts related to the tokens and the reward system of the Sky protocol are displayed in the diagram below. Following the _Sky End Game Plan_, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Conversion contracts allow for the swap from legacy to new tokens and back at a fixed rate.
 
 A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. A `LitePSM` (Peg-stability-module) allows users to swap other stablecoins for `USDS` with no impact on the peg thanks to pre-attributed reserves.
 
@@ -83,6 +91,12 @@ Proposals can be scheduled for executed with the `DSPauseProxy` which enforces a
 ![Overview of the sky governance](./sky-governance.png)
 
 ## Collaterallized Debt Positions Module
+
+The contracts related to the CDP module are highlighted below. The `Vat` is the core accounting system of the protocol and acts as a balance sheet for debt positions against all collaterals. Each collateral needs an adapter contract called `Join` so that it can be linked to the `Vat`. A `Dog` contract monitors the positions and can _bark_ when a position becomes liquidable. It _kicks_ the collateral's `Clipper` (or `LockstakeClipper` if the collateral is sealed `MKR`) and starts the auction process. The `Vow` is the contract keeping track of all surplus and debt and is the beneficiary of all the `DAI` raised in auction. The `Flopper` or `Flapper` are responsible for debt or surplus auctions respectively. The `Vow` is the beneficiary of the `DAI` raised in auctions. It is important to note that the governance has permission on those contracts and could trigger unjustified liquidations by bypassing the `Dog` contract.
+
+The `Spotter` feeds the price used for liquidation and auctions. It reads the price out of the `OSM` (Oracle Security Module) which delays price updates by one hour and can be frozen in case of emergency. Incorrect oracle prices could potentially liquidate the entire Maker ecosystem, the oracle provider Chronicle is therefore extremely trusted.
+
+As for the governance and tokens, the Mom contracts (`FlapperMom`, `FLopperMom`, `OSMMom`) have the ability to stop their child. The permissions to do so are granted by `DSChief`, the governance contract, but we have not found a way to list those permissions exhaustively.
 
 ![Overview of the CDP module](./sky-cdp.png)
 
@@ -144,7 +158,7 @@ The list of contract and deployment addresses is available in both the [official
 | Pot                       | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7) | contract |
 | DssAutoLine               | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3) | contract |
 
-Contracts with mint rights on MKR:
+<!-- Contracts with mint rights on MKR:
 End : 0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28
 ClipperMom: 0x79FBDF16b366DFb14F66cE4Ac2815Ca7296405A0
 DSPause: 0xbE286431454714F511008713973d3B053A2d38f3
@@ -170,6 +184,8 @@ to add or investigate: SkyLink
 
 dog owners:
 LockstakeClipper, Clipper, End
+
+Abacus: -->
 
 ## Permissions
 
@@ -337,6 +353,13 @@ LockstakeClipper, Clipper, End
 | LineMom                               | addIlk                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
 | LineMom                               | delIlk                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
 | LineMom                               | wipe                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO), DSChief(unknown)                                                        |
+| Clipper                               | Rely                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
+| Clipper                               | Deny                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
+| Clipper                               | File                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
+| Clipper                               | Redo                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
+| Clipper                               | Kick                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
+| Clipper                               | Take                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
+| Clipper                               | Yank                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                             |
 
 ## Dependencies
 
