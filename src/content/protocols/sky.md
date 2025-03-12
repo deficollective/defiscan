@@ -5,8 +5,8 @@ x: "https://x.com/SkyEcosystem"
 github: ["https://github.com/makerdao"]
 defillama_slug: ["makerdao"]
 chain: "Ethereum"
-stage: "0"
-reasons: []
+stage: "O"
+reasons: ["Unverifiable Permissions"]
 risks: ["L", "H", "L", "H", "L"]
 author: ["mmilien_"]
 submission_date: "2025-03-11"
