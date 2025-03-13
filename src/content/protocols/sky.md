@@ -17,7 +17,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Sky protocol is a decentralised protocol developed around the USDS stablecoin. It is managed by the Sky ecosystem governance. The Sky Protocol features Sky tokens (USDS, SKY, DAI, MKR), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink. The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker. As Sky is built on top of Maker and both protocol's tokens are tied by fixed converison rate, this review also includes the MakerDAO protocol and its contracts.
+The Sky protocol is a decentralised protocol developed around the `USDS` stablecoin. It is managed by the Sky ecosystem governance. The Sky Protocol features Sky tokens (`USDS`, `SKY`, `DAI`, `MKR`), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink. The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker. As Sky is built on top of Maker and both protocol's tokens are tied by fixed converison rate, this review also includes the MakerDAO protocol and its contracts.
 Maker is a lending protocol centered around `DAI`. Users can borrow `DAI` using a list of accepted collaterals. Fixed rates allow users to go to and from legacy tokens at any time (`DAI` to `USDS`, `MKR` to `SKY`).
 
 # Overview
@@ -45,7 +45,7 @@ The Sky protocol relies on the provider Chronicle for price feeds of collateral 
 
 The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedules. Those proposals usually have a courtesy lock duration of 2-3 days before take, but proposals remain possible at any time with the minimum delay. Proposals may (but do not have to) include an office-hours modifier that means it can only be executed between 14:00 and 21:00 UTC Monday-Friday. There are no minimum amount of tokens to open a proposal or for it to pass, as the protocol uses continuous approval. This is explained in more details in the [exit window analysis section](#exit-window-1).
 
-Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that an _Emergency Shutdown Module_ exists and can definitively shutdown the entire protocol if **500'000** `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract.
+Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that an _Emergency Shutdown Module_ (ESM) exists and can definitively shutdown the entire protocol if **500'000** `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract.
 
 > Exit Window score: High
 
