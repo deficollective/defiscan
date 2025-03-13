@@ -24,7 +24,7 @@ Possum Labs introduces frictionless and efficient yield trading. its network of 
 
 Possum is deployed on the Arbitrum chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: M
+> Chain score: Medium
 
 ## Upgradeability
 
@@ -36,7 +36,7 @@ Each Portal has an associated Adapter contract which enables interactions with e
 
 Furthermore, governance, through the _Core-v1_ module, allows PSM stakers to allocate capital to various Portals or Possum accounts more generally and thereby enable different products. A Multisig owns the permission to update a whitelist with accounts eligible for capital allocations. Removing an account from the whitelist effectively censors it for future rewards. Users can still withdraw funds and unclaimed yield and thus are unaffected by this.
 
-> Upgradeability score: H
+> Upgradeability score: High
 
 ## Autonomy
 
@@ -46,7 +46,7 @@ Arbitrageurs, on the other hand, exploit arbitrage opportunities when the value 
 
 In conclusion, Vaultka, and other potential Portal v2 integrations, introduce an important external dependency in the Possum protocol.
 
-> Autonomy score: H
+> Autonomy score: High
 
 ## Exit Window
 
@@ -59,13 +59,13 @@ The protocol's Adapter contracts are upgradable with hybrid governance process c
 
 It is important to note that a new Adapter implementation is only proposed by the Multisig but then has to be accepted by the Stakers in the respective Portal. If accepted, a 7-day exit window for all users is enforced.
 
-> Exit Window score: M
+> Exit Window score: Medium
 
 ## Accessibility
 
 Currently, Possum Labs offers only a single user interface without a backup solution in case of the shutdown of the user interface or censoring of users.
 
-> Accessibility score: H
+> Accessibility score: High
 
 # Technical Analysis
 

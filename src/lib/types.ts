@@ -5,7 +5,9 @@ export type Reason =
   | "Central Custody"
   | "Missing Docs"
   | "Closed-Source"
-  | "Unverified Contracts";
+  | "Unverified Contracts"
+  | "Unverifiable Permissions";
+
 export type Reasons = Array<Reason>;
 
 export type Project = {
