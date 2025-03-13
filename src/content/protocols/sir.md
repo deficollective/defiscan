@@ -60,7 +60,7 @@ Therefore, the protocol ranks stage 1. The protocol can reach stage 2 when succe
 
 # Technical Analysis
 
-![SIR protocol architecture](./SIR_protocol_architecture.png)
+![SIR protocol architecture](./diagrams/SIR_protocol_architecture.png)
 
 ## Contracts
 
@@ -108,7 +108,7 @@ The only external dependancy of the protocol is Uniswap v3, which serves as pric
 
 ## Exit Window
 
-![Flow chart of SIR different states and its transitions](./SIR_status_flowchart.png)
+![Flow chart of SIR different states and its transitions](./diagrams/SIR_status_flowchart.png)
 
 The protocol operates in four distinct statuses: (1) `Unstoppable`, (2) `TrainingWheels`, (3) `Emergency`, and (4) `Shutdown`. The owner of the `SystemControl` contract can freely switch between the (2) `TrainingWheels` and (3) `Emergency` statuses. Neither of these two statuses prevents users from withdrawing their funds. Transitioning from (2) `TrainingWheels` to (1) `Unstoppable` is irreversible and permanently renders the protocol immutable. The owner can switch from (3) `Emergency` to (4) `Shutdown` only if the `Emergency` status has been active for at least 20 days. The shutdown process is irreversible and serves as a termination mechanism for the protocol in cases of critical vulnerabilities. Once the protocol enters (4) `Shutdown` status, the owner can withdraw all remaining funds.
 
