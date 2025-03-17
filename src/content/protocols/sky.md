@@ -24,7 +24,7 @@ Maker is a lending protocol centered around `DAI`. Users can borrow `DAI` using 
 
 ## Chain
 
-The Sky protocol is deployed on various chains. This review focuses on the Ethereum mainnet deployment.
+The Sky protocol is currently mainly on Ethereum mainnet. As part of Sky's _End Game_ plan the protocol is gradually deploying on other chains and aims to launch its own chain in the future. This review focuses on the Ethereum mainnet deployment of Sky.
 
 > Chain score: Low
 
