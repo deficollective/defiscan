@@ -7,7 +7,7 @@ defillama_slug: ["makerdao"]
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "H", "L", "H", "L"]
+risks: ["L", "H", "M", "H", "L"]
 author: ["mmilien_"]
 submission_date: "2025-03-11"
 publish_date: "1970-01-01"
