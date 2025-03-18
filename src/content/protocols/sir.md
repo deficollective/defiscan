@@ -48,7 +48,7 @@ The protocol implements time-delayed safeguards for critical administrative acti
 
 ## Accessibility
 
-Following our recent launch, the current sole user interface is our official application at https://app.sir.trading. Our long-term vision involves establishing an ecosystem of independent third-party frontends, mirroring Liquity's successful model with its network of interface providers. As a final recourse, users can utilize Etherscan (https://etherscan.io) to interact directly with the protocol's smart contracts.
+The protocol provides a primary interface at [app.sir.trading](https://app.sir.trading) alongside an immutable IPFS-hosted backup (`ipfs://bafybeibsyc7jejntuehvf364t6hk2ehravlojcdfthuuouhoinojl4q6ru`). This satisfies State 1 decentralization requirements by ensuring users can always withdraw funds via IFPS gateways (e.g., [ipfs.io](https://ipfs.io), [dweb.link](https://dweb.link)) or by running an IPFS node, even if the main interface fails.
 
 > Accessibility score: M
 
