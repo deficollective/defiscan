@@ -48,7 +48,7 @@ The protocol implements time-delayed safeguards for critical administrative acti
 
 ## Accessibility
 
-The protocol provides a primary interface at [app.sir.trading](https://app.sir.trading) alongside an immutable IPFS-hosted backup (`ipfs://bafybeibsyc7jejntuehvf364t6hk2ehravlojcdfthuuouhoinojl4q6ru`). This satisfies State 1 decentralization requirements by ensuring users can always withdraw funds via IFPS gateways (e.g., [ipfs.io](https://ipfs.io), [dweb.link](https://dweb.link)) or by running an IPFS node, even if the main interface fails.
+The protocol provides a primary interface at [app.sir.trading](https://app.sir.trading) alongside an immutable IPFS-hosted backup (`ipfs://bafybeibsyc7jejntuehvf364t6hk2ehravlojcdfthuuouhoinojl4q6ru`). This satisfies State 1 decentralization requirements by ensuring users can always withdraw funds via IFPS gateways (e.g., [ipfs.io](https://ipfs.io/ipfs/bafybeigvpz22a2c3wvnfweshfz3ff2tltdx4ufnmzq2vpzr43f2ibvvxbq), [dweb.link](https://dweb.link/ipfs/bafybeigvpz22a2c3wvnfweshfz3ff2tltdx4ufnmzq2vpzr43f2ibvvxbq)) or by running an IPFS node, even if the main interface fails.
 
 > Accessibility score: M
 
