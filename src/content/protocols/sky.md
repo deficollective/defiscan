@@ -76,7 +76,7 @@ A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a r
 
 The governance, through its delay contract DSPauseProxy which enforces a delay of 18 hours on actions, has admin privileges over all contracts and could, for example, arbitrarily mint tokens. `DSChief`, the governance contract, is the authority over the `LitePSMMom` and is therefore the contract choosing which account could halt the `LitePSM` in case of emergency. We did not find a way to compute the exact permission that `DSChief` is granting.
 
-![Overview of the sky tokens and rewards module](./sky-tokens.png)
+![Overview of the sky tokens and rewards module](./diagrams/sky-tokens.png)
 
 ## Governance
 
@@ -88,7 +88,7 @@ Each governance proposal comes under the form of a `DssSpell` the points to a `D
 
 Proposals can be scheduled for executed with the `DSPauseProxy` which enforces a minimal 18 hours delay between approval and execution. Some proposals may exerce non-delayed action to pause some modules of the protocol such as the `LitePSM` (Peg Stability Module), `OSM` (Oracle Security Module), and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (Emergency Shutdown Module) funds sent to the contract cannot be recovered, even if no shutdown happens.
 
-![Overview of the sky governance](./sky-governance.png)
+![Overview of the sky governance](./diagrams/sky-governance.png)
 
 ## Collaterallized Debt Positions Module
 
@@ -100,7 +100,7 @@ The `Pot` and `Jug` contracts represent the rates module. Respectively the `Pot`
 
 As for the governance and tokens, the Mom contracts (`FlapperMom`, `FLopperMom`, `OSMMom`) have the ability to stop their child. The permissions to do so are granted by `DSChief`, the governance contract, but we have not found a way to list those permissions exhaustively.
 
-![Overview of the CDP module](./sky-cdp.png)
+![Overview of the CDP module](./diagrams/sky-cdp.png)
 
 ## Contracts
 
