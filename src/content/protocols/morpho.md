@@ -134,6 +134,8 @@ Permissioned functions in the main `Morpho` contract are controlled by a multisi
 meet our security council requirements. Nonetheless those permissions do not put users' funds
 or yield at risk and do cannot do not have additional capabilities for emergency situations.
 
+&nbsp;
+
 | Requirement                                             | morpho.eth |
 | ------------------------------------------------------- | ---------- |
 | At least 7 signers                                      | ✅         |
