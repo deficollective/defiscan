@@ -2,10 +2,11 @@
 protocol: "morpho"
 website: "https://morpho.org/"
 x: "https://x.com/MorphoLabs"
-github: "https://github.com/morpho-org"
+github: ["https://github.com/morpho-org"]
 defillama_slug: ["morpho-blue"]
 chain: "Ethereum"
 stage: 2
+reasons: []
 risks: ["L", "L", "L", "L", "L"]
 author: ["author-1", "author-2"]
 submission_date: "2024-11-27"
@@ -46,7 +47,7 @@ Each Morpho market relies on an oracle, the latter being configured with feeds. 
 
 ## Exit Window
 
-Morpho's market contracts are fully immutable, no upgrades or changes can be made, removing the need for an exit window.
+Morpho's market contracts are fully immutable, no upgrades or changes can be made apart from fees, removing the need for an exit window.
 
 ⚠️ We note that this is different for the `MORPHO` token, as it can be upgraded and minted at any time with no delay(see [upgradeability](#upgradeability)).
 
@@ -61,7 +62,7 @@ In addition to that, morpho is also accessible through several interfaces such a
 
 # Technical Analysis
 
-See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf)
+<!-- See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf) -->
 
 ## Contracts
 
@@ -129,11 +130,9 @@ The protocol is completely immutable, thus no exit window is required. 🎉
 
 # Security Council
 
-See http://defiscan.info/learn-more#security-council-requirements for guidance.
-
-change ✅ or ❌ accordingly
-
-https://docs.morpho.org/governance/organization/multisigs-and-addresses#morpho-dao-signers-59-multisig
+Permissioned functions in the main `Morpho` contract are controlled by a multisig which does not
+meet our security council requirements. Nonetheless those permissions do not put users' funds
+or yield at risk and do cannot do not have additional capabilities for emergency situations.
 
 | Requirement                                             | morpho.eth |
 | ------------------------------------------------------- | ---------- |
