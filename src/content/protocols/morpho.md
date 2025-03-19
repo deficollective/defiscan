@@ -132,7 +132,7 @@ The protocol is completely immutable, thus no exit window is required. 🎉
 
 Permissioned functions in the main `Morpho` contract are controlled by a multisig which does not
 meet our security council requirements. Nonetheless those permissions do not put users' funds
-or yield at risk and do cannot do not have additional capabilities for emergency situations.
+or yield at risk and do not have additional capabilities for emergency situations.
 
 &nbsp;
 
