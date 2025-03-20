@@ -31,7 +31,7 @@ Morpho is deployed on Ethereum mainnet as well as Base. This review focuses on t
 
 Morpho is fully permissionless, allowing anyone to create, lend, or borrow in markets without the need for approval.
 
-The 600 lines of code of the protocol are fully immutable. The Morpho DAO has the possibility to activate a fee switch parameter, similar to Uniswap's fee structure.
+The 600 lines of code of the protocol are fully immutable. The Morpho multisig (`morpho.eth`) has the possibility to activate a fee switch parameter, similar to Uniswap's fee structure.
 
 ⚠️ Although the Morpho protocol contracts are immutable, we note that the `MORPHO` token is currently upgradeable and mintable. The permissions belong to the `morpho.eth` multisig with currently no delay. As the token is not an active part of the protocol we decided not to include it in the scope of this review.
 
@@ -56,6 +56,7 @@ Morpho's market contracts are fully immutable, no upgrades or changes can be mad
 ## Accessibility
 
 The main morpho interface is [app.morpho.org](https://app.morpho.org/). A backup solution allows users to self-host and access morpho following instructions on [this repository](https://github.com/morpho-org/morpho-blue-offchain-public).
+
 In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.io/metamorpho), and [Contango](https://app.contango.xyz/).
 
 > Accessibility score: L
