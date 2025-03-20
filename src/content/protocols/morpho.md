@@ -60,6 +60,17 @@ In addition to that, morpho is also accessible through several interfaces such a
 
 > Accessibility score: L
 
+## Conclusion
+
+According to our [requirements](https://defiscan.info/learn-more) and the scope defined, we found that Morpho
+meets a low risk score for all centralization vectors. 🎉
+
+However, we discoevered several important risk factors to mention:
+
+- ⚠️ The `MORPHO^ token is upgradeable and mintable by a multisig account `morpho.eth` which does not meet our security council requirements.
+- ⚠️ The markets are created in a permissionless fashion, letting the creator almost free choice of the oracle used. Nohting prevents the use of malicious or centralized oracles.
+- ⚠️ The multisig `morpho.eth` can impact future vaults by allowing the use of new interest rate models and liquidation loan-to-value ratios.
+
 # Technical Analysis
 
 <!-- See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf) -->
