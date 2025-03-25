@@ -105,10 +105,6 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 | marketFactory                     | 0x27b1dAcd74688aF24a64BD3C9C1B143118740784 |
 | pendleSwap                        | 0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212 |
 | pyYtLpOracle                      | 0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2 |
-| yieldContractFactoryV3            | 0xdF3601014686674e53d1Fa52F7602525483F9122 |
-| marketFactoryV3                   | 0x1A6fCc85557BC4fB7B534ed835a03EF056552D52 |
-| yieldContractFactoryV4            | 0x273b4bFA3Bb30fe8F32c467b5f0046834557F072 |
-| marketFactoryV4                   | 0x3d75Bd20C983edb5fD218A1b7e0024F1056c7A2F |
 | yieldContractFactoryV5            | 0x35A338522a435D46f77Be32C70E215B813D0e3aC |
 | marketFactoryV5                   | 0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050 |
 | poolDeployHelper                  | 0x4Df98410c95737FD646D2413AC6CAFc1c04834b9 |
