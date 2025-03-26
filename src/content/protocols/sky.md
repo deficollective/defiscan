@@ -109,26 +109,37 @@ The list of contract and deployment addresses is available in both the [official
 | DaiJoin                       | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28) |
 | DaiUsds                       | [0x3225737a9Bbb6473CB4a45b7244ACa2BeFdB276A](https://etherscan.io/address/0x3225737a9Bbb6473CB4a45b7244ACa2BeFdB276A) |
 | MKR Token                     | [0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2](https://etherscan.io/address/0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2) |
-| DssLitePsm                    | [0xf6e72Db5454dd049d0788e411b06CfAF16853042](https://etherscan.io/address/0xf6e72Db5454dd049d0788e411b06CfAF16853042) |
-| DssVestMintable               | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9) |
-| FlapperUniV2                  | [0xc5A9CaeBA70D6974cBDFb28120C3611Dd9910355](https://etherscan.io/address/0xc5A9CaeBA70D6974cBDFb28120C3611Dd9910355) |
-| LockStakeEngine (Seal Engine) | [0x2b16C07D5fD5cC701a0a871eae2aad6DA5fc8f12](https://etherscan.io/address/0x2b16C07D5fD5cC701a0a871eae2aad6DA5fc8f12) |
-| MkrSky                        | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B) |
-| OracleWrapper                 | [0x38e8c1D443f546Dc014D7756ec63116161CB7B25](https://etherscan.io/address/0x38e8c1D443f546Dc014D7756ec63116161CB7B25) |
-| OsmMom                        | [0x76416A4d5190d071bfed309861527431304aA14f](https://etherscan.io/address/0x76416A4d5190d071bfed309861527431304aA14f) |
+| MkrSky (Converter)            | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B) |
 | Sky                           | [0x56072C95FAA701256059aa122697B133aDEd9279](https://etherscan.io/address/0x56072C95FAA701256059aa122697B133aDEd9279) |
-| Splitter                      | [0xBF7111F13386d23cb2Fba5A538107A73f6872bCF](https://etherscan.io/address/0xBF7111F13386d23cb2Fba5A538107A73f6872bCF) |
-| SplitterMom                   | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e) |
-| StakingRewards                | [0x0650CAF159C5A49f711e8169D4336ECB9b950275](https://etherscan.io/address/0x0650CAF159C5A49f711e8169D4336ECB9b950275) |
-| StakingRewards                | [0x10ab606B067C9C461d8893c47C7512472E19e2Ce](https://etherscan.io/address/0x10ab606B067C9C461d8893c47C7512472E19e2Ce) |
-| SUsds (Proxy)                 | [0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD](https://etherscan.io/address/0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD) |
-| SUsds (Implementation)        | [0x4e7991e5C547ce825BdEb665EE14a3274f9F61e0](https://etherscan.io/address/0x4e7991e5C547ce825BdEb665EE14a3274f9F61e0) |
 | Usds (Proxy)                  | [0xdC035D45d973E3EC169d2276DDab16f1e407384F](https://etherscan.io/address/0xdC035D45d973E3EC169d2276DDab16f1e407384F) |
 | Usds (Implementation)         | [0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102](https://etherscan.io/address/0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102) |
 | UsdsJoin                      | [0x3C0f895007CA717Aa01c8693e59DF1e8C3777FEB](https://etherscan.io/address/0x3C0f895007CA717Aa01c8693e59DF1e8C3777FEB) |
 | UsdsPsmWrapper                | [0xA188EEC8F81263234dA3622A406892F3D630f98c](https://etherscan.io/address/0xA188EEC8F81263234dA3622A406892F3D630f98c) |
+| SUsds (Proxy)                 | [0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD](https://etherscan.io/address/0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD) |
+| SUsds (Implementation)        | [0x4e7991e5C547ce825BdEb665EE14a3274f9F61e0](https://etherscan.io/address/0x4e7991e5C547ce825BdEb665EE14a3274f9F61e0) |
+| StakingRewards                | [0x0650CAF159C5A49f711e8169D4336ECB9b950275](https://etherscan.io/address/0x0650CAF159C5A49f711e8169D4336ECB9b950275) |
+| StakingRewards                | [0x10ab606B067C9C461d8893c47C7512472E19e2Ce](https://etherscan.io/address/0x10ab606B067C9C461d8893c47C7512472E19e2Ce) |
 | VestedRewardsDistribution     | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9) |
 | VestedRewardsDistributionJob  | [0x6464C34A02DD155dd0c630CE233DD6e21C24F9A5](https://etherscan.io/address/0x6464C34A02DD155dd0c630CE233DD6e21C24F9A5) |
+| DssLitePsm                    | [0xf6e72Db5454dd049d0788e411b06CfAF16853042](https://etherscan.io/address/0xf6e72Db5454dd049d0788e411b06CfAF16853042) |
+| DssVestMintable               | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9) |
+| DaiJoinFab                    | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177) |
+| DssLitePsmMom                 | [0x467b32b0407Ad764f56304420Cddaa563bDab425](https://etherscan.io/address/0x467b32b0407Ad764f56304420Cddaa563bDab425) |
+| Splitter                      | [0xBF7111F13386d23cb2Fba5A538107A73f6872bCF](https://etherscan.io/address/0xBF7111F13386d23cb2Fba5A538107A73f6872bCF) |
+| SplitterMom                   | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e) |
+| FlapperUniV2                  | [0xc5A9CaeBA70D6974cBDFb28120C3611Dd9910355](https://etherscan.io/address/0xc5A9CaeBA70D6974cBDFb28120C3611Dd9910355) |
+| LockStakeEngine (Seal Engine) | [0x2b16C07D5fD5cC701a0a871eae2aad6DA5fc8f12](https://etherscan.io/address/0x2b16C07D5fD5cC701a0a871eae2aad6DA5fc8f12) |
+| OracleWrapper                 | [0x38e8c1D443f546Dc014D7756ec63116161CB7B25](https://etherscan.io/address/0x38e8c1D443f546Dc014D7756ec63116161CB7B25) |
+| OsmMom                        | [0x76416A4d5190d071bfed309861527431304aA14f](https://etherscan.io/address/0x76416A4d5190d071bfed309861527431304aA14f) |
+| DssAutoLine                   | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3) |
+| Jug                           | [0x19c0976f590D67707E62397C87829d896Dc0f1F1](https://etherscan.io/address/0x19c0976f590D67707E62397C87829d896Dc0f1F1) |
+| Pot                           | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7) |
+| ESM                           | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) |
+| END                           | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28) |
+| Flopper                       | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d) |
+| Dog                           | [0x135954d155898D42C90D2a57824C690e0c7BEf1B](https://etherscan.io/address/0x135954d155898D42C90D2a57824C690e0c7BEf1B) |
+| Vow                           | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466) |
+| LockstakeClipper              | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239) |
 
 ## Permission owners
 
@@ -138,18 +149,18 @@ The list of contract and deployment addresses is available in both the [official
 | USDSJoin                  | [0x3c0f895007ca717aa01c8693e59df1e8c3777feb](https://etherscan.io/address/0x3c0f895007ca717aa01c8693e59df1e8c3777feb) | contract |
 | DAIJoin                   | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28) | contract |
 | DaiJoinFab                | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177) | contract |
+| MkrSky Converter          | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B) | contract |
 | DssLitePsmMom             | [0x467b32b0407Ad764f56304420Cddaa563bDab425](https://etherscan.io/address/0x467b32b0407Ad764f56304420Cddaa563bDab425) | contract |
+| DssVestMintable           | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9) | contract |
+| DssVestMintable           | [0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd](https://etherscan.io/address/0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd) | contract |
+| VestedRewardsDistribution | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9) | contract |
 | LockstakeClipper          | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239) | contract |
 | Dog                       | [0x135954d155898D42C90D2a57824C690e0c7BEf1B](https://etherscan.io/address/0x135954d155898D42C90D2a57824C690e0c7BEf1B) | contract |
 | SplitterMom               | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e) | contract |
 | Vow                       | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466) | contract |
 | MkrAuthority              | [0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8](https://etherscan.io/address/0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8) | contract |
 | DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
-| MkrSky Converter          | [0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B](https://etherscan.io/address/0xBDcFCA946b6CDd965f99a839e4435Bcdc1bc470B) | contract |
 | Flopper                   | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d) | contract |
-| DssVestMintable           | [0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9](https://etherscan.io/address/0xB313Eab3FdE99B2bB4bA9750C2DDFBe2729d1cE9) | contract |
-| DssVestMintable           | [0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd](https://etherscan.io/address/0x0fC8D4f2151453ca0cA56f07359049c8f07997Bd) | contract |
-| VestedRewardsDistribution | [0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9](https://etherscan.io/address/0x2F0C88e935Db5A60DDA73b0B4EAEef55883896d9) | contract |
 | Vat                       | [0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B](https://etherscan.io/address/0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B) | contract |
 | ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
 | END                       | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28) | contract |
