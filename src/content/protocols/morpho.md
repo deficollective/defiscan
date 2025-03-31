@@ -16,7 +16,7 @@ update_date: "2024-11-27"
 
 # Summary
 
-Morpho is a trustless and efficient lending primitive with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle. Users may lend funds directly on individual Morpho markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho markets.
+Morpho is a trustless and efficient lending primitive with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle. Users may lend funds directly on individual Morpho markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho markets. Morpho governance operates within a very limited scope and without direct control over the Morpho protocol.
 
 # Overview
 
@@ -24,36 +24,37 @@ Morpho is a trustless and efficient lending primitive with permissionless market
 
 Morpho is deployed on different chains. This review is based on the Ethereum mainnet deployment.
 
-> Chain score: L
+> Chain score: Low
 
 ## Upgradeability
 
 The Morpho (markets) protocol and Morpho Vaults are non-upgradeable. No permissions exist in the Morpho protocol that could affect users' funds and unclaimed yield or could otherwise result in non-expected protocol performance.
 
-On the other hand, Morpho Vaults expose users to critical permissions that could result in the loss of user funds. However, control over these permissions is owned by the vault's risk curators and not by Morpho governance, the team or otherwise affiliated entities. The Morpho Vault permissions thus do not introduce centralization risk.
-
 A team multisig, `morpho.eth`, is able to activate a fee switch and enable new LTV tiers and interest rate models. These permissions can only affect newly created markets and future yield, with fees enforced in a fixed range.
 
-⚠️ Note that the `MORPHO` token is upgradeable and mintable by the `morpho.eth` multisig without an Exit Window enforced. Since the MORPHO token does not serve a function in the Morpho protocol and Morpho Vaults, not directly and not through governance, this is not included in the assessment here.
+The `morpho.eth` multisig is further in control of the `MORPHO` token and it's upgradeability and minting features. `MORPHO` upgrades or uncontrolled minting can directly impact distributed rewards in the system and thus result in the loss of unclaimed yield.
 
-> Upgradeability score: L
+⚠️ Note that while not controlled by Morpho governance but the individual risk curators, Morpho Vaults expose users to critical permissions that could result in the loss of user funds. Since not controlled in a centralized manner these risks are not included in the scoring here.
+
+> Upgradeability score: Medium
 
 ## Autonomy
 
-Morpho markets are configured with an external price oracle based on which the solvency of a position is established.
-While market creators are free in the price oracle choice, most use Morpho's price oracle factory.
-This factory makes use of Chainlink price feeds and assumes that these feeds never fail (liveness and valid prices).
-Since Morpho markets are immutable, the price oracle cannot be updated post market creation, a stale Chainlink feed can result in the temporary or permanent freezing of user funds.
+Morpho markets are configured with an external price oracle based on which the solvency of a position is established. Market creators are free in the price oracle choice thus delegating responsibility to users instead of central governance.
 
-The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. This dependency thus introduces centralization risk in the Morpho protocol.
+That said, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 30% of Morpho markets [(read more)](link).
 
-> Autonomy score: H
+This factory makes use of Chainlink price feeds and assumes that these feeds never fail (liveness and valid prices). However, since Chainlink price feeds are controlled in a centralized manner, no onchain governance, no Exit Window, no Security Council, the impact of a failure has to be assessed nonetheless. 
+
+An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the temporary or permanent freezing of funds. With a potential impact on more than 30% of Morpho markets, Chainlink is thus assessed as a Medium centralization risk for Morpho.
+
+> Autonomy score: Medium
 
 ## Exit Window
 
-The Morpho protocol and Morpho Vaults do not expose centrally controlled permissions with a potential impact of loss of user funds or unclaimed yield. Hence, an Exit Window is not required.
+The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed yield and thus result in a *Medium* Upgradeability risk. This risk is not mitigated with an appropriate Exit Window or onchain governance.  
 
-> Exit Window score: L
+> Exit Window score: Medium
 
 ## Accessibility
 
@@ -61,21 +62,19 @@ The main morpho interface is [app.morpho.org](https://app.morpho.org/). A backup
 
 In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.io/metamorpho), and [Contango](https://app.contango.xyz/).
 
-> Accessibility score: L
+> Accessibility score: Low
 
 ## Conclusion
 
-The Morpho Ethereum mainnet protocol achieves Low centralization scores for the Chain, Upgradeability, Exit Window and Accessibility dimensions. However, it exhibits a High centralization risk score for its trusted Chainlink dependency. It thus ranks Stage 0.
+The Morpho Ethereum mainnet protocol achieves *Low* centralization scores for the Chain and Accessibility dimensions. The upgradeability of the `MORPHO` token that is not protected with a sufficient Exit Window or Security Council and its trusted Chainlink dependency result in *Medium* Upgradeability, Exit Window and Autonomy risks and Stage 1 decentralization.
 
-The protocol could reach Stage 2 by implementing validity checks and a fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
+The protocol could reach Stage 2 by transferring control over the `MORPHO` permissions to onchain governance with a sufficient Exit Window and implementing validity checks and a fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
 
 We further want to highlight the following observations which did not directly factor into the scoring:
 
-- ⚠️ The `MORPHO` token is upgradeable and mintable by a multisig account `morpho.eth` which does not meet our security council requirements.
-- ⚠️ The markets are created in a permissionless fashion, letting the creator almost free choice of the oracle used. Nohting prevents the use of malicious or centralized oracles.
-- ⚠️ The multisig `morpho.eth` can impact future vaults by allowing the use of new interest rate models and liquidation loan-to-value ratios.
+- ⚠️ Curators of Morpho Vaults are in control of critical permissions which can result in the loss of user funds and unclaimed yield. These permissions only have a direct impact on users in the respective vault and do thus not contribute to the centralization of the Morpho protocol.
 
-> Overall score: Stage 0
+> Overall score: Stage 1
 
 # Technical Analysis
 
