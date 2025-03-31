@@ -11,7 +11,7 @@ risks: ["L", "M", "M", "M", "L"]
 author: ["author-1", "author-2"]
 submission_date: "2024-11-27"
 publish_date: "1970-01-01"
-update_date: "2024-11-27"
+update_date: "1970-01-01"
 ---
 
 # Summary
@@ -40,7 +40,7 @@ The `morpho.eth` multisig is further in control of the `MORPHO` token and it's u
 
 Morpho markets are configured with an external price oracle based on which the solvency of a position is established. Market creators are free in the price oracle choice thus delegating responsibility to users instead of central governance.
 
-That said, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 30% of Morpho markets [(read more)](link).
+That said, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 30% of Morpho markets [(read more)](#dependencies).
 
 This factory makes use of Chainlink price feeds and assumes that these feeds never fail (liveness and valid prices). However, since Chainlink price feeds are controlled in a centralized manner, no onchain governance, no Exit Window, no Security Council, the impact of a failure has to be assessed nonetheless. 
 
@@ -176,9 +176,9 @@ The Chainlink oracle system itself is upgradeable potentially resulting in the p
 
 ## Exit Window
 
-The protocol is completely immutable, thus no exit window is required. 🎉
+The Morpho protocol exposes permissions that allow the `morpho.eth` multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
 
-⚠️ We note that this is different for the `MORPHO` token, as it can be upgraded and minted at any time with no delay(see [upgradeability](#upgradeability)).
+However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed yield and thus expose a *Medium* upgradeability risk. The permissions are not protected with an Exit Window, instead the `morpho.eth` multisig account can upgrade and mint on the `MORPHO` token contract instantly.
 
 # Security Council
 
