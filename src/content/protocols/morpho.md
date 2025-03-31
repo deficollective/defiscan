@@ -5,9 +5,9 @@ x: "https://x.com/MorphoLabs"
 github: ["https://github.com/morpho-org"]
 defillama_slug: ["morpho-blue"]
 chain: "Ethereum"
-stage: 2
+stage: 1
 reasons: []
-risks: ["L", "L", "L", "L", "L"]
+risks: ["L", "M", "M", "M", "L"]
 author: ["author-1", "author-2"]
 submission_date: "2024-11-27"
 publish_date: "1970-01-01"
@@ -33,8 +33,6 @@ The Morpho (markets) protocol and Morpho Vaults are non-upgradeable. No permissi
 A team multisig, `morpho.eth`, is able to activate a fee switch and enable new LTV tiers and interest rate models. These permissions can only affect newly created markets and future yield, with fees enforced in a fixed range.
 
 The `morpho.eth` multisig is further in control of the `MORPHO` token and it's upgradeability and minting features. `MORPHO` upgrades or uncontrolled minting can directly impact distributed rewards in the system and thus result in the loss of unclaimed yield.
-
-⚠️ Note that while not controlled by Morpho governance but the individual risk curators, Morpho Vaults expose users to critical permissions that could result in the loss of user funds. Since not controlled in a centralized manner these risks are not included in the scoring here.
 
 > Upgradeability score: Medium
 
