@@ -6,13 +6,15 @@ github: ["https://github.com/pendle-finance"]
 defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: 0
-reasons: []
+reasons: [Unverified Contract]
 risks: ["L", "L", "L", "L", "H"]
-author: ["CookingCryptos"]
+author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-02-19"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
+
+⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 # Summary
 
@@ -28,47 +30,58 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+Pendle V2 protocol uses an upgradeable system through ERC1967 proxies.
+ 
 
-We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
+ 
+The main component is a multisig (0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) that acts as:
+ 
+- The DEFAULT_ADMIN_ROLE of the governance proxy, controlling its upgrades and role management
+ 
+- The owner of most protocol contracts, with permissions to:
+ 
+  - Modify economic parameters (fees, rewards, treasury address...)
+ 
+  - Control market factories and yield contracts
+ 
+  - Manage cross-chain messaging
+ 
+  - Withdraw PENDLE tokens to reward voter from Voting Controller...
+ 
 
-For some practical guidance follow this steps. It will help you in writing a nice report:
+ 
+It's a 2/4 multisig, with the following signers:
+ 
+- [0x7BD456937104Ca5eFfFBD895ccbba52421021C29]
+ 
+- [0x9Ce6De7ec862e25a515AA0D8EcFbBBb2DaA8E0fb]
+ 
+- [0x38ab4A7Dea2753757F29fe6d10280Df2C42abe27]
+ 
+- [0xF517364727Fcc764D58DdF4e53280874A4d0c476]
+ 
 
-1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
-2. Fill in all the permissioned functions in the table (`## Permissions`)
-   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
-3. Get a mechanistic and precise understanding of each permissioned function
-4. Assess impact for each function, look out for
-   - loss/blocking of user funds
-   - loss of unclaimed yield
-   - change expected behavior significantly (blacklisting/kyc/fees/...)
-5. Write the impact column based on your understanding
-   - A good tipp when writing the impact column below, think of least 2,3 sentences:
-   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
-   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
-   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
-6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
+ 
+There is the governance proxy contract (0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e) that implements role-based access control with the following features:
+ 
+- Upgradeable implementation via upgradeTo function
+- Role management (grant/revoke roles)
+- Aggregated calls for specific roles
+ 
+He is owner of the PendleMarketFactoryV3 contract.
 
-For some guidance:
+We also have an unknown address (0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) that is the owner of the PendleFeeDistributor V1 contract (but not mainly used). 
+ 
 
-In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+A V2 of the PendleFeeDistributor is used instead but owner is the devMultisig instead of governance.
 
-This steps help you write a nice report:
+While these permissions are significant, several safeguards are in place:
+ 
+- Parameter modifications are often bounded by maximum limits
 
-1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
-2. Fill in all the permissioned functions in the table (`## Permissions`)
-   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
-3. Get a mechanistic and precise understanding of each permissioned function
-4. Assess impact for each function, look out for
-   - loss/blocking of user funds
-   - loss of unclaimed yield
-   - change expected behavior significantly (blacklisting/kyc/fees/...)
-5. Write the impact column based on your understanding
-   - A good tipp when writing the impact column below, think of least 2,3 sentences:
-   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
-   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
-   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
-6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
+A lot of versions of the contracts are deployed which is a bit confusing.
+
+> Upgradeability score: H
 
 ## Autonomy
 
@@ -80,7 +93,9 @@ A failure of these validators could require manual intervention and potentially 
 
 ## Exit Window
 
-See http://defiscan.info/learn-more#exit-window for more guidance.
+No exit windows or timelocks are actually set up in the [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967) which is utilized by all proxy contracts across the core Pendle Protocol contracts, primarily owned by the governance multisig. Essentially, if the governance decides on a change, it can be implemented immediately.
+
+> Exit window score: H
 
 ## Accessibility
 
@@ -94,43 +109,42 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 | Contract Name                     | Address                                    |
 |-----------------------------------|--------------------------------------------|
-| pendle                            | 0x808507121b80c02388fad14726482e061b8da827 |
-| lzEndpoint                        | 0x66A71Dcef29A0fFBDBE3c6a460a3B5BC225Cd675 |
-| wrappedNative                     | 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 |
-| sySwapper                         | 0x248087C69e72E211b7264720Bf6cC5A954F98CDE | Unverified contract
-| baseCodeSplitter                  | 0x35878C2Cff38cC4032E85283183428170BA618A2 |
-| PENDLE                            | 0x808507121b80c02388fad14726482e061b8da827 |
-| governanceProxy                   | 0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e |
-| yieldContractFactory              | 0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD |
-| marketFactory                     | 0x27b1dAcd74688aF24a64BD3C9C1B143118740784 |
-| pendleSwap                        | 0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212 |
-| pyYtLpOracle                      | 0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2 |
-| yieldContractFactoryV5            | 0x35A338522a435D46f77Be32C70E215B813D0e3aC |
-| marketFactoryV5                   | 0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050 |
-| poolDeployHelper                  | 0x4Df98410c95737FD646D2413AC6CAFc1c04834b9 |
-| limitRouter                       | 0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321 |
-| proxyAdmin                        | 0xA28c08f165116587D4F3E708743B4dEe155c5E64 |
-| reflector                         | 0x5039Da22E5126e7c4e9284376116716A91782faF |
-| vePendle                          | 0x4f30A9D41B80ecC5B94306AB4364951AE3170210 |
-| senderEndpoint                    | 0x07b1014c88f14C9E910092526db57A20052E989F |
-| votingController                  | 0x44087E105137a5095c008AaB6a6530182821F2F0 |
-| gaugeController                   | 0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57 |
-| feeDistributor                    | 0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2 |
-| feeDistributorV2                  | 0x8C237520a8E14D658170A633D96F8e80764433b9 |
-| multiTokenDistributor             | 0x3942F7B55094250644cFfDa7160226Caa349A38E |
-| sparkLinearDiscountOracleFactory  | 0xA9A924A4BB95509F77868E086154C25e934F6171 |
-| beta.PendleChainlinkOracleFactory | 0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee |
+| PENDLE | [0x808507121b80c02388fad14726482e061b8da827](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827) |
+| WETH9 | [0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2](https://etherscan.io/address/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2) |
+| sySwapper                         | [0x248087C69e72E211b7264720Bf6cC5A954F98CDE](https://etherscan.io/address/0x248087C69e72E211b7264720Bf6cC5A954F98CDE) | Unverified contract
+| BaseSplitCodeFactoryContract | [0x35878C2Cff38cC4032E85283183428170BA618A2](https://etherscan.io/address/0x35878C2Cff38cC4032E85283183428170BA618A2) |
+| PendleGovernanceProxy | [0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e](https://etherscan.io/address/0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e) |
+| pendleSwap                        | [0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212](https://etherscan.io/address/0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212) |
+| PendlePYLpOracle | [0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2](https://etherscan.io/address/0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2) |
+| PendleYieldContractFactory | [0x35A338522a435D46f77Be32C70E215B813D0e3aC](https://etherscan.io/address/0x35A338522a435D46f77Be32C70E215B813D0e3aC) |
+| PendleMarketFactoryV3 | [0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050](https://etherscan.io/address/0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050) |
+| PoolDeployHelper | [0x4Df98410c95737FD646D2413AC6CAFc1c04834b9](https://etherscan.io/address/0x4Df98410c95737FD646D2413AC6CAFc1c04834b9) |
+| PendleLimitRouter | [0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321](https://etherscan.io/address/0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321) |
+| ProxyAdmin| [0xA28c08f165116587D4F3E708743B4dEe155c5E64](https://etherscan.io/address/0xA28c08f165116587D4F3E708743B4dEe155c5E64) |
+| Reflector | [0x5039Da22E5126e7c4e9284376116716A91782faF](https://etherscan.io/address/0x5039Da22E5126e7c4e9284376116716A91782faF) |
+| VotingEscrowPendleMainchain | [0x4f30A9D41B80ecC5B94306AB4364951AE3170210](https://etherscan.io/address/0x4f30A9D41B80ecC5B94306AB4364951AE3170210) |
+| PendleMsgSendEndpointUpg  | [0x07b1014c88f14C9E910092526db57A20052E989F](https://etherscan.io/address/0x07b1014c88f14C9E910092526db57A20052E989F) |
+| PendleVotingControllerUpg  | [0x44087E105137a5095c008AaB6a6530182821F2F0](https://etherscan.io/address/0x44087E105137a5095c008AaB6a6530182821F2F0) |
+| PendleGaugeControllerMainchainUpg  | [0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57](https://etherscan.io/address/0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57) |
+| PendleFeeDistributor | [0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2](https://etherscan.io/address/0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2) |
+| PendleFeeDistributorV2 | [0x8C237520a8E14D658170A633D96F8e80764433b9](https://etherscan.io/address/0x8C237520a8E14D658170A633D96F8e80764433b9) |
+| PendleMultiTokenMerkleDistributor | [0x3942F7B55094250644cFfDa7160226Caa349A38E](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E) |
+| PendleSparkLinearDiscountOracleFactory | [0xA9A924A4BB95509F77868E086154C25e934F6171](https://etherscan.io/address/0xA9A924A4BB95509F77868E086154C25e934F6171) |
+| PendleChainlinkOracleFactory | [0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee](https://etherscan.io/address/0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee) |
+| PendleRouterStatic | [0x263833d47eA3fA4a30f269323aba6a107f9eB14C](https://etherscan.io/address/0x263833d47eA3fA4a30f269323aba6a107f9eB14C) |
 
 ## Permission owners
 
 | Name        | Account                                                                                                               | Type         |
 | ----------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| treasury (pool fees BEFORE 8th October 2024)   | [0x8270400d528c34e1596EF367eeDEc99080A1b592](https://etherscan.io/address/0x8270400d528c34e1596EF367eeDEc99080A1b592) | Multisig 2/6 |
-| treasury (pool fees AFTER 8th October 2024) | [0xC328dFcD2C8450e2487a91daa9B75629075b7A43](https://etherscan.io/address/0xC328dFcD2C8450e2487a91daa9B75629075b7A43) | Multisig 2/5 |
-| governance  | [0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) | Multisig 2/4 |
-| devMultisig | [0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1) | Multisig 2/3 |
+| Treasury (pools fees BEFORE 8th October 2024)   | [0x8270400d528c34e1596EF367eeDEc99080A1b592](https://etherscan.io/address/0x8270400d528c34e1596EF367eeDEc99080A1b592) | Multisig 2/6 |
+| Treasury (pools fees AFTER 8th October 2024) | [0xC328dFcD2C8450e2487a91daa9B75629075b7A43](https://etherscan.io/address/0xC328dFcD2C8450e2487a91daa9B75629075b7A43) | Multisig 2/5 |
+| Governance  | [0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) | Multisig 2/4 |
+| DevMultisig | [0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1) | Multisig 2/3 |
+| DevMultisig LayerZero | [0xCDa8e3ADD00c95E5035617F970096118Ca2F4C92](https://etherscan.io/address/0xCDa8e3ADD00c95E5035617F970096118Ca2F4C92) | Multisig 2/3 |
 | BaseSplitCodeFactoryContract Owner | [0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7](https://etherscan.io/address/0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7) | EOA |
-| devMultisig | [0xCDa8e3ADD00c95E5035617F970096118Ca2F4C92](https://etherscan.io/address/0xCDa8e3ADD00c95E5035617F970096118Ca2F4C92) | Multisig 2/3 |
+| Governance Guardian EOA / hardwareDeployer | 0xeea6F790F18563E91b18DF00B89d9f79b2E6761F | [0xeea6F790F18563E91b18DF00B89d9f79b2E6761F](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
+| Unkown Address (PendleFeeDistributor(not in use) Owner | [0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1](https://etherscan.io/address/0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) | EOA |
 
 
 ## Permissions
@@ -197,7 +211,7 @@ According to their docs the PENDLE token is currently deployed on the following 
 
 ## Exit Window
 
-insert text
+The whole protocol is upgradable and based on proxy contracts which is opening the door to a lot of risks.
 
 # Security Council
 
