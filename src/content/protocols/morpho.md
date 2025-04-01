@@ -42,7 +42,7 @@ Morpho markets are configured with an external price oracle based on which the s
 
 That said, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 30% of Morpho markets [(read more)](#dependencies).
 
-This factory makes use of Chainlink price feeds and assumes that these feeds never fail (liveness and valid prices). However, since Chainlink price feeds are controlled in a centralized manner, no onchain governance, no Exit Window, no Security Council, the impact of a failure has to be assessed nonetheless. 
+This factory makes use of Chainlink price feeds and assumes that these feeds never fail (liveness and valid prices). However, since Chainlink price feeds are controlled in a centralized manner, no onchain governance, no Exit Window, no Security Council, the impact of a failure has to be assessed nonetheless.
 
 An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the temporary or permanent freezing of funds. With a potential impact on more than 30% of Morpho markets, Chainlink is thus assessed as a Medium centralization risk for Morpho.
 
@@ -50,7 +50,7 @@ An unintended upgrade of the Chainlink price feed contracts could result in stal
 
 ## Exit Window
 
-The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed yield and thus result in a *Medium* Upgradeability risk. This risk is not mitigated with an appropriate Exit Window or onchain governance.  
+The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed yield and thus result in a _Medium_ Upgradeability risk. This risk is not mitigated with an appropriate Exit Window or onchain governance.
 
 > Exit Window score: Medium
 
@@ -64,7 +64,7 @@ In addition to that, morpho is also accessible through several interfaces such a
 
 ## Conclusion
 
-The Morpho Ethereum mainnet protocol achieves *Low* centralization scores for the Chain and Accessibility dimensions. The upgradeability of the `MORPHO` token that is not protected with a sufficient Exit Window or Security Council and its trusted Chainlink dependency result in *Medium* Upgradeability, Exit Window and Autonomy risks and Stage 1 decentralization.
+The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the Chain and Accessibility dimensions. The upgradeability of the `MORPHO` token that is not protected with a sufficient Exit Window or Security Council and its trusted Chainlink dependency result in _Medium_ Upgradeability, Exit Window and Autonomy risks and Stage 1 decentralization.
 
 The protocol could reach Stage 2 by transferring control over the `MORPHO` permissions to onchain governance with a sufficient Exit Window and implementing validity checks and a fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
 
@@ -152,6 +152,11 @@ SafeOwner: 0x0b9915C13e8E184951Df0d9C0b104f8f1277648B -->
 | MetaMorphoV1_1              | revokePendingCap           | Cancel a market supply cap before it takes effect                                                                                                                                                                                                   | Vault Owner, Guardian            |
 | MetaMorphoV1_1              | revokePendingMarketRemoval | Cancels a market removal before it takes effect.                                                                                                                                                                                                    | Vault Owner, Guardian            |
 
+| MorphoTokenEthereum (MORPHO) | upgradeToAndCall | Upgrades the contract to a new implementation. This can potentially change the logic of the token and could be used to steal funds. | morpho.eth |
+| MorphoTokenEthereum (MORPHO) | transferOwnership | Transfer ownership of the contract to a new adress. The new owner needs to accept ownership. The new owner has minting right and upgrade right on the `MORPHO` token and therefore extreme power. | morpho.eth |
+| MorphoTokenEthereum (MORPHO) | renounceOwnership | Unrevokably abandons ownership of the contract. This would make the `MORPHO` contract immutable and prevent further mints. | morpho.eth |
+| MorphoTokenEthereum (MORPHO) | mint | Mints `MORPHO` tokens to a new address and increase the total supply. This can be abused to dillute the value of `MORPHO` or influence governance decisions in the future. | morpho.eth |
+
 ## Dependencies
 
 Morpho markets are configured with an external price oracle based on which the solvency of a position is established.
@@ -171,14 +176,13 @@ At the time of writing this review, about X% of the live Morpho markets make use
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
-
 > Autonomy score: L
 
 ## Exit Window
 
 The Morpho protocol exposes permissions that allow the `morpho.eth` multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
 
-However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed yield and thus expose a *Medium* upgradeability risk. The permissions are not protected with an Exit Window, instead the `morpho.eth` multisig account can upgrade and mint on the `MORPHO` token contract instantly.
+However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed yield and thus expose a _Medium_ upgradeability risk. The permissions are not protected with an Exit Window, instead the `morpho.eth` multisig account can upgrade and mint on the `MORPHO` token contract instantly.
 
 # Security Council
 
