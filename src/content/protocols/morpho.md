@@ -175,8 +175,6 @@ At the time of writing this review, about X% of the live Morpho markets make use
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
-> Autonomy score: L
-
 ## Exit Window
 
 The Morpho protocol exposes permissions that allow the `morpho.eth` multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
