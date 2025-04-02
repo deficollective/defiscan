@@ -845,9 +845,9 @@ RoleAdmin is currently the Governance Executor, but technically any address coul
 | ------------------ | ------------------------------------------------------------------ | -------------------------------- | ------------- |
 | DEFAULT_ADMIN      | 0x0000000000000000000000000000000000000000000000000000000000000000 | Executor_lvl1                    | DEFAULT_ADMIN |
 | CONFIGURATOR_ROLE  | 0x3b49a237fe2d18fa4d9642b8a0e065923cceb71b797783b619a030a61d848bf0 | Executor_lvl1, GhoGsmSteward     | DEFAULT_ADMIN |
-| TOKEN_RESCUER_ROLE | 0x12ad05bde78c5ab75238ce885307f96ecd482bb402ef831f99e7018a0f169b7b |                                  | DEFAULT_ADMIN |
+| TOKEN_RESCUER_ROLE | 0xbf63066482b01a20567880b14a2934fecb21c925e6bcc0a0a091c59723fa9c06 |                                  | DEFAULT_ADMIN |
 | SWAP_FREEZER_ROLE  | 0x6dac4cc0544e34aa1a4ed2862f6de78290e3f18f00fe77179ee8ef34de9dfa24 | Executor_lvl1, OracleSwapFreezer | DEFAULT_ADMIN |
-| LIQUIDATOR_ROLE    | 0x12ad05bde78c5ab75238ce885307f96ecd482bb402ef831f99e7018a0f169b7b |                                  | DEFAULT_ADMIN |
+| LIQUIDATOR_ROLE    | 0x5e17fc5225d4a099df75359ce1f405503ca79498a8dc46a7d583235a0ee45c16 |                                  | DEFAULT_ADMIN |
 
 ### Role Permission inside `GranularGuardianAccessControl`
 
