@@ -136,12 +136,12 @@ The on-chain governance system of Aave is multi-chain by design. The creation of
 
 To get to the stage of voting and creating an on-chain proposal a few prior steps need to be passed to have sufficient probability of being accepted through an on-chain vote.
 
-1. The proposal was discussed with the community and incorporated feedback
-2. A temperature check on Snapshot is conducted. This vote is not binding, but it helps determining if sufficient support is within the community to move the proposal forward.
-3. ARFC (Aave Request for Final Comments) where service provider and community members prepare the AIP
-4. AIP (Aave Improvement Proposal) which includes the contract payload submission
-5. Actual on-chain vote
-6. Execution
+- The proposal was discussed with the community and incorporated feedback
+- A temperature check on Snapshot is conducted. This vote is not binding, but it helps determining if sufficient support is within the community to move the proposal forward.
+- ARFC (Aave Request for Final Comments) where service provider and community members prepare the AIP
+- AIP (Aave Improvement Proposal) which includes the contract payload submission
+- Actual on-chain vote
+- Execution
 
 ### AIP - Payload submission
 
