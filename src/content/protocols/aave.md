@@ -1,9 +1,9 @@
 ---
-protocol: "A3"
+protocol: "Aave v3"
 website: "https://aave.com"
 x: "https://x.com/aave"
 github: ["https://github.com/aave-dao/aave-v3-origin"]
-defillama_slug: [""]
+defillama_slug: ["aave-v3"]
 chain: "Ethereum"
 stage: 0
 risks: ["L", "H", "H", "H", "L"]
