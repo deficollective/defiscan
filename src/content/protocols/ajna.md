@@ -24,7 +24,7 @@ The Ajna Protocol is a decentralized, noncustodial system for permissionless len
 
 The Ajna Protocol is deployed on Ethereum mainnet.
 
-> Chain score: L
+> Chain score: Low
 
 ## Upgradeability
 
@@ -32,7 +32,7 @@ Ajna is fully permissionless, allowing anyone to create, lend, or borrow in pool
 
 The protocol further is fully immutable without the ability to upgrade or make changes to the protocol, its functions or parameters.
 
-> Upgradeability score: L
+> Upgradeability score: Low
 
 ## Autonomy
 
@@ -40,13 +40,13 @@ The protocol has no external dependencies and operates in a fully autonomous man
 
 Ajna eliminates external dependencies by using a market-driven system where lenders specify lending prices and borrowers provide collateral, removing the need e.g. for oracles.
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 Ajna Protocol's contracts are fully immutable, no upgrades or changes can be made, removing the need for an exit window.
 
-> Exit Window score: L
+> Exit Window score: Low
 
 ## Accessibility
 
@@ -56,7 +56,7 @@ Two user interfaces exist and are operated by independent actors. However, these
 
 A list of the third-party user interfaces to access the Ajna protocol can be found [here](https://www.ajna.finance/).
 
-> Accessibility score: M
+> Accessibility score: Medium
 
 # Technical Analysis
 

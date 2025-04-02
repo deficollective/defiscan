@@ -30,7 +30,7 @@ Together, these technological innovations represent a paradigm shift in the way 
 
 Maverick v2 is deployed on Ethereum mainnet.
 
-> Chain score: L
+> Chain score: Low
 
 ## Upgradeability
 
@@ -40,7 +40,7 @@ On other contracts permissions still exist and are not protected with adequate r
 
 As a result, these existing permissions potentially result in the arbitrary minting of new MAV tokens that dillute the overall supply and thus lead to the theft or loss of user funds (in particular unclaimed rewards that are distributed in the MAV token).
 
-> Upgradeability score: H
+> Upgradeability score: High
 
 ## Autonomy
 
@@ -48,7 +48,7 @@ Maverick's protocol token (MAV) relies on the LayerZero protocol for cross-chain
 
 A failure of these validators requires manual intervention by the Maverick Multisig and can result in the temporary censoring of users and the freezing of their funds. In the current stage of the Maverick Protocol, this mostly affects users unclaimed (or claimed) rewards which are paid in MAV tokens on the various chains.
 
-> Autonomy score: M
+> Autonomy score: Medium
 
 ## Exit Window
 
@@ -56,7 +56,7 @@ The only two contracts in Maverick protocol that expose permissions are `Maveric
 
 Further, since `MaverickV2Factory` is not publicly verified, it remains unclear whether an exit window protects the permissions found in this contract.
 
-> Exit Window score: H
+> Exit Window score: High
 
 ## Accessibility
 
@@ -64,7 +64,7 @@ Liquidity on the Maverick-v2 DEX is available to traders through various aggrega
 
 However, LPs are able to access Maverick-v2, and their positions therein, only through a single user interface, app.mav.xyz. A backup solution, in case the interface is shutdown or users are censored, does not exist.
 
-> Accessibility score: H
+> Accessibility score: High
 
 # Technical Analysis
 

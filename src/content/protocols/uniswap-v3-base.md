@@ -32,7 +32,7 @@ The protocol is deployed across multiple chains enabling a wide range of use cas
 
 Uniswap v3 is deployed on various chains. This review is based on the Base chain, an Ethereum L2 in Stage 0 according to L2BEAT.
 
-> Chain score: H
+> Chain score: High
 
 ## Upgradeability
 
@@ -45,26 +45,26 @@ These updates require a governance vote on the Ethereum chain through Uniswap's 
 
 Beyond these updates, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any other way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions or by the risk of manipulating Uniswap governance vote results through Base's cross-chain messaging protocol.
 
-> Upgradeability score: L
+> Upgradeability score: Low
 
 ## Autonomy
 
 There are no particular dependencies for the Uniswap protocol.
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 No "Medium" or "High" risk permissions are found in the protocol that require protection with an Exit Window, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days Exit Window for approved updates.
 
-> Exit score: L
+> Exit score: Low
 
 ## Accessibility
 
 Uniswap is accessible through multiple frontends. Uniswap offers main access through their main deployment: https://app.uniswap.org/. In addition to that,
 the frontend app is also hosted on IPFS see here https://github.com/Uniswap/interface/releases. Further details on the maintenance and access of the interface hosted on IPFS can be found [here](https://blog.uniswap.org/uniswap-interface-ipfs). Additionally, users are offered the possibility to self host the frontend from here: https://github.com/Uniswap/interface.
 
-> Accessibility score: L
+> Accessibility score: Low
 
 # Technical Analysis
 

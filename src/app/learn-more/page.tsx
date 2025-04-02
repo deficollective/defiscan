@@ -53,28 +53,28 @@ const riskData = [
     risks: {
       high: "Possible upgrades may result in the theft or loss of user funds",
       medium:
-        "Possible upgrades may result in the theft or loss of unclaimed yield or may otherwise materially change the system (but user funds remain unaffected)",
-      low: "Possible upgrades do not materially change the system (or result in the theft or loss of user funds and unclaimed yield)",
+        "Possible upgrades may result in the theft or loss of unclaimed yield or may otherwise materially change the expected performance of the system (but user funds remain unaffected)",
+      low: "Possible upgrades do not materially change the expected performance of the system (or result in the theft or loss of user funds and unclaimed yield)",
     },
     anchor: "upgradability",
   },
   {
     category: "Autonomy",
     risks: {
-      high: "Failure of a dependency may result in the theft or loss of user funds",
+      high: "Dependencies may cause theft or loss of user funds and exhibit Stage 0, or equivalent, centralization",
       medium:
-        "Failure of a dependency may result in the theft or loss of unclaimed yield or may otherwise materially change the performance of the system (but user funds remain unaffected)",
-      low: "Failure of a dependency does not materially change the performance of the system (or result in the theft or loss of user funds and unclaimed yield)",
+        "Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization", 
+      low: "Dependencies (if any) cannot materially change the expected protocol performance, OR dependencies exhibit Stage 2, or equivalent, decentralization",
     },
     anchor: "autonomy",
   },
   {
     category: "Exit Window",
     risks: {
-      high: "Upgradeability score is 'High' AND permissions are NOT protected with an exit window or the exit window is less than 7 days",
+      high: "Upgradeability score is 'High' AND permissions are protected with an exit window of less than 7 days (or no Exit Window)",
       medium:
         "Upgradeability score is 'Medium' OR permissions are protected with an exit window of at least 7 days",
-      low: "Upgradeability score is 'Low' OR permissions are transferred to an on-chain governance process AND protected with an exit window of at least 30 days",
+      low: "Upgradeability score is 'Low' OR permissions are transferred to an onchain governance process with an exit window of at least 30 days",
     },
     anchor: "exit-window",
   },
@@ -109,7 +109,7 @@ const stagesData = [
       "In the second stage, risks from critical permissions and dependencies are significantly reduced by either revoking critical permissions, or establishing a Security Council to control such permissions, or enforcing an exit window of at least 7 days so users can withdraw funds in case of an unwanted protocol update. Critical risks from external dependencies are mitigated by the implementation of appropriate fallback mechanisms. Furthermore, the underlying chain cannot censor users' transactions and a backup user interface exists guaranteeing access to user funds.",
     qualifications: [
       '✅ At least a "Medium" risk score for Chain, Autonomy, Accessibility',
-      '✅ IF Exit Window receives "High" risk, THEN control over permissions MUST be transferred to a Security Council',
+      '✅ IF Exit Window receives "High" risk, THEN a Security Council must be in place with ownership of or veto over permissions',
     ],
   },
   {
@@ -120,22 +120,26 @@ const stagesData = [
       '✅ At least "Low" risk score for Chain, Autonomy, Exit Window, Accessibility',
     ],
   },
-  {
-    stage: "Review",
-    description:
-      "The review of a protocol cannot be completed due to missing information or a change in conditions. As a result, the analysis is incomplete or inaccurate and the Stage unclear.",
-    qualifications: [
-      "✅ Analysis is in the process of being completed, corrected or reviewed"
-    ],
-  },
 ];
 
 const securityCouncilRequirements = [
   "At least 7 signers",
   "At least 51% threshold",
-  "At least 50% non-team signers",
+  "At least 50% non-insider signers",
   "Signers are publicly announced (with name or pseudonym)",
 ];
+
+const othersData = {
+  description:
+    "The system does not meet basic Stage 0 requirements, or critical information is missing for a complete assessment, and thus cannot be characterized as a DeFi technology.",
+  qualifications: [
+    "✅ Blockchain-based, financial protocol",
+    "❌ Assets are not in custody by a centralized entity",
+    "❌ Public documentation exists that outlines the protocol components and expected performance",
+    "❌ Source-available codebase",
+    "❌ Verified contracts",
+  ]
+}
 
 function createIdFromTitle(title: string) {
   return title
@@ -377,6 +381,41 @@ const SecurityCouncilSection = () => (
           <li key={index}>{requirement}</li>
         ))}
       </ul>
+      <p className="mb-4 mt-4">
+        Note that we refer to an "insider" as any party of the "inner circle" of individuals or entities developing, maintaining and operating the protocol, such as the "team members" or a company mandated to perform certain services.
+      </p>
+      <p className="mb-4">
+        These requirements translate to a set of at least 7 signers, identified through their name or pseudonym, and a threshold qualified by a majority of signers including at least one "outsider". 
+      </p>
+    </div>
+  </>
+);
+
+const OthersSection = () => (
+  <>
+    <a href={`#${createIdFromTitle("Others Protocol Category")}`}>
+      <h1
+        id={createIdFromTitle("Others Protocol Category")}
+        className="mt-10 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
+        style={{ scrollMarginTop: "100px" }}
+      >
+        Others Protocol Category
+      </h1>
+    </a>
+
+    <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
+      <p className="mb-4">
+        The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a DeFi protocol. 
+        The <i>Others</i> protocol category captures protocols which are built using blockchain technology and serve a financial use case but do not meet one or more of the Stage 0 requirements:
+      </p>
+      <ul className="list-none space-y-2">
+        {othersData.qualifications.map((requirement, index) => (
+          <li key={index}>{requirement}</li>
+        ))}
+      </ul>
+      <p className="mt-4">
+        The <i>Others</i> protocol category thus shines a light on protocols which either fail to disclose the required information publicly, such as documentation (aka a Whitepaper) or software source-code, or do not meet basic requirements to qualify as a <i>DeFi</i> protocol.
+      </p>
     </div>
   </>
 );
@@ -388,6 +427,7 @@ export default function LearnMorePage() {
       <RisksSection />
       <StagesSection />
       <SecurityCouncilSection />
+      <OthersSection />
     </div>
   );
 }
