@@ -7,14 +7,13 @@ defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: 0
 reasons: [Unverified Contract]
-risks: ["L", "L", "L", "L", "H"]
+risks: ["H", "H", "M", "H", "H"]
 author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-02-19"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
-⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 # Summary
 
@@ -30,70 +29,49 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-Pendle V2 protocol uses an upgradeable system through ERC1967 proxies.
- 
+The Pendle V2 protocol is fully upgradeable through ERC1967/UUPS proxies for most of its core contracts, allowing for comprehensive updates to both contract logic and state. This upgradeability capability can potentially result in loss of user funds, theft of unclaimed rewards, and significant changes to the protocol's economic parameters and performance.
 
- 
-The main component is a multisig (0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) that acts as:
- 
-- The DEFAULT_ADMIN_ROLE of the governance proxy, controlling its upgrades and role management
- 
-- The owner of most protocol contracts, with permissions to:
- 
-  - Modify economic parameters (fees, rewards, treasury address...)
- 
-  - Control market factories and yield contracts
- 
-  - Manage cross-chain messaging
- 
-  - Withdraw PENDLE tokens to reward voter from Voting Controller...
- 
+The permission to upgrade the protocol is primarily controlled by two multisig accounts:
 
- 
-It's a 2/4 multisig, with the following signers:
- 
-- [0x7BD456937104Ca5eFfFBD895ccbba52421021C29]
- 
-- [0x9Ce6De7ec862e25a515AA0D8EcFbBBb2DaA8E0fb]
- 
-- [0x38ab4A7Dea2753757F29fe6d10280Df2C42abe27]
- 
-- [0xF517364727Fcc764D58DdF4e53280874A4d0c476]
- 
+The [Governance](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1), a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the [PendleGovernanceProxy](https://etherscan.io/address/0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e), controlling most critical protocol contracts including voting mechanisms, market factories, and cross-chain messaging.
 
- 
-There is the governance proxy contract (0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e) that implements role-based access control with the following features:
- 
-- Upgradeable implementation via upgradeTo function
-- Role management (grant/revoke roles)
-- Aggregated calls for specific roles
- 
-He is owner of the PendleMarketFactoryV3 contract.
+The [DevMultisig](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1), a 2/3 multisig which controls fee distribution systems and reward distribution mechanisms like [PendleFeeDistributorV2](https://etherscan.io/address/0x8C237520a8E14D658170A633D96F8e80764433b9) and [PendleMultiTokenMerkleDistributor](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E).
 
-We also have an unknown address (0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) that is the owner of the PendleFeeDistributor V1 contract (but not mainly used). 
- 
+A critical security concern is that no timelock mechanism is implemented for any upgrade functions or parameter changes except for the PENDLE token contract itself. This means that contract implementations, fee parameters, and fund recipient addresses can be changed instantaneously with no delay or opportunity for community review.
 
-A V2 of the PendleFeeDistributor is used instead but owner is the devMultisig instead of governance.
+Particularly high-risk functions include `upgradeToAndCall` which can atomically upgrade a contract and execute arbitrary initialization logic in a single transaction, `setMerkleRoot` or `setMerkleRootAndFund` which can manipulate reward distributions, especially concerning during the predictable vulnerability window between monthly vePENDLE snapshots and distribution events, and fee parameter modifications that can be adjusted up to maximum caps (20%) without warning.
 
-While these permissions are significant, several safeguards are in place:
- 
-- Parameter modifications are often bounded by maximum limits
+While the multisig structure offers some protection against individual key compromises, the 2/4 threshold is relatively low for a protocol of this significance. Additionally, the existence of multiple contract versions with different ownership structures creates confusion, with some contracts like the original [PendleFeeDistributor](https://etherscan.io/address/0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2) being owned by an unknow address.
 
-A lot of versions of the contracts are deployed which is a bit confusing.
+The cross-chain architecture adds further complexity, as the governance can add destination contracts on other chains for synchronizing vePENDLE balances and voting results, potentially affecting reward distributions across the entire cross-chain ecosystem.
 
 > Upgradeability score: H
 
 ## Autonomy
 
-The Pendle's protocol token (PENDLE) relies on Ethereum to access key features such as locking, voting, and claiming fees. Other chains, like Arbitrum, only mirror data from Ethereum. To receive boosting benefits, users who provide liquidity on Arbitrum must lock PENDLE on Ethereum and synchronize the information to Arbitrum using cross-chain messages. This synchronization is facilitated by the LayerZero protocol, which uses permissioned validators (DVNs) to validate cross-chain transaction data. Currently, Pendle has configured the "default" validator service which is Google Cloud.
+The Pendle V2 protocol maintains its own price oracles for PT (Principal Tokens) through a built-in oracle mechanism inspired by UniswapV3, but relies on several external dependencies that introduce varying degrees of centralization and risk to the protocol.
 
-A failure of these validators could require manual intervention and potentially result in the temporary censoring of users or the freezing of their funds. This primarily affects users unclaimed (or claimed) rewards and liquidity boosting benefits across chains.
+The most critical external dependency is the LayerZero protocol which Pendle utilizes for all cross-chain messaging to synchronize vePENDLE positions from Ethereum to other chains like Arbitrum. LayerZero uses permissioned validators called DVNs (Decentralized Verifier Networks) to validate cross-chain transaction data. Currently, Pendle has configured the "default" validator service which is operated by Google Cloud, representing a high degree of centralization.
+
+This cross-chain infrastructure creates a significant dependency where a failure or compromise of the LayerZero protocol or its validators could:
+
+Prevent users from synchronizing their vePENDLE positions across chains
+Block the broadcasting of voting results for liquidity incentives
+Cause incorrect distribution of rewards on secondary chains
+Lead to users missing boost benefits despite having locked their PENDLE on Ethereum
+For yield-bearing assets wrapped in SY tokens, Pendle depends on the underlying protocols (such as Lido for wstETH, or Aave for aUSDC) being operational and secure. While Pendle standardizes these assets through its SY wrapper, it inherits all risks associated with these protocols.
+
+The Oracle implementation in Pendle does not rely on external oracles like Chainlink, but instead uses its own internal geometric mean price oracle based on market activity, which reduces external dependencies but creates reliance on sufficient market liquidity and activity for accurate pricing.
+
+Additionally, the monthly reward distribution system that relies on merkle roots generated off-chain introduces a dependency on the centralized process that generates these roots, typically managed by the Development Multisig.
+
+While these dependencies create centralization concerns, they primarily affect cross-chain operations and unclaimed rewards rather than directly threatening user principal funds on Ethereum. However, the high centralization of the LayerZero validator (Google Cloud) represents a significant point of failure for cross-chain functionality.
 
 > Autonomy score: M
 
 ## Exit Window
 
-No exit windows or timelocks are actually set up in the [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967) which is utilized by all proxy contracts across the core Pendle Protocol contracts, primarily owned by the governance multisig. Essentially, if the governance decides on a change, it can be implemented immediately.
+No timelocks exist for Pendle's proxied contracts except for the PENDLE token (7-day delay). Critical functions can be executed immediately by governance multisigs without notice to users, creating vulnerability windows especially for cross-chain positions and monthly reward distributions.
 
 > Exit window score: H
 
@@ -107,11 +85,13 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 ## Contracts
 
+⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
+
 | Contract Name                     | Address                                    |
 |-----------------------------------|--------------------------------------------|
 | PENDLE | [0x808507121b80c02388fad14726482e061b8da827](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827) |
 | WETH9 | [0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2](https://etherscan.io/address/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2) |
-| sySwapper                         | [0x248087C69e72E211b7264720Bf6cC5A954F98CDE](https://etherscan.io/address/0x248087C69e72E211b7264720Bf6cC5A954F98CDE) | Unverified contract
+| sySwapper                         | [0x248087C69e72E211b7264720Bf6cC5A954F98CDE](https://etherscan.io/address/0x248087C69e72E211b7264720Bf6cC5A954F98CDE) |
 | BaseSplitCodeFactoryContract | [0x35878C2Cff38cC4032E85283183428170BA618A2](https://etherscan.io/address/0x35878C2Cff38cC4032E85283183428170BA618A2) |
 | PendleGovernanceProxy | [0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e](https://etherscan.io/address/0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e) |
 | pendleSwap                        | [0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212](https://etherscan.io/address/0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212) |
@@ -143,11 +123,11 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 | DevMultisig | [0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1) | Multisig 2/3 |
 | DevMultisig LayerZero | [0xCDa8e3ADD00c95E5035617F970096118Ca2F4C92](https://etherscan.io/address/0xCDa8e3ADD00c95E5035617F970096118Ca2F4C92) | Multisig 2/3 |
 | Pendle: Deployer 1 | [0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7](https://etherscan.io/address/0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7) | EOA |
-| Governance Guardian EOA / hardwareDeployer | 0xeea6F790F18563E91b18DF00B89d9f79b2E6761F | [0xeea6F790F18563E91b18DF00B89d9f79b2E6761F](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
-| GUARDIAN | 0x8b5b16d04624687fcf0d0228f19993c9157c1ed07b41d8d430fd9100eb099fe8 | [0x8b5b16d04624687fcf0d0228f19993c9157c1ed07b41d8d430fd9100eb099fe8](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
+| Governance Guardian EOA / hardwareDeployer | [0xeea6F790F18563E91b18DF00B89d9f79b2E6761F](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
+| GUARDIAN | [0x8b5b16d04624687fcf0d0228f19993c9157c1ed07b41d8d430fd9100eb099fe8](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
 | Unkown Address (PendleFeeDistributor(not in use) Owner) | [0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1](https://etherscan.io/address/0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) | EOA |
 | PendleLiquidityIncentivesMultisig | [0xe8D28E2CA24BB16Fc7e6549eF937e05981d02606](https://etherscan.io/address/0xe8D28E2CA24BB16Fc7e6549eF937e05981d02606) | Multisig 2/4 |
-0x8b5b16d04624687fcf0d0228f19993c9157c1ed07b41d8d430fd9100eb099fe8
+
 
 
 ## Permissions
@@ -246,10 +226,10 @@ Pendle Protocol relies on LayerZero for cross-chain communication and transactio
 
 LayerZero Protocol itself is immutable and fully permissionless. The protocol will exist indefinitely even if Layer0 Labs, the company that developed the LayerZero Protocol, ceases to exist. Layer0 Labs' role in the LayerZero protocol is reduced to deploying immutable Endpoints on new chains. These endpoints reference each other and thereby enable the cross-chain communication network. If Layer0 Labs ceases to exist, no new chains are added to the cross-chain network, but the existing network is not affected.
 
-Pendle relies on LayerZero's default configuration for cross-chain message validation. In the [`PendleMsgSendEndpointUpg`](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract 
+Pendle relies on LayerZero's default configuration for cross-chain message validation. In the [PendleMsgSendEndpointUpg](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract 
 "@dev Initially, currently we will use layer zero's default send and receive version (which is most updated) So we can leave the configuration unset." This means Pendle inherits the security and reliability of LayerZero's default infrastructure, but also depends on it.
 
-The [`PendleMsgSendEndpointUpg`](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract manages message sending across chains through a whitelisted system. While this provides a layer of security, it also means that the protocol's cross-chain functionality is dependent on these whitelisted addresses functioning correctly. A failure in this system could potentially affect cross-chain operations.
+The [PendleMsgSendEndpointUpg](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract manages message sending across chains through a whitelisted system. While this provides a layer of security, it also means that the protocol's cross-chain functionality is dependent on these whitelisted addresses functioning correctly. A failure in this system could potentially affect cross-chain operations.
 
 Finally, the LayerZero Protocol relies on Executors which trigger queued transactions on destination chains. In Pendle's implementation, this is handled through the `MsgReceiveEndpoint` contracts on each chain. The system is designed to be permissionless at the LayerZero level, meaning that even if Pendle's designated endpoints fail, users transactions cannot be permanently censored.
 
@@ -265,7 +245,11 @@ According to their docs the PENDLE token is currently deployed on the following 
 
 ## Exit Window
 
-The whole protocol is upgradable and based on proxy contracts which is opening the door to a lot of risks.
+No exit windows or timelocks are actually set up in the [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967) proxy pattern which is utilized by all proxy contracts across the core Pendle Protocol contracts, primarily owned by the [Governance](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) multisig. Essentially, if the [Governance](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) decides on a change, it can be implemented immediately.
+
+Pendle has no timelock on nearly all critical administrative functions across the protocol. The only exception is the `initiateConfigChanges` function in the [PENDLE](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827)token contract, which enforces a mandatory 7-day timelock period before token configuration changes can take effect. However, this single timelock protection is limited exclusively to token parameters and does not extend to any other part of the protocol infrastructure.
+
+All other contracts and functions in the ecosystem - including upgrades, parameter changes, fee adjustments, and merkle root updates - can be modified instantly without any delay or notice period.
 
 # Security Council
 
