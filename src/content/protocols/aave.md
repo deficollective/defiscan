@@ -119,11 +119,7 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 The center of the Aave V3 market is the contract called `Pool.sol` (`0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2`). Each supported asset that can be supplied and/or borrowed is attached to a reserve in this pool. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
 
-![Market](../../../public/images/Aave_V3_Market.png)
-
 The `Pool` contract is completely upgradeable via the proxy-pattern. The permission to update the pool contract via the proxy is owned by the on-chain governance (DAO).
-
-![Reserve Parameter Control](../../../public/images/Aave_V3_Reserve_Parameter_Control.png)
 
 Moreover, the control over market parameters, emergency freezing and pausing is additionally handed to multi-sigs and off-chain systems through steward contracts which allows the governance to delegate certain permissions in a fine grained manner as seen in the diagram. The `PoolConfigurator` contract is the contract that has the permissions to change any reserve parameter. It mirrors the `Pool` functions that change reserve parameters and decorates them with access control to certain roles. The capability to pause and freeze is assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts in turn are regular smart contracts that mirror a specific selection of the endpoints on the `PoolConfigurator` contract, but with guardrails for changing parameters and they also include rate limiting to certain functions. Councils which are regular multi-sigs are the permission owners of this steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions. The Governance itself can also update reserve parameters if the community wants to. Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
 
@@ -136,12 +132,12 @@ The on-chain governance system of Aave is multi-chain by design. The creation of
 
 To get to the stage of voting and creating an on-chain proposal a few prior steps need to be passed to have sufficient probability of being accepted through an on-chain vote.
 
-- The proposal was discussed with the community and incorporated feedback
-- A temperature check on Snapshot is conducted. This vote is not binding, but it helps determining if sufficient support is within the community to move the proposal forward.
-- ARFC (Aave Request for Final Comments) where service provider and community members prepare the AIP
-- AIP (Aave Improvement Proposal) which includes the contract payload submission
-- Actual on-chain vote
-- Execution
+1. The proposal was discussed with the community and incorporated feedback
+2. A temperature check on Snapshot is conducted. This vote is not binding, but it helps determining if sufficient support is within the community to move the proposal forward.
+3. ARFC (Aave Request for Final Comments) where service provider and community members prepare the AIP
+4. AIP (Aave Improvement Proposal) which includes the contract payload submission
+5. Actual on-chain vote
+6. Execution
 
 ### AIP - Payload submission
 
@@ -156,8 +152,6 @@ Voting can be held on either Ethereum Mainnet, Polygon (PoS) or Avalanche. When 
 Once the proposal passes, the function `executeProposal` on the `AaveGovernanceV3` allows to execute the approved proposal, which forwards the message to the `CrossChainController` (calling `forward`). The CCC forwards the proposal to each chain where the proposal must be executed. If the proposal is also dedicated to the deployment on Ethereum, the payload id is forwarded to the `SameChainAdapter` that calls the function `receiveCrossChainMessage` on the `PayloadsController` contract, which queues the payload to be executed. The payload was previously created on the `PayloadsController` by calling `createPayload` which is needed to be referenced in the governance proposal (see previous section). Anyone can call `executePayload` once sufficient time has passed (timelock). By calling `executePayload` on the `PayloadsController` `executeTransaction` on the `Executor Lvl1` contract will be triggered. A technical detail, if in this report it is mentioned that the governance owns the permission, it is actually (if we are very precise) this `Executor Lvl1` contract (as shown in the permission table) because community approved payloads will act from this contract. Alternatively also the `Executor Lvl2` can be the chosen executor by the payload if it requires permission to update the AAVE token or the Aave governance contract.
 
 In case of a malicious proposal the `Aave Governance V3 Guardian` can step in and stop the malicious proposal of being executed at the level of the `Payloads Controller` or at the Governance contract level (`AaveGovernanceV3`). Note this is can happen even if the proposal is supported by the majority of the community.
-
-![Governance](../../../public/images/Aave_V3_Governance.png)
 
 ## Smart Contract Upgrade Flow
 
@@ -201,5 +195,3 @@ Currently the facilitators are
 Via the `GSM` GHO is redeemable for `USDC` and `USDT` at a 1:1 rate up to a certain USDC and USDT cap. The GHO dedicated multi-sig `Risk Council` can update the exposure caps to USDC/USDT via the `GhoGsmSteward` (read about steward concept in the overview section). Upon receiving USDC/USDT `GSM` supplies the stablecoins to the Aave USDC and USDT reserve and issues freshly minted GHO to the seller of the stablecoins. Similarly if the user buys USDC or USDT from the GSM, the returned GHO is burned.
 
 GHO can be borrowed from the reserve at a dynamic interest rate. The total borrowed GHO cannot exceed the bucket cap. Governance and the Risk Council manage the interest rate by supplying fresh GHO to the reserve via the `GhoDirectMinter` or they can withdraw and burn GHO from the reserve increasing the interest rate.
-
-![Gho](../../../public/images/Aave_V3_Gho.png)
