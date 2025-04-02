@@ -294,12 +294,12 @@ GHO can be borrowed from the reserve at a dynamic interest rate. The total borro
 | AaveGovernanceV3 (Implementation)                           | [0x58bcb647c4beff253b4b6996c62f737b783f2cdd](https://etherscan.io/address/0x58bcb647c4beff253b4b6996c62f737b783f2cdd) |
 | PayloadsController (Proxy)                                  | [0xdAbad81aF85554E9ae636395611C58F7eC1aAEc5](https://etherscan.io/address/0xdAbad81aF85554E9ae636395611C58F7eC1aAEc5) |
 | PayloadsController (Implementation)                         | [0x7222182cb9c5320587b5148bf03eee107ad64578](https://etherscan.io/address/0x7222182cb9c5320587b5148bf03eee107ad64578) |
-| VotingMachine                                               | [0x617332a777780F546261247F621051d0b98975Eb](https://etherscan.io/address/0x617332a777780F546261247F621051d0b98975Eb) |
+| VotingMachine                                               | [0x06a1795a88b82700896583e123F46BE43877bFb6](https://etherscan.io/address/0x06a1795a88b82700896583e123F46BE43877bFb6) |
 | VotingStrategy                                              | [0x5642A5A5Ec284B4145563aBF319620204aCCA7f4](https://etherscan.io/address/0x5642A5A5Ec284B4145563aBF319620204aCCA7f4) |
 | DataWarehouse                                               | [0x1699FE9CaDC8a0b6c93E06B62Ab4592a0fFEcF61](https://etherscan.io/address/0x1699FE9CaDC8a0b6c93E06B62Ab4592a0fFEcF61) |
-| VotingPortal_Eth_Eth                                        | [0xf23f7De3AC42F22eBDA17e64DC4f51FB66b8E21f](https://etherscan.io/address/0xf23f7De3AC42F22eBDA17e64DC4f51FB66b8E21f) |
-| VotingPortal_Eth_Avax                                       | [0x33aCEf7365809218485873B7d0d67FeE411B5D79](https://etherscan.io/address/0x33aCEf7365809218485873B7d0d67FeE411B5D79) |
-| VotingPortal_Eth_Pol                                        | [0x9b24C168d6A76b5459B1d47071a54962a4df36c3](https://etherscan.io/address/0x9b24C168d6A76b5459B1d47071a54962a4df36c3) |
+| VotingPortal_Eth_Eth                                        | [0x6ACe1Bf22D57a33863161bFDC851316Fb0442690](https://etherscan.io/address/0x6ACe1Bf22D57a33863161bFDC851316Fb0442690) |
+| VotingPortal_Eth_Avax                                       | [0x9Ded9406f088C10621BE628EEFf40c1DF396c172](https://etherscan.io/address/0x9Ded9406f088C10621BE628EEFf40c1DF396c172) |
+| VotingPortal_Eth_Pol                                        | [0xFe4683C18aaad791B6AFDF0a8e1Ed5C6e2c9ecD6](https://etherscan.io/address/0xFe4683C18aaad791B6AFDF0a8e1Ed5C6e2c9ecD6) |
 | EmergencyRegistry                                           | [0x73C6Fb358dDA8e84D50e98A98F7c0dF32e15C7e9](https://etherscan.io/address/0x73C6Fb358dDA8e84D50e98A98F7c0dF32e15C7e9) |
 | CCIPAdapter                                                 | [0xB7a6618df58626C3a122ABAFD6Ee63Af63f3Ef29](https://etherscan.io/address/0xB7a6618df58626C3a122ABAFD6Ee63Af63f3Ef29) |
 | PolygonAdapterEthereum (native adapter)                     | [0x1562F1b2487F892BBA8Ef325aF054Fd157510a71](https://etherscan.io/address/0x1562F1b2487F892BBA8Ef325aF054Fd157510a71) |
