@@ -280,16 +280,26 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 };
 export async function mergeDefiLlamaWithMd() {
   const apiData = await defiLlama.getProtocolsWithCache();
+  // const skyTVL = await defiLlama.getProtocolTvl("aave");
   const filtered = protocols
-    .map((frontmatterProtocol) => {
+    .map(async (frontmatterProtocol) => {
       var tvl = 0;
       var logo = "";
       var type = "";
       for (var slug of frontmatterProtocol.defillama_slug) {
-        const res = apiData.find(
+        const res = await defiLlama.getProtocolData(
+          slug,
+          frontmatterProtocol.chain
+        );
+        /*apiData.find(
           (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
         );
-        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
+        if (slug == "sky") {
+          tvl = skyTVL;
+        } else {
+          tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
+        }*/
+        console.log(slug + "GAVE" + res);
         type = res?.category || "";
         logo = res?.logo || "";
       }

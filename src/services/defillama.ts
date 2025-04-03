@@ -6,7 +6,7 @@ export interface Protocol {
   category: string;
   name: string;
   chains: string[];
-  chainTvls: ChainTvls;
+  currentChainTvls: ChainTvls;
 }
 
 interface ChainTvls {
@@ -52,6 +52,17 @@ class DeFiLlamaService {
     return this.fetch<Protocol[]>("/protocols");
   }
 
+  public async getProtocolData(slug: string, chain: string): Promise<any> {
+    let result: Protocol = await this.fetch(`/protocol/${slug}`);
+    const tvl: number = result?.currentChainTvls[chain] || 0;
+    const logo = result?.logo || "";
+    return {
+      slug: slug,
+      logo: logo,
+      tvl: tvl,
+    };
+  }
+
   // Get historical TVL data
   public async getHistoricalChainTvl(
     startTimestamp: number = 1577833200 // Default to Jan 1, 2020
@@ -62,8 +73,10 @@ class DeFiLlamaService {
 
   // Get TVL for specific protocol
   public async getProtocolTvl(slug: string): Promise<number> {
-    const data = await this.fetch<Protocol>(`/protocol/${slug}`);
-    return data.tvl;
+    const data = await this.fetch(`/protocol/${slug}`);
+    console.log(data);
+    console.log(data.currentChainTvls);
+    return data.currentChainTvls.Ethereum;
   }
 
   // Get protocol data with caching
