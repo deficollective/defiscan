@@ -15,7 +15,7 @@ const ReasonSchema = s
   .or(s.literal("Missing Docs"))
   .or(s.literal("Closed-Source"))
   .or(s.literal("Unverified Contracts"))
-  .or(s.literal("Unverifiable Permissions"));
+  .or(s.literal("Incorrect Docs"));
 
 const ReasonSetSchema = s
   .array(ReasonSchema)

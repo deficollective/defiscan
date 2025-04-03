@@ -6,7 +6,7 @@ export type Reason =
   | "Missing Docs"
   | "Closed-Source"
   | "Unverified Contracts"
-  | "Unverifiable Permissions";
+  | "Incorrect Docs";
 
 export type Reasons = Array<Reason>;
 

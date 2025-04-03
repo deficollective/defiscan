@@ -25,6 +25,6 @@ export const reasonToText = {
     "All or some smart contracts are not published with available source code.",
   "Unverified Contracts":
     "All or some smart contracts are not verified with a public blockchain explorer.",
-  "Unverifiable Permissions":
-    "Some permissions in the protocol cannot be verified.",
+  "Incorrect Docs": "All or some contract addresses in the docs are incorrect.",
+
 };
