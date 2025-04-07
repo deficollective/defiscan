@@ -109,8 +109,7 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 | ALICE | [0xab1c679b95f02899dcb97b3404e8ac388504a2e78a30d99d5502d12353e2f8f7](https://etherscan.io/address/0xab1c679b95f02899dcb97b3404e8ac388504a2e78a30d99d5502d12353e2f8f7) | EOA |
 | BOB | [0x29d93e4f9fb5004362e31d9828e4c67c1125ce4f9a86862014fd68039a2e4c38](https://etherscan.io/address/0x29d93e4f9fb5004362e31d9828e4c67c1125ce4f9a86862014fd68039a2e4c38) | EOA |
 | CHARLIE | [0x34a2021b26845c35ade1e3a00bba3ecba59faef855e49dd71e9f06c0b56c689d](https://etherscan.io/address/0x34a2021b26845c35ade1e3a00bba3ecba59faef855e49dd71e9f06c0b56c689d) | EOA |
-| GUARDIAN | [0x8b5b16d04624687fcf0d0228f19993c9157c1ed07b41d8d430fd9100eb099fe8](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
-| Governance Guardian EOA / hardwareDeployer | [0xeea6F790F18563E91b18DF00B89d9f79b2E6761F](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
+| GUARDIAN / hardwareDeployer | [0xeea6F790F18563E91b18DF00B89d9f79b2E6761F](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA |
 | DevMultisig | [0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1) | Multisig 2/3 |
 | Unknown Address (PendleFeeDistributor(not in use) Owner) | [0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1](https://etherscan.io/address/0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) | EOA |
 
