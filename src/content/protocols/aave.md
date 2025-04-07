@@ -16,44 +16,47 @@ update_date: "1970-01-01"
 
 # Summary
 
-Aave V3 allows users to lend and borrow Erc20 tokens and earn yield for lending. Aave V3 also created its own stablecoin called GHO.
+Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, `GHO`. Users can borrow and lend `GHO` like any other asset in the system.
 
-On Ethereum Mainnet 3 markets exist mainnet, Lido and EtherFi. Markets Prime (Lido) and EtherFi exist to allow efficient parameters for borrow and lending while containerize the risk associated with leveraged staked ETH. This report focuses on the Mainnet market (V3).
+The Aave DAO is Aave's onchain governance system, allowing `AAVE` holders, the lending protocol's governance token, to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
+
+Different Aave protocol _Instances_ exist and are managed by the Aave DAO. These instances focus on specific use cases and chains. This review covers the Ethereum Mainnet Core instance.
 
 # Overview
 
 ## Chain
 
-The report is concerned with the Aave V3 deployment on Ethereum mainnet.
+The report is concerned with the Aave V3 _Core_ instance deployed on Ethereum mainnet. Ethereum mainnet achieves a _Low_ centralization risk score.
 
-> Chain score: low
+> Chain score: Low
 
 ## Upgradeability
 
-Aave V3 allows for the upgrade of contracts. Those upgrades can change the logic and implementation of the markets, the reserves, the governance and the smart contract infrastructure around them. The upgrades could result in the loss of funds or the loss of unclaimed yield of users.
+The Aave v3 protocol can be organized in a number of logical modules or subsystems: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each of these subsystems exposes various degrees of control as explained in more detail below. Overall, these control vectors can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
 
-The permission to upgrade the protocol is controlled by an on-chain governance (DAO) with `AAVE`, `aAAVE` or `stkAAVE` token holders submitting and voting on DAO proposals. A multisig account, the `Aave V3 Governance Guardian` has the permission to cancel proposals to mitigate the risk of malicious or otherwise unintended proposals. The Governance Guardian can potentially be abused to censor proposals.
+### Core Lending & Borrowing
 
-Furthermore, another multisig account, the `EmergencyAdmin`, has the permission to pause markets, temporarily disabling and withdrawing assets, if suspicious activity is detected. This role can potentially be abused to freeze funds and unclaimed yield in the protocol.
+This subsystem forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_ [subsystem](#aave-governance). An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
 
-### Stewards
+### Reserve Parameters
 
-The Aave system makes use of a concept called steward contract. These steward contracts sit between the contract with upgradeable parameters and a multisig. The steward enforces rate limiting and maximal changes to the current parameter value in absolute or in relative terms. This allows to reduce trust assumptions to the empowered councils and increases the adaptability to changing market environments. Stewards that are part of Aave V3 are:
+The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or over a certain time period. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could revert these safeguards thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
 
-- `FreezingSteward`
-- `CapsPlusRiskSteward`
-- `ManualAGRS`
-- `SvrOracleSteward`
-- `GhoAaveSteward`
-- `GhoGsmSteward`
-- `GhoBucketSteward`
-- `GhoCCIPSteward`
-- `ClinicSteward`
-- `GranularGuardianAccessControl`
+### Treasury, Aave Ecosystem Reserves and Rewards System
 
-Learn more about the stewards in the permission table.
+This subsystem manages how fees are collected, spent and third-party rewards allocated and claimed by users. Fees taken across the Aave v3 protocol (and previous versions) are collected in the `TreasuryCollector`, a fully upgradeable contract. Through _Aave Governance_ and different (upgradeable) utility contracts these funds are distributed among service providers and ecosystem initiatives. Furthermore, third parties are able to distribute rewards, in their own ERC20 token, to Aave users through the `RewardsControllerManager` and `EmissionManager` contracts. Rewards are distributed continuously among eligible users but controlled by the _Aave Chan Initiative_ multisig account until claimed. The _Aave Chan Initiative_ multisig account can thus potentially be abused to withhold or steal distributed rewards resulting in a loss of unclaimed yield for users.
 
-> Upgradeability score: high
+### GHO Stablecoin
+
+`GHO` is Aave v3's native stablecoin that is pegged to the US Dollar and mintable at a 1:1 rate against the centralized `USDC` and `USDT` stablecoins through the `GhoStabilityModule` contract. Furthermore, a _Risk Council_ multisig account (not a _Security Council_ according to the DeFiScan definition) has the ability to mint unbacked `GHO` supply into (or burn from) the Aave lending market for users to borrow by supplying collateral assets (and thus collateralizing the `GHO` supply). Direct minting and burning through the _Risk Council_ is managed through the `GhoDirectMinter` contract and limited by minting caps which are controlled by _Aave Governance_. Both the `GhoStabilityModule` and the `GhoDirectMinter` as well as the respective `aToken` and `variableDebtToken` contracts upgradeable by _Aave Governance_ opening the possibility of uncontrolled minting or burning of `GHO` in case of an unintended upgrade. If abused, this control thus introduces a risk of loss of funds, loss of unclaimed yield (accrued interest in `GHO`) or an otherwise material impact on the expected protocol performance for `GHO` holders and Aave users.
+
+### Aave Governance
+
+_Aave Governance_ refers to Aave v3's onchain governance system which controls contract upgrades as well as other critical permissions as outlined above. We discuss the governance process itself in the _Exit Window_ [section](#exit-window) and here focus on upgradeability and control in this subsystem itself. This governance process is implemented in the `GovernanceV3` contract which is fully upgradeable through a permissionless governance proposal. Hence, an unintended proposal could change the _Aave Governance_ system and reassign its control to a less robust or fully centralized setup. In order to mitigate this risk, upgrades to the `GovernanceV3` contract, as well as the `AAVE` token, require passing a 7 day _Exit Window_ (read more [here](#exit-window)). During this window, users can exit the Aave v3 protocol. Furthermore, the _Aave Governance v3 Guardian_ multisig account, adhering to the _Security Council_ requirements, can cancel the execution of unintended proposals. On the other hand, this control can be abused to censor regular proposals with majority support.
+
+Also note that the (current) implementation of `GovernanceV3` enables a native multi-chain governance process. Specifically, this process enables proposals to designate a different chain for holding governance votes. While Aave v3's proprietary cross-chain messaging protocol, called `a.DI`, itself does not exhibit centralized control, it makes the governance process susceptible to control over the designated chain itself. 
+
+> Upgradeability score: High
 
 ## Autonomy
 
@@ -71,37 +74,37 @@ The a.DI does not rely on a single bridge provider to move messages across diffe
 
 If the community cannot or does not want to use the a.DI or the other voting networks, then the community still can carry out the vote on Ethereum Mainnet. This would eliminate the cross-chain dependencies for voting.
 
-The cross-chain voting system has low centralisation risk as because of its fault tolerant design, while the oracle system is currently unmitigated.
+The cross-chain voting system has low centralisation risk because of its fault tolerant design, while the oracle system is currently unmitigated.
 
-> Autonomy score: high
+> Autonomy score: High
 
 ## Exit Window
 
-Permissions, including protocol upgrades, are controlled by an onchain governance system.
+Critical permissions, including protocol upgrades, are controlled by the _Aave Governance_ onchain governance system.
 
-There are two levels of permissions that can be executed by the DAO. Level 2 for permissions on the governance and AAVE token contract, and Level 1 for the remaining system.
+Two levels of permissions are separated in the (current) implementation of _Aave Governance_: _Level 2_ defines permissions on the governance system itself and on the `AAVE` token contract, _Level 1_ covers the remaining permissions.
 
-AAVE holders (also stkAAVE, aAAVE) are able to create new proposals (requires 80,000 / 200,0000 votes for level 1 / level 2) and vote on proposals (at least 320,000 / 1,040,000 votes are required for a valid proposal and a voting differential (yes minus no) of 80,000 / 1,040,000 votes). The vote starts 1 day after the proposal was created.
+AAVE holders (also stkAAVE, aAAVE) are able to create new proposals (requires 80,000 / 200,0000 votes for level 1 / level 2) and vote on proposals (at least 320,000 / 1,040,000 votes are required for a valid proposal and a voting differential (yes minus no) of 80,000 / 1,040,000 votes). 
 
-The voting period is 10 days for Level 2, and 3 days for Level 1.
+Votes start 1 day after proposal creation and the voting period is 10 days for _Level 2_, and 3 days for _Level 1_ proposals.
 
-The two levels have different time locks before the proposal is executed after a vote has passed. 7 days for Level 2 and 1 day for Level 1 executed permissions.
+Furthermore, the execution of successful votes is blocked by an _Exit Window_ with a delay of 7 days for _Level 2_ and 1 day for _Level 1_ permissions.
 
-While Level 1 and Level 2 do not meet the 30-day exit window requirement, Level 2 meets the 7-day exit window requirement, but high impact upgradeability permissions of Level 1 are not protected by a 7-day exit window.
+Hence, the enforced _Exit Windows_ do not fulfill the 30-days delay required for a _Low_ risk assessment and only the _Level 2_ delay of 7 days qualifies for a _Medium_ risk according to our criteria.
 
-However, malicious or unintended proposals can be intercepted by the Aave Governance V3 Guardian multisig account, which satisfies the Security Council requirements.
+However, this is mitigated by the _Aave Governance_ system through the _Aave Governance V3 Guardian_ multisig account, which satisfies the Security Council requirements, and its ability to block unintended proposals from execution.
 
-> Exit Window score: high
+> Exit Window score: Medium
 
 ## Accessibility
 
-The frontend of Aave V3 app is open source. Each commit (ie each change to the code base) is published to IPFS (https://github.com/aave/interface/releases).
+The official frontend to the Aave V3 protocol is open source and each commit on Aave's GitHub repository is published to IPFS (https://github.com/aave/interface/releases).
 
-In addition to that Aave is also available through [DeFi Saver](https://app.defisaver.com/aave).
+In addition to that the Aave v3 protocol is also available through [DeFi Saver](https://app.defisaver.com/aave) and other third-party tools.
 
 https://aave.com/help/aave-101/accessing-aave
 
-> Accessibility score: low
+> Accessibility score: Low
 
 ## Conclusion
 
