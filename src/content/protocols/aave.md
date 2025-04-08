@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, `GHO`. Users can borrow and lend `GHO` like any other asset in the system.
 
-The Aave DAO is Aave's onchain governance system, allowing `AAVE` holders, the lending protocol's governance token, to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
+The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and `aAAVE` holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
 
 Different Aave protocol _Instances_ exist and are managed by the Aave DAO. These instances focus on specific use cases and chains. This review covers the Ethereum Mainnet Core instance.
 
@@ -40,7 +40,7 @@ This subsystem forms the core of Aave v3's borrow & lending features and keeps t
 
 ### Reserve Parameters
 
-The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or over a certain time period. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could revert these safeguards thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
+The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or with a certain frequency. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
 
 ### Treasury, Aave Ecosystem Reserves and Rewards System
 
@@ -94,7 +94,7 @@ Hence, the enforced _Exit Windows_ do not fulfill the 30-days delay required for
 
 However, this is mitigated by the _Aave Governance_ system through the _Aave Governance V3 Guardian_ multisig account, which satisfies the Security Council requirements, and its ability to block unintended proposals from execution.
 
-> Exit Window score: Medium
+> Exit Window score: High
 
 ## Accessibility
 
