@@ -101,8 +101,6 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 | Name        | Account                                                                                                               | Type         |
 | ----------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Treasury (pools fees BEFORE 8th October 2024)   | [0x8270400d528c34e1596EF367eeDEc99080A1b592](https://etherscan.io/address/0x8270400d528c34e1596EF367eeDEc99080A1b592) | Multisig 2/6 |
-| Treasury (pools fees AFTER 8th October 2024) | [0xC328dFcD2C8450e2487a91daa9B75629075b7A43](https://etherscan.io/address/0xC328dFcD2C8450e2487a91daa9B75629075b7A43) | Multisig 2/5 |
 | Governance  | [0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) | Multisig 2/4 |
 | PendleLiquidityIncentivesMultisig | [0xe8D28E2CA24BB16Fc7e6549eF937e05981d02606](https://etherscan.io/address/0xe8D28E2CA24BB16Fc7e6549eF937e05981d02606) | Multisig 2/4 |
 | Pendle: Deployer 1 | [0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7](https://etherscan.io/address/0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7) | EOA |
