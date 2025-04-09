@@ -5,7 +5,7 @@ x: "https://x.com/pendle_fi"
 github: ["https://github.com/pendle-finance"]
 defillama_slug: ["pendle"]
 chain: "Ethereum"
-stage: "0"
+stage: "O"
 reasons: ["Unverified Contract"]
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos, PaulDeFi"]
