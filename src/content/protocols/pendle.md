@@ -29,21 +29,25 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol is fully upgradeable through ERC1967/UUPS proxies for most of its core contracts, allowing for comprehensive updates to both contract logic and state. This upgradeability capability can potentially result in loss of user funds, theft of unclaimed rewards, and significant changes to the protocol's economic parameters and performance.
+The Pendle V2 protocol is fully upgradeable through multiple proxy patterns including ERC1967/UUPS proxies for most core contracts and TransparentUpgradeableProxy contracts managed by a central ProxyAdmin. The protocol also employs a custom selector-based router proxy (PendleRouterV4) that directs calls to specialized implementation contracts based on function selectors. This comprehensive upgradeability capability can potentially result in loss of user funds, theft of unclaimed rewards, and significant changes to the protocol's economic parameters and performance.
 
-The permission to upgrade the protocol is primarily controlled by two multisig accounts:
+The permission to upgrade the protocol follows a hierarchical structure:
 
-The [Governance](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1), a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the [PendleGovernanceProxy](https://etherscan.io/address/0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e), controlling most critical protocol contracts including voting mechanisms, market factories, and cross-chain messaging.
+The Governance, a 2/4 multisig that serves as the DEFAULT_ADMIN_ROLE of the PendleGovernanceProxy, has ultimate authority over the protocol's contracts. It directly controls the ProxyAdmin (which manages all TransparentUpgradeableProxy contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging.
 
-The [DevMultisig](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1), a 2/3 multisig which controls fee distribution systems and reward distribution mechanisms like [PendleFeeDistributorV2](https://etherscan.io/address/0x8C237520a8E14D658170A633D96F8e80764433b9) and [PendleMultiTokenMerkleDistributor](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E).
+The DevMultisig, a 2/3 multisig which controls fee distribution systems and reward distribution mechanisms like PendleFeeDistributorV2 and PendleMultiTokenMerkleDistributor.
+
+Additional key actors include hardwareDeployer (0xeea6F790F18563E91b18DF00B89d9f79b2E6761F), which holds both GUARDIAN and ALICE roles in PendleGovernanceProxy as verified through on-chain transactions. This address can pause contracts implementing the IPPausingInterface and execute privileged functions via the aggregate method. It also performs critical operational functions including converting SY tokens to ETH using PendleRouterV4 and transferring funds to the DevMultisig.
+
+Our on-chain analysis reveals the existence of BaseSplitCodeFactoryContract (0x35878C2Cff38cC4032E85283183428170BA618A2), which splits bytecode of large contracts into two fragments to circumvent Ethereum's size limit. These resulting contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public.
 
 A critical security concern is that no timelock mechanism is implemented for any upgrade functions or parameter changes except for the PENDLE token contract itself. This means that contract implementations, fee parameters, and fund recipient addresses can be changed instantaneously with no delay or opportunity for community review.
 
-Particularly high-risk functions include `upgradeToAndCall` which can atomically upgrade a contract and execute arbitrary initialization logic in a single transaction, `setMerkleRoot` or `setMerkleRootAndFund` which can manipulate reward distributions, especially concerning during the predictable vulnerability window between monthly vePENDLE snapshots and distribution events, and fee parameter modifications that can be adjusted up to maximum caps (20%) without warning.
+Particularly high-risk functions include upgradeToAndCall which can atomically upgrade a contract and execute arbitrary initialization logic in a single transaction, setMerkleRoot or setMerkleRootAndFund which can manipulate reward distributions, especially concerning during the predictable vulnerability window between monthly vePENDLE snapshots and distribution events, and fee parameter modifications that can be adjusted up to maximum caps (20%) without warning.
 
-While the multisig structure offers some protection against individual key compromises, the 2/4 threshold is relatively low for a protocol of this significance. Additionally, the existence of multiple contract versions with different ownership structures creates confusion, with some contracts like the original [PendleFeeDistributor](https://etherscan.io/address/0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2) being owned by an unknow address.
+While the multisig structure offers some protection against individual key compromises, the 2/4 threshold is relatively low for a protocol of this significance. Additionally, the existence of multiple contract versions with different ownership structures creates confusion, with some contracts like the original PendleFeeDistributor being owned by an unknown address.
 
-The cross-chain architecture adds further complexity, as the governance can add destination contracts on other chains for synchronizing vePENDLE balances and voting results, potentially affecting reward distributions across the entire cross-chain ecosystem.
+The cross-chain architecture adds further complexity, as the governance can add destination contracts on other chains through PendleMsgSendEndpointUpg for synchronizing vePENDLE balances and voting results, potentially affecting reward distributions across the entire cross-chain ecosystem.
 
 > Upgradeability score: H
 
