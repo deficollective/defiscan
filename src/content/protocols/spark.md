@@ -7,7 +7,7 @@ defillama_slug: ["spark"]
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "M", "H", "H", "H"]
+risks: ["L", "M", "H", "H", "L"]
 author: ["mmilien_"]
 submission_date: "2025-09-04"
 publish_date: "1970-01-01"
@@ -34,7 +34,7 @@ SparkLend is deployed on Ethereum mainnet and the liquidity layer involves other
 
 The upgradeability of the Spark protocol is limited. Most permissions are currently held by the Sky Governance.
 
-The Sky Governance could update the treasury (collected fees) or arbitrarily move funds out. As part of the Liquidity Management Layer (LLM) the Sky Governance also may mint/burn `USDS` (debt) from the Sky protocol to Spark within set limits, which could lead to instability in the protocol. Two externally-owned accounts (EOA) also have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with stricter limits. Those EOAs are assumed to be corruptible with limited impact on the protocol because they are monitored and can be frozen by a _freezer_ multisig. Unfortunately, this multisig does not meet our security council requirements.
+The Sky Governance could update the treasury (collected fees) or arbitrarily move funds out. As part of the Liquidity Management Layer (LML) the Sky Governance also may mint/burn `USDS` (debt) from the Sky protocol to Spark within set limits, which could lead to instability in the protocol. Two externally-owned accounts (EOA) also have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with stricter limits. Those EOAs are assumed to be corruptible with limited impact on the protocol because they are monitored and can be frozen by a _freezer_ multisig. Unfortunately, this multisig does not meet our security council requirements.
 
 The core contracts of SparkLend are not upgradeable. The Sky Governance and the _SparkLend Freezer_ multisig can both freeze all funds deposited into SparkLend with no delay. This is reversible through a Sky Governance delayed proposal.
 
@@ -68,7 +68,9 @@ Emergency proposals are prepared for the Sky Governance to freeze all markets wi
 
 Spark has a main open-source frontend at [spark.fi](https://app.spark.fi). The code is ope-source and there are instruction to run the page locally as a developer. There are no dedicated instructions for self-hosting. Direct interaction with contract is not straight forward nor documented.
 
-> Accesibility score: High
+However, SparkLend is accessible on third-party applications such as DeFiSaver and SummerFi. `sUSDS` (`USDS` in savings) can also be swapped back to `USDS` and `USDC` using common decentralized exchanges. These apps build an acceptable backup solution in case of failure of the official frontend and backend.
+
+> Accesibility score: Low
 
 # Technical Analysis
 
