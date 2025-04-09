@@ -26,7 +26,7 @@ A prize savings protocol gives users a chance at a large upside without risking 
 
 PoolTogether V5 is deployed on Ethereum mainnet.
 
-> Chain score: L
+> Chain score: Low
 
 ## Upgradeability
 
@@ -34,7 +34,7 @@ Permissions in the PoolTogether-v5 protocol are fully revoked, the protocol is i
 
 > ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could include upgradeable contracts. It is outside of the scope of this review to analyze these protocols too.
 
-> Upgradeability score: L
+> Upgradeability score: Low
 
 ## Autonomy
 
@@ -42,7 +42,7 @@ The protocol relies on the Witnet Oracle for randomness in prize draws. If the o
 
 > ⚠️ Note that anyone can create a new `PrizeVault` from the `PriceVaultFactory` and link it to third-party yield sources and utility contracts (e.g., `LiquidationPair` or `Claimer`). A flawed or malicious implementation of these contracts could result in the loss or theft of user funds. While it is outside of the scope of this review to analyze the underlying yield sources, it is important to note that PoolTogether v5 does NOT rely on a single external yield source and that PriceVaults are strictly isolated meaning that users only inherit the risks of the vault they are deposited in.
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
@@ -50,13 +50,13 @@ PoolTogether's contracts are fully immutable, no upgrades or changes can be made
 
 > ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could exhibit upgradeable contracts. It is outside of the scope of this review to analyze whether appropriate Exit Windows exist on these protocols too.
 
-> Exit Window score: L
+> Exit Window score: Low
 
 ## Accessibility
 
 PoolTogether provides access to the protocol through multiple independent interfaces such as [app.cabana.fi](https://app.cabana.fi) and [pooltime.app](https://pooltime.app), ensuring that users can still interact with the protocol even if one interface is unavailable. This diversity in access points helps minimize risks related to interface outages or downtime, offering more flexibility for users.
 
-> Accessibility score: L
+> Accessibility score: Low
 
 # Technical Analysis
 

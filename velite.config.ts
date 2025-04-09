@@ -14,7 +14,8 @@ const ReasonSchema = s
   .literal("Central Custody")
   .or(s.literal("Missing Docs"))
   .or(s.literal("Closed-Source"))
-  .or(s.literal("Unverified Contracts"));
+  .or(s.literal("Unverified Contracts"))
+  .or(s.literal("Incorrect Docs"));
 
 const ReasonSetSchema = s
   .array(ReasonSchema)
