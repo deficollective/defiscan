@@ -6,7 +6,7 @@ github: ["https://github.com/pendle-finance"]
 defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: "O"
-reasons: ["Unverified Contract"]
+reasons: ["Unverified Contracts"]
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-02-19"
