@@ -7,7 +7,7 @@ defillama_slug: ["spark"]
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "L", "H", "H", "H"]
+risks: ["L", "M", "H", "H", "H"]
 author: ["mmilien_"]
 submission_date: "2025-09-04"
 publish_date: "1970-01-01"
@@ -16,59 +16,57 @@ update_date: "1970-01-01"
 
 # Summary
 
-Add a summary of the protocols. What is it? What does it do? etc.
+Spark is a star within the Sky ecosystem and consists of three main products:
+
+- Savings: A fixed savings rate on `USDS`.
+- SparkLend: `USDS` and `DAI` centric lending protocol in which users can participate as lenders or borrowers. It combines liquidity from Sky and integrating with other DeFi protocols.
+- Spark Liquidity Layer: Direct liquidity provision into DeFi markets. This layer automates the liquidity provision of USDS, sUSDS, and USDC directly from Sky across various blockchain networks and DeFi protocols. It also enables Spark to provide liquidity into risk-adjusted yield strategies on other chains and protocols, as with Aave and Morpho on mainnet.
 
 # Overview
 
 ## Chain
 
-See http://defiscan.info/learn-more#chain for more guidance.
+SparkLend is deployed on Ethereum mainnet and the liquidity layer involves other various chains. This review focuses on the Ethereum mainnet deployment of all Spark products.
 
 > Chain score: Low
 
 ## Upgradeability
 
-In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+The upgradeability of the Spark protocol is limited. Most permissions are currently held by the Sky Governance.
 
-We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
+The Sky Governance could update the treasury (collected fees) or arbitrarily move funds out. As part of the Liquidity Management Layer (LLM) the Sky Governance also may mint/burn `USDS` (debt) from the Sky protocol to Spark within set limits, which could lead to instability in the protocol. Two externally-owned accounts (EOA) also have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with stricter limits. Those EOAs are assumed to be corruptible with limited impact on the protocol because they are monitored and can be frozen by a _freezer_ multisig. Unfortunately, this multisig does not meet our security council requirements.
 
-For some practical guidance follow this steps. It will help you in writing a nice report:
+The core contracts of SparkLend are not upgradeable. The Sky Governance and the _SparkLend Freezer_ multisig can both freeze all funds deposited into SparkLend with no delay. This is reversible through a Sky Governance delayed proposal.
 
-1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
-2. Fill in all the permissioned functions in the table (`## Permissions`)
-   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
-3. Get a mechanistic and precise understanding of each permissioned function
-4. Assess impact for each function, look out for
-   - loss/blocking of user funds
-   - loss of unclaimed yield
-   - change expected behavior significantly (blacklisting/kyc/fees/...)
-5. Write the impact column based on your understanding
-   - A good tipp when writing the impact column below, think of least 2,3 sentences:
-   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
-   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
-   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
-6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
+Finally, the contract distributing rewards in SparkLend is upgradeable and rewards could be canceled. This could result in the loss of unclaimed yield for users.
 
-NOTE:
-Pool / Pool Configurator non-upgradeable.
-Upgrade or change in settings to the RewardsController can result in loss of unclaimed yield (rewards)??
+> Upgradeability Score: Medium
 
 ## Autonomy
 
-Spark has a core dependency in Sky, a stage 0 protocol.
+Spark has a core dependency in the Sky Protocol, a stage 0 protocol. This dependency is clear from the fact that all key permissions in Spark contracts are held by the Sky Governance.
 
+Moreover, Spark has several centralized dependencies. Currently, only Chainlink oracles are used in SparkLend with no fallbacks. In order to bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protocol (CCTP) which relies on a set of centralized off-chain signers to provide the bridging attestation.
+
+<!--
 Dependy on USDC: USDC is deployed behind a proxy, and its implementation can be upgraded by an admin.
 CCTP (Cricle's Cross-Chain Transfer Protocol): relies on a set of centralized offchain signers to provide the bridging attestation.
 
-"SparkLend uses Chainlink Aggregators as the source of all asset prices."
+"SparkLend uses Chainlink Aggregators as the source of all asset prices." -->
+
+> Autonomy Score: High
 
 ## Exit Window
 
-See http://defiscan.info/learn-more#exit-window for more guidance.
+Sky Governance proposals are delayed by delay of **16 hours**, set by the Sky Governance itself. This delay also applies to all permissioned calls within Spark, except liquidity management and emergency actions. Liquidity management can be done without delay, but within strict limits set by the governance. The management by _Relayers_ may be paused by the _Freezer_ if it detects a malfunction or malicious actions.
+
+Emergency proposals are prepared for the Sky Governance to freeze all markets within SparkLend without any delay, which would prevent users from withdrawing their funds.
+
+> Exit Window Score: High
 
 ## Accessibility
 
-Spark has a main open-source frontend at [spark.fi](https://app.spark.fi). The code is open and there are instruction to run the page locally as a developer. There are no dedicated instructions for self-hosting. Direct interaction with contract is not straight forward due to the high amount of contracts.
+Spark has a main open-source frontend at [spark.fi](https://app.spark.fi). The code is ope-source and there are instruction to run the page locally as a developer. There are no dedicated instructions for self-hosting. Direct interaction with contract is not straight forward nor documented.
 
 > Accesibility score: High
 
@@ -151,6 +149,7 @@ The list of deployed contracts and their addresses is available in spark's [addr
 **TODO**: Made a mistake in RISK_ADMIN permission holders in the PoolConfigurators permission holders.
 
 Checks to perform:
+PROXYADMIN => RATES_FACTORY?
 
 - Which proxies have ProxyAdmin as owner
 - Roles in MainnetController
