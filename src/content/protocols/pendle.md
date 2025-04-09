@@ -7,7 +7,7 @@ defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: "0"
 reasons: ["Unverified Contract"]
-risks: ["H", "H", "M", "H", "H"]
+risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-02-19"
 publish_date: "1970-01-01"
