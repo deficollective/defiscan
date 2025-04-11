@@ -26,4 +26,5 @@ export const reasonToText = {
   "Unverified Contracts":
     "All or some smart contracts are not verified with a public blockchain explorer.",
   "Incorrect Docs": "All or some contract addresses in the docs are incorrect.",
+
 };
