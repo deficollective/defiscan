@@ -62,7 +62,13 @@ Also note that the (current) implementation of `GovernanceV3` enables a native m
 
 ### Oracle and Prices
 
-The Aave V3 protocol relies on Chainlink oracle feeds to price collateral and borrowed assets in the system. The protocol does not validate asset prices (apart from checking that they are above 0) returned by Chainlink. Aave V3 has the option to install a fallback oracle mechanism but is currently not used. The replacement of a stale or untrusted oracle feed requires a governance vote on level 1 (see Exit Window).
+The Aave V3 protocol relies on Chainlink oracle feeds to price collateral and borrowed assets in the system.
+
+The protocol does currently have limited validation on asset prices provided by Chainlink. This checks include upper caps for stablecoins and LSTs and a sanity check that the price is above 0 for all assets. If the reported price by the price feed was below 0, a fallback oracle would be queried.
+
+Aave has currently no fallback oracle price feeds instantiated. As a consequence if the price was equal to or below 0, user actions on the `Pool` contract that require a price would revert.
+
+The replacement of a stale or untrusted oracle price feed requires a governance vote on permission level 1 (see Exit Window).
 
 The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. This dependency thus introduces centralization risk in the Aave V3 protocol.
 
@@ -877,6 +883,12 @@ On the receiving end (destination network) the a.DI validates the transaction, r
 The a.DI also incorporates an emergency mode which allows the Aave Governance V3 guardian to replace current bridge providers if one or more bridges become untrusted.
 
 ### Oracle
+
+Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds can be one of 3 kind,
+
+1. regular un-mitigated Chainlink price feed (for all volatile assets)
+2. a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
+3. a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
