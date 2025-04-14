@@ -46,7 +46,11 @@ Finally, the contract distributing rewards in SparkLend is upgradeable and rewar
 
 Spark has a core dependency in the Sky Protocol, a stage 0 protocol. This dependency is clear from the fact that all key permissions in Spark contracts are held by the Sky Governance.
 
-Moreover, Spark has several centralized dependencies. Currently, Chainlink oracles are used in SparkLend with no fallbacks for the all asset prices. In order to bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protocol (CCTP) which relies on a set of centralized off-chain signers to provide the bridging attestation. More information on the centralization of those dependencies can be found in [dependencies](#dependencies).
+Spark has another centralized dependency. In order to bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protocol (CCTP) which relies on a set of centralized off-chain signers to provide the bridging attestation.
+
+Finally, Chronicle oracles are used in SparkLend with no fallbacks for all asset prices.
+
+More information on the centralization of those dependencies can be found in [dependencies](#dependencies).
 
 > Autonomy Score: High
 
@@ -382,9 +386,11 @@ The list of deployed contracts and their addresses is available in spark's [addr
 
 Spark has a core dependency in the Sky Protocol, a stage 0 protocol. This dependency is clear from the fact that all key permissions in Spark contracts are held by the Sky Governance.
 
-Moreover, Spark has several centralized dependencies. Currently, Chainlink oracles are used in SparkLend with no fallbacks for the all asset prices. However, a `KillSwitchOracle` contract is used to set critical prices per asset. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the Sky Governance. The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. This dependency thus introduces centralization risk in SparkLend.
-
 In order to bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protocol (CCTP) which relies on a set of centralized off-chain signers to provide the bridging attestation. The off-chain signers in the CCTP are not disclosed and we have not found any furhter specifications on the architecture of the attestation network, emphasizing the centralization risk.
+
+Currently, Chronicle oracles are used in SparkLend with no fallbacks for the all asset prices. However, a `KillSwitchOracle` contract is used to set critical prices per asset. Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable.
+
+If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the Sky Governance.
 
 ## Exit Window
 
