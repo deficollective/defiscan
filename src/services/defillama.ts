@@ -1,4 +1,7 @@
 // DeFiLlama API Type
+import {protocols} from "#site/content";
+import {Project} from "@/lib/types";
+
 export interface Protocol {
   slug: string;
   tvl: number;
@@ -82,6 +85,37 @@ class DeFiLlamaService {
     const data = await this.getProtocols();
     this.cache.set("protocols", { data, timestamp: now });
     return data;
+  }
+
+  public async getProjects() {
+    const apiData = await defiLlama.getProtocolsWithCache();
+    const filtered = protocols
+        .map((frontmatterProtocol) => {
+          var tvl = 0;
+          var logo = "";
+          var type = "";
+          for (var slug of frontmatterProtocol.defillama_slug) {
+            const res = apiData.find(
+                (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
+            );
+            tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
+            type = res?.category || "";
+            logo = res?.logo || "";
+          }
+          return {
+            logo: logo,
+            protocol: frontmatterProtocol.protocol,
+            slug: frontmatterProtocol.slug,
+            tvl: tvl,
+            chain: frontmatterProtocol.chain,
+            stage: frontmatterProtocol.stage,
+            reasons: frontmatterProtocol.reasons,
+            type: type,
+            risks: frontmatterProtocol.risks,
+          } as Project;
+        })
+        .filter((el): el is Project => el !== null);
+    return filtered;
   }
 }
 

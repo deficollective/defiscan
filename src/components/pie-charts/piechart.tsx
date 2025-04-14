@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Label, Pie, PieChart } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,9 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { defiLlama } from "@/services/defillama";
-import { protocols } from "#site/content";
 import { Project, Stage } from "@/lib/types";
+import LlamaContext from "@/context/llamaContext";
 
 interface VisualisedData {
   key: string;
@@ -188,18 +187,21 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
   className,
   customLabelFormatter,
 }) => {
+  const { projects, loading } = useContext(LlamaContext);
   const [data, setData] = useState<VisualisedData[] | null>(null);
 
   useEffect(() => {
+    if (loading)
+      return;
     const fetchData = async () => {
-      const merged = await mergeDefiLlamaWithMd();
+      const merged = projects;
       const groupedBy = groupBy(merged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
       setData(coloredResults);
     };
     fetchData();
-  }, [groupByKey, operation, baseColor]);
+  }, [projects, loading, groupByKey, operation, baseColor]);
 
   const chartConfig = {} satisfies ChartConfig;
 
@@ -278,33 +280,3 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
-export async function mergeDefiLlamaWithMd() {
-  const apiData = await defiLlama.getProtocolsWithCache();
-  const filtered = protocols
-    .map((frontmatterProtocol) => {
-      var tvl = 0;
-      var logo = "";
-      var type = "";
-      for (var slug of frontmatterProtocol.defillama_slug) {
-        const res = apiData.find(
-          (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
-        );
-        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
-        type = res?.category || "";
-        logo = res?.logo || "";
-      }
-      return {
-        logo: logo,
-        protocol: frontmatterProtocol.protocol,
-        slug: frontmatterProtocol.slug,
-        tvl: tvl,
-        chain: frontmatterProtocol.chain,
-        stage: frontmatterProtocol.stage,
-        reasons: frontmatterProtocol.reasons,
-        type: type,
-        risks: frontmatterProtocol.risks,
-      } as Project;
-    })
-    .filter((el): el is Project => el !== null);
-  return filtered;
-}
