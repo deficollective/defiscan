@@ -76,6 +76,7 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | Contract Name                                         | Address                                                                                                              |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | PancakeV3Factory                                      | [0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865](https://bscscan.com/address/0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865) |
+| PancakeV3Pool (example pool)                          | [0x98b141fc697cff2bc26da84fcdb48ced18450df9](https://bscscan.com/address/0x98b141fc697cff2bc26da84fcdb48ced18450df9) |
 | PancakeV3PoolDeployer                                 | [0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9](https://bscscan.com/address/0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9) |
 | SwapRouter                                            | [0x1b81D678ffb9C0263b24A97847620C99d213eB14](https://bscscan.com/address/0x1b81D678ffb9C0263b24A97847620C99d213eB14) |
 | SmartRouter                                           | [0x13f4EA83D0bd40E75C8222255bc855a974568Dd4](https://bscscan.com/address/0x13f4EA83D0bd40E75C8222255bc855a974568Dd4) |
