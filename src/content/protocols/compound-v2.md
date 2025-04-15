@@ -1,10 +1,10 @@
 ---
-protocol: "name of the protocol appended by the version if multiple versions exist (use an '-' and no whitespace)"
-website: "https://..."
-x: "https://x.com/projecthandle"
-github: ["https://github.com/projectgithub"]
-defillama_slug: ["the slug used by https://defillama.com"]
-chain: "the name of the chain on which the protocol is deployed"
+protocol: "Compound V2"
+website: "https://compound.finance/"
+x: "https://x.com/compoundfinance"
+github: ["https://github.com/compound-finance"]
+defillama_slug: ["compound-v2"]
+chain: "Ethereum"
 stage: 0
 reasons: ["remove", "if none"]
 risks: ["x", "x", "x", "x", "x"]
