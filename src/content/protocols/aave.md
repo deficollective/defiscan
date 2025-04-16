@@ -130,7 +130,7 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ## System Outline
 
-## Upgradeable Pool Contract and mutable reserve parameters
+### Upgradeable Pool Contract and mutable reserve parameters
 
 The center of the Aave V3 market is the contract called `Pool.sol` (`0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2`). Each supported asset is attached to a reserve in this `Pool` contract. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
 
@@ -142,7 +142,7 @@ The `Pool` contract is completely upgradeable via the proxy-pattern. The permiss
 
 In addition to completely upgrading the contracts, the control over market parameters, emergency freezing and pausing is handed to multi-sigs through multiple steward contracts. This allows the DAO to delegate certain permissions to the multi-sigs with rate-limiting (frequency) and guardrails (relative or absolute changes to parameters). Technically this was implemented by giving the `PoolConfigurator` contract permission to change any reserve parameter on the `Pool` contract while the `PoolConfigurator` assigns various roles from the `ACLManager` to these permissioned funcions. So is the capability to pause the `Pool` and freeze reserves assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts own these roles and expose the functions with aforementioned guardrails. Councils (regular multi-sigs) are the permission owners of these steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions for these multi-sigs. The Governance itself can also update reserve parameters directly if the community decides to do so. Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
 
-## Governance
+### Governance
 
 The on-chain governance system of Aave is multi-chain by design. The creation of proposals and voting on the proposals in permissionless. In this paragraph, the architecture and existing permissions are highlighted.
 
@@ -171,7 +171,7 @@ In case of a malicious proposal the `Aave Governance V3 Guardian` can step in an
 
 ![Governance](./diagrams/Aave_V3_Governance.png)
 
-## Smart Contract Upgrade Flow
+### Smart Contract Upgrade Flow
 
 Many contracts of the Aave V3 system are directly upgradeable through a proxy pattern (see in the contract table for proxy keyword). The `Executor` contract would call the `upgradeTo` and point to the referenced new implementation contract that is specified in the payload. Additionally to the proxy upgrade pattern, Aave V3 has a contract called `PoolAddressesProvider` which serves as a registry of contracts. Through this contract upgrades can be made by deploying a new contract and switching the reference inside the `PoolAddressesProvider` as contracts in the Aave V3 system rely on `PoolAddressesProvider` as a registry of Aave V3 contracts. Also the `PoolAddressesProvider` is owner of many crucial contracts as well.
 
@@ -182,7 +182,7 @@ Contracts that `PoolAddressesProvider` owns or can set are
 - `ACLManager`
 - `Governance Executor`
 
-## Treasury
+### Treasury
 
 Treasury is funded through reserve fees collected when users pay back debt. The treasury contract is called `Collector`. The treasury contract allows the Aave DAO to pay service providers and fund incentives to grow the Aave ecosystem.
 
