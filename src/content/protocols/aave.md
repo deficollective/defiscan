@@ -128,6 +128,8 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ⚠️ During our analysis, we identified a unverified role (not mentioned in the docs https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-V3.md#admins). Role Id is `0xd1d2cf869016112a9af1107bcf43c3759daf22cf734aad47d0c9c726e33bc782`. The owners of this role are related to the V2 to V3 migration.
 
+## System Outline
+
 ## Upgradeable Pool Contract and mutable reserve parameters
 
 The center of the Aave V3 market is the contract called `Pool.sol` (`0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2`). Each supported asset is attached to a reserve in this `Pool` contract. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
@@ -213,6 +215,45 @@ Via the `GSM` GHO is redeemable for `USDC` and `USDT` at a 1:1 rate up to a cert
 GHO can be borrowed from the reserve at a dynamic interest rate. The total borrowed GHO cannot exceed the bucket cap. Governance and the Risk Council manage the interest rate by supplying fresh GHO to the reserve via the `GhoDirectMinter` or they can withdraw and burn GHO from the reserve increasing the interest rate.
 
 ![Gho](./diagrams/Aave_V3_GHO.png)
+
+## Dependencies
+
+### a.DI
+
+The Aave delivery infrastructure (a.DI) ensures decentralized and fault-tolerant cross-chain messaging. It achieves this by encoding a message and submitting it to multiple independent bridges.
+
+On the receiving end (destination network) the a.DI validates the transaction, requiring multiple matching messages from different bridges before executing the bridged message on the destination network. If the confirmation threshold is not reached, a new attempt can be made by retrying the cross-chain message which uses the same bridge configuration but attempts with a new message. In case the previous transaction failed because lack of gas or other reasons.
+
+The a.DI also incorporates an emergency mode which allows the Aave Governance V3 guardian to replace current bridge providers if one or more bridges become untrusted.
+
+### Oracle
+
+Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds can be one of 3 kind,
+
+1. regular un-mitigated Chainlink price feed (for all volatile assets)
+2. a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
+3. a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
+
+The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+
+# Permission Owners and Security Council
+
+This table shows the external permission owners and how they are rated against the security council criteria.
+
+| Multisig / Role                     | Address                                    | Type         | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
+| ----------------------------------- | ------------------------------------------ | ------------ | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| Aave Governance V3 Guardian         | 0xCe52ab41C40575B072A18C9700091Ccbe4A06710 | Multisig 5/9 | ✅                 | ✅                     | ✅                       | ✅ (source)                |
+| EmergencyAdmin                      | 0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30 | Multisig 5/9 | ✅                 | ✅                     | ❌                       | ✅ (source)                |
+| Risk Council (for Pool Stewards)    | 0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8 | Multisig 2/2 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
+| Risk Council (for GhoGsmSteward)    | 0x8513e6F37dBc52De87b166980Fa3F50639694B60 | Multisig 3/4 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
+| CrossChainController Guardian (BGD) | 0xb812d0944f8F581DfAA3a93Dda0d22EcEf51A9CF | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅                         |
+| CleanUp Admin                       | 0xdeadD8aB03075b7FBA81864202a2f59EE25B312b | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
+| Aave Chan Initiative (ACI)          | 0xac140648435d03f784879cd789130F22Ef588Fcd | Multisig 1/2 | ❌                 | ❌                     | ❌                       | ✅                         |
+| ACI Automation (Bot)                | 0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193 | EOA          | ❌                 | ❌                     | ❌                       | ❌                         |
+| Executor_lvl1                       | 0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
+| Executor_lvl2                       | 0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957 | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
+
+# Contracts and Permissions
 
 ## Contracts
 
@@ -323,7 +364,7 @@ GHO can be borrowed from the reserve at a dynamic interest rate. The total borro
 | VotingMachineDataHelper                                     | [0x77976B51569896523EE215962Ee91ff236Fa50E8](https://etherscan.io/address/0x77976B51569896523EE215962Ee91ff236Fa50E8) |
 | MetaDelegateHelper                                          | [0x94363B11b37BC3ffe43AB09cff5A010352FE85dC](https://etherscan.io/address/0x94363B11b37BC3ffe43AB09cff5A010352FE85dC) |
 
-## Permission owners
+## All Permission owners
 
 | Name                                     | Account                                                                                                               | Type         |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -871,36 +912,3 @@ RoleAdmin is currently the Governance Executor, but technically any address coul
 | DEFAULT_ADMIN        | 0x0000000000000000000000000000000000000000000000000000000000000000 | Executor_lvl1                            | DEFAULT_ADMIN |
 | RETRY_ADMIN          | 0xc448b9502bbdf9850cc39823b6ea40cfe96d3ac63008e89edd2b8e98c6cc0af3 | CrossChainController Guardian (BGD Labs) | DEFAULT_ADMIN |
 | SOLVE_EMERGENCY_ROLE | 0xf4cdc679c22cbf47d6de8e836ce79ffdae51f38408dcde3f0645de7634fa607d | Aave Governance V3 Guardian              | DEFAULT_ADMIN |
-
-## Dependencies
-
-### a.DI
-
-The Aave delivery infrastructure (a.DI) ensures decentralized and fault-tolerant cross-chain messaging. It achieves this by encoding a message and submitting it to multiple independent bridges.
-
-On the receiving end (destination network) the a.DI validates the transaction, requiring multiple matching messages from different bridges before executing the bridged message on the destination network. If the confirmation threshold is not reached, a new attempt can be made by retrying the cross-chain message which uses the same bridge configuration but attempts with a new message. In case the previous transaction failed because lack of gas or other reasons.
-
-The a.DI also incorporates an emergency mode which allows the Aave Governance V3 guardian to replace current bridge providers if one or more bridges become untrusted.
-
-### Oracle
-
-Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds can be one of 3 kind,
-
-1. regular un-mitigated Chainlink price feed (for all volatile assets)
-2. a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
-3. a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
-
-The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
-
-# Security Council
-
-| Requirement                                             | Aave Governance V3 Guardian                                | EmergencyAdmin                                             | Risk Council                                                                                           | Risk Council for GhoGsmSteward                                       | CrossChainController Guardian (BGD Labs) | CleanUp Admin                                                                                                                               | Aave Chan Initiative |
-| ------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| At least 7 signers                                      | ✅                                                         | ✅                                                         | ❌                                                                                                     | ❌                                                                   | ❌                                       | ❌                                                                                                                                          | ❌                   |
-| At least 51% threshold                                  | ✅                                                         | ✅                                                         | ✅                                                                                                     | ✅                                                                   | ✅                                       | ✅                                                                                                                                          | ❌                   |
-| At least 50% non-insiders signers                       | ✅                                                         | ❌                                                         | ❌                                                                                                     | ❌                                                                   | ❌                                       | ❌                                                                                                                                          | ❌                   |
-| Signers are publicly announced (with name or pseudonym) | ✅ ([source](https://aave.com/docs/primitives/governance)) | ✅ ([source](https://aave.com/docs/primitives/governance)) | ✅ ([source](https://governance.aave.com/t/arfc-aave-generalized-risk-stewards-agrs-activation/19178)) | ✅ ([source](https://governance.aave.com/t/arfc-gho-stewards/16466)) | ✅                                       | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=270&ipfsHash=0x4043001b72316afa6b6728772941bfa08f127b66c1c006316a3f20510b6738ab)) | ✅                   |
-
-# Acknowledgement
-
-The Aave protocol maintains a public markdown page on the existing permissions to inform the users of the protocol: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-V3.md
