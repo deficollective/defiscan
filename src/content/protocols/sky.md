@@ -130,7 +130,7 @@ Proposals can be scheduled for execution with the `DSPauseProxy` which enforces 
 
 The Sky protocol relies on the provider Chronicle for price feeds of collateral assets.
 
-Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a TimeLockController with a delay of 7 days. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
+Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a TimeLockController with a delay of 7 days. This controller could also name other controllers or remove this 7 days delay, but the action itself would still be subject to the delay. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
 
 An Oracle Security Module enforces a 1 hour window on price updates and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
 
