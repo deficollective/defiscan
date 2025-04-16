@@ -78,14 +78,6 @@ could be misused to grant any arbitrary address those same permissions. We note 
 we had to scan all governance proposals to ensure this has not happened in the past, and would encourage that those functions are blocked in future versions of the
 governance contract.
 
-## External Permission Owners
-
-| Name                               | Account                                                                                                               | Type     |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
-| DSPause Proxy (Delayed Governance) | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
-| DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
-| ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
-
 ## Sky Stablecoin Module (CDP)
 
 The contracts related to the Collateralized Debt Module are highlighted below. The `Vat` is the core accounting system of the protocol and acts as a balance sheet for debt positions against all collaterals. Each collateral needs an adapter contract called `Join` so that it can be linked to the `Vat`. A `Dog` contract monitors the positions and can _bark_ when a position becomes liquidable. It _kicks_ the collateral's `Clipper` (or `LockstakeClipper` if the collateral is sealed `MKR`) and starts the auction process. The `Vow` is the contract keeping track of all surplus and debt and is the beneficiary of all the `DAI` raised in auction. The `Flopper` or `Flapper` are responsible for debt or surplus auctions respectively. The `Vow` is the beneficiary of the `DAI` raised in auctions. It is important to note that the governance has permission on those contracts and could trigger unjustified liquidations by bypassing the `Dog` contract.
@@ -110,7 +102,7 @@ The governance has admin privileges over all contracts and could, for example, a
 
 ## Sky Rewards
 
-A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. **TODO**: explain more permissions, etc. how rewards work and more could be created.
+A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. Users can stake their `USDS` directly in the `StakingRewards` contract and claim their rewards with the same contract. `DssVestMintable` contracts allows the governance to create vested plans that will gradually mint tokens to distribute to some beneficiaries.
 
 ![Overview of the sky rewards module](./diagrams/sky-rewards.png)
 
@@ -143,9 +135,15 @@ Emergency measures permissions allow the governance to pause certain contracts t
 1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
 2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
 
-# Security Council
+# External Permission Owners and Security Council
 
 There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
+
+| Name                               | Account                                                                                                               | Type     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| DSPause Proxy (Delayed Governance) | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
+| DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
+| ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
 
 # Appendix
 
