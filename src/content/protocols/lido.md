@@ -74,7 +74,9 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | Burner                                 | 0xD15a672319Cf0352560eE76d9e89eAB0889046D3 |
 | MinFirstAllocationStrategy             | 0x7e70De6D1877B3711b2bEDa7BA00013C7142d993 |
 
-## Permission owners **TODO**: it's owners not permissions U_u :(
+## Permission owners
+
+## Permissions
 
 **TODO**: missing proxy permissions? or none?
 | Lido | runScript | ... | ['isInitialized', 'protectState'] |
@@ -145,15 +147,6 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | Burner                                 | requestBurnMyStETH                                     | ...    | ['onlyRole']                 |
 | Burner                                 | requestBurnShares                                      | ...    | ['onlyRole']                 |
 | Burner                                 | commitSharesToBurn                                     | ...    | []                           |
-
-## Permissions
-
-| Contract      | Function     | Impact                                                                                                                               | Owner                   |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| contract name | functionname | Description in 3 Sentences.                                                                                                          | owner of the permission |
-| contract name | functionname | First sentence: what it does technically, e.g "It assigns a new address to the owner variable".                                      | owner of the permission |
-| contract name | functionname | Second sentence: what is the impact within the system, e.g "The owner is permissioned to raise fees".                                | owner of the permission |
-| contract name | functionname | Third sentence: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield. | owner of the permission |
 
 ## Dependencies
 
