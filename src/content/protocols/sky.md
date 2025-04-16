@@ -16,66 +16,105 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Sky protocol is a decentralised protocol developed around the `USDS` stablecoin. It is managed by the Sky ecosystem governance. The Sky Protocol features Sky tokens (`USDS`, `SKY`, `DAI`, `MKR`), the Sky Savings Rate, Sky Token Rewards, Activation Token Rewards, and SkyLink. The Protocol was built from the core module of the MakerDAO Protocol and replaces Maker. As Sky is built on top of Maker and both protocol's tokens are tied by fixed conversion rate, this review also includes the MakerDAO protocol and its contracts.
-Maker is a lending protocol centered around `DAI`. Users can borrow `DAI` using a list of accepted collaterals. Fixed rates allow users to go to and from legacy tokens at any time (`DAI` to `USDS`, `MKR` to `SKY`).
+Sky is a stablecoin protocol allowing users to mint its USDS stablecoin through _Collateralized Debt Positions_ with a variety of crypto collateral assets. Sky is built on the Maker protocol, by the MakerDAO, with the objective to replace the DAI stablecoin and allows for the 1:1 conversion between DAI and USDS. USDS can further be staked for the yield-bearing sUSDS token. Various levels of control over the Sky protocol are exercised through an onchain governance system.
 
 # Overview
 
 ## Chain
 
-The Sky protocol is currently mainly on Ethereum mainnet. As part of Sky's _End Game_ plan the protocol is gradually deploying on other chains and aims to launch its own chain in the future. This review focuses on the Ethereum mainnet deployment of Sky.
+This review focuses on the Ethereum deployment of Sky, currently the only chain the Sky protocol is deployed on. As part of Sky's _End Game_ plan the protocol is gradually deploying on other chains and aims to launch its own chain in the future.
 
 > Chain score: Low
 
 ## Upgradeability
 
-Core contracts such as `USDS` and `sUSDS` are upgradeable through governance actions. Governance has a complete control over the protocol and could arbitrarily mint tokens, liquidate positions, stop contracts, and steal collateral.
-Governance is controlled by `MKR`/`SKY` token holders who sealed their tokens to earn voting power which allows them to submit and vote on respective proposals, or delegate their votes to another user.
+`USDS` and `sUSDS` are upgradeable contracts through governance proposals. Updating those contracts could change the entire logic of those tokens and may incur loss of funds for users.
+
+Many parameters in the Sky Protocol can be changed through governance proposals and may also incur loss of funds, loss of unclaimed yield, as well as material changes in expected performances. Example actions are forced liquidations, creating unbacked debt, or pausing the contracts.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and the governance can freeze the current price to prevent further updates in case of emergency. The Chronicol protocol uses non-upgradeable contracts and a system of decentralized validators (and challengers) to push price updates on-chain. The price feed provider could be changed through a governance proposal.
+The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of decentralized validators (and challengers) to push price updates on-chain and is explained in more details in [dependencies](#dependencies).
+
+An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and the governance can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
 
 > Autonomy score: Medium
 
 ## Exit Window
 
-The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedules. Those proposals usually have a courtesy delay duration of 2-3 days before taking effect, but proposals remain possible at any time with the minimum delay. Proposals may (but do not have to) include an office-hours modifier that means it can only be executed between 14:00 and 21:00 UTC Monday-Friday. There are no minimum amount of tokens to open a proposal or for it to pass, as the protocol uses continuous approval. This is explained in more details in the [exit window analysis section](#exit-window-1).
+All permissions within Sky are held by the onchain Sky Governance. There are no external accounts or multisigs in control.
 
-Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost no matter the emergency status.
+Governance is controlled by `MKR`/`SKY` token holders who locked their tokens to earn voting power which allows them to submit and vote on respective proposals, or delegate their votes to another user. Any token holder can create a proposal and the protocol uses a system of continuous approval explained in more detail in the [technical section](#exit-window-1).
+
+The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedules. Those proposals usually have a courtesy delay duration of 2-3 days before taking effect, but proposals remain possible at any time with the minimum delay.
+
+Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost no matter the emergency status.
 
 > Exit Window score: High
 
 ## Accessibility
 
-Sky has a main frontend at [sky.money](https://sky.money). The frontend is not self-hostable nor open source, but multiple other access points exist with _stars_ such as [Spark](https://spark.fi) which is self-hostable or third-party apps like DeFiSaver or SummerFi. These apps build an acceptable backup solution in case of failure of the official frontend.
+Sky has a main frontend at [sky.money](https://sky.money). The frontend is not self-hostable nor open source, but multiple other access points exist with Sky-specific apps such as [Spark](https://spark.fi) or third-party apps like [DeFiSaver](https://defisaver.com) or [SummerFiPro](https://pro.summer.fi). These apps build an acceptable backup solution in case of failure of the official frontend.
 
 > Accessibility score: Low
 
 ## Conclusion
 
-Overall the Sky protocol has unfortunately a high upgradeability and exit window scores. A security council could potentially
-allow the protocol to reach Stage 1, but the current repartition of voting power in the goverance, with the top-3 _aligned delegates_ having to themselves
-the right to pass proposals, does not qualify for a comparison to a Security council. We encourage the protocol to take measures towards a
-diversification of delegates and voting power. Those scores would grant the rank of Stage 0 to the Sky protocol.
+Overall the Sky protocolexposes critical permissions that are not protected with an appropriate Exit Window or Security Council. It thus earns High centralization risk scores for its Upgradeability and Exit Window dimensions and achieves Stage 0.
+
+The protocol could reach Stage 1 with an exit window of at least 7 days or a security council. It could further reach Stage 2 with an exit window of at least 30 days.
 
 > Overall score: Stage 0
 
 # Technical Analysis
 
-## Tokens and Rewards
+## Informational
 
-The contracts related to the tokens and the reward system of the Sky protocol are displayed in the diagram below. Following the _Sky End Game Plan_, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Conversion contracts allow for the swap from legacy to new tokens and back at a fixed rate.
+During our analysis we discovered a paradigm of _Authority_ contract used to handle fine-grained permissions over functions and contracts.
+In most of the cases the authority is `DSChief` and this allows governance proposals to have non-delayed access to certain functions. Nonetheless, this
+could be misused to grant any arbitrary address those same permissions. We note that because of the lack of _events_ in the `DSChief`'s role granting functions,
+we had to scan all governance proposals to ensure this has not happened in the past, and would encourage that those functions are blocked in future versions of the
+governance contract.
 
-A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. A `LitePSM` (Peg-stability-module) allows users to swap other stablecoins for `USDS` with no impact on the peg thanks to pre-attributed reserves.
+## External Permission Owners
 
-The governance, through its delay contract `DSPauseProxy` which enforces a delay of **18 hours** on actions, has admin privileges over all contracts and could, for example, arbitrarily mint tokens. `DSChief`, the governance contract, is the authority over the `LitePSMMom` which allows governance proposals to stop the `LitePSM` without any delay. We note that a missuse of the authority model used could grant access over the `LitePSM` to any arbitrary addresses (through a governance proposal).
+| Name                               | Account                                                                                                               | Type     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| DSPause Proxy (Delayed Governance) | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
+| DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
+| ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
 
-![Overview of the sky tokens and rewards module](./diagrams/sky-tokens.png)
+## Sky Stablecoin Module (CDP)
 
-## Governance
+The contracts related to the Collateralized Debt Module are highlighted below. The `Vat` is the core accounting system of the protocol and acts as a balance sheet for debt positions against all collaterals. Each collateral needs an adapter contract called `Join` so that it can be linked to the `Vat`. A `Dog` contract monitors the positions and can _bark_ when a position becomes liquidable. It _kicks_ the collateral's `Clipper` (or `LockstakeClipper` if the collateral is sealed `MKR`) and starts the auction process. The `Vow` is the contract keeping track of all surplus and debt and is the beneficiary of all the `DAI` raised in auction. The `Flopper` or `Flapper` are responsible for debt or surplus auctions respectively. The `Vow` is the beneficiary of the `DAI` raised in auctions. It is important to note that the governance has permission on those contracts and could trigger unjustified liquidations by bypassing the `Dog` contract.
+
+The `Spotter` feeds the price used for liquidation and auctions. It reads the price out of the `OSM` (Oracle Security Module) which delays price updates by one hour and can be frozen in case of emergency. Incorrect oracle prices could potentially liquidate the entire Maker ecosystem, the oracle provider Chronicle is therefore extremely trusted.
+
+The `Pot` and `Jug` contracts represent the rates module. Respectively the `Pot`contract allows user to save at a specific _DAI Savings rate_ and the `Jug` contract handles stability fees. We note that the savings rate is not limited and may become either highly negative or positive under future governance proposals.
+
+As for the governance and tokens, the Mom contracts (`FlapperMom`, `FLopperMom`, `OSMMom`) have the ability to stop their child. The permissions to do so are granted by `DSChief`, the governance contract, so that governance proposals can stop those contracts without delay.
+
+![Overview of the stablecoin module](./diagrams/sky-stablecoin.png)
+
+## Sky ↔ Maker Conversion Module
+
+The contracts related to the conversion from legacy Maker tokens to Sky are displayed in the diagram below. Following the _Sky End Game Plan_, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Conversion contracts allow for the swap from legacy to new tokens and back at a fixed rate. In addition to that, a `LitePSM` (Peg-stability-module) allows users to swap `USDC` for `USDS` with no impact on the peg thanks to pre-attributed reserves.
+
+A `LitePSM` (Peg-stability-module) allows users to swap other stablecoins for `USDS` with no impact on the peg thanks to pre-attributed reserves.
+
+The governance has admin privileges over all contracts and could, for example, arbitrarily mint tokens. `DSChief`, the (non-delayed) governance contract, is the authority over the `LitePSMMom` which allows governance proposals to stop the `LitePSM` without any delay.
+
+![Overview of the sky tokens and conversion module](./diagrams/sky-tokens.png)
+
+## Sky Rewards
+
+A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. **TODO**: explain more permissions, etc. how rewards work and more could be created.
+
+![Overview of the sky rewards module](./diagrams/sky-rewards.png)
+
+## Sky Governance
 
 The governance process is highlighted below. Users need to seal `MKR` or `SKY` tokens into the `LockStakeEngine` in order to receive voting rights. Users may receive rewards for their sealed tokens. Withdrawing the tokens is currently subject to a fee starting at 5% and increasing up to 15% overtime.
 
@@ -87,17 +126,28 @@ Proposals can be scheduled for execution with the `DSPauseProxy` which enforces 
 
 ![Overview of the sky governance](./diagrams/sky-governance.png)
 
-## Collaterallized Debt Positions Module
+## Dependencies
 
-The contracts related to the CDP module are highlighted below. The `Vat` is the core accounting system of the protocol and acts as a balance sheet for debt positions against all collaterals. Each collateral needs an adapter contract called `Join` so that it can be linked to the `Vat`. A `Dog` contract monitors the positions and can _bark_ when a position becomes liquidable. It _kicks_ the collateral's `Clipper` (or `LockstakeClipper` if the collateral is sealed `MKR`) and starts the auction process. The `Vow` is the contract keeping track of all surplus and debt and is the beneficiary of all the `DAI` raised in auction. The `Flopper` or `Flapper` are responsible for debt or surplus auctions respectively. The `Vow` is the beneficiary of the `DAI` raised in auctions. It is important to note that the governance has permission on those contracts and could trigger unjustified liquidations by bypassing the `Dog` contract.
+The Sky protocol relies on the provider Chronicle for price feeds of collateral assets.
 
-The `Spotter` feeds the price used for liquidation and auctions. It reads the price out of the `OSM` (Oracle Security Module) which delays price updates by one hour and can be frozen in case of emergency. Incorrect oracle prices could potentially liquidate the entire Maker ecosystem, the oracle provider Chronicle is therefore extremely trusted.
+Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a TimeLockController with a delay of 7 days. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
 
-The `Pot` and `Jug` contracts represent the rates module. Respectively the `Pot`contract allows user to save at a specific _DAI Savings rate_ and the `Jug` contract handles stability fees. We note that the savings rate is not limited and may become either highly negative or positive under future governance proposals.
+An Oracle Security Module enforces a 1 hour window on price updates and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
 
-As for the governance and tokens, the Mom contracts (`FlapperMom`, `FLopperMom`, `OSMMom`) have the ability to stop their child. The permissions to do so are granted by `DSChief`, the governance contract, so that governance proposals can stop those contracts without delay.
+## Exit Window
 
-![Overview of the CDP module](./diagrams/sky-cdp.png)
+The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any times is accepted and can be executed once its delay has passed.
+
+Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. This is the case for all contract that have a `Mom` who can pause or stop their child. In addition to that, an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
+
+1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
+2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
+
+# Security Council
+
+There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
+
+# Appendix
 
 ## Contracts
 
@@ -141,11 +191,13 @@ The list of contract and deployment addresses is available in both the [official
 | Vow                           | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466) |
 | LockstakeClipper              | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239) |
 
-## Permission owners
+## All Permission owners
 
 | Name                      | Account                                                                                                               | Type     |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
 | DSPause Proxy             | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
+| DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
+| ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
 | USDSJoin                  | [0x3c0f895007ca717aa01c8693e59df1e8c3777feb](https://etherscan.io/address/0x3c0f895007ca717aa01c8693e59df1e8c3777feb) | contract |
 | DAIJoin                   | [0x9759a6ac90977b93b58547b4a71c78317f391a28](https://etherscan.io/address/0x9759a6ac90977b93b58547b4a71c78317f391a28) | contract |
 | DaiJoinFab                | [0x64a84e558192dd025F3A96775FEE8FB530f27177](https://etherscan.io/address/0x64a84e558192dd025F3A96775FEE8FB530f27177) | contract |
@@ -159,51 +211,14 @@ The list of contract and deployment addresses is available in both the [official
 | SplitterMom               | [0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e](https://etherscan.io/address/0xF51a075d468dE7dE3599C1Dc47F5C42d02C9230e) | contract |
 | Vow                       | [0xA950524441892A31ebddF91d3cEEFa04Bf454466](https://etherscan.io/address/0xA950524441892A31ebddF91d3cEEFa04Bf454466) | contract |
 | MkrAuthority              | [0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8](https://etherscan.io/address/0x6eEB68B2C7A918f36B78E2DB80dcF279236DDFb8) | contract |
-| DSChief                   | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
 | Flopper                   | [0xa41b6ef151e06da0e34b009b86e828308986736d](https://etherscan.io/address/0xa41b6ef151e06da0e34b009b86e828308986736d) | contract |
 | Vat                       | [0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B](https://etherscan.io/address/0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B) | contract |
-| ESM                       | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
 | END                       | [0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28](https://etherscan.io/address/0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28) | contract |
 | Jug                       | [0x19c0976f590D67707E62397C87829d896Dc0f1F1](https://etherscan.io/address/0x19c0976f590D67707E62397C87829d896Dc0f1F1) | contract |
 | Pot                       | [0x197e90f9fad81970ba7976f33cbd77088e5d7cf7](https://etherscan.io/address/0x197e90f9fad81970ba7976f33cbd77088e5d7cf7) | contract |
 | DssAutoLine               | [0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3](https://etherscan.io/address/0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3) | contract |
 
-<!-- Contracts with mint rights on MKR:
-End : 0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28
-ClipperMom: 0x79FBDF16b366DFb14F66cE4Ac2815Ca7296405A0
-DSPause: 0xbE286431454714F511008713973d3B053A2d38f3
-
-VAT: 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B 0x65fae35e
-Spotter 0x65c79fcb50ca1594b025960e539ed7a9a6d434a3
-
-Rates modules:
-Pot 0x197e90f9fad81970ba7976f33cbd77088e5d7cf7
-Jug 0x19c0976f590D67707E62397C87829d896Dc0f1F1
-
-DssAutoLine 0xc7bdd1f2b16447dcf3de045c4a039a60ec2f0ba3
-LineMom: 0x9c257e5Aaf73d964aEBc2140CA38078988fB0C10
-
-**ESM**: 0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58
-**END**: 0x0e2e8F1D1326A4B9633D96222Ce399c708B19c28
-
-OSM: oracle security module
-OsmMom: 0x76416A4d5190d071bfed309861527431304aA14f
-Liquidation Oracle: 0x88f88bb9e66241b73b84f3a6e197fbba487b1e30
-
-to add or investigate: SkyLink
-
-dog owners:
-LockstakeClipper, Clipper, End
-
-Abacus: -->
-
 ## Permissions
-
-During our analysis we discovered a paradigm of _Authority_ contract used to handle fine-grained permissions over functions and contracts.
-In most of the cases the authority is `DSChief` and this allows governance proposals to have non-delayed access to certain functions. Nonetheless, this
-could be misused to grant any arbitrary address those same permissions. We note that because of the lack of _events_ in the `DSChief`'s role granting functions,
-we had to scan all governance proposals to ensure this has not happened in the past, and would encourage that those functions are blocked in future versions of the
-governance contract.
 
 &nbsp;
 
@@ -366,22 +381,3 @@ governance contract.
 | Clipper                               | File                   | Changes contract parameters or stops the contract. This function can be used to update the address of auxialary contracts or auction parameters that regard the timing, speed, fees, and incentives of auctions. The contract can also be stopped gradually to first stop new auctions, then auction remakes, and then bids.                                                                                                                           | DSPauseProxy (DAO), Dog, ClipperMom, ESM, End                                               |
 | Clipper                               | Kick                   | Starts a new auction. This function is meant to be called by `Dog`. There are no particular input validations. If this contract is directly called by the governance (bypassing `Dog`), it could liquidate a healthy debt position.                                                                                                                                                                                                                    | DSPauseProxy (DAO), Dog, ClipperMom, ESM, End                                               |
 | Clipper                               | Yank                   | Cancels an auction. All auctions would be cancelled in case of an Emergency Shutdow (through `End`).                                                                                                                                                                                                                                                                                                                                                   | DSPauseProxy (DAO), Dog, ClipperMom, ESM, End                                               |
-
-## Dependencies
-
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. An Oracle Security Module enforces a 1 hour window on price updates and the provider (Chronicle) or the governance can freeze the current price value to prevent further updates.
-
-Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
-
-## Exit Window
-
-The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any times is accepted and can be executed once its delay has passed.
-
-Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. This is the case for all contract that have a `Mom` who can pause or stop their child. In addition to that, an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
-
-1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
-2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
-
-# Security Council
-
-There is no security council to oversee the Sky Protocol. Nonetheless, there is a series of emergency governance actions described in [exit-window](#exit-window-1) that can be taken. Unfortunately, the model of continuous approval and vote delegation used in the governance does not qualify for a comparison with a security council, as the top 3 _Aligned Delegates_ could pass both new proposals and emergency actions (exluding the shutdown module) on their own.
