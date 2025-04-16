@@ -16,11 +16,11 @@ update_date: "1970-01-01"
 
 # Summary
 
-Spark is a star within the Sky ecosystem and consists of three main products:
+Spark is a protocol within the Sky ecosystem and consists of three main products:`USDS` savings rate, SparkLend, and the Spark Liquidity Management Layer.
 
-- Savings: A fixed savings rate on `USDS`.
-- SparkLend: a `USDS` and `DAI` centric lending protocol in which users can participate as lenders or borrowers. It combines liquidity from Sky and integrating with other DeFi protocols.
-- Spark Liquidity Layer: Direct liquidity provision into DeFi markets. This layer automates the liquidity provision of USDS, sUSDS, and USDC directly from Sky across various blockchain networks and DeFi protocols. It also enables Spark to provide liquidity into risk-adjusted yield strategies on other chains and protocols, as with Aave and Morpho on mainnet.
+SparkLend is a `USDS` and `DAI` centric lending protocol in which users can participate as lenders or borrowers. It combines liquidity from Sky and integrating with other DeFi protocols.
+
+The Spark Liquidity Management Layer (ALM) automates the liquidity provision of USDS, sUSDS, and USDC directly from Sky across various blockchain networks and DeFi protocols. It also enables Spark to provide liquidity into risk-adjusted yield strategies on other chains and protocols, as with Aave and Morpho on mainnet.
 
 # Overview
 
@@ -32,13 +32,9 @@ SparkLend is deployed on Ethereum mainnet and the liquidity layer involves other
 
 ## Upgradeability
 
-The upgradeability of the Spark protocol is limited. Most permissions are currently held by the Sky Governance.
+The upgradeability of the Spark protocol is limited. No contract is upgradeable within the Spark Liquidity Management Layer (ALM). The SparkLend markets contracts are not upgradeable, but the treasury (collected fees) and rewards contracts may be upgraded through the Sky Governance. Upgrading the rewards contracts may cancel the rewards and result in the loss of unclaimed yield. This is because the rewards are part of the yield advertised to users. The Sky Governance and the _SparkLend Freezer_ multisig can both freeze all funds deposited into SparkLend with no delay.
 
-The Sky Governance could update the treasury (collected fees) or arbitrarily move funds out. As part of the Liquidity Management Layer (LML) the Sky Governance also may mint/burn `USDS` (debt) from the Sky protocol to Spark within set limits, which could lead to instability in the protocol. Two externally-owned accounts (EOA) also have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with stricter limits. Those EOAs are assumed to be corruptible with limited impact on the protocol because they are monitored and can be frozen by a _freezer_ multisig. Unfortunately, this multisig does not meet our security council requirements.
-
-The core contracts of SparkLend are not upgradeable. The Sky Governance and the _SparkLend Freezer_ multisig can both freeze all funds deposited into SparkLend with no delay. This is reversible through a Sky Governance delayed proposal.
-
-Finally, the contract distributing rewards in SparkLend is upgradeable and rewards could be canceled. This could result in the loss of unclaimed yield for users.
+As part of the Liquidity Management Layer (ALM) the two relayers (EOAs) have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with strict limits and only in pre-approved protocols. Those relayers act through a 1/2 multisig and are assumed to be corruptible with limited impact on the protocol. This is because of both the strict rate limiting they are subject to and the presence of a _freezer_ multisig which can freeze the relayers in case of suspicious activity. This _freezer_ multisig does not meet our security council requirements.
 
 > Upgradeability Score: Medium
 
@@ -74,7 +70,7 @@ However, SparkLend is accessible on third-party applications such as DeFiSaver a
 
 # Technical Analysis
 
-## Spark ALM
+## Spark Liquidity Management
 
 Spark has a liquidity management layer (ALM) whose role is to automate liquidity provision of `USDS`, `sUSDS`, and `USDC` directly from Sky and across blockchain networks and DeFi protocols. The overview of this system is shown in the diagram below. All core permissions are held by the Sky Governance through its delayed proxy (`DSPause Proxy`). The `Spark Proxy` is a simple wrap around this governance to distinguish permissions specific to spark. The `AllocatorVault` bridges between Sky and Spark and allows minting/burning of `USDS`.
 
@@ -109,7 +105,6 @@ The list of deployed contracts and their addresses is available in spark's [addr
 | AaveOracle                                                         | [0x8105f69D9C41644c6A0803fDA7D03Aa70996cFD9](https://etherscan.io/address/0x8105f69D9C41644c6A0803fDA7D03Aa70996cFD9) |
 | ACLManager                                                         | [0xdA135Cd78A086025BcdC87B038a1C462032b510C](https://etherscan.io/address/0xdA135Cd78A086025BcdC87B038a1C462032b510C) |
 | InitializableAdminUpgradeabilityProxy (DAI Treasury / Collector)   | [0x856900aa78e856a5df1a2665eE3a66b2487cD68f](https://etherscan.io/address/0x856900aa78e856a5df1a2665eE3a66b2487cD68f) |
-| InitializableAdminUpgradeabilityProxy (RewardsController)          | [0x4370D3b6C9588E02ce9D22e684387859c7Ff5b34](https://etherscan.io/address/0x4370D3b6C9588E02ce9D22e684387859c7Ff5b34) |
 | EmissionManager                                                    | [0xf09e48dd4CA8e76F63a57ADd428bB06fee7932a4](https://etherscan.io/address/0xf09e48dd4CA8e76F63a57ADd428bB06fee7932a4) |
 | InitializableAdminUpgradeabilityProxy (Rewards Controller)         | [0x4370D3b6C9588E02ce9D22e684387859c7Ff5b34](https://etherscan.io/address/0x4370D3b6C9588E02ce9D22e684387859c7Ff5b34) |
 | InitializableImmutableAdminUpgradeabilityProxy (Pool)              | [0xC13e21B648A5Ee794902342038FF3aDAB66BE987](https://etherscan.io/address/0xC13e21B648A5Ee794902342038FF3aDAB66BE987) |
@@ -404,7 +399,7 @@ If an oracle's killswitch is triggered (see [dependencies](#dependencies)), the 
 
 # Security Council
 
-The _Freezer_ multisig can freeze the movement of liquidity in the LML while the _SparkLend Freezer_ can freeze one or all markets in SparkLend. They do not meet our Security Council requirements and the signers are not publicly announced.
+The _Freezer_ multisig can freeze the movement of liquidity in the ALM while the _SparkLend Freezer_ can freeze one or all markets in SparkLend. They do not meet our Security Council requirements and the signers are not publicly announced.
 
 | Requirement                                             | Freezer | SparkLend Freezer |
 | ------------------------------------------------------- | ------- | ----------------- |
