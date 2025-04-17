@@ -22,7 +22,7 @@ The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and
 
 Different Aave protocol _Instances_ exist and are managed by the Aave DAO. These instances focus on specific use cases and chains. This review covers the Ethereum Mainnet Core instance.
 
-# Overview
+# Rating
 
 ## Chain
 
@@ -126,11 +126,9 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ⚠️ During our analysis, we identified a unverified role (not mentioned in the docs https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-V3.md#admins). Role Id is `0xd1d2cf869016112a9af1107bcf43c3759daf22cf734aad47d0c9c726e33bc782`. The owners of this role are related to the V2 to V3 migration.
 
-# Technical Analysis
+# Protocol Outline
 
-## System Outline
-
-### Upgradeable Pool Contract and mutable reserve parameters
+## Upgradeable Pool Contract and mutable reserve parameters
 
 The center of the Aave V3 market is the contract called `Pool.sol` (`0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2`). Each supported asset is attached to a reserve in this `Pool` contract. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
 
@@ -141,35 +139,6 @@ The `Pool` contract is completely upgradeable via the proxy-pattern. The permiss
 ![Reserve Parameter Control](./diagrams/Aave_V3_Reserve_Parameter_Control.png)
 
 In addition to completely upgrading the contracts, the control over market parameters, emergency freezing and pausing is handed to multi-sigs through multiple steward contracts. This allows the DAO to delegate certain permissions to the multi-sigs with rate-limiting (frequency) and guardrails (relative or absolute changes to parameters). Technically this was implemented by giving the `PoolConfigurator` contract permission to change any reserve parameter on the `Pool` contract while the `PoolConfigurator` assigns various roles from the `ACLManager` to these permissioned funcions. So is the capability to pause the `Pool` and freeze reserves assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts own these roles and expose the functions with aforementioned guardrails. Councils (regular multi-sigs) are the permission owners of these steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions for these multi-sigs. The Governance itself can also update reserve parameters directly if the community decides to do so. Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
-
-### Governance
-
-The on-chain governance system of Aave is multi-chain by design. The creation of proposals and voting on the proposals in permissionless. In this paragraph, the architecture and existing permissions are highlighted.
-
-To get to the stage of voting and creating an on-chain proposal a few prior steps need to be passed to have sufficient probability of being accepted through an on-chain vote.
-
-1. The proposal was discussed with the community and incorporated feedback
-2. A temperature check on Snapshot is conducted. This vote is not binding, but it helps determining if sufficient support is within the community to move the proposal forward.
-3. ARFC (Aave Request for Final Comments) where service provider and community members prepare the AIP
-4. AIP (Aave Improvement Proposal) which includes the contract payload submission on-chain
-5. Actual on-chain vote
-6. Execution on the `PayloadsController` on each chain where the change needs to be enforced
-
-### AIP - Payload submission
-
-Payload submission is technically permissionless. The payload is created by calling `createPayload` on the `PayloadsController` contract. The payload is an array of actions and each action contains information that specifies which contract to call with what data.
-
-### Voting
-
-Voting can be held on either Ethereum Mainnet, Polygon (PoS) or Avalanche. When proposal is created (`createProposal`) the specified `VotingPortal` address determines the voting network of the particular vote. Once the voting is activated by the community, the details of the vote (proposal id, snapshot and voting duration) are sent to the voting network cross-chain with the general purpose Aave delivery infrastructure (a.DI). Mainnet AAVE, aAAVE and stkAAVE token holders can vote on the voting network (e.g Polygon PoS) via the `VotingMachine` contract. The `VotingMachine` contract uses state tree hashes to validate the voting power of each voter. Once the voting duration is over, users can call `closeAndSendVote` which sends the results back to mainnet.
-
-### Execution
-
-Once the proposal passes, the function `executeProposal` on the `AaveGovernanceV3` allows to execute the approved proposal, which forwards the message to the `CrossChainController` (calling `forward`). The CCC forwards the proposal to each chain where the proposal must be executed. If the proposal is also dedicated to the deployment on Ethereum, the payload id is forwarded to the `SameChainAdapter` that calls the function `receiveCrossChainMessage` on the `PayloadsController` contract, which queues the payload to be executed. The payload was previously created on the `PayloadsController` by calling `createPayload` which returns a payload id. This payload id is referenced in the governance proposal (see previous section). Anyone can call `executePayload` once sufficient time has passed (timelock). By calling `executePayload` on the `PayloadsController` `executeTransaction` on the `Executor Lvl1` contract will be triggered. A technical detail, if in this report it is mentioned that the governance owns the permission, it is actually (if we are very precise) this `Executor Lvl1` contract (as shown in the permission table) because community approved payloads will be executed from this contract. Alternatively also the `Executor Lvl2` can be the chosen executor by the payload if it requires permission to update the AAVE token or the Aave governance contract.
-
-In case of a malicious proposal the `Aave Governance V3 Guardian` can step in and stop the malicious proposal of being executed at the level of the `Payloads Controller` or at the Governance contract level (`AaveGovernanceV3`). Note this is can happen even if the proposal is supported by the majority of the community.
-
-![Governance](./diagrams/Aave_V3_Governance.png)
 
 ### Smart Contract Upgrade Flow
 
@@ -182,7 +151,7 @@ Contracts that `PoolAddressesProvider` owns or can set are
 - `ACLManager`
 - `Governance Executor`
 
-### Treasury
+## Treasury
 
 Treasury is funded through reserve fees collected when users pay back debt. The treasury contract is called `Collector`. The treasury contract allows the Aave DAO to pay service providers and fund incentives to grow the Aave ecosystem.
 
@@ -192,7 +161,7 @@ Additionally, the DAO owns permissions to create streams and initiate transfers 
 
 Both the treasury and the Aave reserve are upgradeable contracts which are sensitive to update, as they hold a lot of value.
 
-### Incentives
+## Incentives
 
 3rd parties can list incentives additional to the interest rate paid to the suppliers of capital via the `EmissionManager`. The governance admits the emission admin role to an on-chain account that can configure the details of a specific incentive (token, amount of tokens, duration). The tokens are claimed from an account external of the Aave V3 system (for example the ACI multi-sig) via the `RewardsController` contract.
 As a consequence the trust assumptions on receiving the additional incentives has to be studied on a case-by-case basis.
@@ -216,9 +185,9 @@ GHO can be borrowed from the reserve at a dynamic interest rate. The total borro
 
 ![Gho](./diagrams/Aave_V3_GHO.png)
 
-## Dependencies
+# Dependencies
 
-### a.DI
+## a.DI
 
 The Aave delivery infrastructure (a.DI) ensures decentralized and fault-tolerant cross-chain messaging. It achieves this by encoding a message and submitting it to multiple independent bridges.
 
@@ -226,7 +195,7 @@ On the receiving end (destination network) the a.DI validates the transaction, r
 
 The a.DI also incorporates an emergency mode which allows the Aave Governance V3 guardian to replace current bridge providers if one or more bridges become untrusted.
 
-### Oracle
+## Oracle
 
 Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds can be one of 3 kind,
 
@@ -236,12 +205,41 @@ Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
-# Permission Owners
+# Governance
+
+The on-chain governance system of Aave is multi-chain by design. The creation of proposals and voting on the proposals in permissionless. In this paragraph, the architecture and existing permissions are highlighted.
+
+To get to the stage of voting and creating an on-chain proposal a few prior steps need to be passed to have sufficient probability of being accepted through an on-chain vote.
+
+1. The proposal was discussed with the community and incorporated feedback
+2. A temperature check on Snapshot is conducted. This vote is not binding, but it helps determining if sufficient support is within the community to move the proposal forward.
+3. ARFC (Aave Request for Final Comments) where service provider and community members prepare the AIP
+4. AIP (Aave Improvement Proposal) which includes the contract payload submission on-chain
+5. Actual on-chain vote
+6. Execution on the `PayloadsController` on each chain where the change needs to be enforced
+
+## AIP - Payload submission
+
+Payload submission is technically permissionless. The payload is created by calling `createPayload` on the `PayloadsController` contract. The payload is an array of actions and each action contains information that specifies which contract to call with what data.
+
+## Voting
+
+Voting can be held on either Ethereum Mainnet, Polygon (PoS) or Avalanche. When proposal is created (`createProposal`) the specified `VotingPortal` address determines the voting network of the particular vote. Once the voting is activated by the community, the details of the vote (proposal id, snapshot and voting duration) are sent to the voting network cross-chain with the general purpose Aave delivery infrastructure (a.DI). Mainnet AAVE, aAAVE and stkAAVE token holders can vote on the voting network (e.g Polygon PoS) via the `VotingMachine` contract. The `VotingMachine` contract uses state tree hashes to validate the voting power of each voter. Once the voting duration is over, users can call `closeAndSendVote` which sends the results back to mainnet.
+
+## Execution
+
+Once the proposal passes, the function `executeProposal` on the `AaveGovernanceV3` allows to execute the approved proposal, which forwards the message to the `CrossChainController` (calling `forward`). The CCC forwards the proposal to each chain where the proposal must be executed. If the proposal is also dedicated to the deployment on Ethereum, the payload id is forwarded to the `SameChainAdapter` that calls the function `receiveCrossChainMessage` on the `PayloadsController` contract, which queues the payload to be executed. The payload was previously created on the `PayloadsController` by calling `createPayload` which returns a payload id. This payload id is referenced in the governance proposal (see previous section). Anyone can call `executePayload` once sufficient time has passed (timelock). By calling `executePayload` on the `PayloadsController` `executeTransaction` on the `Executor Lvl1` contract will be triggered. A technical detail, if in this report it is mentioned that the governance owns the permission, it is actually (if we are very precise) this `Executor Lvl1` contract (as shown in the permission table) because community approved payloads will be executed from this contract. Alternatively also the `Executor Lvl2` can be the chosen executor by the payload if it requires permission to update the AAVE token or the Aave governance contract.
+
+In case of a malicious proposal the `Aave Governance V3 Guardian` can step in and stop the malicious proposal of being executed at the level of the `Payloads Controller` or at the Governance contract level (`AaveGovernanceV3`). Note this is can happen even if the proposal is supported by the majority of the community.
+
+![Governance](./diagrams/Aave_V3_Governance.png)
 
 This table shows the external permission owners and how they are rated against the security council criteria.
 
 | Multisig / Role                     | Address                                    | Type         | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
 | ----------------------------------- | ------------------------------------------ | ------------ | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| Executor_lvl1                       | 0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
+| Executor_lvl2                       | 0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957 | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
 | Aave Governance V3 Guardian         | 0xCe52ab41C40575B072A18C9700091Ccbe4A06710 | Multisig 5/9 | ✅                 | ✅                     | ✅                       | ✅ (source)                |
 | EmergencyAdmin                      | 0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30 | Multisig 5/9 | ✅                 | ✅                     | ❌                       | ✅ (source)                |
 | Risk Council (for Pool Stewards)    | 0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8 | Multisig 2/2 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
@@ -250,8 +248,6 @@ This table shows the external permission owners and how they are rated against t
 | CleanUp Admin                       | 0xdeadD8aB03075b7FBA81864202a2f59EE25B312b | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
 | Aave Chan Initiative (ACI)          | 0xac140648435d03f784879cd789130F22Ef588Fcd | Multisig 1/2 | ❌                 | ❌                     | ❌                       | ✅                         |
 | ACI Automation (Bot)                | 0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193 | EOA          | ❌                 | ❌                     | ❌                       | ❌                         |
-| Executor_lvl1                       | 0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
-| Executor_lvl2                       | 0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957 | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
 
 # Contracts and Permissions
 
