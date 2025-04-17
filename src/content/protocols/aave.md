@@ -122,11 +122,11 @@ The protocol could reach **Stage 1** by implementing fallback mechanism around t
 
 The project additionally could advance to **Stage 2** if the on-chain governance (DAO) used a 30-day exit window instead of only 7 days.
 
-# Technical Analysis
-
-## Informational
+# Informational
 
 ⚠️ During our analysis, we identified a unverified role (not mentioned in the docs https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-V3.md#admins). Role Id is `0xd1d2cf869016112a9af1107bcf43c3759daf22cf734aad47d0c9c726e33bc782`. The owners of this role are related to the V2 to V3 migration.
+
+# Technical Analysis
 
 ## System Outline
 
@@ -236,7 +236,7 @@ Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
-# Permission Owners and Security Council
+# Permission Owners
 
 This table shows the external permission owners and how they are rated against the security council criteria.
 
