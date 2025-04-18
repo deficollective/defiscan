@@ -7,6 +7,7 @@ export type Reason =
   | "Closed-Source"
   | "Unverified Contracts"
   | "Incorrect Docs";
+
 export type Reasons = Array<Reason>;
 
 export type Project = {
