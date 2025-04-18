@@ -118,8 +118,8 @@ export const columns: ColumnDef<Project>[] = [
       const reasons = row.getValue("reasons") as Reasons;
       return (
         <div>
-          {reasons.map((el) => (
-            <TooltipProvider>
+          {reasons.map((el, index) => (
+            <TooltipProvider key={index}>
               <Badge
                 className="my-1 bg-red-500"
                 stage={"O"}
