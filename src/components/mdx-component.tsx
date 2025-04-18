@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable no-new-func */
 import { cn } from "@/lib/utils";
 import React, { HTMLAttributes } from "react";
