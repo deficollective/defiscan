@@ -145,22 +145,20 @@ Proposals can be scheduled for execution with the `DSPauseProxy` which enforces 
 
 ![Overview of the sky governance](./diagrams/sky-governance.png)
 
-## External Permission Owners
+## External Permission Owners and Security Council
 
-The contracts below are the contracts with managing permissions on the Sky Protocol and that are
+The contracts in the table below are the contracts with managing permissions on the Sky Protocol
 subject to external interactions. `DSChief` is the main governance contract and the contract to
 execute emergeny governance proposals. Proposals that are subject to a delay are passed on to the
 `DSPause Proxy` which enforces the delay.
 
-| Name                               | Account                                                                                                               | Type     |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
-| DSPause Proxy (Delayed Governance) | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract |
-| DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
-| ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
-
-## Security Council
-
 There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
+
+| Name                               | Account                                                                                                               | Type     | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| DSPause Proxy (Delayed Governance) | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract | ❌                 | ❌                     | ❌                       | ❌                         |
+| DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract | ❌                 | ❌                     | ❌                       | ❌                         |
+| ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract | ❌                 | ❌                     | ❌                       | ❌                         |
 
 # Contracts & Permissions
 
