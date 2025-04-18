@@ -26,6 +26,7 @@ import { useEffect, useMemo, useState } from "react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  loading: boolean;
   othersCount: number;
   defiCount: number;
 }
@@ -81,6 +82,7 @@ const useResponsiveColumns = (
 export function DataTable<TData, TValue>({
   columns,
   data,
+  loading,
   othersCount,
   defiCount,
 }: DataTableProps<TData, TValue>) {
@@ -200,35 +202,47 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody className="">
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  onClick={() => {
-                    handleRowClick((row as any).original.slug);
-                  }}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-accent cursor-pointer transition"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
+            {loading && (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center animate-pulse"
                 >
-                  No results.
+                  Loading...
                 </TableCell>
               </TableRow>
+            )}
+            {!loading && (
+              table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    onClick={() => {
+                      handleRowClick((row as any).original.slug);
+                    }}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-accent cursor-pointer transition"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )
             )}
           </TableBody>
         </Table>
