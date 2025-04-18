@@ -7,7 +7,7 @@ defillama_slug: ["sky-lending"]
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "H", "M", "H", "L"]
+risks: ["L", "H", "H", "H", "L"]
 author: ["mmilien_"]
 submission_date: "2025-03-11"
 publish_date: "1970-01-01"
@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Sky is a stablecoin protocol allowing users to mint its USDS stablecoin through _Collateralized Debt Positions_ with a variety of crypto collateral assets. Sky is built on the Maker protocol, by the MakerDAO, with the objective to replace the DAI stablecoin and allows for the 1:1 conversion between DAI and USDS. USDS can further be staked for the yield-bearing sUSDS token. Various levels of control over the Sky protocol are exercised through an onchain governance system.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -28,19 +28,21 @@ This review focuses on the Ethereum deployment of Sky, currently the only chain 
 
 ## Upgradeability
 
-`USDS` and `sUSDS` are upgradeable contracts through governance proposals. Updating those contracts could change the entire logic of those tokens and may incur loss of funds for users.
+`USDS` and `sUSDS`, Sky's stablecoin and its corresponding yield baring version, are upgradeable contracts through Sky governance proposals. Updating those contracts could change the entire logic of those tokens and may incur loss of funds for users.
 
-Many parameters in the Sky Protocol can be changed through governance proposals and may also incur loss of funds, loss of unclaimed yield, as well as material changes in expected performances. Example actions are forced liquidations, creating unbacked debt, or pausing the contracts.
+Many parameters in the Sky Protocol can be changed through governance proposals and may also incur loss of funds, loss of unclaimed yield, as well as materially impact the protocol performances. Example actions are forced liquidations which would result in loss of user funds, creating unbacked debt which could endanger the protocol's stability, or pausing the contracts which could trap user funds for an undetermined amount of time.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of decentralized validators (and challengers) to push price updates on-chain and is explained in more details in [dependencies](#dependencies).
+Sky has a centralized dependency in Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly backed by `USDC` which is a centralized stablecoin. This conversion may be stopped or paused in an emergency Sky Governance proposal.
 
-An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and the governance can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
+The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of hosted by various third-parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that a centralized Chornicle multisig may control which validators may take part in the concensus. However, any changes to the validator set is subject to a 7 days exit-window. We therefore assessed that Chronicle is a Stage 1 dependency and explain it in details in the [dependencies](#dependencies) section.
 
-> Autonomy score: Medium
+An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and the Sky governance can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
+
+> Autonomy score: High
 
 ## Exit Window
 
@@ -50,7 +52,7 @@ Governance is controlled by `MKR`/`SKY` token holders who locked their tokens to
 
 The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedules. Those proposals usually have a courtesy delay duration of 2-3 days before taking effect, but proposals remain possible at any time with the minimum delay.
 
-Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost no matter the emergency status.
+Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost no matter the emergency status. During an emergency shutdown users are can retrieve their supplied assets, but no additional supply or borrowing is allowed. This is explained further in the technical [exit-window](#exit-window-1) section.
 
 > Exit Window score: High
 
@@ -62,21 +64,25 @@ Sky has a main frontend at [sky.money](https://sky.money). The frontend is not s
 
 ## Conclusion
 
-Overall the Sky protocolexposes critical permissions that are not protected with an appropriate Exit Window or Security Council. It thus earns High centralization risk scores for its Upgradeability and Exit Window dimensions and achieves Stage 0.
+The Sky protocol exposes critical permissions that are not protected with an Exit Window of at least 7 days or a Security Council and thus earns a High centralization risk score for its Upgradeability and Exit Window dimensions.
 
-The protocol could reach Stage 1 with an exit window of at least 7 days or a security council. It could further reach Stage 2 with an exit window of at least 30 days.
+Furthermore, Sky is exposed to centralization risks from its USDC and Chronicle dependencies resulting in a High centralization risk score for the Autonomy dimension.
+
+Sky thus achieves Stage 0 decentralization.
+
+The protocol could reach Stage 1 if no longer relies on Circle and increases its exit window to at least 7 days or a security council. It could further reach Stage 2 with an exit window of at least 30 days and changes its oracle provider to a stage 2 or equivalent protocol. This could also be achieved if Chronicle increases its exit-window to 30 days.
 
 > Overall score: Stage 0
 
-# Technical Analysis
+# Informational
 
-## Informational
-
-During our analysis we discovered a paradigm of _Authority_ contract used to handle fine-grained permissions over functions and contracts.
+⚠️ During our analysis we discovered a paradigm of _Authority_ contract used to handle fine-grained permissions over functions and contracts.
 In most of the cases the authority is `DSChief` and this allows governance proposals to have non-delayed access to certain functions. Nonetheless, this
 could be misused to grant any arbitrary address those same permissions. We note that because of the lack of _events_ in the `DSChief`'s role granting functions,
 we had to scan all governance proposals to ensure this has not happened in the past, and would encourage that those functions are blocked in future versions of the
 governance contract.
+
+## Protocol Analysis
 
 ## Sky Stablecoin Module (CDP)
 
@@ -98,6 +104,8 @@ A `LitePSM` (Peg-stability-module) allows users to swap other stablecoins for `U
 
 The governance has admin privileges over all contracts and could, for example, arbitrarily mint tokens. `DSChief`, the (non-delayed) governance contract, is the authority over the `LitePSMMom` which allows governance proposals to stop the `LitePSM` without any delay.
 
+Finally, users can put their `USDS` into savings and obtain `sUSDS`. `sUDS` is the yield bearing token associated with the ERC4626 compatible `sUSDS` contract. The value of `sUSDS` increases at a fixed rate chosen by the Sky Governance. This also allows users to obtain `sUSDS` tokens through other means such as swapping using decentralized exchanges.
+
 ![Overview of the sky tokens and conversion module](./diagrams/sky-tokens.png)
 
 ## Sky Rewards
@@ -105,18 +113,6 @@ The governance has admin privileges over all contracts and could, for example, a
 A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. Users can stake their `USDS` directly in the `StakingRewards` contract and claim their rewards with the same contract. `DssVestMintable` contracts allows the governance to create vested plans that will gradually mint tokens to distribute to some beneficiaries.
 
 ![Overview of the sky rewards module](./diagrams/sky-rewards.png)
-
-## Sky Governance
-
-The governance process is highlighted below. Users need to seal `MKR` or `SKY` tokens into the `LockStakeEngine` in order to receive voting rights. Users may receive rewards for their sealed tokens. Withdrawing the tokens is currently subject to a fee starting at 5% and increasing up to 15% overtime.
-
-The governance contract is `DSChief`, users can either vote or delegate their vote to other users. A list of _Aligned Delegates_ who vowed to respect the protocol's core values is published on the [governance webpage](https://vote.makerdao.com/delegates). The current aligned delates hold a majority of the voting power and extrem influence over the protocol (see [security council](#security-council)).
-
-Each governance proposal comes under the form of a `DssSpell` the points to a `DssSpellAction` contract which holds the logic to be executed upon approval. The governance uses continuous approal, which means one proposal can be executed at a time and users need to shift their vote to support a new proposal. The proposal with the most votes at any times is the `Hat` that can be scheduled and executed. Each `Spell` may be executed just once and expires after 30 days if it has not been selected to be the `Hat`.
-
-Proposals can be scheduled for execution with the `DSPauseProxy` which enforces a minimal 18 hours delay between approval and execution. Some proposals may exerce non-delayed action to pause some modules of the protocol such as the `LitePSM` (Peg Stability Module), `OSM` (Oracle Security Module), liquidations, and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (Emergency Shutdown Module) funds sent to the contract cannot be recovered, even if no shutdown happens.
-
-![Overview of the sky governance](./diagrams/sky-governance.png)
 
 ## Dependencies
 
@@ -135,9 +131,26 @@ Emergency measures permissions allow the governance to pause certain contracts t
 1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
 2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
 
-# External Permission Owners and Security Council
+# Governance
 
-There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
+## Sky Governance
+
+The governance process is highlighted below. Users need to seal `MKR` or `SKY` tokens into the `LockStakeEngine` in order to receive voting rights. Users may receive rewards for their sealed tokens. Withdrawing the tokens is currently subject to a fee starting at 5% and increasing up to 15% overtime.
+
+The governance contract is `DSChief`, users can either vote or delegate their vote to other users. A list of _Aligned Delegates_ who vowed to respect the protocol's core values is published on the [governance webpage](https://vote.makerdao.com/delegates). The current aligned delates hold a majority of the voting power and extrem influence over the protocol (see [security council](#security-council)).
+
+Each governance proposal comes under the form of a `DssSpell` the points to a `DssSpellAction` contract which holds the logic to be executed upon approval. The governance uses continuous approal, which means one proposal can be executed at a time and users need to shift their vote to support a new proposal. The proposal with the most votes at any times is the `Hat` that can be scheduled and executed. Each `Spell` may be executed just once and expires after 30 days if it has not been selected to be the `Hat`.
+
+Proposals can be scheduled for execution with the `DSPauseProxy` which enforces a minimal 18 hours delay between approval and execution. Some proposals may exerce non-delayed action to pause some modules of the protocol such as the `LitePSM` (Peg Stability Module), `OSM` (Oracle Security Module), liquidations, and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (Emergency Shutdown Module) funds sent to the contract cannot be recovered, even if no shutdown happens.
+
+![Overview of the sky governance](./diagrams/sky-governance.png)
+
+## External Permission Owners
+
+The contracts below are the contracts with managing permissions on the Sky Protocol and that are
+subject to external interactions. `DSChief` is the main governance contract and the contract to
+execute emergeny governance proposals. Proposals that are subject to a delay are passed on to the
+`DSPause Proxy` which enforces the delay.
 
 | Name                               | Account                                                                                                               | Type     |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -145,11 +158,17 @@ There is no security council to oversee the Sky Protocol. However, there is a se
 | DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract |
 | ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract |
 
-# Appendix
+## Security Council
+
+There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
+
+# Contracts & Permissions
 
 ## Contracts
 
 The list of contract and deployment addresses is available in both the [official documentation](https://developers.sky.money/) and the protocol's [chainlog](https://chainlog.makerdao.com/).
+
+&nbsp;
 
 | Contract Name                 | Address                                                                                                               |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -190,6 +209,8 @@ The list of contract and deployment addresses is available in both the [official
 | LockstakeClipper              | [0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239](https://etherscan.io/address/0xA85621D35cAf9Cf5C146D2376Ce553D7B78A6239) |
 
 ## All Permission owners
+
+&nbsp;
 
 | Name                      | Account                                                                                                               | Type     |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
