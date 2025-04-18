@@ -216,7 +216,7 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
             <div
               className="mx-auto aspect-square h-[120px] flex items-center justify-center p-4"
             >
-              <div className="aspect-square h-full rounded-full border-8 border-purple-800 animate-pulse flex justify-center items-center">
+              <div className="aspect-square h-full rounded-full border-8 border-purple-600 animate-pulse flex justify-center items-center">
                 <p className="text-xs">Loading</p>
               </div>
             </div>

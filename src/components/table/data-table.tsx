@@ -161,9 +161,16 @@ export function DataTable<TData, TValue>({
           onClick={() => setDefiView(true)}
         >
           <span className="mr-2">DeFi</span>
-          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
-            {defiCount}
-          </span>
+          {loading && (
+            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+              <div className="h-4 w-2 "></div>
+            </span>
+          )}
+          {!loading && (
+            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+              {defiCount}
+            </span>
+          )}
         </div>
 
         <div
@@ -175,9 +182,17 @@ export function DataTable<TData, TValue>({
           onClick={() => setDefiView(false)}
         >
           <span className="mr-2">Others</span>
-          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
-            {othersCount}
-          </span>
+          {loading && (
+            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+              <div className="h-4 w-2 "></div>
+            </span>
+          )}
+          {!loading && (
+            <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+              {othersCount}
+            </span>
+          )}
+          
         </div>
       </div>
 
