@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Label, Pie, PieChart } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,9 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { defiLlama } from "@/services/defillama";
-import { protocols } from "#site/content";
 import { Project, Stage } from "@/lib/types";
+import LlamaContext from "@/context/llamaContext";
 
 interface VisualisedData {
   key: string;
@@ -188,21 +187,44 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
   className,
   customLabelFormatter,
 }) => {
+  const { projects, loading } = useContext(LlamaContext);
   const [data, setData] = useState<VisualisedData[] | null>(null);
 
   useEffect(() => {
+    if (loading)
+      return;
     const fetchData = async () => {
-      const merged = await mergeDefiLlamaWithMd();
+      const merged = projects;
       const groupedBy = groupBy(merged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
       setData(coloredResults);
     };
     fetchData();
-  }, [groupByKey, operation, baseColor]);
+  }, [projects, loading, groupByKey, operation, baseColor]);
 
   const chartConfig = {} satisfies ChartConfig;
 
+  if (loading) {
+    return (
+      <div className={className}>
+        <Card className="flex flex-col">
+          <CardHeader className="items-center p-2 -mb-2">
+            <div className="h-3 my-1 w-2/3 rounded-md bg-gradient-to-r from-purple-800 to-purple-900 dark:from-gray-800 dark:to-gray-700 animate-pulse"></div>
+          </CardHeader>
+          <CardContent className="flex-1 pb-0">
+            <div
+              className="mx-auto aspect-square h-[120px] flex items-center justify-center p-4"
+            >
+              <div className="aspect-square h-full rounded-full border-8 border-purple-600 animate-pulse flex justify-center items-center">
+                <p className="text-xs">Loading</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   if (!data) return null;
 
   return (
@@ -278,33 +300,3 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
-export async function mergeDefiLlamaWithMd() {
-  const apiData = await defiLlama.getProtocolsWithCache();
-  const filtered = protocols
-    .map((frontmatterProtocol) => {
-      var tvl = 0;
-      var logo = "";
-      var type = "";
-      for (var slug of frontmatterProtocol.defillama_slug) {
-        const res = apiData.find(
-          (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
-        );
-        tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
-        type = res?.category || "";
-        logo = res?.logo || "";
-      }
-      return {
-        logo: logo,
-        protocol: frontmatterProtocol.protocol,
-        slug: frontmatterProtocol.slug,
-        tvl: tvl,
-        chain: frontmatterProtocol.chain,
-        stage: frontmatterProtocol.stage,
-        reasons: frontmatterProtocol.reasons,
-        type: type,
-        risks: frontmatterProtocol.risks,
-      } as Project;
-    })
-    .filter((el): el is Project => el !== null);
-  return filtered;
-}

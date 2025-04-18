@@ -1,5 +1,3 @@
-"use client";
-
 import { Metadata } from "next";
 import { protocols as allProtocols } from "#site/content";
 import "@/styles/mdx.css";
@@ -29,28 +27,28 @@ async function getProtocolFromParams(slug: string[]) {
   return { ...protocol };
 }
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: { slug: string[] };
-// }): Promise<Metadata> {
-//   const protocol = await getProtocolFromParams(params.slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] };
+}): Promise<Metadata> {
+  const protocol = await getProtocolFromParams(params.slug);
 
-//   if (!protocol) {
-//     return {
-//       title: "Protocol not found",
-//       description: "Protocol details could not be found.",
-//     };
-//   }
+  if (!protocol) {
+    return {
+      title: "Protocol not found",
+      description: "Protocol details could not be found.",
+    };
+  }
 
-//   return {
-//     title: protocol.protocol,
-//     description: "DeFi Scan decentralization report for " + protocol.protocol,
-//     authors: {
-//       name: protocol.author!.join(", "),
-//     },
-//   };
-// }
+  return {
+    title: protocol.protocol,
+    description: "DeFi Scan decentralization report for " + protocol.protocol,
+    authors: {
+      name: protocol.author!.join(", "),
+    },
+  };
+}
 
 export default async function ProtocolPageItem({
   params,
