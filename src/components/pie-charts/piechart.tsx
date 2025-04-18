@@ -205,6 +205,26 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 
   const chartConfig = {} satisfies ChartConfig;
 
+  if (loading) {
+    return (
+      <div className={className}>
+        <Card className="flex flex-col">
+          <CardHeader className="items-center p-2 -mb-2">
+            <div className="h-3 my-1 w-2/3 rounded-md bg-gradient-to-r from-purple-800 to-purple-900 dark:from-gray-800 dark:to-gray-700 animate-pulse"></div>
+          </CardHeader>
+          <CardContent className="flex-1 pb-0">
+            <div
+              className="mx-auto aspect-square h-[120px] flex items-center justify-center p-4"
+            >
+              <div className="aspect-square h-full rounded-full border-8 border-purple-800 animate-pulse flex justify-center items-center">
+                <p className="text-xs">Loading</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   if (!data) return null;
 
   return (
