@@ -94,7 +94,7 @@ The protocol could reach **Stage 1** by implementing fallback mechanism around t
 
 The project additionally could advance to **Stage 2** if the on-chain governance (DAO) used a 30-day exit window instead of only 7 days.
 
-# Protocol Outline
+# Protocol Analysis
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
@@ -110,9 +110,9 @@ Moreover, the control over market parameters, emergency freezing and pausing is 
 
 Additionally, specifically to the _EtherFi_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
-## Dependencies
+# Dependencies
 
-### a.DI
+## a.DI
 
 The Aave delivery infrastructure (a.DI) ensures decentralized and fault-tolerant cross-chain messaging. It achieves this by encoding a message and submitting it to multiple independent bridges.
 
@@ -120,7 +120,7 @@ On the receiving end (destination network) the a.DI validates the transaction, r
 
 The a.DI also incorporates an emergency mode which allows the Aave Governance V3 guardian to replace current bridge providers if one or more bridges become untrusted.
 
-### Oracle
+## Oracle
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
