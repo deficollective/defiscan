@@ -128,6 +128,8 @@ The Chainlink oracle system itself is upgradeable potentially resulting in the p
 
 The _EtherFi_ Aave V3 instance is governerned by the same set of Smart Contracts that govern the _Core_ and the _Prime_ instance. See _Core_ instance for the full Governance report.
 
+## Security Council
+
 This table shows the external permission owners and how they are rated against the security council criteria.
 
 | External Permission Owner                   | Address                                                                                                               | Type         | At least 7 signers | At least 51% threshold | Above 50% non-insiders signers | Signers publicly announced                                                                                                                                             |
