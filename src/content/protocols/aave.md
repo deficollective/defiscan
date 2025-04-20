@@ -126,7 +126,7 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ⚠️ During our analysis, we identified a unverified role (not mentioned in the docs https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-V3.md#admins). Role Id is `0xd1d2cf869016112a9af1107bcf43c3759daf22cf734aad47d0c9c726e33bc782`. The owners of this role are related to the V2 to V3 migration.
 
-# Protocol Outline
+# Protocol Analysis
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
@@ -140,7 +140,7 @@ The `Pool` contract is completely upgradeable via the proxy-pattern. The permiss
 
 In addition to completely upgrading the contracts, the control over market parameters, emergency freezing and pausing is handed to multi-sigs through multiple steward contracts. This allows the DAO to delegate certain permissions to the multi-sigs with rate-limiting (frequency) and guardrails (relative or absolute changes to parameters). Technically this was implemented by giving the `PoolConfigurator` contract permission to change any reserve parameter on the `Pool` contract while the `PoolConfigurator` assigns various roles from the `ACLManager` to these permissioned funcions. So is the capability to pause the `Pool` and freeze reserves assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts own these roles and expose the functions with aforementioned guardrails. Councils (regular multi-sigs) are the permission owners of these steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions for these multi-sigs. The Governance itself can also update reserve parameters directly if the community decides to do so. Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
 
-### Smart Contract Upgrade Flow
+## Smart Contract Upgrade Flow
 
 Many contracts of the Aave V3 system are directly upgradeable through a proxy pattern (see in the contract table for proxy keyword). The `Executor` contract would call the `upgradeTo` and point to the referenced new implementation contract that is specified in the payload. Additionally to the proxy upgrade pattern, Aave V3 has a contract called `PoolAddressesProvider` which serves as a registry of contracts. Through this contract upgrades can be made by deploying a new contract and switching the reference inside the `PoolAddressesProvider` as contracts in the Aave V3 system rely on `PoolAddressesProvider` as a registry of Aave V3 contracts. Also the `PoolAddressesProvider` is owner of many crucial contracts as well.
 
@@ -234,20 +234,22 @@ In case of a malicious proposal the `Aave Governance V3 Guardian` can step in an
 
 ![Governance](./diagrams/Aave_V3_Governance.png)
 
+## Security Council
+
 This table shows the external permission owners and how they are rated against the security council criteria.
 
-| Multisig / Role                     | Address                                    | Type         | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
-| ----------------------------------- | ------------------------------------------ | ------------ | ------------------ | ---------------------- | ------------------------ | -------------------------- |
-| Executor_lvl1                       | 0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
-| Executor_lvl2                       | 0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957 | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
-| Aave Governance V3 Guardian         | 0xCe52ab41C40575B072A18C9700091Ccbe4A06710 | Multisig 5/9 | ✅                 | ✅                     | ✅                       | ✅ (source)                |
-| EmergencyAdmin                      | 0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30 | Multisig 5/9 | ✅                 | ✅                     | ❌                       | ✅ (source)                |
-| Risk Council (for Pool Stewards)    | 0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8 | Multisig 2/2 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
-| Risk Council (for GhoGsmSteward)    | 0x8513e6F37dBc52De87b166980Fa3F50639694B60 | Multisig 3/4 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
-| CrossChainController Guardian (BGD) | 0xb812d0944f8F581DfAA3a93Dda0d22EcEf51A9CF | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅                         |
-| CleanUp Admin                       | 0xdeadD8aB03075b7FBA81864202a2f59EE25B312b | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
-| Aave Chan Initiative (ACI)          | 0xac140648435d03f784879cd789130F22Ef588Fcd | Multisig 1/2 | ❌                 | ❌                     | ❌                       | ✅                         |
-| ACI Automation (Bot)                | 0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193 | EOA          | ❌                 | ❌                     | ❌                       | ❌                         |
+| Multisig / Role                     | Address                                                                                                               | Type         | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| Executor_lvl1                       | [0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A](https://etherscan.io/address/0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A) | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
+| Executor_lvl2                       | [0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957](https://etherscan.io/address/0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957) | Contract     | ❌                 | ❌                     | ❌                       | ❌                         |
+| Aave Governance V3 Guardian         | [0xCe52ab41C40575B072A18C9700091Ccbe4A06710](https://etherscan.io/address/0xCe52ab41C40575B072A18C9700091Ccbe4A06710) | Multisig 5/9 | ✅                 | ✅                     | ✅                       | ✅ (source)                |
+| EmergencyAdmin                      | [0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30](https://etherscan.io/address/0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30) | Multisig 5/9 | ✅                 | ✅                     | ❌                       | ✅ (source)                |
+| Risk Council (for Pool Stewards)    | [0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8](https://etherscan.io/address/0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8) | Multisig 2/2 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
+| Risk Council (for GhoGsmSteward)    | [0x8513e6F37dBc52De87b166980Fa3F50639694B60](https://etherscan.io/address/0x8513e6F37dBc52De87b166980Fa3F50639694B60) | Multisig 3/4 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
+| CrossChainController Guardian (BGD) | [0xb812d0944f8F581DfAA3a93Dda0d22EcEf51A9CF](https://etherscan.io/address/0xb812d0944f8F581DfAA3a93Dda0d22EcEf51A9CF) | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅                         |
+| CleanUp Admin                       | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://etherscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 | ❌                 | ✅                     | ❌                       | ✅ (source)                |
+| Aave Chan Initiative (ACI)          | [0xac140648435d03f784879cd789130F22Ef588Fcd](https://etherscan.io/address/0xac140648435d03f784879cd789130F22Ef588Fcd) | Multisig 1/2 | ❌                 | ❌                     | ❌                       | ✅                         |
+| ACI Automation (Bot)                | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://etherscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          | ❌                 | ❌                     | ❌                       | ❌                         |
 
 # Contracts and Permissions
 
