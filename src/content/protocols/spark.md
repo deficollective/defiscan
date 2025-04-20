@@ -106,7 +106,12 @@ Chronicle is an oracle protocol that computes a median price from multiple sourc
 
 Moreover, a `KillSwitchOracle` contract is used to set critical prices per asset. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the Sky Governance.
 
-# Exit Window
+# Governance
+
+All critical permissions in Spark are held by the Sky Governance. More details on the exact functioning of
+the Sky Governance can be found in the [Sky Review] (https://www.defiscan.info/protocols/sky).
+
+## Exit Window
 
 Sky Governance proposals are delayed by **18 hours**, set by the Sky Governance itself. This delay also applies to all permissioned calls within Spark, except liquidity management and emergency actions. Liquidity management can be done without delay but within strict limits set by the governance. The management by _Relayers_ may be paused by the _Freezer_ if it detects a malfunction or malicious actions. The _Freezer_ does not meet our Security Council requirements.
 
@@ -116,12 +121,7 @@ Sky leverages a system of _continuous approval_, which means voters need to migr
 
 If an oracle's killswitch is triggered (see [dependencies](#dependencies)), the borrowing is disabled without delay for all assets across the protocol until the killswitch is reset by the Sky Governance.
 
-# Governance
-
-All critical permissions in Spark are held by the Sky Governance. More details on the exact functioning of
-the Sky Governance can be found in the [Sky Review] (https://www.defiscan.info/protocols/sky).
-
-# External Permissions and Security Council
+## External Permissions and Security Council
 
 The table below shows the permissions owners in the Spark protocol that are subject to external interactions. This includes both governance contracts and multisig.
 
