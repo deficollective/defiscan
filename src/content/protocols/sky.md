@@ -82,7 +82,7 @@ could be misused to grant any arbitrary address those same permissions. We note 
 we had to scan all governance proposals to ensure this has not happened in the past, and would encourage that those functions are blocked in future versions of the
 governance contract.
 
-## Protocol Analysis
+# Protocol Analysis
 
 ## Sky Stablecoin Module (CDP)
 
@@ -114,22 +114,13 @@ A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a r
 
 ![Overview of the sky rewards module](./diagrams/sky-rewards.png)
 
-## Dependencies
+# Dependencies
 
 The Sky protocol relies on the provider Chronicle for price feeds of collateral assets.
 
 Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a TimeLockController with a delay of 7 days. This controller could also name other controllers or remove this 7 days delay, but the action itself would still be subject to the delay. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
 
 An Oracle Security Module enforces a 1 hour window on price updates and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
-
-## Exit Window
-
-The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any times is accepted and can be executed once its delay has passed.
-
-Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. This is the case for all contract that have a `Mom` who can pause or stop their child. In addition to that, an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
-
-1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
-2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
 
 # Governance
 
@@ -144,6 +135,15 @@ Each governance proposal comes under the form of a `DssSpell` the points to a `D
 Proposals can be scheduled for execution with the `DSPauseProxy` which enforces a minimal 18 hours delay between approval and execution. Some proposals may exerce non-delayed action to pause some modules of the protocol such as the `LitePSM` (Peg Stability Module), `OSM` (Oracle Security Module), liquidations, and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (Emergency Shutdown Module) funds sent to the contract cannot be recovered, even if no shutdown happens.
 
 ![Overview of the sky governance](./diagrams/sky-governance.png)
+
+## Exit Window
+
+The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any times is accepted and can be executed once its delay has passed.
+
+Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. This is the case for all contract that have a `Mom` who can pause or stop their child. In addition to that, an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
+
+1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
+2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
 
 ## External Permission Owners and Security Council
 
