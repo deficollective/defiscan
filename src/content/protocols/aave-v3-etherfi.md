@@ -20,9 +20,9 @@ Aave v3 is a lending protocol that allows users to lend and borrow different ERC
 
 The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and `aAAVE` holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
 
-Different Aave protocol _Instances_ exist and are managed by the Aave DAO. These instances focus on specific use cases and chains. This review covers the Ethereum Mainnet _Etherfi_ instance.
+Different Aave protocol v3 market _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _Etherfi_ instance.
 
-# Rating
+# Scores
 
 ## Chain
 
@@ -36,17 +36,17 @@ The Aave v3 protocol can be organized in a number of logical modules or subsyste
 
 This report only focuses on the parts that are specifically redeployed and to represent the _Etherfi_ instance, leaving out the following subsystems that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned subsystems read the Aave _Core_ instance report.
 
-Note that the _Aave Governance_ is shared among the different instances, that means that upgrades on the _Etherfi_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contrats in _Etherfi_ also are with the `Executor_lvl1` contract.  
+Note that the _Aave Governance_ is shared among the different instances, that means that upgrades on the _Etherfi_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _Etherfi_ assigned to the `Executor_lvl1` contract.  
 
 ### Core Lending & Borrowing
 
 This subsystem forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_. An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
 
-Note that all the contracts making up the core market (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
+Note that all the contracts making up the money market logic and state (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
 
 ### Reserve Parameters
 
-The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or with a certain frequency. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
+The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range and with a maximal frequency (both configurable by Governance). This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
 
 To achieve different specific risk parameters and associated guardrails the Stewards contracts are re-deployed for the _Etherfi_ market/instance. The multi-sigs owning permissions in the Steward contracts are the same as for the _Core_ instance (_Emergency Admin_ and _Risk Council_). 
 
@@ -56,7 +56,7 @@ To achieve different specific risk parameters and associated guardrails the Stew
 
 ### Oracle and Prices
 
-Requesting oracle feeds to price assets in the system relies on the same mechanisms, but a new `AaveOracle` contract is deployed. The associated centralisation risks are the same as on the _Core_ instance.
+Requesting oracle feeds to price assets in the system is relying on the same mechanisms across the different instances. To control which price feeds are available a new `AaveOracle` contract is deployed for each instance. The associated centralisation risks in the _EtherFi_ instance are the same as on the _Core_ instance.
 
 Read more in our _Core_ instance report.
 
@@ -76,7 +76,7 @@ The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, t
 
 ## Accessibility
 
-The frontend of Aave V3 app is open source. Each commit (ie each change to the code base) is published to IPFS (https://github.com/aave/interface/releases).
+The frontend of Aave V3 app is open source. The frontend allows to interact with all instances. Each commit (ie each change to the code base) is published to IPFS (https://github.com/aave/interface/releases).
 
 In addition to that Aave is also available through [DeFi Saver](https://app.defisaver.com/aave).
 
@@ -106,12 +106,9 @@ The `Pool` contract is completely upgradeable via the proxy-pattern. The permiss
 
 ![Reserve Parameter Control](./diagrams/Aave_V3_Prime_Reserve_Parameter_Control.png)
 
-Moreover, the control over market parameters, emergency freezing and pausing is additionally handed to multi-sigs and off-chain systems through steward contracts which allows the governance to delegate certain permissions in a fine grained manner as seen in the diagram. The `PoolConfigurator` contract is the contract that has the permissions to change any reserve parameter. It mirrors the `Pool` functions that change reserve parameters and decorates them with access control to certain roles. The capability to pause and freeze is assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts in turn are regular smart contracts that mirror a specific selection of the endpoints on the `PoolConfigurator` contract, but with guardrails for changing parameters and they also include rate limiting to certain functions. Councils which are regular multi-sigs are the permission owners of this steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions. The Governance itself can also update reserve parameters if the community wants to. Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
+Moreover, the control over market parameters, emergency freezing and pausing is additionally handed to multi-sigs and off-chain systems through steward contracts which allows the governance to delegate certain permissions in a fine grained manner as seen in the diagram. The `PoolConfigurator` contract is the contract that has the permissions to change any reserve parameter. It mirrors the `Pool` functions that change reserve parameters and decorates them with access control to certain roles. The capability to pause and freeze is assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts in turn are regular smart contracts that mirror a specific selection of the endpoints on the `PoolConfigurator` contract, but with guardrails for changing parameters and they also include rate limiting to certain functions. Councils which are regular multi-sigs are the permission owners of this steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions. The Governance itself can also update reserve parameters if the community wants to. Governance has direct permissions on all of the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
 
-While `RISK_ADMIN` manages liquidity and market risk on a continuous basis in certain cases protection of user funds requires a halt of the system.
-In the diagram above the `Emergency Guardian` is shown owning the `EMERGENCY_ADMIN` role directly and owning permissions on the `FreezeSteward` contract. This is a 5 of 9 multi-sig consisting various parties selected by the community.
-
-Additionally, specific to the _EtherFi_ instance there is an additional Steward called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
+Additionally, specifically to the _EtherFi_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
 ## Dependencies
 
@@ -154,29 +151,28 @@ The BGD Labs maintains a public markdown page on the existing permissions to inf
 
 | Contract Name                                       | Address                                                                                                               |
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Pool (Proxy)                                        | [0x4e033931ad43597d96D6bcc25c280717730B58B1](https://etherscan.io/address/0x4e033931ad43597d96D6bcc25c280717730B58B1) |
+| Pool (Proxy)                                        | [0x56401d666f486c495566A29249447C2BB8C56bB2](https://etherscan.io/address/0x56401d666f486c495566A29249447C2BB8C56bB2) |
 | Pool (Implementation)                               | [0xc405a0eab071a085a832f876d8e5be7cfeafb624](https://etherscan.io/address/0xc405a0eab071a085a832f876d8e5be7cfeafb624) |
-| aToken (wstETH) (Proxy)                             | [0xC035a7cf15375cE2706766804551791aD035E0C2](https://etherscan.io/address/0xC035a7cf15375cE2706766804551791aD035E0C2) |
-| aToken (wstETH) (Implementation)                    | [0x7f8fc14d462bdf93c681c1f2fd615389bf969fb2](https://etherscan.io/address/0x7f8fc14d462bdf93c681c1f2fd615389bf969fb2) |
-| variableDebtToken (wstETH) (Proxy)                  | [0xE439edd2625772AA635B437C099C607B6eb7d35f](https://etherscan.io/address/0xE439edd2625772AA635B437C099C607B6eb7d35f) |
-| variableDebtToken (wstETH) (Implementation)         | [0x3e59212c34588a63350142efad594a20c88c2ced](https://etherscan.io/address/0x3e59212c34588a63350142efad594a20c88c2ced) |
-| wstETHOracle                                        | [0xB4aB0c94159bc2d8C133946E7241368fc2F2a010](https://etherscan.io/address/0xB4aB0c94159bc2d8C133946E7241368fc2F2a010) |
+| aToken (weETH) (Proxy)                              | [0xbe1F842e7e0afd2c2322aae5d34bA899544b29db](https://etherscan.io/address/0xbe1F842e7e0afd2c2322aae5d34bA899544b29db) |
+| aToken (weETH) (Implementation)                     | [0xaffa06528bd92625de2e7a0cfa0119319265ea4b](https://etherscan.io/address/0xaffa06528bd92625de2e7a0cfa0119319265ea4b) |
+| variableDebtToken (weETH) (Proxy)                   | [0x16264412CB72F0d16A446f7D928Dd0D822810048](https://etherscan.io/address/0x16264412CB72F0d16A446f7D928Dd0D822810048) |
+| variableDebtToken (weETH) (Implementation)          | [0xbb077daffeb23b2126e7358b0b122ba6838fb881](https://etherscan.io/address/0xbb077daffeb23b2126e7358b0b122ba6838fb881) |
+| WeETHPriceCapAdapter                                | [0xf112aF6F0A332B815fbEf3Ff932c057E570b62d3](https://etherscan.io/address/0xf112aF6F0A332B815fbEf3Ff932c057E570b62d3) |
 | DefaultReserveInterestRateStrategy                  | [0x9ec6F08190DeA04A54f8Afc53Db96134e5E3FdFB](https://etherscan.io/address/0x9ec6F08190DeA04A54f8Afc53Db96134e5E3FdFB) |
 | wstETHReserveInterestRateStrategy                   | [0x8958b1C39269167527821f8c276Ef7504883f2fa](https://etherscan.io/address/0x8958b1C39269167527821f8c276Ef7504883f2fa) |
 | GhoDirectMinter                                     | [0x2cE01c87Fec1b71A9041c52CaED46Fc5f4807285](https://etherscan.io/address/0x2cE01c87Fec1b71A9041c52CaED46Fc5f4807285) |
-| WrappedTokenGatewayV3                               | [0x3167C452fA3fa1e5C16bB83Bc0fde4519C464299](https://etherscan.io/address/0x3167C452fA3fa1e5C16bB83Bc0fde4519C464299) |
+| WrappedTokenGatewayV3                               | [0xf956B38F035dC9067fb827A512D3CF35202AB0Bc](https://etherscan.io/address/0xf956B38F035dC9067fb827A512D3CF35202AB0Bc) |
 | PoolAddressesProvider                               | [0xeBa440B438Ad808101d1c451C1C5322c90BEFCdA](https://etherscan.io/address/0xeBa440B438Ad808101d1c451C1C5322c90BEFCdA) |
-| PoolConfigurator (Proxy)                            | [0x342631c6CeFC9cfbf97b2fe4aa242a236e1fd517](https://etherscan.io/address/0x64b761D848206f447Fe2dd461b0c635Ec39EbB27) |
+| PoolConfigurator (Proxy)                            | [0x8438F4D29D895d75C86BDC25360c25eF0607E65d](https://etherscan.io/address/0x8438F4D29D895d75C86BDC25360c25eF0607E65d) |
 | PoolConfigurator (Implementation)                   | [0xe5e48ad1f9d1a894188b483dcf91f4fad6aba43b](https://etherscan.io/address/0xe5e48ad1f9d1a894188b483dcf91f4fad6aba43b) |
 | UiPoolDataProvider                                  | [0x3F78BBD206e4D3c504Eb854232EdA7e47E9Fd8FC](https://etherscan.io/address/0x3F78BBD206e4D3c504Eb854232EdA7e47E9Fd8FC) |
 | UiIncentiveDataProvider                             | [0xe3dFf4052F0bF6134ACb73bEaE8fe2317d71F047](https://etherscan.io/address/0xe3dFf4052F0bF6134ACb73bEaE8fe2317d71F047) |
 | UiGHODataProvider                                   | [0x379c1EDD1A41218bdbFf960a9d5AD2818Bf61aE8](https://etherscan.io/address/0x379c1EDD1A41218bdbFf960a9d5AD2818Bf61aE8) |
-| AaveProtocolDataProvider                            | [0x66FeAe868EBEd74A34A7043e88742AAE00D2bC53](https://etherscan.io/address/0x66FeAe868EBEd74A34A7043e88742AAE00D2bC53) |
-| ACLManager                                          | [0x013E2C7567b6231e865BB9273F8c7656103611c0](https://etherscan.io/address/0x013E2C7567b6231e865BB9273F8c7656103611c0) |
+| AaveProtocolDataProvider                            | [0xECdA3F25B73261d1FdFa1E158967660AA29f00cC](https://etherscan.io/address/0xECdA3F25B73261d1FdFa1E158967660AA29f00cC) |
+| ACLManager                                          | [0x3cE8E2eb6501d4705477643E96881B1bef6A2DB3](https://etherscan.io/address/0x3cE8E2eb6501d4705477643E96881B1bef6A2DB3) |
 | WalletBalanceProvider                               | [0xC7be5307ba715ce89b152f3Df0658295b3dbA8E2](https://etherscan.io/address/0xC7be5307ba715ce89b152f3Df0658295b3dbA8E2) |
 | TreasuryCollector (Proxy)                           | [0x464C71f6c2F760DdA6093dCB91C24c39e5d6e18c](https://etherscan.io/address/0x464C71f6c2F760DdA6093dCB91C24c39e5d6e18c) |
 | TreasuryCollector (Implementation)                  | [0x83b7ce402a0e756e901c4a9d1cafa27ca9572afc](https://etherscan.io/address/0x83b7ce402a0e756e901c4a9d1cafa27ca9572afc) |
-| ClinicSteward                                       | [0x7571F419F7Df2d0622C1A20154a0D4250B2265cC](https://etherscan.io/address/0x7571F419F7Df2d0622C1A20154a0D4250B2265cC) |
 | AaveEcosystemReserve (Proxy)                        | [0x25F2226B597E8F9514B3F68F00f494cF4f286491](https://etherscan.io/address/0x25F2226B597E8F9514B3F68F00f494cF4f286491) |
 | AaveEcosystemReserve (Implementation)               | [0x10c74b37ad4541e394c607d78062e6d22d9ad632](https://etherscan.io/address/0x10c74b37ad4541e394c607d78062e6d22d9ad632) |
 | AaveEcosystemReserveController                      | [0x3d569673dAa0575c936c7c67c4E6AedA69CC630C](https://etherscan.io/address/0x3d569673dAa0575c936c7c67c4E6AedA69CC630C) |
@@ -186,12 +182,12 @@ The BGD Labs maintains a public markdown page on the existing permissions to inf
 | StataTokenFactory (Proxy)                           | [0x347C75d19718a05148687E13dca259aD016aB411](https://etherscan.io/address/0x347C75d19718a05148687E13dca259aD016aB411) |
 | StataTokenFactory (Implementation)                  | [0x8d8410c91d3bbe5957e46c2ff2f6e2ce8c99f00d](https://etherscan.io/address/0x8d8410c91d3bbe5957e46c2ff2f6e2ce8c99f00d) |
 | PoolAddressesProviderRegistry                       | [0xbaA999AC55EAce41CcAE355c77809e68Bb345170](https://etherscan.io/address/0xbaA999AC55EAce41CcAE355c77809e68Bb345170) |
-| AaveOracle                                          | [0xE3C061981870C0C7b1f3C4F4bB36B95f1F260BE6](https://etherscan.io/address/0xE3C061981870C0C7b1f3C4F4bB36B95f1F260BE6) |
+| AaveOracle                                          | [0x43b64f28A678944E0655404B0B98E443851cC34F](https://etherscan.io/address/0x43b64f28A678944E0655404B0B98E443851cC34F) |
 | SvrOracleSteward                                    | [0x8b493f416F5F7933cC146b1899c069F2361cad60](https://etherscan.io/address/0x8b493f416F5F7933cC146b1899c069F2361cad60) |
-| RepayWithCollateral / ParaSwapRepayAdapter          | [0x66E1aBdb06e7363a618D65a910c540dfED23754f](https://etherscan.io/address/0x66E1aBdb06e7363a618D65a910c540dfED23754f) |
-| CollateralSwitch / ParaSwapLiquiditySwapAdapter     | [0xD0887AA7fEBC8962c622493646195e7c76D94fCE](https://etherscan.io/address/0xD0887AA7fEBC8962c622493646195e7c76D94fCE) |
-| DebtSwitch / ParaSwapDebtSwapAdapterV3GHO           | [0xd1B2dec98A95B773C4909B5CD8FB455F467A527f](https://etherscan.io/address/0xd1B2dec98A95B773C4909B5CD8FB455F467A527f) |
-| WithdrawSwitchAdapter / ParaSwapWithdrawSwapAdapter | [0x43eDB797834151D041619EEF833Edc784B509dAE](https://etherscan.io/address/0x43eDB797834151D041619EEF833Edc784B509dAE) |
+| RepayWithCollateral / ParaSwapRepayAdapter          | [0x23b282c49C88d9161aae14b5eD777B976A5Ae65D](https://etherscan.io/address/0x23b282c49C88d9161aae14b5eD777B976A5Ae65D) |
+| CollateralSwitch / ParaSwapLiquiditySwapAdapter     | [0xB04427eFdd15b0EC233400d2F7f7E4fd0291C285](https://etherscan.io/address/0xB04427eFdd15b0EC233400d2F7f7E4fd0291C285) |
+| DebtSwitch / ParaSwapDebtSwapAdapterV3GHO           | [0x40ede12b44d98Fc4E53A2fB027D1BD1846e1690C](https://etherscan.io/address/0x40ede12b44d98Fc4E53A2fB027D1BD1846e1690C) |
+| WithdrawSwitchAdapter / ParaSwapWithdrawSwapAdapter | [0x850347E0cF64fd342A3404c1c5DA21Aa0A46c5c6](https://etherscan.io/address/0x850347E0cF64fd342A3404c1c5DA21Aa0A46c5c6) |
 | ACLAdmin / Executor_lvl1                            | [0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A](https://etherscan.io/address/0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A) |
 | ConfigEngine                                        | [0x1097eDb85392932b7dCB630baDDC8A6D73585218](https://etherscan.io/address/0x1097eDb85392932b7dCB630baDDC8A6D73585218) |
 | EdgeRiskSteward                                     | [0x81aFd0F99c2Afa2f2DD7E387c2Ef9CD2a29b6E1A](https://etherscan.io/address/0x81aFd0F99c2Afa2f2DD7E387c2Ef9CD2a29b6E1A) |
