@@ -20,9 +20,9 @@ Aave v3 is a lending protocol that allows users to lend and borrow different ERC
 
 The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and `aAAVE` holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
 
-Different Aave protocol _Instances_ exist and are managed by the Aave DAO. These instances focus on specific use cases and chains. This review covers the Ethereum Mainnet _Prime_ (Lido) instance.
+Different Aave protocol _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _Prime_ (Lido) instance.
 
-# Overview
+# Scores
 
 ## Chain
 
@@ -36,17 +36,17 @@ The Aave v3 protocol can be organized in a number of logical modules or subsyste
 
 This report only focuses on the parts that are specifically redeployed and to represent the _Prime_ instance, leaving out the following subsystems that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned subsystems read the Aave _Core_ instance report.
 
-Note that the _Aave Governance_ is shared among the different instances, that means that upgrades on the _Prime_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contrats in _Prime_ also are with the `Executor_lvl1` contract.  
+Note that the _Aave Governance_ is shared among the different instances, that means that upgrades on the _Prime_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _Prime_ are assigned to the `Executor_lvl1` contract.  
 
 ### Core Lending & Borrowing
 
 This subsystem forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_. An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
 
-Note that all the contracts making up the core market (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
+Note that all the contracts make up the money market logic and state (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
 
 ### Reserve Parameters
 
-The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or with a certain frequency. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
+The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range and with a maximal frequency (both configurable by Governance). This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
 
 To achieve different specific risk parameters and associated guardrails the Stewards contracts are re-deployed for the _Prime_ market/instance. The multi-sigs owning permissions in the Steward contracts are the same as for the _Core_ instance (_Emergency Admin_ and _Risk Council_). 
 
@@ -56,7 +56,7 @@ To achieve different specific risk parameters and associated guardrails the Stew
 
 ### Oracle and Prices
 
-Requesting oracle feeds to price assets in the system relies on the same mechanisms, but a new `AaveOracle` contract is deployed. The associated centralisation risks are the same as on the _Core_ instance.
+Requesting oracle feeds to price assets in the system is relying on the same mechanisms across the different instances. To control which price feeds are available a new `AaveOracle` contract is deployed for each instance. The associated centralisation risks in the _EtherFi_ instance are the same as on the _Core_ instance.
 
 Read more in our _Core_ instance report.
 
@@ -76,7 +76,7 @@ The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, t
 
 ## Accessibility
 
-The frontend of Aave V3 app is open source. Each commit (ie each change to the code base) is published to IPFS (https://github.com/aave/interface/releases).
+The frontend of Aave V3 app is open source. The frontend allows to interact with all instances. Each commit (ie each change to the code base) is published to IPFS (https://github.com/aave/interface/releases).
 
 In addition to that Aave is also available through [DeFi Saver](https://app.defisaver.com/aave).
 
@@ -94,11 +94,9 @@ The protocol could reach **Stage 1** by implementing fallback mechanism around t
 
 The project additionally could advance to **Stage 2** if the on-chain governance (DAO) used a 30-day exit window instead of only 7 days.
 
-# Technical Analysis
+# Protocol Analysis
 
-## System Outline
-
-### Upgradeable Pool Contract and mutable reserve parameters
+## Upgradeable Pool Contract and mutable reserve parameters
 
 The center of the Aave V3 market is the contract called `Pool.sol` (`0x4e033931ad43597d96D6bcc25c280717730B58B1`). Each supported asset that can be supplied and/or borrowed is attached to a reserve in this pool. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
 
@@ -108,12 +106,9 @@ The `Pool` contract is completely upgradeable via the proxy-pattern. The permiss
 
 ![Reserve Parameter Control](./diagrams/Aave_V3_Prime_Reserve_Parameter_Control.png)
 
-Moreover, the control over market parameters, emergency freezing and pausing is additionally handed to multi-sigs and off-chain systems through steward contracts which allows the governance to delegate certain permissions in a fine grained manner as seen in the diagram. The `PoolConfigurator` contract is the contract that has the permissions to change any reserve parameter. It mirrors the `Pool` functions that change reserve parameters and decorates them with access control to certain roles. The capability to pause and freeze is assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts in turn are regular smart contracts that mirror a specific selection of the endpoints on the `PoolConfigurator` contract, but with guardrails for changing parameters and they also include rate limiting to certain functions. Councils which are regular multi-sigs are the permission owners of this steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions. The Governance itself can also update reserve parameters if the community wants to. Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
+Moreover, the control over market parameters, emergency freezing and pausing is additionally handed to multi-sigs and off-chain systems through steward contracts which allows the governance to delegate certain permissions in a fine grained manner as seen in the diagram. The `PoolConfigurator` contract is the contract that has the permissions to change any reserve parameter. It mirrors the `Pool` functions that change reserve parameters and decorates them with access control to certain roles. The capability to pause and freeze is assigned to `EMERGENCY_ADMIN` role, while LTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts in turn are regular smart contracts that mirror a specific selection of the endpoints on the `PoolConfigurator` contract, but with guardrails for changing parameters and they also include rate limiting to certain functions. Councils which are regular multi-sigs are the permission owners of this steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions. The Governance itself can also update reserve parameters if the community wants to. Governance has direct permissions on all of the `PoolConfigurator` endpoints via the role called `POOL_ADMIN`.
 
-While `RISK_ADMIN` manages liquidity and market risk on a continuous basis in certain cases protection of user funds requires a halt of the system.
-In the diagram above the `Emergency Guardian` is shown owning the `EMERGENCY_ADMIN` role directly and owning permissions on the `FreezeSteward` contract. This is a 5 of 9 multi-sig consisting various parties selected by the community.
-
-Additionally, specific to the _Prime_ instance there is an additional Steward called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
+Additionally, specifically to the _Prime_ instance there is an additional Steward contract called `EdgeRiskSteward` which pushes changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
 ## Dependencies
 
@@ -129,20 +124,22 @@ The a.DI also incorporates an emergency mode which allows the Aave Governance V3
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
-# Permission Owners and Security Council
+# Governance
+
+## Security Council
 
 This table shows the external permission owners and how they are rated against the security council criteria.
 
 | External Permission Owner                   | Address                                                                                                               | Type         | At least 7 signers | At least 51% threshold | Above 50% non-insiders signers | Signers publicly announced                                                                                                                                             |
 |----------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------|--------------------|------------------------|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Executor_lvl**               | [0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A](https://etherscan.io/address/0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A) | Contract | n/a                 | n/a                     | n/a                              | n/a                                                                                                    |
-| **EmergencyAdmin**               | [0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30](https://etherscan.io/address/0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30) | Multisig 5/9 | ✅                 | ✅                     | ❌                              | ✅ ([source](https://aave.com/docs/primitives/governance))                                                                                                    |
-| **Risk Council**                 | [0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8](https://etherscan.io/address/0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8) | Multisig 2/2 | ❌                 | ✅                     | ❌                              | ✅ ([source](https://governance.aave.com/t/arfc-aave-generalized-risk-stewards-agrs-activation/19178))                                                       |
-| **ACI Automation (Bot)**         | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://etherscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
-| **CleanUp Admin**                | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://etherscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 | ❌                 | ✅                     | ❌                              | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=270&ipfsHash=0x4043001b72316afa6b6728772941bfa08f127b66c1c006316a3f20510b6738ab))                   |
-| **Injector Owner (BGD Labs)**    | [0xff37939808EcF199A2D599ef91D699Fb13dab7F7](https://etherscan.io/address/0xff37939808EcF199A2D599ef91D699Fb13dab7F7) | Multisig 1/2 | ❌                 | ❌                     | ❌                              | ✅                                                                                                                                                             |
-| **Chaos Labs' Multi-sig?**       | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 2/3 | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
-| **Chaos Labs' Bot**               | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
+| Executor_lvl1               | [0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A](https://etherscan.io/address/0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A) | Contract | n/a                 | n/a                     | n/a                              | n/a                                                                                                    |
+| EmergencyAdmin               | [0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30](https://etherscan.io/address/0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30) | Multisig 5/9 | ✅                 | ✅                     | ❌                              | ✅ ([source](https://aave.com/docs/primitives/governance))                                                                                                    |
+| Risk Council                 | [0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8](https://etherscan.io/address/0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8) | Multisig 2/2 | ❌                 | ✅                     | ❌                              | ✅ ([source](https://governance.aave.com/t/arfc-aave-generalized-risk-stewards-agrs-activation/19178))                                                       |
+| ACI Automation (Bot)         | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://etherscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
+| CleanUp Admin                | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://etherscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 | ❌                 | ✅                     | ❌                              | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=270&ipfsHash=0x4043001b72316afa6b6728772941bfa08f127b66c1c006316a3f20510b6738ab))                   |
+| Injector Owner (BGD Labs)    | [0xff37939808EcF199A2D599ef91D699Fb13dab7F7](https://etherscan.io/address/0xff37939808EcF199A2D599ef91D699Fb13dab7F7) | Multisig 1/2 | ❌                 | ❌                     | ❌                              | ✅                                                                                                                                                             |
+| Chaos Labs' Multi-sig?       | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 2/3 | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
+| Chaos Labs' Bot               | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
 
 # Acknowledgement
 
