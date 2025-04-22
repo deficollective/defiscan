@@ -24,7 +24,7 @@ Uniswap v2 is a decentralized automated market maker (AMM) that builds upon the 
 Another notable improvement is the introduction of flash swaps, which allow users to withdraw assets without upfront capital as long as the borrowed amount is returned by the end of the transaction. This feature facilitates advanced use cases like arbitrage, collateral swapping, and debt refinancing.
 Additionally, Uniswap v2 integrates price oracles that mitigate manipulation risks by providing time-weighted average prices (TWAP) over a given period, which has become a critical component for DeFi protocols reliant on secure pricing mechanisms.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -59,7 +59,34 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Technical Analysis
+# Informational
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+No external dependency has been found.
+
+# Governance
+
+## Extenral Permissions and Security Council
+
+On-chain governance is in place with no security council.
+
+| Name          | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| GovernorBravo | [0x408ED6354d4973f66138C91495F2f2FCbd8724C3](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) | Contract | N/A         | N/A             | N/A               | N/A            |
+| TimeLock      | [0x1a9C8182C09F50C8318d769245beA52c32BE35BC](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC) | Contract | N/A         | N/A             | N/A               | N/A            |
+
+## Exit Window
+
+The protocol fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravoDelegator` contract.
+The lock period is at least two days and up to 30 days for governance actions. If the fee switch gets ever activated it fixed at 1/6 of the LP collected fees.
+When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -75,7 +102,7 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 The `UniswapV2Pair`'s address is an example instance of the contract. All pairs share the same implementation (based of Factory Pattern).
 
-## Permission owners
+## All Permission Owners
 
 | Name          | Account                                                                                                               | Type     |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -98,17 +125,3 @@ The `UniswapV2Pair`'s address is an example instance of the contract. All pairs 
 | GovernorBravoDelegator | \_setImplementation | Updates the implementation of the `GovernorBravoDelegate` (DAO) contract whwere the `GovernorBravoDelegator` is pointing to. The permisison to call this function lies with the admin, which is the TimeLock contract. The new contract specifies the implementation for the GovernorBravo (DAO) contract.                                                                                                               | Timelock                                                               |
 | GovernorBravoDelegate  | \_setPendingAdmin   | Set a new address for the admin of the GovernorBravo. The new appointed admin has to call `_acceptAdmin` before the transfer of admin rights is final.                                                                                                                                                                                                                                                                   | Timelock                                                               |
 | GovernorBravoDelegate  | \_acceptAdmin       | A newly appointed admin of the Governor has to call `_acceptAdmin`.                                                                                                                                                                                                                                                                                                                                                      | only Pending Admin (assigned via setPendingAdmin), currently 0-address |
-
-## Dependencies
-
-No external dependency has been found.
-
-## Exit Window
-
-The protocol fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravoDelegator` contract.
-The lock period is at least two days and up to 30 days for governance actions. If the fee switch gets ever activated it fixed at 1/6 of the LP collected fees.
-When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-
-# Security Council
-
-No security council needed because on-chain governance is in place.

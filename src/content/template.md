@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Add a summary of the protocols. What is it? What does it do? etc.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -69,7 +69,43 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 > Accessibility score: Low/Medium/High
 
-# Technical Analysis
+# Informational
+
+Any information that you deem worth sharing. That could be on something the protocol
+does different than others or hard decisions you took when writing your review (eg: whether
+to include something in the scope or not).
+
+# Protocol Analysis
+
+# Dependencies
+
+# Governance
+
+## External Permission Owners and Security Council
+
+Here we list permission owners that are subject to external interactions. This includes:
+
+- Governance contracts
+- Timelocks
+- Multisigs
+- EOAs
+
+It doesn't include contracts that are permissions owners but in which the only permission holders are other contracts.
+
+See http://defiscan.info/learn-more#security-council-requirements for guidance on the multisig requirements.
+
+change ✅ or ❌ accordingly for multisigs, or use N/A for contracts, ❌ for EOAs.
+
+| Name                  | Account                                     | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| --------------------- | ------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| A typical Multisig    | [0x123](https://basescan.org/address/0x123) | Multisig x/n | ✅          | ✅              | ❌                | ❌             |
+| A Governance contract | [0x123](https://basescan.org/address/0x123) | Contract     | N/A         | N/A             | N/A               | N/A            |
+
+## Exit Window
+
+Explain the exit window in more technical details.
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -78,7 +114,7 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | contract 1    | [0x123](https://etherscan.io/address/0x123) |
 | contract 2    | [0x456](https://etherscan.io/address/0x456) |
 
-## Permission owners
+## All Permission Owners
 
 | Name | Account                                     | Type         |
 | ---- | ------------------------------------------- | ------------ |
@@ -94,24 +130,3 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | contract name | functionname | First sentence: what it does technically, e.g "It assigns a new address to the owner variable".                                      | owner of the permission |
 | contract name | functionname | Second sentence: what is the impact within the system, e.g "The owner is permissioned to raise fees".                                | owner of the permission |
 | contract name | functionname | Third sentence: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield. | owner of the permission |
-
-## Dependencies
-
-Explain the autonomy section in more technical details.
-
-## Exit Window
-
-Explain the exit window in more technical details.
-
-# Security Council
-
-See http://defiscan.info/learn-more#security-council-requirements for guidance.
-
-change ✅ or ❌ accordingly
-
-| ✅ /❌ | Requirement                                             |
-| ------ | ------------------------------------------------------- |
-| ❌     | At least 7 signers                                      |
-| ❌     | At least 51% threshold                                  |
-| ❌     | At least 50% non-insider signers                        |
-| ❌     | Signers are publicly announced (with name or pseudonym) |

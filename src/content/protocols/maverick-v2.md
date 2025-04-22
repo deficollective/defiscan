@@ -24,7 +24,7 @@ Liquidity providers can also now choose to follow the price of an asset in a sin
 
 Together, these technological innovations represent a paradigm shift in the way smart contracts manage liquidity. Maverick is the first Dynamic Distribution AMM, capable of automating liquidity strategies that before now have required daily maintenance or the use of metaprotocols.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -66,7 +66,55 @@ However, LPs are able to access Maverick-v2, and their positions therein, only t
 
 > Accessibility score: High
 
-# Technical Analysis
+# Informational
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+Maverick Protocol relies on LayerZero for cross-chain communication and transaction validation.
+
+LayerZero Protocol itself is immutable and fully permissionless. The protocol will exist indefinitely even if Layer0 Labs, the company that developed the LayerZero Protocol, ceases to exist. Layer0 Labs' role in the LayerZero protocol is reduced to deploying immutable _Endpoints_ on new chains. These endpoints reference each other and thereby enable the cross-chain communication network. If Layer0 Labs ceases to exist, no new chains are added to the cross-chain network, but the existing network is not affected.
+
+The LayerZero Protocol further relies on a _Decentralized Validator Network_ (DVN), these are validators of transaction data that needs to move cross-chain. These validators are configured by the protocol, the Maverick Multisig in this case, with their security settings. If the configured DVNs fail, the Maverick Multisig needs to update its security settings and configure new DVNs. The DVNs themselves have a reputation and earn fees for the validating cross-chain transaction data and are thus incentivised to behave correctly and maintain an appropriate uptime. Maverick uses the "default" DVNs which is run by Google Cloud. Their DVN is deployed at the address: [0xD56e4eAb23cb81f43168F9F45211Eb027b9aC7cc](https://etherscan.io/address/0xD56e4eAb23cb81f43168F9F45211Eb027b9aC7cc) (deterministically deployed across all chains).
+
+Any protocol that relies on LayerZero could choose to run their own DVN. A flawed or unstable DVN can result in downtimes and the temporary freezing of funds. A malicious DVN can run a malicious verifier algorithm allowing the operator to steal user funds.
+
+Finally, the LayerZero Protocol relies on _Executors_ which trigger queued transactions on destination chains. The set of executors can be customised by the respective protocol, in this case maverick. However, it’s also fully permissionless, even if the designated executors do not execute the transaction on the destination chain, any user can step in and execute the transaction. Users' transactions can thus not be censored through the _Executor_ set.
+
+According to their [docs](https://docs.mav.xyz/technical-reference/contract-addresses/v2-contract-addresses) the MAV token is currently deployed on the following chains through the LayerZero protocol:
+
+- Arbitrum
+- Base
+- Mainnet
+- zkSync Era
+- Scroll
+- BNB Chain
+
+# Governance
+
+## External Permission Owners and Security Council
+
+| Name                  | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Undeclared Multisig 1 | [0xcAf836A03D8ADcDfF48F6d0354061F468ae8b2A3](https://etherscan.io/address/0xcAf836A03D8ADcDfF48F6d0354061F468ae8b2A3) | Multisig 3/6 | ❌          | ❌              | ❌                | ❌             |
+| Undeclared Multisig 2 | [0xA2206fe97eE8d2E689EFB96aE03be5F50BFAD027](https://etherscan.io/address/0xA2206fe97eE8d2E689EFB96aE03be5F50BFAD027) | Multisig 3/6 | ❌          | ❌              | ❌                | ❌             |
+
+No information on the multisigs was found in the docs.
+
+## Exit Window
+
+The only two contracts that have some upgrade/change potential are the MaverickV2Factory and the MaverickToken.
+
+MaverickV2Factory:
+Since the full source code of MaverickV2Factory is not publicly verified, it’s not clear if fee switches are enforced immediately or not.
+
+MaverickToken:
+Token has no timelock for changes/upgrades. The OFT token when ownership is not renounced allows owners to switch destination addresses and security settings. Users do not have the option to opt-out with a waiting period before the change is applied.
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -89,7 +137,7 @@ However, LPs are able to access Maverick-v2, and their positions therein, only t
 | MaverickVeV2                      | [0xC6addB3327A7D4b3b604227f82A6259Ca7112053](https://etherscan.io/address/0xC6addB3327A7D4b3b604227f82A6259Ca7112053) |
 | MaverickTokenIncentiveMatcher     | [0x9172a390Cb35a15a890293f59EA5aF250b234D55](https://etherscan.io/address/0x9172a390Cb35a15a890293f59EA5aF250b234D55) |
 
-## Permission Owners
+## All Permission Owners
 
 | Name                  | Account                                                                                                               | Type         |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -118,45 +166,3 @@ However, LPs are able to access Maverick-v2, and their positions therein, only t
 | Maverick Token (OFT)       | setPayloadSizeLimit       | The owner is allowed to set a limit to the payload size, again for each destination chain individually.                                                                                                                                                                          | Undeclared Multisig 1                                             |
 | Maverick Token (OFT)       | renounceOwnership         | The owner can renounce ownership, making the contract immutable regarding the aforementioned settings, otherwise the contract continues to work as-is. Note: Technically the owner is now the 0-address.                                                                         | Undeclared Multisig 1                                             |
 | Maverick Token (OFT)       | transferOwnership         | The owner can transfer the ownership to another address, which then receives the permissions to call the aforementioned functions and change settings of the OFT token.                                                                                                          | Undeclared Multisig 1                                             |
-
-## Dependencies
-
-Maverick Protocol relies on LayerZero for cross-chain communication and transaction validation.
-
-LayerZero Protocol itself is immutable and fully permissionless. The protocol will exist indefinitely even if Layer0 Labs, the company that developed the LayerZero Protocol, ceases to exist. Layer0 Labs' role in the LayerZero protocol is reduced to deploying immutable _Endpoints_ on new chains. These endpoints reference each other and thereby enable the cross-chain communication network. If Layer0 Labs ceases to exist, no new chains are added to the cross-chain network, but the existing network is not affected.
-
-The LayerZero Protocol further relies on a _Decentralized Validator Network_ (DVN), these are validators of transaction data that needs to move cross-chain. These validators are configured by the protocol, the Maverick Multisig in this case, with their security settings. If the configured DVNs fail, the Maverick Multisig needs to update its security settings and configure new DVNs. The DVNs themselves have a reputation and earn fees for the validating cross-chain transaction data and are thus incentivised to behave correctly and maintain an appropriate uptime. Maverick uses the "default" DVNs which is run by Google Cloud. Their DVN is deployed at the address: [0xD56e4eAb23cb81f43168F9F45211Eb027b9aC7cc](https://etherscan.io/address/0xD56e4eAb23cb81f43168F9F45211Eb027b9aC7cc) (deterministically deployed across all chains).
-
-Any protocol that relies on LayerZero could choose to run their own DVN. A flawed or unstable DVN can result in downtimes and the temporary freezing of funds. A malicious DVN can run a malicious verifier algorithm allowing the operator to steal user funds.
-
-Finally, the LayerZero Protocol relies on _Executors_ which trigger queued transactions on destination chains. The set of executors can be customised by the respective protocol, in this case maverick. However, it’s also fully permissionless, even if the designated executors do not execute the transaction on the destination chain, any user can step in and execute the transaction. Users' transactions can thus not be censored through the _Executor_ set.
-
-According to their [docs](https://docs.mav.xyz/technical-reference/contract-addresses/v2-contract-addresses) the MAV token is currently deployed on the following chains through the LayerZero protocol:
-
-- Arbitrum
-- Base
-- Mainnet
-- zkSync Era
-- Scroll
-- BNB Chain
-
-## Exit Window
-
-The only two contracts that have some upgrade/change potential are the MaverickV2Factory and the MaverickToken.
-
-MaverickV2Factory:
-Since the full source code of MaverickV2Factory is not publicly verified, it’s not clear if fee switches are enforced immediately or not.
-
-MaverickToken:
-Token has no timelock for changes/upgrades. The OFT token when ownership is not renounced allows owners to switch destination addresses and security settings. Users do not have the option to opt-out with a waiting period before the change is applied.
-
-# Security Council
-
-| Requirement                                             | Undeclared Multisig 1 | Undeclared Multisig 2 |
-| ------------------------------------------------------- | :-------------------: | :-------------------: |
-| At least 7 signers                                      |          ✅           |          ✅           |
-| At least 51% threshold                                  |          ❌           |          ❌           |
-| At least 50% non-team signers                           |          ❌           |          ❌           |
-| Signers are publicly announced (with name or pseudonym) |          ❌           |          ❌           |
-
-No information on the multisig in use found in the docs.

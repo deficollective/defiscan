@@ -26,7 +26,7 @@ Uniswap v3 is an AMM that builds upon Uniswap v2 by introducing a concentrated l
 Uniswap v3 also introduces multiple fee tiers (0.01%, 0.05%, 0.3%, and 1%) to support different asset volatility profiles, allowing LPs to adjust their fee preferences based on expected risk and return. Additionally, it incorporates "range orders," which effectively turn liquidity positions into limit orders, further enhancing LP strategy flexibility.
 The protocol is deployed across multiple chains enabling a wide range of use cases across decentralized finance (DeFi) applications.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -66,7 +66,51 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Technical Analysis
+# Informational
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+No external dependency has been found.
+
+# Governance
+
+## Governance Decision Enforcement from L1 to Arbitrum
+
+When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract to call `executeTransaction` on the Timelock contract.
+
+If a vote has passed and is queued that has changes for the Arbitrum deployment the payload must specify as target the L1 contract for Cross-chain messaging by Arbitrum called [Inbox](https://etherscan.io/address/0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f). This contract by Arbitrum belongs to the [Delayed Inbox system](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging#retryable-tickets). The target function on this contract is `createRetryableTicket`.
+
+When the transaction arrives in the inbox (retryable function call by the timelock contract succeeded) and the subsequent cross-chain handling succeeded as well \*, the arbitrum chain includes the transaction with the original sender (Timelock) address being aliased (`L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111`). This is how this address `0x2BAD8182C09F50c8318d769245beA52C32Be46CD` is the L2 equivalent of the Timelock on the L1.
+
+This `L2Alias` calls the specified L2 target (`to`) with the data to execute a function on the behalf of the Timelock on L1 (`bytes calldata data`).
+
+The target and data could e.g specify `UniswapV3Factory` (target) and `enableFeeAmount` with arguments `uint24 fee, int24 tickSpacing` (data) to set fees for V3 Pools on Arbitrum.
+
+\*if the L1 transaction to request submission succeeds (i.e. does not revert) then the execution of the Retryable on L2 has a strong guarantee to ultimately succeed as well. [[1]](#sources)
+
+[1] https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging
+
+## External Permission Owners and Security Council
+
+No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Arbitrum.
+
+| Name              | Account                                                                                                              | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| L2 Alias Timelock | [0x2BAD8182C09F50c8318d769245beA52C32Be46CD](https://arbiscan.io/address/0x2BAD8182C09F50c8318d769245beA52C32Be46CD) | Contract | N/A         | N/A             | N/A               | N/A            |
+
+## Exit Window
+
+As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol
+fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
+The lock period is at least two days and up to 30 days for governance actions.
+When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
+Subsequently, governance actions initiated on Ethereum (L1) are enforced on Arbitrum (L2) with very strong guarantees (see [Governance Decision Enforcement from L1 to Arbitrum](#governance-decision-enforcement-from-l1-to-arbitrum)).
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -90,7 +134,7 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | v3StakerAddress                    | [0xe34139463bA50bD61336E0c446Bd8C0867c6fE65](https://arbiscan.io/address/0xe34139463bA50bD61336E0c446Bd8C0867c6fE65) |
 | L2 Alias                           | [0x2BAD8182C09F50c8318d769245beA52C32Be46CD](https://arbiscan.io/address/0x2BAD8182C09F50c8318d769245beA52C32Be46CD) |
 
-## Permission owners
+## All Permission Owners
 
 | Name              | Account                                                                                                              | Type           |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -113,37 +157,3 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | TransparentUpgradeableProxy | changeAdmin       | Updates the proxy's admin: the account with the rights to upgrade the proxy's implementation. This would replace the role of the `ProxyAdmin` contract and could be used to upgrade (replace) `ProxyAdmin`.                                         | ProxyAdmin        |
 | TransparentUpgradeableProxy | upgradeTo         | Upgrades the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                                           | ProxyAdmin        |
 | TransparentUpgradeableProxy | upgradeToAndCall  | Upgrades the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                                              | ProxyAdmin        |
-
-## Governance Decision Enforcement from L1 to Arbitrum
-
-When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract to call `executeTransaction` on the Timelock contract.
-
-If a vote has passed and is queued that has changes for the Arbitrum deployment the payload must specify as target the L1 contract for Cross-chain messaging by Arbitrum called [Inbox](https://etherscan.io/address/0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f). This contract by Arbitrum belongs to the [Delayed Inbox system](https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging#retryable-tickets). The target function on this contract is `createRetryableTicket`.
-
-When the transaction arrives in the inbox (retryable function call by the timelock contract succeeded) and the subsequent cross-chain handling succeeded as well \*, the arbitrum chain includes the transaction with the original sender (Timelock) address being aliased (`L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111`). This is how this address `0x2BAD8182C09F50c8318d769245beA52C32Be46CD` is the L2 equivalent of the Timelock on the L1.
-
-This `L2Alias` calls the specified L2 target (`to`) with the data to execute a function on the behalf of the Timelock on L1 (`bytes calldata data`).
-
-The target and data could e.g specify `UniswapV3Factory` (target) and `enableFeeAmount` with arguments `uint24 fee, int24 tickSpacing` (data) to set fees for V3 Pools on Arbitrum.
-
-\*if the L1 transaction to request submission succeeds (i.e. does not revert) then the execution of the Retryable on L2 has a strong guarantee to ultimately succeed as well. [[1]](#sources)
-
-## Dependencies
-
-No external dependency has been found.
-
-## Exit Window
-
-As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol
-fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravo` contract.
-The lock period is at least two days and up to 30 days for governance actions.
-When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-Subsequently, governance actions initiated on Ethereum (L1) are enforced on Arbitrum (L2) with very strong guarantees (see [Governance Decision Enforcement from L1 to Arbitrum](#governance-decision-enforcement-from-l1-to-arbitrum)).
-
-# Security Council
-
-No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Arbitrum.
-
-# Sources
-
-[1] https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging

@@ -20,7 +20,7 @@ Liquity is a decentralized borrowing protocol that allows you to draw interest-f
 
 In addition to the collateral, the loans are secured by a Stability Pool containing LUSD and by fellow borrowers collectively acting as guarantors of last resort. Learn more about these mechanisms under Liquidation.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -54,7 +54,31 @@ A list of third-party frontends can be found [here](https://www.liquity.org/fron
 
 > Accessibility score: Low
 
-# Technical Analysis
+# Informational
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+The only external protocol dependency is an ETH/USD price feed (the Oracle) which is used to compute the value of users’ collateral when minting LUSD, redeeming LUSD or liquidating troves.
+
+The system relies on two different oracles: Chainlink is the primary oracle and Tellor is the fallback oracle in case the chainlink price feed is frozen or untrusted. The Chainlink price feed is deployed at `0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0`, the Tellor oracle is deployed at `0xAd430500ECDa11E38C9bCB08a702274b94641112`.
+
+If both Chainlink and Tellor are frozen or untrusted the last good price is used and the system keeps operating allowing users to withdraw their assets.
+
+# Governance
+
+## External Permission Owners and Security Council
+
+The protocol is completely immutable, thus no Security Council is required 🎉
+
+## Exit Window
+
+The protocol is completely immutable, thus no exit window is required 🎉
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -81,7 +105,7 @@ A list of third-party frontends can be found [here](https://www.liquity.org/fron
 | Chanlink LUSD feed    | [0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0](https://etherscan.io/address/0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0) |
 | Tellor USD feed       | [0xAd430500ECDa11E38C9bCB08a702274b94641112](https://etherscan.io/address/0xAd430500ECDa11E38C9bCB08a702274b94641112) |
 
-## Permission Owners
+## All Permission Owners
 
 All external permissions are revoked, the protocol is immutable 🎉
 
@@ -102,19 +126,3 @@ All external permissions are revoked, the protocol is immutable 🎉
 | SortedTroves          | setParams           | The permissioned function allows the owner of the permission to set the following addresses in order to set relationships to co-dependent smart contracts of the Liquity system: troveManager, borrowerOperationsAddress. And it allows to set the max size for data.                                                                                  | 0x0   |
 | StabilityPool         | setAddresses        | The permissioned function allows the owner of the permission to set the following addresses in order to set relationships to co-dependent smart contracts of the Liquity system: troveManager, borrowerOperations, activePool, lusdToken, sortedTroves, priceFeed and communityIssuance.                                                               | 0x0   |
 | Unipool               | setAddresses        | The permissioned function allows the owner of the permission to set the following addresses in order to set relationships to co-dependent smart contracts of the Liquity system: lqtyToken and uniToken.                                                                                                                                               | 0x0   |
-
-## Dependencies
-
-The only external protocol dependency is an ETH/USD price feed (the Oracle) which is used to compute the value of users’ collateral when minting LUSD, redeeming LUSD or liquidating troves.
-
-The system relies on two different oracles: Chainlink is the primary oracle and Tellor is the fallback oracle in case the chainlink price feed is frozen or untrusted. The Chainlink price feed is deployed at `0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0`, the Tellor oracle is deployed at `0xAd430500ECDa11E38C9bCB08a702274b94641112`.
-
-If both Chainlink and Tellor are frozen or untrusted the last good price is used and the system keeps operating allowing users to withdraw their assets.
-
-## Exit Window
-
-The protocol is completely immutable, thus no exit window is required 🎉
-
-# Security Council
-
-The protocol is completely immutable, thus no Security Council is required 🎉

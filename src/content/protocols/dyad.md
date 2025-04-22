@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 The DYAD protocol allows users to mint interest-free stablecoins against collateral types like ETH. Users have to deposit assets that are worth at least 150% of the value of their minted DYAD, or their position is liquidated. The excess value of all collateral in the system is tokenized, and users who own the token are able to utilize its value as part of their backing.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -54,7 +54,37 @@ Dyad Protocol offers a single user interface accessible through its website. The
 
 > Accessibility score: Medium
 
-# Technical Analysis
+# Informational
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+The Dyad protocol relies on Chainlink price feeds for collateral valuation.
+In case one of the chainlink price feeds deployed to addresses `0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419` (WETH),`0xCfE54B5cD566aB89272946F602D76Ea879CAb4a8` (stETH),`0x8350b7De6a6a2C1368E7D4Bd968190e13E354297` (TBTC),`0xFF3BC18cCBd5999CE63E788A1c250a88626aD099` (sUSDe) stops working the Dyad protocol will face disruption. For each collateral price feed that stops working the respective collateral in the vault is frozen. That means the specific collateral cannot be redeemed for DYAD and the collateral cannot be withdrawn even if the collateralisation ratio was above the 150% value. Additionally liquidations for this specific asset are paused. Burning DYAD remains always possible in case of frozen oracle prices.
+
+The protocol does not offer alternatives to replace or update the oracle dependency, as the reference addresses for these feeds are immutable. Consequently, if any Chainlink feed is discontinued, the corresponding collateral could be lost without recovery options.
+
+# Governance
+
+## External Permission Owners and Security Council
+
+| Name          | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Team Multisig | [0xDeD796De6a14E255487191963dEe436c45995813](https://etherscan.io/address/0xDeD796De6a14E255487191963dEe436c45995813) | Multisig 2/3 | ❌          | ✅              | ❌                | ❌             |
+
+No information on the multisig was found in the docs.
+
+## Exit Window
+
+- Collateral Vaults
+  - The multisig of the protocol team can deploy vaults, list and unlist them as collateral. The vault licenser `0xfe81952a0a2c6ab603ef1b3cc69e1b6bffa92697` has no timelock for adding and removing vaults form the registry. As mentioned above in the permission section on the VaultLicenser this can result in temporary lock of user funds.
+- VaultManagerVx
+  - VaultManager contract is upgradeable and currently version 4 is deployed. There is no timelock prohibiting immediately enforced upgrades to change mint, burn and liquidation implementations. This also counts for stored references to DYAD token, notes (dNft) and the vault licenser.
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -70,7 +100,7 @@ Dyad Protocol offers a single user interface accessible through its website. The
 | KerosineManager     | [0xfccf9d9466ed79afed2abc46350bfb78f7b47b90](https://etherscan.io/address/0xfccf9d9466ed79afed2abc46350bfb78f7b47b90) |
 | KerosineDenominator | [0x4b3dd4ceb943efd7d169a1baaeec63097601e88e](https://etherscan.io/address/0x4b3dd4ceb943efd7d169a1baaeec63097601e88e) |
 
-## Permission Owners
+## All Permission Owners
 
 | Name          | Account                                                                                                               | Type         |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -92,28 +122,3 @@ Dyad Protocol offers a single user interface accessible through its website. The
 | KerosineManager | remove           | The remove function allows the owner of the permission to remove vaults.                                                                                                                                                                                                                                                                                                                                                                                                    | Team Multisig  |
 | VaultManagerV4  | authorizeUpgrade | VaultManager is an upgradeable contract with ERC-1967 and UUPS pattern, thus the proxy upgrade logic is part of VaultManagerV4 contract. Calling _authorizeUpgrade_ to upgrade VaultManagerV4 to a new implementation is permissioned and only allowed by the owner. As a result, users interacting with the VaultManager through Proxy contract `0xb62bdb1a6ac97a9b70957dd35357311e8859f0d7` need to be aware that the logic of the VaultManager could change at any time. | Team Multisig  |
 | VaultStakedUSDe | setDepositCap    | The function setDepositCap allows the owner of the permission to set a deposit cap for each depositor of this vault. This function only exists for the sUSDe vault.                                                                                                                                                                                                                                                                                                         | Team Multisig  |
-
-## Dependencies
-
-The Dyad protocol relies on Chainlink price feeds for collateral valuation.
-In case one of the chainlink price feeds deployed to addresses `0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419` (WETH),`0xCfE54B5cD566aB89272946F602D76Ea879CAb4a8` (stETH),`0x8350b7De6a6a2C1368E7D4Bd968190e13E354297` (TBTC),`0xFF3BC18cCBd5999CE63E788A1c250a88626aD099` (sUSDe) stops working the Dyad protocol will face disruption. For each collateral price feed that stops working the respective collateral in the vault is frozen. That means the specific collateral cannot be redeemed for DYAD and the collateral cannot be withdrawn even if the collateralisation ratio was above the 150% value. Additionally liquidations for this specific asset are paused. Burning DYAD remains always possible in case of frozen oracle prices.
-
-The protocol does not offer alternatives to replace or update the oracle dependency, as the reference addresses for these feeds are immutable. Consequently, if any Chainlink feed is discontinued, the corresponding collateral could be lost without recovery options.
-
-## Exit Window
-
-- Collateral Vaults
-  - The multisig of the protocol team can deploy vaults, list and unlist them as collateral. The vault licenser `0xfe81952a0a2c6ab603ef1b3cc69e1b6bffa92697` has no timelock for adding and removing vaults form the registry. As mentioned above in the permission section on the VaultLicenser this can result in temporary lock of user funds.
-- VaultManagerVx
-  - VaultManager contract is upgradeable and currently version 4 is deployed. There is no timelock prohibiting immediately enforced upgrades to change mint, burn and liquidation implementations. This also counts for stored references to DYAD token, notes (dNft) and the vault licenser.
-
-# Security Council
-
-| Requirement                                             | Team Multisig |
-| ------------------------------------------------------- | :-----------: |
-| At least 7 signers                                      |      ❌       |
-| At least 51% threshold                                  |      ✅       |
-| At least 50% non-team signers                           |      ❌       |
-| Signers are publicly announced (with name or pseudonym) |      ❌       |
-
-No information on the multisig in use found in the docs.
