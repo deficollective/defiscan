@@ -18,6 +18,8 @@ publish_date: "2025-01-29"
 update_date: "1970-01-01"
 ---
 
+⚠️ During our analysis, we identified two unverified contracts, ProxyAdmin and TransparentUpgradeableProxy, on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
+
 # Summary
 
 Uniswap v2 is a decentralized automated market maker (AMM) that builds upon the original Uniswap protocol by introducing several key features to enhance functionality and flexibility for liquidity providers (LPs) and traders. Unlike its predecessor, Uniswap v2 enables direct token-to-token swaps, eliminating the need to route trades through ETH as an intermediary.
