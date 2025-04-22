@@ -22,7 +22,7 @@ Sky is a stablecoin protocol allowing users to mint its USDS stablecoin through 
 
 ## Chain
 
-This review focuses on the Ethereum deployment of Sky, currently the only chain the Sky protocol is deployed on. As part of Sky's _End Game_ plan the protocol is gradually deploying on other chains and aims to launch its own chain in the future.
+This review focuses on the Ethereum deployment of Sky, currently the only chain the Sky protocol is deployed on. As part of Sky's _End Game_ plan the protocol aims to launch its own chain in the future and appoints other protocols such as Spark to provision `USDS`on other chains.
 
 > Chain score: Low
 
@@ -36,7 +36,7 @@ Many parameters in the Sky Protocol can be changed through governance proposals 
 
 ## Autonomy
 
-Sky has a centralized dependency in Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly backed by `USDC` which is a centralized stablecoin. This conversion may be stopped or paused in an emergency Sky Governance proposal.
+Sky has a centralized dependency in Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. This conversion may be stopped or paused in an emergency Sky Governance proposal. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. Nonetheless, at the time of writing this debt ceiling is high enough that it does not prevent that more than 50% of the collateral in Sky is backed by `USDC`. The ceiling is explained further in the [dependencies](#dependencies) section.
 
 The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of hosted by various third-parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that a centralized Chornicle multisig may control which validators may take part in the concensus. However, any changes to the validator set is subject to a 7 days exit-window. We therefore assessed that Chronicle is a Stage 1 dependency and explain it in details in the [dependencies](#dependencies) section.
 
@@ -48,17 +48,17 @@ An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and t
 
 All permissions within Sky are held by the onchain Sky Governance. There are no external accounts or multisigs in control.
 
-Governance is controlled by `MKR`/`SKY` token holders who locked their tokens to earn voting power which allows them to submit and vote on respective proposals, or delegate their votes to another user. Any token holder can create a proposal and the protocol uses a system of continuous approval explained in more detail in the [technical section](#exit-window-1).
+Governance is controlled by `MKR`/`SKY` token holders who locked their tokens to earn voting power which allows them to submit and vote on respective proposals, or delegate their votes to another user. Any token holder can create a proposal and the protocol uses a system of continuous approval explained in more detail in the [governance section](#exit-window-1).
 
 The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedules. Those proposals usually have a courtesy delay duration of 2-3 days before taking effect, but proposals remain possible at any time with the minimum delay.
 
-Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost no matter the emergency status. During an emergency shutdown users are can retrieve their supplied assets, but no additional supply or borrowing is allowed. This is explained further in the technical [exit-window](#exit-window-1) section.
+Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost no matter the emergency status. During an emergency shutdown users are can retrieve their supplied assets, but no additional supply or borrowing is allowed. This is explained further in the technical [governance section](#exit-window-1).
 
 > Exit Window score: High
 
 ## Accessibility
 
-Sky has a main frontend at [sky.money](https://sky.money). The frontend is not self-hostable nor open source, but multiple other access points exist with Sky-specific apps such as [Spark](https://spark.fi) or third-party apps like [DeFiSaver](https://defisaver.com) or [SummerFiPro](https://pro.summer.fi). These apps build an acceptable backup solution in case of failure of the official frontend.
+Sky has a main frontend at [sky.money](https://sky.money). The frontend is not self-hostable nor open source, but multiple other access points exist with Sky-specific apps such as [Spark](https://spark.fi) or third-party apps like [DeFiSaver](https://defisaver.com) or [SummerFi Pro](https://pro.summer.fi). These apps build an acceptable backup solution in case of failure of the official frontend.
 
 > Accessibility score: Low
 
@@ -66,11 +66,11 @@ Sky has a main frontend at [sky.money](https://sky.money). The frontend is not s
 
 The Sky protocol exposes critical permissions that are not protected with an Exit Window of at least 7 days or a Security Council and thus earns a High centralization risk score for its Upgradeability and Exit Window dimensions.
 
-Furthermore, Sky is exposed to centralization risks from its USDC and Chronicle dependencies resulting in a High centralization risk score for the Autonomy dimension.
+Furthermore, Sky is exposed to centralization risks from its USDC and Chronicle dependencies resulting in an overall High centralization risk score for the Autonomy dimension.
 
-Sky thus achieves Stage 0 decentralization.
+Sky thus achieves a decentralization of Stage 0.
 
-The protocol could reach Stage 1 if no longer relies on Circle and increases its exit window to at least 7 days or a security council. It could further reach Stage 2 with an exit window of at least 30 days and changes its oracle provider to a stage 2 or equivalent protocol. This could also be achieved if Chronicle increases its exit-window to 30 days.
+The protocol could reach Stage 1 if it no longer swaps its `USDS` with Circle's `UDSC` in a blind fashion and increases its exit window to at least 7 days or a security council. It could further reach Stage 2 with an exit window of at least 30 days and if it changes its oracle provider to a stage 2 or equivalent protocol. This could also be achieved if Chronicle increases its exit-window to 30 days.
 
 > Overall score: Stage 0
 
@@ -116,7 +116,13 @@ A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a r
 
 # Dependencies
 
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets.
+`USDS` is pegged to Circle's `USDC` rather than `USD` due to its stability module.
+
+Users can mint `USDS` from `USDC` at a fixed 1:1 rate using the `LitePSM` (Peg-stability module). This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. This debt ceiling is dynamic, it can be increased every 12 hours by _400 Mio_ if the current debt approaches the ceiling (debt + 400 Mio > ceiling). The ceiling can reach up to **10 Billion** `USDS`, making `USDC` more than a collateral for Sky, but a peg for its stablecoin.
+
+The `LitePSM` which allows this conversion may be stopped or paused in an emergency Sky Governance proposal.
+
+The Sky protocol also relies on the provider Chronicle for price feeds of collateral assets.
 
 Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a TimeLockController with a delay of 7 days. This controller could also name other controllers or remove this 7 days delay, but the action itself would still be subject to the delay. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
 
@@ -153,6 +159,8 @@ execute emergeny governance proposals. Proposals that are subject to a delay are
 `DSPause Proxy` which enforces the delay.
 
 There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
+
+&nbsp;
 
 | Name                               | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
