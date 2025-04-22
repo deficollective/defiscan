@@ -71,9 +71,10 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 # Informational
 
-Any information that you deem worth sharing. That could be on something the protocol
+Any information that you deem worth sharing and is not part of the report. That could be on something the protocol
 does different than others or hard decisions you took when writing your review (eg: whether
-to include something in the scope or not).
+to include something in the scope or not). If there is a reason why the protocol is in the category "others"
+you can explain in more details why.
 
 # Protocol Analysis
 

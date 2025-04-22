@@ -69,6 +69,11 @@ There were no particular discoveries made during the analysis of this protocol.
 
 # Protocol Analysis
 
+An overview of the contracts in Uniswap V3 can be found below. Users can interact
+through the routers or Multicall contracts, as well as interact with the pools directly. `UNI` token holders may vote in the governance, which can enable fees for specific pools, collect the fees, or upgrade the `NFTPositionDescriptor` contract, which is used for token descriptions. Anyone can create new pools.
+
+![Overview of Uniswap V3](./diagrams/uniswap-v3.png)
+
 # Dependencies
 
 No external dependency has been found.

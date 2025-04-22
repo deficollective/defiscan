@@ -65,6 +65,12 @@ There were no particular discoveries made during the analysis of this protocol.
 
 # Protocol Analysis
 
+An overview of the contracts in Uniswap V2 can be found below. Users can interact
+through the router or with the pairs directly. `UNI` token holders may vote in the governance,
+which can enable fees for specific pairs. Anyone can create new pairs using the factory.
+
+![Overview of Uniswap V2](./diagrams/uniswap-v2.png)
+
 # Dependencies
 
 No external dependency has been found.
