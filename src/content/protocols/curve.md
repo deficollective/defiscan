@@ -4,9 +4,9 @@ website: "https://curve.fi/"
 x: "https://x.com/CurveFinance"
 github: ["https://github.com/CurveFi"]
 defillama_slug: ["curve-finance"]
-chain: "ethereum"
+chain: "Ethereum"
 stage: 1
-reasons: ["Upgradability", "Permissions"]
+reasons: []
 risks: ["L", "H", "L", "M", "L"]
 author: ["Saint Rat"]
 submission_date: "2025-04-26"
