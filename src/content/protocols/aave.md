@@ -85,23 +85,23 @@ The a.DI does not rely on a single bridge provider to move messages across diffe
 
 If the community cannot or does not want to use the a.DI or the other voting networks, then the community still can carry out the vote on Ethereum Mainnet. This would eliminate the cross-chain dependencies for voting.
 
-The cross-chain voting system has low centralisation risk because of its fault tolerant design, while the oracle system is currently unmitigated.
+The cross-chain voting system has low centralization risk because of its fault tolerant design, while the oracle system is currently unmitigated.
 
 > Autonomy score: High
 
 ## Exit Window
 
-Critical permissions, including protocol upgrades, are controlled by the _Aave Governance_ onchain governance system.
+Critical permissions, including protocol upgrades, are controlled by _Aave Governance_ and an _EmergencyAdmin_ multisig account.
 
 Two levels of permissions are separated in the (current) implementation of _Aave Governance_: _Level 2_ defines permissions on the governance system itself and on the `AAVE` token contract, _Level 1_ covers the remaining permissions.
 
-AAVE holders (also stkAAVE, aAAVE) are able to create new proposals (requires 80,000 / 200,0000 votes for level 1 / level 2) and vote on proposals (at least 320,000 / 1,040,000 votes are required for a valid proposal and a voting differential (yes minus no) of 80,000 / 1,040,000 votes).
+AAVE holders (also stkAAVE, aAAVE) are able to create new proposals (requires 80,000 / 200,0000 votes for Level 1 / Level 2) and vote on proposals (at least 320,000 / 1,040,000 votes are required for a valid proposal and a voting differential (yes minus no votes) of 80,000 / 1,040,000 votes).
 
 Votes start 1 day after proposal creation and the voting period is 10 days for _Level 2_, and 3 days for _Level 1_ proposals.
 
-Furthermore, the execution of successful votes is blocked by an Exit Window with a delay of 7 days for Level 2 and 1 day for Level 1 permissions. While these Exit Windows do not qualify for a Low or Medium score, the Aave Governance V3 Guardian multisig account (adhering to the Security Council requirements) and its ability to block unintended proposals from execution mitigates this risk.
+The execution of successful votes is blocked by an Exit Window with a delay of 7 days for _Level 2_ and 1 day for _Level 1_ permissions. While these Exit Windows do not qualify for a _Low_ or _Medium_ score, the risk of unwanted updates is further mitigated by the _Aave Governance V3 Guardian_ multisig, which is able to cancel unintended governance proposals and which adheres to the _Security Council_ requirements.
 
-However, these safeguards do not apply to the _EmergencyAdmin_ permissions, which do not comply with Security Council requirements, resulting in a High centralization risk score. The `EMERGENCY_ADMIN` role, controlled by the _EmergencyAdmin_ multi-sig, enables pausing individual reserves or the entire market, as well as disabling the liquidation grace period upon resuming operations. Although these actions are reversible via governance, they can be executed without prior oversight. The compromised or malicious multi-sig could turn the pool off, and then atomically perform the sequence (turn-on - liquidate - turn-off), and with this sequence, be the sole liquidator.
+However, these safeguards do only apply to permissions controlled by _Aave Governance_. The _EmergencyAdmin_ multisig too holds critical permissions which are not protected with an Exit Window or _Security Council_ setup. Specifically, the _EmergencyAdmin_ is able to pause individual Aave markets or the entire protocol as well as disabling the liquidation grace period. If compromised e.g. during a high-volatility market, these permissions could be taken advantage of, in order to execute controlled liquidations.
 
 > Exit Window score: High
 
@@ -119,7 +119,7 @@ https://aave.com/help/aave-101/accessing-aave
 
 The Aave-v3 Ethereum mainnet protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks **Stage 0**.
 
-The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the _EmergencyAdmin_ multi-sig and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
+The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the _EmergencyAdmin_ multisig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
 
 The project additionally could advance to Stage 2 if all critical permissions were assigned to Aave's onchain governance system and protected with a 30-day Exit Window.
 
