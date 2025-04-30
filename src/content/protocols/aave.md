@@ -16,9 +16,9 @@ update_date: "1970-01-01"
 
 # Summary
 
-Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, `GHO`. Users can borrow and lend `GHO` like any other asset in the system.
+Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, GHO. Users can borrow and lend GHO like any other asset in the system.
 
-The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and `aAAVE` holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
+The Aave DAO is Aave's onchain governance system, allowing AAVE, stkAAVE and aAAVE holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
 
 Different Aave protocol _Instances_ exist and are managed by the Aave DAO. These instances focus on specific use cases and chains. This review covers the Ethereum Mainnet Core instance.
 
@@ -32,14 +32,14 @@ The report is concerned with the Aave V3 _Core_ instance deployed on Ethereum ma
 
 ## Upgradeability
 
-The Aave v3 protocol can be analyzed in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol. All the control vectors, apart from the _EmergencyAdmin_'s priviledge, are behind governance vote or if permissions are given to a multi-sig, the permission is successfully restricted to prevent mis-use by using steward contracts.
-If the _EmergencyAdmin_ adhered to the security council standards, the _Upgradeability Risk_ would achieve a medium score. With the current setup the Aave V3 core instance achieves a High centralization risk score.
+The Aave v3 protocol can be analyzed in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol. All the control vectors, apart from the `EmergencyAdmin`'s priviledge, are behind governance vote or if permissions are given to a multi-sig account, the permission is successfully restricted to prevent mis-use by using steward contracts.
+If the `EmergencyAdmin` adhered to the security council standards, the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ centralization risk score.
 
 ### Core Lending & Borrowing
 
 This module forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_ [module](#aave-governance). An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
 
-Special attention is required for the _EmergencyAdmin_ multi-sig, which owns the role `EMERGENCY_ADMIN` that allows to pause a single reserve or pause the entire core market instance (all reserves / the entire Pool). The _EmergencyAdmin_ can also disable the grace period for liquidations after discontinuing the pause and resume market activities. The actions by the _EmergencyAdmin_ are reversible, but require a governance vote. The _EmergencyAdmin_ does not adhere to the security council requirements, as the members of the multi-sig are considered insiders of the Aave DAO (service providers and key voting power holders). In case of a market down turn the _EmergencyAdmin_ could mis-use the power to liquidate from a priviledged position. Quoting the [Aave V3 technical paper](https://github.com/aave-dao/aave-v3-origin/blob/main/docs/Aave_V3_Technical_Paper.pdf) page 16.
+Special attention is required for the `EmergencyAdmin` multi-sig, which owns the role `EMERGENCY_ADMIN` that allows to pause a single reserve or pause the entire core market instance (all reserves / the entire Pool). The `EmergencyAdmin` can also disable the grace period for liquidations after discontinuing the pause and resume market activities. The actions by the `EmergencyAdmin` are reversible, but require a governance vote. The `EmergencyAdmin` does not adhere to the _security council requirements_, as the members of the multi-sig are considered _insiders_ of the Aave DAO (service providers and key voting power holders). In case of a market down turn the _EmergencyAdmin_ could mis-use the power to liquidate from a priviledged position. Quoting the [Aave V3 technical paper](https://github.com/aave-dao/aave-v3-origin/blob/main/docs/Aave_V3_Technical_Paper.pdf) page 16.
 
 > Timed with a market crash, the attacker can turn the pool off, and then atomically perform the sequence (turn-on - liquidate - turn-off), allowing him to be the sole liquidator.
 
@@ -49,15 +49,15 @@ The _Reserve Parameters_ module is responsible for maintaining and updating crit
 
 ### Treasury, Aave Ecosystem Reserves and Rewards System
 
-This module manages how fees are collected, spent and third-party rewards allocated and claimed by users. Fees taken across the Aave v3 protocol (and previous versions) are collected in the `TreasuryCollector`, a fully upgradeable contract. Through _Aave Governance_ and different (upgradeable) utility contracts these funds are distributed among service providers and ecosystem initiatives. Furthermore, third parties are able to distribute rewards, in their own ERC20 token, to Aave users through the `RewardsControllerManager` and `EmissionManager` contracts. Rewards are distributed continuously among eligible users but controlled by the _Aave Chan Initiative_ multisig account until claimed. The _Aave Chan Initiative_ multisig account can thus potentially be abused to withhold or steal distributed rewards resulting in a loss of unclaimed yield for users.
+This module manages how fees are collected, spent and third-party rewards allocated and claimed by users. Fees taken across the Aave v3 protocol (and previous versions) are collected in the `TreasuryCollector`, a fully upgradeable contract. Through _Aave Governance_ and different (upgradeable) utility contracts these funds are distributed among _service providers_ and ecosystem initiatives. Furthermore, third parties are able to distribute rewards, in their own ERC20 token, to Aave users through the `RewardsControllerManager` and `EmissionManager` contracts. Rewards are distributed continuously among eligible users but controlled by the [Aave Chan Initiative](#security-council) multisig account until claimed. The Aave Chan Initiative multisig account can thus potentially be abused to withhold or steal distributed rewards resulting in a loss of unclaimed yield for users.
 
 ### GHO Stablecoin
 
-`GHO` is Aave v3's native stablecoin that is pegged to the US Dollar and mintable at a 1:1 rate against the centralized `USDC` and `USDT` stablecoins through the `GhoStabilityModule` contract. Furthermore, a _Risk Council_ multisig account (not a _Security Council_ according to the DeFiScan definition) has the ability to mint unbacked `GHO` supply into (or burn from) the Aave lending market for users to borrow by supplying collateral assets (and thus collateralizing the `GHO` supply) (this _Risk Council_ is not the same multi-sig as the multi-sig controlling the steward contracts for reserve parameters.) Direct minting and burning through the _Risk Council_ is managed through the `GhoDirectMinter` contract and limited by minting caps which are controlled by the _Aave Governance_. Both the `GhoStabilityModule` and the `GhoDirectMinter` as well as the respective `aToken` and `variableDebtToken` contracts are upgradeable by the _Aave Governance_ opening the possibility of uncontrolled minting or burning of `GHO` in case of an unintended upgrade. If abused, this control thus introduces a risk of loss of funds, loss of unclaimed yield (accrued interest in `GHO`) or an otherwise material impact on the expected protocol performance for `GHO` holders and Aave users.
+GHO is Aave v3's native stablecoin that is pegged to the US Dollar and mintable at a 1:1 rate against the centralized USDC and USDT stablecoins through the `GhoStabilityModule` contract. Furthermore, a [Risk Council](#security-council) multisig account (not a _Security Council_ according to the DeFiScan definition) has the ability to mint unbacked GHO supply into (or burn from) the Aave lending market for users to borrow by supplying collateral assets (and thus collateralizing the GHO supply) (this [RiskCouncil](#security-council) is not the same multi-sig as the multi-sig controlling the steward contracts for reserve parameters.) Direct minting and burning through the [Risk Council](#security-council) is managed through the `GhoDirectMinter` contract and limited by minting caps which are controlled by the _Aave Governance_. Both the `GhoStabilityModule` and the `GhoDirectMinter` as well as the respective `aToken` and `variableDebtToken` contracts are upgradeable by the _Aave Governance_ opening the possibility of uncontrolled minting or burning of GHO in case of an unintended upgrade. If abused, this control thus introduces a risk of loss of funds, loss of unclaimed yield (accrued interest in GHO) or an otherwise material impact on the expected protocol performance for GHO holders and Aave users.
 
 ### Aave Governance
 
-_Aave Governance_ refers to Aave v3's onchain governance system which controls contract upgrades as well as other critical permissions as outlined above. We discuss the governance process itself in the _Exit Window_ [section](#exit-window) and here focus on upgradeability and control in this module itself. This governance process is implemented in the `GovernanceV3` contract which is fully upgradeable through a permissionless governance proposal. Hence, an unintended proposal could change the _Aave Governance_ system and reassign its control to a less robust or fully centralized setup. In order to mitigate this risk, upgrades to the `GovernanceV3` contract, as well as the `AAVE` token, require passing a 7 day _Exit Window_ (read more [here](#exit-window)). During this window, users can exit the Aave v3 protocol. Furthermore, the _Aave Governance v3 Guardian_ multisig account, adhering to the _Security Council_ requirements, can cancel the execution of unintended proposals. On the other hand, this control can be abused to censor regular proposals with majority support.
+_Aave Governance_ refers to Aave v3's onchain governance system which controls contract upgrades as well as other critical permissions as outlined above. We discuss the governance process itself in the _Exit Window_ [section](#exit-window) and here focus on upgradeability and control in this module itself. This governance process is implemented in the `GovernanceV3` contract which is fully upgradeable through a permissionless governance proposal. Hence, an unintended proposal could change the _Aave Governance_ system and reassign its control to a less robust or fully centralized setup. In order to mitigate this risk, upgrades to the `GovernanceV3` contract, as well as the AAVE token, require passing a 7 day _Exit Window_ (read more [here](#exit-window)). During this window, users can exit the Aave v3 protocol. Furthermore, the [Aave Governance v3 Guardian](#security-council) multisig account, adhering to the _Security Council_ requirements, can cancel the execution of unintended proposals. On the other hand, this control can be abused to censor regular proposals with majority support.
 
 Also note that the (current) implementation of `GovernanceV3` enables a native multi-chain governance process. Specifically, this process enables proposals to designate a different chain for holding governance votes. While Aave v3's proprietary cross-chain messaging protocol, called `a.DI`, itself does not exhibit centralized control, it makes the governance process susceptible to control over the designated chain itself.
 
@@ -73,7 +73,7 @@ The protocol does currently have limited validation on asset prices provided by 
 
 Aave has currently no fallback oracle price feeds instantiated. As a consequence if the price was equal to or below 0, user actions on the `Pool` contract that require a price would revert.
 
-The replacement of a stale or untrusted oracle price feed requires a governance vote on permission level 1 (see Exit Window).
+The replacement of a stale or untrusted oracle price feed requires a governance vote on permission level 1 (see [Exit Window](#exit-window)).
 
 The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. This dependency thus introduces centralization risk in the Aave V3 protocol.
 
@@ -93,7 +93,7 @@ The cross-chain voting system has low centralization risk because of its fault t
 
 Critical permissions, including protocol upgrades, are controlled by _Aave Governance_ and an _EmergencyAdmin_ multisig account.
 
-Two levels of permissions are separated in the (current) implementation of _Aave Governance_: _Level 2_ defines permissions on the governance system itself and on the `AAVE` token contract, _Level 1_ covers the remaining permissions.
+Two levels of permissions are separated in the (current) implementation of _Aave Governance_: _Level 2_ defines permissions on the governance system itself and on the AAVE token contract, _Level 1_ covers the remaining permissions.
 
 AAVE holders (also stkAAVE, aAAVE) are able to create new proposals (requires 80,000 / 200,0000 votes for Level 1 / Level 2) and vote on proposals (at least 320,000 / 1,040,000 votes are required for a valid proposal and a voting differential (yes minus no votes) of 80,000 / 1,040,000 votes).
 
@@ -101,7 +101,7 @@ Votes start 1 day after proposal creation and the voting period is 10 days for _
 
 The execution of successful votes is blocked by an Exit Window with a delay of 7 days for _Level 2_ and 1 day for _Level 1_ permissions. While these Exit Windows do not qualify for a _Low_ or _Medium_ score, the risk of unwanted updates is further mitigated by the _Aave Governance V3 Guardian_ multisig, which is able to cancel unintended governance proposals and which adheres to the _Security Council_ requirements.
 
-However, these safeguards do only apply to permissions controlled by _Aave Governance_. The _EmergencyAdmin_ multisig too holds critical permissions which are not protected with an Exit Window or _Security Council_ setup. Specifically, the _EmergencyAdmin_ is able to pause individual Aave markets or the entire protocol as well as disabling the liquidation grace period. If compromised e.g. during a high-volatility market, these permissions could be taken advantage of, in order to execute controlled liquidations.
+However, these safeguards do only apply to permissions controlled by _Aave Governance_. The [EmergencyAdmin](#security-council) multisig too holds critical permissions which are not protected with an Exit Window or _Security Council_ setup. Specifically, the [EmergencyAdmin](#security-council) is able to pause individual Aave markets or the entire protocol as well as disabling the liquidation grace period. If compromised e.g. during a high-volatility market, these permissions could be taken advantage of, in order to execute controlled liquidations.
 
 > Exit Window score: High
 
@@ -119,9 +119,9 @@ https://aave.com/help/aave-101/accessing-aave
 
 The Aave-v3 Ethereum mainnet protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks **Stage 0**.
 
-The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the _EmergencyAdmin_ multisig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
+The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the [EmergencyAdmin](#security-council) multi-sig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a _Security Council_ setup for its own multisig account).
 
-The project additionally could advance to Stage 2 if all critical permissions were assigned to Aave's onchain governance system and protected with a 30-day Exit Window.
+The project additionally could advance to **Stage 2** if all critical permissions were assigned to Aave Governance and protected with a 30-day _Exit Window_.
 
 # Reviewer Notes
 
@@ -131,7 +131,7 @@ The project additionally could advance to Stage 2 if all critical permissions we
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
-The center of the Aave V3 market is the contract called `Pool.sol` (`0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2`). Each supported asset is attached to a reserve in this `Pool` contract. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
+The center of the Aave V3 market is the contract called `Pool`. Each supported asset is attached to a reserve in this `Pool` contract. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
 
 ![Market](./diagrams/Aave_V3_Market.png)
 
@@ -139,7 +139,7 @@ The `Pool` contract is completely upgradeable via the proxy-pattern. The permiss
 
 ![Reserve Parameter Control](./diagrams/Aave_V3_Reserve_Parameter_Control.png)
 
-In addition to completely upgrading the contracts, the control over some market parameters is handed to the _Risk Council_ multi-sig through steward contracts. Steward contracts are contracts that wrap around permissions and restrict the multi-sig's permission to update market parameters with guardrails. These guardrails include rate-limiting (frequency) as well as relative or absolute changes to parameters. The market parameters which are assigned to the Risk Council via the steward contracts do not include binary decisions like listing an asset, or allowing/disallowing an asset as collateral. Governance is always the only owner of these steward contracts and is the only allowed entity to update the guardrails.
+In addition to completely upgrading the contracts, the control over some market parameters is handed to the [Risk Council](#security-council) multi-sig through steward contracts. Steward contracts are contracts that wrap around permissions and restrict the multi-sig's permission to update market parameters with guardrails. These guardrails include rate-limiting (frequency) as well as relative or absolute changes to parameters. The market parameters which are assigned to the [Risk Council](#security-council) via the steward contracts do not include binary decisions like listing an asset, or allowing/disallowing an asset as collateral. Governance is always the only owner of these steward contracts and is the only allowed entity to update the guardrails.
 
 The system with risk intermediaries (Stewards & Councils) was implemented by giving the `PoolConfigurator` contract permission to change any reserve parameter on the `Pool` contract while the `PoolConfigurator` assigns various roles from the `ACLManager` to these permissioned funcions. LTV, LLTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts own these roles and expose the functions with aforementioned guardrails. Councils (regular multi-sigs) are the permission owners of these steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions for these multi-sigs.
 
@@ -186,9 +186,9 @@ Currently the facilitators are
 - GHOFlashMinter
 - GHO Stability Modules (USDC, USDT)
 
-Via the `GSM` GHO is redeemable for `USDC` and `USDT` at a 1:1 rate up to a certain USDC and USDT cap. The GHO dedicated multi-sig `Risk Council` can update the exposure caps to USDC/USDT via the `GhoGsmSteward`. Upon receiving USDC/USDT `GSM` supplies the stablecoins to the Aave USDC and USDT reserve and issues freshly minted GHO to the seller of the stablecoins. Similarly if the user buys USDC or USDT from the GSM, the returned GHO is burned.
+Via the `GSM` GHO is redeemable for USDC and USDT at a 1:1 rate up to a certain USDC and USDT cap. The GHO dedicated multi-sig [Risk Council](#security-council) can update the exposure caps to USDC/USDT via the `GhoGsmSteward`. Upon receiving USDC/USDT `GSM` supplies the stablecoins to the Aave USDC and USDT reserve and issues freshly minted GHO to the seller of the stablecoins. Similarly if the user buys USDC or USDT from the GSM, the returned GHO is burned.
 
-GHO can be borrowed from the reserve at a dynamic interest rate. The total borrowed GHO cannot exceed the bucket cap. Governance and the Risk Council manage the interest rate by supplying fresh GHO to the reserve via the `GhoDirectMinter` or they can withdraw and burn GHO from the reserve increasing the interest rate.
+GHO can be borrowed from the reserve at a dynamic interest rate. The total borrowed GHO cannot exceed the bucket cap. Governance and the [Risk Council](#security-council) manage the interest rate by supplying fresh GHO to the reserve via the `GhoDirectMinter` or they can withdraw and burn GHO from the reserve increasing the interest rate.
 
 ![Gho](./diagrams/Aave_V3_GHO.png)
 
@@ -237,7 +237,7 @@ Voting can be held on either Ethereum Mainnet, Polygon (PoS) or Avalanche. When 
 
 Once the proposal passes, the function `executeProposal` on the `AaveGovernanceV3` allows to execute the approved proposal, which forwards the message to the `CrossChainController` (calling `forward`). The CCC forwards the proposal to each chain where the proposal must be executed. If the proposal is also dedicated to the deployment on Ethereum, the payload id is forwarded to the `SameChainAdapter` that calls the function `receiveCrossChainMessage` on the `PayloadsController` contract, which queues the payload to be executed. The payload was previously created on the `PayloadsController` by calling `createPayload` which returns a payload id. This payload id is referenced in the governance proposal (see previous section). Anyone can call `executePayload` once sufficient time has passed (timelock). By calling `executePayload` on the `PayloadsController` `executeTransaction` on the `Executor Lvl1` contract will be triggered. A technical detail, if in this report it is mentioned that the governance owns the permission, it is actually (if we are very precise) this `Executor Lvl1` contract (as shown in the permission table) because community approved payloads will be executed from this contract. Alternatively also the `Executor Lvl2` can be the chosen executor by the payload if it requires permission to update the AAVE token or the Aave governance contract.
 
-In case of a malicious proposal the `Aave Governance V3 Guardian` can step in and stop the malicious proposal of being executed at the level of the `Payloads Controller` or at the Governance contract level (`AaveGovernanceV3`). Note this is can happen even if the proposal is supported by the majority of the community.
+In case of a malicious proposal the [Aave Governance V3 Guardian](#security-council) can step in and stop the malicious proposal of being executed at the level of the `Payloads Controller` or at the Governance contract level (`AaveGovernanceV3`). Note this is can happen even if the proposal is supported by the majority of the community.
 
 ![Governance](./diagrams/Aave_V3_Governance.png)
 
@@ -389,7 +389,7 @@ This table shows the external permission owners and how they are rated against t
 | CleanUp Admin                            | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://etherscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 |
 | ACI Automation (Bot)                     | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://etherscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          |
 | ProxyAdmin for GHO CCIP Token Pool       | [0xB54f773211331f3889b74624D341e49328E83473](https://etherscan.io/address/0xB54f773211331f3889b74624D341e49328E83473) | Contract     |
-| Aave Chain Initiative (in short ACI)     | [0xac140648435d03f784879cd789130F22Ef588Fcd](https://etherscan.io/address/0xac140648435d03f784879cd789130F22Ef588Fcd) | Multisig 1/2 |
+| Aave Chan Initiative (in short ACI)      | [0xac140648435d03f784879cd789130F22Ef588Fcd](https://etherscan.io/address/0xac140648435d03f784879cd789130F22Ef588Fcd) | Multisig 1/2 |
 
 ## Permissions
 
