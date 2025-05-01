@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Morpho is a trustless and efficient lending primitive with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle. Users may lend funds directly on individual Morpho markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho markets. Morpho governance operates within a very limited scope and without direct control over the Morpho protocol.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -28,7 +28,7 @@ Morpho is deployed on different chains. This review is based on the Ethereum mai
 
 ## Upgradeability
 
-The Morpho (markets) protocol and Morpho Vaults are non-upgradeable. No permissions exist in the Morpho protocol that could affect users' funds and unclaimed yield or could otherwise result in non-expected protocol performance. Permissions in Morpho Vaults are owned by the vault creators themselves, aka *Curators*, and thus are not centralized under Morpho governance.
+The Morpho (markets) protocol and Morpho Vaults are non-upgradeable. No permissions exist in the Morpho protocol that could affect users' funds and unclaimed yield or could otherwise result in non-expected protocol performance. Permissions in Morpho Vaults are owned by the vault creators themselves, aka _Curators_, and thus are not centralized under Morpho governance.
 
 A team multisig, `morpho.eth`, is able to activate a fee switch and enable new LTV tiers and interest rate models. These permissions can only affect newly created markets with fees enforced in a fixed range.
 
@@ -42,7 +42,7 @@ Morpho markets are configured with an external price oracle based on which the s
 
 However, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 35% of Morpho markets [(read more)](#dependencies).
 
-This factory makes use of Chainlink price feeds and assumes that these feeds never fail (liveness and valid prices). Since Chainlink price feeds are controlled in a centralized manner, a multisig account not complying with *Security Council* requirements, the impact of a failure has to be assessed nonetheless.
+This factory wraps price feeds compliant with Chainlink's Aggregator interface and assumes that these feeds never fail (liveness and valid prices). Although the price feed is chosen permissionlessly by the market creator, more than 35% of the Morpho markets rely on a Chainlink curated price feed. Those feeds are controlled in a centralized manner, a multisig account not complying with _Security Council_ requirements, the impact of a failure has to be assessed nonetheless.
 
 An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the permanent freezing of funds in affected markets. With a potential impact on more than 35% of Morpho markets, or more than 30% of Morpho's TVL, Chainlink is thus assessed as a Medium centralization risk for Morpho.
 
@@ -50,13 +50,13 @@ An unintended upgrade of the Chainlink price feed contracts could result in stal
 
 ## Exit Window
 
-The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed yield and thus result in a _Medium_ Upgradeability risk. This risk is not mitigated with an onchain governance system and appropriate Exit Windows.
+The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed `MORPHO` rewards and thus result in a _Medium_ Upgradeability risk. This risk is not mitigated with an onchain governance system and appropriate Exit Windows.
 
 > Exit Window score: Medium
 
 ## Accessibility
 
-The main morpho interface is [app.morpho.org](https://app.morpho.org/). A backup solution allows users to self-host and access morpho following instructions on [this repository](https://github.com/morpho-org/morpho-blue-offchain-public).
+The main morpho interface is [app.morpho.org](https://app.morpho.org/). An RPC-only fallback interface ([fallback.morpho.org](https://fallback.morpho.org)) exists, offering an alternative in case of failure of the main interace. Finally, a backup solution allows users to self-host and access morpho following instructions on [this repository](https://github.com/morpho-org/morpho-blue-offchain-public).
 
 In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.io/metamorpho), and [Contango](https://app.contango.xyz/).
 
@@ -64,17 +64,19 @@ In addition to that, morpho is also accessible through several interfaces such a
 
 ## Conclusion
 
-The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the *Chain* and *Accessibility* dimensions. The upgradeability of the `MORPHO` token that is not protected with an onchain governance system and *Exit Window* and its trusted Chainlink dependency result in _Medium_ _Upgradeability_, _Exit Window_ and _Autonomy_ risks and Stage 1 decentralization.
+The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the _Chain_ and _Accessibility_ dimensions. The upgradeability of the `MORPHO` token that is not protected with an onchain governance system and _Exit Window_ and its trusted Chainlink dependency result in _Medium_ _Upgradeability_, _Exit Window_ and _Autonomy_ risks and Stage 1 decentralization.
 
 The protocol could reach Stage 2 by transferring control over the `MORPHO` permissions to onchain governance with a sufficient _Exit Window_ and implementing a fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
 
-We further want to highlight the following observations which did not directly factor into the scoring:
-
-- ⚠️ Curators of Morpho Vaults are in control of critical permissions which can result in the loss of user funds and unclaimed yield. These permissions only have a direct impact on users in the respective vault and thus do not contribute to the centralization of the Morpho protocol.
-
 > Overall score: Stage 1
 
-# Technical Analysis
+# Reviewer's Notes
+
+We further want to highlight the following observations which did not directly factor into the scoring:
+
+- ⚠️ Curators of Morpho Vaults are in control of critical permissions which can result in the loss of user funds and unclaimed yield. These permissions only have a direct impact on users in the respective vault and thus do not contribute to the centralization of the Morpho protocol. Vault owners can name guardians with the capability to cancel bad behaviors of curators, when the actions they are taking is increasing the risk towards the end user.
+
+# Protocol Analysis
 
 An overview of the Morpho protocol can be seen in the diagram below.
 
@@ -82,7 +84,46 @@ An overview of the Morpho protocol can be seen in the diagram below.
 
 <!-- See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf) -->
 
-## Contracts
+# Dependencies
+
+Morpho markets are configured with an external price oracle based on which the solvency of a position is established.
+Market creators are free in chosing an appropriate price oracle implementation. However, once created, the feed cannot be updated.
+The Morpho protocol facilitates the creation of price oracles, and markets, with the `MorphoChainlinkOracleV2Factory`.
+This factory creates new price oracles which are compliant with Chainlink's Aggregator Interface. Thereby, the factory makes important assumptions on the liveness and validity of prices returned by the feed as documented in the source code as follows:
+
+```
+/// - Staleness is not checked because it's assumed that the Chainlink feed keeps its promises on this.
+/// - The price is not checked to be in the min/max bounds because it's assumed that the Chainlink feed keeps its
+/// promises on this.
+```
+
+Note that the price oracle in a Morpho market cannot be updated (markets are immutable). A permanent failure or staleness of the price feed can thus result in user funds being permanently frozen in Morpho markets.
+
+At the time of writing this review, more than 35% of the live Morpho markets, or more than 30% of Morpho's TVL, make use of this standard price oracle and a Chainlink curated price feed. An analysis of this with results can be found on our [GitHub](https://github.com/deficollective/morpho-oracles-analysis). Thus, even though technically not enforced, Chainlink forms a critical dependency of the Morpho protocol.
+
+The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+
+# Governance
+
+## Permission Owners & Security Council
+
+Permissioned functions in the Morpho protocol and `MORPHO` token contract are controlled by the `morpho.eth` multisig. This multisig does not meet our _Security Council_ requirements as shown in the table below. The `MorphoRewards` multisig oversees the computation and distribution of `MORPHO` rewards.
+
+&nbsp;
+
+| Name                   | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| morpho.eth             | [0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a](https://basescan.org/address/0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a) | Multisig 5/9 | ✅          | ✅              | ❌                | ❌             |
+| MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://etherscan.io/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
+| Morpho                 | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://etherscan.io/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) | Contract     | N/A         | N/A             | N/A               | N/A            |
+
+## Exit Window
+
+The Morpho protocol exposes permissions that allow the `morpho.eth` multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
+
+However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed `MORPHO` rewards and thus expose a _Medium_ upgradeability risk. The permissions are not protected with onchain governance and an Exit Window, instead the `morpho.eth` multisig account can upgrade and mint on the `MORPHO` token contract instantly.
+
+# Contracts & Permissions
 
 | Contract Name                                      | Address                                                                                                               |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -101,7 +142,7 @@ An overview of the Morpho protocol can be seen in the diagram below.
 
 <!-- | Public Allocator | [0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D](https://etherscan.io/address/0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D) | -->
 
-## Permission owners
+## All Permission owners
 
 | Name                   | Account                                                                                                               | Type         |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -112,7 +153,6 @@ An overview of the Morpho protocol can be seen in the diagram below.
 <!-- potential additional permission owners:
 
 Morpho operations multisig: 0x640428D38189B11B844dAEBDBAAbbdfbd8aE0143 (3/9)
-Morpho rewards multisig: 0xF057afeEc22E220f47AD4220871364e9E828b2e9 (3/5)
 SafeOwner: 0x0b9915C13e8E184951Df0d9C0b104f8f1277648B -->
 
 ## Permissions
@@ -155,41 +195,3 @@ SafeOwner: 0x0b9915C13e8E184951Df0d9C0b104f8f1277648B -->
 | MorphoTokenEthereum (MORPHO) | transferOwnership          | Transfer ownership of the contract to a new adress. The new owner needs to accept ownership. The new owner has minting right and upgrade right on the `MORPHO` token and therefore extreme power.                                                   | morpho.eth                       |
 | MorphoTokenEthereum (MORPHO) | renounceOwnership          | Unrevokably abandons ownership of the contract. This would make the `MORPHO` contract immutable and prevent further mints.                                                                                                                          | morpho.eth                       |
 | MorphoTokenEthereum (MORPHO) | mint                       | Mints `MORPHO` tokens to a new address and increase the total supply. This can be abused to dillute the value of `MORPHO` or influence governance decisions in the future.                                                                          | morpho.eth                       |
-
-## Dependencies
-
-Morpho markets are configured with an external price oracle based on which the solvency of a position is established.
-Market creators are free in chosing an appropriate price oracle implementation. However, once created, the feed cannot be updated.
-The Morpho protocol facilitates the creation of price oracles, and markets, with the `MorphoChainlinkOracleV2Factory`.
-This factory creates new price oracles which make use of Chainlink's price feeds. Thereby, the factory makes important assumptions on the liveness and validity of prices returned by Chainlink as documented in the source code as follows:
-
-```
-/// - Staleness is not checked because it's assumed that the Chainlink feed keeps its promises on this.
-/// - The price is not checked to be in the min/max bounds because it's assumed that the Chainlink feed keeps its
-/// promises on this.
-```
-
-Note that the price oracle in a Morpho market cannot be updated (markets are immutable). A permanent failure of Chainlink, or staleness of its price feed, can thus result in user funds being permanently frozen in Morpho markets.
-
-At the time of writing this review, more than 35% of the live Morpho markets, or more than 30% of Morpho's TVL, make use of this standard price oracle and Chainlink feeds. An analysis of this with results can be found on our [GitHub](https://github.com/deficollective/morpho-oracles-analysis). Thus, even though technically not enforced, Chainlink forms a critical dependency of the Morpho protocol.
-
-The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
-
-## Exit Window
-
-The Morpho protocol exposes permissions that allow the `morpho.eth` multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
-
-However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed yield and thus expose a _Medium_ upgradeability risk. The permissions are not protected with onchain governance and an Exit Window, instead the `morpho.eth` multisig account can upgrade and mint on the `MORPHO` token contract instantly.
-
-# Security Council
-
-Permissioned functions in the Morpho protocol and `MORPHO` token contract are controlled by the `morpho.eth` multisig. This multisig does not meet our _Security Council_ requirements as shown in the table below.
-
-&nbsp;
-
-| Requirement                                             | morpho.eth |
-| ------------------------------------------------------- | ---------- |
-| At least 7 signers                                      | ✅         |
-| At least 51% threshold                                  | ✅         |
-| At least 50% non-team signers                           | ❌         |
-| Signers are publicly announced (with name or pseudonym) | ❌         |
