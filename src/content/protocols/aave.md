@@ -103,6 +103,8 @@ The execution of successful votes is blocked by an Exit Window with a delay of 7
 
 However, these safeguards do only apply to permissions controlled by _Aave Governance_. The [EmergencyAdmin](#security-council) multisig too holds critical permissions which are not protected with an Exit Window or _Security Council_ setup. Specifically, the [EmergencyAdmin](#security-council) is able to pause individual Aave markets or the entire protocol as well as disabling the liquidation grace period. If compromised e.g. during a high-volatility market, these permissions could be taken advantage of, in order to execute controlled liquidations.
 
+Meanwhile the permissions of multi-sig accounts [Risk Council](#security-council) for Gho and for the Pool contract are sufficiently restricted by steward contracts in terms of frequency of updates and magnitude of the updates, such that an exit window is not required.
+
 > Exit Window score: High
 
 ## Accessibility
