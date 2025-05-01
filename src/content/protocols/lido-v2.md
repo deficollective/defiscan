@@ -69,13 +69,19 @@ Fee is in two parts: module fee, treasury fee, in %
 
 Staking module: contract that manages its own subset of validators.
 
+## Liquid Staking
+
+## Staking Modules
+
 # Dependencies
 
 # Governance
 
-The Aragon Kernel is the core contract in the Aragon framework, serving as the foundation for decentralized organizations (DAOs). It acts as both a registry for applications and the central permissions management system.
+The `Aragon Kernel` is the core contract in the Aragon framework, serving as the foundation for decentralized organizations (DAOs). It acts as both a registry for applications and the central permissions management system.
 
-The Token Manager is an Aragon application that manages MiniMeToken instances, providing governance functionality for token distribution, vesting, and control.
+The `Aragon TokenManager` is an Aragon application that manages the `LDO` governance token, providing functionality for token distribution, vesting, and control.
+
+The Finance contract is part of the Aragon OS ecosystem and serves as a financial controller for DAOs, including Lido. It manages:Treasury funds through a Vault. Period-based accounting. Scheduled and immediate payments. Budget controls for different tokens. Transaction recording and reporting
 
 ## External Permission Owners and Security Council
 
@@ -305,54 +311,25 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 | Agent | setDesignatedSigner | Adds a designated signer. The external address can sign messages on behalf of the Agent according to ERC-1271. | ['arr', 'authP'] |
 
 | TokenManager | runScript | ... | ['isInitialized', 'protectState'] |
-| TokenManager | mint | ... | ['arr', 'authP'] |
-| TokenManager | issue | ... | ['arr', 'authP'] |
-| TokenManager | assign | ... | ['arr', 'authP'] |
-| TokenManager | burn | ... | ['arr', 'authP'] |
-| TokenManager | assignVested | ... | ['arr', 'authP'] |
-| TokenManager | revokeVesting | ... | ['arr', 'authP', 'vestingExists'] |
-| TokenManager | onTransfer | ... | ['onlyToken'] |
-| TokenManager | onApprove | ... | ['onlyToken'] |
-| TokenManager | proxyPayment | ... | ['onlyToken'] |
-| TokenManager | forward | ... | [] |
-| TokenManager | getVesting | ... | ['vestingExists'] |
-| TokenManager | spendableBalanceOf | ... | ['isInitialized'] |
-| TokenManager | transferableBalance | ... | ['isInitialized'] |
+| TokenManager | mint | Mints a given amount of `LDO` token to a specified address. | ['arr', 'authP'] |
+| TokenManager | issue | Mints a given amount of `LDO` token to the `TokenManager`. This is used to create a treasury of tokens that can later be assigned. | ['arr', 'authP'] |
+| TokenManager | assign | Assigns a given amount of `LDO` tokens to a recipient. The tokens are directly taken out of the `TokenManager` and transferred to the recipient. | ['arr', 'authP'] |
+| TokenManager | assignVested | ASsigns a given of `LDO` tokens to a recipient with a specific vesting plan. The full amount is transferred to the address but the `LDO` token is trusted to call the `TokenManager` upon each transfer and enforce the vesting plan. The plan can optionally contain a revokable flag which allows the manager to cancel the remaining locked tokens in a plan at any time before the plan expires. | ['arr', 'authP'] |
+| TokenManager | burn | Burns the given amount of `LDO` tokens of any given address. This allows this contract to burn any user's `LDO` tokens. | ['arr', 'authP'] |
+| TokenManager | revokeVesting | Revokes a user's vesting plan. This will cancel all the tokens that are still locked. | ['arr', 'authP', 'vestingExists'] |
+| TokenManager | forward | Runs an Aragon EVM script on behalf of a token holder. The token holder needs to have permission and the contract uses a blakclist to prevent the holder from executing actions on behalf of the `TokenManager`. | [] |
 
 | Finance | runScript | ... | ['isInitialized', 'protectState'] |
-| Finance | initialized | ... | ['onlyInit'] |
-| Finance | initializedAt | ... | ['onlyInit'] |
-| Finance | petrify | ... | ['onlyInit'] |
-| Finance | fallback | ... | ['isInitialized', 'transitionsPeriod'] |
-| Finance | initialize | ... | ['onlyInit'] |
-| Finance | deposit | ... | ['isInitialized', 'transitionsPeriod'] |
-| Finance | newImmediatePayment | ... | ['_arr', 'authP', 'getTimestamp', 'transitionsPeriod'] |
-| Finance | newScheduledPayment | ... | ['_arr', 'authP', 'transitionsPeriod'] |
-| Finance | setPeriodDuration | ... | ['arr', 'authP', 'transitionsPeriod'] |
-| Finance | setBudget | ... | ['arr', 'authP', 'transitionsPeriod'] |
-| Finance | removeBudget | ... | ['arr', 'authP', 'transitionsPeriod'] |
-| Finance | executePayment | ... | ['arr', 'authP', 'scheduledPaymentExists', 'transitionsPeriod'] |
-| Finance | receiverExecutePayment | ... | ['scheduledPaymentExists', 'transitionsPeriod'] |
-| Finance | setPaymentStatus | ... | ['arr', 'authP', 'scheduledPaymentExists'] |
-| Finance | recoverToVault | ... | ['isInitialized', 'transitionsPeriod'] |
-| Finance | tryTransitionAccountingPeriod | ... | ['isInitialized'] |
-| Finance | getPayment | ... | ['scheduledPaymentExists'] |
-| Finance | getTransaction | ... | ['transactionExists'] |
-| Finance | getPeriod | ... | ['periodExists'] |
-| Finance | getPeriodTokenStatement | ... | ['periodExists'] |
-| Finance | currentPeriodId | ... | ['isInitialized'] |
-| Finance | getPeriodDuration | ... | ['isInitialized'] |
-| Finance | getBudget | ... | ['isInitialized'] |
-| Finance | getRemainingBudget | ... | ['isInitialized'] |
-| Finance | canMakePayment | ... | ['isInitialized'] |
-| Finance | nextPaymentTime | ... | ['scheduledPaymentExists'] |
-| Finance | \_deposit | ... | [] |
+| Finance | newImmediatePayment | Makes a new instant payment of a given amount of tokens to a receiver. The tokens are taken out of the vault. The current vault is the `AragonAgent` | ['_arr', 'authP', 'getTimestamp', 'transitionsPeriod'] |
+| Finance | newScheduledPayment | Creates a new recurring payment. Recurring payments have a starting date, an intervale at which they can be executed, and a total amount of executions. The intervals are fixed and in reference to the starting timestamp, the payment can be manually executed once per interval. It may also be executed late. | ['_arr', 'authP', 'transitionsPeriod'] |
+| Finance | setPeriodDuration | Sets the accounting period duration. The period is used for accounting and budget restrictions. The new duration will be effective from the next period. | ['arr', 'authP', 'transitionsPeriod'] |
+| Finance | setBudget | Sets the spending budget of a given token for per accounting period. This budget is enforced for each payment and resets at the end of the accounting period. | ['arr', 'authP', 'transitionsPeriod'] |
+| Finance | removeBudget | Removes the budget for a token and enables unlimited spending. | ['arr', 'authP', 'transitionsPeriod'] |
+| Finance | executePayment | Executes a schedule payment as many times as possible according to the current timestamp and payment limit. | ['arr', 'authP', 'scheduledPaymentExists', 'transitionsPeriod'] |
+| Finance | receiverExecutePayment | Similar to `executePayment`but can be called by the payment's receiver. | ['scheduledPaymentExists', 'transitionsPeriod'] |
+| Finance | setPaymentStatus | Sets the status of a scheduled payment as active or inactive. When inactive the payment can no longer be triggered. If reactivated the missed payment intervals can still be triggered in retrospect. | ['arr', 'authP', 'scheduledPaymentExists'] |
 
 | APMRegistry | runScript | ... | ['isInitialized', 'protectState'] |
-| APMRegistry | initialized | ... | ['onlyInit'] |
-| APMRegistry | initializedAt | ... | ['onlyInit'] |
-| APMRegistry | petrify | ... | ['onlyInit'] |
-| APMRegistry | initialize | ... | ['onlyInit'] |
 | APMRegistry | newRepo | ... | ['auth'] |
 | APMRegistry | newRepoWithVersion | ... | ['auth'] |
 
