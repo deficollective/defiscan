@@ -97,7 +97,7 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ### Risk Oracle
 
-Next to handing the some control over market parameters to the _Risk Council_ via steward contracts, the Aave V3 instance on Arbitrum automates the borrow and supply cap automatically by handing off the exact values to a risk oracle implemented by Chaos Labs (service provider to the DAO). `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior.
+Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on Arbitrum automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
 
 ### Price Oracle Sentinel
 
