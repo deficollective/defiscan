@@ -105,7 +105,7 @@ The Chainlink oracle system itself is upgradeable potentially resulting in the p
 
 # Governance
 
-## Permission Owners & Security Council
+## External Permission Owners & Security Council
 
 Permissioned functions in the Morpho protocol and `MORPHO` token contract are controlled by the `morpho.eth` multisig. This multisig does not meet our _Security Council_ requirements as shown in the table below. The `MorphoRewards` multisig oversees the computation and distribution of `MORPHO` rewards.
 
