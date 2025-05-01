@@ -103,7 +103,18 @@ Next to handing the some control over market parameters to the _Risk Council_ vi
 
 Aave V3 instances on Layer 2s make use of the Sequencer oracle offered by Chainlink. This oracle informs smart contracts whether the sequencer of the respective rollup is currently offline. Sophisticated actors can force transactions on native rollups via posting them directly on Ethereum mainnet. To prevent sophisticated actors to liquidate users during sequencer downtime, Aave implemented the `PriceOracleSentinel` contract that prevents liquidations, if the oracle reports downtime of the sequencer. If this sequencer oracle does not report sequencer downtime, the protection for simple users fails. If the oracle reports downtime even if there is no downtime, the system's capability for liquidations is un-necessarily blocked for the grace period (1 hour). Even if the `PriceOracleSentinel` fails the protocol impact on users is marginal, thus the score for this dependency risk is low.
 
-### a.DI
+### CCIP 
+
+The GHO tokens on Arbitrum are bridged from Mainnet via [CCIP](https://docs.chain.link/ccip/directory/mainnet/token/GHO). CCIP stands for Cross-Chain Interoperability Protocol and is a product by Chainlink.
+
+The tokens are bridged by a token lock/release mechanism on mainnet, and a mint/burn mechanism on Arbitrum. For example a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
+
+
+The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+
+https://docs.chain.link/ccip/service-responsibility#chainlink-node-operator-responsibilities
+
+### Layer 1 Governance
 
 ## Oracle
 
