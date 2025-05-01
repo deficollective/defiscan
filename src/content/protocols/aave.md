@@ -260,6 +260,31 @@ This table shows the external permission owners and how they are rated against t
 
 💡 The BGD Labs maintains a public markdown page on the existing permissions to inform its users: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/ARBITRUM_ONE-V3.md
 
+## Councils and their permissions
+
+This table summarizes the permission owner multi-sig accounts and the stewards which enforce guardrails on the action by the Council.
+
+| Role                              | Risk Parameter                  | Guardrails enforced by Steward(s)              | Controlled by                         | Contract                        |
+| --------------------------------- | ------------------------------- | ---------------------------------------------- | ------------------------------------- | ------------------------------- |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setReservePause                 |                                                | Gov, EmergencyAdmin                   | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setPoolPause                    |                                                | Gov, EmergencyAdmin                   | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | disableLiquidationGracePeriod   |                                                | Gov, EmergencyAdmin                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | configureReserveAsCollateral    | Manual AGRS (RiskSteward)                      | Gov, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setBorrowCap                    | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | Gov, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveFreeze                |                                                | Gov, EmergencyAdmin                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveInterestRateData      | Manual AGRS (RiskSteward)                      | Gov, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setSupplyCap                    | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | Gov, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | updateStablePriceCaps           | Manual AGRS (RiskSteward)                      | Gov, Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       |
+| `RISK_ADMIN` or `POOL_ADMIN`      | updateLstPriceCaps              | Manual AGRS (RiskSteward)                      | Gov, Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       |
+| `CONFIGURATOR_ROLE`               | updateGsmExposureCap            | GhoGsmSteward                                  | Gov, Risk Council (for GhoGsmSteward) | GSM                             |
+| `CONFIGURATOR_ROLE`               | updateGsmBuySellFees            | GhoGsmSteward                                  | Gov, Risk Council (for GhoGsmSteward) | GSM                             |
+| Guardian                          | updateBridgeLimit               | GhoCcipSteward                                 | Gov, Risk Council (for GhoGsmSteward) | UpgradeableLockReleaseTokenPool |
+| Guardian                          | updateRateLimit                 | GhoCcipSteward                                 | Gov, Risk Council (for GhoGsmSteward) | UpgradeableLockReleaseTokenPool |
+| `BUCKET_MANAGER_ROLE`             | updateFacilitatorBucketCapacity | GhoBucketSteward                               | Gov, Risk Council (for GhoGsmSteward) | GHO                             |
+| Risk Council                      | updateGhoBorrowRate             | GhoAaveSteward                                 | Gov, Risk Council (for GhoGsmSteward) | PoolConfigurator                |
+| Risk Council                      | updateGhoBorrowCap              | GhoAaveSteward                                 | Gov, Risk Council (for GhoGsmSteward) | PoolConfigurator                |
+| Risk Council                      | updateGhoSupplyCap              | GhoAaveSteward                                 | Gov, Risk Council (for GhoGsmSteward) | PoolConfigurator                |
+
 # Contracts and Permissions
 
 ## Contracts
@@ -912,47 +937,58 @@ RoleAdmin is currently the Governance Executor, but technically any address coul
 | RETRY_ADMIN          | 0xc448b9502bbdf9850cc39823b6ea40cfe96d3ac63008e89edd2b8e98c6cc0af3 | CrossChainController Guardian (BGD Labs) | DEFAULT_ADMIN |
 | SOLVE_EMERGENCY_ROLE | 0xf4cdc679c22cbf47d6de8e836ce79ffdae51f38408dcde3f0645de7634fa607d | Aave Governance V3 Guardian              | DEFAULT_ADMIN |
 
-# Some table
-
-| Risk Parameter | Steward(s) | Contract | Function | Restricted |
-| -------------- | ---------- | -------- | -------- | ---------- |
-|                |            |          |          |            |
-
-| Role                                | Risk Parameter                        | Controlled by Governance | Controlled by Steward(s)                       | Council(s)                       | Contract                        | Restricted |
-| ----------------------------------- | ------------------------------------- | ------------------------ | ---------------------------------------------- | -------------------------------- | ------------------------------- | ---------- |
-| `AssetListingAdmin` or `POOL_ADMIN` | initReserves                          | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `AssetListingAdmin` or `POOL_ADMIN` | dropReserve                           | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `POOL_ADMIN`                        | updateAToken                          | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `POOL_ADMIN`                        | updateVariableDebtToken               | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `POOL_ADMIN`                        | setReserveActive                      | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `POOL_ADMIN`                        | setBorrowableInIsolation              | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | setReservePause                       | Yes                      |                                                | EmergencyAdmin                   | PoolConfigurator                | No         |
-| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | setPoolPause                          | Yes                      |                                                | EmergencyAdmin                   | PoolConfigurator                | No         |
-| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | disableLiquidationGracePeriod         | Yes                      |                                                | EmergencyAdmin                   | PoolConfigurator                | No         |
-| `RISK_ADMIN` or `POOL_ADMIN`        | configureReserveAsCollateral          | Yes                      | Manual AGRS (RiskSteward)                      | Risk Council (for Pool Stewards) | PoolConfigurator                | Yes        |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setAssetCollateralInEMode             | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setBorrowCap                          | Yes                      | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | Risk Council (for Pool Stewards) | PoolConfigurator                | Yes        |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setDebtCeiling                        | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setEModeCategory                      | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setLiquidationProtocolFee             | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveBorrowing                   | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFlashLoaning                | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFactor                      | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFreeze                      | Yes                      | FreezingSteward                                | EmergencyAdmin                   | PoolConfigurator                | No         |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveInterestRateData            | Yes                      | Manual AGRS (RiskSteward)                      | Risk Council (for Pool Stewards) | PoolConfigurator                | Yes        |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveInterestRateStrategyAddress | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setSiloedBorrowing                    | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setSupplyCap                          | Yes                      | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | Risk Council (for Pool Stewards) | PoolConfigurator                | Yes        |
-| `RISK_ADMIN` or `POOL_ADMIN`        | setUnbackedMintCap                    | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | updateBridgeProtocolFee               | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | updateFlashloanPremiumTotal           | Yes                      |                                                |                                  | PoolConfigurator                |            |
-| `RISK_ADMIN` or `POOL_ADMIN`        | updateStablePriceCaps                 | Yes                      | Manual AGRS (RiskSteward)                      | Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       | Yes        |
-| `RISK_ADMIN` or `POOL_ADMIN`        | updateLstPriceCaps                    | Yes                      | Manual AGRS (RiskSteward)                      | Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       | Yes        |
-| `CONFIGURATOR_ROLE`                 | updateGsmExposureCap                  | Yes                      | GhoGsmSteward                                  | Risk Council (for GhoGsmSteward) | GSM                             | Yes        |
-| `CONFIGURATOR_ROLE`                 | updateGsmBuySellFees                  | Yes                      | GhoGsmSteward                                  | Risk Council (for GhoGsmSteward) | GSM                             | Yes        |
-| Guardian                            | updateBridgeLimit                     | Yes                      | GhoCcipSteward                                 | Risk Council (for GhoGsmSteward) | UpgradeableLockReleaseTokenPool | Yes        |
-| Guardian                            | updateRateLimit                       | Yes                      | GhoCcipSteward                                 | Risk Council (for GhoGsmSteward) | UpgradeableLockReleaseTokenPool | Yes        |
-| `BUCKET_MANAGER_ROLE`               | updateFacilitatorBucketCapacity       | Yes                      | GhoBucketSteward                               | Risk Council (for GhoGsmSteward) | GHO                             | Yes        |
-| Risk Council                        | updateGhoBorrowRate                   | Yes                      | GhoAaveSteward                                 | Risk Council (for GhoGsmSteward) | PoolConfigurator                | Yes        |
-| Risk Council                        | updateGhoBorrowCap                    | Yes                      | GhoAaveSteward                                 | Risk Council (for GhoGsmSteward) | PoolConfigurator                | Yes        |
-| Risk Council                        | updateGhoSupplyCap                    | Yes                      | GhoAaveSteward                                 | Risk Council (for GhoGsmSteward) | PoolConfigurator                | Yes        |
+| Role                                | Risk Parameter                        | Guardrails enforced by Steward(s)              | Controlled by                                | Contract                        |
+| ----------------------------------- | ------------------------------------- | ---------------------------------------------- | -------------------------------------------- | ------------------------------- |
+| `AssetListingAdmin` or `POOL_ADMIN` | initReserves                          |                                                | Governance                                   | PoolConfigurator                |
+| `AssetListingAdmin` or `POOL_ADMIN` | dropReserve                           |                                                | Governance                                   | PoolConfigurator                |
+| `POOL_ADMIN`                        | updateAToken                          |                                                | Governance                                   | PoolConfigurator                |
+| `POOL_ADMIN`                        | updateVariableDebtToken               |                                                | Governance                                   | PoolConfigurator                |
+| `POOL_ADMIN`                        | setReserveActive                      |                                                | Governance                                   | PoolConfigurator                |
+| `POOL_ADMIN`                        | setBorrowableInIsolation              |                                                | Governance                                   | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | setReservePause                       |                                                | Governance, EmergencyAdmin                   | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | setPoolPause                          |                                                | Governance, EmergencyAdmin                   | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | disableLiquidationGracePeriod         |                                                | Governance, EmergencyAdmin                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | configureReserveAsCollateral          | Manual AGRS (RiskSteward)                      | Governance, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setAssetCollateralInEMode             |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setBorrowCap                          | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | Governance, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setDebtCeiling                        |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setEModeCategory                      |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setLiquidationProtocolFee             |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveBorrowing                   |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFlashLoaning                |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFactor                      |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFreeze                      | FreezingSteward                                | Governance, EmergencyAdmin                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveInterestRateData            | Manual AGRS (RiskSteward)                      | Governance, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveInterestRateStrategyAddress |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setSiloedBorrowing                    |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setSupplyCap                          | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | Governance, Risk Council (for Pool Stewards) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setUnbackedMintCap                    |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateBridgeProtocolFee               |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateFlashloanPremiumTotal           |                                                | Governance                                   | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateStablePriceCaps                 | Manual AGRS (RiskSteward)                      | Governance, Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateLstPriceCaps                    | Manual AGRS (RiskSteward)                      | Governance, Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       |
+| `SWAP_FREEZER_ROLE`                 | setSwapFreeze                         |                                                | Governance, Risk Council (for GhoGsmSteward) | GSM                             |
+| `LIQUIDATOR_ROLE`                   | seize                                 |                                                | Governance                                   | GSM                             |
+| `LIQUIDATOR_ROLE`                   | burnAfterSeize                        |                                                | Governance                                   | GSM                             |
+| `CONFIGURATOR_ROLE`                 | updateGhoTreasury                     |                                                | Governance                                   | GSM                             |
+| `CONFIGURATOR_ROLE`                 | updateFeeStrategy                     |                                                | Governance                                   | GSM                             |
+| `CONFIGURATOR_ROLE`                 | updateGsmExposureCap                  | GhoGsmSteward                                  | Governance, Risk Council (for GhoGsmSteward) | GSM                             |
+| `CONFIGURATOR_ROLE`                 | updateGsmBuySellFees                  | GhoGsmSteward                                  | Governance, Risk Council (for GhoGsmSteward) | GSM                             |
+| Owner                               | addRemotePool                         |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | removeRemotePool                      |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | applyChainUpdates                     |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | setRateLimitAdmin                     |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | applyAllowListUpdates                 |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | setRebalancer                         |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | setCurrentBridgedAmount               |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Owner                               | transferLiquidity                     |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Rebalancer                          | withdrawLiquidity                     |                                                | Governance                                   | UpgradeableLockReleaseTokenPool |
+| Guardian                            | updateBridgeLimit                     | GhoCcipSteward                                 | Risk Council (for GhoGsmSteward)             | UpgradeableLockReleaseTokenPool |
+| Guardian                            | updateRateLimit                       | GhoCcipSteward                                 | Risk Council (for GhoGsmSteward)             | UpgradeableLockReleaseTokenPool |
+| `FACILITATOR_MANAGER_ROLE`          | addFacilitator                        |                                                | Governance                                   | GHO                             |
+| `FACILITATOR_MANAGER_ROLE`          | removeFacilitator                     |                                                | Governance                                   | GHO                             |
+| `BUCKET_MANAGER_ROLE`               | setFacilitatorBucketCapacity          |                                                | Governance                                   | GHO                             |
+| `BUCKET_MANAGER_ROLE`               | updateFacilitatorBucketCapacity       | GhoBucketSteward                               | Risk Council (for GhoGsmSteward)             | GHO                             |
+| Risk Council                        | updateGhoBorrowRate                   | GhoAaveSteward                                 | Risk Council (for GhoGsmSteward)             | PoolConfigurator                |
+| Risk Council                        | updateGhoBorrowCap                    | GhoAaveSteward                                 | Risk Council (for GhoGsmSteward)             | PoolConfigurator                |
+| Risk Council                        | updateGhoSupplyCap                    | GhoAaveSteward                                 | Risk Council (for GhoGsmSteward)             | PoolConfigurator                |
