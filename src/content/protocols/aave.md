@@ -266,26 +266,26 @@ This table shows the external permission owners and how they are rated against t
 
 This table summarizes the permission owner multisig accounts and the stewards which enforce guardrails on the action by the Council.
 
-| Role                              | Risk Parameter                  | Guardrails enforced by Steward(s)              | Controlled by                                       | Contract                        |
-| --------------------------------- | ------------------------------- | ---------------------------------------------- | --------------------------------------------------- | ------------------------------- |
-| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setReservePause                 |                                                | _Aave Governance_, Emergency Admin                  | PoolConfigurator                |
-| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setPoolPause                    |                                                | _Aave Governance_, Emergency Admin                  | PoolConfigurator                |
-| `EMERGENCY_ADMIN` or `POOL_ADMIN` | disableLiquidationGracePeriod   |                                                | _Aave Governance_, Emergency Admin                  | PoolConfigurator                |
-| `RISK_ADMIN` or `POOL_ADMIN`      | configureReserveAsCollateral    | Manual AGRS (RiskSteward)                      | _Aave Governance_, Risk Council (for Pool Stewards) | PoolConfigurator                |
-| `RISK_ADMIN` or `POOL_ADMIN`      | setBorrowCap                    | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | _Aave Governance_, Risk Council (for Pool Stewards) | PoolConfigurator                |
-| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveFreeze                |                                                | _Aave Governance_, Emergency Admin                  | PoolConfigurator                |
-| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveInterestRateData      | Manual AGRS (RiskSteward)                      | _Aave Governance_, Risk Council (for Pool Stewards) | PoolConfigurator                |
-| `RISK_ADMIN` or `POOL_ADMIN`      | setSupplyCap                    | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | _Aave Governance_, Risk Council (for Pool Stewards) | PoolConfigurator                |
-| `RISK_ADMIN` or `POOL_ADMIN`      | updateStablePriceCaps           | Manual AGRS (RiskSteward)                      | _Aave Governance_, Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       |
-| `RISK_ADMIN` or `POOL_ADMIN`      | updateLstPriceCaps              | Manual AGRS (RiskSteward)                      | _Aave Governance_, Risk Council (for Pool Stewards) | Oracle Pricefeed wrappers       |
-| `CONFIGURATOR_ROLE`               | updateGsmExposureCap            | GhoGsmSteward                                  | _Aave Governance_, Risk Council (for GhoGsmSteward) | GSM                             |
-| `CONFIGURATOR_ROLE`               | updateGsmBuySellFees            | GhoGsmSteward                                  | _Aave Governance_, Risk Council (for GhoGsmSteward) | GSM                             |
-| Guardian                          | updateBridgeLimit               | GhoCcipSteward                                 | _Aave Governance_, Risk Council (for GhoGsmSteward) | UpgradeableLockReleaseTokenPool |
-| Guardian                          | updateRateLimit                 | GhoCcipSteward                                 | _Aave Governance_, Risk Council (for GhoGsmSteward) | UpgradeableLockReleaseTokenPool |
-| `BUCKET_MANAGER_ROLE`             | updateFacilitatorBucketCapacity | GhoBucketSteward                               | _Aave Governance_, Risk Council (for GhoGsmSteward) | GHO                             |
-| Risk Council                      | updateGhoBorrowRate             | GhoAaveSteward                                 | _Aave Governance_, Risk Council (for GhoGsmSteward) | PoolConfigurator                |
-| Risk Council                      | updateGhoBorrowCap              | GhoAaveSteward                                 | _Aave Governance_, Risk Council (for GhoGsmSteward) | PoolConfigurator                |
-| Risk Council                      | updateGhoSupplyCap              | GhoAaveSteward                                 | _Aave Governance_, Risk Council (for GhoGsmSteward) | PoolConfigurator                |
+| Role                              | Risk Parameter                  | Controlled by                    | Guardrails enforced by                         | Contract                        |
+| --------------------------------- | ------------------------------- | -------------------------------- | ---------------------------------------------- | ------------------------------- |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setReservePause                 | Emergency Admin                  |                                                | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setPoolPause                    | Emergency Admin                  |                                                | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | disableLiquidationGracePeriod   | Emergency Admin                  |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | configureReserveAsCollateral    | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setBorrowCap                    | Risk Council (for Pool Stewards) | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveFreeze                | Emergency Admin                  |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveInterestRateData      | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setSupplyCap                    | Risk Council (for Pool Stewards) | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`      | updateStablePriceCaps           | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | Oracle Pricefeed wrappers       |
+| `RISK_ADMIN` or `POOL_ADMIN`      | updateLstPriceCaps              | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | Oracle Pricefeed wrappers       |
+| `CONFIGURATOR_ROLE`               | updateGsmExposureCap            | Risk Council (for GhoGsmSteward) | GhoGsmSteward                                  | GSM                             |
+| `CONFIGURATOR_ROLE`               | updateGsmBuySellFees            | Risk Council (for GhoGsmSteward) | GhoGsmSteward                                  | GSM                             |
+| Guardian                          | updateBridgeLimit               | Risk Council (for GhoGsmSteward) | GhoCcipSteward                                 | UpgradeableLockReleaseTokenPool |
+| Guardian                          | updateRateLimit                 | Risk Council (for GhoGsmSteward) | GhoCcipSteward                                 | UpgradeableLockReleaseTokenPool |
+| `BUCKET_MANAGER_ROLE`             | updateFacilitatorBucketCapacity | Risk Council (for GhoGsmSteward) | GhoBucketSteward                               | GHO                             |
+| Risk Council                      | updateGhoBorrowRate             | Risk Council (for GhoGsmSteward) | GhoAaveSteward                                 | PoolConfigurator                |
+| Risk Council                      | updateGhoBorrowCap              | Risk Council (for GhoGsmSteward) | GhoAaveSteward                                 | PoolConfigurator                |
+| Risk Council                      | updateGhoSupplyCap              | Risk Council (for GhoGsmSteward) | GhoAaveSteward                                 | PoolConfigurator                |
 
 # Contracts and Permissions
 
