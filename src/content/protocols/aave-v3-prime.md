@@ -112,6 +112,10 @@ Additionally, specifically to the _Prime_ instance there is an additional Stewar
 
 ## Dependencies
 
+### Risk Oracle
+
+Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on Arbitrum automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on quantitative algorithmic risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
+
 ### a.DI
 
 The Aave delivery infrastructure (a.DI) ensures decentralized and fault-tolerant cross-chain messaging. It achieves this by encoding a message and submitting it to multiple independent bridges.
