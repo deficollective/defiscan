@@ -56,6 +56,8 @@ In addition to that, it offers an extended list of [UI integration elements](htt
 
 # Informational
 
+Considered node operators as insiders. Argue.
+
 # Protocol Analysis
 
 StakingRouter: registry of staking modules. allocates stake to modules. distribute protocol fees
@@ -85,6 +87,11 @@ The Finance contract is part of the Aragon OS ecosystem and serves as a financia
 
 ## External Permission Owners and Security Council
 
+| Name                              | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Relay Maintenance Committee       | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.org/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/7 | ✅          | ✅              | ❌                | ✅             |
+| DepositSecurityModule (Guardians) | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.org/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
+
 ## Exit Window
 
 # Contracts & Permissions
@@ -106,7 +113,7 @@ The Finance contract is part of the Aragon OS ecosystem and serves as a financia
 | WithdrawalQueueERC721 (Proxy)          | 0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1 |
 | WithdrawalQueueERC721 (Implementation) | 0xE42C659Dc09109566720EA8b2De186c2Be7D94D9 |
 | WithdrawalsManagerProxy                | 0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f |
-| WithdrawalVault                        | ...                                        |
+| WithdrawalVault                        | 0xCC52f17756C04bBa7E377716d7062fC36D7f69Fd |
 | Burner                                 | 0xD15a672319Cf0352560eE76d9e89eAB0889046D3 |
 | MinFirstAllocationStrategy             | 0x7e70De6D1877B3711b2bEDa7BA00013C7142d993 |
 | MiniMeToken                            | 0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32 |
@@ -126,7 +133,9 @@ HashConsensus FOR THE EXIT BUS: 0x7FaDB6358950c5fAA66Cb5EB8eE5147De3df355a
 ValidatorsExitBus (proxy OssifiableProxy name ValidatorsExitBusOracle) 0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e
 AccountingOracle 0x852deD011285fe67063a08005c71a85690503Cee (proxy) (impl name AccountingOracle)
 
-To check: The legacy oracle, + its Repo contract listed in governance, is it still in use?
+MEV Boost Relay Allowed List: 0xF95f069F9AD107938F6ba802a3da87892298610E
+
+To check: The legacy oracle, + its Repo contract listed in governance, is it still in use? => Main GateSeal expired but there is a another one for the CSM, most likely created through the blueprint and factory contracts.
 
 {
 "name": "GateSeal",
@@ -150,57 +159,66 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 
 0x8772E3a2D86B9347A2688f9bc1808A6d8917760C Gate Seal Committee (via 0x1ad5cb2955940f998081c1ef5f5f00875431aa90) (_expired_)
 
+0x98be4a407Bff0c125e25fBE9Eb1165504349c37d Relay Maintenance Committee (MEV Boost Relay Allowed List)
+
+Deposit Guardians
+
 ## Permissions
 
-**TODO**: missing proxy permissions? or none?
-| Lido | runScript | ... | ['isInitialized', 'protectState'] |
-| Lido | initialized | ... | ['onlyInit'] |
-| Lido | initializedAt | ... | ['onlyInit'] |
-| Lido | petrify | ... | ['onlyInit'] |
-| Lido | initialize | ... | ['onlyInit'] |
-| Lido | receiveELRewards | ... | [] |
-| Lido | receiveWithdrawals | ... | [] |
-| Lido | deposit | ... | [] |
-| Lido | \_auth | ... | [] |
-| Lido | \_handleOracleReport | ... | [] |
+| Contract | Function | Impact | Owner |
+| -------- | -------- | ------ | ----- |
 
-| Contract                       | Function                                               | Impact                                                                                                                                                                                                                                                                                                                                        | Owner                             |
-| ------------------------------ | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| LidoLocator (Proxy)            | proxy\_\_ossify                                        | Ossifies the proxy. This freezes the current implementation of the `LidoLocator` and effectively makes it non-upagreable by changing the proxy admin to the zero address.                                                                                                                                                                     | Aragon Agent                      |
-| LidoLocator (Proxy)            | proxy\_\_changeAdmin                                   | Changes the proxy admin. The admin can update the entire implementation and logic of the `LidoLocator`.                                                                                                                                                                                                                                       | Aragon Agent                      |
-| LidoLocator (Proxy)            | proxy\_\_upgradeTo                                     | Upgrades the implementation of the `LidoLocator` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any.                                                                                                                                                                         | Aragon Agent                      |
-| LidoLocator (Proxy)            | proxy\_\_upgradeToAndCall                              | Upgrades the implementation of the `LidoLocator` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract.                                                                                                                                                                                                         | Aragon Agent                      |
-| StakingRouter (Proxy)          | proxy\_\_ossify                                        | Ossifies the proxy. This freezes the current implementation of the `StakingRouter` and effectively makes it non-upagreable by changing the proxy admin to the zero address.                                                                                                                                                                   | Aragon Agent                      |
-| StakingRouter (Proxy)          | proxy\_\_changeAdmin                                   | Changes the proxy admin. The admin can update the entire implementation and logic of the `StakingRouter`.                                                                                                                                                                                                                                     | Aragon Agent                      |
-| StakingRouter (Proxy)          | proxy\_\_upgradeTo                                     | Upgrades the implementation of the `StakingRouter` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any.                                                                                                                                                                       | Aragon Agent                      |
-| StakingRouter (Proxy)          | proxy\_\_upgradeToAndCall                              | Upgrades the implementation of the `StakingRouter` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract.                                                                                                                                                                                                       | Aragon Agent                      |
-| StakingRouter (Implementation) | grantRole                                              | ...                                                                                                                                                                                                                                                                                                                                           | ['getRoleAdmin', 'onlyRole']      |
-| StakingRouter (Implementation) | revokeRole                                             | ...                                                                                                                                                                                                                                                                                                                                           | ['getRoleAdmin', 'onlyRole']      |
-| StakingRouter (Implementation) | addStakingModule                                       | Registers a staking module specifying a name, contract, fee settings, and limits on the shares and validators. The new module can receive ETH deposits. **TODO**: more detail                                                                                                                                                                 | Aragon Agent                      |
-| StakingRouter (Implementation) | updateStakingModule                                    | Updates the settings of an existing Staking Module. This can change the fees or the limits set on deposits and staking shares.                                                                                                                                                                                                                | Aragon Agent                      |
-| StakingRouter (Implementation) | updateTargetValidatorsLimits                           | Adjusts the maximum number of validators a specific node operator within a staking module can manage. This influences risk distribution within the protocol.                                                                                                                                                                                  | Aragon Agent                      |
-| StakingRouter (Implementation) | updateRefundedValidatorsCount                          | Updates the count of validators that have been refunded for a specific node operator.                                                                                                                                                                                                                                                         | Aragon Agent                      |
-| StakingRouter (Implementation) | reportRewardsMinted                                    | Reports rewards that have been minted and notifies each module of the rewards they received by calling a dedicated function in the respective module's contract.                                                                                                                                                                              | Lido (Proxy)                      |
-| StakingRouter (Implementation) | updateExitedValidatorsCountByStakingModule             | ...                                                                                                                                                                                                                                                                                                                                           | AccountingOracle                  |
-| StakingRouter (Implementation) | reportStakingModuleExitedValidatorsCountByNodeOperator | ...                                                                                                                                                                                                                                                                                                                                           | AccountingOracle                  |
-| StakingRouter (Implementation) | unsafeSetExitedValidatorsCount                         | ...                                                                                                                                                                                                                                                                                                                                           | AccountingOracle                  |
-| StakingRouter (Implementation) | reportStakingModuleStuckValidatorsCountByNodeOperator  | ...                                                                                                                                                                                                                                                                                                                                           | AccountingOracle                  |
-| StakingRouter (Implementation) | onValidatorsCountsByNodeOperatorReportingFinished      | ...                                                                                                                                                                                                                                                                                                                                           | AccountingOracle                  |
-| StakingRouter (Implementation) | decreaseStakingModuleVettedKeysCountByNodeOperator     | Reduces the number of validators a specific node operator can run. This doesn't affect existing validators but may prevent the node operators to create new validators if it has reached the new limit count.                                                                                                                                 | DepositSecurityModule             |
-| StakingRouter (Implementation) | setStakingModuleStatus                                 | Changes the status of a staking module. Modules may be Active, Paused, or Stopped. When Paused no more deposits can be added but the rewards are still distributed. If stopped no more deposits can be added and the rewards go to the protocol treasury instead.                                                                             | Aragon Agent                      |
-| StakingRouter (Implementation) | deposit                                                | ...                                                                                                                                                                                                                                                                                                                                           | Lido (Proxy)                      |
-| StakingRouter (Implementation) | setWithdrawalCredentials                               | Sets the withdraw credentials of each module. The credentials are used to withdraw ETH on the Consensus Layer side. No address currently has the permission to change those credentials.                                                                                                                                                      | 0x0                               |
-| DepositSecurityModule          | setOwner                                               | Sets the owner of the contract. This role is dedicated to the DAO. The owner can add new guardians, change the quorum, and unpause the deposits.                                                                                                                                                                                              | Aragon Agent                      |
-| DepositSecurityModule          | setPauseIntentValidityPeriodBlocks                     | Sets the window of validity of a pause intent. This is the reaction time allowed for guardians to pause deposits. When a guardian wants to pause deposits it specifies a block number, the pause is only applied if the current block number is within the validity period of the specified block. This is to avoid replay of pause messages. | Aragon Agent                      |
-| DepositSecurityModule          | pauseDeposits                                          | Pauses the deposits. Funds can no longer be deposited into new validators until deposits are unpaused. This can be called by any guardian when a frontrunning by a node operator is suspected and prevents the loss of user funds through deposits.                                                                                           | DepositSecurityModule (Guardian)  |
-| DepositSecurityModule          | unvetSigningKeys                                       | Unvets signing keys for the given node operators. This can be called by any guardian when a frontrunning by a node operator is suspectedand prevents the loss of user funds through deposits.                                                                                                                                                 | DepositSecurityModule (Guardian)  |
-| DepositSecurityModule          | depositsBufferedETH                                    | Deposits ETH into a given validator using `Lido.deposit`. The message must include at least 4/6 signatures from guardians for it to be valid.                                                                                                                                                                                                 | DepositSecurityModule (Guardians) |
-| DepositSecurityModule          | setMaxOperatorsPerUnvetting                            | Sets a limit on how many node operators can have their vetted signing keys unvetted in one transaction, as a safeguard against drastic changes.                                                                                                                                                                                               | Aragon Agent                      |
-| DepositSecurityModule          | setGuardianQuorum                                      | Sets the quorum value. This is the minimum number of guardians that need to take part in a deposit for it to be valid.                                                                                                                                                                                                                        | Aragon Agent                      |
-| DepositSecurityModule          | addGuardian                                            | Adds a guardian and sets a new custom quorum value. Guardians co-sign deposits to reduce the risk of collusion with node operators.                                                                                                                                                                                                           | Aragon Agent                      |
-| DepositSecurityModule          | addGuardians                                           | Adds multiple guardians and sets a new custom quorum value. Guardians co-sign deposits to reduce the risk of collusion with node operators.                                                                                                                                                                                                   | Aragon Agent                      |
-| DepositSecurityModule          | removeGuardian                                         | Removes a guardian and                                                                                                                                                                                                                                                                                                                        | Aragon Agent                      |
-| DepositSecurityModule          | unpauseDeposits                                        | unpauses the deposits without delay.                                                                                                                                                                                                                                                                                                          | Aragon Agent                      |
+| Lido | stop | Stops all staking similarly to `pauseStaking`, and prevents transfer of `stETH` as well as beacone chain oracle submissions. This is a critical emergency function that completely halts the users' ability to enter and exit the system. | PAUSE_ROLE |
+| Lido | resume | Resumes all operations paused after `stop` was called. | RESUME_ROLE |
+
+| Lido | pauseStaking | Stops accepting new ETH deposits to the protocol. This ensures new funds do not enter the system without affecting other operations. | STAKING_PAUSE_ROLE |
+| Lido | resumeStaking | Re-enables staking of new ETH into the contract. | STAKING_CONTROL_ROLE |
+| Lido | setStakingLimit | Limits the rate and total stake of ETH allows into the contract. This is done by imposing a maximum stake limit and a rate of increase per block. This will prevent users from depositing additional ETH if the limit is reached. | STAKING_CONTROL_ROLE |
+| Lido | removeStakingLimit | Removes the staking limit, allowing unlimited deposits. | STAKING_CONTROL_ROLE |
+| Lido | receiveELRewards | A function to allow the rewards vault to send rewards to this contract without them being considered user deposits. | getLidoLocator().elRewardsVault() |
+| Lido | receiveWithdrawals | A function to allw the `WithdrawalVault` to receive funds from exited validators without them being considered user deposits. | `WithdrawalVault` |
+
+| Lido | handleOracleReport | **TODO** | AccountedOracke |
+| Lido | unsafeChangeDepositedValidators | Unsafely changes the deposited validators counter. This may be used to onboard external validators to Lido. This is function could dangerously change the accounting metrics in Lido as it changes a parameter without any safeguards. Such a change could artificially inflate or deflate the value of `stETH` or manipulate the expected returns calculation. | TODO (whoever can change ACL roles) |
+
+| Lido | deposit | Deposits 32 ETH into the ethereum staking contract to create a new validator. This can only be called by the DepositSecurityModule which will make sure the call reverts if the state of the deposit contract has changed between the submission and execution of the deposit. | DepositSecurityModule |
+| Lido | transferToVault | Default recovery function in Aragon Apps. Irreversably disabled. | 0x0 |
+
+| LidoLocator (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `LidoLocator` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
+| LidoLocator (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `LidoLocator`. | Aragon Agent |
+| LidoLocator (Proxy) | proxy\_\_upgradeTo | Upgrades the implementation of the `LidoLocator` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any. | Aragon Agent |
+| LidoLocator (Proxy) | proxy\_\_upgradeToAndCall | Upgrades the implementation of the `LidoLocator` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract. | Aragon Agent |
+| StakingRouter (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `StakingRouter` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
+| StakingRouter (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `StakingRouter`. | Aragon Agent |
+| StakingRouter (Proxy) | proxy\_\_upgradeTo | Upgrades the implementation of the `StakingRouter` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any. | Aragon Agent |
+| StakingRouter (Proxy) | proxy\_\_upgradeToAndCall | Upgrades the implementation of the `StakingRouter` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract. | Aragon Agent |
+| StakingRouter (Implementation) | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| StakingRouter (Implementation) | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| StakingRouter (Implementation) | addStakingModule | Registers a staking module specifying a name, contract, fee settings, and limits on the shares and validators. The new module can receive ETH deposits. **TODO**: more detail | Aragon Agent |
+| StakingRouter (Implementation) | updateStakingModule | Updates the settings of an existing Staking Module. This can change the fees or the limits set on deposits and staking shares. | Aragon Agent |
+| StakingRouter (Implementation) | updateTargetValidatorsLimits | Adjusts the maximum number of validators a specific node operator within a staking module can manage. This influences risk distribution within the protocol. | Aragon Agent |
+| StakingRouter (Implementation) | updateRefundedValidatorsCount | Updates the count of validators that have been refunded for a specific node operator. | Aragon Agent |
+| StakingRouter (Implementation) | reportRewardsMinted | Reports rewards that have been minted and notifies each module of the rewards they received by calling a dedicated function in the respective module's contract. | Lido (Proxy) |
+| StakingRouter (Implementation) | updateExitedValidatorsCountByStakingModule | ... | AccountingOracle |
+| StakingRouter (Implementation) | reportStakingModuleExitedValidatorsCountByNodeOperator | ... | AccountingOracle |
+| StakingRouter (Implementation) | unsafeSetExitedValidatorsCount | ... | AccountingOracle |
+| StakingRouter (Implementation) | reportStakingModuleStuckValidatorsCountByNodeOperator | ... | AccountingOracle |
+| StakingRouter (Implementation) | onValidatorsCountsByNodeOperatorReportingFinished | ... | AccountingOracle |
+| StakingRouter (Implementation) | decreaseStakingModuleVettedKeysCountByNodeOperator | Reduces the number of validators a specific node operator can run. This doesn't affect existing validators but may prevent the node operators to create new validators if it has reached the new limit count. | DepositSecurityModule |
+| StakingRouter (Implementation) | setStakingModuleStatus | Changes the status of a staking module. Modules may be Active, Paused, or Stopped. When Paused no more deposits can be added but the rewards are still distributed. If stopped no more deposits can be added and the rewards go to the protocol treasury instead. | Aragon Agent |
+| StakingRouter (Implementation) | deposit | ... | Lido (Proxy) |
+| StakingRouter (Implementation) | setWithdrawalCredentials | Sets the withdraw credentials of each module. The credentials are used to withdraw ETH on the Consensus Layer side. No address currently has the permission to change those credentials. | 0x0 |
+| DepositSecurityModule | setOwner | Sets the owner of the contract. This role is dedicated to the DAO. The owner can add new guardians, change the quorum, and unpause the deposits. | Aragon Agent |
+| DepositSecurityModule | setPauseIntentValidityPeriodBlocks | Sets the window of validity of a pause intent. This is the reaction time allowed for guardians to pause deposits. When a guardian wants to pause deposits it specifies a block number, the pause is only applied if the current block number is within the validity period of the specified block. This is to avoid replay of pause messages. | Aragon Agent |
+| DepositSecurityModule | pauseDeposits | Pauses the deposits. Funds can no longer be deposited into new validators until deposits are unpaused. This can be called by any guardian when a frontrunning by a node operator is suspected and prevents the loss of user funds through deposits. | DepositSecurityModule (Guardian) |
+| DepositSecurityModule | unvetSigningKeys | Unvets signing keys for the given node operators. This can be called by any guardian when a frontrunning by a node operator is suspectedand prevents the loss of user funds through deposits. | DepositSecurityModule (Guardian) |
+| DepositSecurityModule | depositsBufferedETH | Deposits ETH into a given validator using `Lido.deposit`. The message must include at least 4/6 signatures from guardians for it to be valid. | DepositSecurityModule (Guardians) |
+| DepositSecurityModule | setMaxOperatorsPerUnvetting | Sets a limit on how many node operators can have their vetted signing keys unvetted in one transaction, as a safeguard against drastic changes. | Aragon Agent |
+| DepositSecurityModule | setGuardianQuorum | Sets the quorum value. This is the minimum number of guardians that need to take part in a deposit for it to be valid. | Aragon Agent |
+| DepositSecurityModule | addGuardian | Adds a guardian and sets a new custom quorum value. Guardians co-sign deposits to reduce the risk of collusion with node operators. | Aragon Agent |
+| DepositSecurityModule | addGuardians | Adds multiple guardians and sets a new custom quorum value. Guardians co-sign deposits to reduce the risk of collusion with node operators. | Aragon Agent |
+| DepositSecurityModule | removeGuardian | Removes a guardian and | Aragon Agent |
+| DepositSecurityModule | unpauseDeposits | unpauses the deposits without delay. | Aragon Agent |
 
 | AccountingOracle (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `AccountingOracle` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
 | AccountingOracle (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `AccountingOracle`. | Aragon Agent |
@@ -285,7 +303,6 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 | Kernel | newPinnedAppInstance | Creates a new non-upgradeable (pinned) application instance. The instance has an app ID and will use the implementation contract (code logic) associated with this ID. | ['arr', 'auth'] |
 | Kernel | setRecoveryVaultAppId | Sets the recovery vault. A contract to recover assets if neeeded. The current vault is the Aragon Agent contract. | ['arr', 'auth'] |
 
-| ACL | runScript | ... | ['isInitialized', 'protectState'] |
 | ACL | createPermission | Creates a new permission and specifies its permission manager and the role ID. | ['auth', 'noPermissionManager'] |
 | ACL | grantPermission | Grants a permission (a role) to an entity. The entity can then perform all the actions associated with the role. Optionally the manager can specify parameters associated with the permission that could grant additional permisisons specifically for those parameters. | ['onlyPermissionManager'] |
 | ACL | revokePermission | Revokes a permission from an entity. | ['onlyPermissionManager'] |
@@ -310,7 +327,6 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 | Agent | presignHash | Pre-approves a hash according to ERC-1271. It allows the governance to approve a hash so that it is considered valid once verified. This allows the approval of a message without requiring the contract to actually sign it. | ['arr', 'authP'] |
 | Agent | setDesignatedSigner | Adds a designated signer. The external address can sign messages on behalf of the Agent according to ERC-1271. | ['arr', 'authP'] |
 
-| TokenManager | runScript | ... | ['isInitialized', 'protectState'] |
 | TokenManager | mint | Mints a given amount of `LDO` token to a specified address. | ['arr', 'authP'] |
 | TokenManager | issue | Mints a given amount of `LDO` token to the `TokenManager`. This is used to create a treasury of tokens that can later be assigned. | ['arr', 'authP'] |
 | TokenManager | assign | Assigns a given amount of `LDO` tokens to a recipient. The tokens are directly taken out of the `TokenManager` and transferred to the recipient. | ['arr', 'authP'] |
@@ -319,7 +335,6 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 | TokenManager | revokeVesting | Revokes a user's vesting plan. This will cancel all the tokens that are still locked. | ['arr', 'authP', 'vestingExists'] |
 | TokenManager | forward | Runs an Aragon EVM script on behalf of a token holder. The token holder needs to have permission and the contract uses a blakclist to prevent the holder from executing actions on behalf of the `TokenManager`. | [] |
 
-| Finance | runScript | ... | ['isInitialized', 'protectState'] |
 | Finance | newImmediatePayment | Makes a new instant payment of a given amount of tokens to a receiver. The tokens are taken out of the vault. The current vault is the `AragonAgent` | ['_arr', 'authP', 'getTimestamp', 'transitionsPeriod'] |
 | Finance | newScheduledPayment | Creates a new recurring payment. Recurring payments have a starting date, an intervale at which they can be executed, and a total amount of executions. The intervals are fixed and in reference to the starting timestamp, the payment can be manually executed once per interval. It may also be executed late. | ['_arr', 'authP', 'transitionsPeriod'] |
 | Finance | setPeriodDuration | Sets the accounting period duration. The period is used for accounting and budget restrictions. The new duration will be effective from the next period. | ['arr', 'authP', 'transitionsPeriod'] |
@@ -329,16 +344,24 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 | Finance | receiverExecutePayment | Similar to `executePayment`but can be called by the payment's receiver. | ['scheduledPaymentExists', 'transitionsPeriod'] |
 | Finance | setPaymentStatus | Sets the status of a scheduled payment as active or inactive. When inactive the payment can no longer be triggered. If reactivated the missed payment intervals can still be triggered in retrospect. | ['arr', 'authP', 'scheduledPaymentExists'] |
 
-| APMRegistry | runScript | ... | ['isInitialized', 'protectState'] |
-| APMRegistry | newRepo | ... | ['auth'] |
-| APMRegistry | newRepoWithVersion | ... | ['auth'] |
+| Repo | newVersion | Updates the version for the tracked package. Each version is specified by a version number (major.minimal.patch), a content URI and the corresponding contract address. The contract address can only be changed if the major version number if changed. | ['auth']|
 
-| InsuranceFund | renounceOwnership | ... | 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c |
-| InsuranceFund | transferOwnership | ... | 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c |
-| InsuranceFund | transferEther | ... | 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c |
-| InsuranceFund | transferERC20 | ... | 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c |
-| InsuranceFund | transferERC721 | ... | 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c |
-| InsuranceFund | transferERC1155 | ... | 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c |
+| APMRegistry | newRepo | Creates a new `Repo` contract for on-chain version control. Grants version management permissions to a an address specified by the caller. | ['auth'] |
+| APMRegistry | newRepoWithVersion | Similar to `newRepo` with the initial version specified. | ['auth'] |
+
+| InsuranceFund | transferEther | Transfers ETH out of the contract and to a non-zero recipient. | Aragon Agent |
+| InsuranceFund | transferERC20 | Transfers an ERC20 compatible token out of the contract and to a non-zero recipient. | Aragon Agent |
+| InsuranceFund | transferERC721 | Transfers an ERC721 (NFT) out of the contract and to a non-zero recipient. | Aragon Agent |
+| InsuranceFund | transferERC1155 | Transfers an ERC1155 compatible token out of the contract and to a non-zero recipient. | Aragon Agent |
+| InsuranceFund | renounceOwnership | Would renounce ownership over the contract and lock assets forever. This function is irreversebly disabled. | 0x0 |
+| InsuranceFund | transferOwnership | Transfers ownership over the contract to any non-zero address. The new owner has control over all assets in the insurance fund. | Aragon Agent |
+
+|MEV Boost Relay Allowed List (Vyper) | add_relay | Adds a relay to the list of approved relays in MEV-Boost setups. The relays listed in the contract are used to generate a configuration file to be used by the node operators. | Relay Maintenance Committee, Aragon Agent |
+|MEV Boost Relay Allowed List (Vyper) | remove_relay | Removes a relay from the list. | Relay Maintenance Committee, Aragon Agent |
+|MEV Boost Relay Allowed List (Vyper) | change_owner | Changes the contract owner. The owner can name a manager, add or remove relays, and recover funds from the contract. The current owner is the Lido DAO.| Aragon Agent |
+|MEV Boost Relay Allowed List (Vyper) | set_manager | Sets a manager who can add or remove relays. | Aragon Agent |
+|MEV Boost Relay Allowed List (Vyper) | dismiss_manager | Dismisses the current manager and sets the manager to the zero address. | Aragon Agent |
+|MEV Boost Relay Allowed List (Vyper) | recover_erc20 | Transfers ERC20 tokens out of the contract and to any non-zero address. This is meant to recover funds sent to the contract by mistake. | Aragon Agent |
 
 ## Access Control
 
