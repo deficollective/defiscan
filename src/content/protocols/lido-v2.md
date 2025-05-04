@@ -33,11 +33,13 @@ Ethereum mainnet deployment.
 
 ## Autonomy
 
+One dependency of Lido is the need for an oracle to report the state of the beacon chain to Lido's smart contracts on Ethereum. The beacon chain of Ethereum is responsible for creating new blocks and ensuring consensus. It is made of all the validators who take part in the system with their stake (Proof-of-Stake). The state of the beacon chain is accessible from within Ethereum smart contract. This is why an AccountingOracle and ExitBusOracle are used to report on this data. Lido has a consensus committee made of 9 members who report daily on the state of the beacon chain, 5 of which are necessary for a consensus to be reached. The signers are announced and respect our security council requirements. If colluding those members could report false data onchain, which could result in inflation or deflation of `stETH`, which could lead to loss of user funds by insolvency. (**TODO: double check this claim**)
+
+The Deposit Security Module is another committee critical to the functioning of Lido. The Deposit Security Module is made of 6 Guardians (4 necessary for quorum) and handles the deposits linked to the creation of new validators for Lido. Each new validator requires 32 ETH and only the Deposit Security Module is allowed to sign off on the deposit. This committee was introduced to counter a possible frontrunning attack by node operators to steal the depositted ETH. The attack and the chosen mitigation (solution d) are explained in this [post](https://research.lido.fi/t/mitigations-for-deposit-front-running-vulnerability/1239). In case of collusion between 4 members of the security module and the node operator, the ETH depositted into new validators could be stolen, which would lead to loss of user funds. The Deposi Security Module does not meet our security council requirements and therefore represents a high risk dependency.
+
 Uses Chainlink Price Feeds. Why? Fallbacks?
 
-OracleReports for beacon chain stats.
-
-> Autonomy score: Low/Medium/High
+> Autonomy score: High
 
 ## Exit Window
 
