@@ -262,9 +262,9 @@ This table shows the external permission owners and how they are rated against t
 
 💡 The BGD Labs maintains a public markdown page on the existing permissions to inform its users: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/ARBITRUM_ONE-V3.md
 
-## Councils and their permissions
+## Multisigs and their permission
 
-This table summarizes the permission owner multisig accounts and the stewards which enforce guardrails on the action by the Council.
+This table summarizes the permission owner multisig accounts and the stewards which enforce guardrails on the action by the multisig accounts.
 
 | Role                              | Risk Parameter                  | Controlled by                    | Guardrails enforced by                         | Contract                        |
 | --------------------------------- | ------------------------------- | -------------------------------- | ---------------------------------------------- | ------------------------------- |
