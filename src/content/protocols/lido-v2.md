@@ -93,6 +93,7 @@ The Finance contract is part of the Aragon OS ecosystem and serves as a financia
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | Relay Maintenance Committee       | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.org/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/7 | ✅          | ✅              | ❌                | ✅             |
 | DepositSecurityModule (Guardians) | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.org/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
+| EmergencyBrakes                   | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.org/address/0x73b047fe6337183A454c5217241D780a932777bD) | Multisig 3/5 | ❌          | ✅              | ❌                | ✅             |
 
 ## Exit Window
 
@@ -120,6 +121,9 @@ The Finance contract is part of the Aragon OS ecosystem and serves as a financia
 | MinFirstAllocationStrategy             | 0x7e70De6D1877B3711b2bEDa7BA00013C7142d993 |
 | MiniMeToken                            | 0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32 |
 | InsuranceFund                          | 0x8B3f33234ABD88493c0Cd28De33D583B70beDe35 |
+
+| EVMScriptExecutor | 0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977 |
+| EasyTrack | 0xF0211b7660680B49De1A7E9f25C65660F0a13Fea |
 
 - all the others below
   | OssifiableProxy | 0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e |
@@ -155,6 +159,15 @@ The Last GateSeal was deployed 55 days ago, why is it used?
 
 All the Repo and Registry contracts have same logic but different proxy state. To differentiate / explain
 
+MISSING? Node Operators Registry, Simple DVT (specific permissions),
+
+MISSING FROM PERMISSIONS SCRIPT: APMRegistry
+
+All EASYTRACKS listed in the lido scripts config
+
+MAYBE: include bridge contracts in the scope. Just to mention, for instance, the emergency brake multisig can
+stop the bridging to other chains.
+
 ## Permission owners
 
 0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c admin of LidoLocator
@@ -165,20 +178,22 @@ All the Repo and Registry contracts have same logic but different proxy state. T
 
 Deposit Guardians
 
+EasyTrack EVMSCriptExecutor: can create payments in Aragon Finance
+
 ## Permissions
 
 | Contract | Function | Impact | Owner |
 | -------- | -------- | ------ | ----- |
 
-| Lido | stop | Stops all staking similarly to `pauseStaking`, and prevents transfer of `stETH` as well as beacone chain oracle submissions. This is a critical emergency function that completely halts the users' ability to enter and exit the system. | PAUSE_ROLE |
-| Lido | resume | Resumes all operations paused after `stop` was called. | RESUME_ROLE |
+| Lido | stop | Stops all staking similarly to `pauseStaking`, and prevents transfer of `stETH` as well as beacone chain oracle submissions. This is a critical emergency function that completely halts the users' ability to enter and exit the system. | Aragon Voting |
+| Lido | resume | Resumes all operations paused after `stop` was called. | Aragon Voting |
 
-| Lido | pauseStaking | Stops accepting new ETH deposits to the protocol. This ensures new funds do not enter the system without affecting other operations. | STAKING_PAUSE_ROLE |
-| Lido | resumeStaking | Re-enables staking of new ETH into the contract. | STAKING_CONTROL_ROLE |
-| Lido | setStakingLimit | Limits the rate and total stake of ETH allows into the contract. This is done by imposing a maximum stake limit and a rate of increase per block. This will prevent users from depositing additional ETH if the limit is reached. | STAKING_CONTROL_ROLE |
-| Lido | removeStakingLimit | Removes the staking limit, allowing unlimited deposits. | STAKING_CONTROL_ROLE |
+| Lido | pauseStaking | Stops accepting new ETH deposits to the protocol. This ensures new funds do not enter the system without affecting other operations. | Aragon Voting |
+| Lido | resumeStaking | Re-enables staking of new ETH into the contract. | Aragon Voting |
+| Lido | setStakingLimit | Limits the rate and total stake of ETH allows into the contract. This is done by imposing a maximum stake limit and a rate of increase per block. This will prevent users from depositing additional ETH if the limit is reached. | Aragon Voting |
+| Lido | removeStakingLimit | Removes the staking limit, allowing unlimited deposits. | Aragon Voting |
 | Lido | receiveELRewards | A function to allow the rewards vault to send rewards to this contract without them being considered user deposits. | getLidoLocator().elRewardsVault() |
-| Lido | receiveWithdrawals | A function to allw the `WithdrawalVault` to receive funds from exited validators without them being considered user deposits. | `WithdrawalVault` |
+| Lido | receiveWithdrawals | A function to allw the `WithdrawalVault` to receive funds from exited validators without them being considered user deposits. | WithdrawalVault |
 
 | Lido | handleOracleReport | **TODO** | AccountedOracke |
 | Lido | unsafeChangeDepositedValidators | Unsafely changes the deposited validators counter. This may be used to onboard external validators to Lido. This is function could dangerously change the accounting metrics in Lido as it changes a parameter without any safeguards. Such a change could artificially inflate or deflate the value of `stETH` or manipulate the expected returns calculation. | TODO (whoever can change ACL roles) |
@@ -300,18 +315,18 @@ Deposit Guardians
 | MiniMeToken (LDO Token) | fallback | ... | [] |
 | MiniMeToken (LDO Token) | claimTokens | ... | ['onlyController'] |
 
-| Kernel | setApp | Sets the implementation contract (code logic) that corresponds to a given namespace and app ID in the registry. All proxies in this namespace with this AppID will now point to this new implementation. | ['arr', 'auth'] |
-| Kernel | newAppInstance | Creates a new upgradeable application instance by deploying the proxy. The instance has an app ID and will use the implementation contract (code logic) currently associated with this ID. | ['arr', 'auth'] |
-| Kernel | newPinnedAppInstance | Creates a new non-upgradeable (pinned) application instance. The instance has an app ID and will use the implementation contract (code logic) associated with this ID. | ['arr', 'auth'] |
-| Kernel | setRecoveryVaultAppId | Sets the recovery vault. A contract to recover assets if neeeded. The current vault is the Aragon Agent contract. | ['arr', 'auth'] |
+| Kernel | setApp | Sets the implementation contract (code logic) that corresponds to a given namespace and app ID in the registry. All proxies in this namespace with this AppID will now point to this new implementation. | Aragon Voting |
+| Kernel | newAppInstance | Creates a new upgradeable application instance by deploying the proxy. The instance has an app ID and will use the implementation contract (code logic) currently associated with this ID. | Aragon Voting |
+| Kernel | newPinnedAppInstance | Creates a new non-upgradeable (pinned) application instance. The instance has an app ID and will use the implementation contract (code logic) associated with this ID. | Aragon Voting|
+| Kernel | setRecoveryVaultAppId | Sets the recovery vault. A contract to recover assets if neeeded. The current vault is the Aragon Agent contract. | Aragon Voting |
 
-| ACL | createPermission | Creates a new permission and specifies its permission manager and the role ID. | ['auth', 'noPermissionManager'] |
+| ACL | createPermission | Creates a new permission and specifies its permission manager and the role ID. | Aragon Voting |
 | ACL | grantPermission | Grants a permission (a role) to an entity. The entity can then perform all the actions associated with the role. Optionally the manager can specify parameters associated with the permission that could grant additional permisisons specifically for those parameters. | ['onlyPermissionManager'] |
 | ACL | revokePermission | Revokes a permission from an entity. | ['onlyPermissionManager'] |
 | ACL | setPermissionManager | Sets a permission (role)'s manaer. The manager can grant and revoke the permissions for that role ID. | ['onlyPermissionManager'] |
 | ACL | removePermissionManager | Removes the permission manager for a role and sets it to the zero address. This role can no longer be granted or revoked, but a new manager can still be named using the `createPermission` function. | ['onlyPermissionManager'] |
 | ACL | burnPermissionManager | Permanently locks a permission so it can never be modified. This is done by changing the manager to a `BURN_ENTITY`. | ['onlyPermissionManager'] |
-| ACL | createBurnedPermission | Permanently locks a permission so it can never be modified. This variant is called when the manager of the role was already the zero address.| ['auth', 'noPermissionManager'] |
+| ACL | createBurnedPermission | Permanently locks a permission so it can never be modified. This variant is called when the manager of the role was already the zero address.| Aragon Voting |
 
 | Voting | changeSupportRequiredPct | Changes the required percentage of "yes" votes for a proposal to pass. The number has to be greater or equal than the quorum and less than 100%. | ['arr', 'authP'] |
 | Voting | changeMinAcceptQuorumPct | Changes the minimum quorum required for a proposal to pass. This is the percentage of "yes" votes in regard to the total voting power. The new value has to be less or equal than the support percentage. | ['arr', 'authP'] |
@@ -320,14 +335,14 @@ Deposit Guardians
 | Voting | newVote | Creates a proposal with an associated execution script and description metadata. If the proposal is accepted the script will be executed and could perform any action that the Voting contract is allowed to do. | ['auth'] |
 | Voting | forward | Similar to `newVote` but without any description metadata. This is meant to be called as a result of other governance processes or smart contracts. | checks permissions by kernerl |
 
-| Agent | transfer | Transfers a given ERC20 token out of the contract to a given address. | ['arr', 'authP'] |
-| Agent | forward | Executes a script as the Agent. This is meant to be called by the Voting contract to execute proposals through the Agent. | [] |
-| Agent | execute | Executes arbitrary function calls to any external contract with a given ETH value. This can perform any action that is allowed to the Aragon Agent in other Lido contracts, which includes critical ones. | ['_getSig', 'arr', 'authP'] |
-| Agent | safeExecute | Similar to `execute` but with protections for known critical tokens. It ensures there are no direct calls to the protected tokens, the token balances don't decrease, and the list of protected tokens doesn't change. | ['_getSig', 'arr', 'authP'] |
-| Agent | addProtectedToken | Adds a token to the protected list (maximum of 10 tokens). Those tokens are safeguarded when proposals are executed using `safeExecute`. | ['arr', 'authP'] |
-| Agent | removeProtectedToken | Removes a token from the protected list. | ['arr', 'authP'] |
-| Agent | presignHash | Pre-approves a hash according to ERC-1271. It allows the governance to approve a hash so that it is considered valid once verified. This allows the approval of a message without requiring the contract to actually sign it. | ['arr', 'authP'] |
-| Agent | setDesignatedSigner | Adds a designated signer. The external address can sign messages on behalf of the Agent according to ERC-1271. | ['arr', 'authP'] |
+| Agent | execute | Executes arbitrary function calls to any external contract with a given ETH value. This can perform any action that is allowed to the Aragon Agent in other Lido contracts, which includes critical ones. | Aragon Voting |
+| Agent | transfer | Transfers a given ERC20 token out of the contract to a given address. | Aragon Finance |
+| Agent | forward | Executes a script as the Agent. This is meant to be called by the Voting contract to execute proposals through the Agent. | Aragon Voting |
+| Agent | safeExecute | Similar to `execute` but with protections for known critical tokens. It ensures there are no direct calls to the protected tokens, the token balances don't decrease, and the list of protected tokens doesn't change. | TODO: ACL Permission Manager? |
+| Agent | addProtectedToken | Adds a token to the protected list (maximum of 10 tokens). Those tokens are safeguarded when proposals are executed using `safeExecute`. | TODO: ACL Permission Manager?|
+| Agent | removeProtectedToken | Removes a token from the protected list. | TODO: ACL Permission Manager? |
+| Agent | presignHash | Pre-approves a hash according to ERC-1271. It allows the governance to approve a hash so that it is considered valid once verified. This allows the approval of a message without requiring the contract to actually sign it. | TODO: ACL Permission Manager? |
+| Agent | setDesignatedSigner | Adds a designated signer. The external address can sign messages on behalf of the Agent according to ERC-1271. | TODO: ACL Permission Manager?|
 
 | TokenManager | mint | Mints a given amount of `LDO` token to a specified address. | ['arr', 'authP'] |
 | TokenManager | issue | Mints a given amount of `LDO` token to the `TokenManager`. This is used to create a treasury of tokens that can later be assigned. | ['arr', 'authP'] |
@@ -337,14 +352,14 @@ Deposit Guardians
 | TokenManager | revokeVesting | Revokes a user's vesting plan. This will cancel all the tokens that are still locked. | ['arr', 'authP', 'vestingExists'] |
 | TokenManager | forward | Runs an Aragon EVM script on behalf of a token holder. The token holder needs to have permission and the contract uses a blakclist to prevent the holder from executing actions on behalf of the `TokenManager`. | [] |
 
-| Finance | newImmediatePayment | Makes a new instant payment of a given amount of tokens to a receiver. The tokens are taken out of the vault. The current vault is the `AragonAgent` | ['_arr', 'authP', 'getTimestamp', 'transitionsPeriod'] |
-| Finance | newScheduledPayment | Creates a new recurring payment. Recurring payments have a starting date, an intervale at which they can be executed, and a total amount of executions. The intervals are fixed and in reference to the starting timestamp, the payment can be manually executed once per interval. It may also be executed late. | ['_arr', 'authP', 'transitionsPeriod'] |
-| Finance | setPeriodDuration | Sets the accounting period duration. The period is used for accounting and budget restrictions. The new duration will be effective from the next period. | ['arr', 'authP', 'transitionsPeriod'] |
-| Finance | setBudget | Sets the spending budget of a given token for per accounting period. This budget is enforced for each payment and resets at the end of the accounting period. | ['arr', 'authP', 'transitionsPeriod'] |
-| Finance | removeBudget | Removes the budget for a token and enables unlimited spending. | ['arr', 'authP', 'transitionsPeriod'] |
-| Finance | executePayment | Executes a schedule payment as many times as possible according to the current timestamp and payment limit. | ['arr', 'authP', 'scheduledPaymentExists', 'transitionsPeriod'] |
-| Finance | receiverExecutePayment | Similar to `executePayment`but can be called by the payment's receiver. | ['scheduledPaymentExists', 'transitionsPeriod'] |
-| Finance | setPaymentStatus | Sets the status of a scheduled payment as active or inactive. When inactive the payment can no longer be triggered. If reactivated the missed payment intervals can still be triggered in retrospect. | ['arr', 'authP', 'scheduledPaymentExists'] |
+| Finance | newImmediatePayment | Makes a new instant payment of a given amount of tokens to a receiver. The tokens are taken out of the vault. The current vault is the `AragonAgent` | Aragon Voting, EasyTrack EVMSCriptExecutor |
+| Finance | newScheduledPayment | Creates a new recurring payment. Recurring payments have a starting date, an intervale at which they can be executed, and a total amount of executions. The intervals are fixed and in reference to the starting timestamp, the payment can be manually executed once per interval. It may also be executed late. | Aragon Voting, EasyTrack EVMSCriptExecutor |
+| Finance | setPeriodDuration | Sets the accounting period duration. The period is used for accounting and budget restrictions. The new duration will be effective from the next period. | TODO: ACL permission manager? |
+| Finance | setBudget | Sets the spending budget of a given token for per accounting period. This budget is enforced for each payment and resets at the end of the accounting period. | TODO: ACL permission manager? |
+| Finance | removeBudget | Removes the budget for a token and enables unlimited spending. | TODO: ACL permission manager? |
+| Finance | executePayment | Executes a schedule payment as many times as possible according to the current timestamp and payment limit. | Aragon Voting |
+| Finance | receiverExecutePayment | Similar to `executePayment`but can be called by the payment's receiver. | payment recipient |
+| Finance | setPaymentStatus | Sets the status of a scheduled payment as active or inactive. When inactive the payment can no longer be triggered. If reactivated the missed payment intervals can still be triggered in retrospect. | Aragon Voting |
 
 | Repo | newVersion | Updates the version for the tracked package. Each version is specified by a version number (major.minimal.patch), a content URI and the corresponding contract address. The contract address can only be changed if the major version number if changed. | ['auth']|
 
@@ -364,6 +379,28 @@ Deposit Guardians
 |MEV Boost Relay Allowed List (Vyper) | set_manager | Sets a manager who can add or remove relays. | Aragon Agent |
 |MEV Boost Relay Allowed List (Vyper) | dismiss_manager | Dismisses the current manager and sets the manager to the zero address. | Aragon Agent |
 |MEV Boost Relay Allowed List (Vyper) | recover_erc20 | Transfers ERC20 tokens out of the contract and to any non-zero address. This is meant to recover funds sent to the contract by mistake. | Aragon Agent |
+
+| EasyTrack | addEVMScriptFactory | ... | ['onlyRole'] |
+| EasyTrack | removeEVMScriptFactory | ... | ['onlyRole'] |
+| EasyTrack | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| EasyTrack | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| EasyTrack | setMotionDuration | ... | ['onlyRole'] |
+| EasyTrack | setObjectionsThreshold | ... | ['onlyRole'] |
+| EasyTrack | setMotionsCountLimit | ... | ['onlyRole'] |
+| EasyTrack | createMotion | ... | ['whenNotPaused'] |
+| EasyTrack | enactMotion | ... | ['whenNotPaused'] |
+| EasyTrack | objectToMotion | ... | [] |
+| EasyTrack | cancelMotion | ... | [] |
+| EasyTrack | cancelMotions | ... | ['onlyRole'] |
+| EasyTrack | cancelAllMotions | ... | ['onlyRole'] |
+| EasyTrack | setEVMScriptExecutor | ... | ['onlyRole'] |
+| EasyTrack | pause | ... | ['onlyRole', 'whenNotPaused'] |
+| EasyTrack | unpause | ... | ['onlyRole', 'whenPaused'] |
+
+| EVMScriptExecutor | renounceOwnership | ... | Aragon Voting |
+| EVMScriptExecutor | transferOwnership | ... | Aragon Voting |
+| EVMScriptExecutor | executeEVMScript | ... | EasyTrack |
+| EVMScriptExecutor | setEasyTrack | ... | Aragon Voting |
 
 ## Access Control
 
@@ -413,3 +450,12 @@ Deposit Guardians
 | DEFAULT_ADMIN              | 0x0000000000000000000000000000000000000000000000000000000000000000 | Aragon Agent                                         | DEFAULT_ADMIN |
 | REQUEST_BURN_SHARES_ROLE   | 0x4be29e0e4eb91f98f709d98803cba271592782e293b84a625e025cbb40197ba8 | Lido (contract), NodeOperatorsRegistry, CSAccounting | DEFAULT_ADMIN |
 | REQUEST_BURN_MY_STETH_ROLE | 0x28186f938b759084eea36948ef1cd8b40ec8790a98d5f1a09b70879fe054e5cc | Aragon Agent                                         | DEFAULT_ADMIN |
+
+### Role Permissions in Easytrack
+
+| Role Name     | ID                                                                 | Role Owners                             | Role Admin    |
+| ------------- | ------------------------------------------------------------------ | --------------------------------------- | ------------- |
+| default admin | 0x0000000000000000000000000000000000000000000000000000000000000000 | Aragon Voting                           | DEFAULT_ADMIN |
+| pause role    | 0x139c2898040ef16910dc9f44dc697df79363da767d8bc92f2e310312b816e46d | Aragon Voting, EmergencyBrakes Multisig | DEFAULT_ADMIN |
+| unpause role  | 0x265b220c5a8891efdd9e1b1b7fa72f257bd5169f8d87e319cf3dad6ff52b94ae | Aragon Voting                           | DEFAULT_ADMIN |
+| cancel role   | 0x9f959e00d95122f5cbd677010436cf273ef535b86b056afc172852144b9491d7 | Aragon Voting                           | DEFAULT_ADMIN |
