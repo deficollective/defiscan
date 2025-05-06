@@ -47,7 +47,6 @@ This module forms the core of Aave v3's borrow & lending features and keeps trac
 
 Special attention is required for the [Emergency Admin](#security-council) multisig, which owns the role `EMERGENCY_ADMIN` that allows to pause a single reserve or pause the entire core market instance (all reserves / the entire Pool). The [Emergency Admin](#security-council) can also disable the grace period for liquidations after discontinuing the pause and resume market activities. The actions by the [Emergency Admin](#security-council) are reversible, but require a governance vote. The [Emergency Admin](#security-council) does not adhere to the _security council requirements_, as the members of the multisig are considered _insiders_ of the Aave DAO (service providers and key voting power holders). In case of a market down turn the [Emergency Admin](#security-council) could mis-use the power to liquidate from a priviledged position. Quoting the [Aave V3 technical paper](https://github.com/aave-dao/aave-v3-origin/blob/main/docs/Aave_V3_Technical_Paper.pdf) page 16.
 
-Note that all the contracts make up the money market logic and state (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
 > Timed with a market crash, the attacker can turn the pool off, and then atomically perform the sequence (turn-on - liquidate - turn-off), allowing him to be the sole liquidator.
 
 Note that all the contracts making up the money market logic and state (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
