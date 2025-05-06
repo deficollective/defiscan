@@ -50,13 +50,15 @@ The _Reserve Parameters_ subsystem is responsible for maintaining and updating c
 
 To achieve different specific risk parameters and associated guardrails the Stewards contracts are re-deployed for the _Prime_ market/instance. The multi-sigs owning permissions in the Steward contracts are the same as for the _Core_ instance (_Emergency Admin_ and _Risk Council_). 
 
+A notable difference to the Core instance is the introduced dependency on a Risk Oracle provided by Chaos Labs which helps to update risk parameters within governance set guardrails automatically and based on quantitative algorithmic risk models in real time. The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional upgradeability risk is introduced.
+
 > Upgradeability score: high
 
 ## Autonomy
 
 ### Oracle and Prices
 
-Requesting oracle feeds to price assets in the system is relying on the same mechanisms across the different instances. To control which price feeds are available a new `AaveOracle` contract is deployed for each instance. The associated centralisation risks in the _EtherFi_ instance are the same as on the _Core_ instance.
+Requesting oracle feeds to price assets in the system is relying on the same mechanisms across the different instances. To control which price feeds are available a new `AaveOracle` contract is deployed for each instance. The associated centralisation risks in the _Prime_ instance are the same as on the _Core_ instance.
 
 Read more in our _Core_ instance report.
 
@@ -114,7 +116,7 @@ Additionally, specifically to the _Prime_ instance there is an additional Stewar
 
 ### Risk Oracle
 
-Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on Arbitrum automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on quantitative algorithmic risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
+Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on the Prime instance automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on quantitative algorithmic risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
 
 ### a.DI
 
