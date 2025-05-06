@@ -86,6 +86,8 @@ There are two vote types within the Curve DAO: Ownership votes and Parameter vot
 - **Ownership Votes** - Minimum Quorum of 30%, 51% support
 - **Parameter Votes** - Minimum Quorum of 15%, 60% support
 
+*Note: That only "YES" votes count towards Quorum, detailed here: [Curve Resources - DAO Votes](https://resources.curve.fi/governance/understanding-governance/#dao-votes)*
+
 Originally, Ownership votes were used for actions such as setting the owner/admin on contracts and approving gauges to receive CRV emissions, while Parameter votes handled changes to parameters within pools. Today, most votes within the Curve DAO are Ownership votes, as current participation levels allow for it.
 
 All votes within the Curve DAO occur on Ethereum mainnet and are currently set to a **7-day** voting period. This can be adjusted by the DAO to any value between 0.5 and 14 days. To mitigate manipulation toward the end of the voting period, user voting power decays linearly to zero starting at day 3.5:
@@ -524,6 +526,6 @@ The old `EmergencyDAO` was quietly sunset in favor of the current `EmergencyMult
 
 The old `EmergencyDAO` is still hardcoded into some contracts, namely the veCRV `FeeDistributor (old)`.
 
-Members for the old `EmergencyDAO` are publicly available here: [https://dao-old.curve.fi/emergencymembers](https://dao-old.curve.fi/emergencymembers).  Members of the new `EmergencyMultisig` and their telegram handle are available here: [Curve Resources: Emergency DAO](https://resources.curve.fi/governance/understanding-governance/#emergency-dao).
+Members for the old `EmergencyDAO` are publicly available here: [https://dao-old.curve.fi/emergencymembers](https://dao-old.curve.fi/emergencymembers).  Members of the new `EmergencyMultisig` and their telegram handle are available here: [Curve Resources - Emergency DAO](https://resources.curve.fi/governance/understanding-governance/#emergency-dao).
 
 At least 4 of the 5 signers on the `scrvusdEmergencyMultisig` can be identified as members/previous members of the Curve team.  However, this multisig can only limit/stop deposits into the scrvUSD vault.  It cannot steal user funds or limit withdrawals.
