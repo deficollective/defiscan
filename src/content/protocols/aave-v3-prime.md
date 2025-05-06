@@ -32,35 +32,56 @@ The report is concerned with the Aave V3 _Prime_ instance deployed on Ethereum m
 
 ## Upgradeability
 
-The Aave v3 protocol can be organized in a number of logical modules or subsystems: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each of these subsystems exposes various degrees of control. Overall, these control vectors can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
+The Aave v3 protocol can be analyzed in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
 
-This report only focuses on the parts that are specifically redeployed and to represent the _Prime_ instance, leaving out the following subsystems that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned subsystems read the Aave _Core_ instance report.
+This report only focuses on the parts that are specifically redeployed and to represent the _Prime_ instance, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned modules read the Aave _Core_ instance report.
 
-Note that the _Aave Governance_ is shared among the different instances, that means that upgrades on the _Prime_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _Prime_ are assigned to the `Executor_lvl1` contract.  
+Note that the _Aave Governance_ is shared among the different instances. The upgrades on the _Prime_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _Prime_ are assigned to the `Executor_lvl1` contract.  
+
+All the control vectors, apart from the [Emergency Admin](#security-council)'s privilege, are behind governance vote or if permissions are given to a multisig account, the permission is successfully restricted to prevent mis-use by using steward contracts.
+If the [Emergency Admin](#security-council) adhered to the security council standards, the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ centralization risk score.
 
 ### Core Lending & Borrowing
 
-This subsystem forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_. An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
+This module forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_ [module](#aave-governance). An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
 
-Note that all the contracts make up the money market logic and state (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
+Special attention is required for the [Emergency Admin](#security-council) multisig, which owns the role `EMERGENCY_ADMIN` that allows to pause a single reserve or pause the entire core market instance (all reserves / the entire Pool). The [Emergency Admin](#security-council) can also disable the grace period for liquidations after discontinuing the pause and resume market activities. The actions by the [Emergency Admin](#security-council) are reversible, but require a governance vote. The [Emergency Admin](#security-council) does not adhere to the _security council requirements_, as the members of the multisig are considered _insiders_ of the Aave DAO (service providers and key voting power holders). In case of a market down turn the [Emergency Admin](#security-council) could mis-use the power to liquidate from a priviledged position. Quoting the [Aave V3 technical paper](https://github.com/aave-dao/aave-v3-origin/blob/main/docs/Aave_V3_Technical_Paper.pdf) page 16.
+
+> Timed with a market crash, the attacker can turn the pool off, and then atomically perform the sequence (turn-on - liquidate - turn-off), allowing him to be the sole liquidator.
 
 ### Reserve Parameters
 
-The _Reserve Parameters_ subsystem is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the _Emergency Admin_ or _Risk Council_. A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range and with a maximal frequency (both configurable by Governance). This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
+The _Reserve Parameters_ module is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the [Emergency Admin](#security-council) or [Risk Council](#security-council). A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or with a certain frequency. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
 
-To achieve different specific risk parameters and associated guardrails the Stewards contracts are re-deployed for the _Prime_ market/instance. The multi-sigs owning permissions in the Steward contracts are the same as for the _Core_ instance (_Emergency Admin_ and _Risk Council_). 
+To achieve different specific dedicated risk parameters and associated guardrails the Stewards contracts are re-deployed for the _Prime_ instance. The multisig account owning permissions in the Steward contracts is the same [Risk Council](#security-council) as for the _Core_ instance. 
 
-A notable difference to the Core instance is the introduced dependency on a Risk Oracle provided by Chaos Labs which helps to update risk parameters within governance set guardrails automatically and based on quantitative algorithmic risk models in real time. The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional upgradeability risk is introduced.
+A notable difference to the _Core_ instance is the introduced dependency on a Risk Oracle provided by Chaos Labs which helps to update risk parameters within governance set guardrails based on quantitative algorithmic risk models in real time. The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional upgradeability risk is introduced.
 
 > Upgradeability score: high
 
+### Re-used modules
+
+For upgradeability risk assessment on shared modules between the instances on mainnet, please read our report on the core instance.
+
+Shared modules
+
+- Treasury
+- GHO
+- Governance
+
 ## Autonomy
+
+### Risk Oracle
+
+Next to handing some control over market parameters to the [Risk Council](#security-council) via steward contracts, the Aave V3 _Prime_ instance on Mainnet updates the interest rate by handing off the control to a Risk Oracle implemented by Chaos Labs (service provider to the DAO). The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior. In case of failure of the Risk Oracle, the [Risk Council](#security-council) can still update the interest rate parameters in due time, so the Risk Oracle setup is fault tolerant. No additional dependency risk is introduced by using the Risk Oracle provided by Chaos Labs.
 
 ### Oracle and Prices
 
+The Aave V3 protocol relies on Chainlink oracle feeds to price collateral and borrowed assets in the system.
+
 Requesting oracle feeds to price assets in the system is relying on the same mechanisms across the different instances. To control which price feeds are available a new `AaveOracle` contract is deployed for each instance. The associated centralisation risks in the _Prime_ instance are the same as on the _Core_ instance.
 
-Read more in our _Core_ instance report.
+The autonomy risk for the Oracle assessed for the _Core_ instance also applies for the _Prime_ instance. Read more in our _Core_ instance report.
 
 ### Cross-Chain Vote
 
@@ -74,7 +95,9 @@ Read more in our _Core_ instance report.
 
 The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-> Exit Window score: High
+Read more in our _Core_ instance report.
+
+> Exit Window score: high
 
 ## Accessibility
 
@@ -90,11 +113,9 @@ https://aave.com/help/aave-101/accessing-aave
 
 The Aave-v3 Ethereum mainnet protocol, and specifically the _Prime_ instance achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks **Stage 0**.
 
-The project mitigates the Exit Window risk by having a Governance Guardian that suffices the Security Council setup.
+The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the [Emergency Admin](#security-council) multisig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a _Security Council_ setup for its own multisig account).
 
-The protocol could reach **Stage 1** by implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
-
-The project additionally could advance to **Stage 2** if the on-chain governance (DAO) used a 30-day exit window instead of only 7 days.
+The project additionally could advance to **Stage 2** if all critical permissions were assigned to Aave Governance and protected with a 30-day _Exit Window_.
 
 # Protocol Analysis
 
@@ -120,17 +141,19 @@ Besides the [Risk Council](#security-council) having control over market paramet
 
 ### a.DI
 
-The Aave delivery infrastructure (a.DI) ensures decentralized and fault-tolerant cross-chain messaging. It achieves this by encoding a message and submitting it to multiple independent bridges.
-
-On the receiving end (destination network) the a.DI validates the transaction, requiring multiple matching messages from different bridges before executing the bridged message on the destination network. If the confirmation threshold is not reached, a new attempt can be made by retrying the cross-chain message which uses the same bridge configuration but attempts with a new message. In case the previous transaction failed because lack of gas or other reasons.
-
-The a.DI also incorporates an emergency mode which allows the Aave Governance V3 guardian to replace current bridge providers if one or more bridges become untrusted.
+The a.DI is deployed once for each blockchain. The description of a.DI on Ethereum Mainnet is described in our _Core_ instance report.
 
 ### Oracle
 
-The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+The centralization risk within Chainlink price oracles is described in the _Core_ instance report.
+
+Read more in our _Core_ instance report.
 
 # Governance
+
+The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
+
+Read more in our _Core_ instance report.
 
 ## Security Council
 
@@ -147,9 +170,26 @@ This table shows the external permission owners and how they are rated against t
 | Chaos Labs' Multi-sig?       | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 2/3 | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
 | Chaos Labs' Bot               | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          | ❌                 | ❌                     | ❌                              | ❌                                                                                                                                                             |
 
-# Acknowledgement
+💡 The BGD Labs maintains a public markdown page on the existing permissions to inform its users:  https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-LIDO.md
 
-The BGD Labs maintains a public markdown page on the existing permissions to inform its users: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-LIDO.md
+## Multisigs and their permission
+
+This table summarizes the permission owner multisig accounts and the stewards which enforce guardrails on the action by the multisig accounts.
+
+| Role                              | Risk Parameter                              | Controlled by                    | Guardrails enforced by                         | Contract                  |
+| --------------------------------- | ------------------------------------------- | -------------------------------- | ---------------------------------------------- | ------------------------- |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setReservePause                             | Emergency Admin                  |                                                | PoolConfigurator          |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | setPoolPause                                | Emergency Admin                  |                                                | PoolConfigurator          |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN` | disableLiquidationGracePeriod               | Emergency Admin                  |                                                | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | configureReserveAsCollateral                | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setBorrowCap                                | Risk Council (for Pool Stewards) | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveFreeze                            | Emergency Admin                  |                                                | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveInterestRateData                  | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setReserveInterestRateData (limited assets) | RiskOracle                       | EdgeRiskSteward                                | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | setSupplyCap                                | Risk Council (for Pool Stewards) | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | PoolConfigurator          |
+| `RISK_ADMIN` or `POOL_ADMIN`      | updateStablePriceCaps                       | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | Oracle Pricefeed wrappers |
+| `RISK_ADMIN` or `POOL_ADMIN`      | updateLstPriceCaps                          | Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | Oracle Pricefeed wrappers |
+
 
 # Contracts and Permissions
 
@@ -217,7 +257,7 @@ The BGD Labs maintains a public markdown page on the existing permissions to inf
 | EmergencyAdmin                     | [0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30](https://etherscan.io/address/0x2cfe3ec4d5a6811f4b8067f0de7e47dfa938aa30) | Multisig 5/9 |
 | Risk Council (for Pool Stewards)   | [0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8](https://etherscan.io/address/0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8) | Multisig 2/2 |
 | Injector Owner (BGD Labs multisig) | [0xff37939808EcF199A2D599ef91D699Fb13dab7F7](https://etherscan.io/address/0xff37939808EcF199A2D599ef91D699Fb13dab7F7) | Multisig 1/2 |
-| Chaos Labs Multi-sig?              | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig ?/? |
+| Chaos Labs Multi-sig?              | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 3/6 |
 | Chaos Labs Bot                     | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          |
 | CleanUp Admin                      | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://etherscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 |
 | ACI Automation (Bot)               | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://etherscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          |
@@ -454,15 +494,6 @@ The BGD Labs maintains a public markdown page on the existing permissions to inf
 | RiskOracle | publishBulkRiskParameterUpdates | Unlike `publishRiskParameterUpdate` this function allows to update multiple parameters at once.  | Chaos Labs Bot |
 
 
-In order to prevent repetitiveness the `BaseImmutableAdminUpgradeabilityProxy`'s permissions are only included once in the table above. The following list of addresses have this proxy implementation:
-
-| Contract                  | Address                                    |
-| ------------------------- | ------------------------------------------ |
-| Pool (Proxy)              | 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2 |
-| PoolConfigurator (Proxy)  | 0x64b761D848206f447Fe2dd461b0c635Ec39EbB27 |
-| TreasuryCollector (Proxy) | 0x464C71f6c2F760DdA6093dCB91C24c39e5d6e18c |
-| RewardsController (Proxy) | 0x8164Cc65827dcFe994AB23944CBC90e0aa80bFcb |
-
 ### Roles Permission inside `ACLManager`
 
 ID refers to the 32-bytes value that is used within `AccessControl` by Open Zeppelin (inherited by `ACLManager`) to identify different roles.
@@ -494,3 +525,35 @@ RoleAdmin is currently the Governance Executor, but technically any address coul
 | CLEANUP_ROLE  | 0xa76fa7c45e5f73660ff588d1884d27398b8576fbdeca4568c9e474f45a928f19 | CleanUp Admin, ACI Automation (Bot) | DEFAULT_ADMIN |
 
 
+## Risk Parameter Control
+
+| Role                                | Risk Parameter                            | Controlled by                                       | Guardrails enforced by                         | Contract                        |
+| ----------------------------------- | ----------------------------------------- | --------------------------------------------------- | ---------------------------------------------- | ------------------------------- |
+| `AssetListingAdmin` or `POOL_ADMIN` | initReserves                              | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `AssetListingAdmin` or `POOL_ADMIN` | dropReserve                               | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `POOL_ADMIN`                        | updateAToken                              | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `POOL_ADMIN`                        | updateVariableDebtToken                   | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `POOL_ADMIN`                        | setReserveActive                          | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `POOL_ADMIN`                        | setBorrowableInIsolation                  | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | setReservePause                           | _Aave Governance_, Emergency Admin                  |                                                | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | setPoolPause                              | _Aave Governance_, Emergency Admin                  |                                                | PoolConfigurator                |
+| `EMERGENCY_ADMIN` or `POOL_ADMIN`   | disableLiquidationGracePeriod             | _Aave Governance_, Emergency Admin                  |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | configureReserveAsCollateral              | _Aave Governance_, Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setAssetCollateralInEMode                 | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setBorrowCap                              | _Aave Governance_, Risk Council (for Pool Stewards) | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setDebtCeiling                            | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setEModeCategory                          | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setLiquidationProtocolFee                 | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveBorrowing                       | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFlashLoaning                    | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFactor                          | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveFreeze                          | _Aave Governance_, Emergency Admin                  |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveInterestRateData                | _Aave Governance_, Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setReserveInterestRateStrategyAddress     | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setSiloedBorrowing                        | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setSupplyCap                              | _Aave Governance_, Risk Council (for Pool Stewards) | CapsPlusRiskSteward, Manual AGRS (RiskSteward) | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | setUnbackedMintCap                        | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateBridgeProtocolFee                   | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateFlashloanPremiumTotal               | _Aave Governance_                                   |                                                | PoolConfigurator                |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateStablePriceCaps                     | _Aave Governance_, Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | Oracle Pricefeed wrappers       |
+| `RISK_ADMIN` or `POOL_ADMIN`        | updateLstPriceCaps                        | _Aave Governance_, Risk Council (for Pool Stewards) | Manual AGRS (RiskSteward)                      | Oracle Pricefeed wrappers       |
