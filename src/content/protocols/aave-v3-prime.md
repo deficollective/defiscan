@@ -34,7 +34,7 @@ The report is concerned with the Aave V3 _Prime_ instance deployed on Ethereum m
 
 The Aave v3 protocol can be analyzed in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
 
-This report only focuses on the parts that are specifically redeployed and to represent the _Prime_ instance, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned modules read the Aave _Core_ instance report.
+This report only focuses on the parts that are specifically redeployed and to represent the _Prime_ instance, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
 
 Note that the _Aave Governance_ is shared among the different instances. The upgrades on the _Prime_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _Prime_ are assigned to the `Executor_lvl1` contract.  
 
@@ -81,13 +81,13 @@ The Aave V3 protocol relies on Chainlink oracle feeds to price collateral and bo
 
 Requesting oracle feeds to price assets in the system is relying on the same mechanisms across the different instances. To control which price feeds are available a new `AaveOracle` contract is deployed for each instance. The associated centralisation risks in the _Prime_ instance are the same as on the _Core_ instance.
 
-The autonomy risk for the Oracle assessed for the _Core_ instance also applies for the _Prime_ instance. Read more in our _Core_ instance report.
+The autonomy risk for the Oracle assessed for the _Core_ instance also applies for the _Prime_ instance. Read more in our _Core_ instance [report](/protocols/aave).
 
 ### Cross-Chain Vote
 
 Votes for _Prime_, _Core_ and _Etherfi_ instances are held with the same set of contracts. 
 
-Read more in our _Core_ instance report.
+Read more in our _Core_ instance [report](/protocols/aave).
 
 > Autonomy score: high
 
@@ -95,7 +95,7 @@ Read more in our _Core_ instance report.
 
 The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our _Core_ instance report.
+Read more in our _Core_ instance [report](/protocols/aave).
 
 > Exit Window score: high
 
@@ -148,19 +148,19 @@ Besides the [Risk Council](#security-council) having control over market paramet
 
 ### a.DI
 
-The a.DI is deployed once for each blockchain. The description of a.DI on Ethereum Mainnet is described in our _Core_ instance report.
+The a.DI is deployed once for each blockchain. The description of a.DI on Ethereum Mainnet is described in our _Core_ instance [report](/protocols/aave).
 
 ### Oracle
 
 The centralization risk within Chainlink price oracles is described in the _Core_ instance report.
 
-Read more in our _Core_ instance report.
+Read more in our _Core_ instance [report](/protocols/aave).
 
 # Governance
 
 The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our _Core_ instance report.
+Read more in our _Core_ instance [report](/protocols/aave).
 
 ## Security Council
 
