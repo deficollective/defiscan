@@ -97,7 +97,7 @@ Read more in our _Core_ instance report.
 
 The _Prime_, _Core_ and _EtherFi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our [_Core_ instance report](dyad.md).
+Read more in our [_Core_ instance report](./dyad).
 
 > Exit Window score: High
 
