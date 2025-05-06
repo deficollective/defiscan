@@ -518,12 +518,12 @@ The `TriCryptoSwapFactory`'s current pool implementation also implements a manda
 | At least 7 signers                                      | ✅            | ✅                 | ❌                        |
 | At least 51% threshold                                  | ✅            | ✅                 | ❌                        |
 | At least 50% non-insider signers                        | ✅            | ✅                 | ❌                        |
-| Signers are publicly announced (with name or pseudonym) | ✅            | ❌                 | ❌                        |
+| Signers are publicly announced (with name or pseudonym) | ✅            | ✅                 | ❌                        |
 
 The old `EmergencyDAO` was quietly sunset in favor of the current `EmergencyMultisig`.  A reason couldn't be found for this.  This does reduce friction and increases speed for the members if actions are required, but also increases the risk of malicious actions, as the `EmergencyMultisig` can add and remove members with a majority vote.  There is no oversight or direct control currently possible from the main DAO.
 
 The old `EmergencyDAO` is still hardcoded into some contracts, namely the veCRV `FeeDistributor (old)`.
 
-Members for the old `EmergencyDAO` are publicly available here: [https://dao-old.curve.fi/emergencymembers](https://dao-old.curve.fi/emergencymembers).  Unfortunately due to no public update since the original `EmergencyDAO` was [formed in 2020](https://dao-old.curve.fi/emergencymembers), it is unknown if all the current signers of the new `EmergencyMultisig` are the same as the previous DAO.  We can see that at least five members do overlap with the old signers, and all of these are non-insiders of Curve.  However, as we don't have names/pseudonyms for all signers, it does not fit the requirements of a security council under the defiscan criteria.
+Members for the old `EmergencyDAO` are publicly available here: [https://dao-old.curve.fi/emergencymembers](https://dao-old.curve.fi/emergencymembers).  Unfortunately due to no public update since the original `EmergencyDAO` was [formed in 2020](https://dao-old.curve.fi/emergencymembers), members of the new `EmergencyMultisig` and their telegram handle are available here: [Curve Resources: Emergency DAO](https://resources.curve.fi/governance/understanding-governance/#emergency-dao).
 
 At least 4 of the 5 signers on the `scrvusdEmergencyMultisig` can be identified as members/previous members of the Curve team.  However, this multisig can only limit/stop deposits into the scrvUSD vault.  It cannot steal user funds or limit withdrawals.
