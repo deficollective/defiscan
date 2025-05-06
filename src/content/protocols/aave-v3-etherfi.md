@@ -20,13 +20,13 @@ Aave v3 is a lending protocol that allows users to lend and borrow different ERC
 
 The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and `aAAVE` holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
 
-Different Aave protocol v3 market _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _Etherfi_ instance.
+Different Aave protocol v3 market _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _EtherFi_ instance.
 
 # Scores
 
 ## Chain
 
-The report is concerned with the Aave V3 _Etherfi_ instance deployed on Ethereum mainnet. Ethereum mainnet achieves a _Low_ centralization risk score.
+The report is concerned with the Aave V3 _EtherFi_ instance deployed on Ethereum mainnet. Ethereum mainnet achieves a _Low_ centralization risk score.
 
 > Chain score: Low
 
@@ -34,9 +34,9 @@ The report is concerned with the Aave V3 _Etherfi_ instance deployed on Ethereum
 
 The Aave v3 protocol can be organized in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
 
-This report only focuses on the parts that are specifically redeployed and to represent the _Etherfi_ instance, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _Etherfi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned modules read the Aave _Core_ instance report.
+This report only focuses on the parts that are specifically redeployed and to represent the _EtherFi_ instance, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned modules read the Aave _Core_ instance report.
 
-Note that the _Aave Governance_ is shared among the different instances. The upgrades on the _Etherfi_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _Etherfi_ are assigned to the `Executor_lvl1` contract.  
+Note that the _Aave Governance_ is shared among the different instances. The upgrades on the _EtherFi_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _EtherFi_ are assigned to the `Executor_lvl1` contract.  
 
 All the control vectors, apart from the [Emergency Admin](#security-council)'s privilege, are behind governance vote or if permissions are given to a multisig account, the permission is successfully restricted to prevent mis-use by using steward contracts.
 If the [Emergency Admin](#security-council) adhered to the security council standards, the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ centralization risk score.
@@ -88,7 +88,7 @@ The autonomy risk for the Oracle assessed for the _Core_ instance also applies f
 
 ### Cross-Chain Vote
 
-Votes for _Prime_, _Core_ and _Etherfi_ instances are held with the same set of contracts. 
+Votes for _Prime_, _Core_ and _EtherFi_ instances are held with the same set of contracts. 
 
 Read more in our _Core_ instance report.
 
@@ -96,7 +96,7 @@ Read more in our _Core_ instance report.
 
 ## Exit Window
 
-The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
+The _Prime_, _Core_ and _EtherFi_ instances use the same governance structure, thus the same exit window risks apply.
 
 Read more in our _Core_ instance report.
 
@@ -114,7 +114,7 @@ https://aave.com/help/aave-101/accessing-aave
 
 ## Conclusion
 
-The Aave-v3 Ethereum mainnet protocol, and specifically the _Etherfi_ instance achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks **Stage 0**.
+The Aave-v3 Ethereum mainnet protocol, and specifically the _EtherFi_ instance achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks **Stage 0**.
 
 The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the [Emergency Admin](#security-council) multisig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a _Security Council_ setup for its own multisig account).
 
@@ -156,7 +156,7 @@ Read more in our _Core_ instance report.
 
 # Governance
 
-The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
+The _Prime_, _Core_ and _EtherFi_ instances use the same governance structure, thus the same exit window risks apply.
 
 Read more in our _Core_ instance report.
 
