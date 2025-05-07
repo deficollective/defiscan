@@ -22,7 +22,7 @@ Sky is a stablecoin protocol allowing users to mint its USDS stablecoin through 
 
 ## Chain
 
-This review focuses on the Ethereum deployment of Sky, currently the only chain the Sky protocol is deployed on. As part of Sky's _End Game_ plan the protocol aims to launch its own chain in the future and appoints other protocols such as Spark to provision `USDS`on other chains.
+This review focuses on the Ethereum deployment of Sky, currently the only chain the Sky protocol is deployed on. Ethereum achieves a Low centralization risk score."
 
 > Chain score: Low
 
@@ -38,7 +38,7 @@ Many parameters in the Sky Protocol can be changed through governance proposals 
 
 Sky has a centralized dependency in Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. This conversion may be stopped or paused in an emergency Sky Governance proposal. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. Nonetheless, at the time of writing this debt ceiling is high enough that it does not prevent that more than 50% of the collateral in Sky is backed by `USDC`. The ceiling is explained further in the [dependencies](#dependencies) section.
 
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of hosted by various third-parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that a centralized Chornicle multisig may control which validators may take part in the concensus. However, any changes to the validator set is subject to a 7 days exit-window. We therefore assessed that Chronicle is a Stage 1 dependency and explain it in details in the [dependencies](#dependencies) section.
+The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of hosted by various third-parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that any changes to the validator set is subject to a 7 days exit-window. We therefore assessed that Chronicle is a Stage 1 dependency and explain it in details in a [dedicated report](./chronicle.md).
 
 An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates and the Sky governance can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
 
@@ -74,7 +74,7 @@ The protocol could reach Stage 1 if it no longer swaps its `USDS` with Circle's 
 
 > Overall score: Stage 0
 
-# Informational
+# Reviewer Notes
 
 ⚠️ During our analysis we discovered a paradigm of _Authority_ contract used to handle fine-grained permissions over functions and contracts.
 In most of the cases the authority is `DSChief` and this allows governance proposals to have non-delayed access to certain functions. Nonetheless, this
@@ -116,15 +116,19 @@ A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a r
 
 # Dependencies
 
+## Circle's USDC
+
 `USDS` is pegged to Circle's `USDC` rather than `USD` due to its stability module.
 
 Users can mint `USDS` from `USDC` at a fixed 1:1 rate using the `LitePSM` (Peg-stability module). This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. This debt ceiling is dynamic, it can be increased every 12 hours by _400 Mio_ if the current debt approaches the ceiling (debt + 400 Mio > ceiling). The ceiling can reach up to **10 Billion** `USDS`, making `USDC` more than a collateral for Sky, but a peg for its stablecoin.
 
 The `LitePSM` which allows this conversion may be stopped or paused in an emergency Sky Governance proposal.
 
+## Chronicle
+
 The Sky protocol also relies on the provider Chronicle for price feeds of collateral assets.
 
-Chronicle is a decentralized oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a TimeLockController with a delay of 7 days. This controller could also name other controllers or remove this 7 days delay, but the action itself would still be subject to the delay. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
+Chronicle is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a dedicated report [here](./chronicle.md).
 
 An Oracle Security Module enforces a 1 hour window on price updates and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
 
@@ -146,27 +150,12 @@ Proposals can be scheduled for execution with the `DSPauseProxy` which enforces 
 
 The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any times is accepted and can be executed once its delay has passed.
 
-Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. This is the case for all contract that have a `Mom` who can pause or stop their child. In addition to that, an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
+Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mendatory delay. This is the case for all contract that have a `Mom` who can pause or stop their child.
+
+In addition to that, an _Emergency Shutdown Module_ exists and can shutdown the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
 
 1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed and the users who shut down the system see their funds restored.
 2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
-
-## External Permission Owners and Security Council
-
-The contracts in the table below are the contracts with managing permissions on the Sky Protocol
-subject to external interactions. `DSChief` is the main governance contract and the contract to
-execute emergeny governance proposals. Proposals that are subject to a delay are passed on to the
-`DSPause Proxy` which enforces the delay.
-
-There is no security council to oversee the Sky Protocol. However, there is a series of emergency actions described in [exit-window](#exit-window-1) that can be taken by the governance without delay.
-
-&nbsp;
-
-| Name                               | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| DSPause Proxy (Delayed Governance) | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | contract | ❌          | ❌              | ❌                | ❌             |
-| DSChief (Governance)               | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | contract | ❌          | ❌              | ❌                | ❌             |
-| ESM (Emergency Shutdown Module)    | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | contract | ❌          | ❌              | ❌                | ❌             |
 
 # Contracts & Permissions
 
