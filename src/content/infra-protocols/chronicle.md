@@ -16,11 +16,9 @@ update_date: "1970-01-01"
 
 # Summary
 
-Chronicle Labs is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. Becoming a validator is a permissioned process, a majority of the validators in place are held by third-party entities in the Ethereum ecosystem.
+Chronicle Labs is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. Becoming a validator is a permissioned process; a majority of the validators in place are held by third-party entities in the Ethereum ecosystem.
 
-Oracles
-
-a `ValidatorRegistry` exists to be used as a certificate authority with respect to the Schnorr Public Keys of validators as well as a fallback defense system to help filtering messages on the validators' side based on the messages' signatures in case of Denial of Service attack.
+Each price feed (oracle) is its own smart contract and corresponding validator set. A `ValidatorRegistry` exists to be used as a certificate authority with respect to the Schnorr Public Keys of validators as well as a fallback defense system to help filter messages on the validators' side based on the messages' signatures in case of a Denial of Service attack.
 
 # Ratings
 
@@ -34,9 +32,9 @@ This review is limited to Chornicle Oracles deployed on Ethereum mainnet. We not
 
 The oracle contracts are non-upgradeable and each oracle has its own validator set. This set can be changed by a `TimelockController` which is an internal multisig belonging to Chronicle Labs.
 
-There is a single `TimelockController` per chain for all oracles. This timelock enforces a mandatory delay on any change to an oracle's validator set (see [exit-window](#exit-window)). Changing the validator set could put the system at risk of controlled prices which could lead to the loss of user funds in protocols which rely on Chronicle Labs oracles.
+There is a single `TimelockController` per chain for all oracles. This timelock enforces a mandatory delay on any change to an oracle's validator set (see [exit-window](#exit-window)). Changing the validator set could put the system at risk of controlled prices which could lead to the loss of user funds in protocols, which rely on ChronicleLabs' oracles.
 
-Finally, the `ValidatorRegistry` can be updated by 3 Externally Owned Accounts (EOAs). Updating the registry in a malicious fashion could not lead to weaker assumptions on the possibility of price manipulation. Nonetheless, this could prevent the validators from reaching a consensus due to either easier attacks or corrupted certificate authority. This could lead to staleness in the oracles.
+Finally, the `ValidatorRegistry` can be updated by 3 Externally Owned Accounts (EOAs). Updating the registry in a malicious fashion does not weaken the assumptions on the possibility of price manipulation. Nonetheless, this could prevent the validators from reaching a consensus due to either easier attacks or corrupted certificate authority. This could lead to staleness in the oracles.
 
 > Upgradeability score: High
 
@@ -48,10 +46,9 @@ The validators in the protocols are hosted by various third-parties such as (but
 
 ## Exit Window
 
-Any changes in the validaotor set is subject to a 7 days exit-window
-Validators push price updates on-chain. We found that a centralized Chornicle multisig controls which validators may take part in the concensus. However, any changes to the validator set is subject to a 7 days exit-window. We therefore assessed that Chronicle is a Stage 1 dependency and explain it in details in the [dependencies](#dependencies) section.
+Any changes in the validator set is subject to a 7-day exit window.
 
-This set can be changed by a TimeLockController with a delay of 7 days. This controller could also name other controllers or remove this 7 days delay, but the action itself would still be subject to the delay. The validator set and quorum of each oracle is announced on the chronicle labs [public dashboard](https://chroniclelabs.org/dashboard/oracles).
+More precisely, we found that a centralized Chornicle multisig controls which validators may take part in the concensus. However, any changes to the validator set is subject to a 7-day exit window.
 
 Finally, the `ValidatorRegistry` can be updated without delay by 3 Externally Owned Accounts (EOAs). As mentioned in [upgradeability](#upgradeability), this may lead to staleness of the oracles, but should not increase the risks of price manipulation.
 
@@ -59,11 +56,11 @@ Finally, the `ValidatorRegistry` can be updated without delay by 3 Externally Ow
 
 ## Accessibility
 
-Oracles and validators are listed on Chronicle Labs' [public dashboard](https://chroniclelabs.org/dashboard). This allows anyone to verify the data cryptographically. The dashboard is not opensource, but this does not prevent the monitoring of the onchain activity from the side of projects using Chronicle.
+Oracles and validators are listed on ChronicleLabs' [public dashboard](https://chroniclelabs.org/dashboard). This allows anyone to verify the data cryptographically. The dashboard is not opensource, but this does not prevent the monitoring of the onchain activity from the side of projects using ChronicleLabs' oracles.
 
 ## Conclusion
 
-ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set which are protected with a 7-days exit window. The protocol relies on third-party entities which collaborate off-chain in order to produce a verifiable price onchain. Overall, this grants Chronicle a Stage 1 equivalent centralization risk score.
+ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set which are protected with a 7-days exit window. The protocol relies on third-party entities which collaborate offchain to produce a verifiable price onchain. Overall, this grants Chronicle a Stage 1 equivalent centralization risk score.
 
 The protocol could reach Stage 2 with an exit window increased to 30 days.
 
