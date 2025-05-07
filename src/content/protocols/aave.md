@@ -49,7 +49,7 @@ The _Reserve Parameters_ module is responsible for maintaining and updating crit
 
 ### Treasury, Aave Ecosystem Reserves and Rewards System
 
-This module manages how fees are collected, spent and third-party rewards allocated and claimed by users. Fees taken across the Aave v3 protocol (and previous versions) are collected in the `TreasuryCollector`, a fully upgradeable contract. Through _Aave Governance_ and different (upgradeable) utility contracts these funds are distributed among _service providers_ and ecosystem initiatives. Furthermore, third parties are able to distribute rewards, in their own ERC20 token, to Aave users through the `RewardsControllerManager` and `EmissionManager` contracts. Rewards are distributed continuously among eligible users but controlled by the [Aave Chan Initiative](#security-council) multisig account until claimed. The Aave Chan Initiative multisig account can thus potentially be abused to withhold or steal distributed rewards resulting in a loss of unclaimed yield for users.
+This module manages how fees are collected, spent and third-party rewards allocated and claimed by users. Fees taken across the Aave v3 protocol (and previous versions) are collected in the `TreasuryCollector`, a fully upgradeable contract. Through _Aave Governance_ and different (upgradeable) utility contracts these funds are distributed among _service providers_ and ecosystem initiatives.
 
 ### GHO Stablecoin
 
@@ -129,7 +129,7 @@ The project additionally could advance to **Stage 2** if all critical permission
 
 ⚠️ During our analysis, we identified a unverified role (not mentioned in the docs https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-V3.md#admins). Role Id is `0xd1d2cf869016112a9af1107bcf43c3759daf22cf734aad47d0c9c726e33bc782`. The owners of this role are related to the V2 to V3 migration.
 
-Furthermore, third parties are able to distribute rewards, in their own ERC20 token, to Aave users through the `RewardsControllerManager` and `EmissionManager` contracts. Rewards are distributed continuously among eligible users but controlled by the [Aave Chan Initiative multisig](#security-council) account until claimed. The Aave Chan Initiative multisig account can thus potentially be abused to withhold or steal distributed rewards resulting in a loss of unclaimed yield for users.
+⚠️ Third parties are able to distribute rewards, in their own ERC20 token, to Aave users through the `RewardsControllerManager` and `EmissionManager` contracts. Rewards are distributed continuously among eligible users but controlled by the [Aave Chan Initiative multisig](#security-council) account until claimed. The Aave Chan Initiative multisig account can thus potentially be abused to withhold or steal distributed rewards resulting in a loss of unclaimed yield for users.
 
 # Protocol Analysis
 
