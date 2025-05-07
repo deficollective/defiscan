@@ -68,6 +68,10 @@ The protocol could reach Stage 2 with an exit window increased to 30 days.
 
 # Protocol Analysis
 
+An overview of the Chronicle protocol can be seen below.
+
+![Overview of Chronicle](./diagrams/chronicle-overview.png)
+
 The core of the protocol are the oracle contracts, the validators, and the `ValidatorRegistry`.
 
 The `ValidatorRegistry` does _not_ directly affect the validators whitelisted (_lift_-ed) on the oracles. It is used by the peer-to-peer network as a backup defense mechanism to know which validators can be generally trusted by filtering messages based on addresses recovered from the message's signature. Furthermore, it acts as a certificate authority with respect to the Schnorr public keys of all validators.
