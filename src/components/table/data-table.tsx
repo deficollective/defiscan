@@ -28,6 +28,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   othersCount: number;
   defiCount: number;
+  infrastructureCount: number;
 }
 
 // Define the extended ColumnMeta type
@@ -35,15 +36,17 @@ type ExtendedColumnMeta = {
   responsiveHidden?: boolean;
 };
 
+type ViewType = "defi" | "infrastructure" | "others";
+
 const getInitialVisibility = (
   columns: ColumnDef<any, any>[],
-  defiView: boolean
+  activeView: ViewType
 ) => {
   const initialState: Record<string, boolean> = {
     logo: true,
     protocol: true,
-    stage: true,
-    reasons: false, // disable with first load
+    stage: activeView === "defi" || activeView === "infrastructure",
+    reasons: activeView === "others",
     risks: true,
     type: true,
     chain: true,
@@ -83,6 +86,7 @@ export function DataTable<TData, TValue>({
   data,
   othersCount,
   defiCount,
+  infrastructureCount,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -92,11 +96,11 @@ export function DataTable<TData, TValue>({
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const [defiView, setDefiView] = useState(true);
+  const [activeView, setActiveView] = useState<ViewType>("defi");
 
   const initialVisibility = useMemo(
-    () => getInitialVisibility(columns, defiView),
-    [columns]
+    () => getInitialVisibility(columns, activeView),
+    [columns, activeView]
   );
 
   const [columnVisibility, setColumnVisibility] = useState(initialVisibility);
@@ -128,17 +132,23 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     setColumnVisibility((prev) => ({
       ...prev,
-      stage: defiView,
-      reasons: !defiView,
+      stage: activeView === "defi" || activeView === "infrastructure",
+      reasons: activeView === "others",
+      tvl: activeView !== "infrastructure",
     }));
-    if (!defiView) {
-      table.resetColumnFilters();
+
+    // Reset and set filters based on the active view
+    table.resetColumnFilters();
+
+    if (activeView === "others") {
       table.getColumn("stage")?.setFilterValue("O");
+    } else if (activeView === "infrastructure") {
+      table.getColumn("stage")?.setFilterValue(["I0", "I1", "I2"]);
     } else {
-      table.resetColumnFilters();
+      // DeFi view
       table.getColumn("stage")?.setFilterValue([0, 1, 2, "R"]);
     }
-  }, [defiView, table]);
+  }, [activeView, table]);
 
   useResponsiveColumns(table);
 
@@ -150,13 +160,14 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       <div className="flex space-x-2">
+        {/* DeFi tab */}
         <div
           className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
-            defiView
+            activeView === "defi"
               ? "bg-primary text-white"
               : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
           }`}
-          onClick={() => setDefiView(true)}
+          onClick={() => setActiveView("defi")}
         >
           <span className="mr-2">DeFi</span>
           <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
@@ -164,13 +175,29 @@ export function DataTable<TData, TValue>({
           </span>
         </div>
 
+        {/* Infrastructure tab */}
         <div
           className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
-            !defiView
+            activeView === "infrastructure"
               ? "bg-primary text-white"
               : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
           }`}
-          onClick={() => setDefiView(false)}
+          onClick={() => setActiveView("infrastructure")}
+        >
+          <span className="mr-2">Infrastructure</span>
+          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
+            {infrastructureCount}
+          </span>
+        </div>
+
+        {/* Others tab */}
+        <div
+          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
+            activeView === "others"
+              ? "bg-primary text-white"
+              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
+          }`}
+          onClick={() => setActiveView("others")}
         >
           <span className="mr-2">Others</span>
           <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">

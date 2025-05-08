@@ -14,6 +14,11 @@ export const stageToRequisites = {
   "2": [
     "Critical permissions have either been revoked or delegated to an on-chain governance system with ample time for users to exit in case of an unwanted protocol update. Risks from external dependencies have been further reduced such that users’ funds and unclaimed yield remain unaffected by a failure. In addition, different independent user interfaces and a fully decentralized underlying chain guarantee access to users’ funds at any time.",
   ],
+  I0: [
+    "Equivalent to a Stage 0 DeFi protocol. The infrastructure uses blockchain and assets are not in custody by a centralized entity.",
+  ],
+  I1: ["Equivalent to a Stage 1 DeFi protocol."],
+  I2: ["Equivalent to a Stage 2 DeFi protocol."],
 };
 
 export const reasonToText = {
@@ -26,5 +31,4 @@ export const reasonToText = {
   "Unverified Contracts":
     "All or some smart contracts are not verified with a public blockchain explorer.",
   "Incorrect Docs": "All or some contract addresses in the docs are incorrect.",
-
 };

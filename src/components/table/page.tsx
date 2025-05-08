@@ -29,8 +29,12 @@ export default function Table() {
 
   let othersCount = 0;
   let defiCount = 0;
+  let infrastructureCount = 0;
   data?.forEach((el) => {
+    console.log(el.stage);
     if (el.stage === "O") othersCount++;
+    else if (el.stage === "I0" || el.stage === "I1" || el.stage === "I2")
+      infrastructureCount++;
     else defiCount++;
   });
 
@@ -41,6 +45,7 @@ export default function Table() {
         data={data || []}
         othersCount={othersCount}
         defiCount={defiCount}
+        infrastructureCount={infrastructureCount}
       />
     </div>
   );

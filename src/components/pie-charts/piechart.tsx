@@ -290,8 +290,8 @@ export async function mergeDefiLlamaWithMd() {
           (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
         );
         tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
-        type = res?.category || "";
-        logo = res?.logo || "";
+        type = res?.category || frontmatterProtocol.type?.toString() || "";
+        logo = res?.logo || frontmatterProtocol.logo?.toString() || "";
       }
       return {
         logo: logo,

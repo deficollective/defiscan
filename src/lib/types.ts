@@ -1,5 +1,5 @@
 export type RiskLevel = "L" | "M" | "H";
-export type Stage = "O" | "R" | 0 | 1 | 2;
+export type Stage = "O" | "R" | 0 | 1 | 2 | "I0" | "I1" | "I2";
 export type RiskArray = [RiskLevel, RiskLevel, RiskLevel, RiskLevel, RiskLevel];
 export type Reason =
   | "Central Custody"
