@@ -31,7 +31,6 @@ export default function Table() {
   let defiCount = 0;
   let infrastructureCount = 0;
   data?.forEach((el) => {
-    console.log(el.stage);
     if (el.stage === "O") othersCount++;
     else if (el.stage === "I0" || el.stage === "I1" || el.stage === "I2")
       infrastructureCount++;
