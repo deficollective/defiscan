@@ -6,7 +6,7 @@ github: ["https://github.com/chronicleprotocol"]
 defillama_slug: [""]
 chain: "mainnet"
 type: "Oracles"
-logo: "/images/chronicle-logo.png"
+logo: "/images/infrastructure-logos/chronicle-logo.png"
 stage: "I1"
 reasons: []
 risks: ["L", "H", "L", "M", "L"]
