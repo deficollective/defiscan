@@ -3,7 +3,7 @@ protocol: "Spark"
 website: "https://spark.fi"
 x: "https://x.com/sparkdotfi"
 github: ["https://github.com/sparkdotfi"]
-defillama_slug: ["spark"]
+defillama_slug: ["spark-lending"]
 chain: "Ethereum"
 stage: 0
 reasons: []
@@ -22,7 +22,7 @@ SparkLend is a `USDS` and `DAI` centric lending protocol in which users can part
 
 The Spark Liquidity Management Layer (ALM) automates the liquidity provision of USDS, sUSDS, and USDC directly from Sky across various blockchain networks and DeFi protocols. It also enables Spark to provide liquidity into risk-adjusted yield strategies on other chains and protocols, as with Aave and Morpho on mainnet.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -34,7 +34,7 @@ SparkLend is deployed on Ethereum mainnet and the liquidity layer involves other
 
 The upgradeability of the Spark protocol is limited. No contract is upgradeable within the Spark Liquidity Management Layer (ALM). The SparkLend markets contracts are not upgradeable, but the treasury (collected fees) and rewards contracts may be upgraded through the Sky Governance. Upgrading the rewards contracts may cancel the rewards and result in the loss of unclaimed yield. This is because the rewards are part of the yield advertised to users. The Sky Governance and the _SparkLend Freezer_ multisig can both freeze all funds deposited into SparkLend with no delay.
 
-As part of the Liquidity Management Layer (ALM) the two relayers (EOAs) have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with strict limits and only in pre-approved protocols. Those relayers act through a 1/2 multisig and are assumed to be corruptible with limited impact on the protocol. This is because of both the strict rate limiting they are subject to and the presence of a _freezer_ multisig which can freeze the relayers in case of suspicious activity. This _freezer_ multisig does not meet our security council requirements.
+As part of the Liquidity Management Layer (ALM) the two relayers have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with strict limits and only in pre-approved protocols. Those relayers act through a 1/2 multisig and are assumed to be corruptible with limited impact on the protocol. This is because of both the strict rate limiting they are subject to and the presence of a _freezer_ multisig which can freeze the relayers in case of suspicious activity. This _freezer_ multisig does not meet our security council requirements.
 
 > Upgradeability Score: Medium
 
@@ -64,11 +64,17 @@ Oracles have a killswitch to pause all borrowing if an asset's price falls below
 
 Spark has a main open-source frontend at [spark.fi](https://app.spark.fi). The code is open-source and there are instruction to run the page locally as a developer. There are no dedicated instructions for self-hosting. Direct interaction with contract is not straight forward nor documented.
 
-However, SparkLend is accessible on third-party applications such as DeFiSaver and SummerFi. `sUSDS` (`USDS` in savings) can also be swapped back to `USDS` and `USDC` using common decentralized exchanges. These apps build an acceptable backup solution in case of failure of the official frontend and backend.
+However, SparkLend is accessible on third-party applications such as DeFiSaver and SummerFiPro. These apps build an acceptable backup solution in case of failure of the official frontend and backend.
 
 > Accesibility score: Low
 
-# Informational
+## Conclusion
+
+Spark has a critical dependency
+
+> Overall score: Stage 0
+
+# Reviewer Notes
 
 We encountered no notable difficulty when reviewing Spark.
 
@@ -96,9 +102,15 @@ Spark has two rewards modules named `SparkRewards` and `SparkLendRewards`. `Spar
 
 # Dependencies
 
-Spark has a core dependency in the Sky Protocol, a stage 0 protocol. This dependency is two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons this would severly impact Spark. In addition to that, all criticial permissions in spark are held by the Sky Governance.
+## Sky
+
+Spark has a critical dependency in the Sky Protocol, a stage 0 protocol. This dependency is two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons this would severly impact Spark. In addition to that, all criticial permissions in spark are held by the Sky Governance.
+
+## Circle's CCTP
 
 In order to bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protocol (CCTP) which relies on a set of centralized offchain signers to provide the bridging attestation. The offchain signers in the CCTP are not disclosed and we have not found any further specifications on the architecture of the attestation network, emphasizing the centralization risk.
+
+## Chronicle
 
 Currently, Chronicle oracles are used in SparkLend with no fallbacks for all asset prices.
 
@@ -129,17 +141,15 @@ The _Freezer_ multisig can freeze the movement of liquidity in the ALM while the
 
 | Name                                | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| DSPauseProxy (Sky DAO)              | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | Contract     | ❌          | ❌              | ❌                | ❌             |
-| DSChief (Sky DAO without delay)     | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | Contract     | ❌          | ❌              | ❌                | ❌             |
-| ESM (Sky Emergency Shutdown Module) | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | Contract     | ❌          | ❌              | ❌                | ❌             |
-| SubProxy ("Spark Proxy")            | [0x3300f198988e4C9C63F75dF86De36421f06af8c4](https://etherscan.io/address/0x3300f198988e4C9C63F75dF86De36421f06af8c4) | Contract     | ❌          | ❌              | ❌                | ❌             |
-| CapAutomator                        | [0x2276f52afba7Cf2525fd0a050DF464AC8532d0ef](https://etherscan.io/address/0x2276f52afba7Cf2525fd0a050DF464AC8532d0ef) | Contract     | ❌          | ❌              | ❌                | ❌             |
-| KillSwitchOracle                    | [0x909A86f78e1cdEd68F9c2Fe2c9CD922c401abe82](https://etherscan.io/address/0x909A86f78e1cdEd68F9c2Fe2c9CD922c401abe82) | Contract     | ❌          | ❌              | ❌                | ❌             |
 | SparkRewards                        | [0xF649956f43825d4d7295a50EDdBe1EDC814A3a83](https://etherscan.io/address/0xF649956f43825d4d7295a50EDdBe1EDC814A3a83) | MultiSig 2/3 | ❌          | ❌              | ❌                | ❌             |
 | SparkLend Rewards                   | [0x8076807464DaC94Ac8Aa1f7aF31b58F73bD88A27](https://etherscan.io/address/0x8076807464DaC94Ac8Aa1f7aF31b58F73bD88A27) | MultiSig 2/3 | ❌          | ❌              | ❌                | ❌             |
 | Freezer                             | [0x90D8c80C028B4C09C0d8dcAab9bbB057F0513431](https://etherscan.io/address/0x90D8c80C028B4C09C0d8dcAab9bbB057F0513431) | MultiSig 2/4 | ❌          | ❌              | ❌                | ❌             |
 | Relayer                             | [0x8a25A24EDE9482C4Fc0738F99611BE58F1c839AB](https://etherscan.io/address/0x8a25A24EDE9482C4Fc0738F99611BE58F1c839AB) | MultiSig 1/2 | ❌          | ❌              | ❌                | ❌             |
 | SparkLend Freezer                   | [0x44efFc473e81632B12486866AA1678edbb7BEeC3](https://etherscan.io/address/0x44efFc473e81632B12486866AA1678edbb7BEeC3) | MultiSig 2/5 | ❌          | ❌              | ❌                | ❌             |
+| DSPauseProxy (Sky DAO)              | [0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB](https://etherscan.io/address/0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB) | Contract     | N/A         | N/A             | N/A               | N/A            |
+| DSChief (Sky DAO without delay)     | [0x0a3f6849f78076aefaDf113F5BED87720274dDC0](https://etherscan.io/address/0x0a3f6849f78076aefaDf113F5BED87720274dDC0) | Contract     | N/A         | N/A             | N/A               | N/A            |
+| ESM (Sky Emergency Shutdown Module) | [0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58](https://etherscan.io/address/0x09e05fF6142F2f9de8B6B65855A1d56B6cfE4c58) | Contract     | N/A         | N/A             | N/A               | N/A            |
+| KillSwitchOracle                    | [0x909A86f78e1cdEd68F9c2Fe2c9CD922c401abe82](https://etherscan.io/address/0x909A86f78e1cdEd68F9c2Fe2c9CD922c401abe82) | Contract     | N/A         | N/A             | N/A               | N/A            |
 
 # Contracts and Permissions
 
