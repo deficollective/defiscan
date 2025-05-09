@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
+import { infraScoreToText } from "@/app/protocols/stageToRequisites";
 
 export const columns: ColumnDef<Project>[] = [
   {
@@ -94,10 +95,9 @@ export const columns: ColumnDef<Project>[] = [
           >
             {stage === "R"
               ? "Review"
-              : "Stage " +
-                (stage.toString().startsWith("I")
-                  ? stage.toString()[1]
-                  : stage)}
+              : stage?.toString().startsWith("I")
+                ? infraScoreToText[stage!.toString()]
+                : "Stage " + stage!}
           </Badge>
         </TooltipProvider>
       );

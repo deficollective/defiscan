@@ -13,6 +13,7 @@ import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Stage } from "@/lib/types";
+import { infraScoreToText } from "../stageToRequisites";
 
 interface ProtocolPageItemProps {
   params: {
@@ -176,7 +177,9 @@ export default async function ProtocolPageItem({
 
         {protocol.stage! != "O" ? (
           <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-            Stage
+            {!protocol.stage!.toString().startsWith("I")
+              ? "Stage"
+              : "Centralization"}
           </h1>
         ) : (
           <></>
@@ -190,19 +193,18 @@ export default async function ProtocolPageItem({
               className={`${
                 protocol.stage! === "R"
                   ? "bg-gray-500"
-                  : protocol.stage! === 0
+                  : protocol.stage! === 0 || protocol.stage! === "I0"
                     ? "bg-red-500"
-                    : protocol.stage! === 1
+                    : protocol.stage! === 1 || protocol.stage! === "I1"
                       ? "bg-yellow-500"
                       : "bg-green-500"
               } text-white py-1 rounded "text-lg"`}
             >
               {protocol.stage! === "R"
                 ? "Review"
-                : "Stage " +
-                  (protocol.stage?.toString().startsWith("I")
-                    ? protocol.stage!.toString()[1]
-                    : protocol.stage!)}
+                : protocol.stage?.toString().startsWith("I")
+                  ? infraScoreToText[protocol.stage!.toString()]
+                  : "Stage " + protocol.stage!}
             </Badge>
           </TooltipProvider>
         ) : (
@@ -237,16 +239,20 @@ export default async function ProtocolPageItem({
           </div>
         }
 
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Risks
-        </h1>
+        {!protocol.stage!.toString().startsWith("I") && (
+          <>
+            <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+              Risks
+            </h1>
 
-        <TooltipProvider>
-          <BigPizzaRosette
-            className="mt-auto"
-            values={getRiskDescriptions(protocol.risks!)}
-          />
-        </TooltipProvider>
+            <TooltipProvider>
+              <BigPizzaRosette
+                className="mt-auto"
+                values={getRiskDescriptions(protocol.risks!)}
+              />
+            </TooltipProvider>
+          </>
+        )}
         <Mdx code={protocol.body!} />
         <hr className="mt-12" />
         <div className="flex justify-center py-6 lg:py-10">

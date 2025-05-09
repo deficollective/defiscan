@@ -135,6 +135,7 @@ export function DataTable<TData, TValue>({
       stage: activeView === "defi" || activeView === "infrastructure",
       reasons: activeView === "others",
       tvl: activeView !== "infrastructure",
+      risks: activeView !== "infrastructure",
     }));
 
     // Reset and set filters based on the active view
