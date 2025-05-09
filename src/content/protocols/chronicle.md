@@ -38,7 +38,7 @@ There is a single `TimelockController` per chain with admin permissions on all o
 
 The `ValidatorRegistry` does _not_ directly affect the validators whitelisted (_lift_-ed) on the oracles. It is used to publicly prove that each validator knows the private key to their claimed public key. This prevents rogue key attacks in which a validator claims their public key is the sum of other public keys and thereby signs for multiple other validators at once.
 
-# Evaluation of Decentralization
+# Centralization
 
 ## Chain
 
@@ -62,19 +62,19 @@ Oracles and validators are listed on ChronicleLabs' [public dashboard](https://c
 
 ## Conclusion
 
-ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set which are protected with a 7-day exit window. The protocol relies on third-party entities which collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a decentralization stage equivalent to Stage 1, as a dependency.
+ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set which are protected with a 7-day exit window. The protocol relies on third-party entities which collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a **Medium Centralization**, equivalent to Stage 1, as a dependency.
 
-> Overall score: Stage 1
+> Overall score: Medium Centralization
 
-# Governance
+# Appendix
+
+## Security Council
 
 The multisig in charge of the `TimelockController` is a 2/3 multisig belonging to chronicle. It does not meet our security council requirements.
 
 | Name              | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | Internal Multisig | [0xC8910D85511dfe915630bfccB6bF98973e67F827](https://etherscan.org/address/0xC8910D85511dfe915630bfccB6bF98973e67F827) | Multisig 2/3 | ❌          | ✅              | ❌                | ❌             |
-
-# Contracts & Permissions
 
 ## Contracts¨
 
