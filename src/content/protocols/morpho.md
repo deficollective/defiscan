@@ -8,9 +8,9 @@ chain: "Ethereum"
 stage: 1
 reasons: []
 risks: ["L", "M", "M", "M", "L"]
-author: ["author-1", "author-2"]
+author: ["mmilien_"]
 submission_date: "2024-11-27"
-publish_date: "1970-01-01"
+publish_date: "2025-05-12"
 update_date: "1970-01-01"
 ---
 
