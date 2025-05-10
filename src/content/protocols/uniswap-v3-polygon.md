@@ -24,7 +24,7 @@ Uniswap v3 is an AMM that builds upon Uniswap v2 by introducing a concentrated l
 Uniswap v3 also introduces multiple fee tiers (0.01%, 0.05%, 0.3%, and 1%) to support different asset volatility profiles, allowing LPs to adjust their fee preferences based on expected risk and return. Additionally, it incorporates "range orders," which effectively turn liquidity positions into limit orders, further enhancing LP strategy flexibility.
 The protocol is deployed across multiple chains enabling a wide range of use cases across decentralized finance (DeFi) applications.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -64,7 +64,49 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Technical Analysis
+# Informational
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+No external dependency has been found.
+
+# Governance
+
+## Governance Decision Enforcement from L1 to Polygon
+
+When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract which calls `executeTransaction` on the Timelock contract.
+
+If a vote has passed and is queued that has changes for the Polygon deployment the payload must specify as target the L1 contract for Cross-chain messaging by Polygon called [FxRoot](https://etherscan.io/address/0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2). This in turn calls `syncState` on the [StateSender contract](https://etherscan.io/address/0x28e4F3a7f651294B9564800b2D01f35189A5bFbE). This emits an event `StateSynced(uint256 indexed id, address indexed contractAddress, bytes data)`.
+
+> "All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [[2]](#sources).
+
+The Execution Layer (Bor chain) Validators pick this up and include a transaction where [StateReceiver](https://polygonscan.com/address/0x0000000000000000000000000000000000001001) calls the function `onStateReceive` on [FxChild](https://polygonscan.com/address/0x8397259c983751DAf40400790063935a11afa28a) which calls the function ` processMessageFromRoot` on the [EthereumProxy](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374).
+
+This means that a sufficiently large validator set has the ability to censor Uniswap governance vote results that are to be executed on the Polygon chain or include invalid governance vote results.
+
+However, due to the limited permissions given to Uniswap governance, the impact of a censored/malicious governance vote result by the validators remains low.
+
+- [1] https://l2beat.com/scaling/projects/polygon-pos
+- [2] https://docs.polygon.technology/pos/architecture/bor/state-sync/
+
+## External Permission Owners and Security Council
+
+No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Polygon.
+
+| Name          | Account                                                                                                                  | Type                       | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- | ----------- | --------------- | ----------------- | -------------- |
+| EthereumProxy | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374) | Cross-chain proxy contract | N/A         | N/A             | N/A               | N/A            |
+
+## Exit Window
+
+As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol fees can be changed by the DAO. A Timelock protects the contracts and updates are governed by the GovernorBravo contract. The lock period is at least two days and up to 30 days for governance actions. When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
+Subsequently, governance actions initiated on Ethereum (L1) are enforced on Polygon (L2) with some guarantees (see [Governance Decision Enforcement from L1 to Polygon](#governance-decision-enforcement-from-l1-to-polygon)).
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -88,7 +130,7 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | v3StakerAddress                    | [0xe34139463bA50bD61336E0c446Bd8C0867c6fE65](https://polygonscan.com/address/0xe34139463bA50bD61336E0c446Bd8C0867c6fE65) |
 | EthereumProxy                      | [0x8a1B966aC46F42275860f905dbC75EfBfDC12374](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374) |
 
-## Permission owners
+## All Permission Owners
 
 | Name          | Account                                                                                                                  | Type                       |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
@@ -105,35 +147,3 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | ProxyAdmin       | transferOwnership | Updates the owner of the `ProxyAdmin` contract: the account with the rights to change the admin of the proxy and upgrade the `NonFungibleTokenPositionDescriptor` contract.                                                              | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 | ProxyAdmin       | upgrade           | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions.                                                                                                                 | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
 | ProxyAdmin       | upgradeAndCall    | Triggers the upgrade of the `NonFungibleTokenPositionDescriptor` contract which allows to change the token descriptions and then call a function in the new contract.                                                                    | EthereumProxy , controlled by TimeLocked DAO contract (GovernorBravo) on Ethereum |
-
-## Governance Decision Enforcement from L1 to Polygon
-
-When a vote has passed on the [Governor Contract](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) on Ethereum Mainnet, the decision gets queued by calling `queue` (the payload is then stored on the [Timelock contract](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC)). After the waiting period has passed any address can permissionessly call `execute` on the Governor contract which calls `executeTransaction` on the Timelock contract.
-
-If a vote has passed and is queued that has changes for the Polygon deployment the payload must specify as target the L1 contract for Cross-chain messaging by Polygon called [FxRoot](https://etherscan.io/address/0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2). This in turn calls `syncState` on the [StateSender contract](https://etherscan.io/address/0x28e4F3a7f651294B9564800b2D01f35189A5bFbE). This emits an event `StateSynced(uint256 indexed id, address indexed contractAddress, bytes data)`.
-
-> "All the validators on the Heimdall chain (Consensus Layer) receive this event and one of them, whoever wishes to get the transaction fees for state sync sends this transaction to Heimdall. Once state-sync transaction on Heimdall has been included in a block, it is added to pending state-sync list" [[2]](#sources).
-
-The Execution Layer (Bor chain) Validators pick this up and include a transaction where [StateReceiver](https://polygonscan.com/address/0x0000000000000000000000000000000000001001) calls the function `onStateReceive` on [FxChild](https://polygonscan.com/address/0x8397259c983751DAf40400790063935a11afa28a) which calls the function ` processMessageFromRoot` on the [EthereumProxy](https://polygonscan.com/address/0x8a1B966aC46F42275860f905dbC75EfBfDC12374).
-
-This means that a sufficiently large validator set has the ability to censor Uniswap governance vote results that are to be executed on the Polygon chain or include invalid governance vote results.
-
-However, due to the limited permissions given to Uniswap governance, the impact of a censored/malicious governance vote result by the validators remains low.
-
-## Dependencies
-
-No external dependency has been found.
-
-## Exit Window
-
-As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol fees can be changed by the DAO. A Timelock protects the contracts and updates are governed by the GovernorBravo contract. The lock period is at least two days and up to 30 days for governance actions. When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-Subsequently, governance actions initiated on Ethereum (L1) are enforced on Polygon (L2) with some guarantees (see [Governance Decision Enforcement from L1 to Polygon](#governance-decision-enforcement-from-l1-to-polygon)).
-
-# Security Council
-
-No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Polygon.
-
-# Sources
-
-- [1] https://l2beat.com/scaling/projects/polygon-pos
-- [2] https://docs.polygon.technology/pos/architecture/bor/state-sync/
