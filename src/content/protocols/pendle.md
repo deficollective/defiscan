@@ -111,6 +111,7 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 | PendlePrincipalToken                   | [0x50D2C7992b802Eef16c04FeADAB310f31866a545](https://etherscan.io/address/0x50D2C7992b802Eef16c04FeADAB310f31866a545) |
 | PendleYieldToken                       | [0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868](https://etherscan.io/address/0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) |
 | PendleMarketV3                         | [0x85667e484a32d884010cf16427d90049ccf46e97](https://etherscan.io/address/0x85667e484a32d884010cf16427d90049ccf46e97) |
+| PendleSwap                             | [0xd4e9B0d466789d7F6201442eecCBA6a75A552db0](https://etherscan.io/address/0xd4e9B0d466789d7F6201442eecCBA6a75A552db0) |
 
 
 ## Permission owners
