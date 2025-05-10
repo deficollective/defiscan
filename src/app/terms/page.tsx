@@ -223,42 +223,28 @@ export default function TermsPage() {
       </div>
 
       <h1 className="inline-block mt-10  tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-        Limited license; intellectual property; community generated content and
+        License; intellectual property; community generated content and
         feedback
       </h1>
 
       <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
         <p>
-          <strong>Limited license for User</strong>: Subject to these Terms and
-          your full compliance therewith, you are granted a limited, personal,
-          non-exclusive, non-commercial, non-sublicensable, at any time
-          revocable by the Collective at its sole discretion and
-          non-transferable license to use DeFiScan and the Content, in each case
-          solely for your personal use and only in line with the limitations
-          outlined in these Terms, particularly the Disclaimer above. You
-          particularly agree not to use DeFiScan or the Content for any
-          commercial purpose or as a basis for any (financial or non-financial)
-          decisions to use, participate in, invest in or in any other way
-          interact with any of the Protocols. Except for the foregoing license,
-          you have no other rights to DeFiScan or any Content, and you may not
-          modify, edit, copy, distribute, reproduce, publish, display, perform,
-          license, sell, rent, lease, loan, create derivative works of, create
-          any index, reverse engineer, alter, enhance, provide access to or in
-          any way exploit DeFiScan or the Content in any manner.
+          <strong>MIT license</strong>: DeFiScan and all Content is licensed
+          under the MIT open-source license, please refer to the DeFiScan GitHub repository.
+          You have no other rights to DeFiScan or any of the Content.
         </p>
 
         <p className="mt-4">
-          <strong>Intellectual property of the Collective</strong>: DeFiScan and the Content may
-          involve works protected under applicable intellectual property
-          legislation, particularly copyright legislation. Other than the
-          limited license outlined above, the Collective (or, where applicable,
+          <strong>Intellectual property of the Collective</strong>: DeFiScan and the Content involves works 
+          protected under applicable intellectual property
+          legislation, particularly copyright legislation. The Collective (or, where applicable,
           third-parties) retain all rights, titles and interests to any of the
           intellectual property, including copyrights, trademarks, designs,
           domain names, know-how, trade secrets, data and other intangible
           property rights ("<strong>IP Rights</strong>") in any way related to
           DeFiScan and nothing in these Terms or the wider communication of the
           Collective with respect to the DeFiScan should be understood as an assignment of any IP Rights
-          or any license other than what is outlined in the section above to any User.
+          or any license other than what is outlined in the section <strong>MIT license</strong> to any User.
         </p>
 
         <p className="mt-4">
