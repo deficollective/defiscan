@@ -150,24 +150,56 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 
 ## Permissions Arbitrum
 
-| Contract       | Function                    | Owner                             |
-| -------------- | --------------------------- | --------------------------------- |
-| EVM2EVMOffRamp | setOCR2Config               | RBACTimelock                      |
-| EVM2EVMOffRamp | transmit                    | Addresses from Executing Network  |
-| EVM2EVMOffRamp | transferOwnership           | RBACTimelock                      |
-| EVM2EVMOffRamp | acceptOwnership             | pending owner                     |
-| EVM2EVMOffRamp | setRateLimiterConfig        | RBACTimelock                      |
-| EVM2EVMOffRamp | setAdmin                    | RBACTimelock                      |
-| EVM2EVMOffRamp | updateRateLimitTokens       | RBACTimelock                      |
-| CommitStore    | setOCR2Config               | RBACTimelock                      |
-| CommitStore    | transmit                    | Addresses from Committing Network |
-| CommitStore    | transferOwnership           | RBACTimelock                      |
-| CommitStore    | acceptOwnership             | pending owner                     |
-| CommitStore    | setMinSeqNr                 | RBACTimelock                      |
-| CommitStore    | setLatestPriceEpochAndRound | RBACTimelock                      |
-| CommitStore    | resetUnblessedRoots         | RBACTimelock                      |
-| CommitStore    | pause                       | RBACTimelock                      |
-| CommitStore    | unpause                     | RBACTimelock                      |
+| Contract           | Function                    | Owner                                                             |
+| ------------------ | --------------------------- | ----------------------------------------------------------------- |
+| Router             | transferOwnership           | RBACTimelock                                                      |
+| Router             | acceptOwnership             | pending owner                                                     |
+| Router             | setWrappedNative            | RBACTimelock                                                      |
+| Router             | applyRampUpdates            | RBACTimelock                                                      |
+| Router             | recoverTokens               | RBACTimelock                                                      |
+| ARMProxy           | transferOwnership           | RBACTimelock                                                      |
+| ARMProxy           | acceptOwnership             | pending owner                                                     |
+| ARMProxy           | setARM                      | RBACTimelock                                                      |
+| RMNRemote          | transferOwnership           | RBACTimelock                                                      |
+| RMNRemote          | acceptOwnership             | pending owner                                                     |
+| RMNRemote          | setConfig                   | RBACTimelock                                                      |
+| RMNRemote          | curse                       | RBACTimelock                                                      |
+| RMNRemote          | uncurse                     | RBACTimelock                                                      |
+| EVM2EVMOnRamp      | setRateLimiterConfig        | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOnRamp      | setAdmin                    | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOnRamp      | transferOwnership           | RBACTimelock                                                      |
+| EVM2EVMOnRamp      | acceptOwnership             | pending owner                                                     |
+| EVM2EVMOnRamp      | forwardFromRouter           | Router                                                            |
+| EVM2EVMOnRamp      | setDynamicConfig            | RBACTimelock                                                      |
+| EVM2EVMOnRamp      | setFeeTokenConfig           | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOnRamp      | setTokenTransferFeeConfig   | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOnRamp      | setNops                     | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOnRamp      | payNops                     | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOnRamp      | withdrawNonLinkFees         | RBACTimelock or MCMS (0xe93D6A88555C4e3bDd288b756FFBBA2c25D74a7b) |
+| EVM2EVMOffRamp     | setOCR2Config               | RBACTimelock                                                      |
+| EVM2EVMOffRamp     | transmit                    | Addresses from Executing Network                                  |
+| EVM2EVMOffRamp     | transferOwnership           | RBACTimelock                                                      |
+| EVM2EVMOffRamp     | acceptOwnership             | pending owner                                                     |
+| EVM2EVMOffRamp     | setRateLimiterConfig        | RBACTimelock                                                      |
+| EVM2EVMOffRamp     | setAdmin                    | RBACTimelock                                                      |
+| EVM2EVMOffRamp     | updateRateLimitTokens       | RBACTimelock                                                      |
+| CommitStore        | setOCR2Config               | RBACTimelock                                                      |
+| CommitStore        | transmit                    | Addresses from Committing Network                                 |
+| CommitStore        | transferOwnership           | RBACTimelock                                                      |
+| CommitStore        | acceptOwnership             | pending owner                                                     |
+| CommitStore        | setMinSeqNr                 | RBACTimelock                                                      |
+| CommitStore        | setLatestPriceEpochAndRound | RBACTimelock                                                      |
+| CommitStore        | resetUnblessedRoots         | RBACTimelock                                                      |
+| CommitStore        | pause                       | RBACTimelock                                                      |
+| CommitStore        | unpause                     | RBACTimelock                                                      |
+| TokenAdminRegistry | transferOwnership           | RBACTimelock                                                      |
+| TokenAdminRegistry | acceptOwnership             | pending owner                                                     |
+| TokenAdminRegistry | setPool                     | Token Admin (each CCIP token has its own admin)                   |
+| TokenAdminRegistry | transferAdminRole           | Token Admin (each CCIP token has its own admin)                   |
+| TokenAdminRegistry | acceptAdminRole             | pending owner                                                     |
+| TokenAdminRegistry | proposeAdministrator        | RBACTimelock                                                      |
+| TokenAdminRegistry | addRegistryModule           | RBACTimelock                                                      |
+| TokenAdminRegistry | removeRegistryModule        | RBACTimelock                                                      |
 
 ## Role Owners `RBACTimelock`
 
