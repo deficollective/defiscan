@@ -18,55 +18,39 @@ update_date: "1970-01-01"
 
 # Summary
 
-CCIP is a cross-chain protocol that allows any protocol to use a multi-purpose bridge to transfer messages and tokens from one blockchain to another.
+CCIP is a cross-chain protocol that allows any smart contract protocol to use a multi-purpose bridge to transfer messages and tokens from one blockchain to another.
 
-This report is work in progress and currently only covers scanned permissions and the owners of these permission of the cross-chain communication infrastructure between Ethereum Mainnet and Arbitrum based on smart contract analysis.
-
-# Ratings
-
-## Upgradeability
-
-This report did not analyse all smart contracts permissions that build the onchain component of the CCIP infrastructure. Three functions that expose upgradeability risk are `setConfig` on `RMN` contract, `setOCR2Config` on `CommitStore` and `setOCR2Config` on the `EVM2EVMOfframp` contract.
-
-These functions allow to set the signer and transmitter addresses of proofs and messages that form the cross-chain messages. Updating the representing addresses to a smaller set can introduce centralisation risk that could be exploited to trigger malicious cross-chain messages, as minting/releasing tokens on the destination chain, without sufficient collateralisation on the origin chain.
-
-> Upgradeability Score: high
-
-## Exit Window
-
-Updates to Smart Contracts that build the infrastructure of CCIP need to be scheduled and executed by the `RBACTimelock` contract. The timelock is always subject to the proposing MCMS's decision but cannot be lower than 3 hours.
-
-The Bypasser Role owners can even circumvent the timelock and execute their calls immediately.
-
-> Exit Window Score: high
-
-## Conclusion
-
-CCIP smart contracts expose centralisatized permissions to update the set of nodes that can push cross-chain messages. Updates via the Bypasser role are immediately executed. The CCIP protocol is rated as a Stage 0 equivalent.
-
-The CCIP protocol could advance to Stage 1 if the Bypasser Role owner adhered to the Security Council Requirements. Publishing the owners of the signers and having more than 50% outside signers (in contract to insider signers) would make the MCMS a security council.
+This report only covers scanned permissions and the owners of these permission of the cross-chain communication infrastructure between Ethereum Mainnet and Arbitrum based on smart contract analysis. The code of the oracle networks and centralization vectors thereof are not part of the scope.
 
 # Protocol Analysis
 
-## Action flow of CCIP
+There are three oracle networks that help to make CCIP as a bridge secure. Each network has a distinct role inside the cross chain communication flow.
 
-There are three networks that help to make CCIP as a bridge secure. Each network has a distinct role inside the cross chain communication flow.
+There is the _Risk Management Network_ which monitors the chain, and can halt the cross-chain flow of messages and tokens to and from a network. Additionally, the _Risk Management Network_ “blesses” or “curses” messages that should be moved cross chain. When the count of nodes blessing a message reaches the quorum, the message can be executed on the destination chain.
 
-There is the risk network which monitors the chain, and can halt the cross-chain flow to and from this network. Additionally it “blesses” or “curses” messages that should be moved cross chain.
+Additionally, there is the _Committing Network_ which observes events on the source chain that signal messages that should be moved cross chain. If it detects such a transaction, the _Committing Network_ posts a root to the `CommitStore` contract on the destination chain.
 
-Additionally, there is the committing network which observes events on the source chain that signals messages that should be moved cross chain. If it detects such a transaction it posts a root to the `CommitStore` contract on the destination chain.
+Lastly, there is the _Executing Network_ that observes the transactions and if roots are posted to the `CommitStore` and the roots are blessed, the executing network triggers the message to be executed on the target chain with the blessed messages.
 
-Lastly, there is the executing network that observes the transactions and if roots are posted to the `CommitStore` and the roots are blessed, the executing network triggers the message to be executed on the target chain with the blessed messages.
+![Onchain Infrastructure](./diagrams/CCIP_Infrastructure.png)
 
-# Governance
+# Centralization
 
-The CCIP protocol is governed by the `RBACTimelock` contract. The governance can change parameters and the onchain addresses representing nodes in each network (Risk, Committing, Executing).
+## Governance
 
-The governance usually works by proposing and executing. The `RBACTimelock` contract enforces a minimum timelock, which is set to 3 hours. Particpants of governance can propose transactions by calling `scheduleBatch` on the `RBACTimelock` contract. Any address with the Role `Proposer` can schedule transactions to be executed (see role owner table). The scheduled transactions are then ready to be executed after the timelock has passed. During the time of the exit window the scheduled transactions can also be cancelled. When no cancellation happened execution is permissionless.
+The smart contracts of the CCIP protocol are governed by the `RBACTimelock` contract. The governance can change parameters and the onchain addresses of the nodes in each network (Risk, Committing, Executing).
 
-For the case of an emergency a Bypasser role is assigned to a Multichain Multisig to execute transactions instantaneously.
+Governance actions are proposed by multichain multisigs (MCMSs) which have the Proposer role by calling `scheduleBatch` on the `RBACTimelock` contract (see [role owner table](#role-owners-rbactimelock)). The `RBACTimelock` contract enforces a minimum timelock, which is set to 3 hours. Particpants of governance can choose a specific timelock which is above or equal to the minimum timelock. The scheduled transactions are then ready to be executed after the timelock has passed. During the time of the exit window the scheduled transactions is object to cancellation by MCMSs with the Canceller role. With no cancellation during the exit window period execution becomes permissionless.
+
+A Bypasser role is assigned to a Multichain Multisig (MCMS) for the case of an emergency to execute transactions instantaneously without the possibility to cancel the transaction.
 
 The `RBACTimelock` (Governance) contract is deployed to any chain which CCIP is connecting.
+
+## Upgradeability
+
+This report did not analyse all smart contracts permissions that can be found in the smart contract foundation of the CCIP infrastructure. But three functions that expose upgradeability risk are `setConfig` on `RMN` contract, `setOCR2Config` on `CommitStore` and `setOCR2Config` on the `EVM2EVMOfframp` contract.
+
+These functions allow to set the signer and transmitter addresses of the cross-chain messages for the three different networks. Updating the representing addresses to a smaller set can introduce centralization risk that could be exploited to trigger malicious cross-chain messages, such as minting/releasing tokens on the destination chain, without sufficient collateralization on the origin chain.
 
 ## Multichain Multisig (MCMS)
 
@@ -81,23 +65,27 @@ The Bypasser role can call any contract with arbitrary data via the `RBACTimeloc
 
 The governance (`RBACTimelock`) owns the contracts in the CCIP smart contract system. The Bypasser has thus immediate and ultimate control over many functions (see permission table).
 
-The Bypasser controls crucial functions on the `CommitStore` contract, the `RMN` contract (Risk Management Network Smart Contract) and the `EVM2EVMOffRamp` contract. Since the Bypasser signers are not attested to belong to different entitites, the risk remains that a single actor or an insufficiently decentralised group of actors can update the previously mentioned contract to exploit funds from CCIP token pools.
+The Bypasser controls crucial functions on the `CommitStore` contract, the `RMN` contract (Risk Management Network Smart Contract) and the `EVM2EVMOffRamp` contract. Since the Bypasser signers are not attested to belong to different entitites, the risk remains that a single actor or an insufficiently decentralised group of actors can update the previously mentioned contracts to exploit funds from CCIP token pools.
 
 The MCMS with Bypasser role could reduce the set of oracle nodes for the three networks by calling `RMN.setConfig`, `CommitStore.setOCR2Config` and `EVM2EVMOfframp.setOCR2Config` and only list addresses that the Bypasser group controls. In a next step the malicious actor would mint or release tokens on the destination chain (source) to addresses it self controls, by posting data to the `CommitStore`, blessing with the controlled Risk Management Network signers and executing the malicious transactions by passing messages that match the root posted to the `CommitStore`.
 
-![Onchain Infrastructure](./diagrams/CCIP_Infrastructure.png)
-
-# Security Council
+## Security Council
 
 | Multisig / Role | Address                                    | Type | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
 | --------------- | ------------------------------------------ | ---- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
 | BYPASSER        | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
 
+## Conclusion
+
+CCIP smart contracts expose centralized permissions to update the set of nodes that can push cross-chain messages. Updates via the Bypasser role are immediately executed. The CCIP protocol is rated as a highly centralized.
+
+The CCIP protocol could advance to Medium Centralization if the Bypasser Role owner adhered to the Security Council Requirements. Publishing the owners of the signers and having more than 50% outside signers (in contract to insider signers) would make the MCMS a security council.
+
 # Reviewer notes
 
-The review was not exhaustive and does not cover all permissions in the CCIP system and does not cover all permissioned functions of the two deployments on Ethereum Mainnet and Arbitrum. The review focuses on the most important centralisation vector (weakest link logic).
+The review was not exhaustive and does not cover all permissions in the CCIP system and does not cover all permissioned functions of the two deployments on Ethereum Mainnet and Arbitrum. The review focuses on the most important centralisation vector (weakest link).
 
-# Contracts & Permissions
+# Appendix
 
 ## Contracts
 
@@ -180,3 +168,98 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | CommitStore    | resetUnblessedRoots         | RBACTimelock                      |
 | CommitStore    | pause                       | RBACTimelock                      |
 | CommitStore    | unpause                     | RBACTimelock                      |
+
+## Role Owners `RBACTimelock`
+
+| Role name      | ID                                                                 | Role Owners                                                                                                                                                                                                                                                            | Role Admin |
+| -------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| ADMIN_ROLE     | 0xa49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693c21775 | 0x44835bbba9d40deda9b64858095ecfb2693c9449                                                                                                                                                                                                                             | ADMIN_ROLE |
+| PROPOSER_ROLE  | 0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1 | 0xe53289f32c8e690b7173aa33affe9b6b0cb0012f, 0xd6597750bf74dcaec57e0f9ad2ec998d837005bf, 0xd9757aa52907798d1af2fda7a6c0cc733e5acf7e                                                                                                                                     | ADMIN_ROLE |
+| CANCELLER_ROLE | 0xfd643c72710c63c0180259aba6b2d05451e3591a24e58b62239378085726f783 | 0xe53289f32c8e690b7173aa33affe9b6b0cb0012f, 0xad97c0270a243270136e40278155c12ce7c7f87b, 0xd6597750bf74dcaec57e0f9ad2ec998d837005bf, 0xa8d5e1daa6d8b94f11d77b7e09de846292ef69ff, 0x117ec8ad107976e1dbcc21717ff78407bc36aadc, 0xd9757aa52907798d1af2fda7a6c0cc733e5acf7e | ADMIN_ROLE |
+| BYPASSER_ROLE  | 0xa1b2b8005de234c4b8ce8cd0be058239056e0d54f6097825b5117101469d5a8d | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc                                                                                                                                                                                                                             | ADMIN_ROLE |
+| EXECUTOR_ROLE  | 0xd8aa0f3194971a2a116679f7c2090f6939c8d4e01a2a8d7e41d55e5351469e63 | 0x82b8a19497fa25575f250a3dcffcd2562b575a2e                                                                                                                                                                                                                             | ADMIN_ROLE |
+
+## Signers of Bypasser MCMS
+
+![MCMS](./diagrams/CCIP_MCMS.png)
+
+| Signers Group 1                            |
+| ------------------------------------------ |
+| 0x146cae49dbe1b1d1968fc4652814740706548952 |
+| 0x2b88575011c5e11389ddb50d28d31c7d06b352a0 |
+| 0x2bbb172cd88dcad64cbe762dcc53e6f96a17d1d6 |
+| 0x43640f208956c7d49e04f40ff95df818643b76aa |
+| 0x4e509c60b3e916644de441298595fed12c4ac926 |
+| 0x570f41d83b1031d382f641b9a532a8d7cbd7a695 |
+| 0x6924e54339c7f28730dbb4b842a7fe86ed01ecf7 |
+| 0x9079410666ed02725ee9d148398cee26397c2a36 |
+| 0x925d7ea0ade586dbfd56a942bb297286ce428c79 |
+| 0xa3177f64efe98422e782bc17be7971f01187b7cf |
+
+| Signers Group 2                            |
+| ------------------------------------------ |
+| 0x5bd3a90e94bb8aa6fe6ccf494e292f5f707b92d6 |
+| 0x5c33bf560f29e04df8a666493aad8e47eea9b1c8 |
+
+| Signers Group 3                            |
+| ------------------------------------------ |
+| 0x3c6ce61b611e3b41289c2fafa5bc4e150dd88de3 |
+| 0x48a094f7a354d8fad7263ea2a82391d105df6628 |
+
+| Signers Group 4                            |
+| ------------------------------------------ |
+| 0x2b73763722378ab2013cb0877946f69fc3727fd8 |
+| 0xa35b7219521134caf52dccad44d604335b64a4fb |
+| 0xd3094f770579afd66711847ce9e9c42d10ba2264 |
+
+| Signers Group 5                            |
+| ------------------------------------------ |
+| 0x180159135c9b93c59d16ea1a690e465d22c5eb67 |
+| 0x7eff312905dedb38bf8f07befadff96376154374 |
+| 0xc90788d9168f83dec518ab7c0445ad1ec53554d7 |
+
+| Signers Group 6                            |
+| ------------------------------------------ |
+| 0x70c2ddc97c4faea760027d45e5de4d1e2ad2b9a5 |
+| 0x9453e18f03a36e2a2c70598de520bd24434d2d1d |
+| 0xd3e2da792e806556517124f03f12e557045951e7 |
+
+| Signers Group 7                            |
+| ------------------------------------------ |
+| 0x124ba7e2188074335a0e9b12b449ad5781a73d60 |
+| 0x6b0f508b8cbef970faf9e8a28b9b4c6f1fd3afae |
+
+| Signers Group 8                            |
+| ------------------------------------------ |
+| 0x06e5891d9b2ee77740355a309baf49caab672f98 |
+| 0x14a8f3b302bbfa7f2f2ac2f4515548370bc7badc |
+| 0x2cd36141d4aefb8e57209770b965043ed3129d9f |
+| 0x56b167decd5fc4e3bbc07b3b4e1f30e74534f9dd |
+| 0x6bfbf6bc4bc5cd20768daa6f58f0743baff2e5f4 |
+| 0x9e2fd656effff4cbac9fd45c017d4dd8fbc550e5 |
+| 0xa42c8570771240d1e2f3211064a7c7472cc05b7d |
+
+| Signers Group 10                           |
+| ------------------------------------------ |
+| 0x41eadbc688797a02bfabe48472995833489ce69d |
+| 0x480496c0884d61f2f56707adb11697f8018898c2 |
+| 0x7052cb84079905400ea52b635cab6a275fda8823 |
+| 0xe062e7d123ac8df480c56147f911144f55c10f88 |
+
+| Signers Group 11                           |
+| ------------------------------------------ |
+| 0x1c6460cfe32916196f6977b5442b0f98a826d880 |
+| 0x36fdbda6085d4dfa63da90839432dde9373970f0 |
+| 0x745b9329ccf53556e3c5f1fd1e4e9d0e91ad2514 |
+| 0x776d5b14ef1d5c58b0d48b53114f2aa0faccb307 |
+| 0xae735fd5e74887064dff99c637f291cae5485a75 |
+
+| Signers Group 12                           |
+| ------------------------------------------ |
+| 0x21ac2a1d6ee437fb11a6f1933c5d1d22c714b922 |
+| 0x9d0d65cd6e46b86f88ff021d8f5ee58fe8ce2882 |
+| 0x9e318d85d42f7e5b8b4fb2fb2d706c4c04d1549e |
+| 0xa8030f40032e88552519edfc448523d677b29661 |
+| 0xc19beb494ba0bc57e5f967706a24bafb6da7bcd7 |
+| 0xd844665361adba29cd1259ebde9b547ece2ab0e7 |
+| 0xecdd1737e54530d7b05ad309b9b365cdc0084fd0 |
