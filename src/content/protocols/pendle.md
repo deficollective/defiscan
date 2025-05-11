@@ -74,44 +74,59 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 ⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
-| Contract Name                          | Address                                                                                                               |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| PENDLE                                 | [0x808507121b80c02388fad14726482e061b8da827](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827) |
-| WETH9                                  | [0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2](https://etherscan.io/address/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2) |
-| sySwapper                              | [0x248087C69e72E211b7264720Bf6cC5A954F98CDE](https://etherscan.io/address/0x248087C69e72E211b7264720Bf6cC5A954F98CDE) |
-| BaseSplitCodeFactoryContract           | [0x35878C2Cff38cC4032E85283183428170BA618A2](https://etherscan.io/address/0x35878C2Cff38cC4032E85283183428170BA618A2) |
-| PendleGovernanceProxy                  | [0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e](https://etherscan.io/address/0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e) |
-| pendleSwap                             | [0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212](https://etherscan.io/address/0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212) |
-| PendlePYLpOracle                       | [0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2](https://etherscan.io/address/0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2) |
-| PendleYieldContractFactory             | [0x35A338522a435D46f77Be32C70E215B813D0e3aC](https://etherscan.io/address/0x35A338522a435D46f77Be32C70E215B813D0e3aC) |
-| PendleMarketFactoryV3                  | [0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050](https://etherscan.io/address/0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050) |
-| PoolDeployHelper                       | [0x4Df98410c95737FD646D2413AC6CAFc1c04834b9](https://etherscan.io/address/0x4Df98410c95737FD646D2413AC6CAFc1c04834b9) |
-| PendleLimitRouter                      | [0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321](https://etherscan.io/address/0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321) |
-| ProxyAdmin                             | [0xA28c08f165116587D4F3E708743B4dEe155c5E64](https://etherscan.io/address/0xA28c08f165116587D4F3E708743B4dEe155c5E64) |
-| Reflector                              | [0x5039Da22E5126e7c4e9284376116716A91782faF](https://etherscan.io/address/0x5039Da22E5126e7c4e9284376116716A91782faF) |
-| VotingEscrowPendleMainchain            | [0x4f30A9D41B80ecC5B94306AB4364951AE3170210](https://etherscan.io/address/0x4f30A9D41B80ecC5B94306AB4364951AE3170210) |
-| PendleMsgSendEndpointUpg               | [0x07b1014c88f14C9E910092526db57A20052E989F](https://etherscan.io/address/0x07b1014c88f14C9E910092526db57A20052E989F) |
-| PendleVotingControllerUpg              | [0x44087E105137a5095c008AaB6a6530182821F2F0](https://etherscan.io/address/0x44087E105137a5095c008AaB6a6530182821F2F0) |
-| PendleGaugeControllerMainchainUpg      | [0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57](https://etherscan.io/address/0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57) |
-| PendleFeeDistributor                   | [0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2](https://etherscan.io/address/0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2) |
-| PendleFeeDistributorV2                 | [0x8C237520a8E14D658170A633D96F8e80764433b9](https://etherscan.io/address/0x8C237520a8E14D658170A633D96F8e80764433b9) |
-| PendleMultiTokenMerkleDistributor      | [0x3942F7B55094250644cFfDa7160226Caa349A38E](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E) |
-| PendleSparkLinearDiscountOracleFactory | [0xA9A924A4BB95509F77868E086154C25e934F6171](https://etherscan.io/address/0xA9A924A4BB95509F77868E086154C25e934F6171) |
-| PendleChainlinkOracleFactory           | [0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee](https://etherscan.io/address/0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee) |
-| PendleRouterStatic                     | [0x263833d47eA3fA4a30f269323aba6a107f9eB14C](https://etherscan.io/address/0x263833d47eA3fA4a30f269323aba6a107f9eB14C) |
-| PendleRouterV4                         | [0x888888888889758F76e7103c6CbF23ABbF58F946](https://etherscan.io/address/0x888888888889758F76e7103c6CbF23ABbF58F946) |
-| ActionAddRemoveLiqV3                   | [0x663C21103915B68e9dA797CfdF3cAb01a037D5Ff](https://etherscan.io/address/0x663C21103915B68e9dA797CfdF3cAb01a037D5Ff) |
-| ActionSwapPTV3                         | [0xd8D200d9A713A1c71cF1e7F694B14E5F1D948b15](https://etherscan.io/address/0xd8D200d9A713A1c71cF1e7F694B14E5F1D948b15) |
-| ActionSwapYTV3                         | [0x4a03Ce0a268951d04E187B1CF48075eE69266e27](https://etherscan.io/address/0x4a03Ce0a268951d04E187B1CF48075eE69266e27) |
-| ActionMiscV3                           | [0x373Dba2055Ad40cb4815148bC47cd1DC16e92E44](https://etherscan.io/address/0x373Dba2055Ad40cb4815148bC47cd1DC16e92E44) |
-| ActionSimple                           | [0x852e59252c94716F0df19B52b36512f6C9297a96](https://etherscan.io/address/0x852e59252c94716F0df19B52b36512f6C9297a96) |
-| ActionCallbackV3                       | [0x997FBC511a8Ad11F84a400feACD66E2A3fa805d2](https://etherscan.io/address/0x997FBC511a8Ad11F84a400feACD66E2A3fa805d2) |
-| ActionStorageV4                        | [0x6a0Ed0A9193FCBe7ae9B0F3D90F88e365Cca64fC](https://etherscan.io/address/0x6a0Ed0A9193FCBe7ae9B0F3D90F88e365Cca64fC) |
-| PendleERC4626SYV2                      | [0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0](https://etherscan.io/address/0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) |
-| PendlePrincipalToken                   | [0x50D2C7992b802Eef16c04FeADAB310f31866a545](https://etherscan.io/address/0x50D2C7992b802Eef16c04FeADAB310f31866a545) |
-| PendleYieldToken                       | [0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868](https://etherscan.io/address/0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) |
-| PendleMarketV3                         | [0x85667e484a32d884010cf16427d90049ccf46e97](https://etherscan.io/address/0x85667e484a32d884010cf16427d90049ccf46e97) |
-| PendleSwap                             | [0xd4e9B0d466789d7F6201442eecCBA6a75A552db0](https://etherscan.io/address/0xd4e9B0d466789d7F6201442eecCBA6a75A552db0) |
+| Contract Name                                       | Address                                                                                                               |
+|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| PENDLE                                              | [0x808507121b80c02388fad14726482e061b8da827](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827) |
+| WETH9                                               | [0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2](https://etherscan.io/address/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2) |
+| sySwapper                                           | [0x248087C69e72E211b7264720Bf6cC5A954F98CDE](https://etherscan.io/address/0x248087C69e72E211b7264720Bf6cC5A954F98CDE) |
+| BaseSplitCodeFactoryContract                        | [0x35878C2Cff38cC4032E85283183428170BA618A2](https://etherscan.io/address/0x35878C2Cff38cC4032E85283183428170BA618A2) |
+| PendleGovernanceProxy (Proxy)                       | [0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e](https://etherscan.io/address/0x2aD631F72fB16d91c4953A7f4260A97C2fE2f31e) |
+| PendleGovernanceProxy (Implementation)              | [0x41dd1bd32a1db1460e7253969d591132f75f74d6](https://etherscan.io/address/0x41dd1bd32a1db1460e7253969d591132f75f74d6) |
+| PendleRouterV4                                      | [0x888888888889758F76e7103c6CbF23ABbF58F946](https://etherscan.io/address/0x888888888889758F76e7103c6CbF23ABbF58F946) |
+| ActionAddRemoveLiqV3                                | [0x663C21103915B68e9dA797CfdF3cAb01a037D5Ff](https://etherscan.io/address/0x663C21103915B68e9dA797CfdF3cAb01a037D5Ff) |
+| ActionSwapPTV3                                      | [0xd8D200d9A713A1c71cF1e7F694B14E5F1D948b15](https://etherscan.io/address/0xd8D200d9A713A1c71cF1e7F694B14E5F1D948b15) |
+| ActionSwapYTV3                                      | [0x4a03Ce0a268951d04E187B1CF48075eE69266e27](https://etherscan.io/address/0x4a03Ce0a268951d04E187B1CF48075eE69266e27) |
+| ActionMiscV3                                        | [0x373Dba2055Ad40cb4815148bC47cd1DC16e92E44](https://etherscan.io/address/0x373Dba2055Ad40cb4815148bC47cd1DC16e92E44) |
+| ActionSimple                                        | [0x852e59252c94716F0df19B52b36512f6C9297a96](https://etherscan.io/address/0x852e59252c94716F0df19B52b36512f6C9297a96) |
+| ActionCallbackV3                                    | [0x997FBC511a8Ad11F84a400feACD66E2A3fa805d2](https://etherscan.io/address/0x997FBC511a8Ad11F84a400feACD66E2A3fa805d2) |
+| ActionStorageV4                                     | [0x6a0Ed0A9193FCBe7ae9B0F3D90F88e365Cca64fC](https://etherscan.io/address/0x6a0Ed0A9193FCBe7ae9B0F3D90F88e365Cca64fC) |
+| PendleRouterStatic                                  | [0x263833d47eA3fA4a30f269323aba6a107f9eB14C](https://etherscan.io/address/0x263833d47eA3fA4a30f269323aba6a107f9eB14C) |
+| ActionStorageStatic                                 | [0x4efc8c366d3872c214ea0dd8cdff85d51fc0a776](https://etherscan.io/address/0x4efc8c366d3872c214ea0dd8cdff85d51fc0a776) |
+| PendleSwap                                          | [0xd4e9B0d466789d7F6201442eecCBA6a75A552db0](https://etherscan.io/address/0xd4e9B0d466789d7F6201442eecCBA6a75A552db0) |
+| PendlePYLpOracle (Proxy)                            | [0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2](https://etherscan.io/address/0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2) |
+| PendlePYLpOracle (Implementation)                   | [0x14418800e0b4c971905423aa873e83355922428c](https://etherscan.io/address/0x14418800e0b4c971905423aa873e83355922428c) |
+| PendleYieldContractFactory (yieldContractFactoryV5) | [0x35A338522a435D46f77Be32C70E215B813D0e3aC](https://etherscan.io/address/0x35A338522a435D46f77Be32C70E215B813D0e3aC) |
+| PendleMarketFactoryV3 (marketFactoryV5)             | [0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050](https://etherscan.io/address/0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050) |
+| PendlePoolDeployHelper                              | [0x4Df98410c95737FD646D2413AC6CAFc1c04834b9](https://etherscan.io/address/0x4Df98410c95737FD646D2413AC6CAFc1c04834b9) |
+| PendlePoolDeployHelperV2                            | [0xF642d8Daa026B8aEd6dFE82FACbA2E077AF199E2](https://etherscan.io/address/0xF642d8Daa026B8aEd6dFE82FACbA2E077AF199E2) |
+| PendleLimitRouter (Proxy)                           | [0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321](https://etherscan.io/address/0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321) |
+| PendleLimitRouter (Implementation)                  | [0xcbefc0b1fb24995883e31f8e24cb78c25a9f51ab](https://etherscan.io/address/0xcbefc0b1fb24995883e31f8e24cb78c25a9f51ab) |
+| ProxyAdmin                                          | [0xA28c08f165116587D4F3E708743B4dEe155c5E64](https://etherscan.io/address/0xA28c08f165116587D4F3E708743B4dEe155c5E64) |
+| Reflector                                           | [0x73d5DBF81A4f3bFa7b335e6a2d4638D6017a4fA8](https://etherscan.io/address/0x73d5DBF81A4f3bFa7b335e6a2d4638D6017a4fA8) |
+| PendleCommonPoolDeployHelperV2 (Proxy)              | [0x2Ed473F528E5B320f850d17ADfe0e558f0298aA9](https://etherscan.io/address/0x2Ed473F528E5B320f850d17ADfe0e558f0298aA9) |
+| PendleCommonPoolDeployHelperV2 (Implementation)     | [0x1bd53748cb557da4cfe7c535f6dcb3bcec38d055](https://etherscan.io/address/0x1bd53748cb557da4cfe7c535f6dcb3bcec38d055) |
+| PendleCommonSYFactory (Proxy)                       | [0x466ced3b33045ea986b2f306c8d0aa8067961cf8](https://etherscan.io/address/0x466ced3b33045ea986b2f306c8d0aa8067961cf8) |
+| PendleCommonSYFactory (Implementation)              | [0x3ba05f8989262e0637c6350437d0db7f14fbda96](https://etherscan.io/address/0x3ba05f8989262e0637c6350437d0db7f14fbda96) |
+| PendleSparkLinearDiscountOracleFactory              | [0x34C91651A070664279866E5f3d6B4d5F65cbbFFb](https://etherscan.io/address/0x34C91651A070664279866E5f3d6B4d5F65cbbFFb) |
+| PendleChainlinkOracleFactory                        | [0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee](https://etherscan.io/address/0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee) |
+| VotingEscrowPendleMainchain                         | [0x4f30A9D41B80ecC5B94306AB4364951AE3170210](https://etherscan.io/address/0x4f30A9D41B80ecC5B94306AB4364951AE3170210) |
+| PendleMsgSendEndpointUpg (Proxy)                    | [0x07b1014c88f14C9E910092526db57A20052E989F](https://etherscan.io/address/0x07b1014c88f14C9E910092526db57A20052E989F) |
+| PendleMsgSendEndpointUpg (Implementation)           | [0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a) |
+| PendleVotingControllerUpg (Proxy)                   | [0x44087E105137a5095c008AaB6a6530182821F2F0](https://etherscan.io/address/0x44087E105137a5095c008AaB6a6530182821F2F0) |
+| PendleVotingControllerUpg (Implementation)          | [0x2ddfe90808e6a4679575c0f727d3f2f104fba604](https://etherscan.io/address/0x2ddfe90808e6a4679575c0f727d3f2f104fba604) |
+| PendleGaugeControllerMainchainUpg (Proxy)           | [0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57](https://etherscan.io/address/0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57) |
+| PendleGaugeControllerMainchainUpg (Implementation)  | [0x7762cbfa8f62999a8a40d800b751686e99a31c9a](https://etherscan.io/address/0x7762cbfa8f62999a8a40d800b751686e99a31c9a) |
+| PendleMultiTokenMerkleDistributor                   | [0x3942F7B55094250644cFfDa7160226Caa349A38E](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E) |
+| ERC1967Proxy (externalRewardsDistributor)           | [0xae898a7d07f8e27f25e13d0f351a7401f9a5bf9d](https://etherscan.io/address/0xae898a7d07f8e27f25e13d0f351a7401f9a5bf9d) |
+| PendleFeeDistributor (Proxy)                        | [0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2](https://etherscan.io/address/0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2) |
+| PendleFeeDistributor (Implementation)               | [0xb0caa67c712d96809f2abaf2c95369ef942ce8cb](https://etherscan.io/address/0xb0caa67c712d96809f2abaf2c95369ef942ce8cb) |
+| PendleFeeDistributorV2 (Proxy)                      | [0x8C237520a8E14D658170A633D96F8e80764433b9](https://etherscan.io/address/0x8C237520a8E14D658170A633D96F8e80764433b9) |
+| PendleFeeDistributorV2 (Implementation)             | [0xafaae49c7684a2f386eb18569966604973f9d83d](https://etherscan.io/address/0xafaae49c7684a2f386eb18569966604973f9d83d) |
+| PendleERC4626SYV2 (Example)                         | [0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0](https://etherscan.io/address/0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) |
+| PendlePrincipalToken (Example)                      | [0x50D2C7992b802Eef16c04FeADAB310f31866a545](https://etherscan.io/address/0x50D2C7992b802Eef16c04FeADAB310f31866a545) |
+| PendleYieldToken (Example)                          | [0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868](https://etherscan.io/address/0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) |
+| PendleMarketV3 (Example)                            | [0x85667e484a32d884010cf16427d90049ccf46e97](https://etherscan.io/address/0x85667e484a32d884010cf16427d90049ccf46e97) |
+
 
 
 ## Permission owners
