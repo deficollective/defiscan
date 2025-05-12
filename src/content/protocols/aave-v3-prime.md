@@ -22,7 +22,7 @@ The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and
 
 Different Aave protocol _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _Prime_ (Lido) instance.
 
-# Scores
+# Ratings
 
 ## Chain
 
@@ -61,7 +61,7 @@ A notable difference to the _Core_ instance is the introduced dependency on a Ri
 
 ### Re-used modules
 
-For upgradeability risk assessment on shared modules between the instances on mainnet, please read our report on the core instance.
+For upgradeability risk assessment on shared modules between the instances on mainnet, please read our [report](/protocols/aave) on the core instance.
 
 Shared modules
 
