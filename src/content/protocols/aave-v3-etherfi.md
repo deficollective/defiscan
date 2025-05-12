@@ -22,7 +22,7 @@ The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and
 
 Different Aave protocol v3 market _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _EtherFi_ instance.
 
-# Scores
+# Ratings
 
 ## Chain
 
