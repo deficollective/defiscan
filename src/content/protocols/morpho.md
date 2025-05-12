@@ -30,9 +30,9 @@ Morpho is deployed on different chains. This review is based on the Ethereum mai
 
 The Morpho (markets) protocol and Morpho Vaults are non-upgradeable. No permissions exist in the Morpho protocol that could affect users' funds and unclaimed yield or could otherwise result in non-expected protocol performance. Permissions in Morpho Vaults are owned by the vault creators themselves, aka _Curators_, and thus are not centralized under Morpho governance.
 
-A team multisig, `morpho.eth`, is able to activate a fee switch and enable new LTV tiers and interest rate models. These permissions can only affect newly created markets with fees enforced in a fixed range.
+A team multisig, [morpho.eth](#security-council), is able to activate a fee switch and enable new LTV tiers and interest rate models. These permissions can only affect newly created markets with fees enforced in a fixed range.
 
-The `morpho.eth` multisig is further in control of the `MORPHO` token and it's upgradeability and minting features. `MORPHO` upgrades or minting can directly impact distributed rewards in the system and thus result in the loss of unclaimed yield.
+The [morpho.eth](#security-council) multisig is further in control of the `MORPHO` token and it's upgradeability and minting features. `MORPHO` upgrades or minting can directly impact distributed rewards in the system and thus result in the loss of unclaimed yield.
 
 > Upgradeability score: Medium
 
@@ -105,9 +105,9 @@ The Chainlink oracle system itself is upgradeable potentially resulting in the p
 
 # Governance
 
-## Security Council
+Morpho does not yet have an onchain governance system with control over protocol permissions. Instead, permissioned functions are controlled by the [morpho.eth](#security-council) (Morpho protocol and MORPHO token) and [MorphoRewards](#security-council) (distribution of rewards) multisig accounts.
 
-Morpho does not yet an onchain governance with control over the contracts. Permissioned functions in the Morpho protocol and `MORPHO` token contract are controlled by the `morpho.eth` multisig. This multisig does not meet our _Security Council_ requirements as shown in the table below. The `MorphoRewards` multisig oversees the computation and distribution of `MORPHO` rewards.
+## Security Council
 
 &nbsp;
 
@@ -118,9 +118,9 @@ Morpho does not yet an onchain governance with control over the contracts. Permi
 
 ## Exit Window
 
-The Morpho protocol exposes permissions that allow the `morpho.eth` multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
+The Morpho protocol exposes permissions that allow the [morpho.eth](#security-council) multisig account to enable new Liquidation Loan-to-Value ratios and Interest Rate Models for future market creation. These functions do not impose risks of loss of funds or unclaimed yield on users and thus do not need to be protected with an Exit Window.
 
-However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed `MORPHO` rewards and thus expose a _Medium_ upgradeability risk. The permissions are not protected with onchain governance and an Exit Window, instead the `morpho.eth` multisig account can upgrade and mint on the `MORPHO` token contract instantly.
+However, critical permissions in the `MORPHO` token allow the same multisig account to upgrade the token contract or mint more tokens. These permissions can result in the loss of unclaimed `MORPHO` rewards and thus expose a _Medium_ upgradeability risk. The permissions are not protected with onchain governance and an Exit Window, instead the [morpho.eth](#security-council) multisig account can upgrade and mint on the `MORPHO` token contract instantly.
 
 # Contracts & Permissions
 
