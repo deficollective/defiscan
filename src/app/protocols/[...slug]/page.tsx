@@ -57,7 +57,6 @@ export default async function ProtocolPageItem({
   params,
 }: ProtocolPageItemProps) {
   const protocol = await getProtocolFromParams(params.slug);
-
   if (!protocol) {
     return <div>Protocol not found</div>; // Handle not found case
   }

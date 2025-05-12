@@ -35,6 +35,7 @@ const protocols = defineCollection({
       chain: s.string(),
       type: s.string().optional(),
       logo: s.string().optional(),
+      protocols: s.array(s.string()).optional(),
       stage: s
         .number()
         .gte(0)

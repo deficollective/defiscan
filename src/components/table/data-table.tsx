@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   othersCount: number;
   defiCount: number;
   infrastructureCount: number;
+  getProtocolLogo?: (name: string) => string;
 }
 
 // Define the extended ColumnMeta type
@@ -49,8 +50,10 @@ const getInitialVisibility = (
     reasons: activeView === "others",
     risks: true,
     type: true,
-    chain: true,
+    chain: activeView === "defi" || activeView === "others",
     tvl: true,
+    infrastructure: activeView === "infrastructure",
+    centralization: activeView === "infrastructure",
   };
 
   return initialState;
@@ -132,10 +135,13 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     setColumnVisibility((prev) => ({
       ...prev,
-      stage: activeView === "defi" || activeView === "infrastructure",
+      stage: activeView === "defi",
+      centralization: activeView === "infrastructure",
+      protocols: activeView === "infrastructure",
       reasons: activeView === "others",
       tvl: activeView !== "infrastructure",
       risks: activeView !== "infrastructure",
+      chain: activeView !== "infrastructure",
     }));
 
     // Reset and set filters based on the active view

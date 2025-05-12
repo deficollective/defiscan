@@ -17,6 +17,7 @@ export type Project = {
   stage: Stage;
   reasons: Reasons;
   risks: RiskArray;
+  protocols: string[];
   type: string;
   chain: string;
   tvl: number;
