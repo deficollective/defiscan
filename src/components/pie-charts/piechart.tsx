@@ -280,6 +280,7 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 };
 export async function mergeDefiLlamaWithMd() {
   const apiData = await defiLlama.getProtocolsWithCache();
+
   const filtered = protocols
     .map((frontmatterProtocol) => {
       var tvl = 0;
@@ -290,8 +291,8 @@ export async function mergeDefiLlamaWithMd() {
           (defiLlamaProtocolData) => slug == defiLlamaProtocolData.slug
         );
         tvl += res?.chainTvls[frontmatterProtocol.chain] || 0;
-        type = res?.category || "";
-        logo = res?.logo || "";
+        type = res?.category || frontmatterProtocol.type?.toString() || "";
+        logo = res?.logo || frontmatterProtocol.logo?.toString() || "";
       }
       return {
         logo: logo,
@@ -303,6 +304,7 @@ export async function mergeDefiLlamaWithMd() {
         reasons: frontmatterProtocol.reasons,
         type: type,
         risks: frontmatterProtocol.risks,
+        protocols: frontmatterProtocol.protocols,
       } as Project;
     })
     .filter((el): el is Project => el !== null);

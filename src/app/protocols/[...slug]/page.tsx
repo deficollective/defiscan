@@ -13,6 +13,7 @@ import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Stage } from "@/lib/types";
+import { infraScoreToText } from "../stageToRequisites";
 
 interface ProtocolPageItemProps {
   params: {
@@ -56,7 +57,6 @@ export default async function ProtocolPageItem({
   params,
 }: ProtocolPageItemProps) {
   const protocol = await getProtocolFromParams(params.slug);
-
   if (!protocol) {
     return <div>Protocol not found</div>; // Handle not found case
   }
@@ -115,29 +115,33 @@ export default async function ProtocolPageItem({
                 </div>
               </td>
             </tr>
-            <tr>
-              <td className="whitespace-nowrap">Defillama</td>
-              <td className="break-all max-w-xs">
-                <div className="">
-                  {protocol.defillama_slug!.map((slug, index) => (
-                    <a
-                      key={index}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`
+            {!protocol.stage!.toString().startsWith("I") && (
+              <tr>
+                <td className="whitespace-nowrap">Defillama</td>
+                <td className="break-all max-w-xs">
+                  <div className="">
+                    {protocol.defillama_slug!.map((slug, index) => (
+                      <a
+                        key={index}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={`
                         https://defillama.com/protocol/${slug}`}
-                      className="text-blue-500 hover:underline text-sm md:text-base"
-                    >
-                      {index == 0 ? slug : ", " + slug}
-                    </a>
-                  ))}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">Chain</td>
-              <td className="break-all max-w-xs">{protocol.chain}</td>
-            </tr>
+                        className="text-blue-500 hover:underline text-sm md:text-base"
+                      >
+                        {index == 0 ? slug : ", " + slug}
+                      </a>
+                    ))}
+                  </div>
+                </td>
+              </tr>
+            )}
+            {!protocol.stage!.toString().startsWith("I") && (
+              <tr>
+                <td className="whitespace-nowrap">Chain</td>
+                <td className="break-all max-w-xs">{protocol.chain}</td>
+              </tr>
+            )}
           </tbody>
         </table>
 
@@ -176,7 +180,9 @@ export default async function ProtocolPageItem({
 
         {protocol.stage! != "O" ? (
           <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-            Stage
+            {!protocol.stage!.toString().startsWith("I")
+              ? "Stage"
+              : "Centralization"}
           </h1>
         ) : (
           <></>
@@ -190,14 +196,18 @@ export default async function ProtocolPageItem({
               className={`${
                 protocol.stage! === "R"
                   ? "bg-gray-500"
-                  : protocol.stage! === 0
+                  : protocol.stage! === 0 || protocol.stage! === "I0"
                     ? "bg-red-500"
-                    : protocol.stage! === 1
+                    : protocol.stage! === 1 || protocol.stage! === "I1"
                       ? "bg-yellow-500"
                       : "bg-green-500"
               } text-white py-1 rounded "text-lg"`}
             >
-              {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
+              {protocol.stage! === "R"
+                ? "Review"
+                : protocol.stage?.toString().startsWith("I")
+                  ? infraScoreToText[protocol.stage!.toString()]
+                  : "Stage " + protocol.stage!}
             </Badge>
           </TooltipProvider>
         ) : (
@@ -232,16 +242,20 @@ export default async function ProtocolPageItem({
           </div>
         }
 
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Risks
-        </h1>
+        {!protocol.stage!.toString().startsWith("I") && (
+          <>
+            <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
+              Risks
+            </h1>
 
-        <TooltipProvider>
-          <BigPizzaRosette
-            className="mt-auto"
-            values={getRiskDescriptions(protocol.risks!)}
-          />
-        </TooltipProvider>
+            <TooltipProvider>
+              <BigPizzaRosette
+                className="mt-auto"
+                values={getRiskDescriptions(protocol.risks!)}
+              />
+            </TooltipProvider>
+          </>
+        )}
         <Mdx code={protocol.body!} />
         <hr className="mt-12" />
         <div className="flex justify-center py-6 lg:py-10">
