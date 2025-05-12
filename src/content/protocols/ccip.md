@@ -30,7 +30,7 @@ First, the _Risk Management Network_ monitors the chain and can halt the cross-c
 
 Additionally, the _Committing Network_ observes events of new cross-chain messages on the source chain. If it detects such an event, the _Committing Network_ posts a root to the `CommitStore` contract on the destination chain.
 
-Lastly, there is the _Executing Network_ that observes the transactions and if roots are posted to the `CommitStore` and the roots are blessed, the executing network triggers the message to be executed on the target chain with the blessed messages.
+Lastly, the _Executing Network_ observes the transactions, and if roots are posted to the `CommitStore` and the roots are blessed, the executing network triggers the message to be executed on the target chain with the blessed messages.
 
 ![Onchain Infrastructure](./diagrams/CCIP_Infrastructure.png)
 
