@@ -26,7 +26,7 @@ This report only covers scanned permissions and the owners of these permissions 
 
 There are three oracle networks that help to secure CCIP. Each network has a distinct role inside the cross-chain communication flow.
 
-There is the _Risk Management Network_ which monitors the chain, and can halt the cross-chain flow of messages and tokens to and from a network. Additionally, the _Risk Management Network_ “blesses” or “curses” messages that should be moved cross chain. When the count of nodes blessing a message reaches the quorum, the message can be executed on the destination chain.
+First, the _Risk Management Network_ monitors the chain and can halt the cross-chain flow of messages and tokens to and from a network. Additionally, the _Risk Management Network_ “blesses” or “curses” messages that should be moved cross-chain. When the count of nodes blessing a message reaches the quorum, the message can be executed on the destination chain.
 
 Additionally, there is the _Committing Network_ which observes events on the source chain that signal messages that should be moved cross chain. If it detects such a transaction, the _Committing Network_ posts a root to the `CommitStore` contract on the destination chain.
 
