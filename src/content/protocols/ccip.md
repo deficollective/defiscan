@@ -69,24 +69,26 @@ The Bypasser controls crucial functions on the `CommitStore` contract, the `RMN`
 
 The MCMS with Bypasser role on the destination chain could reduce the set of addresses for the signers and the transmitters for the oracle nodes for the three networks by calling `RMN.setConfig`, `CommitStore.setOCR2Config` and `EVM2EVMOfframp.setOCR2Config` and only list addresses that the Bypasser group controls on the destination chain. In a next step the malicious actor would mint or release tokens on the destination chain (source) to addresses it controls, by posting data to the `CommitStore`, blessing with the controlled Risk Management Network signers and executing the malicious transactions by passing messages that match the root posted to the `CommitStore`.
 
-## Security Council
-
-| Multisig / Role     | Address                                    | Type | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
-| ------------------- | ------------------------------------------ | ---- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
-| BYPASSER (Ethereum) | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
-| BYPASSER (Arbitrum) | 0xf4c257b5c6c526d56367a602e87b1932d13e67cb | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
-
 ## Conclusion
 
 CCIP smart contracts expose centralized permissions to update the set of nodes that can push cross-chain messages. Updates via the Bypasser role are immediately executed. The CCIP protocol is therefore rated as highly centralized.
 
 The CCIP protocol could advance to Medium Centralization if the Bypasser Role owner adhered to the Security Council Requirements. Publishing the owners of the signers and having more than 50% outside signers (in contract to insider signers) would make the MCMS a security council.
 
+> Overall centralization: High
+
 # Reviewer notes
 
-The review was not exhaustive and does not cover all permissions in the CCIP system and does not cover all permissioned functions of the two deployments on Ethereum Mainnet and Arbitrum. The review focuses on the most important centralisation vector (weakest link).
+The review was not exhaustive and does not cover all permissions in the CCIP system and does not cover all permissioned functions of the two deployments on Ethereum Mainnet and Arbitrum. The described permissions in the section above are enough to showcase critical centralization vectors within CCIP.
 
 # Appendix
+
+## Security Council
+
+| Multisig / Role     | Address                                    | Type | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
+| ------------------- | ------------------------------------------ | ---- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| BYPASSER (Ethereum) | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
+| BYPASSER (Arbitrum) | 0xf4c257b5c6c526d56367a602e87b1932d13e67cb | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
 
 ## Contracts
 
