@@ -78,7 +78,7 @@ The MCMS with Bypasser role on the destination chain could reduce the set of add
 
 ## Conclusion
 
-CCIP smart contracts expose centralized permissions to update the set of nodes that can push cross-chain messages. Updates via the Bypasser role are immediately executed. The CCIP protocol is rated as a highly centralized.
+CCIP smart contracts expose centralized permissions to update the set of nodes that can push cross-chain messages. Updates via the Bypasser role are immediately executed. The CCIP protocol is therefore rated as highly centralized.
 
 The CCIP protocol could advance to Medium Centralization if the Bypasser Role owner adhered to the Security Council Requirements. Publishing the owners of the signers and having more than 50% outside signers (in contract to insider signers) would make the MCMS a security council.
 
