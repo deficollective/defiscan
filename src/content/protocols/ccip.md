@@ -24,7 +24,7 @@ This report only covers scanned permissions and the owners of these permissions 
 
 # Protocol Analysis
 
-There are three oracle networks that help to make CCIP as a bridge secure. Each network has a distinct role inside the cross chain communication flow.
+There are three oracle networks that help to secure CCIP. Each network has a distinct role inside the cross-chain communication flow.
 
 There is the _Risk Management Network_ which monitors the chain, and can halt the cross-chain flow of messages and tokens to and from a network. Additionally, the _Risk Management Network_ “blesses” or “curses” messages that should be moved cross chain. When the count of nodes blessing a message reaches the quorum, the message can be executed on the destination chain.
 
