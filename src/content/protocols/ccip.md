@@ -150,6 +150,15 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | TokenAdminRegistry | proposeAdministrator      | RBACTimelock                                                      |
 | TokenAdminRegistry | addRegistryModule         | RBACTimelock                                                      |
 | TokenAdminRegistry | removeRegistryModule      | RBACTimelock                                                      |
+| RBACTimelock       | grantRole                 | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | revokeRole                | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | scheduleBatch             | `PROPOSER_ROLE`                                                   |
+| RBACTimelock       | cancel                    | `CANCELLER_ROLE`                                                  |
+| RBACTimelock       | executeBatch              | `EXECUTOR_ROLE`                                                   |
+| RBACTimelock       | updateDelay               | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | blockFunctionSelector     | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | unblockFunctionSelector   | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | bypasserExecuteBatch      | `BYPASSER_ROLE`                                                   |
 
 ## Permissions Arbitrum
 
@@ -203,6 +212,15 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | TokenAdminRegistry | proposeAdministrator        | RBACTimelock                                                      |
 | TokenAdminRegistry | addRegistryModule           | RBACTimelock                                                      |
 | TokenAdminRegistry | removeRegistryModule        | RBACTimelock                                                      |
+| RBACTimelock       | grantRole                   | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | revokeRole                  | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | scheduleBatch               | `PROPOSER_ROLE`                                                   |
+| RBACTimelock       | cancel                      | `CANCELLER_ROLE`                                                  |
+| RBACTimelock       | executeBatch                | `EXECUTOR_ROLE`                                                   |
+| RBACTimelock       | updateDelay                 | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | blockFunctionSelector       | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | unblockFunctionSelector     | `ADMIN_ROLE`                                                      |
+| RBACTimelock       | bypasserExecuteBatch        | `BYPASSER_ROLE`                                                   |
 
 ## Role Owners `RBACTimelock` on Ethereum
 
