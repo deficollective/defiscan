@@ -21,9 +21,9 @@ update_date: "1970-01-01"
 
 Chronicle Labs is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who enforce cryptographic verification. Becoming a validator is a permissioned process; a majority of the validators in place are held by third-party entities in the Ethereum ecosystem.
 
-The validators in the protocols are hosted by various third parties such as (but not limited to) Nethermind, Gnosis, Bitcoin Suisse, DeFi Saver, ETHGlobal, Gitcoin, and Etherscan. About 11 validators are listed without officially representing an entity (address only), out of 25 validators into total. The validators collaborate in a peer-to-peer fashion and the final signature is pushed onchain and verifiable.
+The validators in the protocols are hosted by various third parties such as (but not limited to) Nethermind, Gnosis, Bitcoin Suisse, DeFi Saver, ETHGlobal, Gitcoin, and Etherscan. About 11 validators are listed without officially representing an entity (address only), out of 25 total. The validators collaborate in a peer-to-peer fashion, and the final signature is pushed onchain and verifiable.
 
-Each price feed (oracle) is its own smart contract which holds the corresponding validator set. A `ValidatorRegistry` exists to be used as a certificate authority and proves that each validator knows the private key to their claimed public key.
+Each price feed (oracle) is its own smart contract, which holds the corresponding validator set. A `ValidatorRegistry_2` exists to be used as a certificate authority and proves that each validator knows the private key to their claimed public key.
 
 # Protocol Analysis
 
@@ -31,31 +31,31 @@ An overview of the Chronicle protocol can be seen below.
 
 ![Overview of Chronicle](./diagrams/chronicle-overview.png)
 
-The core of the protocol are the oracle contracts, the validators, and the `ValidatorRegistry`.
+The core of the protocol is the oracle contracts, the validators, and the `ValidatorRegistry_2`.
 
-Each oracle has its own validator set (a subset of all the validators). This set can be changed by a `TimelockController` which is an internal multisig belonging to Chronicle Labs. A `Kisser` contract holds similar admin permissions over the oracles but is, by design, restricted to only be able to add new customers.
+Each oracle has its own validator set (a subset of all the validators). This set can be changed by a `TimelockController`, which is owned by the Chronicle multisig. A `Kisser` contract holds similar admin permissions over the oracles but is, by design, restricted to only being able to add new customers.
 
-There is a single `TimelockController` per chain with admin permissions on all oracles. The delay is therefore the same for each oracle: 7 days. According to the documentation (but not stritcly verified), the same delay is enforced on each chain Chronicle is deployed on.
+There is a single `TimelockController` per chain with admin permissions on all oracles. The delay is therefore the same for each oracle: 7 days. According to the documentation (but not strictly verified), the same delay is enforced on each chain where Chronicle is deployed.
 
-The `ValidatorRegistry` does _not_ directly affect the validators whitelisted (_lift_-ed) on the oracles. It is used to publicly prove that each validator knows the private key to their claimed public key. This prevents rogue key attacks in which a validator claims their public key is the sum of other public keys and thereby signs for multiple other validators at once.
+The `ValidatorRegistry_2` does _not_ directly affect the validators whitelisted (_lifted_) on the oracles. It is used to publicly prove that each validator knows the private key to their claimed public key. This prevents rogue key attacks in which a validator claims their public key is the sum of other public keys and thereby signs for multiple other validators at once.
 
-# Centralization
+# Rating
 
-As mentioned in the [protocol analysis](#protocol-analysis), a multisig internal to Chronicle has permissions to change each oracle's validator set. Changing the validator set could put the system at risk of controlled prices which could lead to the loss of user funds in protocols, which rely on ChronicleLabs' oracles.
+As mentioned in the [protocol analysis](#protocol-analysis), the Chronicle multisig has permissions to change each oracle's validator set. Changing the validator set could put the system at risk of controlled prices, which could lead to the loss of user funds in protocols that rely on ChronicleLabs' oracles. Any changes in an oracle's validator set are subject to a **7-day exit window**.
 
-Finally, the `ValidatorRegistry` can be updated by 3 Externally Owned Accounts (EOAs) to add or remove validator public keys. Updating the registry in a malicious fashion does not weaken the assumptions on the possibility of price manipulation as the validators perform all cryptographic actions based on the oracle contracts. Update or addition of a public key in the registry must come with a valid signature. The registry only improves the guarenttees of the protocol by attesting that each validator owns their key and this key is a single key (not a sum of keys). Moreover, it allows potentital DoS mitigations on the peer-to-peer network by filtering messages based on recovered signers.
+Finally, 3 Externally Owned Accounts (EOAs) can add or remove validator public keys to the `ValidatorRegistry_2` without delay. Updating the registry in a malicious fashion does not weaken the assumptions on the possibility of price manipulation, as the validators perform all cryptographic actions based on the oracle contracts. Update or addition of a public key in the registry must come with a valid signature. The registry only improves the guarantees of the protocol by attesting that each validator owns their key, and this key is a single key (not a sum of keys). Moreover, it allows potential DoS mitigations on the peer-to-peer network by filtering messages based on recovered signers.
 
-Any changes in an oracle's validator set is subject to a **7-day exit window**.
-
-The `ValidatorRegistry` can be updated without delay by 3 Externally Owned Accounts (EOAs). As mentioned in [upgradeability](#upgradeability), this does not increase the risks of price manipulation.
-
-Oracles and validators are listed on ChronicleLabs' [public dashboard](https://chroniclelabs.org/dashboard). This allows anyone to verify the data cryptographically. The dashboard is not opensource, but this does not prevent the monitoring of the onchain activity from the side of projects using ChronicleLabs' oracles.
+Oracles and validators are listed on ChronicleLabs' [public dashboard](https://chroniclelabs.org/dashboard). This allows anyone to verify the data cryptographically. The dashboard is not open-source, but this does not prevent the monitoring of the onchain activity from the side of projects using ChronicleLabs' oracles.
 
 ## Conclusion
 
-ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set which are protected with a 7-day exit window. The protocol relies on third-party entities which collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a **Medium Centralization**, equivalent to Stage 1, as a dependency.
+ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set, which are protected with a 7-day exit window. The protocol relies on third-party entities that collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities, including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a **Medium Centralization**, equivalent to Stage 1, as a dependency.
 
 > Overall score: Medium
+
+# Revier Notes
+
+This review is limited to Chornicle Oracles deployed on Ethereum mainnet. We note that the findings should generalize to all chains according to Chronicle's documentation.
 
 # Appendix
 
@@ -63,11 +63,11 @@ ChronicleLabs' protocol exposes centralized permissions on the oracles' validato
 
 The multisig in charge of the `TimelockController` is a 2/3 multisig belonging to chronicle. It does not meet our security council requirements.
 
-| Name              | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| Internal Multisig | [0xC8910D85511dfe915630bfccB6bF98973e67F827](https://etherscan.org/address/0xC8910D85511dfe915630bfccB6bF98973e67F827) | Multisig 2/3 | ❌          | ✅              | ❌                | ❌             |
+| Name               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Chronicle Multisig | [0xC8910D85511dfe915630bfccB6bF98973e67F827](https://etherscan.org/address/0xC8910D85511dfe915630bfccB6bF98973e67F827) | Multisig 2/3 | ❌          | ✅              | ❌                | ❌             |
 
-## Contracts¨
+## Contracts
 
 At the time of writing there are 26 public oracles curated by Chronicle Labs deployed on Ethereum Mainnet.
 
@@ -105,12 +105,12 @@ At the time of writing there are 26 public oracles curated by Chronicle Labs dep
 
 ## All Permission Owners
 
-| Name              | Account                                                                                                                 | Type         |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Internal Multisig | [0xc8910d85511dfe915630bfccb6bf98973e67f827](https://etherscan.io/address/0xc8910d85511dfe915630bfccb6bf98973e67f827)   | Multisig 2/3 |
-| Undeclared EOA    | [0x74258a92611e029b748f79c50024dd851339db15](https://etherscan.io/address/0x0x74258a92611e029b748f79c50024dd851339db15) | EOA          |
-| Undeclared EOA    | [0x39abd7819e5632fa06d2ecbba45dca5c90687ee3](https://etherscan.io/address/0x0x39abd7819e5632fa06d2ecbba45dca5c90687ee3) | EOA          |
-| Undeclared EOA    | [0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b](https://etherscan.io/address/0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b)   | EOA          |
+| Name               | Account                                                                                                                 | Type         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Chronicle Multisig | [0xc8910d85511dfe915630bfccb6bf98973e67f827](https://etherscan.io/address/0xc8910d85511dfe915630bfccb6bf98973e67f827)   | Multisig 2/3 |
+| Undeclared EOA     | [0x74258a92611e029b748f79c50024dd851339db15](https://etherscan.io/address/0x0x74258a92611e029b748f79c50024dd851339db15) | EOA          |
+| Undeclared EOA     | [0x39abd7819e5632fa06d2ecbba45dca5c90687ee3](https://etherscan.io/address/0x0x39abd7819e5632fa06d2ecbba45dca5c90687ee3) | EOA          |
+| Undeclared EOA     | [0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b](https://etherscan.io/address/0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b)   | EOA          |
 
 ## Permissions
 
@@ -120,9 +120,9 @@ At the time of writing there are 26 public oracles curated by Chronicle Labs dep
 | ValidatorRegistry_2           | drop                  | Deletes a validator from the registry.                                                                                                                                                                                                                                                          | Undeclared EOAs                       |
 | ValidatorRegistry_2           | rely                  | Grants admin privileges over the contract. Admins can `lift` and `drop` validators.                                                                                                                                                                                                             | Undeclared EOAs                       |
 | ValidatorRegistry_2           | deny                  | Revokes admin privileges over the contract.                                                                                                                                                                                                                                                     | Undeclared EOAs                       |
-| ChronicleTimelockController_1 | schedule              | Schedules a transaction to be executed. This can be anything the contract is permissioned to do in oracles and other contracts. This can only be executed once the delay of 7 days has passed.                                                                                                  | Internal Multisig                     |
-| ChronicleTimelockController_1 | scheduleBatch         | Similarly to schedule but for a batch of transaction. This can only be executed once the delay of 7 days has passed.                                                                                                                                                                            | Internal Multisig                     |
-| ChronicleTimelockController_1 | cancel                | Cancels a pending transaction.                                                                                                                                                                                                                                                                  | Internal Multisig                     |
+| ChronicleTimelockController_1 | schedule              | Schedules a transaction to be executed. This can be anything the contract is permissioned to do in oracles and other contracts. This can only be executed once the delay of 7 days has passed.                                                                                                  | Chronicle Multisig                    |
+| ChronicleTimelockController_1 | scheduleBatch         | Similarly to schedule but for a batch of transaction. This can only be executed once the delay of 7 days has passed.                                                                                                                                                                            | Chronicle Multisig                    |
+| ChronicleTimelockController_1 | cancel                | Cancels a pending transaction.                                                                                                                                                                                                                                                                  | Chronicle Multisig                    |
 | ChronicleTimelockController_1 | grantRole             | Grants a role to an address within the contract. Roles may give the right to propose, execute, or cancel transactions. Execution is permisionless unless the role is given to any address in the future.                                                                                        | ChronicleTimelockController_1         |
 | ChronicleTimelockController_1 | revokeRole            | Revokes a role to a given address.                                                                                                                                                                                                                                                              | ChronicleTimelockController_1         |
 | Chronicle\*BTC_USD_3          | opPoke                | Sends an optimistic poke (price update). The price if opimistically considered valid unless a challenge is sent within the challenge period. Anyone can challenge a price and enforce the cryptographic verification in the contract. Succesful challenges are financially rewarded with `ETH`. | Contract-specific Approved Feeds      |

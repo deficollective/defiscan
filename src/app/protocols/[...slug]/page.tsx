@@ -115,29 +115,33 @@ export default async function ProtocolPageItem({
                 </div>
               </td>
             </tr>
-            <tr>
-              <td className="whitespace-nowrap">Defillama</td>
-              <td className="break-all max-w-xs">
-                <div className="">
-                  {protocol.defillama_slug!.map((slug, index) => (
-                    <a
-                      key={index}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`
+            {!protocol.stage!.toString().startsWith("I") && (
+              <tr>
+                <td className="whitespace-nowrap">Defillama</td>
+                <td className="break-all max-w-xs">
+                  <div className="">
+                    {protocol.defillama_slug!.map((slug, index) => (
+                      <a
+                        key={index}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={`
                         https://defillama.com/protocol/${slug}`}
-                      className="text-blue-500 hover:underline text-sm md:text-base"
-                    >
-                      {index == 0 ? slug : ", " + slug}
-                    </a>
-                  ))}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">Chain</td>
-              <td className="break-all max-w-xs">{protocol.chain}</td>
-            </tr>
+                        className="text-blue-500 hover:underline text-sm md:text-base"
+                      >
+                        {index == 0 ? slug : ", " + slug}
+                      </a>
+                    ))}
+                  </div>
+                </td>
+              </tr>
+            )}
+            {!protocol.stage!.toString().startsWith("I") && (
+              <tr>
+                <td className="whitespace-nowrap">Chain</td>
+                <td className="break-all max-w-xs">{protocol.chain}</td>
+              </tr>
+            )}
           </tbody>
         </table>
 
