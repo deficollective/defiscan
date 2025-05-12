@@ -54,8 +54,10 @@ These functions allow to set the signer and transmitter addresses of the cross-c
 
 ## Multichain Multisig (MCMS)
 
-Role owners of the `RBACTimelock` (governance) are multichain multisigs or MCMS for short. They allow to use the same signatures across many chains, as such only EOAs are supported and not smart contracts.
-Signing groups are arranged in a tree and each node in the tree has its own threshold. A group or interior node is successful if a quorum of its children are successful. The multisig signs, ie. sets a root successfully if the root group is successful. EOAs are the leaves of the tree.
+Role owners of the `RBACTimelock` (governance) are multichain multisigs or MCMS for short (see also [security council table](#security-council)). They allow to use the same signatures across many chains, as such only EOAs are supported and not smart contracts.
+
+The MCMS is a multisig based of many children multisigs, the MCMS signs if the root multisig is successful. In order for the root to reach the quorum, its children need to reach their thresholds.
+EOAs are the leaves of the tree.
 
 ![MCMS](./diagrams/CCIP_MCMS.png)
 
@@ -63,7 +65,7 @@ Signing groups are arranged in a tree and each node in the tree has its own thre
 
 The Bypasser role can call any contract with arbitrary data via the `RBACTimelock` without delay. This means the Bypasser can act on behalf of the governance. The onchain analysis revealed that only one MCMS (`0x117ec8ad107976e1dbcc21717ff78407bc36aadc`) holds the Bypasser role on the Ethereum instance. On the Arbitrum instance of the CCIP governance deployment there is as well only one MCMS in control of the Bypasser role (`0xf4c257b5c6c526d56367a602e87b1932d13e67cb`).
 
-The governance (`RBACTimelock`) owns the contracts in the CCIP smart contract system. The Bypasser has thus immediate and ultimate control over many functions (see permission table) on the respective chain.
+The governance (`RBACTimelock`) owns the contracts in the CCIP smart contract system. The Bypasser has thus immediate and ultimate control over many functions (see [permission table](#permissions-mainnet)) on the respective chain.
 
 The Bypasser controls crucial functions on the `CommitStore` contract, the `RMN` contract (Risk Management Network Smart Contract) and the `EVM2EVMOffRamp` contract. Since the Bypasser signers are not attested to belong to different entitites, the risk remains that a single actor or an insufficiently decentralised group of actors can update the previously mentioned contracts to exploit funds from CCIP token pools.
 
