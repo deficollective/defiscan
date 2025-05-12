@@ -38,7 +38,7 @@ Lastly, there is the _Executing Network_ that observes the transactions and if r
 
 ## Governance
 
-The smart contracts of the CCIP protocol are governed by the `RBACTimelock` contract. The governance can change parameters and the onchain addresses of the nodes in each network (Risk, Committing, Executing).
+The smart contracts of the CCIP protocol are governed by the `RBACTimelock` contract. The governance can change parameters (e.g fee tokens) and the signer addresses of the nodes in each network (Risk, Committing, Executing).
 
 Governance actions are proposed by multichain multisigs (MCMSs) which have the Proposer role by calling `scheduleBatch` on the `RBACTimelock` contract (see [role owner table](#role-owners-rbactimelock)). The `RBACTimelock` contract enforces a minimum timelock, which is set to 3 hours. Particpants of governance can choose a specific timelock which is above or equal to the minimum timelock. The scheduled transactions are then ready to be executed after the timelock has passed. During the time of the exit window the scheduled transactions is object to cancellation by MCMSs with the Canceller role. With no cancellation during the exit window period execution becomes permissionless.
 
