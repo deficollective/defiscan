@@ -61,19 +61,20 @@ Signing groups are arranged in a tree and each node in the tree has its own thre
 
 ## Bypasser
 
-The Bypasser role can call any contract with arbitrary data via the `RBACTimelock` without delay. This means the Bypasser can act on behalf of the governance. The onchain analysis revealed that only one MCMS (`0x117ec8ad107976e1dbcc21717ff78407bc36aadc`) holds the Bypasser role.
+The Bypasser role can call any contract with arbitrary data via the `RBACTimelock` without delay. This means the Bypasser can act on behalf of the governance. The onchain analysis revealed that only one MCMS (`0x117ec8ad107976e1dbcc21717ff78407bc36aadc`) holds the Bypasser role on the Ethereum instance. On the Arbitrum instance of the CCIP governance deployment there is as well only one MCMS in control of the Bypasser role (`0xf4c257b5c6c526d56367a602e87b1932d13e67cb`).
 
-The governance (`RBACTimelock`) owns the contracts in the CCIP smart contract system. The Bypasser has thus immediate and ultimate control over many functions (see permission table).
+The governance (`RBACTimelock`) owns the contracts in the CCIP smart contract system. The Bypasser has thus immediate and ultimate control over many functions (see permission table) on the respective chain.
 
 The Bypasser controls crucial functions on the `CommitStore` contract, the `RMN` contract (Risk Management Network Smart Contract) and the `EVM2EVMOffRamp` contract. Since the Bypasser signers are not attested to belong to different entitites, the risk remains that a single actor or an insufficiently decentralised group of actors can update the previously mentioned contracts to exploit funds from CCIP token pools.
 
-The MCMS with Bypasser role could reduce the set of oracle nodes for the three networks by calling `RMN.setConfig`, `CommitStore.setOCR2Config` and `EVM2EVMOfframp.setOCR2Config` and only list addresses that the Bypasser group controls. In a next step the malicious actor would mint or release tokens on the destination chain (source) to addresses it self controls, by posting data to the `CommitStore`, blessing with the controlled Risk Management Network signers and executing the malicious transactions by passing messages that match the root posted to the `CommitStore`.
+The MCMS with Bypasser role on the destination chain could reduce the set of addresses for the signers and the transmitters for the oracle nodes for the three networks by calling `RMN.setConfig`, `CommitStore.setOCR2Config` and `EVM2EVMOfframp.setOCR2Config` and only list addresses that the Bypasser group controls on the destination chain. In a next step the malicious actor would mint or release tokens on the destination chain (source) to addresses it self controls, by posting data to the `CommitStore`, blessing with the controlled Risk Management Network signers and executing the malicious transactions by passing messages that match the root posted to the `CommitStore`.
 
 ## Security Council
 
-| Multisig / Role | Address                                    | Type | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
-| --------------- | ------------------------------------------ | ---- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
-| BYPASSER        | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
+| Multisig / Role     | Address                                    | Type | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
+| ------------------- | ------------------------------------------ | ---- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| BYPASSER (Ethereum) | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
+| BYPASSER (Arbitrum) | 0xf4c257b5c6c526d56367a602e87b1932d13e67cb | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
 
 ## Conclusion
 
@@ -99,6 +100,7 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | EVM2EVMOffRamp     | [0xeFC4a18af59398FF23bfe7325F2401aD44286F4d](https://etherscan.io/address/0xeFC4a18af59398FF23bfe7325F2401aD44286F4d) |
 | TokenAdminRegistry | [0xb22764f98dD05c789929716D677382Df22C05Cb6](https://etherscan.io/address/0xb22764f98dD05c789929716D677382Df22C05Cb6) |
 | CommitStore        | [...](https://etherscan.io/address/...)                                                                               |
+| RBACTimelock       | [0x44835bbba9d40deda9b64858095ecfb2693c9449](https://etherscan.io/address/0x44835bbba9d40deda9b64858095ecfb2693c9449) |
 
 ### Arbitrum
 
@@ -110,6 +112,7 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | EVM2EVMOffRamp     | [0x91e46cc5590A4B9182e47f40006140A7077Dec31](https://arbiscan.io/address/0x91e46cc5590A4B9182e47f40006140A7077Dec31) |
 | TokenAdminRegistry | [0x39AE1032cF4B334a1Ed41cdD0833bdD7c7E7751E](https://arbiscan.io/address/0x39AE1032cF4B334a1Ed41cdD0833bdD7c7E7751E) |
 | CommitStore        | [0x86be76A0FA2bD3ECB69330cBb4fd1f62c48F43E3](https://arbiscan.io/address/0x86be76A0FA2bD3ECB69330cBb4fd1f62c48F43E3) |
+| RBACTimelock       | [0x8a89770722c84B60cE02989Aedb22Ac4791F8C7f](https://arbiscan.io/address/0x8a89770722c84B60cE02989Aedb22Ac4791F8C7f) |
 
 ## Permissions Mainnet
 
@@ -201,7 +204,7 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | TokenAdminRegistry | addRegistryModule           | RBACTimelock                                                      |
 | TokenAdminRegistry | removeRegistryModule        | RBACTimelock                                                      |
 
-## Role Owners `RBACTimelock`
+## Role Owners `RBACTimelock` on Ethereum
 
 | Role name      | ID                                                                 | Role Owners                                                                                                                                                                                                                                                            | Role Admin |
 | -------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
@@ -211,7 +214,17 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | BYPASSER_ROLE  | 0xa1b2b8005de234c4b8ce8cd0be058239056e0d54f6097825b5117101469d5a8d | 0x117ec8ad107976e1dbcc21717ff78407bc36aadc                                                                                                                                                                                                                             | ADMIN_ROLE |
 | EXECUTOR_ROLE  | 0xd8aa0f3194971a2a116679f7c2090f6939c8d4e01a2a8d7e41d55e5351469e63 | 0x82b8a19497fa25575f250a3dcffcd2562b575a2e                                                                                                                                                                                                                             | ADMIN_ROLE |
 
-## Signers of Bypasser MCMS
+## Role Owners `RBACTimelock` on Arbitrum
+
+| Role name      | ID                                                                 | Role Owners                                                                                                                                                                                                                                                            | Role Admin |
+| -------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| ADMIN_ROLE     | 0xa49807205ce4d355092ef5a8a18f56e8913cf4a201fbe287825b095693c21775 | 0x8a89770722c84b60ce02989aedb22ac4791f8c7f                                                                                                                                                                                                                             | ADMIN_ROLE |
+| PROPOSER_ROLE  | 0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1 | 0x69b798425cfff3ae962f6118fd6d6646c829a8c5, 0x5972428082b6e1b6670014cf373b3e42b42aef13, 0x0cff501cdb93e72221231ca5b6b1a3321a338b14                                                                                                                                     | ADMIN_ROLE |
+| CANCELLER_ROLE | 0xfd643c72710c63c0180259aba6b2d05451e3591a24e58b62239378085726f783 | 0x69b798425cfff3ae962f6118fd6d6646c829a8c5, 0x4ea3f791511d35aa859455bd60af526537040bb3, 0x6662e348b2710bddfb69a1356482e2cf1c27dd7c, 0x5972428082b6e1b6670014cf373b3e42b42aef13, 0xf4c257b5c6c526d56367a602e87b1932d13e67cb, 0x0cff501cdb93e72221231ca5b6b1a3321a338b14 | ADMIN_ROLE |
+| BYPASSER_ROLE  | 0xa1b2b8005de234c4b8ce8cd0be058239056e0d54f6097825b5117101469d5a8d | 0xf4c257b5c6c526d56367a602e87b1932d13e67cb                                                                                                                                                                                                                             | ADMIN_ROLE |
+| EXECUTOR_ROLE  | 0xd8aa0f3194971a2a116679f7c2090f6939c8d4e01a2a8d7e41d55e5351469e63 | 0x031828231b6829208c1b2aad4ecfea2c011dcf87                                                                                                                                                                                                                             | ADMIN_ROLE |
+
+## Signers of Bypasser MCMS on Ethereum
 
 ![MCMS](./diagrams/CCIP_MCMS.png)
 
@@ -295,3 +308,59 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | 0xc19beb494ba0bc57e5f967706a24bafb6da7bcd7 |
 | 0xd844665361adba29cd1259ebde9b547ece2ab0e7 |
 | 0xecdd1737e54530d7b05ad309b9b365cdc0084fd0 |
+
+## Signers of Bypasser MCMS on Arbitrum
+
+| Signers Group 01                           |
+| ------------------------------------------ |
+| 0x146cae49dbe1b1d1968fc4652814740706548952 |
+| 0x2b88575011c5e11389ddb50d28d31c7d06b352a0 |
+| 0x2bbb172cd88dcad64cbe762dcc53e6f96a17d1d6 |
+| 0x43640f208956c7d49e04f40ff95df818643b76aa |
+| 0x4e509c60b3e916644de441298595fed12c4ac926 |
+| 0x570f41d83b1031d382f641b9a532a8d7cbd7a695 |
+| 0x6924e54339c7f28730dbb4b842a7fe86ed01ecf7 |
+| 0xa3177f64efe98422e782bc17be7971f01187b7cf |
+
+| Signers Group 02                           |
+| ------------------------------------------ |
+| 0x5bd3a90e94bb8aa6fe6ccf494e292f5f707b92d6 |
+| 0x5c33bf560f29e04df8a666493aad8e47eea9b1c8 |
+
+| Signers Group 03                           |
+| ------------------------------------------ |
+| 0x3c6ce61b611e3b41289c2fafa5bc4e150dd88de3 |
+| 0x48a094f7a354d8fad7263ea2a82391d105df6628 |
+
+| Signers Group 04                           |
+| ------------------------------------------ |
+| 0x2b73763722378ab2013cb0877946f69fc3727fd8 |
+| 0xa35b7219521134caf52dccad44d604335b64a4fb |
+
+| Signers Group 05                           |
+| ------------------------------------------ |
+| 0x180159135c9b93c59d16ea1a690e465d22c5eb67 |
+| 0x7eff312905dedb38bf8f07befadff96376154374 |
+
+| Signers Group 06                           |
+| ------------------------------------------ |
+| 0x70c2ddc97c4faea760027d45e5de4d1e2ad2b9a5 |
+| 0x9453e18f03a36e2a2c70598de520bd24434d2d1d |
+
+| Signers Group 07                           |
+| ------------------------------------------ |
+| 0x124ba7e2188074335a0e9b12b449ad5781a73d60 |
+| 0x6b0f508b8cbef970faf9e8a28b9b4c6f1fd3afae |
+
+| Signers Group 08                           |
+| ------------------------------------------ |
+| 0x9079410666ed02725ee9d148398cee26397c2a36 |
+
+| Signers Group 0a                           |
+| ------------------------------------------ |
+| 0x14a8f3b302bbfa7f2f2ac2f4515548370bc7badc |
+| 0x56b167decd5fc4e3bbc07b3b4e1f30e74534f9dd |
+| 0x6bfbf6bc4bc5cd20768daa6f58f0743baff2e5f4 |
+| 0xa42c8570771240d1e2f3211064a7c7472cc05b7d |
+| 0x013d4a675fd02359c3c35abc514dafd97b127e34 |
+| 0x0d2730ad6d62a49907fb9273cd4a59d1092cb472 |
