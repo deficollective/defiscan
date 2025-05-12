@@ -3,7 +3,7 @@ protocol: "Spark"
 website: "https://spark.fi"
 x: "https://x.com/sparkdotfi"
 github: ["https://github.com/sparkdotfi"]
-defillama_slug: ["spark-lending"]
+defillama_slug: ["sparklend"]
 chain: "Ethereum"
 stage: 0
 reasons: []
