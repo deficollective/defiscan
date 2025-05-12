@@ -48,7 +48,7 @@ The `RBACTimelock` (Governance) contract is deployed to any chain which CCIP is 
 
 ## Upgradeability
 
-This report did not analyse all smart contracts permissions that can be found in the smart contract foundation of the CCIP infrastructure. But three functions that expose upgradeability risk are `setConfig` on `RMN` contract, `setOCR2Config` on `CommitStore` and `setOCR2Config` on the `EVM2EVMOfframp` contract.
+This report did not analyse all smart contract permissions that can be found in the smart contract foundation of the CCIP infrastructure. Nonetheless, three functions that expose upgradeability risk are `setConfig` on `RMN` contract, `setOCR2Config` on `CommitStore`, and `setOCR2Config` on the `EVM2EVMOfframp` contract.
 
 These functions allow to set the signer and transmitter addresses of the cross-chain messages for the three different networks. Updating the representing addresses to a smaller set can introduce centralization risk that could be exploited to trigger malicious cross-chain messages, such as minting/releasing tokens on the destination chain, without sufficient collateralization on the origin chain.
 
