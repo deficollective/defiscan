@@ -1,6 +1,6 @@
 "use client";
 
-import { columns, createColumns } from "./columns";
+import { createColumns } from "./columns";
 import { DataTable } from "./data-table";
 import { protocols } from "#site/content";
 import { useEffect, useState } from "react";
