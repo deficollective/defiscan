@@ -40,23 +40,13 @@ The `ValidatorRegistry` does _not_ directly affect the validators whitelisted (_
 
 # Centralization
 
-## Chain
-
-This review is limited to Chornicle Oracles deployed on Ethereum mainnet. We note that the findings should generalize to all chains according to Chronicle's documentation.
-
-## Upgradeability
-
 As mentioned in the [protocol analysis](#protocol-analysis), a multisig internal to Chronicle has permissions to change each oracle's validator set. Changing the validator set could put the system at risk of controlled prices which could lead to the loss of user funds in protocols, which rely on ChronicleLabs' oracles.
 
 Finally, the `ValidatorRegistry` can be updated by 3 Externally Owned Accounts (EOAs) to add or remove validator public keys. Updating the registry in a malicious fashion does not weaken the assumptions on the possibility of price manipulation as the validators perform all cryptographic actions based on the oracle contracts. Update or addition of a public key in the registry must come with a valid signature. The registry only improves the guarenttees of the protocol by attesting that each validator owns their key and this key is a single key (not a sum of keys). Moreover, it allows potentital DoS mitigations on the peer-to-peer network by filtering messages based on recovered signers.
 
-## Exit Window
-
-Any changes in an oracle's validator set is subject to a 7-day exit window.
+Any changes in an oracle's validator set is subject to a **7-day exit window**.
 
 The `ValidatorRegistry` can be updated without delay by 3 Externally Owned Accounts (EOAs). As mentioned in [upgradeability](#upgradeability), this does not increase the risks of price manipulation.
-
-## Accessibility
 
 Oracles and validators are listed on ChronicleLabs' [public dashboard](https://chroniclelabs.org/dashboard). This allows anyone to verify the data cryptographically. The dashboard is not opensource, but this does not prevent the monitoring of the onchain activity from the side of projects using ChronicleLabs' oracles.
 
