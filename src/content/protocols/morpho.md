@@ -105,9 +105,9 @@ The Chainlink oracle system itself is upgradeable potentially resulting in the p
 
 # Governance
 
-## External Permission Owners & Security Council
+## Security Council
 
-Permissioned functions in the Morpho protocol and `MORPHO` token contract are controlled by the `morpho.eth` multisig. This multisig does not meet our _Security Council_ requirements as shown in the table below. The `MorphoRewards` multisig oversees the computation and distribution of `MORPHO` rewards.
+Morpho does not yet an onchain governance with control over the contracts. Permissioned functions in the Morpho protocol and `MORPHO` token contract are controlled by the `morpho.eth` multisig. This multisig does not meet our _Security Council_ requirements as shown in the table below. The `MorphoRewards` multisig oversees the computation and distribution of `MORPHO` rewards.
 
 &nbsp;
 
@@ -115,7 +115,6 @@ Permissioned functions in the Morpho protocol and `MORPHO` token contract are co
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | morpho.eth             | [0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a](https://basescan.org/address/0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a) | Multisig 5/9 | ✅          | ✅              | ❌                | ❌             |
 | MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://etherscan.io/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
-| Morpho                 | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://etherscan.io/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) | Contract     | N/A         | N/A             | N/A               | N/A            |
 
 ## Exit Window
 
