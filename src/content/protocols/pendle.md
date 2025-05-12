@@ -48,30 +48,34 @@ While the multisig structure offers some protection against individual key compr
 
 The cross-chain architecture adds further complexity, as the governance can add destination contracts on other chains through `PendleMsgSendEndpointUpg` for synchronizing vePENDLE balances and voting results, potentially affecting reward distributions across the entire cross-chain ecosystem.
 
-> Upgradeability score: H
+> Upgradeability score: High
 
 ## Autonomy
 
 Pendle V2 operates autonomously on Ethereum with self-contained oracles for core functions. Its only dependency is LayerZero for cross-chain communications, using Google Cloud as the default validator. If this infrastructure fails, users cannot synchronize vePENDLE positions across chains (Ethereum, Arbitrum, Mantle, Base, Optimism, BNB Chain), losing reward boosts up to 250% and disrupting incentive voting, though core protocol functions and user funds remain secure.
 
-> Autonomy score: M
+> Autonomy score: Medium
 
 ## Exit Window
 
 No timelocks exist for Pendle's proxied contracts except for the `PENDLE` token (7-day delay). Critical functions can be executed immediately by governance multisigs without notice to users, creating vulnerability windows especially for cross-chain positions and monthly reward distributions.
 
-> Exit window score: H
+> Exit window score: High
 
 ## Accessibility
 
 Users can only access Pendle through a single user interface: [app.pendle.finance](https://app.pendle.finance). Currently, there is no backup solution in case the interface is shut down or users are censored.
 
-> Accessibility score: H
+> Accessibility score: High
 
-# Technical Analysis
+## Conclusion
+
+# Reviewer Notes
+
+# Protocol Analysis
 
 
-## Dependencies
+# Dependencies
 
 The Pendle V2 protocol exhibits a high degree of autonomy for its core operations on Ethereum, with critical external dependencies limited to cross-chain functionality.
 
@@ -99,6 +103,9 @@ No exit windows or timelocks are actually set up in the [EIP-1967](https://eips.
 Pendle has no timelock on nearly all critical administrative functions across the protocol. The only exception is the `initiateConfigChanges` function in the [PENDLE](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827)token contract, which enforces a mandatory 7-day timelock period before token configuration changes can take effect. However, this single timelock protection is limited exclusively to token parameters and does not extend to any other part of the protocol infrastructure.
 
 All other contracts and functions in the ecosystem - including upgrades, parameter changes, fee adjustments, and merkle root updates - can be modified instantly without any delay or notice period.
+
+
+# Governance
 
 ## Security Council
 
