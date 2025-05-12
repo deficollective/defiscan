@@ -20,7 +20,7 @@ update_date: "1970-01-01"
 
 CCIP is a cross-chain protocol that allows any smart contract protocol to use a multi-purpose bridge to transfer messages and tokens from one blockchain to another.
 
-This report only covers scanned permissions and the owners of these permission of the cross-chain communication infrastructure between Ethereum Mainnet and Arbitrum based on smart contract analysis. The code of the oracle networks and centralization vectors thereof are not part of the scope.
+This report only covers scanned permissions and the owners of these permissions of the cross-chain communication infrastructure between Ethereum Mainnet and Arbitrum based on smart contract analysis. The code of the oracle networks and centralization vectors thereof are not part of the scope.
 
 # Protocol Analysis
 
