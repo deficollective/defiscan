@@ -99,7 +99,7 @@ The review was not exhaustive and does not cover all permissions in the CCIP sys
 | EVM2EVMOnRamp      | [0x69eCC4E2D8ea56E2d0a05bF57f4Fd6aEE7f2c284](https://etherscan.io/address/0x69eCC4E2D8ea56E2d0a05bF57f4Fd6aEE7f2c284) |
 | EVM2EVMOffRamp     | [0xeFC4a18af59398FF23bfe7325F2401aD44286F4d](https://etherscan.io/address/0xeFC4a18af59398FF23bfe7325F2401aD44286F4d) |
 | TokenAdminRegistry | [0xb22764f98dD05c789929716D677382Df22C05Cb6](https://etherscan.io/address/0xb22764f98dD05c789929716D677382Df22C05Cb6) |
-| CommitStore        | [...](https://etherscan.io/address/...)                                                                               |
+| CommitStore        | [0xf7b343a17445f175f2dd9f5cb29baf0a8de75ed3](https://etherscan.io/address/0xf7b343a17445f175f2dd9f5cb29baf0a8de75ed3) |
 | RBACTimelock       | [0x44835bbba9d40deda9b64858095ecfb2693c9449](https://etherscan.io/address/0x44835bbba9d40deda9b64858095ecfb2693c9449) |
 
 ### Arbitrum
