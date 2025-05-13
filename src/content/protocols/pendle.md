@@ -139,15 +139,6 @@ According to their docs PENDLE is currently deployed on the following chains thr
 - Optimism
 - BNB Chain
 
-## Exit Window
-
-No exit windows or timelocks are actually set up in the [EIP-1967](https://eips.ethereum.org/EIPS/eip-1967) proxy pattern which is utilized by all proxy contracts across the core Pendle Protocol contracts, primarily owned by the [Governance](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) multisig. Essentially, if the [Governance](https://etherscan.io/address/0x8119EC16F0573B7dAc7C0CB94EB504FB32456ee1) decides on a change, it can be implemented immediately.
-
-Pendle has no timelock on nearly all critical administrative functions across the protocol. The only exception is the `initiateConfigChanges` function in the [PENDLE](https://etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827)token contract, which enforces a mandatory 7-day timelock period before token configuration changes can take effect. However, this single timelock protection is limited exclusively to token parameters and does not extend to any other part of the protocol infrastructure.
-
-All other contracts and functions in the ecosystem - including upgrades, parameter changes, fee adjustments, and merkle root updates - can be modified instantly without any delay or notice period.
-
-
 # Governance
 
 ## Security Council
