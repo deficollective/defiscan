@@ -28,25 +28,58 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol is fully upgradeable through multiple proxy patterns including `ERC1967/UUPS` proxies for most core contracts and `TransparentUpgradeableProxy` contracts managed by a central `ProxyAdmin`. The protocol also employs a custom selector-based router proxy (`PendleRouterV4`) that directs calls to specialized implementation contracts based on function selectors. This comprehensive upgradeability capability can potentially result in loss of user funds, theft of unclaimed rewards, and significant changes to the protocol's economic parameters and performance.
+The Pendle V2 protocol is fully upgradeable through multiple proxy patterns including `ERC1967/UUPS` proxies for most core contracts and `TransparentUpgradeableProxy` contracts managed by a central `ProxyAdmin`. This comprehensive upgradeability capability can potentially result in loss of user funds, theft of unclaimed rewards, and significant changes to the protocol's economic parameters and performance.
 
-The permission to upgrade the protocol follows a hierarchical structure:
+The permission to upgrade the protocol follows a hierarchical structure. The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging. The `DevMultisig`, a 2/3 multisig, controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
 
-The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging.
+### Core Protocol Components
 
-The `DevMultisig`, a 2/3 multisig which controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
+The `BaseSplitCodeFactoryContract` creates large contracts by splitting their bytecode into two separate fragments that function together as a single logical entity. The resulting fragment contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public. This contract is controlled by the EOA "Pendle: Deployer 1" and is used to deploy contracts like `PendleMarketFactoryV3`.
 
-Additional key actors include [hardwareDeployer](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F), which holds both `GUARDIAN` and `ALICE` roles in `PendleGovernanceProxy` as verified through on-chain transactions. This address can pause contracts and execute privileged functions via the aggregate method. It also performs critical operational functions including converting SY tokens to ETH using `PendleRouterV4` and transferring funds to the `DevMultisig`.
+The `ProxyAdmin` contract controls all `TransparentUpgradeableProxy` contracts in the protocol through functions including `upgrade`, `upgradeAndCall`, and `changeProxyAdmin`. These functions enable complete replacement of contract logic while preserving state data, with no timelock protection.
 
-Our on-chain analysis reveals the existence of `BaseSplitCodeFactoryContract`, which splits bytecode of large contracts into two fragments to circumvent Ethereum's size limit. These resulting contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public.
+The `upgradeToAndCall` function, available across the system's proxy contracts, permits upgrading a contract and executing initialization code atomically in a single transaction. Among all protocol contracts, only the `PENDLE` token implements a timelock mechanism (7 days via `initiateConfigChanges`). All other contracts can be upgraded instantaneously without delay or community review.
 
-A critical security concern is that no timelock mechanism is implemented for any upgrade functions or parameter changes except for the `PENDLE` token contract itself. This means that contract implementations, fee parameters, and fund recipient addresses can be changed instantaneously with no delay or opportunity for community review.
+### Yield Tokenization Infrastructure
 
-Particularly high-risk functions include `upgradeToAndCall` which can atomically upgrade a contract and execute arbitrary initialization logic in a single transaction, `setMerkleRoot` or `setMerkleRootAndFund` which can manipulate reward distributions, especially concerning during the predictable vulnerability window between monthly vePENDLE snapshots and distribution events, and fee parameter modifications that can be adjusted up to maximum caps (20%) without warning.
+The Yield Tokenization infrastructure presents significant upgradeability risks through multiple interconnected contracts. The `PendleCommonSYFactory`  is controlled by "Pendle: Deployer 1", an EOA. This contract can register arbitrary implementation code for new SY tokens via `setSYCreationCode`, creating a critical vulnerability where malicious code could be deployed for all future yield-bearing assets.
 
-While the multisig structure offers some protection against individual key compromises, the 2/4 threshold is relatively low for a protocol of this significance. Additionally, the existence of multiple contract versions with different ownership structures creates confusion, with some contracts like the original `PendleFeeDistributor` being owned by an unknown address.
+The `PendleYieldContractFactory`, controlled by the `Governance` , can modify economic parameters without timelock via `setInterestFeeRate` and `setTreasury`. These functions allow instant changes to protocol fees (up to 20%) and redirection of revenue streams without warning users, leaving them no opportunity to exit their positions.
 
-The cross-chain architecture adds further complexity, as the governance can add destination contracts on other chains through `PendleMsgSendEndpointUpg` for synchronizing vePENDLE balances and voting results, potentially affecting reward distributions across the entire cross-chain ecosystem.
+The SY tokens themselves `PendleERC4626SYV2` (example SY contract) contain `pause` and `unpause` functions that can be triggered by any address with appropriate permissions in the `PendleGovernanceProxy`. This creates an additional upgradeability risk where user assets could be instantly frozen through governance actions without timelock protection.
+
+### Pendle Swap System
+
+The PendleSwap component employs a custom selector-based router proxy `PendleRouterV4` that directs calls to seven specialized implementations. Unlike standard upgradeable proxies, PendleRouterV4's routing infrastructure is controlled by `ActionStorageV4`, whose owner is permanently set to the zero address, making its configuration immutable and eliminating upgradeability risks for this specific component.
+
+The `PendlePYLpOracle`, essential for integrations with external protocols, is fully upgradeable and owned by the Governance multisig (2/4). Its upgradeability risks stem from the ability of Governance to call `transferOwnership` without timelock and `setBlockCycleNumerator` which can modify TWAP calculations. This creates a risk where the Governance multisig could transfer control or manipulate oracle parameters with no delay or warning to users.
+
+The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately controlled by `Governance multisig`), contains high-risk functions including `setTreasuryAndFeeReserve` and `setOverriddenFee` that can modify critical economic parameters without timelock protection. The `PendleLimitRouter`, owned directly by the `Governance multisig`, includes functions like `setFeeRecipient` that can redirect protocol fees and `setLnFeeRateRoots` that can modify trading fee rates. This latter function can be called by either Governance or the `hardwareDeployer EOA`, creating multiple vectors for parameter manipulation.
+
+
+### vePENDLE and Governance System
+
+The vePENDLE system handles voting, boosts and rewards. The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. Its functions include `upgradeTo`, `addPool`, `removePool`, and `setPendlePerSec`, all controlled by `Governance` and in some cases by `hardwareDeployer` (an EOA) and `DevMultisig`. These functions allow for complete modification of the incentive system with no timelock protection.
+
+The `PendleGaugeControllerMainchainUpg` includes the function `withdrawPendle` that allows `Governance` to withdraw any amount of PENDLE tokens to any address, potentially draining all reserves in a single transaction. It also includes `upgradeTo` and `transferOwnership` functions that could transfer control of the entire reward distribution system.
+
+### Treasury & Fee System
+
+The treasury and fee distribution system presents critical upgradeability risks. The `PendleFeeDistributorV2`, controlled by the `DevMultisig`, includes high-risk functions like `upgradeToAndCall` and `setMerkleRootAndFund`. The latter updates the merkle root that validates user reward claims and simultaneously adds funds to the contract for distribution, creating a potential vector for reward theft if a malicious root is set.
+
+The contract also includes `updateProtocolClaimable` and `updateProtocolClaimables` which allow the DevMultisig to modify reward allocations for protocol integrations, potentially allocating excessive rewards to compromised addresses. Without timelock protection, these changes could be executed and funds drained before users could react.
+
+The original `PendleFeeDistributor`, still active but considered legacy, is owned by an unknown address (0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1), creating a potential risk for unclaimed token rewards. This contract includes functions like `upgradeTo`, `addPool`, and `fund` that could be used to manipulate remaining token distributions if this unknown owner is malicious or compromised.
+
+The `PendleMultiTokenMerkleDistributor` manages the monthly vePENDLE rewards distribution and includes functions like `upgradeTo`, `upgradeToAndCall`, and `setMerkleRoot`. A predictable vulnerability window exists between monthly vePENDLE snapshots (on the 20th) and distribution events, during which a compromised DevMultisig could redirect an entire month's rewards across multiple token types.
+
+### Cross-Chain Infrastructure
+
+The cross-chain architecture adds further complexity to the upgradeability risks. The `PendleMsgSendEndpointUpg` manages the transmission of vePENDLE position data to other blockchains through LayerZero and is fully upgradeable via `upgradeTo`. Critical functions like `setWhitelisted` and `addReceiveEndpoints` configure which addresses can send cross-chain messages and register new destination contracts.
+
+The `VotingEscrowPendleMainchain` includes functions like `addDestinationContract` and `setApproxDstExecutionGas` that affect how vePENDLE balances are synchronized across chains. If compromised, the cross-chain LP reward boost system could be manipulated, preventing users from receiving their rightful benefits on secondary chains.
+
+The governance can add destination contracts on other chains for synchronizing vePENDLE balances and voting results through functions like `addDestinationContract` in `VotingEscrowPendleMainchain` and `forceBroadcastResults` in `PendleVotingControllerUpg`. These functions have no timelock protection and could be used to manipulate cross-chain incentive distribution if the Governance multisig is compromised.
 
 > Upgradeability score: High
 
