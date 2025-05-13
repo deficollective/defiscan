@@ -50,7 +50,9 @@ An unintended upgrade of the Chainlink price feed contracts could result in stal
 
 ## Exit Window
 
-The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed `MORPHO` rewards and thus result in a _Medium_ Upgradeability risk. This risk is not mitigated with an onchain governance system and appropriate Exit Windows.
+The [morpho.eth](#security-council) multisig account owns the permission to enable new Liquidation LTVs and Interest Rate Models to create new Morpho Markets with, but cannot change existing Morpho Markets thus not affecting users.
+
+The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed `MORPHO` rewards and thus result in a Medium Upgradeability risk. This risk is not mitigated with an onchain governance system and appropriate Exit Windows.
 
 > Exit Window score: Medium
 
@@ -59,6 +61,8 @@ The Morpho protocol exposes critical permissions in the `MORPHO` token that can 
 The main morpho interface is [app.morpho.org](https://app.morpho.org/). An RPC-only fallback interface ([fallback.morpho.org](https://fallback.morpho.org)) exists, offering an alternative in case of failure of the main interace. Finally, a backup solution allows users to self-host and access morpho following instructions on [this repository](https://github.com/morpho-org/morpho-blue-offchain-public).
 
 In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.io/metamorpho), and [Contango](https://app.contango.xyz/).
+
+Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho on Polygon, Optimism, and World.
 
 > Accessibility score: Low
 
