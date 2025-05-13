@@ -84,6 +84,18 @@ The governance can add destination contracts on other chains for synchronizing v
 
 > Upgradeability score: High
 
+## Autonomy
+
+Pendle V2 operates autonomously on Ethereum with self-contained oracles for core functions. Its only dependency is LayerZero for cross-chain communications, using Google Cloud as the default validator. If this infrastructure fails, users cannot synchronize vePENDLE positions across chains (Ethereum, Arbitrum, Mantle, Base, Optimism, BNB Chain), losing reward boosts up to 250% and disrupting incentive voting, though core protocol functions and user funds remain secure.
+
+> Autonomy score: Medium
+
+## Exit Window
+
+No timelocks exist for Pendle's proxied contracts except for the `PENDLE` token (7-day delay). Critical functions can be executed immediately by governance multisigs without notice to users, creating vulnerability windows especially for cross-chain positions and monthly reward distributions.
+
+> Exit window score: High
+
 ## Accessibility
 
 Users can only access Pendle through a single user interface: [app.pendle.finance](https://app.pendle.finance). Currently, there is no backup solution in case the interface is shut down or users are censored.
