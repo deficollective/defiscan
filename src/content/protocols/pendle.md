@@ -86,13 +86,14 @@ The governance can add destination contracts on other chains for synchronizing v
 
 ## Autonomy
 
-Pendle V2 operates autonomously on Ethereum with self-contained oracles for core functions. Its only dependency is LayerZero for cross-chain communications, using Google Cloud as the default validator. If this infrastructure fails, users cannot synchronize vePENDLE positions across chains (Ethereum, Arbitrum, Mantle, Base, Optimism, BNB Chain), losing reward boosts up to 250% and disrupting incentive voting, though core protocol functions and user funds remain secure.
+Pendle V2 autonomy presents a mixed profile with high independence on Ethereum yet external dependencies for cross-chain functions. On Ethereum, Pendle employs a dual-layer oracle system: OracleLib integrated directly into PendleMarket contracts for collecting and updating interest rate data autonomously, and PendlePYLpOracle serving as a facade for external protocol integrations. This self-contained oracle infrastructure ensures complete autonomy for core protocol operations. 
+The only external dependency is LayerZero for cross-chain communications, using Google Cloud as its default validator since September 2023. If this infrastructure fails, users would lose vePENDLE position synchronization across the six supported chains, LP reward boosts up to 250%, and cross-chain voting functionalities. However, user funds and core protocol operations on Ethereum would remain unaffected. This configuration warrants a Medium autonomy score as dependencies can impact protocol performance regarding yields and rewards without threatening user principal funds.
 
 > Autonomy score: Medium
 
 ## Exit Window
 
-No timelocks exist for Pendle's proxied contracts except for the `PENDLE` token (7-day delay). Critical functions can be executed immediately by governance multisigs without notice to users, creating vulnerability windows especially for cross-chain positions and monthly reward distributions.
+Pendle presents a critical risk due to the near-total absence of timelocks on its upgradeable contracts. With the exception of the `PENDLE` token which implements a 7-day delay through the `initiateConfigChanges` function, all other protocol contracts can be modified instantly without any delay or warning to users. This absence of an exit window is particularly problematic given the high upgradeability capabilities of the protocol. The `pause` functions in SY contracts can immediately freeze deposits, withdrawals and transfers. Functions such as `withdrawPendle` in `PendleGaugeControllerMainchainUpg` or `setTreasuryAndFeeReserve` in `PendleMarketFactoryV3` can redirect funds without delay.  Users with positions across the six supported chains (Ethereum, Arbitrum, Mantle, Base, Optimism, BNB Chain) are dependent on the cross-chain infrastructure that synchronizes their vePENDLE positions and voting power.
 
 > Exit window score: High
 
