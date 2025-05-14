@@ -69,8 +69,6 @@ The fee distribution system has multiple critical upgradeability vectors and cen
 
 The `hardwareDeployer` EOA creates a severe centralization risk in the fee flow: Treasury multisigs (2/6 and 2/5) send tokens to this EOA, which then converts them to ETH using `PendleRouterV4` and is supposed to transfer funds to `DevMultisig` and to the `Treasury`. Our analysis shows this EOA can simply choose not to execute these transfers, effectively blocking all fee distributions to users. This address also has both `GUARDIAN` and `ALICE` roles in `PendleGovernanceProxy` and can modify protocol parameters like fee rates via `setLnFeeRate`.
 
-The original `PendleFeeDistributor`, still active but considered legacy, is owned by an unknown address(0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) that still distributes USDC to users with no relation to the current Treasury.
-
 The `PendleMultiTokenMerkleDistributor` manages token rewards earned from vePENDLE voting points and contains critical upgradeability functions including `upgradeToAndCall` and `setMerkleRoot`, controlled by the `DevMultisig`. These functions allow replacing the contract implementation and modifying the merkle root used to validate reward claims, without timelock or other protection.
 
 
@@ -119,11 +117,44 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 ## Yield Tokenization Architecture
 
+The Pendle protocol utilizes a three-token system to separate yield-bearing assets into principal and yield components through a series of specialized contracts.
+
+PendleCommonSYFactory (0x466ced3b33045ea986b2f306c8d0aa8067961cf8) creates Standardized Yield (SY) tokens via the setSYCreationCode function. This factory, controlled by "Pendle: Deployer 1" EOA, deploys various SY implementations like PendleERC4626SYV2 (0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) that normalize yield-bearing assets into the protocol's standard format.
+
+PendleYieldContractFactory (0x35A338522a435D46f77Be32C70E215B813D0e3aC) performs the core tokenization through mintPyFromSy, splitting SY tokens into equal amounts of Principal Tokens (PT) and Yield Tokens (YT) with a specified maturity date.
+
+PTs (Example: 0x50D2C7992b802Eef16c04FeADAB310f31866a545) represent the right to the underlying asset at maturity, while YTs (0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) capture all yield until maturity.
+
 ## PendleSwap AMM
+
+PendleSwap employs PendleMarketV3 contracts (Example: 0x85667e484a32d884010cf16427d90049ccf46e97) created by PendleMarketFactoryV3 (0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050) to facilitate trading. These markets implement a specialized AMM with a time-adaptive price curve optimized for principal and yield token trading, using integrated OracleLib for autonomous interest rate tracking.
+
+User interactions are funneled through PendleRouterV4 (0x888888888889758F76e7103c6CbF23ABbF58F946), which uses a selector-based routing system to dispatch calls to specialized implementation contracts. This router delegates function calls to seven different action facets based on their function signatures:
+
+- ActionAddRemoveLiqV3: Manages liquidity provision and removal
+- ActionSwapPTV3: Handles PT/SY swaps
+- ActionSwapYTV3: Executes flash-loan based YT trades
+- ActionMiscV3: Handles token conversions and other utilities
+- ActionSimple: Provides basic token operations
+- ActionCallbackV3: Manages callback functions for complex operations
+- ActionStorageV4: Controls the routing configuration
+
+The routing configuration in ActionStorageV4 is immutable (owned by address(0)), making the core routing logic unchangeable once deployed.
+
+For YT trading, ActionSwapYTV3 (0x4a03Ce0a268951d04E187B1CF48075eE69266e27) implements a flash swap mechanism:
+
+Buying YT: Flash-borrows SY, mints PT+YT, sells PT to repay the loan, delivers YT
+Selling YT: Flash-borrows PT, recombines with YT to get SY, partially sells SY to repay the loan
+
+For PT trading, ActionSwapPTV3 (0xd8D200d9A713A1c71cF1e7F694B14E5F1D948b15) implements direct swaps between PT and SY:
+Buying PT: swapExactSyForPt or swapSyForExactPt functions exchange SY for PT
+Selling PT: swapExactPtForSy or swapPtForExactSy functions exchange PT for SY
 
 ## Liquidity and Incentives System
 
 ## vePendle voting and emissions
+
+The original `PendleFeeDistributor`, still active but considered legacy, is owned by an unknown address(0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) that still distributes USDC to users with no relation to the current Treasury.
 
 ## Upgradeability Architecture
 
