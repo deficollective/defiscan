@@ -179,7 +179,10 @@ According to their docs PENDLE is currently deployed on the following chains thr
 | PendlePYLpOracle (Proxy)                            | [0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2](https://etherscan.io/address/0x9a9fa8338dd5e5b2188006f1cd2ef26d921650c2) |
 | PendlePYLpOracle (Implementation)                   | [0x14418800e0b4c971905423aa873e83355922428c](https://etherscan.io/address/0x14418800e0b4c971905423aa873e83355922428c) |
 | PendleYieldContractFactory (yieldContractFactoryV5) | [0x35A338522a435D46f77Be32C70E215B813D0e3aC](https://etherscan.io/address/0x35A338522a435D46f77Be32C70E215B813D0e3aC) |
+| PendlePrincipalToken (Example PT)                   | [0x50D2C7992b802Eef16c04FeADAB310f31866a545](https://etherscan.io/address/0x50D2C7992b802Eef16c04FeADAB310f31866a545) |
+| PendleYieldToken (Example YT)                       | [0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868](https://etherscan.io/address/0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) |
 | PendleMarketFactoryV3 (marketFactoryV5)             | [0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050](https://etherscan.io/address/0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050) |
+| PendleMarketV3 (Example)                            | [0x85667e484a32d884010cf16427d90049ccf46e97](https://etherscan.io/address/0x85667e484a32d884010cf16427d90049ccf46e97) |
 | PendlePoolDeployHelper                              | [0x4Df98410c95737FD646D2413AC6CAFc1c04834b9](https://etherscan.io/address/0x4Df98410c95737FD646D2413AC6CAFc1c04834b9) |
 | PendlePoolDeployHelperV2                            | [0xF642d8Daa026B8aEd6dFE82FACbA2E077AF199E2](https://etherscan.io/address/0xF642d8Daa026B8aEd6dFE82FACbA2E077AF199E2) |
 | PendleLimitRouter (Proxy)                           | [0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321](https://etherscan.io/address/0x000000000000c9B3E2C3Ec88B1B4c0cD853f4321) |
@@ -190,6 +193,7 @@ According to their docs PENDLE is currently deployed on the following chains thr
 | PendleCommonPoolDeployHelperV2 (Implementation)     | [0x1bd53748cb557da4cfe7c535f6dcb3bcec38d055](https://etherscan.io/address/0x1bd53748cb557da4cfe7c535f6dcb3bcec38d055) |
 | PendleCommonSYFactory (Proxy)                       | [0x466ced3b33045ea986b2f306c8d0aa8067961cf8](https://etherscan.io/address/0x466ced3b33045ea986b2f306c8d0aa8067961cf8) |
 | PendleCommonSYFactory (Implementation)              | [0x3ba05f8989262e0637c6350437d0db7f14fbda96](https://etherscan.io/address/0x3ba05f8989262e0637c6350437d0db7f14fbda96) |
+| PendleERC4626SYV2 (Example SY)                      | [0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0](https://etherscan.io/address/0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) |
 | PendleSparkLinearDiscountOracleFactory              | [0x34C91651A070664279866E5f3d6B4d5F65cbbFFb](https://etherscan.io/address/0x34C91651A070664279866E5f3d6B4d5F65cbbFFb) |
 | PendleChainlinkOracleFactory                        | [0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee](https://etherscan.io/address/0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee) |
 | VotingEscrowPendleMainchain                         | [0x4f30A9D41B80ecC5B94306AB4364951AE3170210](https://etherscan.io/address/0x4f30A9D41B80ecC5B94306AB4364951AE3170210) |
@@ -205,10 +209,7 @@ According to their docs PENDLE is currently deployed on the following chains thr
 | PendleFeeDistributor (Implementation)               | [0xb0caa67c712d96809f2abaf2c95369ef942ce8cb](https://etherscan.io/address/0xb0caa67c712d96809f2abaf2c95369ef942ce8cb) |
 | PendleFeeDistributorV2 (Proxy)                      | [0x8C237520a8E14D658170A633D96F8e80764433b9](https://etherscan.io/address/0x8C237520a8E14D658170A633D96F8e80764433b9) |
 | PendleFeeDistributorV2 (Implementation)             | [0xafaae49c7684a2f386eb18569966604973f9d83d](https://etherscan.io/address/0xafaae49c7684a2f386eb18569966604973f9d83d) |
-| PendleERC4626SYV2 (Example)                         | [0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0](https://etherscan.io/address/0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) |
-| PendlePrincipalToken (Example)                      | [0x50D2C7992b802Eef16c04FeADAB310f31866a545](https://etherscan.io/address/0x50D2C7992b802Eef16c04FeADAB310f31866a545) |
-| PendleYieldToken (Example)                          | [0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868](https://etherscan.io/address/0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) |
-| PendleMarketV3 (Example)                            | [0x85667e484a32d884010cf16427d90049ccf46e97](https://etherscan.io/address/0x85667e484a32d884010cf16427d90049ccf46e97) |
+
 
 
 
