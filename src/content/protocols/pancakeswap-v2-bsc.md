@@ -6,7 +6,7 @@ github: ["https://github.com/pancakeswap"]
 defillama_slug: ["pancakeswap-amm"]
 chain: "Binance Smart Chain"
 stage: 0
-reasons: ["remove", "if none"]
+reasons: []
 risks: ["L", "M", "M", "H", "M"]
 author: ["noemacee"]
 submission_date: "2025-05-13"
