@@ -196,7 +196,7 @@ According to their docs PENDLE is currently deployed on the following chains thr
 | PendleERC4626SYV2 (Example SY)                      | [0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0](https://etherscan.io/address/0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) |
 | PendleSparkLinearDiscountOracleFactory              | [0x34C91651A070664279866E5f3d6B4d5F65cbbFFb](https://etherscan.io/address/0x34C91651A070664279866E5f3d6B4d5F65cbbFFb) |
 | PendleChainlinkOracleFactory                        | [0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee](https://etherscan.io/address/0x2A73e899389cABa2a2f648BaBA35e67f5C00EFee) |
-| VotingEscrowPendleMainchain                         | [0x4f30A9D41B80ecC5B94306AB4364951AE3170210](https://etherscan.io/address/0x4f30A9D41B80ecC5B94306AB4364951AE3170210) |
+| VotingEscrowPendleMainchain (vePendle)              | [0x4f30A9D41B80ecC5B94306AB4364951AE3170210](https://etherscan.io/address/0x4f30A9D41B80ecC5B94306AB4364951AE3170210) |
 | PendleMsgSendEndpointUpg (Proxy)                    | [0x07b1014c88f14C9E910092526db57A20052E989F](https://etherscan.io/address/0x07b1014c88f14C9E910092526db57A20052E989F) |
 | PendleMsgSendEndpointUpg (Implementation)           | [0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a) |
 | PendleVotingControllerUpg (Proxy)                   | [0x44087E105137a5095c008AaB6a6530182821F2F0](https://etherscan.io/address/0x44087E105137a5095c008AaB6a6530182821F2F0) |
