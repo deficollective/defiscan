@@ -117,6 +117,17 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 # Protocol Analysis
 
+## Yield Tokenization Architecture
+
+## PendleSwap AMM
+
+## Liquidity and Incentives System
+
+## vePendle voting and emissions
+
+## Upgradeability Architecture
+
+## LayerZero Cross-chain messaging
 
 # Dependencies
 
@@ -150,7 +161,8 @@ According to their docs PENDLE is currently deployed on the following chains thr
 | Pendle: Deployer 1                | [0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7](https://etherscan.io/address/0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7) | EOA          | ❌                  | ❌                      | ❌                        | ❌                          |
 | hardwareDeployer                  | [0xeea6F790F18563E91b18DF00B89d9f79b2E6761F](https://etherscan.io/address/0xeea6F790F18563E91b18DF00B89d9f79b2E6761F) | EOA          | ❌                  | ❌                      | ❌                        | ❌                          |
 | DevMultisig                       | [0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1](https://etherscan.io/address/0xE6F0489ED91dc27f40f9dbe8f81fccbFC16b9cb1) | Multisig 2/3 | ❌                  | ✅                      | ❌                        | ❌                          |
-| Treasury                          | [0x8270400d528c34e1596EF367eeDEc99080A1b592](https://etherscan.io/address/0x8270400d528c34e1596EF367eeDEc99080A1b592) | Multisig 2/6 | ❌                  | ❌                      | ❌                        | ❌                          |
+| Treasury 1                        | [0x8270400d528c34e1596EF367eeDEc99080A1b592](https://etherscan.io/address/0x8270400d528c34e1596EF367eeDEc99080A1b592) | Multisig 2/6 | ❌                  | ❌                      | ❌                        | ❌                          |
+| Treasury 2                        | [0xC328dFcD2C8450e2487a91daa9B75629075b7A43](https://etherscan.io/address/0xC328dFcD2C8450e2487a91daa9B75629075b7A43) | Multisig 2/5 | ❌                  | ❌                      | ❌                        | ❌                          |
 | Undeclared Address                | [0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1](https://etherscan.io/address/0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) | EOA          | ❌                  | ❌                      | ❌                        | ❌                          |
 
 # Contracts and Permissions
@@ -203,7 +215,8 @@ According to their docs PENDLE is currently deployed on the following chains thr
 | PendleVotingControllerUpg (Implementation)          | [0x2ddfe90808e6a4679575c0f727d3f2f104fba604](https://etherscan.io/address/0x2ddfe90808e6a4679575c0f727d3f2f104fba604) |
 | PendleGaugeControllerMainchainUpg (Proxy)           | [0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57](https://etherscan.io/address/0x47D74516B33eD5D70ddE7119A40839f6Fcc24e57) |
 | PendleGaugeControllerMainchainUpg (Implementation)  | [0x7762cbfa8f62999a8a40d800b751686e99a31c9a](https://etherscan.io/address/0x7762cbfa8f62999a8a40d800b751686e99a31c9a) |
-| PendleMultiTokenMerkleDistributor                   | [0x3942F7B55094250644cFfDa7160226Caa349A38E](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E) |
+| PendleMultiTokenMerkleDistributor (Proxy)           | [0x3942F7B55094250644cFfDa7160226Caa349A38E](https://etherscan.io/address/0x3942F7B55094250644cFfDa7160226Caa349A38E) |
+| PendleMultiTokenMerkleDistributor (Implementation)  | [0x946afc64dcb64bb96688ead4f0d0ac67b1dd7a36](https://etherscan.io/address/0x946afc64dcb64bb96688ead4f0d0ac67b1dd7a36) |
 | ERC1967Proxy (externalRewardsDistributor)           | [0xae898a7d07f8e27f25e13d0f351a7401f9a5bf9d](https://etherscan.io/address/0xae898a7d07f8e27f25e13d0f351a7401f9a5bf9d) |
 | PendleFeeDistributor (Proxy)                        | [0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2](https://etherscan.io/address/0xd7b34a6fDCb2A7ceD2115FF7f5fdD72aa6aA4dE2) |
 | PendleFeeDistributor (Implementation)               | [0xb0caa67c712d96809f2abaf2c95369ef942ce8cb](https://etherscan.io/address/0xb0caa67c712d96809f2abaf2c95369ef942ce8cb) |
