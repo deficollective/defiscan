@@ -87,6 +87,8 @@ The `Aragon TokenManager` is an Aragon application that manages the `LDO` govern
 
 The Finance contract is part of the Aragon OS ecosystem and serves as a financial controller for DAOs, including Lido. It manages:Treasury funds through a Vault. Period-based accounting. Scheduled and immediate payments. Budget controls for different tokens. Transaction recording and reporting
 
+Easytrack: set of pre-approved governance operations that can be executed after some waiting period if there was no governance objection.
+
 ## Security Council
 
 | Name                              | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
@@ -380,27 +382,26 @@ EasyTrack EVMSCriptExecutor: can create payments in Aragon Finance
 |MEV Boost Relay Allowed List (Vyper) | dismiss_manager | Dismisses the current manager and sets the manager to the zero address. | Aragon Agent |
 |MEV Boost Relay Allowed List (Vyper) | recover_erc20 | Transfers ERC20 tokens out of the contract and to any non-zero address. This is meant to recover funds sent to the contract by mistake. | Aragon Agent |
 
-| EasyTrack | addEVMScriptFactory | ... | ['onlyRole'] |
-| EasyTrack | removeEVMScriptFactory | ... | ['onlyRole'] |
-| EasyTrack | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| EasyTrack | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| EasyTrack | setMotionDuration | ... | ['onlyRole'] |
-| EasyTrack | setObjectionsThreshold | ... | ['onlyRole'] |
-| EasyTrack | setMotionsCountLimit | ... | ['onlyRole'] |
-| EasyTrack | createMotion | ... | ['whenNotPaused'] |
-| EasyTrack | enactMotion | ... | ['whenNotPaused'] |
-| EasyTrack | objectToMotion | ... | [] |
-| EasyTrack | cancelMotion | ... | [] |
-| EasyTrack | cancelMotions | ... | ['onlyRole'] |
-| EasyTrack | cancelAllMotions | ... | ['onlyRole'] |
-| EasyTrack | setEVMScriptExecutor | ... | ['onlyRole'] |
-| EasyTrack | pause | ... | ['onlyRole', 'whenNotPaused'] |
-| EasyTrack | unpause | ... | ['onlyRole', 'whenPaused'] |
+| EasyTrack | addEVMScriptFactory | Adds a script factory to the contract and associated permissions. This factory can later be used by anyone to create motions in the easy track. The factory can only create script which execute functions allowed by the specified permissions. | Aragon Voting |
+| EasyTrack | removeEVMScriptFactory | Removes a script factory from the contract and prevents any further motions to be created from it. | Aragon Voting |
+| EasyTrack | setEVMScriptExecutor | Sets the script executor, the contract used to execute the motions. | Aragon Voting |
+| EasyTrack | setMotionDuration | Sets the duration of a motion. This is a critical parameter as it represents the minimal waiting time before a motion can be enacted. If the time is too short users will not have time to object to the motion and cancel it. A duration cannot be set to less than 48 hours and is currently 72 hours at the time of writing. | Aragon Voting|
+| EasyTrack | setObjectionsThreshold | Sets the percent of total governance tokens required to object to a motion, in basis points (1% = 100). The current objection threshold is 0.5% of all governance tokens. | Aragon Voting |
+| EasyTrack | setMotionsCountLimit | Sets a limit for the number of motions which can be ongoing at all times. | Aragon Voting |
+| EasyTrack | createMotion | Creates a new motion using an existing script factory. The motion can be executed after the mandatory duration has passed and no objections occured from governance token holders. The motion can only execute permissioned functions thourhg scripts created by the script factory. | ['whenNotPaused'] |
+| EasyTrack | enactMotion | Activates a motion if the mandatory objection period has passed. | ['whenNotPaused'] |
+| EasyTrack | cancelMotion | Allows the creator of a motion to cancel it before execution. | Motion Creator |
+| EasyTrack | cancelMotions | Allows the governance to cancel a list of motions. | Aragon Voting |
+| EasyTrack | cancelAllMotions | Allows the governance to cancel all pending motions. | Aragon Voting |
+| EasyTrack | pause | Pauses the contract and prevents both the creation and activation of motions. | EmergencyBrakes Multisig, Aragon Voting |
+| EasyTrack | unpause | Unpauses the contract. New motions can be created again and existing motions can complete if they haven't been cancelled. | Aragon Voting |
+| EasyTrack | grantRole | Grants a role within the contract. There are roles to pause, unpause, and cancel motions. | Aragon Voting |
+| EasyTrack | revokeRole | Revokes a role within the contract. | Aragon Voting |
 
-| EVMScriptExecutor | renounceOwnership | ... | Aragon Voting |
-| EVMScriptExecutor | transferOwnership | ... | Aragon Voting |
-| EVMScriptExecutor | executeEVMScript | ... | EasyTrack |
-| EVMScriptExecutor | setEasyTrack | ... | Aragon Voting |
+| EVMScriptExecutor | renounceOwnership | Would remove all ownership over the contract and prevent future update of the `EasyTrack`contract. | Aragon Voting |
+| EVMScriptExecutor | transferOwnership | Transfers ownership over the contract to a new address. The new owner can change the `EasyTrack` contract. The new contract would have permissions to use any permissions (throughs scripts) granted to the `EVMScriptExecutor` without any mandatory delay and objection rights. | Aragon Voting |
+| EVMScriptExecutor | executeEVMScript | Executes a script. Only the `EasyTrack` can call this function and this ensures only scripts approved and created through the `EasyTrack` will be executed. | EasyTrack |
+| EVMScriptExecutor | setEasyTrack | Sets the `EasyTrack` contract, the contract allowed to execute scripts using through this contract. | Aragon Voting |
 
 ## Access Control
 
