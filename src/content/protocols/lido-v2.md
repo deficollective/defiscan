@@ -6,7 +6,7 @@ github: ["https://github.com/lidofinance"]
 defillama_slug: ["lido"]
 chain: "mainnet"
 stage: 0
-reasons: [""]
+reasons: []
 risks: ["L", "H", "H", "H", "L"]
 author: ["mmilien_"]
 submission_date: "1970-01-01"
