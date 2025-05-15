@@ -93,6 +93,10 @@ There is a strategy (MinFirstAllocationStrategy) that chooses to which validator
 
 Fee is in two parts: module fee, treasury fee, in %
 
+APMRegistry:
+
+Simple DVT: handle the NO set?
+
 ## Liquid Staking
 
 <-- DIAGRAM -->
@@ -166,6 +170,11 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | GateSeal                               | [0xEe06EA501f7d9DC6F4200385A8D910182D155d3e](https://etherscan.io/address/0xEe06EA501f7d9DC6F4200385A8D910182D155d3e) |
 | GateSeal                               | [0xf9C9fDB4A5D2AA1D836D5370AB9b28BC1847e178](https://etherscan.io/address/0xf9C9fDB4A5D2AA1D836D5370AB9b28BC1847e178) |
 | GateSeal Factory                       | [0x6c82877cac5a7a739f16ca0a89c0a328b8764a24](https://etherscan.io/address/0x6c82877cac5a7a739f16ca0a89c0a328b8764a24) |
+| Node Registry (Proxy) (Curated Module) | [0x55032650b14df07b85bF18A3a3eC8E0Af2e028d5](https://etherscan.io/address/0x55032650b14df07b85bF18A3a3eC8E0Af2e028d5) |
+| Node Registry (Proxy) (DVT Module)     | [0xaE7B191A31f627b4eB1d4DaC64eaB9976995b433](https://etherscan.io/address/0xaE7B191A31f627b4eB1d4DaC64eaB9976995b433) |
+| Node Registry (Impl)                   | [0x1770044a38402e3cfca2fcfa0c84a093c9b42135](https://etherscan.io/address/0x1770044a38402e3cfca2fcfa0c84a093c9b42135) |
+| CSModule (Proxy)                       | [0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F](https://etherscan.io/address/0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F) |
+| CSModule (Impl)                        | [0x8daea53b17a629918cdfab785c5c74077c1d895b](https://etherscan.io/address/0x8daea53b17a629918cdfab785c5c74077c1d895b) |
 
 ## Permission Owners
 
@@ -384,6 +393,45 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | EVMScriptExecutor | transferOwnership | Transfers ownership over the contract to a new address. The new owner can change the `EasyTrack` contract. The new contract would have permissions to use any permissions (throughs scripts) granted to the `EVMScriptExecutor` without any mandatory delay and objection rights. | Aragon Voting |
 | EVMScriptExecutor | executeEVMScript | Executes a script. Only the `EasyTrack` can call this function and this ensures only scripts approved and created through the `EasyTrack` will be executed. | EasyTrack |
 | EVMScriptExecutor | setEasyTrack | Sets the `EasyTrack` contract, the contract allowed to execute scripts using through this contract. | Aragon Voting |
+
+| CSModule | **AccessControlEnumerable_init | ... | ['onlyInitializing'] |
+| CSModule | **AccessControlEnumerable_init_unchained | ... | ['onlyInitializing'] |
+| CSModule | **AccessControl_init | ... | ['onlyInitializing'] |
+| CSModule | **AccessControl_init_unchained | ... | ['onlyInitializing'] |
+| CSModule | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSModule | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSModule | **ERC165_init | ... | ['onlyInitializing'] |
+| CSModule | **ERC165_init_unchained | ... | ['onlyInitializing'] |
+| CSModule | **Context_init | ... | ['onlyInitializing'] |
+| CSModule | **Context_init_unchained | ... | ['onlyInitializing'] |
+| CSModule | initialize | ... | ['initializer'] |
+| CSModule | resume | ... | ['onlyRole'] |
+| CSModule | pauseFor | ... | ['onlyRole'] |
+| CSModule | activatePublicRelease | ... | ['onlyRole'] |
+| CSModule | setKeyRemovalCharge | ... | ['onlyRole'] |
+| CSModule | addNodeOperatorETH | ... | ['whenResumed'] |
+| CSModule | addNodeOperatorStETH | ... | ['whenResumed'] |
+| CSModule | addNodeOperatorWstETH | ... | ['whenResumed'] |
+| CSModule | addValidatorKeysETH | ... | ['whenResumed'] |
+| CSModule | addValidatorKeysStETH | ... | ['whenResumed'] |
+| CSModule | addValidatorKeysWstETH | ... | ['whenResumed'] |
+| CSModule | onRewardsMinted | ... | ['onlyRole'] |
+| CSModule | updateStuckValidatorsCount | ... | ['onlyRole'] |
+| CSModule | updateExitedValidatorsCount | ... | ['onlyRole'] |
+| CSModule | updateRefundedValidatorsCount | ... | ['onlyRole'] |
+| CSModule | updateTargetValidatorsLimits | ... | ['onlyRole'] |
+| CSModule | onExitedAndStuckValidatorsCountsUpdated | ... | ['onlyRole'] |
+| CSModule | unsafeUpdateValidatorsCount | ... | ['onlyRole'] |
+| CSModule | decreaseVettedSigningKeysCount | ... | ['onlyRole'] |
+| CSModule | reportELRewardsStealingPenalty | ... | ['onlyRole'] |
+| CSModule | cancelELRewardsStealingPenalty | ... | ['onlyRole'] |
+| CSModule | settleELRewardsStealingPenalty | ... | ['onlyRole'] |
+| CSModule | submitWithdrawal | ... | ['onlyRole'] |
+| CSModule | submitInitialSlashing | ... | ['onlyRole'] |
+| CSModule | onWithdrawalCredentialsChanged | ... | ['onlyRole'] |
+| CSModule | obtainDepositData | ... | ['onlyRole'] |
+| CSModule | \_onlyNodeOperatorManager | ... | [] |
+| CSModule | \_onlyNodeOperatorManagerOrRewardAddresses | ... | [] |
 
 ## Access Control
 
