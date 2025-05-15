@@ -40,7 +40,7 @@ Sky has a centralized dependency on Circle and its `USDC` stablecoin token. This
 
 The Sky protocol also relies on Chronicle's oracle price feeds to assess the solvency of debt positions. The Chronicol protocol uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates onchain. We found that any changes to the validator set are subject to a 7 days exit window. Chronicle thus achieves a _Medium_ centralization risk score as discussed in a separate report [here](./chronicle.md).
 
-An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates, and the _Sky Governance_ can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
+An _Oracle Security Module_ (`OSM`) enforces a 1-hour delay on price updates, and the _Sky Governance_ can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
 
 > Autonomy score: High
 
