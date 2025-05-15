@@ -119,11 +119,13 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 The Pendle protocol utilizes a three-token system to separate yield-bearing assets into principal and yield components through a series of specialized contracts.
 
-PendleCommonSYFactory (0x466ced3b33045ea986b2f306c8d0aa8067961cf8) creates Standardized Yield (SY) tokens via the setSYCreationCode function. This factory, controlled by "Pendle: Deployer 1" EOA, deploys various SY implementations like PendleERC4626SYV2 (0x7ac8ca87959b1d5EDfe2df5325A37c304DCea4D0) that normalize yield-bearing assets into the protocol's standard format.
+`PendleCommonSYFactory` deploys Standardized Yield (SY) tokens via the `deploySY` function, using creation code registered with `setSYCreationCode`. While this factory is owned by the `Pendle: Deployer 1` EOA, the deployment of new SY tokens is permissionless with the `deploySY` function.
 
-PendleYieldContractFactory (0x35A338522a435D46f77Be32C70E215B813D0e3aC) performs the core tokenization through mintPyFromSy, splitting SY tokens into equal amounts of Principal Tokens (PT) and Yield Tokens (YT) with a specified maturity date.
+`PendleYieldContractFactory` enables the creation of Principal Token (PT) and Yield Token (YT) contracts through its `createYieldContract` function, which is also permissionless. This function can be called directly by users or programmatically via the `PendleCommonPoolDeployHelperV2` as part of a full pool deployment process.
 
-PTs (Example: 0x50D2C7992b802Eef16c04FeADAB310f31866a545) represent the right to the underlying asset at maturity, while YTs (0x708dD9B344dDc7842f44C7b90492CF0e1E3eb868) capture all yield until maturity.
+The actual tokenization process (converting SY to PT and YT) occurs when users interact with the system through the Router, which delegates to the `ActionMiscV3` contract's `mintPyFromSy` function. This function transfers SY tokens to the YT contract, which then mints equal quantities of PT and YT tokens as confirmed in the `PendleYieldToken` contract's documentation.
+
+PT (`PendlePrincipalToken`) represents the right to redeem the underlying asset at maturity, while YT (`PendleYieldToken`) captures all yield accrued until maturity.
 
 ## PendleSwap AMM
 
