@@ -16,11 +16,9 @@ update_date: "1970-01-01"
 
 # Summary
 
+On Ethereum Mainnet, 3 different instances exist _Core_, _Prime_ and _EtherFi_ which all are managed by the Aave DAO. **This report covers the Aave V3 _EtherFi_ instance.** To check out our main report on Aave V3 see the [_Core Instance_ report](/protocols/aave). This report focuses on the key differences between the _EtherFi_ and the _Core_ instance.
+
 Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, `GHO`. Users can borrow and lend `GHO` like any other asset in the system.
-
-The Aave DAO is Aave's onchain governance system, allowing `AAVE`, `stkAAVE` and `aAAVE` holders to govern over various aspects ranging across treasury management, risk management and strategic initiatives.
-
-Different Aave protocol v3 market _Instances_ exist which all are managed by the Aave DAO. These instances focus on specific use cases and chains. On Ethereum Mainnet, 3 instances exist _Core_, _Prime_ and _EtherFi_. This review covers the Ethereum Mainnet _EtherFi_ instance.
 
 # Ratings
 
@@ -34,26 +32,21 @@ The report is concerned with the Aave V3 _EtherFi_ instance deployed on Ethereum
 
 The Aave v3 protocol can be organized in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
 
-This report only focuses on the parts that are specifically redeployed and to represent the _EtherFi_ instance, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet: _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
+**This report only focuses on the parts that are specifically re-deployed for the _EtherFi_ instance**, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet:
+- _Treasury, Aave Ecosystem Reserves & Rewards_
+- _GHO Stablecoin_
+- _Aave Governance_.
 
-Note that the _Aave Governance_ is shared among the different instances. The upgrades on the _EtherFi_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _EtherFi_ are assigned to the `Executor_lvl1` contract.  
+For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
 
-All the control vectors, apart from the [Emergency Admin](#security-council)'s privilege, are behind governance vote or if permissions are given to a multisig account, the permission is successfully restricted to prevent mis-use by using steward contracts.
-If the [Emergency Admin](#security-council) adhered to the security council standards, the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ centralization risk score.
+**The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same.** The permission owners are the same multisig accounts as on the _core_ instance. As a consequence the same upgradeability rating is assigned to the EtherFi report.
 
-### Core Lending & Borrowing
+> All the control vectors, apart from the [Emergency Admin](#security-council)'s privilege, are behind governance vote or if permissions are given to a multisig account, the permission is successfully restricted to prevent mis-use by using steward contracts. If the [Emergency Admin](#security-council) adhered to the security council standards, the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ centralization risk score.
 
-This module forms the core of Aave v3's borrow & lending features and keeps track of users' positions and related protocol state. It centers around the `Pool` contract that governs how debt in the system can be built up, collateralized and how positions can be liquidated. It includes Aave v3's `aTokens` and `variableDebtTokens`. All of these contracts are fully upgradeable through the _Aave Governance_ [module](#aave-governance). An unintended (or malicious) contract upgrade can result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected protocol performance.
+Note that the _Aave Governance_ is shared among the different instances. The upgrades on the _EtherFi_ instance are executed with the same mechanism as on the _Core_ instance, ie. permission to upgrade contracts in _EtherFi_ are assigned to the `Executor_lvl1` contract.
 
-Special attention is required for the [Emergency Admin](#security-council) multisig, which owns the role `EMERGENCY_ADMIN` that allows to pause a single reserve or pause the entire core market instance (all reserves / the entire Pool). The [Emergency Admin](#security-council) can also disable the grace period for liquidations after discontinuing the pause and resume market activities. The actions by the [Emergency Admin](#security-council) are reversible, but require a governance vote. The [Emergency Admin](#security-council) does not adhere to the _security council requirements_, as the members of the multisig are considered _insiders_ of the Aave DAO (service providers and key voting power holders). In case of a market down turn the [Emergency Admin](#security-council) could mis-use the power to liquidate from a priviledged position. Quoting the [Aave V3 technical paper](https://github.com/aave-dao/aave-v3-origin/blob/main/docs/Aave_V3_Technical_Paper.pdf) page 16.
-
-> Timed with a market crash, the attacker can turn the pool off, and then atomically perform the sequence (turn-on - liquidate - turn-off), allowing him to be the sole liquidator.
-
-Note that all the contracts making up the money market logic and state (Pool, aTokens, variableDebtTokens, PoolConfigurator etc.) are re-deployed for each instance.
 
 ### Reserve Parameters
-
-The _Reserve Parameters_ module is responsible for maintaining and updating critical risk parameters in the Aave v3 protocol. Among others, these include the set of enabled collateral and loan assets, their specific _liquidation loan-to-value_ ratios, _liquidation bonuses_ or _interest rate parameters_ and _borrow and supply caps_. An upgradeable `PoolConfigurator` contract controls these parameters with permissions to implement changes delegated to different, specialized, multisig accounts such as the [Emergency Admin](#security-council) or [Risk Council](#security-council). A system of _Roles_, implemented using OpenZeppelin's ACL pattern, and _Stewards_ ensures that these multisig accounts can only implement changes in a limited range or with a certain frequency. This system thus limits the risk of unintended updates through the multisig accounts. However, an upgrade of the `PoolConfigurator` contract could remove these safeguards, for instance by assigning permissions to an _EOA_ or multisig account directly, thus reintroducing the risk of loss of funds, loss of unclaimed yield or a material change of the expected protocol performance.
 
 To achieve different specific dedicated risk parameters and associated guardrails the Stewards contracts are re-deployed for the _EtherFi_ instance. The multisig account owning permissions in the Steward contracts is the same [Risk Council](#security-council) as for the _Core_ instance. 
 
@@ -123,23 +116,9 @@ The project additionally could advance to **Stage 2** if all critical permission
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
-The center of the Aave V3 market is the contract called `Pool`. Each supported asset that can be supplied and/or borrowed is attached to a reserve in this pool. A reserve specifies the market parameters for this asset (Loan-to-Value, Liquidation Threshold, Supply and Borrow Caps and the interest rate model). Additionally, each asset (ie reserve) can be enabled or disabled for borrowing, if disabled, the asset can only be supplied as collateral for borrowing other assets. The assets are technically deposited to the respective aToken contracts (the receipt token of supplied assets) of a given reserve.
-
-![Market](./diagrams/Aave_V3_Market.png)
-
-The `Pool` contract is completely upgradeable via the proxy-pattern. The permission to update the pool contract via the proxy is owned by the on-chain governance (DAO).
+Specifically to the _EtherFi_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
 ![Reserve Parameter Control](./diagrams/Aave_V3_Prime_Reserve_Parameter_Control.png)
-
-In addition to completely upgrading the contracts, the control over some market parameters is handed to the [Risk Council](#security-council) multisig through steward contracts. Steward contracts are contracts that wrap around permissions and restrict the multisig's permission to update market parameters with guardrails. These guardrails include rate-limiting (frequency) as well as relative or absolute changes to parameters. The market parameters which are assigned to the [Risk Council](#security-council) via the steward contracts do not include binary decisions like listing an asset, or allowing/disallowing an asset as collateral. Governance is always the only owner of these steward contracts and is the only allowed entity to update the guardrails.
-
-The system with risk intermediaries (Stewards & Councils) was implemented by giving the `PoolConfigurator` contract permission to change any reserve parameter on the `Pool` contract while the `PoolConfigurator` assigns various roles from the `ACLManager` to these permissioned funcions. LTV, LLTV or Supply and Borrow Caps are assigned to the `RISK_ADMIN` role. Steward contracts own these roles and expose the functions with aforementioned guardrails. Councils (regular multisigs) are the permission owners of these steward functions and thus have only limited control over reserve parameters which prevents malicious behavior and reduces trust assumptions for these multisigs.
-
-This system allows to add more risk councils and to deploy more steward contracts if needed.
-
-The Governance itself can also update reserve parameters directly if the community decides to do so. Additionally Governance has direct permissions on the `PoolConfigurator` endpoints via the role called `POOL_ADMIN` to make changes to the parameters without the Stewards and Councils as intermediaries.
-
-Additionally, specifically to the _EtherFi_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
 # Dependencies
 
