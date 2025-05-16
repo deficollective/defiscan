@@ -10,7 +10,7 @@ reasons: []
 risks: ["L", "M", "M", "M", "L"]
 author: ["mmilien_"]
 submission_date: "2024-11-27"
-publish_date: "2025-05-12"
+publish_date: "2025-05-19"
 update_date: "1970-01-01"
 ---
 
@@ -50,7 +50,7 @@ An unintended upgrade of the Chainlink price feed contracts could result in stal
 
 ## Exit Window
 
-The [morpho.eth](#security-council) multisig account owns the permission to enable new Liquidation LTVs and Interest Rate Models to create new Morpho Markets with, but cannot change existing Morpho Markets thus not affecting users.
+The [morpho.eth](#security-council) multisig account owns the permission to enable new Liquidation LTVs and Interest Rate Models to create new Morpho Markets with, but cannot change existing Morpho Markets thus not affecting existing user positions.
 
 The Morpho protocol exposes critical permissions in the `MORPHO` token that can impact users' unclaimed `MORPHO` rewards and thus result in a Medium Upgradeability risk. This risk is not mitigated with an onchain governance system and appropriate Exit Windows.
 
@@ -62,15 +62,15 @@ The main morpho interface is [app.morpho.org](https://app.morpho.org/). An RPC-o
 
 In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.io/metamorpho), and [Contango](https://app.contango.xyz/).
 
-Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho on Polygon, Optimism, and World.
+Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho on Polygon, Optimism, and World Chain.
 
 > Accessibility score: Low
 
 ## Conclusion
 
-The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the _Chain_ and _Accessibility_ dimensions. The upgradeability of the `MORPHO` token that is not protected with an onchain governance system and _Exit Window_ and its trusted Chainlink dependency result in _Medium_ _Upgradeability_, _Exit Window_ and _Autonomy_ risks and Stage 1 decentralization.
+The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the _Chain_ and _Accessibility_ dimensions. The upgradeability of the `MORPHO` token that is not protected with an onchain governance system and _Exit Window_ and its trusted Chainlink dependency result in _Medium_ _Upgradeability_, _Exit Window_ and _Autonomy_ risks and **Stage 1** decentralization.
 
-The protocol could reach Stage 2 by transferring control over the `MORPHO` permissions to onchain governance with a sufficient _Exit Window_ and implementing a fallback mechanism around the Chainlink oracle (or Chainlink adopting a Security Council setup for its own multisig account).
+The protocol could advance to **Stage 2** by; 1) transferring control over the `MORPHO` permissions to onchain governance with a 30-day _Exit Window_ and 2) implementing a fallback mechanism around the Chainlink oracle dependency (or Chainlink adopting a Security Council setup for its own multisig account).
 
 > Overall score: Stage 1
 
@@ -78,7 +78,7 @@ The protocol could reach Stage 2 by transferring control over the `MORPHO` permi
 
 We further want to highlight the following observations which did not directly factor into the scoring:
 
-- ⚠️ Curators of Morpho Vaults are in control of critical permissions which can result in the loss of user funds and unclaimed yield. These permissions only have a direct impact on users in the respective vault and thus do not contribute to the centralization of the Morpho protocol. Vault owners can name guardians with the capability to cancel bad behaviors of curators, when the actions they are taking is increasing the risk towards the end user.
+- ⚠️ Curators of Morpho Vaults are in control of critical permissions which can result in the _loss of user funds_ and _loss of unclaimed yield_. These permissions only have a direct impact on users in the respective vault and thus do not contribute to the centralization of the Morpho protocol. Vault owners can name guardians with the capability to cancel bad behaviors of curators, when the actions they are taking is increasing the risk towards the end user.
 
 # Protocol Analysis
 
@@ -109,7 +109,7 @@ The Chainlink oracle system itself is upgradeable potentially resulting in the p
 
 # Governance
 
-Morpho does not yet have an onchain governance system with control over protocol permissions. Instead, permissioned functions are controlled by the [morpho.eth](#security-council) (Morpho protocol and MORPHO token) and [MorphoRewards](#security-council) (distribution of rewards) multisig accounts.
+Morpho does not yet have an onchain governance system with control over protocol permissions. Instead, permissioned functions are controlled by the [morpho.eth](#security-council) (Morpho protocol and `MORPHO` token) and [MorphoRewards](#security-council) (distribution of rewards) multisig accounts.
 
 ## Security Council
 
