@@ -5,9 +5,10 @@ x: "https://x.com/chainlink"
 github: ["https://github.com/smartcontractkit"]
 defillama_slug: [""]
 chain: "mainnet"
-type: "Bridge"
+type: "Bridges"
 logo: "/images/infrastructure-logos/chainlink-logo.png"
 stage: "I0"
+protocols: []
 reasons: []
 risks: ["L", "H", "L", "M", "L"]
 author: ["sagaciousyves"]
@@ -81,7 +82,7 @@ The CCIP protocol could advance to Medium Centralization if the Bypasser Role ow
 
 # Reviewer notes
 
-The review was not exhaustive and does not cover all permissions in the CCIP system and does not cover all permissioned functions of the two deployments on Ethereum Mainnet and Arbitrum. The described permissions in the section above are enough to showcase critical centralization vectors within CCIP.
+⚠️ The review was not exhaustive and does not cover all permissions in the CCIP system and does not cover all permissioned functions of the two deployments on Ethereum Mainnet and Arbitrum. The described permissions in the section above are enough to showcase critical centralization vectors within CCIP.
 
 # Appendix
 
