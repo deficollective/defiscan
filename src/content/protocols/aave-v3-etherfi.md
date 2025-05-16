@@ -52,17 +52,6 @@ To achieve different specific dedicated risk parameters and associated guardrail
 
 A notable difference to the _Core_ instance is the introduced dependency on a Risk Oracle provided by Chaos Labs which helps to update risk parameters within governance set guardrails based on quantitative algorithmic risk models in real time. The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional upgradeability risk is introduced.
 
-### Re-used modules
-
-For upgradeability risk assessment on shared modules between the instances on mainnet, please read our [report](/protocols/aave) on the core instance.
-
-Shared modules
-
-- Treasury
-- GHO
-- Governance
-
-> Upgradeability score: high
 
 ## Autonomy
 
