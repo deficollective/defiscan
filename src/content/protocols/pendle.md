@@ -115,7 +115,7 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 # Protocol Analysis
 
-## Yield Tokenization Architecture
+## Yield Tokenization Infrastructure
 
 The Pendle protocol utilizes a three-token system to separate yield-bearing assets into principal and yield components through a series of specialized contracts.
 
@@ -123,9 +123,24 @@ The Pendle protocol utilizes a three-token system to separate yield-bearing asse
 
 `PendleYieldContractFactory` enables the creation of Principal Token (PT) and Yield Token (YT) contracts through its `createYieldContract` function, which is also permissionless. This function can be called directly by users or programmatically via the `PendleCommonPoolDeployHelperV2` as part of a full pool deployment process.
 
-The actual tokenization process (converting SY to PT and YT) occurs when users interact with the system through the Router, which delegates to the `ActionMiscV3` contract's `mintPyFromSy` function. This function transfers SY tokens to the YT contract, which then mints equal quantities of PT and YT tokens as confirmed in the `PendleYieldToken` contract's documentation.
+## Yield Tokenization Process
 
-PT (`PendlePrincipalToken`) represents the right to redeem the underlying asset at maturity, while YT (`PendleYieldToken`) captures all yield accrued until maturity.
+Direct Minting
+
+**SY → PT+YT (`mintPyFromSy`)**  
+Users with existing SY tokens can convert them directly into PT and YT through the `PendleRouterV4`. The router passes the request to the `PendleYieldToken` contract, which receives the SY tokens and then calls its `mintPY` function. The `PendleYieldToken` contract mints YT tokens and requests the `PendlePrincipalToken` contract to mint an equal amount of PT tokens via `mintByYT`.
+
+**External tokens → PT+YT (`mintPyFromToken`)**  
+Users can also convert external tokens (such as ETH or USDe) in a single transaction. The `PendleRouterV4` first converts these tokens to SY via a deposit operation, then transfers the SY to the `PendleYieldToken` contract which proceeds to issue PT and YT tokens in the same manner.
+
+In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens and coordinates the creation of equal quantities of PT and YT. The `PendlePrincipalToken` contract does not hold any assets directly, while the `PendleYieldToken` contract retains all SY tokens as collateral.
+
+Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
+
+Indirect Minting
+Providing Liquidity (LP)
+Buying PT only (flash swap)
+Buying YT only (flash swap)
 
 ## PendleSwap AMM
 
