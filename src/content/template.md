@@ -106,7 +106,7 @@ New table with all the multisigs
 
 | Name          | Account | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| Team Multisig | 0x123   | Multisig | ✅          | ❌              | ❌                | ✅             |
+| Team Multisig | [0x123](https://etherscan.io/address/0x123)  | Multisig | ✅          | ❌              | ❌                | ✅             |
 
 # Technical Analysis
 
