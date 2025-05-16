@@ -35,6 +35,8 @@ Critical contracts are upgradeable: Lido, WithdrawalQueue, WithdrawalVault, Acco
 
 Further: Governance contracts are also upgradeable.
 
+Validator set is part of upgradeability: Curated set can be changed by Governance. Simple DVT through easy track (governance), and CS is permissionless
+
 > Upgradeability score: High
 
 ## Autonomy
@@ -394,17 +396,57 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | EVMScriptExecutor | executeEVMScript | Executes a script. Only the `EasyTrack` can call this function and this ensures only scripts approved and created through the `EasyTrack` will be executed. | EasyTrack |
 | EVMScriptExecutor | setEasyTrack | Sets the `EasyTrack` contract, the contract allowed to execute scripts using through this contract. | Aragon Voting |
 
-| CSModule | **AccessControlEnumerable_init | ... | ['onlyInitializing'] |
-| CSModule | **AccessControlEnumerable_init_unchained | ... | ['onlyInitializing'] |
-| CSModule | **AccessControl_init | ... | ['onlyInitializing'] |
-| CSModule | **AccessControl_init_unchained | ... | ['onlyInitializing'] |
+[**TODO**]:
+| NodeOperatorsRegistry (Curated Module) | addNodeOperator | Adds a new node operator with specified name and reward address. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | activateNodeOperator | Activates a previously deactivated node operator, allowing them to participate in staking and rewards. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | deactivateNodeOperator | Deactivates an active node operator, removing them from participation in staking and rewards. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | setNodeOperatorName | Changes the human-readable name of a node operator. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | setNodeOperatorRewardAddress | Changes the reward address of a node operator. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | setNodeOperatorStakingLimit | Sets the maximum number of validators to stake for a node operator. | Aragon Voting, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Curated Module) | decreaseVettedSigningKeysCount | Decreases the number of vetted keys for node operators. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | onRewardsMinted | Signal that stETH rewards were minted for this module. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | updateStuckValidatorsCount | Updates the count of validators that were requested to exit but failed. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | updateExitedValidatorsCount | Updates the count of validators in the EXITED state. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | updateRefundedValidatorsCount | Updates the count of refunded validators for a node operator. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | onExitedAndStuckValidatorsCountsUpdated | Called after oracle report is applied to update exited and stuck validators counts. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | unsafeUpdateValidatorsCount | Unsafely updates the number of validators in EXITED/STUCK states. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | updateTargetValidatorsLimits | Updates the limit of validators that can be used for deposit. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | onWithdrawalCredentialsChanged | Invalidates all unused deposit data for all node operators. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | invalidateReadyToDepositKeysRange | Invalidates unused validators keys for node operators in a range. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | obtainDepositData | Obtains deposit data to be used by StakingRouter for deposit to Ethereum Deposit contract. | StakingRouter |
+| NodeOperatorsRegistry (Curated Module) | addSigningKeys | Adds validator signing keys to a node operator. | Aragon Voting, Node Operator's reward address |
+| NodeOperatorsRegistry (Curated Module) | removeSigningKeys | Removes validator signing keys from a node operator. | Aragon Voting, Node Operator's reward address |
+| NodeOperatorsRegistry (Curated Module) | setStuckPenaltyDelay | Sets the delay period for stuck penalty. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | addNodeOperator | Adds a new node operator with specified name and reward address. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | activateNodeOperator | Activates a previously deactivated node operator, allowing them to participate in staking and rewards. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | deactivateNodeOperator | Deactivates an active node operator, removing them from participation in staking and rewards. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | setNodeOperatorName | Changes the human-readable name of a node operator. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | setNodeOperatorRewardAddress | Changes the reward address of a node operator. | Aragon Agent |
+| NodeOperatorsRegistry (Curated Module) | setNodeOperatorStakingLimit | Sets the maximum number of validators to stake for a node operator. | Aragon Voting, EVMScriptExecutor (EasyTrack) |
+
+| NodeOperatorsRegistry (Simple DVT Module) | decreaseVettedSigningKeysCount | Decreases the number of vetted keys for node operators. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | onRewardsMinted | Signal that stETH rewards were minted for this module. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | updateStuckValidatorsCount | Updates the count of validators that were requested to exit but failed. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | updateExitedValidatorsCount | Updates the count of validators in the EXITED state. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | updateRefundedValidatorsCount | Updates the count of refunded validators for a node operator. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | onExitedAndStuckValidatorsCountsUpdated | Called after oracle report is applied to update exited and stuck validators counts. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | unsafeUpdateValidatorsCount | Unsafely updates the number of validators in EXITED/STUCK states. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | updateTargetValidatorsLimits | Updates the limit of validators that can be used for deposit. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | onWithdrawalCredentialsChanged | Invalidates all unused deposit data for all node operators. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | invalidateReadyToDepositKeysRange | Invalidates unused validators keys for node operators in a range. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | obtainDepositData | Obtains deposit data to be used by StakingRouter for deposit to Ethereum Deposit contract. | StakingRouter, EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | addSigningKeys | Adds validator signing keys to a node operator. | EVMScriptExecutor (EasyTrack), Node Operator's reward address |
+| NodeOperatorsRegistry (Simple DVT Module) | removeSigningKeys | Removes validator signing keys from a node operator. | EVMScriptExecutor (EasyTrack) Node Operator's reward address |
+| NodeOperatorsRegistry (Simple DVT Module) | setStuckPenaltyDelay | Sets the delay period for stuck penalty. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | addNodeOperator | Adds a new node operator with specified name and reward address. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | activateNodeOperator | Activates a previously deactivated node operator, allowing them to participate in staking and rewards. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | deactivateNodeOperator | Deactivates an active node operator, removing them from participation in staking and rewards. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorName | Changes the human-readable name of a node operator. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorRewardAddress | Changes the reward address of a node operator. | EVMScriptExecutor (EasyTrack) |
+| NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorStakingLimit | Sets the maximum number of validators to stake for a node operator. | EVMScriptExecutor (EasyTrack), EVMScriptExecutor (EasyTrack) |
+
 | CSModule | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | CSModule | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| CSModule | **ERC165_init | ... | ['onlyInitializing'] |
-| CSModule | **ERC165_init_unchained | ... | ['onlyInitializing'] |
-| CSModule | **Context_init | ... | ['onlyInitializing'] |
-| CSModule | **Context_init_unchained | ... | ['onlyInitializing'] |
-| CSModule | initialize | ... | ['initializer'] |
 | CSModule | resume | ... | ['onlyRole'] |
 | CSModule | pauseFor | ... | ['onlyRole'] |
 | CSModule | activatePublicRelease | ... | ['onlyRole'] |
