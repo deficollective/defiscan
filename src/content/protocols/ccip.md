@@ -31,7 +31,7 @@ First, the _Risk Management Network_ monitors the chain and can halt the cross-c
 
 Additionally, the _Committing Network_ observes events of new cross-chain messages on the source chain. If it detects such an event, the _Committing Network_ posts a root to the `CommitStore` contract on the destination chain.
 
-Lastly, there is the _Executing Network_ that observes the transactions and if roots are posted to the `CommitStore` and the roots are blessed, the executing network triggers the message to be executed on the target chain with the blessed messages.
+Lastly, the _Executing Network_ observes the transactions, and if roots are posted to the `CommitStore` and the roots are blessed, the executing network triggers the message to be executed on the target chain with the blessed messages.
 
 ![Onchain Infrastructure](./diagrams/CCIP_Infrastructure.png)
 
@@ -49,7 +49,7 @@ The `RBACTimelock` (Governance) contract is deployed to any chain which CCIP is 
 
 ## Upgradeability
 
-This report did not analyse all smart contracts permissions that can be found in the smart contract foundation of the CCIP infrastructure. But three functions that expose upgradeability risk are `setConfig` on `RMN` contract, `setOCR2Config` on `CommitStore` and `setOCR2Config` on the `EVM2EVMOfframp` contract.
+This report did not analyse all smart contract permissions that can be found in the smart contract foundation of the CCIP infrastructure. Nonetheless, three functions that expose upgradeability risk are `setConfig` on `RMN` contract, `setOCR2Config` on `CommitStore`, and `setOCR2Config` on the `EVM2EVMOfframp` contract.
 
 These functions allow to set the signer and transmitter addresses of the cross-chain messages for the three different networks. Updating the representing addresses to a smaller set can introduce centralization risk that could be exploited to trigger malicious cross-chain messages, such as minting/releasing tokens on the destination chain, without sufficient collateralization on the origin chain.
 
