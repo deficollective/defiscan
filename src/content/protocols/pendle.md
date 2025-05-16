@@ -125,22 +125,49 @@ The Pendle protocol utilizes a three-token system to separate yield-bearing asse
 
 ## Yield Tokenization Process
 
-Direct Minting
+### Direct Minting
 
-**SY → PT+YT (`mintPyFromSy`)**  
+SY → PT+YT (`mintPyFromSy`)  
 Users with existing SY tokens can convert them directly into PT and YT through the `PendleRouterV4`. The router passes the request to the `PendleYieldToken` contract, which receives the SY tokens and then calls its `mintPY` function. The `PendleYieldToken` contract mints YT tokens and requests the `PendlePrincipalToken` contract to mint an equal amount of PT tokens via `mintByYT`.
 
-**External tokens → PT+YT (`mintPyFromToken`)**  
+External tokens → PT+YT (`mintPyFromToken`)  
 Users can also convert external tokens (such as ETH or USDe) in a single transaction. The `PendleRouterV4` first converts these tokens to SY via a deposit operation, then transfers the SY to the `PendleYieldToken` contract which proceeds to issue PT and YT tokens in the same manner.
 
 In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens and coordinates the creation of equal quantities of PT and YT. The `PendlePrincipalToken` contract does not hold any assets directly, while the `PendleYieldToken` contract retains all SY tokens as collateral.
 
 Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
 
-Indirect Minting
-Providing Liquidity (LP)
-Buying PT only (flash swap)
-Buying YT only (flash swap)
+### Indirect Minting
+
+#### Providing Liquidity (LP)  
+Users can add liquidity through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury via the Proxy contract.
+
+Liquidity removal is performed via `removeLiquiditySingleToken`. The LP tokens are burned, the user receives their proportional share of SY and PT, the PT are converted to SY via `swapExactPtForSy`, and the SY are converted to underlying tokens. During both addition and removal, the `PendleGaugeController` contract distributes PENDLE rewards to the market and the user.
+
+#### Trade PT
+Principal Tokens can be minted indirectly through `PendleRouterV4` using swap functions, which delegate operations to the `ActionSwapPTV3` contract.
+
+Buying PT:
+Users can convert external tokens to PT in a single transaction using `swapExactTokenForPt`. The process involves tokenizing the external asset into SY tokens via the SY contract, then using these SY tokens in the `PendleMarket` to obtain PT. Unlike direct minting, this method acquires only PT without the corresponding YT. A portion of SY tokens is sent as fees to the `Treasury`.
+
+Selling PT:
+When redeeming PT for external tokens, users call `swapExactPtForToken`. The PT tokens are sent to the `PendleMarket` for conversion to SY tokens, which are then redeemed for the underlying asset. A portion of SY tokens is send as fees to the `Treasury`.
+
+`Governance` can `pause` SY token transfers, disabling the buying and selling of PT through this mechanism.
+
+#### Trade YT
+
+Yield Tokens can be traded through the `PendleRouterV4` which delegates operations to the `ActionSwapYTV3` contract. Trading YT uses a sophisticated flash swap mechanism to enable buying or selling YT independently.
+
+Buying YT:
+Users can acquire YT tokens without holding PT via `swapExactTokenForYt`. The router converts the external tokens to SY tokens, then temporarily borrows additional SY from the `PendleMarketV3` contract. All SY are used to mint both PT and YT (as they must be created in equal quantities), but only the YT are kept for the user. The PT are immediately sold back to the market to repay the borrowed SY. A portion of SY is sent as fees to the `Treasury`.
+
+Selling YT:
+When selling YT via `swapExactYtForToken`, the router borrows an equivalent amount of PT from the market, combines them with the user's YT to redeem SY (as both tokens are needed to unlock the underlying asset), then returns a portion of the SY to the market to repay the borrowed PT. The remaining SY are converted to the desired output token. As with buying, fees are collected and sent to the `Treasury`.
+
+These flash swap mechanisms allow users to gain exposure to yield alone (YT) without needing to manage the principal component (PT).
+
+`Governance` can `pause` SY token transfers, disabling the buying and selling of YT through this mechanism.
 
 ## PendleSwap AMM
 
