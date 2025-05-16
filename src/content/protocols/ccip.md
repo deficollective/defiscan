@@ -379,7 +379,7 @@ The CCIP protocol could advance to Medium Centralization if the Bypasser Role ow
 | ------------------------------------------ |
 | 0x9079410666ed02725ee9d148398cee26397c2a36 |
 
-| Signers Group 0a                           |
+| Signers Group 10                           |
 | ------------------------------------------ |
 | 0x14a8f3b302bbfa7f2f2ac2f4515548370bc7badc |
 | 0x56b167decd5fc4e3bbc07b3b4e1f30e74534f9dd |
