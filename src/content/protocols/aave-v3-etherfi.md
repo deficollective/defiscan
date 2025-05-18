@@ -39,7 +39,7 @@ The Aave v3 protocol can be organized in a number of logical modules: _Core Lend
 
 For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
 
-**The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same.** The permission owners are the same multisig accounts as on the _core_ instance. As a consequence the same upgradeability rating is assigned to the EtherFi report.
+**The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same.** The permission owners are the same multisig accounts as on the _Core_ instance. As a consequence, the same upgradeability rating is assigned to the _EtherFi_ report.
 
 > All the control vectors, apart from the [Emergency Admin](#security-council)'s privilege, are behind governance vote or if permissions are given to a multisig account, the permission is successfully restricted to prevent mis-use by using steward contracts. If the [Emergency Admin](#security-council) adhered to the security council standards, the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ centralization risk score.
 
