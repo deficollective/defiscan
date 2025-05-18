@@ -16,7 +16,18 @@ update_date: "1970-01-01"
 
 # Summary
 
-On Ethereum Mainnet, 3 different instances exist _Core_, _Prime_, and _EtherFi_, which are all managed by the Aave DAO. **This report covers the Aave V3 _EtherFi_ instance.** To check out our main report on Aave V3 see the [_Core Instance_ report](/protocols/aave). This report focuses on the key differences between the _EtherFi_ and the _Core_ instance.
+On Ethereum Mainnet, 3 different instances exist _Core_, _Prime_, and _EtherFi_, which are all managed by the Aave DAO. **This report covers the Aave V3 _EtherFi_ instance.** This report focuses on the key differences between the _EtherFi_ and the _Core_ instance,
+
+leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet:
+- _Treasury, Aave Ecosystem Reserves & Rewards_
+- _GHO Stablecoin_
+- _Aave Governance_
+
+and focuses on the re-deployed modules
+- _Core Lend & Borrow_
+- _Reserve Parameters_
+
+For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
 
 Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, `GHO`. Users can borrow and lend `GHO` like any other asset in the system.
 
@@ -30,14 +41,7 @@ The report is concerned with the Aave V3 _EtherFi_ instance deployed on Ethereum
 
 ## Upgradeability
 
-The Aave v3 protocol can be organized in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol.
-
-**This report only focuses on the parts that are specifically re-deployed for the _EtherFi_ instance**, leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet:
-- _Treasury, Aave Ecosystem Reserves & Rewards_
-- _GHO Stablecoin_
-- _Aave Governance_.
-
-For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
+**This report only focuses on the parts that are specifically re-deployed for the _EtherFi_ instance**, 
 
 **The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same.** The permission owners are the same multisig accounts as on the _Core_ instance. As a consequence, the same upgradeability rating is assigned to the _EtherFi_ report.
 
