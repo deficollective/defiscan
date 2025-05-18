@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 On Ethereum Mainnet, 3 different instances exist _Core_, _Prime_, and _EtherFi_, which are all managed by the Aave DAO. **This report covers the Aave V3 _EtherFi_ instance.** This report focuses on the key differences between the _EtherFi_ and the _Core_ instance,
 
-leaving out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet:
+The report leaves out the following modules that are re-used (ie. same contracts) across the different instances (_Core_, _Prime_ and _EtherFi_) on mainnet:
 - _Treasury, Aave Ecosystem Reserves & Rewards_
 - _GHO Stablecoin_
 - _Aave Governance_
@@ -27,7 +27,7 @@ and focuses on the re-deployed modules
 - _Core Lend & Borrow_
 - _Reserve Parameters_
 
-For detailed report on the previously mentioned modules read the Aave _Core_ instance [report](/protocols/aave).
+For detailed report on the omitted modules read the Aave _Core_ instance [report](/protocols/aave).
 
 Aave v3 is a lending protocol that allows users to lend and borrow different ERC20 assets. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile. Furthermore, instead of borrowing supplied assets, Aave V3 also issues its own stablecoin, `GHO`. Users can borrow and lend `GHO` like any other asset in the system.
 
