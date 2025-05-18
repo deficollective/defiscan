@@ -99,7 +99,7 @@ https://aave.com/help/aave-101/accessing-aave
 
 ## Conclusion
 
-The Aave-v3 Ethereum mainnet protocol, and specifically the _EtherFi_ instance achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks **Stage 0**.
+The Aave-v3 Ethereum mainnet protocol, and specifically the _EtherFi_ instance achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_ and _Exit Window_ dimensions. It thus ranks **Stage 0**.
 
 The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the [Emergency Admin](#security-council) multisig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a _Security Council_ setup for its own multisig account).
 
