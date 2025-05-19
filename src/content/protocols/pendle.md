@@ -28,7 +28,7 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol is fully upgradeable through multiple proxy patterns including `ERC1967/UUPS` proxies for most core contracts and `TransparentUpgradeableProxy` contracts managed by a central `ProxyAdmin`. This comprehensive upgradeability capability can potentially result in loss of user funds, theft of unclaimed rewards, and significant changes to the protocol's economic parameters and performance.
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are hold by accounts with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
 
 The permission to upgrade the protocol follows a hierarchical structure. The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging. The `DevMultisig`, a 2/3 multisig, controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
 
