@@ -4,7 +4,7 @@ website: "https://lido.fi/"
 x: "https://x.com/LidoFinance"
 github: ["https://github.com/lidofinance"]
 defillama_slug: ["lido"]
-chain: "mainnet"
+chain: "Ethereum"
 stage: 0
 reasons: []
 risks: ["L", "H", "H", "H", "L"]
@@ -104,6 +104,20 @@ Simple DVT: handle the NO set?
 <-- DIAGRAM -->
 
 ## Staking Modules
+
+### Community Staking Module
+
+CSModule: core contract from the module. It's th entry point for node operators and it stores information about node operators and deposit data. Interaction with StakingRouter: DD queue management + node operators params. it is upgradeable (by agent), pausable + differente managing roles (punishements, etc.)
+
+CSAccounting: supplementary contract responsible for management of bonds, rewards, and penalties. It is upgradeable (by agent), pausable + the bonding curve can be changed (making creating validators more / less expensive)
+
+CSFeeDistributor: supplmementary contract to handle the distribution of rewards to node operators. It receives the non-distributed rewards from the CSModule every time the StakingRouter mints additional node operators' rewards. It accepts calls from CSAccounting with reward claims and stores the balances of claims from each node operator as well as the latest merkle root of the rewards distribution merkle tree. It is upgradeable (by agent), it uses an ORACLE and there is a recoverer.
+
+CSFeeOracle: utility contract responsible of the CSM oracle report (once consensus is reached in HashConsensus). Namely, it converts non-distributed rewards in non-claimed rewards in the CSFeeDistributor contract and uploads the latest distribution merkle tree root. It is upgradeable (by agent), pausable, and manageable.
+
+CSVerifier: responsible for validation of Consensus Layer data proofs and report to the CSModule. It proves the validity of withdrawal events. Immutable
+
+CSEarlyAdoption: verification of early adopters. Stores addresses that have already been used to create a node operator to determine whether an address is eligible for the discounted bond curve during and after the early adoption period.
 
 <-- DIAGRAM -->
 
@@ -474,6 +488,56 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | CSModule | obtainDepositData | ... | ['onlyRole'] |
 | CSModule | \_onlyNodeOperatorManager | ... | [] |
 | CSModule | \_onlyNodeOperatorManagerOrRewardAddresses | ... | [] |
+| CSAccounting | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSAccounting | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSAccounting | resume | ... | ['onlyRole'] |
+| CSAccounting | pauseFor | ... | ['onlyRole'] |
+| CSAccounting | setChargePenaltyRecipient | ... | ['onlyRole'] |
+| CSAccounting | setLockedBondRetentionPeriod | ... | ['onlyRole'] |
+| CSAccounting | addBondCurve | ... | ['onlyRole'] |
+| CSAccounting | updateBondCurve | ... | ['onlyRole'] |
+| CSAccounting | setBondCurve | ... | ['onlyRole'] |
+| CSAccounting | resetBondCurve | ... | ['onlyRole'] |
+| CSAccounting | depositETH | ... | ['onlyCSM', 'whenResumed'] |
+| CSAccounting | depositStETH | ... | ['onlyCSM', 'whenResumed'] |
+| CSAccounting | depositWstETH | ... | ['onlyCSM', 'whenResumed'] |
+| CSAccounting | claimRewardsStETH | ... | ['onlyCSM', 'whenResumed'] |
+| CSAccounting | claimRewardsWstETH | ... | ['onlyCSM', 'whenResumed'] |
+| CSAccounting | claimRewardsUnstETH | ... | ['onlyCSM', 'whenResumed'] |
+| CSAccounting | lockBondETH | ... | ['onlyCSM'] |
+| CSAccounting | releaseLockedBondETH | ... | ['onlyCSM'] |
+| CSAccounting | compensateLockedBondETH | ... | ['onlyCSM'] |
+| CSAccounting | settleLockedBondETH | ... | ['onlyCSM'] |
+| CSAccounting | penalize | ... | ['onlyCSM'] |
+| CSAccounting | chargeFee | ... | ['onlyCSM'] |
+
+| CSFeeDistributor | distributeFees | ... | [] |
+| CSFeeDistributor | processOracleReport | ... | [] |
+| CSFeeDistributor | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSFeeDistributor | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+
+| CSFeeOracle | submitReportData | ... | ['whenResumed'] |
+| CSFeeOracle | setConsensusContract | Sets the consensus contract to use. The consensus contract is a `HashConsensus`, it can decide who is a committee member and push the consensus proof to the `CSFeeOracle`. | ['onlyRole'] |
+| CSFeeOracle | setConsensusVersion | Sets the current consensus version used. The version refers to a set of rules that the members must agree on when building the report. | ['onlyRole'] |
+| CSFeeOracle | setFeeDistributorContract | ... | ['onlyRole'] |
+| CSFeeOracle | setPerformanceLeeway | ... | ['onlyRole'] |
+| CSFeeOracle | pauseFor | ... | ['onlyRole'] |
+| CSFeeOracle | pauseUntil | ... | ['onlyRole'] |
+| CSFeeOracle | resume | ... | ['onlyRole'] |
+| CSFeeOracle | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSFeeOracle | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+
+| HashConsensus (of CSFeeOracle) | submitReport | Used by oracle members to submit hash of the data calculated for the given reference slot. If consensus is reached (more submissions of the same report than the quorum amount) the `HashConsensus` contract submits this report to the processing contract (`CSFeeOracle`) to enable processing. | HashConsensus (Committee Members) |
+| HashConsensus (of CSFeeOracle) | disableConsensus | Temporarily disables consensus by increasing the quorum value an unreachable number. This prevents any consensus from being reached. Consensus needs to be re-enabled using `setQuorum`. | DISABLE_CONSENSUS_ROLE |
+| HashConsensus (of CSFeeOracle) | setQuorum | Sets the quorum value. This is the amount of equal reports that need to be accumulated for each slot for a report to be considered valid and ready for processing. A value higher the the number of members in the committee would make consensus impossible. | MANAGE_MEMBERS_AND_QUORUM_ROLE, DISABLE_CONSENSUS_ROLE (only allowed to set unreachable quorum) |
+| HashConsensus (of CSFeeOracle) | updateInitialEpoch | Changes when to oracle reporting system starts, given it hasn't started yet. This function can no longer becalled. | ['onlyRole'] |
+| HashConsensus (of CSFeeOracle) | setFrameConfig | Sets the configuration of frames. Frames are time window of equal lenghts referencing the processing of a slot and the corresponding deadline. A report based on the consensus layer must be built and consensus must be reached before each deadline. | ['onlyRole'] |
+| HashConsensus (of CSFeeOracle) | setFastLaneLengthSlots | Sets the duration of a fast lane rotation in slots. Members in the fast lane can (and are expected to) submit their report during a dedicated fast lane time window before submissions are open to all other members. The members in the fast lanes are rotated at a rate set using this function. The goal is to enforce active participation of all oracle members, preventing lazy copying. | ['onlyRole'] |
+| HashConsensus (of CSFeeOracle) | addMember | Adds a member to the consensus committee. Members can contribute to building consensus and submit reports. | ['onlyRole'] |
+| HashConsensus (of CSFeeOracle) | removeMember | Removes a member from the consensus committee. | ['onlyRole'] |
+| HashConsensus (of CSFeeOracle) | setReportProcessor | Sets the processor contract to which the reports are sent over to. This particular `HashConsensus` contract is meant for the `CSFeeOracle` as processor. | ['onlyRole'] |
+| HashConsensus (of CSFeeOracle) | grantRole | Grants a role within the contract to a specific address. This may allow addresses to execute any of the functions above related to the specific role. | ['getRoleAdmin', 'onlyRole'] |
+| HashConsensus (of CSFeeOracle) | revokeRole | Revokes a role to a specific address. | ['getRoleAdmin', 'onlyRole'] |
 
 ## Access Control
 
