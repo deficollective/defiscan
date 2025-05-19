@@ -63,6 +63,8 @@ This review is limited to Chornicle Oracles deployed on Ethereum mainnet. We not
 
 The multisig in charge of the `TimelockController` is a 2/3 multisig belonging to chronicle. It does not meet our security council requirements.
 
+&nbsp;
+
 | Name               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | Chronicle Multisig | [0xC8910D85511dfe915630bfccB6bF98973e67F827](https://etherscan.org/address/0xC8910D85511dfe915630bfccB6bF98973e67F827) | Multisig 2/3 | ❌          | ✅              | ❌                | ❌             |
@@ -70,6 +72,8 @@ The multisig in charge of the `TimelockController` is a 2/3 multisig belonging t
 ## Contracts
 
 At the time of writing there are 26 public oracles curated by Chronicle Labs deployed on Ethereum Mainnet.
+
+&nbsp;
 
 | Contract Name                | Address                                                                                                               |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- |

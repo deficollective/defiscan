@@ -57,6 +57,8 @@ This review is limited to Chainlink Oracles deployed on Ethereum mainnet. We not
 
 The multisig in charge of the price feeds and aggregator contracts is a 4/9 multisig belonging to chronicle. It does not meet our security council requirements.
 
+&nbsp;
+
 | Name               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | Chainlink Multisig | [0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA](https://etherscan.org/address/0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA) | Multisig 4/9 | ✅          | ❌              | ❌                | ❌             |
@@ -64,6 +66,8 @@ The multisig in charge of the price feeds and aggregator contracts is a 4/9 mult
 ## Contracts
 
 We list here an example price feed. All Chainlink price feeds are listed [here](https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&network=ethereum).
+
+&nbsp;
 
 | Contract Name                                | Address                                                                                                               |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
