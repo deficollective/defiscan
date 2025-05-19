@@ -4,7 +4,7 @@ website: "https://chroniclelabs.org/"
 x: "https://x.com/ChronicleLabs"
 github: ["https://github.com/chronicleprotocol"]
 defillama_slug: [""]
-chain: "mainnet"
+chain: "Ethereum"
 type: "Oracles"
 logo: "/images/infrastructure-logos/chronicle-logo.png"
 stage: "I1"

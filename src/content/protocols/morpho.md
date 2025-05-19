@@ -1,5 +1,5 @@
 ---
-protocol: "morpho"
+protocol: "Morpho"
 website: "https://morpho.org/"
 x: "https://x.com/MorphoLabs"
 github: ["https://github.com/morpho-org"]
@@ -10,7 +10,7 @@ reasons: []
 risks: ["L", "M", "M", "M", "L"]
 author: ["mmilien_"]
 submission_date: "2024-11-27"
-publish_date: "2025-05-19"
+publish_date: "2025-05-20"
 update_date: "1970-01-01"
 ---
 
@@ -32,7 +32,7 @@ The Morpho (markets) protocol and Morpho Vaults are non-upgradeable. No permissi
 
 A team multisig, [morpho.eth](#security-council), is able to activate a fee switch and enable new LTV tiers and interest rate models. These permissions can only affect newly created markets with fees enforced in a fixed range.
 
-The [morpho.eth](#security-council) multisig is further in control of the `MORPHO` token and it's upgradeability and minting features. `MORPHO` upgrades or minting can directly impact distributed rewards in the system and thus result in the loss of unclaimed yield.
+The [morpho.eth](#security-council) multisig is further in control of the `MORPHO` token and it's upgradeability and minting features. `MORPHO` upgrades or minting can directly impact distributed rewards in the system and thus result in the loss of unclaimed yield. Thus the _Upgradeability Risk Score_ is _Medium_.
 
 > Upgradeability score: Medium
 
@@ -44,7 +44,7 @@ However, the Morpho protocol facilitates oracle creation through a factory, curr
 
 This factory wraps price feeds compliant with Chainlink's Aggregator interface and assumes that these feeds never fail (liveness and valid prices). Although the price feed is chosen permissionlessly by the market creator, more than 35% of the Morpho Markets rely on a Chainlink curated price feed. Those feeds are controlled in a centralized manner, a multisig account not complying with _Security Council_ requirements, the impact of a failure has to be assessed nonetheless.
 
-An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the permanent freezing of funds in affected markets. With a potential impact on more than 35% of Morpho Markets, or more than 30% of Morpho's TVL, Chainlink is thus assessed as a Medium centralization risk for Morpho.
+An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the permanent freezing of funds in affected markets. With a potential impact on more than 35% of Morpho Markets, or more than 30% of Morpho's TVL, Chainlink is thus assessed as a "Medium centralization risk" for Morpho. A complete analysis of Chainlink price feeds can be found in the dedicated [report](./chainlink-oracles.md).
 
 > Autonomy score: Medium
 
@@ -105,7 +105,7 @@ Note that the price oracle in a Morpho market cannot be updated (markets are imm
 
 At the time of writing this review, more than 35% of the live Morpho Markets, or more than 30% of Morpho's TVL, make use of this standard price oracle and a Chainlink curated price feed. An analysis of this with results can be found on our [GitHub](https://github.com/deficollective/morpho-oracles-analysis). Thus, even though technically not enforced, Chainlink forms a critical dependency of the Morpho protocol.
 
-The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score. We detail our findings further in a dedicated [report](./chainlink-oracles.md).
 
 # Governance
 
