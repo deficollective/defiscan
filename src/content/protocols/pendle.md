@@ -46,7 +46,7 @@ The Yield Tokenization infrastructure presents significant upgradeability risks 
 
 The `PendleYieldContractFactory`, controlled by the `Governance` , can modify economic parameters without timelock via `setInterestFeeRate` and `setTreasury`. These functions allow instant changes to protocol fees (up to 20%) and redirection of revenue streams without warning users, leaving them no opportunity to exit their positions.
 
-The SY tokens themselves (`PendleERC4626SYV2`) contain `pause` and `unpause` functions that can be triggered by the _Pendle Team_. Calling `pause` locks deposited user assets instantly without timelock protection. This could lead to permanent _loss of user funds_.
+The SY tokens themselves (`PendleERC4626SYV2`) contain `pause` and `unpause` functions that can be triggered by the _Pendle Team_ (with appropriate permissions in the `PendleGovernanceProxy`). Calling `pause` locks deposited user assets instantly without timelock protection. This could lead to permanent _loss of user funds_.
 
 ### Pendle Swap System
 
