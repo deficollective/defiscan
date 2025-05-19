@@ -24,7 +24,7 @@ Aerodrome Finance is a next-generation AMM designed to serve as Base's central l
 
 Aerodrome is deployed on the Base chain, an Ethereum L2 in Stage 0 according to L2BEAT.
 
-> Chain score: H
+> Chain score: High
 
 ## Upgradeability
 
@@ -38,25 +38,25 @@ The undeclared multisig further is the owner of various contracts, and the assoc
 
 Another noteworthy permission in the protocol is the ability to _kill_ and _revive_ gauges and thereby stop, or enable, a gauge to receive and distribute rewards to LPs and voters. However, killing a gauge does not affect the rewards already distributed to LPs or voters and also does not affect the rewards, or any other aspect, of other gauges. This permission hence can not materially affect the protocol's expected performance.
 
-> Upgradeability score: M
+> Upgradeability score: Medium
 
 ## Autonomy
 
 Aerodrome does not have external dependencies 🎉
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 Existing permissions have a "Medium" risk score and are not protected by an exit window. Users are not able to withdraw funds in case of an unwanted update.
 
-> Exit Window score: M
+> Exit Window score: Medium
 
 ## Accessibility
 
 Aerodrome provides multiple access points for users, including both centralized interfaces ([aerodrome.finance](https://aerodrome.finance), [alt.aerodrome.finance](https://alt.aerodrome.finance)) and decentralized interfaces on IPFS ([aero.drome.eth](https://aero.drome.eth), [aero.drome.eth.limo](https://aero.drome.eth.limo), [aero.drome.eth.link](https://aero.drome.eth.link)). This diversity in user interfaces ensures redundancy, allowing users to access the protocol even if one interface becomes unavailable.
 
-> Accessibility score: L
+> Accessibility score: Low
 
 # Technical Analysis
 

@@ -24,7 +24,7 @@ Velodrome Finance is a next-generation AMM that combines the best of Curve, Conv
 
 Velodrome is deployed on the Optimism chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: M
+> Chain score: Medium
 
 ## Upgradeability
 
@@ -38,25 +38,25 @@ The undeclared multisig further is the owner of various contracts, and the assoc
 
 Another noteworthy permission in the protocol is the ability to _kill_ and _revive_ gauges and thereby stop, or enable, a gauge to receive and distribute rewards to LPs and voters. However, killing a gauge does not affect the rewards already distributed to LPs or voters and also does not affect the rewards, or any other aspect, of other gauges. This permission hence can not materially affect the protocol's expected performance.
 
-> Upgradeability score: M
+> Upgradeability score: Medium
 
 ## Autonomy
 
 Velodrome does not have external dependencies 🎉
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 Existing permissions have a "Medium" risk score and are not protected by an exit window. Users are not able to withdraw funds in case of an unwanted update.
 
-> Exit Window score: M
+> Exit Window score: Medium
 
 ## Accessibility
 
 Velodrome provides several access points to the protocol, both decentralized and centralized. Decentralized links include [velo.drome.eth](https://velo.drome.eth), [velo.drome.eth.limo](https://velo.drome.eth.limo), and [velo.drome.eth.link](https://velo.drome.eth.link), while centralized options include [velodrome.finance](https://velodrome.finance) and [alt.velodrome.finance](https://alt.velodrome.finance). This diversity of user interfaces offers redundancy and reduces risks associated with access issues.
 
-> Accessibility score: L
+> Accessibility score: Low
 
 # Technical Analysis
 
