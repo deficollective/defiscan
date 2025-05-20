@@ -68,7 +68,7 @@ Pendle deployment on Ethereum does not depend on any dependency. Please read the
 
 ## Exit Window
 
-Pendle presents a critical risk due to the near-total absence of timelocks on its upgradeable contracts. With the exception of the `PENDLE` token which implements a 7-day delay through the `initiateConfigChanges` function, all other protocol contracts can be modified instantly without any delay or warning to users. This absence of an exit window is particularly problematic given the high upgradeability capabilities of the protocol. The `pause` functions in SY contracts can immediately freeze deposits, withdrawals and transfers. Functions such as `withdrawPendle` in `PendleGaugeControllerMainchainUpg` or `setTreasuryAndFeeReserve` in `PendleMarketFactoryV3` can redirect funds without delay.  Users with positions across the six supported chains (Ethereum, Arbitrum, Mantle, Base, Optimism, BNB Chain) are dependent on the cross-chain infrastructure that synchronizes their vePENDLE positions and voting power.
+With the exception of the `PENDLE` token which implements a 7-day delay through the `initiateConfigChanges` function, most other protocol contracts can be upgraded or modified instantly without any delay or warning to users. 
 
 > Exit window score: High
 
