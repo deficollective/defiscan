@@ -102,18 +102,20 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 ## Market Creation
 
-The Pendle protocol utilizes a three-token system to separate yield-bearing assets into principal and yield components through a series of specialized contracts.
+The Pendle protocol utilizes a yield-bearing token wrapper (SY) which then is split into principal (PT) and yield (YT) components. The creation of a market that connects the 3 contracts is permissionless.
 
-`PendleCommonSYFactory` deploys Standardized Yield (SY) tokens via the `deploySY` function, using creation code registered with `setSYCreationCode`. While this factory is owned by the `Pendle: Deployer 1` EOA, the deployment of new SY tokens is permissionless with the `deploySY` function.
+The `PendleCommonSYFactory` deploys Standardized Yield (SY) tokens via the `deploySY` function, using creation code registered with `setSYCreationCode`. While this factory is owned by the `Pendle: Deployer 1` EOA, the deployment of new SY tokens is permissionless with the `deploySY` function.
 
-`PendleYieldContractFactory` enables the creation of Principal Token (PT) and Yield Token (YT) contracts through its `createYieldContract` function, which is also permissionless. This function can be called directly by users or programmatically via the `PendleCommonPoolDeployHelperV2` as part of a full pool deployment process.
+`PendleYieldContractFactory` enables the creation of Principal Token (PT) and Yield Token (YT) contracts through its `createYieldContract` function, which is also permissionless. This function can be called directly by users or programmatically via the `PendleCommonPoolDeployHelperV2` as part of a full pool deployment process which also deploys the market.
+
+![Market Creation](./diagrams/pendle-v2-market-creation.png)
 
 ## Yield Tokenization Process
 
 ### Direct Minting
 
 SY → PT+YT (`mintPyFromSy`)  
-Users with existing SY tokens can convert them directly into PT and YT through the `PendleRouterV4`. The router passes the request to the `PendleYieldToken` contract, which receives the SY tokens and then calls its `mintPY` function. The `PendleYieldToken` contract mints YT tokens and requests the `PendlePrincipalToken` contract to mint an equal amount of PT tokens via `mintByYT`.
+Users with existing SY tokens can convert them directly into PT and YT through the `PendleRouterV4`. The router passes the request to the `PendleYieldToken` contract, which receives the SY tokens and then calls its `mintPY` function on the YT contract. The `PendleYieldToken` contract mints YT tokens and requests the `PendlePrincipalToken` contract to mint the corresponding amount of PT tokens via `mintByYT`.
 
 External tokens → PT+YT (`mintPyFromToken`)  
 Users can also convert external tokens (such as ETH or USDe) in a single transaction. The `PendleRouterV4` first converts these tokens to SY via a deposit operation, then transfers the SY to the `PendleYieldToken` contract which proceeds to issue PT and YT tokens in the same manner.
@@ -122,14 +124,22 @@ In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens
 
 Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
 
+![Direct Minting](./diagrams/pendle-v2-direct-minting.png)
+
 ### Indirect Minting
 
-#### Providing Liquidity (LP)  
+## Providing Liquidity (LP)  
+
 Users can add liquidity through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury via the Proxy contract.
 
 Liquidity removal is performed via `removeLiquiditySingleToken`. The LP tokens are burned, the user receives their proportional share of SY and PT, the PT are converted to SY via `swapExactPtForSy`, and the SY are converted to underlying tokens. During both addition and removal, the `PendleGaugeController` contract distributes PENDLE rewards to the market and the user.
 
-#### Trade PT
+![LP to Market](./diagrams/pendle-v2-lp.png)
+
+## AMM PT and YT Trading
+
+### Trade PT
+
 Principal Tokens can be minted indirectly through `PendleRouterV4` using swap functions, which delegate operations to the `ActionSwapPTV3` contract.
 
 Buying PT:
@@ -140,7 +150,9 @@ When redeeming PT for external tokens, users call `swapExactPtForToken`. The PT 
 
 `Governance` can `pause` SY token transfers, disabling the buying and selling of PT through this mechanism.
 
-#### Trade YT
+![Trade PT](./diagrams/pendle-v2-trade-PT.png)
+
+### Trade YT
 
 Yield Tokens can be traded through the `PendleRouterV4` which delegates operations to the `ActionSwapYTV3` contract. Trading YT uses a sophisticated flash swap mechanism to enable buying or selling YT independently.
 
@@ -154,63 +166,19 @@ These flash swap mechanisms allow users to gain exposure to yield alone (YT) wit
 
 `Governance` can `pause` SY token transfers, disabling the buying and selling of YT through this mechanism.
 
-## PendleSwap AMM
-
-PendleSwap employs PendleMarketV3 contracts (Example: 0x85667e484a32d884010cf16427d90049ccf46e97) created by PendleMarketFactoryV3 (0x6fcf753f2C67b83f7B09746Bbc4FA0047b35D050) to facilitate trading. These markets implement a specialized AMM with a time-adaptive price curve optimized for principal and yield token trading, using integrated OracleLib for autonomous interest rate tracking.
-
-User interactions are funneled through PendleRouterV4 (0x888888888889758F76e7103c6CbF23ABbF58F946), which uses a selector-based routing system to dispatch calls to specialized implementation contracts. This router delegates function calls to seven different action facets based on their function signatures:
-
-- ActionAddRemoveLiqV3: Manages liquidity provision and removal
-- ActionSwapPTV3: Handles PT/SY swaps
-- ActionSwapYTV3: Executes flash-loan based YT trades
-- ActionMiscV3: Handles token conversions and other utilities
-- ActionSimple: Provides basic token operations
-- ActionCallbackV3: Manages callback functions for complex operations
-- ActionStorageV4: Controls the routing configuration
-
-The routing configuration in ActionStorageV4 is immutable (owned by address(0)), making the core routing logic unchangeable once deployed.
-
-For YT trading, ActionSwapYTV3 (0x4a03Ce0a268951d04E187B1CF48075eE69266e27) implements a flash swap mechanism:
-
-Buying YT: Flash-borrows SY, mints PT+YT, sells PT to repay the loan, delivers YT
-Selling YT: Flash-borrows PT, recombines with YT to get SY, partially sells SY to repay the loan
-
-For PT trading, ActionSwapPTV3 (0xd8D200d9A713A1c71cF1e7F694B14E5F1D948b15) implements direct swaps between PT and SY:
-Buying PT: swapExactSyForPt or swapSyForExactPt functions exchange SY for PT
-Selling PT: swapExactPtForSy or swapPtForExactSy functions exchange PT for SY
-
-## Liquidity and Incentives System
-
-## vePendle voting and emissions
+## PENDLE incentives and Fees
 
 The original `PendleFeeDistributor`, still active but considered legacy, is owned by an unknown address(0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) that still distributes USDC to users with no relation to the current Treasury.
 
-## Upgradeability Architecture
-
-## LayerZero Cross-chain messaging
+![Voting and Fees](./diagrams/pendle-v2-voting-and-fees.png)
 
 # Dependencies
 
-The Pendle V2 protocol exhibits a high degree of autonomy for its core operations on Ethereum, with critical external dependencies limited to cross-chain functionality.
-
-Pendle employs an oracle system fully integrated into its market contracts, functioning similarly to UniswapV3 TWAPs. These oracles rely exclusively on Pendle market activity without requiring external data feeds. While Pendle's own internal operations do not depend on these oracles, they serve as important price feeds for external protocols integrating with Pendle. All essential protocol functions including swaps, pricing, minting and redeeming operate independently, ensuring complete autonomy for critical operations on Ethereum.
-
-The only significant external dependency for Pendle is LayerZero for cross-chain communications. LayerZero Protocol itself is immutable and fully permissionless. The protocol will exist indefinitely even if Layer0 Labs, the company that developed the LayerZero Protocol, ceases to exist. Layer0 Labs' role in the LayerZero protocol is reduced to deploying immutable Endpoints on new chains. These endpoints reference each other and thereby enable the cross-chain communication network. If Layer0 Labs ceases to exist, no new chains are added to the cross-chain network, but the existing network is not affected.
-
-Analysis of the [PendleMsgSendEndpointUpg](https://etherscan.io/address/0xdcf7313cc90cfd7589fba65d1985e02b5de31e9a#code) contract reveals that Pendle exclusively uses LayerZero endpoints with their default configuration, without customization of validators (DVNs). Since September 2023, LayerZero has used Google Cloud as its default validator. Should LayerZero or Google Cloud fail, users would be unable to synchronize their vePENDLE positions from Ethereum to secondary chains, would lose access to reward boosts of up to 250% on their LP positions on secondary chains, and would see disruption to the cross-chain voting system for incentive allocation. However, these failures would not affect users' principal funds, existing positions, or essential protocol functionality on Ethereum.
-
-The centralization via Google Cloud in the LayerZero infrastructure represents a significant risk for Pendle's cross-chain operations, with no alternatives or fallback mechanisms in case of failure. This means Pendle inherits the security and reliability of LayerZero's default infrastructure, but also depends on it.
-
-According to their docs PENDLE is currently deployed on the following chains through the LayerZero protocol:
-
-- Mainnet
-- Arbitrum
-- Mantle
-- Base
-- Optimism
-- BNB Chain
+The protocol has no external dependencies.
 
 # Governance
+
+![Upgradeability](./diagrams/pendle-v2-upgradeability.png)
 
 The permission to upgrade the protocol follows a hierarchical structure. The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging. The `DevMultisig`, a 2/3 multisig, controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
 
