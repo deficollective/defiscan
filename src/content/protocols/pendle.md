@@ -28,7 +28,7 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by accounts with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
 
 ### Yield Tokenization
 
