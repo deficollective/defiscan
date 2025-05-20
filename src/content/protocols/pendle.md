@@ -30,23 +30,21 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are hold by accounts with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
 
-The permission to upgrade the protocol follows a hierarchical structure. The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging. The `DevMultisig`, a 2/3 multisig, controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
-
 ### Core Protocol Components
 
-The `BaseSplitCodeFactoryContract` creates large contracts by splitting their bytecode into two separate fragments that function together as a single logical entity. The resulting fragment contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public. This contract is controlled by the EOA "Pendle: Deployer 1" and is used to deploy contracts like `PendleMarketFactoryV3`.
+Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield exposure independently.
 
-The `ProxyAdmin` contract controls all `TransparentUpgradeableProxy` contracts in the protocol through functions including `upgrade`, `upgradeAndCall`, and `changeProxyAdmin`. These functions enable complete replacement of contract logic while preserving state data, with no timelock protection.
+The `ProxyAdmin` contract governs the upgradeability of several key protocol components including market implementations, yield tokenization contracts, and standardized yield tokens. These upgradeable components can have their logic completely replaced while preserving state data, with no timelock protection in place.
 
 The `upgradeToAndCall` function, available across the system's proxy contracts, permits upgrading a contract and executing initialization code atomically in a single transaction. 
 
 ### Yield Tokenization Infrastructure
 
-The Yield Tokenization infrastructure presents significant upgradeability risks through multiple interconnected contracts. The `PendleCommonSYFactory` is controlled by `Pendle: Deployer 1`, an EOA. This contract can register arbitrary implementation code for new SY tokens via `setSYCreationCode`, creating a critical vulnerability where malicious code could be deployed for all future yield-bearing assets. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
-
 The `PendleYieldContractFactory`, controlled by the `Governance`, can modify economic parameters without timelock via `setInterestFeeRate` and `setTreasury`. These functions allow instant changes to protocol fees (up to 20%) and redirection of revenue streams without warning users, leaving them no opportunity to exit their positions. Unlike other parameter changes that only affect new markets, the fee rate directly impacts both existing positions and newly created ones, as it applies globally to every tokenization queried from the factory. This means users with active positions are exposed to potential fee increases without prior notification.
 
 The SY tokens themselves (`PendleERC4626SYV2`) contain `pause` and `unpause` functions that can be triggered by the _Pendle Team_ (with appropriate permissions in the `PendleGovernanceProxy`). Calling `pause` locks deposited user assets instantly without timelock protection. This could lead to permanent _loss of user funds_.
+
+The Yield Tokenization infrastructure presents significant upgradeability risks through multiple interconnected contracts. The `PendleCommonSYFactory` is controlled by `Pendle: Deployer 1`, an EOA. This contract can register arbitrary implementation code for new SY tokens via `setSYCreationCode`, creating a critical vulnerability where malicious code could be deployed for all future yield-bearing assets. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
 
 ### Pendle Swap Module
 
@@ -113,9 +111,11 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 # Reviewer Notes
 
+The `BaseSplitCodeFactoryContract` creates large contracts by splitting their bytecode into two separate fragments that function together as a single logical entity. The resulting fragment contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public. This contract is controlled by the EOA "Pendle: Deployer 1" and is used to deploy contracts like `PendleMarketFactoryV3`.
+
 # Protocol Analysis
 
-## Yield Tokenization Infrastructure
+## Market Creation
 
 The Pendle protocol utilizes a three-token system to separate yield-bearing assets into principal and yield components through a series of specialized contracts.
 
@@ -208,7 +208,7 @@ The original `PendleFeeDistributor`, still active but considered legacy, is owne
 
 The Pendle V2 protocol exhibits a high degree of autonomy for its core operations on Ethereum, with critical external dependencies limited to cross-chain functionality.
 
-Pendle employs an oracle system fully integrated into its market contracts, functioning similarly to UniswapV3 TWAPs. These oracles rely exclusively on Pendle market activity without requiring external data feeds. All essential protocol functions including swaps, pricing, minting and redeeming depend on these internal oracles, ensuring complete independence for critical operations on Ethereum.
+Pendle employs an oracle system fully integrated into its market contracts, functioning similarly to UniswapV3 TWAPs. These oracles rely exclusively on Pendle market activity without requiring external data feeds. While Pendle's own internal operations do not depend on these oracles, they serve as important price feeds for external protocols integrating with Pendle. All essential protocol functions including swaps, pricing, minting and redeeming operate independently, ensuring complete autonomy for critical operations on Ethereum.
 
 The only significant external dependency for Pendle is LayerZero for cross-chain communications. LayerZero Protocol itself is immutable and fully permissionless. The protocol will exist indefinitely even if Layer0 Labs, the company that developed the LayerZero Protocol, ceases to exist. Layer0 Labs' role in the LayerZero protocol is reduced to deploying immutable Endpoints on new chains. These endpoints reference each other and thereby enable the cross-chain communication network. If Layer0 Labs ceases to exist, no new chains are added to the cross-chain network, but the existing network is not affected.
 
@@ -226,6 +226,8 @@ According to their docs PENDLE is currently deployed on the following chains thr
 - BNB Chain
 
 # Governance
+
+The permission to upgrade the protocol follows a hierarchical structure. The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging. The `DevMultisig`, a 2/3 multisig, controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
 
 ## Security Council
 
