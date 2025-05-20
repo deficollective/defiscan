@@ -48,28 +48,15 @@ The `PendlePYLpOracle`, essential for integrations with external protocols, is f
 
 The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately controlled by `Governance multisig`), contains high-risk functions including `setTreasuryAndFeeReserve` and `setOverriddenFee` that can modify critical economic parameters without timelock protection. The `PendleLimitRouter`, owned directly by the `Governance multisig`, includes functions like `setFeeRecipient` that can redirect protocol fees and `setLnFeeRateRoots` that can modify trading fee rates. This latter function can be called by either Governance or the `hardwareDeployer EOA`, creating multiple vectors for parameter manipulation.
 
-### vePENDLE and Governance System
+### PENDLE incentives for LPs and Fees for vePENDLE voters
 
 The vePENDLE system handles voting, boosts and rewards. The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade the contract, or add and remove pools from receiving votes without timelock which could lead to _loss of unclaimed yield_.
 
-The PENDLE tokens that are distributed as incentive can be withdrawn by the _Pendle Team_ at any moment from the `PendleGaugeControllerMainchainUpg` contract preventing distribution to users and leading to loss of unclaimed yield. Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts.
+The PENDLE tokens that are distributed as incentive can be withdrawn by the _Pendle Team_ at any moment from the `PendleGaugeControllerMainchainUpg` contract preventing distribution to LPs and leading to _loss of unclaimed yield_. Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts of PENDLE to LPs.
 
-### Treasury & Fee System
+Fees from market activities are sent to the `Treasury` multisig. The fees allocated for the vePENDLE holders are manually forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The fees can be withhold at any stage of the transfer from the Treasury to the vePENDLE holders.
 
-The fee distribution system has multiple critical upgradeability vectors and centralization risks. The `PendleFeeDistributorV2` (controlled by `DevMultisig`) contains `upgradeToAndCall` and `setMerkleRootAndFund` which can replace implementation logic and redirect reward distributions without timelock.
-
-The `hardwareDeployer` EOA creates a severe centralization risk in the fee flow: Treasury multisigs (2/6 and 2/5) send tokens to this EOA, which then converts them to ETH using `PendleRouterV4` and is supposed to transfer funds to `DevMultisig` and to the `Treasury`. Our analysis shows this EOA can simply choose not to execute these transfers, effectively blocking all fee distributions to users. This address also has both `GUARDIAN` and `ALICE` roles in `PendleGovernanceProxy` and can modify protocol parameters like fee rates via `setLnFeeRate`.
-
-The `PendleMultiTokenMerkleDistributor` manages token rewards earned from vePENDLE voting points and contains critical upgradeability functions including `upgradeToAndCall` and `setMerkleRoot`, controlled by the `DevMultisig`. These functions allow replacing the contract implementation and modifying the merkle root used to validate reward claims, without timelock or other protection.
-
-
-### Cross-Chain Infrastructure
-
-The cross-chain architecture adds further complexity to the upgradeability risks. The `PendleMsgSendEndpointUpg` manages the transmission of vePENDLE position data to other blockchains through LayerZero and is fully upgradeable via `upgradeTo`. Critical functions like `setWhitelisted` and `addReceiveEndpoints` configure which addresses can send cross-chain messages and register new destination contracts.
-
-The `VotingEscrowPendleMainchain` includes functions like `addDestinationContract` and `setApproxDstExecutionGas` that affect how vePENDLE balances are synchronized across chains. If compromised, the cross-chain LP reward boost system could be manipulated, preventing users from receiving their rightful benefits on secondary chains.
-
-The governance can add destination contracts on other chains for synchronizing vePENDLE balances and voting results through functions like `addDestinationContract` in `VotingEscrowPendleMainchain` and `forceBroadcastResults` in `PendleVotingControllerUpg`. These functions have no timelock protection and could be used to manipulate cross-chain incentive distribution if the `Governance` multisig is compromised.
+The `PendleMultiTokenMerkleDistributor` allows vePENDLE holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` contains is upgradeable by the `DevMultisig`. These functions allow replacing the contract implementation and modifying the merkle root used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
 
 > Upgradeability score: High
 
