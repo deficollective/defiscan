@@ -52,7 +52,7 @@ The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately co
 
 The vePENDLE system handles voting, boosts and rewards. The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade the contract, or add and remove pools from receiving votes without timelock which could lead to _loss of unclaimed yield_.
 
-The `PendleGaugeControllerMainchainUpg` includes the function `withdrawPendle` that allows `Governance` to withdraw any amount of PENDLE tokens to any address, potentially draining all reserves in a single transaction. It also includes `upgradeTo` and `transferOwnership` functions that could transfer control of the entire reward distribution system.
+The PENDLE tokens that are distributed as incentive can be withdrawn by the _Pendle Team_ at any moment from the `PendleGaugeControllerMainchainUpg` contract preventing distribution to users and leading to loss of unclaimed yield. Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts.
 
 ### Treasury & Fee System
 
