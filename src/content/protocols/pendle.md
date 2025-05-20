@@ -28,23 +28,17 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are hold by accounts with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by accounts with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
 
-### Core Protocol Components
+### Yield Tokenization
 
 Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield exposure independently.
 
-The `ProxyAdmin` contract governs the upgradeability of several key protocol components including market implementations, yield tokenization contracts, and standardized yield tokens. These upgradeable components can have their logic completely replaced while preserving state data, with no timelock protection in place.
+The SY tokens themselves can be paused by the _Pendle Team_. Calling `pause` locks the yield bearing assets in Pendle instantly without timelock protection. This could lead to permanent or temporary _loss of user funds_. Additionally, during a paused SY token, trading between the associated YT and PT is paused.
 
-The `upgradeToAndCall` function, available across the system's proxy contracts, permits upgrading a contract and executing initialization code atomically in a single transaction. 
+The `PendleYieldContractFactory`, controlled by the `Governance` multisig account, can change the interest fee on a market instantaneously up to 20% leaving them no opportunity to exit their positions. The fee rate directly impacts both existing positions and newly created ones. This could lead to _loss of unclaimed yield.
 
-### Yield Tokenization Infrastructure
-
-The `PendleYieldContractFactory`, controlled by the `Governance`, can modify economic parameters without timelock via `setInterestFeeRate` and `setTreasury`. These functions allow instant changes to protocol fees (up to 20%) and redirection of revenue streams without warning users, leaving them no opportunity to exit their positions. Unlike other parameter changes that only affect new markets, the fee rate directly impacts both existing positions and newly created ones, as it applies globally to every tokenization queried from the factory. This means users with active positions are exposed to potential fee increases without prior notification.
-
-The SY tokens themselves (`PendleERC4626SYV2`) contain `pause` and `unpause` functions that can be triggered by the _Pendle Team_ (with appropriate permissions in the `PendleGovernanceProxy`). Calling `pause` locks deposited user assets instantly without timelock protection. This could lead to permanent _loss of user funds_.
-
-The Yield Tokenization infrastructure presents significant upgradeability risks through multiple interconnected contracts. The `PendleCommonSYFactory` is controlled by `Pendle: Deployer 1`, an EOA. This contract can register arbitrary implementation code for new SY tokens via `setSYCreationCode`, creating a critical vulnerability where malicious code could be deployed for all future yield-bearing assets. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
+The `PendleCommonSYFactory` is used to create new markets and instantiate SY contracts. The implementation code used by the Factory to deploy new SY tokens can be updated by `Pendle: Deployer 1`, an EOA. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
 
 ### Pendle Swap Module
 
@@ -53,7 +47,6 @@ The Pendle protocol employs a custom selector-based router proxy `PendleRouterV4
 The `PendlePYLpOracle`, essential for integrations with external protocols, is fully upgradeable and owned by the Governance multisig (2/4). Its upgradeability risks stem from the ability of Governance to call `transferOwnership` without timelock and `setBlockCycleNumerator` which can modify TWAP calculations. This creates a risk where the Governance multisig could transfer control or manipulate oracle parameters with no delay or warning to users.
 
 The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately controlled by `Governance multisig`), contains high-risk functions including `setTreasuryAndFeeReserve` and `setOverriddenFee` that can modify critical economic parameters without timelock protection. The `PendleLimitRouter`, owned directly by the `Governance multisig`, includes functions like `setFeeRecipient` that can redirect protocol fees and `setLnFeeRateRoots` that can modify trading fee rates. This latter function can be called by either Governance or the `hardwareDeployer EOA`, creating multiple vectors for parameter manipulation.
-
 
 ### vePENDLE and Governance System
 
