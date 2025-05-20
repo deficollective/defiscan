@@ -7,7 +7,7 @@ defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: "O"
 reasons: ["Unverified Contracts"]
-risks: ["L", "H", "M", "H", "H"]
+risks: ["L", "H", "L", "H", "H"]
 author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-02-19"
 publish_date: "1970-01-01"
@@ -85,7 +85,7 @@ The governance can add destination contracts on other chains for synchronizing v
 Pendle V2 autonomy presents a mixed profile with high independence on Ethereum yet external dependencies for cross-chain functions. On Ethereum, Pendle employs a dual-layer oracle system: `OracleLib` integrated directly into `PendleMarket` contracts for collecting and updating interest rate data autonomously, and `PendlePYLpOracle` serving as a facade for external protocol integrations. This self-contained oracle infrastructure ensures complete autonomy for core protocol operations. 
 The only external dependency is LayerZero for cross-chain communications, using Google Cloud as its default validator since September 2023. If this infrastructure fails, users would lose vePENDLE position synchronization across the six supported chains, LP reward boosts up to 250%, and cross-chain voting functionalities. However, user funds and core protocol operations on Ethereum would remain unaffected. This configuration warrants a Medium autonomy score as dependencies can impact protocol performance regarding yields and rewards without threatening user principal funds.
 
-> Autonomy score: Medium
+> Autonomy score: Low
 
 ## Exit Window
 
