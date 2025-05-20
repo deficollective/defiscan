@@ -113,6 +113,8 @@ Given the multiple high risk scores and the presence of unverified contracts, si
 
 The `BaseSplitCodeFactoryContract` creates large contracts by splitting their bytecode into two separate fragments that function together as a single logical entity. The resulting fragment contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public. This contract is controlled by the EOA "Pendle: Deployer 1" and is used to deploy contracts like `PendleMarketFactoryV3`.
 
+⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
+
 # Protocol Analysis
 
 ## Market Creation
@@ -245,8 +247,6 @@ The permission to upgrade the protocol follows a hierarchical structure. The `Go
 # Contracts and Permissions
 
 ## Contracts
-
-⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 | Contract Name                                       | Address                                                                                                               |
 |-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
