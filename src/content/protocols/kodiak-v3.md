@@ -15,10 +15,15 @@ update_date: "2025-05-07"
 ---
 
 # Summary
-Kodiak Finance V3 is a comprehensive liquidity hub on Berachain that combines multiple DeFi components into a unified platform. At its core, it offers both Uniswap V2-style (constant product) and V3-style (concentrated liquidity) AMMs, with a protocol fee of 35% from launch. The platform's unique "Kodiak Islands" system provides ERC20-wrapped V3 positions in two variants: Managed Islands, which are protocol-run with automatic rebalancing and a 10% fee, and Unmanaged Islands that allow users to deploy their own positions without rebalancing.
-A distinctive feature of Kodiak is its integrated incentive layer and no-code token deployer factory called "Panda Factory." This system enables token launches on Berachain using bonding curves with several innovative features: a 1B total supply model, zero initial liquidity requirement, configurable price ranges, and support for base tokens like BERA and HONEY. The Panda Factory includes an optional same-block buy feature for deployers (up to 10% of supply) and implements a graduation mechanism where tokens transition from the bonding curve to the Kodiak DEX once 80-90% of the supply is purchased.
-The protocol's architecture is built on immutable contracts rather than using proxy upgradeable contracts, with protocol parameters managed through multi-sig wallets.
-# Overview
+Kodiak Finance V3 is a comprehensive liquidity hub on Berachain that combines multiple DeFi components into a unified platform. At its core, it offers both Uniswap V2-style (constant product) and V3-style (concentrated liquidity) AMMs, with a protocol fee of 35% from launch. 
+- "Kodiak Islands" system provides ERC20-wrapped V3 positions, where users can provide liquidity in two variants: 
+  - Managed Islands, which are protocol-run with automatic rebalancing and a 10% fee, 
+  - Unmanaged Islands that allow users to deploy their own positions without rebalancing.
+- Users can stake their LP tokens in the RewardVault contract to earn additional rewards from the protocol's incentive layer.
+- A distinctive feature of Kodiak is its integrated incentive layer and no-code token deployer factory called "Panda Factory." (which will deploy a PandaToken). This system enables token launches on Berachain using bonding curves with several features: a 1B total supply model, zero initial liquidity requirement, configurable price ranges, and support for base tokens like BERA and HONEY. The Panda Factory includes an optional same-block buy feature for deployers (up to 10% of supply) and implements a graduation mechanism where tokens transition from the bonding curve to the Kodiak DEX once 80-90% of the supply is purchased.
+- The protocol's architecture is built on immutable contracts rather than using proxy upgradeable contracts, with protocol parameters managed through multi-sig wallets.
+
+# Ratings
 
 ## Chain
 
@@ -61,7 +66,9 @@ Kodiak is accessible through only a frontend [kodiak.finance](https://app.kodiak
 
 > Accessibility score: High
 
-# Technical Analysis
+## Conclusion
+
+# Contracts and Permissions
 
 ## Contracts
 
@@ -101,9 +108,11 @@ Kodiak is accessible through only a frontend [kodiak.finance](https://app.kodiak
 | UniswapV3Factory    | setOwner                   | Changes the owner address. Owner can modify fee protocol and amounts.                                                                                                                                                                               | Safe Wallet 1 |
 | UniswapV3Factory    | setDefaultFeeProtocol      | Sets protocol fee percentage for new pools, does not affect existing ones. Currently 35%.                                                                                                                                                           | Safe Wallet 1 |
 | UniswapV3Factory    | enableFeeAmount            | Enables/disables fee tiers.                                                                                                                                                                                                                         | Safe Wallet 1 |
+| UniswapV3Pool       | setFeeProtocol             | Allows the owner to set a fee percentage that is deducted from the LPs fees. It only affects the pool where the function is called. The fee is required to be less than 10% of the total accumulated fees. It only affects future accumulated fees. | Safe Wallet 1 |
+| UniswapV3Pool       | collectProtocol            | Withdraws the accumulated protocol fees to a custom address.The owner triggers the withdraw and specifies the address.                                                                                                                              | Safe Wallet 1 |
 | KodiakIslandFactory | renounceOwnership          | Removes admin control. Prevents future upgrades and parameter changes. Could permanently lock protocol in current state.                                                                                                                            | Safe Wallet 2 |
 | KodiakIslandFactory | transferOwnership          | Transfers admin control. New owner gains full control over island parameters and upgrades.                                                                                                                                                          | Safe Wallet 2 |
-| KodiakIslandFactory | setIslandImplementation    | Updates island contract implementation, affects new instances deployed by the factory                                                                                                                                                               | Safe Wallet 2 |
+| KodiakIslandFactory | setIslandImplementation    | Updates island contract implementation, affects new instances deployed by the factory. The current IslandImplementation is [KodiakIslandWithRouter](https://berascan.com/address/0xCFe9Ee61c271fBA4D190498b5A71B8CB365a3590)                        | Safe Wallet 2 |
 | KodiakIslandFactory | setTreasury                | Changes fee recipient, redirects all fees to new address.                                                                                                                                                                                           | Safe Wallet 2 |
 | KodiakIslandFactory | setIslandFee               | Sets island fee percentage, guardrailded at 20% max.                                                                                                                                                                                                | Safe Wallet 2 |
 | FarmFactory         | renounceOwnership          | Removes admin control. Prevents future farm parameter changes. Could permanently lock farming functionality.                                                                                                                                        | Safe Wallet 1 |
@@ -128,22 +137,16 @@ Kodiak is accessible through only a frontend [kodiak.finance](https://app.kodiak
 | PandaFactory        | setWbera                   | Sets wrapped BERA address.                                                                                                                                                                                                                          | Safe Wallet 3 |
 | PandaFactory        | setIncentive               | Sets launch incentives.                                                                                                                                                                                                                             | Safe Wallet 3 |
 | PandaFactory        | setPandaPoolFees           | Sets pool fee structure. Fees cannot lead to loss of funds for PandaToken (immutable after deployment).                                                                                                                                             | Safe Wallet 3 |
+| RewardVaultFactory  | setBGTIncentiveDistributor | Sets the BGTIncentiveDistributor contract                                                                                                                                                                                                           | Safe Wallet 4 |
+| RewardVaultFactory  | grantRole                  | Grant roles, including Factory Owner, Factory Manager, and Factory Vault Pauser                                                                                                                                                                     | Safe Wallet 4 |
+| RewardVaultFactory  | revokeRole                 | Revoke roles, including Factory Owner, Factory Manager, and Factory Vault Pauser                                                                                                                                                                    | Safe Wallet 4 |
 | RewardVault         | setDistributor             | Updates the distributor address that control the distribution of rewards                                                                                                                                                                            | Safe Wallet 4 |
 | RewardVault         | recoverERC20               | Allows the contract owner to recover ERC20 tokens that were accidentally sent to the contract, but not whitelisted incentive tokens and staked tokens                                                                                               | Safe Wallet 4 |
 | RewardVault         | removeIncentiveToken       | Deletes the token from the incentives mapping.                                                                                                                                                                                                      | Safe Wallet 4 |
 | RewardVault         | updateIncentiveManager     | Updates the incentive manager address                                                                                                                                                                                                               | Safe Wallet 4 |
 | RewardVault         | pause                      | Allows the factory vault pauser to pause the vault.                                                                                                                                                                                                 | Safe Wallet 4 |
 | RewardVault         | unpause                    | Unpause the vault                                                                                                                                                                                                                                   | Safe Wallet 4 |
-| RewardVaultFactory  | setBGTIncentiveDistributor | Sets the BGTIncentiveDistributor contract                                                                                                                                                                                                           | Safe Wallet 4 |
-| RewardVaultFactory  | grantRole                  | Grant roles, including Factory Owner, Factory Manager, and Factory Vault Pauser                                                                                                                                                                     | Safe Wallet 4 |
-| RewardVaultFactory  | revokeRole                 | Revoke roles, including Factory Owner, Factory Manager, and Factory Vault Pauser                                                                                                                                                                    | Safe Wallet 4 |
-| UniswapV3Pool       | setFeeProtocol             | Allows the owner to set a fee percentage that is deducted from the LPs fees. It only affects the pool where the function is called. The fee is required to be less than 10% of the total accumulated fees. It only affects future accumulated fees. | Safe Wallet 1 |
-| UniswapV3Pool       | collectProtocol            | Withdraws the accumulated protocol fees to a custom address.The owner triggers the withdraw and specifies the address.                                                                                                                              | Safe Wallet 1 |
 
-
-## Dependencies
-
-No external dependency has been found.
 
 ## Exit Window
 
@@ -181,14 +184,19 @@ No external dependency has been found.
 
 This implementation means users have no protection period to exit their positions before potentially malicious changes take effect.
 
-# Security Council
+## Risk Parameter Control
 
-| Multisig / Role | Address                                    | Type         | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
-| --------------- | ------------------------------------------ | ------------ | ------------------ | ---------------------- | ------------------------ | -------------------------- |
-| No 1            | 0x21802b7C3DF57e98df45f1547b0F1a72F2CD1aED | Multisig 5/9 |                    |                        |                          |                            |
-| No 2            | 0x7D8A57bf453ecf440093fe6484c78B91b377e638 | Multisig 3/6 |                    |                        |                          |                            |
-| No 3            | 0x8A98f7A3dF97029bd8992966044a06DEe4CC5299 | Multisig 2/3 |                    |                        |                          |                            |
-| No 4            | 0xD13948F99525FB271809F45c268D72a3C00a568D | Multisig 3/5 |                    |                        |                          |                            |
+| Multisig / Role        | Address                                    | Type         | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
+| ---------------------- | ------------------------------------------ | ------------ | ------------------ | ---------------------- | ------------------------ | -------------------------- |
+| Farming parameters     | 0x21802b7C3DF57e98df45f1547b0F1a72F2CD1aED | Multisig 2/4 | ❌                  | ❌                      | ❌                        | ❌                          |
+| Liquidity parameters   | 0x7D8A57bf453ecf440093fe6484c78B91b377e638 | Multisig 3/6 | ❌                  | ❌                      | ❌                        | ❌                          |
+| PandasToken parameters | 0x8A98f7A3dF97029bd8992966044a06DEe4CC5299 | Multisig 2/3 | ❌                  | ✅                      | ❌                        | ❌                          |
+| RewardVault parameters | 0xD13948F99525FB271809F45c268D72a3C00a568D | Multisig 3/5 | ❌                  | ✅                      | ❌                        | ❌                          |
 
 
-
+| Role               | Risk Parameter | Controlled by | Guardrails enforced by | Contract            |
+| ------------------ | -------------- | ------------- | ---------------------- | ------------------- |
+| Farming parameters |                | Multisig 2/4  |                        | UniswapV3Factory    |
+|                    |                | Multisig 3/6  |                        | KodiakIslandFactory |
+|                    |                | Multisig 2/3  |                        | PandaFactory        |
+|                    |                | Multisig 3/5  |                        | RewardVaultFactory  |
