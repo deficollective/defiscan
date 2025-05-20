@@ -42,9 +42,9 @@ Morpho Markets are configured with an external price oracle based on which the s
 
 However, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 35% of Morpho Markets [(read more)](#dependencies).
 
-This factory wraps price feeds compliant with Chainlink's Aggregator interface and assumes that these feeds never fail (liveness and valid prices). Although the price feed is chosen permissionlessly by the market creator, more than 35% of the Morpho Markets rely on a Chainlink curated price feed. Those feeds are controlled in a centralized manner, a multisig account not complying with _Security Council_ requirements, the impact of a failure has to be assessed nonetheless.
+This factory wraps price feeds compliant with Chainlink's Aggregator interface and assumes that these feeds never fail (liveness and valid prices). Although the price feed is chosen permissionlessly by the market creator, more than 35% of the Morpho Markets rely on a Chainlink curated price feed. Those feeds are controlled in a centralized manner, a multisig account not complying with _Security Council_ requirements, the impact of a failure has to be assessed nonetheless. A complete analysis of Chainlink price feeds can be found in the dedicated [report](./chainlink-oracles.md).
 
-An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the permanent freezing of funds in affected markets. With a potential impact on more than 35% of Morpho Markets, or more than 30% of Morpho's TVL, Chainlink is thus assessed as a _Medium centralization risk_ for Morpho. A complete analysis of Chainlink price feeds can be found in the dedicated [report](./chainlink-oracles.md).
+An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the permanent freezing of funds in affected markets. With a potential impact on more than 35% of Morpho Markets, or more than 30% of Morpho's TVL. This potential impact on 30% of Morpho's TVL results in a _Medium centralization risk_ from Chainlink.
 
 > Autonomy score: Medium
 
@@ -70,7 +70,7 @@ Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho o
 
 The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the _Chain_ and _Accessibility_ dimensions. The upgradeability of the `MORPHO` token that is not protected with an onchain governance system and _Exit Window_ and its trusted Chainlink dependency result in _Medium_ _Upgradeability_, _Exit Window_ and _Autonomy_ risks and **Stage 1** decentralization.
 
-The protocol could advance to **Stage 2** by; 1) transferring control over the `MORPHO` permissions to onchain governance with a 30-day _Exit Window_ and 2) implementing a fallback mechanism around the Chainlink oracle dependency (or Chainlink adopting a Security Council setup for its own multisig account).
+The protocol could advance to **Stage 2** by; 1) transferring control over the `MORPHO` permissions to onchain governance with a 30-day _Exit Window_ and 2) implementing a fallback mechanism around the Chainlink oracle dependency (or Chainlink taking measures to become a _Low Centralization_ protocol, as highlighted in this [report](./chainlink-oracles.md)).
 
 > Overall score: Stage 1
 

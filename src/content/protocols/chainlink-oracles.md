@@ -8,7 +8,7 @@ chain: "Ethereum"
 type: "Oracles"
 logo: "/images/infrastructure-logos/chainlink-logo.png"
 stage: "I0"
-protocols: ["Morpho", "Aave v3", "Compound-V3"]
+protocols: ["Morpho", "Aave v3", "Compound-V3", "Liquity"]
 reasons: []
 risks: ["L", "H", "L", "M", "L"]
 author: ["mmilien_"]
@@ -33,17 +33,19 @@ An overview of the Chainlink Price Feeds can be seen below.
 
 The core of the protocol is the aggregator contract (`AccessControlledOCR2Aggregator`) and its proxy (`EACAggregatorProxy`), the _Node Operators_, and the [Chainlink multisig](#security-council).
 
-The Chainlink _Node Operators_ are a set of well-established companies in diverse economic sectors. The _Node Operators_ reach a consensus by collaborating offchain using several data sources. Once enough _Node Operators_ agree on a price, one transmitter can send the new price and a sufficient amount of signatures to the `AccessControlledOCR2Aggregator` contract. The entry point for customers is the `EACAggregatorProxy`, which will in turn query the `AccessControlledOCR2Aggregator`. Both contracts are under the control of the [Chainlink multisig](#security-council) multisig, which could effectively update the price feed to any new logic.
+The Chainlink _Node Operators_ are a set of well-established companies in diverse economic sectors. The _Node Operators_ reach a consensus by collaborating offchain using several data sources. Once enough _Node Operators_ agree on a price, one transmitter can send the new price and a sufficient amount of signatures to the `AccessControlledOCR2Aggregator` contract. The entry point for users is the `EACAggregatorProxy`, which will in turn query the `AccessControlledOCR2Aggregator`. Both contracts are under the control of the [Chainlink multisig](#security-council) multisig, which could effectively update which Aggregator is used by the Proxy. This could arbitrarily change the entire logic of the price feed.
 
 # Rating
 
 As mentioned in the [protocol analysis](#protocol-analysis), the [Chainlink multisig](#security-council) has permissions to change the price feeds at any given time without delay. This could change the entire logic of the price feeds, disabling further updates or rendering inaccurate data.
 
-Those changes can be made **without delay**.
+Those changes can be made **without delay** and the [Chainlink multisig](#security-council) does not follow the requirements for a _security council_.
 
 ## Conclusion
 
-Chainlink's protocol exposes centralized permissions on the price feeds aggregator implementations, which are not protected by an _Exit Window_. The protocol relies on _Node Operators_ from well-established companies to run the offchain consensus and push data onchain. We believe that this brings the Chainlinik price feeds to a **High Centralization**, equivalent to _Stage 0_, as a dependency.
+Chainlink's protocol exposes centralized permissions on the price feeds, which leads to a _High Upgradeability_ risk score. Those permissions are not protected by an _Exit Window_ nor a _Security Council_. We believe that this brings the Chainlinik price feeds to a **High Centralization**, equivalent to _Stage 0_, as a dependency.
+
+Chainlink could advance to _Stage 1_ by adhering to the [Security Council requirements](https://defiscan.info/learn-more) or introducing a 7-day _exit window_ on changes made to the price feeds.
 
 > Overall score: High
 
@@ -55,7 +57,7 @@ This review is limited to Chainlink Oracles deployed on Ethereum mainnet. We not
 
 ## Security Council
 
-The multisig in charge of the price feeds and aggregator contracts is a 4/9 multisig belonging to chronicle. It does not meet our security council requirements.
+The multisig in charge of the price feeds and aggregator contracts is a 4/9 multisig controlled by Chainlink. It does not meet our security council requirements.
 
 &nbsp;
 
