@@ -459,43 +459,35 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorRewardAddress | Changes the reward address of a node operator. | EVMScriptExecutor (EasyTrack) |
 | NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorStakingLimit | Sets the maximum number of validators to stake for a node operator. | EVMScriptExecutor (EasyTrack), EVMScriptExecutor (EasyTrack) |
 
-| CSModule | activatePublicRelease | ... | ['onlyRole'] |
-| CSModule | setKeyRemovalCharge | ... | ['onlyRole'] |
-| CSModule | addNodeOperatorETH | ... | ['whenResumed'] |
-| CSModule | addNodeOperatorStETH | ... | ['whenResumed'] |
-| CSModule | addNodeOperatorWstETH | ... | ['whenResumed'] |
-| CSModule | addValidatorKeysETH | ... | ['whenResumed'] |
-| CSModule | addValidatorKeysStETH | ... | ['onlyNodeOperatorManager'] |
+| CSModule | activatePublicRelease | Publicly releases the module and enable permissionless node operator registration with no limit on the amount of keys. | ['onlyRole MODULE_MANAGER_ROLE'] |
+| CSModule | setKeyRemovalCharge | Sets the key removal charge. This charge is taken from the bond if a key is removed. | ['onlyRole MODULE_MANAGER_ROLE'] |
 
-| CSModule | addValidatorKeysWstETH | ... | ['onlyNodeOperatorManager'] |
-| CSModule | claimRewardsStETH | ... | ['onlyNodeOperatorManagerOrRewardsAddress'] |
-| CSModule | claimRewardsWstETH | ... | ['onlyNodeOperatorManagerOrRewardsAddress'] |
-| CSModule | claimRewardsUnstETH | ... | ['onlyNodeOperatorManagerOrRewardsAddress'] |
+| CSModule | claimRewardsStETH | Claim full reward (fees + bond rewards) in stETH for the given Node Operator | Node operator's manager or rewards address |
+| CSModule | claimRewardsWstETH | Claim full reward (fees + bond rewards) in WstETH for the given Node Operator | Node operator's manager or rewards address|
+| CSModule | claimRewardsUnstETH | Request full reward (fees + bond rewards) in Withdrawal NFT (unstETH) for the given Node Operator | Node operator's manager or rewards address |
 
-| CSModule | removeKeys | ... | ['onlyNodeOperatorManager'] |
-| CSModule | compensateELRewardsStealingPenalty | ... | ['onlyNodeOperatorManager'] |
+| CSModule | removeKeys | Removes validator keys and takes a charge in the node opertaor's bonds. | Node operator's manager |
+| CSModule | compensateELRewardsStealingPenalty | Compensate execution layer rewards stealing penalty for the given Node Operator to prevent further validator exits. | Node Operator's manager |
 
-| CSModule | onRewardsMinted | ... | ['onlyRole'] |
-| CSModule | updateStuckValidatorsCount | ... | ['onlyRole'] |
-| CSModule | updateExitedValidatorsCount | ... | ['onlyRole'] |
-| CSModule | updateRefundedValidatorsCount | ... | ['onlyRole'] |
-| CSModule | updateTargetValidatorsLimits | ... | ['onlyRole'] |
-| CSModule | onExitedAndStuckValidatorsCountsUpdated | ... | ['onlyRole'] |
-| CSModule | unsafeUpdateValidatorsCount | ... | ['onlyRole'] |
-| CSModule | decreaseVettedSigningKeysCount | ... | ['onlyRole'] |
-| CSModule | reportELRewardsStealingPenalty | ... | ['onlyRole'] |
-| CSModule | cancelELRewardsStealingPenalty | ... | ['onlyRole'] |
-| CSModule | settleELRewardsStealingPenalty | ... | ['onlyRole'] |
-| CSModule | submitWithdrawal | ... | ['onlyRole'] |
-| CSModule | submitInitialSlashing | ... | ['onlyRole'] |
-| CSModule | onWithdrawalCredentialsChanged | ... | ['onlyRole'] |
-| CSModule | obtainDepositData | ... | ['onlyRole'] |
-| CSModule | \_onlyNodeOperatorManager | ... | [] |
-| CSModule | \_onlyNodeOperatorManagerOrRewardAddresses | ... | [] |
-| CSModule | resume | ... | ['onlyRole'] |
-| CSModule | pauseFor | ... | ['onlyRole'] |
-| CSModule | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| CSModule | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSModule | onRewardsMinted | Called when rewards are minted for the module, it passes through the minted stETH shares to the fee distributor | StakingRouter |
+| CSModule | updateStuckValidatorsCount | Update stuck validators count for Node Operators. Stuck validators are validators who did not follow the exit signal and may be penalized. If any operator has stuck validators it may no loinger be assigned validators as long as it is not resolved. | StakingRouter |
+| CSModule | updateExitedValidatorsCount | Update exited validators count for Node Operators. | StakingRouter |
+| CSModule | updateRefundedValidatorsCount | Unsupported, always reverts. | StakingRouter|
+| CSModule | updateTargetValidatorsLimits | Update target validators limits for a given node operator. | StakingRouter |
+| CSModule | onExitedAndStuckValidatorsCountsUpdated | This method is empty but will be called every time the counts are updated. | StakingRouter |
+| CSModule | unsafeUpdateValidatorsCount | Called to decrease the number of vetted keys for the given node operators. | StakingRouter |
+| CSModule | decreaseVettedSigningKeysCount | ... | StakingRouter |
+| CSModule | reportELRewardsStealingPenalty | Reports that a node operators stole execution layer rewards. The amount stolen and a fee will be locked from the node operator's bond. | ['onlyRole REPORT_EL_REWARDS_STEALING_PENALTY_ROLE'] |
+| CSModule | cancelELRewardsStealingPenalty | Cancels a previously reported stealing penalty and unlocks the funds for the node operator. | ['onlyRole' REPORT_EL_REWARDS_STEALING_PENALTY_ROLE] |
+| CSModule | settleELRewardsStealingPenalty | Settle locked bond for the given Node Operators throught the`CSAccounting` contract. The locked bond burnt. | ['onlyRole SETTLE_EL_REWARDS_STEALING_PENALTY_ROLE'] |
+| CSModule | submitWithdrawal | Report Node Operator's key as withdrawn and settle withdrawn amount. If wrongly sent this signal could free funds that are still deposited and lead to accounting errors. | ['onlyRole Verifier'] |
+| CSModule | submitInitialSlashing | Report Node Operator's key as slashed and apply the initial slashing penalty (through `CSAccounting`). | ['onlyRole' VERIFIER_ROLE] |
+| CSModule | onWithdrawalCredentialsChanged | Signals that the withdrawal credentials have been changed by the DAO. This sets the withdrawal charge to zero as node operators will need to remove their keys and submit new ones. | StakingRouter |
+| CSModule | obtainDepositData | Get the next depositsCount of depositable keys with signatures from the queue. | StakingRouter |
+| CSModule | pauseFor | Pause creation of the Node Operators and keys upload for a given amount of seconds. The management of existing node operators and rewards claiming remains possible. Rewards redemption can be paused through `CSAccounting`. | ['onlyRole PAUSE_ROLE'] |
+| CSModule | resume | Resume creation of the Node Operators and keys upload. | ['onlyRole RESUME_ROLE'] |
+| CSModule | grantRole | Grants a role withing the contract to a given address. There are roles to pause and resume the contract as well as roles meant for contracts (StakingRouter, Oracles). Granting contract roles to external accounts could lead to a hijack of user funds or wrongful penalties. | ['getRoleAdmin', 'onlyRole'] |
+| CSModule | revokeRole | Revokes a role in the contract. | ['getRoleAdmin', 'onlyRole'] |
 
 | CSAccounting | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | CSAccounting | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
