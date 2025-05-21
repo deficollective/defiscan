@@ -185,7 +185,17 @@ These flash swap mechanisms allow users to gain exposure to yield alone (YT) wit
 
 ## PENDLE incentives and Fees
 
-The original `PendleFeeDistributor`, still active but considered legacy, is owned by an unknown address(0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1) that still distributes USDC to users with no relation to the current Treasury.
+### Fee Collection and Distribution Path
+
+Fees collected during market operations are automatically sent to two Treasury multisig accounts. `Treasury1` (2/6 multisig) manages fees from pools created before October 8, 2024, while `Treasury2` (2/5 multisig) handles fees from pools created after this date. Neither Treasury implements any timelock protection for transferring funds.
+
+These Treasury multisigs manually transfer tokens to the `hardwareDeployer` EOA. This EOA converts the received tokens to ETH using the `PendleRouterV4` before forwarding them to the `PendleFeeDistributorV2Proxy`. This manual process creates a critical centralization point where a single entity controls the flow of all protocol fees destined for vePENDLE holders.
+
+The `PendleFeeDistributorV2Proxy` is governed by the `DevMultisig` (2/3) and implements multiple high-risk functions. The `setMerkleRootAndFund` function allows changing the merkle root that validates users' reward claims while simultaneously funding the contract. With `upgradeToAndCall`, the `DevMultisig` can replace the entire contract implementation and execute arbitrary function calls during the upgrade. The `updateProtocolClaimable` function enables manipulation of reward allocations to specific protocols without transparency. None of these functions implement timelock protection.
+
+The `hardwareDeployer` EOA also possesses additional protocol-wide powers through its `GUARDIAN` and `ALICE` roles in the `PendleGovernanceProxy`, including the ability to modify fee rates via `setLnFeeRate` and pause protocol functions. This concentration of power in a single external address creates a severe security risk for the entire fee distribution system.
+
+In parallel, the legacy `PendleFeeDistributor` remains active under the control of an unidentified address (0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1). This contract continues to distribute USDC to users through a separate reward system not accountable to the current Treasury structure.
 
 ![Voting and Fees](./diagrams/pendle-v2-voting-and-fees.png)
 
