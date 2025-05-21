@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Pendle is a yield-trading protocol that enables users to manage and optimize their yield exposure. By tokenizing yield-bearing assets into standardized yield tokens (SY), Pendle allows these assets to be split into principal tokens (PT) and yield tokens (YT). This separation facilitates various strategies, including earning fixed yields, speculating on future yield changes, and providing liquidity to earn additional rewards. Pendle's Automated Market Maker (AMM) is specifically designed to handle the trading of these time-decaying assets.
+Pendle is a yield-trading protocol that enables users to manage and optimize their yield exposure. By tokenizing yield-bearing assets into standardized yield tokens (SY), Pendle allows these assets to be split into principal tokens (PT) and yield tokens (YT). This separation facilitates various strategies, including earning fixed yields, speculating on future yield changes, and providing liquidity to earn additional rewards. Pendle's Automated Market Maker (AMM) is specifically designed to handle the trading of these duration dependent assets.
 
 # Ratings
 
@@ -28,15 +28,15 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no distributed onchain Governance voting exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
 
 ### Yield Tokenization
 
 Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield exposure independently.
 
-The SY tokens themselves can be paused by the _Pendle Team_. Calling `pause` locks the yield bearing assets in Pendle instantly without timelock protection. This could lead to permanent or temporary _loss of user funds_. Additionally, during a paused SY token, trading between the associated YT and PT is paused.
+The SY tokens themselves can be paused by the _Pendle Team_. Calling `pause` locks the supplied yield bearing assets in Pendle instantly without timelock protection. This could lead to permanent or temporary _loss of user funds_. Additionally, as a consequence of the smart contract infrastructure, during a paused SY token, trading between the associated YT and PT is paused.
 
-The `PendleYieldContractFactory`, controlled by the `Governance` multisig account, can change the interest fee on a market instantaneously up to 20% leaving them no opportunity to exit their positions. The fee rate directly impacts both existing positions and newly created ones. This could lead to _loss of unclaimed yield.
+The `PendleYieldContractFactory`, controlled by the `Governance` multisig account, can change the interest fee on a market instantaneously up to 20% leaving them no opportunity to exit their positions. The fee rate directly impacts both existing positions and newly created ones. This could lead to _loss of unclaimed yield_.
 
 The `PendleCommonSYFactory` is used to create new markets and instantiate SY contracts. The implementation code used by the Factory to deploy new SY tokens can be updated by `Pendle: Deployer 1`, an EOA. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
 
@@ -50,13 +50,19 @@ The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately co
 
 ### PENDLE incentives for LPs and Fees for vePENDLE voters
 
-The vePENDLE system handles voting, boosts and rewards. The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade the contract, or add and remove pools from receiving votes without timelock which could lead to _loss of unclaimed yield_.
+The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
+
+#### PENDLE emissions to LPs
+
+The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade this contract, or add and remove pools from receiving votes without timelock which could lead to _loss of unclaimed yield_.
 
 The PENDLE tokens that are distributed as incentive can be withdrawn by the _Pendle Team_ at any moment from the `PendleGaugeControllerMainchainUpg` contract preventing distribution to LPs and leading to _loss of unclaimed yield_. Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts of PENDLE to LPs.
 
-Fees from market activities are sent to the `Treasury` multisig. The fees allocated for the vePENDLE holders are manually forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The fees can be withhold at any stage of the transfer from the Treasury to the vePENDLE holders.
+#### Redirection of Fees to vePENDLE voters
 
-The `PendleMultiTokenMerkleDistributor` allows vePENDLE holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` contains is upgradeable by the `DevMultisig`. These functions allow replacing the contract implementation and modifying the merkle root used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
+Charged fees from market activities are automatically sent to the `Treasury` multisig. The fees allocated for the vePENDLE holders are manually forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The collected fees can be withhold at any stage of the transfer from the Treasury to the vePENDLE holders. This could lead to _loss of unclaimed yield_.
+
+The `PendleMultiTokenMerkleDistributor` allows vePENDLE holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` contains is upgradeable by the `DevMultisig`. These functions allow replacing the contract implementation used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
 
 > Upgradeability score: High
 
