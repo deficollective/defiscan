@@ -82,11 +82,9 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 The Pendle V2 protocol falls into the N/A category and not Stage 0 due to the `sySwapper` contract which is not verified on public block explorers.
 
-Despite this classification, our analysis shows that Pendle V2 protocol receives High centralization risk scores for Upgradeability, Exit Window, and Accessibility dimensions, with a Medium score for Autonomy.
+Despite this classification, our analysis shows that Pendle V2 protocol receives High centralization risk scores for Upgradeability, Exit Window, and Accessibility dimensions, and a low score for Autonomy.
 
-To reach Stage 0, Pendle should first verify all its contracts on Etherscan. Then, to progress toward Stage 1, the protocol would need to: 1) adopt a proper Security Council structure with at least 7 signers, a 51% threshold, and at least 50% publicly identified external signers; 2) implement timelock mechanisms for critical functions; and 3) improve accessibility by publishing the frontend code to IPFS or developing alternative interfaces.
-
-Given the multiple high risk scores and the presence of unverified contracts, significant structural and transparency changes would be necessary for the protocol to advance within the DeFiScan evaluation framework.
+To reach Stage 0, Pendle should first verify all its contracts on Etherscan. Then, to progress toward Stage 1, the protocol would need to: 1) assign permissions to an account that suffices the _Security Council requirements_ with at least 7 signers, a 51% threshold, and at least 50% publicly identified external signers; 2) implement timelock mechanisms for critical functions; and 3) improve accessibility by publishing the frontend code to IPFS or developing alternative interfaces.
 
 # Reviewer Notes
 
