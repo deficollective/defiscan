@@ -42,7 +42,7 @@ The `PendleCommonSYFactory` is used to create new markets and instantiate SY con
 
 ### Pendle Swap Module
 
-The Pendle protocol employs a custom selector-based router proxy `PendleRouterV4` that directs calls to seven specialized implementations. This router handles all user interactions with the protocol, including tokenization operations (minting PT/YT), liquidity management, and swap functions. Unlike standard upgradeable proxies, `PendleRouterV4`'s routing infrastructure is controlled by `ActionStorageV4`, whose owner is permanently set to the zero address, making its configuration immutable and eliminating upgradeability risks for this specific component.
+Trading of PT and YT Tokens can be halted if the pause function on the SY token is called by the _Pendle Team_. If the pause is not resumed, PT owners can not claim the underlying asset at maturity, leading to _loss of user funds_.
 
 The `PendlePYLpOracle`, essential for integrations with external protocols, is fully upgradeable and owned by the Governance multisig (2/4). Its upgradeability risks stem from the ability of Governance to call `transferOwnership` without timelock and `setBlockCycleNumerator` which can modify TWAP calculations. This creates a risk where the Governance multisig could transfer control or manipulate oracle parameters with no delay or warning to users.
 
