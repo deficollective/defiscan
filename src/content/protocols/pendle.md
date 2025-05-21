@@ -14,6 +14,13 @@ publish_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
+# Todo (remove afterwards)
+- Check all rows and their impact (sagaciousyves)
+- Check timing of fees and re-direction (sagaciousyves)
+- Unwrapping (cookingcrypto)
+- Expand on "PENDLE incentives and Fees" in Technical Analysis (cookingcrypto)
+- check Limit Orders and centralisation vectors within (?)
+
 # Summary
 
 Pendle is a yield-trading protocol that enables users to manage and optimize their yield exposure. By tokenizing yield-bearing assets into standardized yield tokens (SY), Pendle allows these assets to be split into principal tokens (PT) and yield tokens (YT). This separation facilitates various strategies, including earning fixed yields, speculating on future yield changes, and providing liquidity to earn additional rewards. Pendle's Automated Market Maker (AMM) is specifically designed to handle the trading of these duration dependent assets.
@@ -68,7 +75,7 @@ The `PendleMultiTokenMerkleDistributor` allows vePENDLE holders to claim token r
 
 ## Autonomy
 
-Pendle deployment on Ethereum does not depend on any dependency. Please read the Reviewer Notes to understand the dependency risk on other chain deployments.
+Pendle deployment on Ethereum does not depend on any dependency. Please read the [Reviewer Notes](#reviewer-notes) to informed about the dependency risk on other chain deployments.
 
 > Autonomy score: Low
 
