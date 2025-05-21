@@ -20,6 +20,7 @@ update_date: "1970-01-01"
 - Unwrapping (cookingcrypto)
 - Expand on "PENDLE incentives and Fees" in Technical Analysis (cookingcrypto)
 - check Limit Orders and centralisation vectors within (?)
+- Add more information about the hardwareDeployer. This EOA holds significant protocol-wide authority through its GUARDIAN and ALICE roles in the PendleGovernanceProxy. These roles allow it to modify fee rates via setLnFeeRate and pause protocol functions. Such a high concentration of power in a single external address represents a critical security risk for the entire fee distribution system (Swap/Fees). It is supposedly operated by a bot, but this has not been confirmed.
 
 # Summary
 
