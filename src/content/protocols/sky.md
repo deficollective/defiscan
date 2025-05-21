@@ -38,7 +38,7 @@ Critical parameters in the Sky protocol can be changed through _Sky Governance_ 
 
 Sky has a centralized dependency on Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. This conversion may be stopped or paused in an emergency _Sky Governance_ proposal. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. Nonetheless, at the time of writing, this debt ceiling is high enough that it does not prevent more than 50% of the collateral in Sky from being backed by `USDC`. The ceiling is explained further in the [dependencies](#dependencies) section.
 
-The Sky protocol also relies on Chronicle's oracle price feeds to assess the solvency of debt positions. The Chronicol protocol uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates onchain. We found that any changes to the validator set are subject to a 7 days exit window. Chronicle thus achieves a _Medium_ centralization risk score as discussed in a separate report [here](./chronicle.md).
+The Sky protocol also relies on Chronicle's oracle price feeds to assess the solvency of debt positions. The Chronicol protocol uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates onchain. We found that any changes to the validator set are subject to a 7 days exit window. Chronicle thus achieves a _Medium_ centralization risk score as discussed in a separate report [here](/protocols/chronicle).
 
 An _Oracle Security Module_ (`OSM`) enforces a 1-hour delay on price updates, and the _Sky Governance_ can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
 
@@ -128,7 +128,7 @@ The `LitePSM`, which allows this conversion, may be stopped or paused in an emer
 
 The Sky protocol also relies on the provider Chronicle for price feeds of collateral assets.
 
-Chronicle is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a dedicated report [here](./chronicle.md).
+Chronicle is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a dedicated report [here](/protocols/chronicle).
 
 An _Oracle Security Module_ enforces a 1-hour window on price updates, and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
 
