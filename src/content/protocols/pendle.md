@@ -159,7 +159,7 @@ Users can convert external tokens to PT in a single transaction using `swapExact
 Selling PT:
 When redeeming PT for external tokens, users call `swapExactPtForToken`. The PT tokens are sent to the `PendleMarket` for conversion to SY tokens, which are then redeemed for the underlying asset. A portion of SY tokens is send as fees to the `Treasury`.
 
-`Governance` can `pause` SY token transfers, disabling the buying and selling of PT through this mechanism.
+`Governance` can `pause` SY token transfers, which technically prevents all PT trading operations. This pause blocks essential SY functions (deposits, withdrawals, transfers) that are required for both buying PT (cannot convert assets to SY or transfer SY to markets) and selling PT (cannot convert received SY back to underlying assets). Users with PT positions would be unable to exit until governance reactivates the SY token, creating immediate liquidity risk with no advance warning mechanism.
 
 ![Trade PT](./diagrams/pendle-v2-trade-PT.png)
 
@@ -175,7 +175,7 @@ When selling YT via `swapExactYtForToken`, the router borrows an equivalent amou
 
 These flash swap mechanisms allow users to gain exposure to yield alone (YT) without needing to manage the principal component (PT).
 
-`Governance` can `pause` SY token transfers, disabling the buying and selling of YT through this mechanism.
+`Governance` can `pause` SY token transfers, which completely blocks YT trading mechanisms. This pause prevents all essential operations on SY tokens (deposits, withdrawals, and transfers) that are necessary for flash swap functionality. Without these operations, it becomes technically impossible to buy or sell YT, as the process requires converting tokens to SY, minting PT+YT, and combining PT+YT to release SY. Users holding YT find themselves unable to exit their positions until governance decides to reactivate transfers, creating a significant centralization risk and potential fund immobilization during potentially critical periods.
 
 ## PENDLE incentives and Fees
 
