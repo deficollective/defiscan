@@ -243,7 +243,17 @@ The protocol has no external dependencies.
 
 ![Upgradeability](./diagrams/pendle-v2-upgradeability.png)
 
-The permission to upgrade the protocol follows a hierarchical structure. The `Governance`, a 2/4 multisig that serves as the `DEFAULT_ADMIN_ROLE` of the `PendleGovernanceProxy`, has ultimate authority over the protocol's contracts. It directly controls the `ProxyAdmin` (which manages all `TransparentUpgradeableProxy` contracts) and also has direct control over various other contracts including voting mechanisms, market factories, and cross-chain messaging. The `DevMultisig`, a 2/3 multisig, controls fee distribution systems and reward distribution mechanisms like `PendleFeeDistributorV2` and `PendleMultiTokenMerkleDistributor`.
+The Pendle protocol implements a governance model where the `Governance` multisig (2/4) maintains extensive control over all protocol aspects through multiple mechanisms.
+
+For direct token control, `Governance` controls the `PENDLE` token via `transferOwnership` authority and initiates parameter changes through `initiateConfigChanges` (with 7-day timelock protection). It also controls the vote-escrowed `vePENDLE` token via `transferGovernance`, which is the cornerstone of the protocol's voting mechanism.
+
+Regarding core infrastructure, `Governance` holds the `DEFAULT_ADMIN_ROLE` in `PendleGovernanceProxy`, enabling it to grant and revoke roles, upgrade the implementation, and pause critical protocol functions. The `PendleGovernanceProxy` in turn has direct control over `PendleMarketFactoryV3`, with capabilities to set fees and treasury addresses. Separately, `Governance` directly manages the `ProxyAdmin` contract, which specifically provides upgrade authority over `PendleCommonPoolDeployHelperV2` and `PendleLimitRouter`.
+
+For reward system control, `Governance` directly manages both `PendleGaugeControllerMainchainUpg` and `PendleVotingControllerUpg` via `upgradeTo` and `transferOwnership` functions.
+
+`Governance` also maintains authority over `PendleYieldContractFactory` via `transferOwnership` and controls cross-chain messaging through the `PendleMsgSendEndpointUpg` proxy. The multisig has assigned `GUARDIAN` and `ALICE` roles to the `hardwareDeployer` EOA, which enables this address to perform critical actions including pausing functions.
+
+The only significant timelock protection in this governance structure is the 7-day delay on PENDLE token parameter changes, while other governance actions can be executed without delay. The `Timelock` contract receives the `initiateConfigChanges` call and enforces the waiting period before `applyConfigs` can be called, providing a security mechanism for token parameter modifications.
 
 ## Security Council
 
