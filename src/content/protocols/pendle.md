@@ -187,13 +187,13 @@ These flash swap mechanisms allow users to gain exposure to yield alone (YT) wit
 
 ### Fee Collection and Distribution Path
 
-Fees collected during market operations are automatically sent to two Treasury multisig accounts. `Treasury1` (2/6 multisig) manages fees from pools created before October 8, 2024, while `Treasury2` (2/5 multisig) handles fees from pools created after this date. Neither Treasury implements any timelock protection for transferring funds.
+The protocol implements a multi-stage fee distribution architecture with distinct flows for different market types. Fee revenue generated through market operations flows into two separate Treasury multisig accounts: `Treasury1` (2/6 multisig) processes fees from pools created before October 8, 2024, while `Treasury2` (2/5 multisig) handles those from newer pools.
 
-These Treasury multisigs manually transfer tokens to the `hardwareDeployer` EOA. This EOA converts the received tokens to ETH using the `PendleRouterV4` before forwarding them to the `PendleFeeDistributorV2Proxy`. This manual process creates a critical centralization point where a single entity controls the flow of all protocol fees destined for vePENDLE holders.
+From these Treasury accounts, tokens follow a standardized conversion path. The `hardwareDeployer` EOA serves as an intermediary conversion agent, receiving tokens from both Treasury multisigs. This EOA transforms various token types into ETH through the `PendleRouterV4`, then directs this ETH to the `PendleFeeDistributorV2Proxy` for final distribution.
 
-The `PendleFeeDistributorV2Proxy` is governed by the `DevMultisig` (2/3) and implements multiple high-risk functions. The `setMerkleRootAndFund` function allows changing the merkle root that validates users' reward claims while simultaneously funding the contract. With `upgradeToAndCall`, the `DevMultisig` can replace the entire contract implementation and execute arbitrary function calls during the upgrade. The `updateProtocolClaimable` function enables manipulation of reward allocations to specific protocols without transparency. None of these functions implement timelock protection.
+The `PendleFeeDistributorV2Proxy` functions as the distribution engine for rewards to vePENDLE holders. Under the `DevMultisig` (2/3) administration, this contract employs merkle proofs through `setMerkleRootAndFund` to validate claims while simultaneously receiving funds. Its architecture allows for protocol-specific allocations through `updateProtocolClaimable` and system upgrades via `upgradeToAndCall`.
 
-The `hardwareDeployer` EOA also possesses additional protocol-wide powers through its `GUARDIAN` and `ALICE` roles in the `PendleGovernanceProxy`, including the ability to modify fee rates via `setLnFeeRate` and pause protocol functions. This concentration of power in a single external address creates a severe security risk for the entire fee distribution system.
+The `hardwareDeployer` EOA maintains additional protocol functionalities with its `GUARDIAN` and `ALICE` roles in the `PendleGovernanceProxy`. These capacities include fee rate modifications through `setLnFeeRate` and operational controls.
 
 In parallel, the legacy `PendleFeeDistributor` remains active under the control of an unidentified address (0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1). This contract continues to distribute USDC to users through a separate reward system not accountable to the current Treasury structure.
 
