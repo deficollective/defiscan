@@ -144,8 +144,6 @@ Users can convert SY tokens back to the underlying assets through the `PendleRou
 
 ![Direct Minting](./diagrams/pendle-v2-direct-minting.png)
 
-### Indirect Minting
-
 ## Providing Liquidity (LP)  
 
 Users can add liquidity through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury via the Proxy contract.
