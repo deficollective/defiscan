@@ -17,9 +17,6 @@ update_date: "1970-01-01"
 # Todo (remove afterwards)
 - Check all rows and their impact (sagaciousyves)
 - Check timing of fees and re-direction (sagaciousyves)
-- Unwrapping (cookingcrypto)
-- Expand on "PENDLE incentives and Fees" in Technical Analysis (cookingcrypto)
-- check Limit Orders and centralisation vectors within (?)
 - check all 0x0 (permissions) if renounced or not
 
 # Summary
@@ -137,6 +134,8 @@ Users can also convert external tokens (such as ETH or USDe) in a single transac
 In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens and coordinates the creation of equal quantities of PT and YT. The `PendlePrincipalToken` contract does not hold any assets directly, while the `PendleYieldToken` contract retains all SY tokens as collateral.
 
 Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
+
+### Redeem Underlying
 
 SY → Underlying Assets (`redeemSyToToken`)  
 Users can convert SY tokens back to the underlying assets through the `PendleRouterV4`. The router calls the respective SY contract's redeem function, which unwraps the SY token and returns the underlying asset (such as ETH, USDC, or wstETH) directly to the user. This process allows users to exit the Pendle ecosystem completely and reclaim their original assets.
