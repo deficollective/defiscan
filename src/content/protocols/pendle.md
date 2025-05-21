@@ -184,6 +184,20 @@ These flash swap mechanisms allow users to gain exposure to yield alone (YT) wit
 
 `Governance` can `pause` SY token transfers, which completely blocks YT trading mechanisms. This pause prevents all essential operations on SY tokens (deposits, withdrawals, and transfers) that are necessary for flash swap functionality. Without these operations, it becomes technically impossible to buy or sell YT, as the process requires converting tokens to SY, minting PT+YT, and combining PT+YT to release SY. Users holding YT find themselves unable to exit their positions until governance decides to reactivate transfers.
 
+## Router System and Action Modules
+
+The `PendleRouterV4` functions as the protocol's central interface hub, directing user interactions to specialized execution modules. This architecture employs a selector-based routing mechanism where each function call is mapped to one of seven dedicated action modules, each responsible for specific protocol operations.
+
+The primary modules include `ActionAddRemoveLiqV3` for liquidity management in Pendle pools, `ActionSwapPTV3` for Principal Token exchange operations, and `ActionSwapYTV3` for Yield Token transactions. Supporting modules such as `ActionMiscV3` handle yield redemption, token conversions, and position exits, while `ActionSimple` provides core utility functions. Advanced functionalities are enabled through `ActionAggregator` for batched operations and `ActionLimitOrder` for conditional trades.
+
+Unlike conventional proxies, the routing infrastructure of `PendleRouterV4` relies on `ActionStorageV4` to manage function selector mappings. With the owner permanently set to the zero address , this configuration is immutable.
+
+## Limit Order System
+
+The protocol implements a limit order system through the `PendleLimitRouter` contract, enabling conditional execution of trades based on predefined parameters. This mechanism uses a hash-based identification system to track each order's status, recording both remaining amounts and filled portions.
+
+Users can create orders that execute only when specific price conditions are met and can cancel their orders individually or in batches. The system uses EIP-712 signatures for order validation and employs logarithmic calculations for fee determination. These fee parameters are configured via `setLnFeeRateRoots` by either `Governance` or the `hardwareDeployer`, while collected fees are directed to `Treasury1`.
+
 ## PENDLE incentives and Fees
 
 ### Fee Collection and Distribution Path
