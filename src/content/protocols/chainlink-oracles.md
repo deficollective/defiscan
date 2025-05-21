@@ -27,7 +27,7 @@ This report is a limited assessment of Chainlink's price feeds to assess the cen
 
 # Protocol Analysis
 
-An overview of the Chainlink Price Feeds can be seen below.
+An overview of the Chainlink price feeds' architecture can be seen below.
 
 ![Overview of Chainlink price feeds](./diagrams/chainlink-oracles-overview.png)
 
