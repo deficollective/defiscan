@@ -51,7 +51,7 @@ The `PendleCommonSYFactory` is used to create new markets and instantiate SY con
 
 Trading of PT and YT Tokens can be halted if the pause function on the SY token is called by the _Pendle Team_. If the pause is not resumed, PT owners can not claim the underlying asset at maturity, leading to _loss of user funds_.
 
-The `PendlePYLpOracle`, essential for integrations with external protocols, is fully upgradeable and owned by the Governance multisig (2/4). Its upgradeability risks stem from the ability of Governance to call `transferOwnership` without timelock and `setBlockCycleNumerator` which can modify TWAP calculations. This creates a risk where the Governance multisig could transfer control or manipulate oracle parameters with no delay or warning to users.
+Are trading fees affected by `setOverriddenFee` ? what is this function `setLnFeeRateRoots` ? depending on the outcome handle the next paragraph
 
 The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately controlled by `Governance multisig`), contains high-risk functions including `setTreasuryAndFeeReserve` and `setOverriddenFee` that can modify critical economic parameters without timelock protection. The `PendleLimitRouter`, owned directly by the `Governance multisig`, includes functions like `setFeeRecipient` that can redirect protocol fees and `setLnFeeRateRoots` that can modify trading fee rates. This latter function can be called by either Governance or the `hardwareDeployer EOA`, creating multiple vectors for parameter manipulation.
 
