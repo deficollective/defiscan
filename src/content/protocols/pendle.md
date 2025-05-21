@@ -28,7 +28,7 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM Swap_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no onchain Governance exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
 
 ### Yield Tokenization
 
@@ -40,7 +40,7 @@ The `PendleYieldContractFactory`, controlled by the `Governance` multisig accoun
 
 The `PendleCommonSYFactory` is used to create new markets and instantiate SY contracts. The implementation code used by the Factory to deploy new SY tokens can be updated by `Pendle: Deployer 1`, an EOA. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
 
-### Pendle Swap Module
+### Pendle AMM Module
 
 Trading of PT and YT Tokens can be halted if the pause function on the SY token is called by the _Pendle Team_. If the pause is not resumed, PT owners can not claim the underlying asset at maturity, leading to _loss of user funds_.
 
