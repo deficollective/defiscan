@@ -59,11 +59,13 @@ The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately co
 
 The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
 
+
 #### PENDLE emissions to LPs
 
 The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade this contract, or add and remove pools from receiving votes without timelock which could lead to _loss of unclaimed yield_.
 
 The PENDLE tokens that are distributed as incentive can be withdrawn by the _Pendle Team_ at any moment from the `PendleGaugeControllerMainchainUpg` contract preventing distribution to LPs and leading to _loss of unclaimed yield_. Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts of PENDLE to LPs.
+
 
 #### Redirection of Fees to vePENDLE voters
 
