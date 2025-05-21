@@ -135,6 +135,9 @@ In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens
 
 Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
 
+SY → Underlying Assets (`redeemSyToToken`)  
+Users can convert SY tokens back to the underlying assets through the `PendleRouterV4`. The router calls the respective SY contract's redeem function, which unwraps the SY token and returns the underlying asset (such as ETH, USDC, or wstETH) directly to the user. This process allows users to exit the Pendle ecosystem completely and reclaim their original assets.
+
 ![Direct Minting](./diagrams/pendle-v2-direct-minting.png)
 
 ### Indirect Minting
@@ -159,7 +162,7 @@ Users can convert external tokens to PT in a single transaction using `swapExact
 Selling PT:
 When redeeming PT for external tokens, users call `swapExactPtForToken`. The PT tokens are sent to the `PendleMarket` for conversion to SY tokens, which are then redeemed for the underlying asset. A portion of SY tokens is send as fees to the `Treasury`.
 
-`Governance` can `pause` SY token transfers, which technically prevents all PT trading operations. This pause blocks essential SY functions (deposits, withdrawals, transfers) that are required for both buying PT (cannot convert assets to SY or transfer SY to markets) and selling PT (cannot convert received SY back to underlying assets). Users with PT positions would be unable to exit until governance reactivates the SY token, creating immediate liquidity risk with no advance warning mechanism.
+`Governance` can `pause` SY token transfers, which technically prevents all PT trading operations. This pause blocks essential SY functions (deposits, withdrawals, transfers) that are required for both buying PT (cannot convert assets to SY or transfer SY to markets) and selling PT (cannot convert received SY back to underlying assets). Users with PT positions would be unable to exit until governance reactivates the SY token.
 
 ![Trade PT](./diagrams/pendle-v2-trade-PT.png)
 
@@ -175,7 +178,7 @@ When selling YT via `swapExactYtForToken`, the router borrows an equivalent amou
 
 These flash swap mechanisms allow users to gain exposure to yield alone (YT) without needing to manage the principal component (PT).
 
-`Governance` can `pause` SY token transfers, which completely blocks YT trading mechanisms. This pause prevents all essential operations on SY tokens (deposits, withdrawals, and transfers) that are necessary for flash swap functionality. Without these operations, it becomes technically impossible to buy or sell YT, as the process requires converting tokens to SY, minting PT+YT, and combining PT+YT to release SY. Users holding YT find themselves unable to exit their positions until governance decides to reactivate transfers, creating a significant centralization risk and potential fund immobilization during potentially critical periods.
+`Governance` can `pause` SY token transfers, which completely blocks YT trading mechanisms. This pause prevents all essential operations on SY tokens (deposits, withdrawals, and transfers) that are necessary for flash swap functionality. Without these operations, it becomes technically impossible to buy or sell YT, as the process requires converting tokens to SY, minting PT+YT, and combining PT+YT to release SY. Users holding YT find themselves unable to exit their positions until governance decides to reactivate transfers.
 
 ## PENDLE incentives and Fees
 
