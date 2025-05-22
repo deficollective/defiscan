@@ -116,6 +116,7 @@ CSFeeDistributor: supplmementary contract to handle the distribution of rewards 
 CSFeeOracle: utility contract responsible of the CSM oracle report (once consensus is reached in HashConsensus). Namely, it converts non-distributed rewards in non-claimed rewards in the CSFeeDistributor contract and uploads the latest distribution merkle tree root. It is upgradeable (by agent), pausable, and manageable.
 
 CSVerifier: responsible for validation of Consensus Layer data proofs and report to the CSModule. It proves the validity of withdrawal events. Immutable
+0x0c345dFa318f9F4977cdd4f33d80F9D0ffA38e8B
 
 CSEarlyAdoption: verification of early adopters. Stores addresses that have already been used to create a node operator to determine whether an address is eligible for the discounted bond curve during and after the early adoption period.
 
@@ -137,11 +138,12 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 
 ## Security Council
 
-| Name                              | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| Relay Maintenance Committee       | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.org/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/7 | ✅          | ✅              | ❌                | ✅             |
-| DepositSecurityModule (Guardians) | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.org/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
-| EmergencyBrakes                   | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.org/address/0x73b047fe6337183A454c5217241D780a932777bD) | Multisig 3/5 | ❌          | ✅              | ❌                | ✅             |
+| Name                               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Relay Maintenance Committee        | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.org/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/7 | ✅          | ✅              | ❌                | ✅             |
+| DepositSecurityModule (Guardians)  | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.org/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
+| EmergencyBrakes                    | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.org/address/0x73b047fe6337183A454c5217241D780a932777bD) | Multisig 3/5 | ❌          | ✅              | ❌                | ✅             |
+| Community Staking Module Committee | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f)  | Multisig 4/6 | ❌          | ✅              | ❌                | ✅             |
 
 ## Exit Window
 
@@ -192,25 +194,31 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | CSModule (Proxy)                       | [0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F](https://etherscan.io/address/0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F) |
 | CSModule (Impl)                        | [0x8daea53b17a629918cdfab785c5c74077c1d895b](https://etherscan.io/address/0x8daea53b17a629918cdfab785c5c74077c1d895b) |
 
-## Permission Owners
+## All Permission Owners
 
-| Entity Name                       | Address                                                                                                               | Type     |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
-| Lido (Proxy)                      | [0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84](https://etherscan.io/address/0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84) | Contract |
-| Aragon Agent (Governance)         | [0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c](https://etherscan.io/address/0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c) | Contract |
-| Aragon Voting (Governance)        | [0x2e59A20f205bB85a89C53f1936454680651E618e](https://etherscan.io/address/0x2e59A20f205bB85a89C53f1936454680651E618e) | Contract |
-| Aragon Finance (proxy)            | [0xB9E5CBB9CA5b0d659238807E84D0176930753d86](https://etherscan.io/address/0xB9E5CBB9CA5b0d659238807E84D0176930753d86) | Contract |
-| MEV Boost Relay Allowed List      | [0xF95f069F9AD107938F6ba802a3da87892298610E](https://etherscan.io/address/0xF95f069F9AD107938F6ba802a3da87892298610E) | Contract |
-| EmergencyBrakes                   | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.io/address/0x73b047fe6337183A454c5217241D780a932777bD) | Contract |
-| EVMScriptExecutor                 | [0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977](https://etherscan.io/address/0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977) | Contract |
-| EasyTrack                         | [0xF0211b7660680B49De1A7E9f25C65660F0a13Fea](https://etherscan.io/address/0xF0211b7660680B49De1A7E9f25C65660F0a13Fea) | Contract |
-| HashConsensus                     | [0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288](https://etherscan.io/address/0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288) | Contract |
-| WithdrawalsManagerProxy           | [0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f](https://etherscan.io/address/0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f) | Contract |
-| LidoExecutionLayerRewardsVault    | [0x388C818CA8B9251b393131C08a736A67ccB19297](https://etherscan.io/address/0x388C818CA8B9251b393131C08a736A67ccB19297) | Contract |
-| EasyTrack                         | [0xF0211b7660680B49De1A7E9f25C65660F0a13Fea](https://etherscan.io/address/0xF0211b7660680B49De1A7E9f25C65660F0a13Fea) | Contract |
-| EasyTrack                         | [0xF0211b7660680B49De1A7E9f25C65660F0a13Fea](https://etherscan.io/address/0xF0211b7660680B49De1A7E9f25C65660F0a13Fea) | Contract |
-| Relay Maintenance Committee       | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.io/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig |
-| DepositSecurityModule (Guardians) | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.io/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig |
+| Entity Name                        | Address                                                                                                               | Type         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Lido (Proxy)                       | [0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84](https://etherscan.io/address/0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84) | Contract     |
+| Aragon Agent (Governance)          | [0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c](https://etherscan.io/address/0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c) | Contract     |
+| Aragon Voting (Governance)         | [0x2e59A20f205bB85a89C53f1936454680651E618e](https://etherscan.io/address/0x2e59A20f205bB85a89C53f1936454680651E618e) | Contract     |
+| Aragon Finance (proxy)             | [0xB9E5CBB9CA5b0d659238807E84D0176930753d86](https://etherscan.io/address/0xB9E5CBB9CA5b0d659238807E84D0176930753d86) | Contract     |
+| MEV Boost Relay Allowed List       | [0xF95f069F9AD107938F6ba802a3da87892298610E](https://etherscan.io/address/0xF95f069F9AD107938F6ba802a3da87892298610E) | Contract     |
+| EmergencyBrakes                    | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.io/address/0x73b047fe6337183A454c5217241D780a932777bD) | Contract     |
+| EVMScriptExecutor                  | [0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977](https://etherscan.io/address/0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977) | Contract     |
+| EasyTrack                          | [0xF0211b7660680B49De1A7E9f25C65660F0a13Fea](https://etherscan.io/address/0xF0211b7660680B49De1A7E9f25C65660F0a13Fea) | Contract     |
+| HashConsensus                      | [0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288](https://etherscan.io/address/0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288) | Contract     |
+| WithdrawalsManagerProxy            | [0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f](https://etherscan.io/address/0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f) | Contract     |
+| LidoExecutionLayerRewardsVault     | [0x388C818CA8B9251b393131C08a736A67ccB19297](https://etherscan.io/address/0x388C818CA8B9251b393131C08a736A67ccB19297) | Contract     |
+| CSVerifier                         | [0x3dfc50f22aca652a0a6f28a0f892ab62074b5583](https://etherscan.io/address/0x3dfc50f22aca652a0a6f28a0f892ab62074b5583) | Contract     |
+| Relay Maintenance Committee        | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.io/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig     |
+| DepositSecurityModule (Guardians)  | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.io/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig     |
+| Community Staking Module Committee | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 |
+
+0x5cfca30450b1e5548f140c24a47e36c10ce306f0 => Pause CSModule => GateSeal. Instant pause for 6 days, Underlying multisig is the 0xc52fc3081123073078698f1eac2f1dc7bd71880f (below)
+0x16Dbd4B85a448bE564f1742d5c8cCdD2bB3185D0 => Pause CSAccounting => GateSeal, 11 days pause. underlaying is the same as below
+
+0xc52fc3081123073078698f1eac2f1dc7bd71880f => Report steal in CS (Multisig 4/6) "Community Staking Module Committee"
+0x3dfc50f22aca652a0a6f28a0f892ab62074b5583 => Verifier in CSM
 
 ## Permissions
 
@@ -225,7 +233,7 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | Lido                                     | receiveELRewards                                       | A function to allow the rewards vault to send rewards to this contract without them being considered user deposits.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | getLidoLocator().elRewardsVault()                                                               |
 | Lido                                     | receiveWithdrawals                                     | A function to allw the `WithdrawalVault` to receive funds from exited validators without them being considered user deposits.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | WithdrawalVault                                                                                 |
 | Lido                                     | handleOracleReport                                     | Handles the oracle data and takes a series of actions accordingly. Actions include process withdrawals, burning shares, distribute rewards, and rebase tokens. Malicious or wrong data reporting could lead to accounting errors and potential loss of user funds and unclaimed yield.                                                                                                                                                                                                                                                                                                                         | AccountingOracle                                                                                |
-| Lido                                     | unsafeChangeDepositedValidators                        | Unsafely changes the deposited validators counter. This may be used to onboard external validators to Lido. This is function could dangerously change the accounting metrics in Lido as it changes a parameter without any safeguards. Such a change could artificially inflate or deflate the value of `stETH` or manipulate the expected returns calculation.                                                                                                                                                                                                                                                | TODO (whoever can change ACL roles)                                                             |
+| Lido                                     | unsafeChangeDepositedValidators                        | Unsafely changes the deposited validators counter. This may be used to onboard external validators to Lido. This is function could dangerously change the accounting metrics in Lido as it changes a parameter without any safeguards. Such a change could artificially inflate or deflate the value of `stETH` or manipulate the expected returns calculation.                                                                                                                                                                                                                                                | **TODO** (whoever can change ACL roles)                                                         |
 | Lido                                     | deposit                                                | Deposits 32 ETH into the ethereum staking contract to create a new validator. This can only be called by the DepositSecurityModule which will make sure the call reverts if the state of the deposit contract has changed between the submission and execution of the deposit.                                                                                                                                                                                                                                                                                                                                 | DepositSecurityModule                                                                           |
 | Lido                                     | transferToVault                                        | Default recovery function in Aragon Apps. Irreversably disabled.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 0x0                                                                                             |
 | LidoLocator (Proxy)                      | proxy\_\_ossify                                        | Ossifies the proxy. This freezes the current implementation of the `LidoLocator` and effectively makes it non-upagreable by changing the proxy admin to the zero address.                                                                                                                                                                                                                                                                                                                                                                                                                                      | Aragon Agent                                                                                    |
@@ -410,7 +418,8 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | EVMScriptExecutor | executeEVMScript | Executes a script. Only the `EasyTrack` can call this function and this ensures only scripts approved and created through the `EasyTrack` will be executed. | EasyTrack |
 | EVMScriptExecutor | setEasyTrack | Sets the `EasyTrack` contract, the contract allowed to execute scripts using through this contract. | Aragon Voting |
 
-[**TODO**]:
+**TODO**: DOUBLE CHEKC DESCS of NODES REGISTRIES + OSSIFY PROXIES
+
 | NodeOperatorsRegistry (Curated Module) | addNodeOperator | Adds a new node operator with specified name and reward address. | Aragon Agent |
 | NodeOperatorsRegistry (Curated Module) | activateNodeOperator | Activates a previously deactivated node operator, allowing them to participate in staking and rewards. | Aragon Agent |
 | NodeOperatorsRegistry (Curated Module) | deactivateNodeOperator | Deactivates an active node operator, removing them from participation in staking and rewards. | Aragon Agent |
@@ -459,9 +468,13 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorRewardAddress | Changes the reward address of a node operator. | EVMScriptExecutor (EasyTrack) |
 | NodeOperatorsRegistry (Simple DVT Module) | setNodeOperatorStakingLimit | Sets the maximum number of validators to stake for a node operator. | EVMScriptExecutor (EasyTrack), EVMScriptExecutor (EasyTrack) |
 
-| CSModule | activatePublicRelease | Publicly releases the module and enable permissionless node operator registration with no limit on the amount of keys. | ['onlyRole MODULE_MANAGER_ROLE'] |
-| CSModule | setKeyRemovalCharge | Sets the key removal charge. This charge is taken from the bond if a key is removed. | ['onlyRole MODULE_MANAGER_ROLE'] |
+| CSModule (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `CSModule` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
+| CSModule (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `CSModule`. | Aragon Agent |
+| CSModule (Proxy) | proxy\_\_upgradeTo | Upgrades the implementation of the `CSModule` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any, or influence interaction with the rest of the protocol. | Aragon Agent |
+| CSModule (Proxy) | proxy\_\_upgradeToAndCall | Upgrades the implementation of the `CSModule` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract. | Aragon Agent |
 
+| CSModule | activatePublicRelease | Publicly releases the module and enable permissionless node operator registration with no limit on the amount of keys. | Aragon Agent |
+| CSModule | setKeyRemovalCharge | Sets the key removal charge. This charge is taken from the bond if a key is removed. | Aragon Agent |
 | CSModule | claimRewardsStETH | Claim full reward (fees + bond rewards) in stETH for the given Node Operator | Node operator's manager or rewards address |
 | CSModule | claimRewardsWstETH | Claim full reward (fees + bond rewards) in WstETH for the given Node Operator | Node operator's manager or rewards address|
 | CSModule | claimRewardsUnstETH | Request full reward (fees + bond rewards) in Withdrawal NFT (unstETH) for the given Node Operator | Node operator's manager or rewards address |
@@ -469,76 +482,92 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | CSModule | removeKeys | Removes validator keys and takes a charge in the node opertaor's bonds. | Node operator's manager |
 | CSModule | compensateELRewardsStealingPenalty | Compensate execution layer rewards stealing penalty for the given Node Operator to prevent further validator exits. | Node Operator's manager |
 
-| CSModule | onRewardsMinted | Called when rewards are minted for the module, it passes through the minted stETH shares to the fee distributor | StakingRouter |
-| CSModule | updateStuckValidatorsCount | Update stuck validators count for Node Operators. Stuck validators are validators who did not follow the exit signal and may be penalized. If any operator has stuck validators it may no loinger be assigned validators as long as it is not resolved. | StakingRouter |
-| CSModule | updateExitedValidatorsCount | Update exited validators count for Node Operators. | StakingRouter |
-| CSModule | updateRefundedValidatorsCount | Unsupported, always reverts. | StakingRouter|
-| CSModule | updateTargetValidatorsLimits | Update target validators limits for a given node operator. | StakingRouter |
-| CSModule | onExitedAndStuckValidatorsCountsUpdated | This method is empty but will be called every time the counts are updated. | StakingRouter |
-| CSModule | unsafeUpdateValidatorsCount | Called to decrease the number of vetted keys for the given node operators. | StakingRouter |
-| CSModule | decreaseVettedSigningKeysCount | ... | StakingRouter |
-| CSModule | reportELRewardsStealingPenalty | Reports that a node operators stole execution layer rewards. The amount stolen and a fee will be locked from the node operator's bond. | ['onlyRole REPORT_EL_REWARDS_STEALING_PENALTY_ROLE'] |
-| CSModule | cancelELRewardsStealingPenalty | Cancels a previously reported stealing penalty and unlocks the funds for the node operator. | ['onlyRole' REPORT_EL_REWARDS_STEALING_PENALTY_ROLE] |
-| CSModule | settleELRewardsStealingPenalty | Settle locked bond for the given Node Operators throught the`CSAccounting` contract. The locked bond burnt. | ['onlyRole SETTLE_EL_REWARDS_STEALING_PENALTY_ROLE'] |
-| CSModule | submitWithdrawal | Report Node Operator's key as withdrawn and settle withdrawn amount. If wrongly sent this signal could free funds that are still deposited and lead to accounting errors. | ['onlyRole Verifier'] |
-| CSModule | submitInitialSlashing | Report Node Operator's key as slashed and apply the initial slashing penalty (through `CSAccounting`). | ['onlyRole' VERIFIER_ROLE] |
+| CSModule | onRewardsMinted | Called when rewards are minted for the module, it passes through the minted stETH shares to the fee distributor | StakingRouter, Aragon Agent |
+| CSModule | updateStuckValidatorsCount | Update stuck validators count for Node Operators. Stuck validators are validators who did not follow the exit signal and may be penalized. If any operator has stuck validators it may no loinger be assigned validators as long as it is not resolved. | StakingRouter, Aragon Agent |
+| CSModule | updateExitedValidatorsCount | Update exited validators count for Node Operators. | StakingRouter, Aragon Agent |
+| CSModule | updateRefundedValidatorsCount | Unsupported, always reverts. | StakingRouter, Aragon Agent |
+| CSModule | updateTargetValidatorsLimits | Update target validators limits for a given node operator. | StakingRouter, Aragon Agent |
+| CSModule | onExitedAndStuckValidatorsCountsUpdated | This method is empty but will be called every time the counts are updated. | StakingRouter, Aragon Agent |
+| CSModule | unsafeUpdateValidatorsCount | Called to decrease the number of vetted keys for the given node operators. | StakingRouter, Aragon Agent |
+| CSModule | decreaseVettedSigningKeysCount | **TODO** | StakingRouter, Aragon Agent |
+| CSModule | reportELRewardsStealingPenalty | Reports that a node operators stole execution layer rewards. The amount stolen and a fee will be locked from the node operator's bond. | Community Staking Module Committee, Aragon Agent |
+| CSModule | cancelELRewardsStealingPenalty | Cancels a previously reported stealing penalty and unlocks the funds for the node operator. | Community Staking Module Committee, Aragon Agent |
+| CSModule | settleELRewardsStealingPenalty | Settle locked bond for the given Node Operators throught the`CSAccounting` contract. The locked bond burnt. | EVMScriptExecutor (EasyTrack), Aragon Agent |
+| CSModule | submitWithdrawal | Report Node Operator's key as withdrawn and settle withdrawn amount. If wrongly sent this signal could free funds that are still deposited and lead to accounting errors. | CSVerifier, Aragon Agent |
+| CSModule | submitInitialSlashing | Report Node Operator's key as slashed and apply the initial slashing penalty (through `CSAccounting`). | CSVerifier, Aragon Agent |
 | CSModule | onWithdrawalCredentialsChanged | Signals that the withdrawal credentials have been changed by the DAO. This sets the withdrawal charge to zero as node operators will need to remove their keys and submit new ones. | StakingRouter |
 | CSModule | obtainDepositData | Get the next depositsCount of depositable keys with signatures from the queue. | StakingRouter |
-| CSModule | pauseFor | Pause creation of the Node Operators and keys upload for a given amount of seconds. The management of existing node operators and rewards claiming remains possible. Rewards redemption can be paused through `CSAccounting`. | ['onlyRole PAUSE_ROLE'] |
-| CSModule | resume | Resume creation of the Node Operators and keys upload. | ['onlyRole RESUME_ROLE'] |
-| CSModule | grantRole | Grants a role withing the contract to a given address. There are roles to pause and resume the contract as well as roles meant for contracts (StakingRouter, Oracles). Granting contract roles to external accounts could lead to a hijack of user funds or wrongful penalties. | ['getRoleAdmin', 'onlyRole'] |
-| CSModule | revokeRole | Revokes a role in the contract. | ['getRoleAdmin', 'onlyRole'] |
+| CSModule | pauseFor | Pause creation of the Node Operators and keys upload for a given amount of seconds. The management of existing node operators and rewards claiming remains possible. Rewards redemption can be paused through `CSAccounting`. | GateSeal (CSM Committee), Aragon Agent |
+| CSModule | resume | Resume creation of the Node Operators and keys upload. | Aragon Agent |
+| CSModule | grantRole | Grants a role withing the contract to a given address. There are roles to pause and resume the contract as well as roles meant for contracts (StakingRouter, Oracles). Granting contract roles to external accounts could lead to a hijack of user funds or wrongful penalties. | Aragon Agent |
+| CSModule | revokeRole | Revokes a role in the contract. | Aragon Agent |
 
-| CSAccounting | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| CSAccounting | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| CSAccounting | resume | ... | ['onlyRole'] |
-| CSAccounting | pauseFor | ... | ['onlyRole'] |
-| CSAccounting | setChargePenaltyRecipient | ... | ['onlyRole'] |
-| CSAccounting | setLockedBondRetentionPeriod | ... | ['onlyRole'] |
-| CSAccounting | addBondCurve | ... | ['onlyRole'] |
-| CSAccounting | updateBondCurve | ... | ['onlyRole'] |
-| CSAccounting | setBondCurve | ... | ['onlyRole'] |
-| CSAccounting | resetBondCurve | ... | ['onlyRole'] |
-| CSAccounting | depositETH | ... | ['onlyCSM', 'whenResumed'] |
-| CSAccounting | depositStETH | ... | ['onlyCSM', 'whenResumed'] |
-| CSAccounting | depositWstETH | ... | ['onlyCSM', 'whenResumed'] |
-| CSAccounting | claimRewardsStETH | ... | ['onlyCSM', 'whenResumed'] |
-| CSAccounting | claimRewardsWstETH | ... | ['onlyCSM', 'whenResumed'] |
-| CSAccounting | claimRewardsUnstETH | ... | ['onlyCSM', 'whenResumed'] |
-| CSAccounting | lockBondETH | ... | ['onlyCSM'] |
-| CSAccounting | releaseLockedBondETH | ... | ['onlyCSM'] |
-| CSAccounting | compensateLockedBondETH | ... | ['onlyCSM'] |
-| CSAccounting | settleLockedBondETH | ... | ['onlyCSM'] |
-| CSAccounting | penalize | ... | ['onlyCSM'] |
-| CSAccounting | chargeFee | ... | ['onlyCSM'] |
+| CSAccounting (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `CSAccounting` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
+| CSAccounting (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `CSAccounting`. | Aragon Agent |
+| CSAccounting (Proxy) | proxy\_\_upgradeTo | Upgrades the implementation of the `CSAccounting` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any, or influence interaction with the rest of the protocol. | Aragon Agent |
+| CSAccounting (Proxy) | proxy\_\_upgradeToAndCall | Upgrades the implementation of the `CSAccounting` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract. | Aragon Agent |
 
-| CSFeeDistributor | distributeFees | ... | [] |
-| CSFeeDistributor | processOracleReport | ... | [] |
-| CSFeeDistributor | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| CSFeeDistributor | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSAccounting | setChargePenaltyRecipient | Sets the charge recipient. The address that will receive the withdrawal charge. | Aragon Agent |
+| CSAccounting | setLockedBondRetentionPeriod | Sets the period (in seconds) to retain the bon lock. |Aragon Agent |
+| CSAccounting | addBondCurve | Adds a new bond curve. Bond curves determine the price of a bond given the amount of validator keys a node operator has created. | Aragon Agent |
+| CSAccounting | updateBondCurve | Updates an existing bond curve. | Aragon Agent |
+| CSAccounting | setBondCurve | Sets the bond curve for a given node operator. This sets how much a node operator needs to deposit for bonds for each validator keys created. | CSModule, Community Staking Module Committee, Aragon Agent |
+| CSAccounting | resetBondCurve | Resets a node operator's bond curve to the default one. | CSModule, Community Staking Module Committee, Aragon Agent |
+| CSAccounting | depositETH | Stake `ETH` with Lido and deposit `stETH` to the a node operator's bond. | CSModule |
+| CSAccounting | depositStETH | Deposit `stETH` to the a node operator's bond. | CSModule |
+| CSAccounting | depositWstETH | Unwarps `wstETH` and deposit `stETH` to a node operator's bond. | CSModule |
+| CSAccounting | claimRewardsStETH | Claim full rewards for the given node operator. | CSModule |
+| CSAccounting | claimRewardsWstETH | Claim full rewards in `wstETH` for the given node operator. | CSModule |
+| CSAccounting | claimRewardsUnstETH | Claim full rewards in Withdrawal NFT (`unstETH`) for the given node operator. | CSModule |
+| CSAccounting | lockBondETH | Locks an amount in `ETH` from a node operator's bond. (see `CSModule`) | CSModule |
+| CSAccounting | releaseLockedBondETH | Releases a node operator's locked bond. (see `CSModule`) | CSModule |
+| CSAccounting | compensateLockedBondETH | Compensates a locked bond for the given node operator (see `CSModule`) | CSModule |
+| CSAccounting | settleLockedBondETH | Settle a locked bond for the given node operator. (see `CSModule`) | CSModule |
+| CSAccounting | penalize | Penalize a bond by burning `stETH` shares of the node operator. | CSModule |
+| CSAccounting | chargeFee | Charge a fee from the bond by transfering `stETH` to the charge recipient. | CSModule |
+| CSAccounting | grantRole | Grants a role within the contract to a given address. Roles may allow any address to manage bond curves and change the charge recipient. Contrary to the `CSModule`'s design, the functions destined to be called by contracts (namely by the `CSModule`) cannot be hijacked as the `CSModule`'s address used cannot be changed. | Aragon Agent |
+| CSAccounting | revokeRole | Revokes a role within the contract. | Aragon Agent |
+| CSAccounting | pauseFor | Pauses deposits and rewards claims for a given amount of seconds. | GateSeal(CSAccounting), Aragon Agent |
+| CSAccounting | resume | Resumes all paused functions. | Aragon Agent |
 
-| CSFeeOracle | submitReportData | ... | ['whenResumed'] |
-| CSFeeOracle | setConsensusContract | Sets the consensus contract to use. The consensus contract is a `HashConsensus`, it can decide who is a committee member and push the consensus proof to the `CSFeeOracle`. | ['onlyRole'] |
-| CSFeeOracle | setConsensusVersion | Sets the current consensus version used. The version refers to a set of rules that the members must agree on when building the report. | ['onlyRole'] |
-| CSFeeOracle | setFeeDistributorContract | ... | ['onlyRole'] |
-| CSFeeOracle | setPerformanceLeeway | ... | ['onlyRole'] |
-| CSFeeOracle | pauseFor | ... | ['onlyRole'] |
-| CSFeeOracle | pauseUntil | ... | ['onlyRole'] |
-| CSFeeOracle | resume | ... | ['onlyRole'] |
-| CSFeeOracle | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| CSFeeOracle | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CSFeeDistributor (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `CSFeeDistributor` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
+| CSFeeDistributor (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `CSFeeDistributor`. | Aragon Agent |
+| CSFeeDistributor (Proxy) | proxy\_\_upgradeTo | Upgrades the implementation of the `CSFeeDistributor` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any, or influence interaction with the rest of the protocol. | Aragon Agent |
+| CSFeeDistributor (Proxy) | proxy\_\_upgradeToAndCall | Upgrades the implementation of the `CSFeeDistributor` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract. | Aragon Agent |
 
-| HashConsensus (of CSFeeOracle) | submitReport | Used by oracle members to submit hash of the data calculated for the given reference slot. If consensus is reached (more submissions of the same report than the quorum amount) the `HashConsensus` contract submits this report to the processing contract (`CSFeeOracle`) to enable processing. | HashConsensus (Committee Members) |
-| HashConsensus (of CSFeeOracle) | disableConsensus | Temporarily disables consensus by increasing the quorum value an unreachable number. This prevents any consensus from being reached. Consensus needs to be re-enabled using `setQuorum`. | DISABLE_CONSENSUS_ROLE |
-| HashConsensus (of CSFeeOracle) | setQuorum | Sets the quorum value. This is the amount of equal reports that need to be accumulated for each slot for a report to be considered valid and ready for processing. A value higher the the number of members in the committee would make consensus impossible. | MANAGE_MEMBERS_AND_QUORUM_ROLE, DISABLE_CONSENSUS_ROLE (only allowed to set unreachable quorum) |
-| HashConsensus (of CSFeeOracle) | updateInitialEpoch | Changes when to oracle reporting system starts, given it hasn't started yet. This function can no longer becalled. | ['onlyRole'] |
-| HashConsensus (of CSFeeOracle) | setFrameConfig | Sets the configuration of frames. Frames are time window of equal lenghts referencing the processing of a slot and the corresponding deadline. A report based on the consensus layer must be built and consensus must be reached before each deadline. | ['onlyRole'] |
-| HashConsensus (of CSFeeOracle) | setFastLaneLengthSlots | Sets the duration of a fast lane rotation in slots. Members in the fast lane can (and are expected to) submit their report during a dedicated fast lane time window before submissions are open to all other members. The members in the fast lanes are rotated at a rate set using this function. The goal is to enforce active participation of all oracle members, preventing lazy copying. | ['onlyRole'] |
-| HashConsensus (of CSFeeOracle) | addMember | Adds a member to the consensus committee. Members can contribute to building consensus and submit reports. | ['onlyRole'] |
-| HashConsensus (of CSFeeOracle) | removeMember | Removes a member from the consensus committee. | ['onlyRole'] |
-| HashConsensus (of CSFeeOracle) | setReportProcessor | Sets the processor contract to which the reports are sent over to. This particular `HashConsensus` contract is meant for the `CSFeeOracle` as processor. | ['onlyRole'] |
-| HashConsensus (of CSFeeOracle) | grantRole | Grants a role within the contract to a specific address. This may allow addresses to execute any of the functions above related to the specific role. | ['getRoleAdmin', 'onlyRole'] |
-| HashConsensus (of CSFeeOracle) | revokeRole | Revokes a role to a specific address. | ['getRoleAdmin', 'onlyRole'] |
+| CSFeeDistributor | distributeFees | Distributes fees to the accounting contracrt in favour of the given node operator. | CSAccounting |
+| CSFeeDistributor | processOracleReport | Receives the data of the Merkle tree used for fee distribution. | CSFeeOracle |
+| CSFeeDistributor | recoverERC20 | Recovers any ERC20 (except `stETH`) from the contract. This is meant for tokens wrongfully sent to this contract. | Aragon Agent |
+| CSFeeDistributor | grantRole | Grants a role within the contract. The only role in use is _RECOVERER_, the address with the right to sweep tokens. | Aragon Agent |
+| CSFeeDistributor | revokeRole | Revokes a role from a given address. | Aragon Agent |
+
+| CSFeeOracle (Proxy) | proxy\_\_ossify | Ossifies the proxy. This freezes the current implementation of the `CSFeeOracle` and effectively makes it non-upagreable by changing the proxy admin to the zero address. | Aragon Agent |
+| CSFeeOracle (Proxy) | proxy\_\_changeAdmin | Changes the proxy admin. The admin can update the entire implementation and logic of the `CSFeeOracle`. | Aragon Agent |
+| CSFeeOracle (Proxy) | proxy\_\_upgradeTo | Upgrades the implementation of the `CSFeeOracle` This can change the entire logic of the contract including change ownership of funds locked in the contract, if any, or influence interaction with the rest of the protocol. | Aragon Agent |
+| CSFeeOracle (Proxy) | proxy\_\_upgradeToAndCall | Upgrades the implementation of the `CSFeeOracle` (similarly to _proxy\_\_upgradeTo _), and then calls a function in the new contract. | Aragon Agent |
+
+| CSFeeOracle | submitReportData | Submits a report for the current slot on which the committee members reached a consensus. The report contains the data on the fee distribution. | HashConsensus Committee Members (below), Aragon Agent |
+| CSFeeOracle | setConsensusContract | Sets the consensus contract to use. The consensus contract is a `HashConsensus`, it can decide who is a committee member and push the consensus proof to the `CSFeeOracle`. | Aragon Agent |
+| CSFeeOracle | setConsensusVersion | Sets the current consensus version used. The version refers to a set of rules that the members must agree on when building the report. | Aragon Agent |
+| CSFeeOracle | setFeeDistributorContract | Sets the address of the `CSFeeDistributor` used. | Aragon Agent |
+| CSFeeOracle | setPerformanceLeeway | Sets the performance leeway in basis points. This is the threshold used to determine the under-performing validators in reference to the average performance reported by the oracle.| Aragon Agent|
+| CSFeeOracle | pauseFor | Stops accepting new oracle reports for a given amount of seconds. | Aragon Agent, GateSeal (CSAccounting) |
+| CSFeeOracle | pauseUntil | Stops accepting new oracle reports until a specific timestamp. | Aragon Agent, GateSeal (CSAccounting) |
+| CSFeeOracle | resume | Resumes the paused contract and starts accepting oracle reports again. | Aragon Agent |
+| CSFeeOracle | grantRole | Grants a role within the contract. There are roles to manage the contract and submit data. Granting roles to a malicious actors could abuse the fee distribution system by over or under distributing rewards. Reporting wrong performances could also wrongfully penalize the node operators. | Aragon Agent |
+| CSFeeOracle | revokeRole | Revokes a role from a given address. | Aragon Agent |
+
+| HashConsensus (of CSFeeOracle) | submitReport | Used by oracle members to submit hash of the data calculated for the given reference slot. If consensus is reached (more submissions of the same report than the quorum amount) the `HashConsensus` contract submits this report to the processing contract (`CSFeeOracle`) to enable processing. | HashCon sensus (Committee Members) |
+| HashConsensus (of CSFeeOracle) | disableConsensus | Temporarily disables consensus by increasing the quorum value to an unreachable number. This prevents any consensus from being reached. Consensus needs to be re-enabled using `setQuorum`. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | setQuorum | Sets the quorum value. This is the amount of equal reports that need to be accumulated for each slot for a report to be considered valid and ready for processing. A value higher the the number of members in the committee would make consensus impossible. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | updateInitialEpoch | Changes when to oracle reporting system starts, given it hasn't started yet. This function can no longer becalled. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | setFrameConfig | Sets the configuration of frames. Frames are time window of equal lenghts referencing the processing of a slot and the corresponding deadline. A report based on the consensus layer must be built and consensus must be reached before each deadline. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | setFastLaneLengthSlots | Sets the duration of a fast lane rotation in slots. Members in the fast lane can (and are expected to) submit their report during a dedicated fast lane time window before submissions are open to all other members. The members in the fast lanes are rotated at a rate set using this function. The goal is to enforce active participation of all oracle members, preventing lazy copying. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | addMember | Adds a member to the consensus committee. Members can contribute to building consensus and submit reports. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | removeMember | Removes a member from the consensus committee. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | setReportProcessor | Sets the processor contract to which the reports are sent over to. This particular `HashConsensus` contract is meant for the `CSFeeOracle` as processor. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | grantRole | Grants a role within the contract to a specific address. This may allow addresses to execute any of the functions above related to the specific role. | Aragon Agent |
+| HashConsensus (of CSFeeOracle) | revokeRole | Revokes a role to a specific address. | Aragon Agent |
 
 ## Access Control
 
@@ -597,3 +626,34 @@ Easytrack: set of pre-approved governance operations that can be executed after 
 | pause role    | 0x139c2898040ef16910dc9f44dc697df79363da767d8bc92f2e310312b816e46d | Aragon Voting, EmergencyBrakes Multisig | DEFAULT_ADMIN |
 | unpause role  | 0x265b220c5a8891efdd9e1b1b7fa72f257bd5169f8d87e319cf3dad6ff52b94ae | Aragon Voting                           | DEFAULT_ADMIN |
 | cancel role   | 0x9f959e00d95122f5cbd677010436cf273ef535b86b056afc172852144b9491d7 | Aragon Voting                           | DEFAULT_ADMIN |
+
+### Role Permissions in CSModule
+
+| Role Name                               | ID                                                                 | Role Owners                        | Role Admin    |
+| --------------------------------------- | ------------------------------------------------------------------ | ---------------------------------- | ------------- |
+| DEFAULT_ADMIN_ROLE                      | 0x0000000000000000000000000000000000000000000000000000000000000000 | Aragon Agent                       | DEFAULT_ADMIN |
+| STAKING_ROUTER_ROLE                     | 0xbb75b874360e0bfd87f964eadd8276d8efb7c942134fc329b513032d0803e0c6 | StakingRouter                      | DEFAULT_ADMIN |
+| PAUSE_ROLE                              | 0x139c2898040ef16910dc9f44dc697df79363da767d8bc92f2e310312b816e46d | GateSeal (CSM)                     | DEFAULT_ADMIN |
+| REPORT_EL_REWARDS_STEALING_PENALTY_ROLE | 0x59911a6aa08a72fe3824aec4500dc42335c6d0702b6d5c5c72ceb265a0de9302 | Community Staking Module Committee | DEFAULT_ADMIN |
+| SETTLE_EL_REWARDS_STEALING_PENALTY_ROLE | 0xe85fdec10fe0f93d0792364051df7c3d73e37c17b3a954bffe593960e3cd3012 | EVMScriptExecutor (EasyTrack)      | DEFAULT_ADMIN |
+| VERIFIER_ROLE                           | 0x0ce23c3e399818cfee81a7ab0880f714e53d7672b08df0fa62f2843416e1ea09 | CSVerifier                         | DEFAULT_ADMIN |
+| RESUME_ROLE                             | 0x2fc10cc8ae19568712f7a176fb4978616a610650813c9d05326c34abb62749c7 | 0x0                                | DEFAULT_ADMIN |
+| MODULE_MANAGER_ROLE                     | 0x79dfcec784e591aafcf60db7db7b029a5c8b12aac4afd4e8c4eb740430405fa6 | 0x0                                | DEFAULT_ADMIN |
+
+### Role Permissions in CSAccounting
+
+| Role Name               | ID                                                                 | Role Owners                                  | Role Admin    |
+| ----------------------- | ------------------------------------------------------------------ | -------------------------------------------- | ------------- |
+| DEFAULT_ADMIN_ROLE      | 0x0000000000000000000000000000000000000000000000000000000000000000 | Aragon Agent                                 | DEFAULT_ADMIN |
+| SET_BOND_CURVE_ROLE     | 0x645c9e6d2a86805cb5a28b1e4751c0dab493df7cf935070ce405489ba1a7bf72 | CSModule, Community Staking Module Committee | DEFAULT_ADMIN |
+| RESET_BOND_CURVE_ROLE   | 0xb5dffea014b759c493d63b1edaceb942631d6468998125e1b4fe427c99082134 | CSModule, Community Staking Module Committee | DEFAULT_ADMIN |
+| MANAGE_BOND_CURVES_ROLE | 0xd35e4a788498271198ec69c34f1dc762a1eee8200c111f598da1b3dde946783d | 0x0                                          | DEFAULT_ADMIN |
+| PAUSE_ROLE              | 0x139c2898040ef16910dc9f44dc697df79363da767d8bc92f2e310312b816e46d | GateSeal (CSAccounting)                      | DEFAULT_ADMIN |
+
+### Role Permissions in CSOracle
+
+| Role Name                     | ID                                                                 | Role Owners                           | Role Admin    |
+| ----------------------------- | ------------------------------------------------------------------ | ------------------------------------- | ------------- |
+| DEFAULT_ADMIN_ROLE            | 0x0000000000000000000000000000000000000000000000000000000000000000 | Aragon Agent                          | DEFAULT_ADMIN |
+| PAUSE_ROLE                    | 0x139c2898040ef16910dc9f44dc697df79363da767d8bc92f2e310312b816e46d | Aragon Agent, GateSeal (CSAccounting) | DEFAULT_ADMIN |
+| MANAGE_CONSENSUS_VERSION_ROLE | 0xc31b1e4b732c5173dc51d519dfa432bad95550ecc4b0f9a61c2a558a2a8e4341 | 0x0                                   | DEFAULT_ADMIN |
