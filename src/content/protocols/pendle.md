@@ -21,7 +21,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Pendle is a yield-trading protocol that enables users to manage and optimize their yield exposure. By tokenizing yield-bearing assets into standardized yield tokens (SY), Pendle allows these assets to be split into principal tokens (PT) and yield tokens (YT). This separation facilitates various strategies, including earning fixed yields, speculating on future yield changes, and providing liquidity to earn additional rewards. Pendle's Automated Market Maker (AMM) is specifically designed to handle the trading of these duration dependent assets.
+Pendle is a yield-trading protocol that enables users to manage and optimize their yield exposure. By tokenizing yield-bearing assets into standardized yield tokens (SY), Pendle allows these assets to be split into principal tokens (PT) and yield tokens (YT). This separation facilitates various strategies, including earning fixed yields, speculating on future yield changes, and providing liquidity to earn additional rewards. Pendle's Automated Market Maker (AMM) is specifically designed to handle the trading of these assets.
 
 # Ratings
 
@@ -33,15 +33,17 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no distributed onchain Governance voting exists to this date. See the [Security Council Table](#security-council). With the current setup the _Upgradeability Score_ is _High_. 
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, fees and incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by the _Pendle Team_ with insufficient decentralisation and no distributed onchain Governance voting exists to this date. See the [Security Council Table](#security-council) for more details on the accounts that are the permission owners.
+
+With the current setup the _Upgradeability Score_ is _High_. 
 
 ### Yield Tokenization
 
-Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield exposure independently.
+Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield or fix the yield for a duration.
 
 The SY tokens themselves can be paused by the _Pendle Team_. Calling `pause` locks the supplied yield bearing assets in Pendle instantly without timelock protection. This could lead to permanent or temporary _loss of user funds_. Additionally, as a consequence of the smart contract infrastructure, during a paused SY token, trading between the associated YT and PT is paused.
 
-The `PendleYieldContractFactory`, controlled by the `Governance` multisig account, can change the interest fee on a market instantaneously up to 20% leaving them no opportunity to exit their positions. The fee rate directly impacts both existing positions and newly created ones. This could lead to _loss of unclaimed yield_.
+The `Governance` multisig account can change the fee on the earned interest on any market instantenously up to 20% leaving users no opportunity to exit their positions. Existing positions are affected as well as newly created positions. Existing positions will receive when claiming, less yield than previously expected (_loss of unclaimed yield_). Currently this fee is 3% and is 100% re-directed to vePENDLE voters.
 
 The `PendleCommonSYFactory` is used to create new markets and instantiate SY contracts. The implementation code used by the Factory to deploy new SY tokens can be updated by `Pendle: Deployer 1`, an EOA. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
 
@@ -60,10 +62,11 @@ The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
 
 #### PENDLE emissions to LPs
 
-The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade this contract, or add and remove pools from receiving votes without timelock which could lead to _loss of unclaimed yield_.
+The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade this contract, or add and remove pools from receiving votes without timelock. A pool that has received votes but is removed before the epoch is finalized and broadcasted looses all promised PENDLE allocation (_loss of unclaimed yield_).
 
-The PENDLE tokens that are distributed as incentive can be withdrawn by the _Pendle Team_ at any moment from the `PendleGaugeControllerMainchainUpg` contract preventing distribution to LPs and leading to _loss of unclaimed yield_. Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts of PENDLE to LPs.
+The `PendleGaugeControllerMainchainUpg` contract distributes PENDLE tokens pro rata as incentive for LPs to the markets on every market state change. The _Pendle Team_ can withdraw the PENDLE tokens from the `PendleGaugeControllerMainchainUpg` contract at any moment. As a consequence, the PENDLE tokens are not further distributed to the markets based on the voting they received. Already distributed PENDLE tokens cannot be withdrawn from the market contract, but future PENDLE incentives are less than expected.
 
+Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts of PENDLE to LPs which _materially affects the expected performance_ for the LPs of the protocol.
 
 #### Redirection of Fees to vePENDLE voters
 
