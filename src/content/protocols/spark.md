@@ -42,8 +42,6 @@ As part of the _Liquidity Management Layer (ALM)_ the two relayers have the righ
 
 Spark has a critical dependency on the Sky Protocol, a [Stage 0 protocol](./sky.md). This dependency is clear from the fact that all key permissions in Spark contracts are held by the _Sky Governance_.
 
-Spark further relies on Cricle's Cross-Chain Transfer Protocol (CCTP) to bridge funds to other chains. The CCTP which relies on a set of centralized offchain signers to provide the bridging attestation.
-
 Finally, Chronicle price feeds are used in _SparkLend_ with no fallbacks for all asset prices. A failure of those oracles could lead to wrongful liquidations or even trigger the oracle killswitch, which freezes all borrowing within _SparkLend_ until manually reset by the governance. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a [dedicated report](/protocols/chronicle).
 
 More information on the centralization and functioning of those dependencies can be found in [dependencies](#dependencies).
@@ -78,7 +76,7 @@ Spark can only become stage 1 if Sky becomes a Stage 1 protocol. It could furthe
 
 # Reviewer Notes
 
-We encountered no notable difficulty when reviewing Spark.
+We believe it is worth noting that funds in the _Liquidity Management Layer_ may be sent out to other chains through _Circle's Cross-Chain Transfer Protocol (CCTP)_. The CCTP which relies on a set of centralized offchain signers to provide the bridging attestation. As this review is only concerned with Ethereum Mainnet, it does not count as a dependency. Nonetheless, it will influence the score of Spark on other chains receiving funds from the CCTP.
 
 # Protocol Analysis
 
@@ -107,10 +105,6 @@ Spark has two rewards modules named `SparkRewards` and `SparkLendRewards`. `Spar
 ## Sky
 
 Spark has a critical dependency on the Sky Protocol, a Stage 0 protocol. This dependency is at two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons, this would severely impact Spark. In addition to that, all critical permissions in Spark are held by the _Sky Governance_.
-
-## Circle's CCTP
-
-To bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protocol (CCTP), which relies on a set of centralized offchain signers (attesters) to provide the bridging attestation. The offchain signers in the CCTP are not disclosed, and we have not found any further specifications on the architecture of the attestation service, emphasizing the centralization risk.
 
 ## Chronicle
 
