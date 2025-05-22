@@ -10,17 +10,17 @@ reasons: []
 risks: ["L", "M", "H", "H", "L"]
 author: ["mmilien_"]
 submission_date: "2025-09-04"
-publish_date: "1970-01-01"
+publish_date: "2025-05-26"
 update_date: "1970-01-01"
 ---
 
 # Summary
 
-Spark is a protocol within the Sky ecosystem and consists of three main products:`USDS` savings rate, _SparkLend_, and the Spark Liquidity Management Layer.
+Spark is a protocol within the Sky ecosystem and consists of three main products:`USDS` savings rate, _SparkLend_, and the _Spark Liquidity Management Layer_.
 
 _SparkLend_ is a `USDS` and `DAI` centric lending protocol in which users can participate as lenders or borrowers. It combines liquidity from Sky and integrates with other DeFi protocols.
 
-The Spark Liquidity Management Layer (ALM) automates the liquidity provision of `USDS`, `sUSDS`, and `USDC` directly from Sky across various blockchain networks and DeFi protocols. It also enables Spark to provide liquidity into risk-adjusted yield strategies on other chains and protocols, as with Aave and Morpho on mainnet.
+The _Spark Liquidity Management Layer (ALM)_ automates the liquidity provision of `USDS`, `sUSDS`, and `USDC` directly from Sky across various blockchain networks and DeFi protocols. It also enables Spark to provide liquidity into risk-adjusted yield strategies on other chains and protocols, as with Aave and Morpho on mainnet.
 
 # Ratings
 
@@ -32,7 +32,7 @@ _SparkLend_ is deployed on Ethereum mainnet and the liquidity layer involves oth
 
 ## Upgradeability
 
-The upgradeability of the Spark protocol is limited. No contract is upgradeable within the _Spark Liquidity Management Layer (ALM)_. The _SparkLend_ markets contracts are not upgradeable, but the treasury (collected fees) and rewards contracts may be upgraded through the Sky Governance. Upgrading the rewards contracts may cancel the rewards and result in the loss of unclaimed yield. This is because the rewards are part of the yield advertised to users. The Sky Governance and the [SparkLend Freezer](#security-council) multisig can both freeze all funds deposited into _SparkLend_ with no delay.
+The upgradeability of the Spark protocol is limited. No contract is upgradeable within the _Spark Liquidity Management Layer (ALM)_. The _SparkLend_ markets contracts are not upgradeable, but the treasury (collected fees) and rewards contracts may be upgraded through the _Sky Governance_. Upgrading the rewards contracts may cancel the rewards and result in the loss of unclaimed yield. This is because the rewards are part of the yield advertised to users. The _Sky Governance_ and the [SparkLend Freezer](#security-council) multisig can both freeze all funds deposited into _SparkLend_ with no delay.
 
 As part of the _Liquidity Management Layer (ALM)_ the two relayers have the right to mint/burn `USDS`, bridge funds, and deposit them into Aave, Ethena, or vault-compatible protocols such as Morpho, but with strict limits and only in pre-approved protocols. Those relayers act through a 1/2 multisig and are assumed to be corruptible with limited impact on the protocol. This is because of both the strict rate limiting they are subject to and the presence of a [Freezer](#security-council) multisig, which can freeze the relayers in case of suspicious activity. This [Freezer](#security-council) multisig does not meet our security council requirements.
 
@@ -40,11 +40,11 @@ As part of the _Liquidity Management Layer (ALM)_ the two relayers have the righ
 
 ## Autonomy
 
-Spark has a critical dependency on the Sky Protocol, a [Stage 0 protocol](./sky.md). This dependency is clear from the fact that all key permissions in Spark contracts are held by the Sky Governance.
+Spark has a critical dependency on the Sky Protocol, a [Stage 0 protocol](./sky.md). This dependency is clear from the fact that all key permissions in Spark contracts are held by the _Sky Governance_.
 
 Spark further relies on Cricle's Cross-Chain Transfer Protocol (CCTP) to bridge funds to other chains. The CCTP which relies on a set of centralized offchain signers to provide the bridging attestation.
 
-Finally, Chronicle price feeds are used in _SparkLend_ with no fallbacks for all asset prices. A failure of those oracles could lead to wrongful liquidations or even trigger the oracle killswitch, which freezes all borrowing within _SparkLend_ until manually reset by the governance. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a [dedicated report](./chronicle.md).
+Finally, Chronicle price feeds are used in _SparkLend_ with no fallbacks for all asset prices. A failure of those oracles could lead to wrongful liquidations or even trigger the oracle killswitch, which freezes all borrowing within _SparkLend_ until manually reset by the governance. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a [dedicated report](/protocols/chronicle).
 
 More information on the centralization and functioning of those dependencies can be found in [dependencies](#dependencies).
 
@@ -52,9 +52,9 @@ More information on the centralization and functioning of those dependencies can
 
 ## Exit Window
 
-Sky Governance proposals are delayed by **18 hours**, set by the Sky Governance itself. This delay also applies to all permissioned calls within Spark, except liquidity management and emergency actions. Liquidity management can be done without delay, but within strict limits set by the governance. The management by [Relayers](#security-council) may be paused by the [Freezer](#security-council) if it detects a malfunction or malicious actions.
+_Sky Governance_ proposals are delayed by **18 hours**, set by the \_\_Sky Governance\_\_itself. This delay also applies to all permissioned calls within Spark, except liquidity management and emergency actions. Liquidity management can be done without delay, but within strict limits set by the governance. The management by [Relayers](#security-council) may be paused by the [Freezer](#security-council) if it detects a malfunction or malicious actions.
 
-Emergency proposals are prepared for the Sky Governance to freeze all markets within _SparkLend_ without any delay, which would prevent users from withdrawing their funds. In addition to that, a [SparkLend Freezer](#security-council) multisig holds the same emergency permissions with only 2 signatures required out of 5 possible signers.
+Emergency proposals are prepared for the _Sky Governance_ to freeze all markets within _SparkLend_ without any delay, which would prevent users from withdrawing their funds. In addition to that, a [SparkLend Freezer](#security-council) multisig holds the same emergency permissions with only 2 signatures required out of 5 possible signers.
 
 Oracles have a kill switch to pause all borrowing if an asset's price falls below a predetermined threshold. If the killswitch is triggered (see [dependencies](#dependencies)), the borrowing is disabled without delay for all assets across the protocol until the killswitch is reset by the governance.
 
@@ -84,7 +84,7 @@ We encountered no notable difficulty when reviewing Spark.
 
 ## Spark Liquidity Management
 
-Spark has a _Liquidity Management Layer (ALM)_ whose role is to automate liquidity provision of `USDS`, `sUSDS`, and `USDC` directly from Sky and across blockchain networks and DeFi protocols. The overview of this system is shown in the diagram below. No contracts in the ALM are upgradeable, and all critical permissions are held by the Sky Governance through its delayed proxy (`DSPause Proxy`). The `Spark Proxy` is a simple wrapper around this governance to distinguish permissions specific to Spark. The `AllocatorVault` bridges between Sky and Spark and allows minting/burning of `USDS`.
+Spark has a _Liquidity Management Layer (ALM)_ whose role is to automate liquidity provision of `USDS`, `sUSDS`, and `USDC` directly from Sky and across blockchain networks and DeFi protocols. The overview of this system is shown in the diagram below. No contracts in the ALM are upgradeable, and all critical permissions are held by the _Sky Governance_ through its delayed proxy (`DSPause Proxy`). The `Spark Proxy` is a simple wrapper around this governance to distinguish permissions specific to Spark. The `AllocatorVault` bridges between Sky and Spark and allows minting/burning of `USDS`.
 
 The main component of the ALM is the `ALMProxy` and its `MainnetController`. The `ALMProxy` holds all the funds while the `MainnetController` can move and distribute those funds across protocols and chains. An offchain [Relayers](#security-council) multistig made of 2 signers with a threshold of 1 can dictate all liquidity movements. However, the relayers are subject to strict rate limits and can only allocate funds to pre-approved contracts. A [Freezer](#security-council) multisig can freeze the relayers at any time if it detects suspicious behaviors. The `MainnetController` supports the provision of liquidity in Aave, Ethena, and any ERC-4626 compatible (pre-approved) vault.
 
@@ -94,9 +94,9 @@ The main component of the ALM is the `ALMProxy` and its `MainnetController`. The
 
 _SparkLend_ is a `USDS` and `DAI`-centric lending protocol in which users can participate as lenders or borrowers.
 
-The protocol is a fork of Aave v3 with some particularities highlighted in the diagram below. Most contracts, including markets, are non-upgradeable, with upgrades only possible on the `Treasury` and `RewardsControllerManager` contracts. Upgrading the rewards may lead to the loss of unclaimed yield, as rewards are advertised as part of the yield. Similarly to [Spark' liquidity layer](#spark-alm), all critical permissions are held by the Sky Governance through the `DSPause Proxy`.
+The protocol is a fork of Aave v3 with some particularities highlighted in the diagram below. Most contracts, including markets, are non-upgradeable, with upgrades only possible on the `Treasury` and `RewardsControllerManager` contracts. Upgrading the rewards may lead to the loss of unclaimed yield, as rewards are advertised as part of the yield. Similarly to [Spark' liquidity layer](#spark-alm), all critical permissions are held by the _Sky Governance_ through the `DSPause Proxy`.
 
-Some emergency actions can be taken, such as freezing all new borrowing in _SparkLend_ if a certain asset price falls below a predetermined threshold. A multisig called [SparkLend Freezer](#security-council), as well as the Sky governance, can freeze or pause any market in SparkLend without any delay. They can then be reactivated through the delayed Sky governance.
+Some emergency actions can be taken, such as freezing all new borrowing in _SparkLend_ if a certain asset price falls below a predetermined threshold. A multisig called [SparkLend Freezer](#security-council), as well as the _Sky Governance_, can freeze or pause any market in SparkLend without any delay. They can then be reactivated through the delayed _Sky Governance_.
 
 Spark has two rewards modules named `SparkRewards` and `SparkLendRewards`. `SparkRewards` is a global rewards program that may reward users for any specific action that promotes the use of Spark. This may include using a specific _SparkLend_ market. On the other hand, `SparkLendRewards` is a rewards module inherited from Aave v3, which allows the distribution of rewards for specific _SparkLend_ Markets. Both reward modules have their respective mulsitigs with 2-out-of-3 signers, and both have been used in the past to distribute rewards promoting the use of _SparkLend_.
 
@@ -106,7 +106,7 @@ Spark has two rewards modules named `SparkRewards` and `SparkLendRewards`. `Spar
 
 ## Sky
 
-Spark has a critical dependency on the Sky Protocol, a Stage 0 protocol. This dependency is at two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons, this would severely impact Spark. In addition to that, all critical permissions in Spark are held by the Sky Governance.
+Spark has a critical dependency on the Sky Protocol, a Stage 0 protocol. This dependency is at two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons, this would severely impact Spark. In addition to that, all critical permissions in Spark are held by the _Sky Governance_.
 
 ## Circle's CCTP
 
@@ -116,24 +116,24 @@ To bridge funds to other chains, Spark uses Circle's Cross-Chain Transfer Protoc
 
 Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices.
 
-Chronicle is an oracle protocol that computes a median price from multiple sources.It uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that any changes to the validator set are subject to a 7 days exit window. We therefore assessed that Chronicle is a Stage 1 equivalent dependency and explained it in detail in a [dedicated report](./chronicle.md).
+Chronicle is an oracle protocol that computes a median price from multiple sources. It uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that any changes to the validator set are subject to a _7-day exit window_. We therefore assessed that Chronicle is a _Stage 1_ equivalent dependency and explained it in detail in a [dedicated report](/protocols/chronicle).
 
-Moreover, a `KillSwitchOracle` contract is used to set critical prices per asset. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the Sky Governance.
+Moreover, a `KillSwitchOracle` contract is used to set critical prices per asset. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the _Sky Governance_.
 
 # Governance
 
-All critical permissions in Spark are held by the Sky Governance. More details on the exact functioning of
-the Sky Governance can be found in the [Sky Review] (https://www.defiscan.info/protocols/sky).
+All critical permissions in Spark are held by the _Sky Governance_. More details on the exact functioning of
+the _Sky Governance_ can be found in the [Sky Review] (https://www.defiscan.info/protocols/sky).
 
 ## Exit Window
 
-Spark does not add any further delay to Sky Governance decisions. Sky Governance proposals are delayed by **18 hours**, set by the Sky Governance itself (see [Sky review](./sky.md#exit-window)).
+Spark does not add any further delay to _Sky Governance_ decisions. _Sky Governance_ proposals are delayed by **18 hours**, set by the _Sky Governance_ itself (see [Sky review](./sky.md#exit-window)).
 
 Liquidity management can be done without delay, but within strict limits set by the governance. The management by [Relayers](#security-council) may be paused by the [Freezer](#security-council) if it detects a malfunction or malicious actions. The [Freezer](#security-council) does not meet our Security Council requirements.
 
-Emergency proposals are prepared for the Sky Governance to freeze all markets within _SparkLend_ without any delay, which would prevent users from withdrawing their funds. Those actions could be executed without delay, but still require a vote and a majority according to Sky's continuous approval system. In addition to that, a [SparkLend Freezer](#security-council) multi-sig holds the same emergency permissions with only 2 signatures required out of 5 possible signers.
+Emergency proposals are prepared for the _Sky Governance_ to freeze all markets within _SparkLend_ without any delay, which would prevent users from withdrawing their funds. Those actions could be executed without delay, but still require a vote and a majority according to Sky's continuous approval system. In addition to that, a [SparkLend Freezer](#security-council) multi-sig holds the same emergency permissions with only 2 signatures required out of 5 possible signers.
 
-If an oracle's killswitch is triggered (see [dependencies](#dependencies)), the borrowing is disabled without delay for all assets across the protocol until the killswitch is reset by the Sky Governance.
+If an oracle's killswitch is triggered (see [dependencies](#dependencies)), the borrowing is disabled without delay for all assets across the protocol until the killswitch is reset by the _Sky Governance_.
 
 ## Security Council
 
