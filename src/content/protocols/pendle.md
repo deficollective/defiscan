@@ -53,12 +53,11 @@ Trading of PT and YT Tokens can be halted if the pause function on the SY token 
 
 Are trading fees affected by `setOverriddenFee` ? what is this function `setLnFeeRateRoots` ? depending on the outcome handle the next paragraph
 
-The `PendleMarketFactoryV3`, owned by the `PendleGovernanceProxy` (ultimately controlled by `Governance multisig`), contains high-risk functions including `setTreasuryAndFeeReserve` and `setOverriddenFee` that can modify critical economic parameters without timelock protection. The `PendleLimitRouter`, owned directly by the `Governance multisig`, includes functions like `setFeeRecipient` that can redirect protocol fees and `setLnFeeRateRoots` that can modify trading fee rates. This latter function can be called by either Governance or the `hardwareDeployer EOA`, creating multiple vectors for parameter manipulation.
+The _Pendle Team_ (`Governance multisig`) can update the trading fee for simple swaps and limit orders instantly. The fees are ultimately re-directed to the vePENDLE voters. If fees are reduced, the expected performance for vePENDLE voters does not hold true.
 
 ### PENDLE incentives for LPs and Fees for vePENDLE voters
 
 The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
-
 
 #### PENDLE emissions to LPs
 
