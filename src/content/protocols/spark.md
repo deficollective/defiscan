@@ -142,7 +142,6 @@ The [Freezer](#security-council) multisig can freeze the movement of liquidity i
 | Freezer           | [0x90D8c80C028B4C09C0d8dcAab9bbB057F0513431](https://etherscan.io/address/0x90D8c80C028B4C09C0d8dcAab9bbB057F0513431) | MultiSig 2/4 | ❌          | ❌              | ❌                | ❌             |
 | Relayer           | [0x8a25A24EDE9482C4Fc0738F99611BE58F1c839AB](https://etherscan.io/address/0x8a25A24EDE9482C4Fc0738F99611BE58F1c839AB) | MultiSig 1/2 | ❌          | ❌              | ❌                | ❌             |
 | SparkLend Freezer | [0x44efFc473e81632B12486866AA1678edbb7BEeC3](https://etherscan.io/address/0x44efFc473e81632B12486866AA1678edbb7BEeC3) | MultiSig 2/5 | ❌          | ❌              | ❌                | ❌             |
-| KillSwitchOracle  | [0x909A86f78e1cdEd68F9c2Fe2c9CD922c401abe82](https://etherscan.io/address/0x909A86f78e1cdEd68F9c2Fe2c9CD922c401abe82) | Contract     | N/A         | N/A             | N/A               | N/A            |
 
 # Contracts and Permissions
 
