@@ -103,7 +103,7 @@ To reach Stage 0, Pendle should first verify all its contracts on Etherscan. The
 
 ⚠️ [sySwapper](https://etherscan.io/address/0x248087c69e72e211b7264720bf6cc5a954f98cde#code) is NOT verified on a public block explorer. For the `sySwapper` we currently rely on the technical documentation provided by the Pendle Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
-⚠️ The `PendlePYLpOracle`, essential for integrations by external protocols, is fully upgradeable and owned by the Governance multisig (2/4). The Governance multisig account can call `setBlockCycleNumerator` which can modifies TWAP calculations. This is a centralization risk introduced to protocols that integrate Pendle.
+⚠️ The `PendlePYLpOracle`, essential for integrations by external protocols, is fully upgradeable and owned by the Governance multisig (2/4). The Governance multisig account can call `setBlockCycleNumerator` which can modifies TWAP calculations. This is a upgradeability risk introduced to protocols that integrate Pendle's TWAP.
 
 ⚠️ The `BaseSplitCodeFactoryContract` creates large contracts by splitting their bytecode into two separate fragments that function together as a single logical entity. The resulting fragment contracts remain unverified on Etherscan, creating significant transparency issues as their source code is inaccessible to the public. This contract is controlled by the EOA "Pendle: Deployer 1" and is used to deploy contracts like `PendleMarketFactoryV3`.
 
@@ -233,7 +233,7 @@ The `DevMultisig` can modify reward distributions through several mechanisms: ch
 
 # Dependencies
 
-The protocol has no external dependencies.
+The Pendle V2 Ethereum deployment has no external dependencies. The other deployments on other chains rely on Layer0 for broadcasting voting results and vePENDLE balances.
 
 # Governance
 
