@@ -210,7 +210,7 @@ In parallel, the legacy `PendleFeeDistributor` remains active under the control 
 
 ### PENDLE Emissions to LPs
 
-The PENDLE token emission system operates through an interconnected contract architecture with dynamic reward distribution.
+The Pendle protocol distributes PENDLE tokens as incentives to liquidity providers (LPs) through a weighted voting system. vePENDLE holders can allocate their voting power across different pools.
 
 The emission cycle begins when the `PendleLiquidityIncentivesMultisig` claims newly minted PENDLE through `claimLiquidityEmissions` based on a predetermined schedule. The PENDLE token's parameters are protected by a 7-day timelock via `initiateConfigChanges`. These tokens then flow to `Governance`, which funds the `PendleGaugeControllerMainchainUpg` through the `fundPendle` function.
 
