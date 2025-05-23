@@ -206,8 +206,6 @@ From these Treasury accounts, tokens follow a standardized conversion path. The 
 
 The `PendleFeeDistributorV2Proxy` functions as the distribution contract for the collected fees that are rewarded to vePENDLE holders for their respective voting power. Under the `DevMultisig` (2/3) administration, this contract employs merkle proofs through `setMerkleRootAndFund` to set the claims while simultaneously depositing funds for claiming.
 
-The `hardwareDeployer` EOA maintains additional protocol functionalities with its `GUARDIAN` and `ALICE` roles in the `PendleGovernanceProxy`. These capacities include fee rate modifications through `setLnFeeRate` and operational controls.
-
 In parallel, the legacy `PendleFeeDistributor` remains active under the control of an unidentified address (0xD9c9935f4BFaC33F38fd3A35265a237836b30Bd1). This contract continues to distribute USDC to users through a separate reward system not accountable to the current Treasury structure.
 
 ### PENDLE Emissions to LPs
