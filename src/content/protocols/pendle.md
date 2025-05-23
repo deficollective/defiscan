@@ -49,9 +49,7 @@ The `PendleCommonSYFactory` is used to create new markets and instantiate the co
 
 ### Pendle AMM Module
 
-Trading of PT and YT Tokens can be halted if the pause function on the SY token is called by the _Pendle Team_. If the pause is not resumed, PT owners can not claim the underlying asset at maturity, leading to _loss of user funds_.
-
-can YT holders claim their yield when SY is paused?
+Trading of PT and YT Tokens can be halted if the pause function on the SY token is called by the _Pendle Team_. If the pause is not resumed, PT owners can not claim the underlying asset at maturity, leading to _loss of user funds_. Likewise, the YT holders cannot claim the interest because of the paused SY token.
 
 The _Pendle Team_ (`Governance multisig`) can update the trading fee for simple swaps and limit orders instantly. The fees are ultimately re-directed to the vePENDLE voters. If fees are reduced, the expected performance for vePENDLE voters might not hold true.
 
