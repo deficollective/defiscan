@@ -218,7 +218,7 @@ vePENDLE holders lock their PENDLE in the `VotingEscrowPendleMainchain` contract
 
 The `PendleVotingControllerUpg` sends voting results to the `PendleGaugeControllerMainchainUpg` via `updateVotingResults`, which then allocates PENDLE rewards to `PendleMarketV3` contracts dynamically.
 
-Finally, LPs can claim their accumulated rewards directly from `PendleMarketV3` contracts via `redeemRewards`, completing a system where incentives are continuously allocated in response to liquidity activity and governance decisions.
+Finally, LPs can claim their accumulated rewards directly from `PendleMarketV3` contracts via `redeemRewards` or automatically receive them when closing their LP position through `removeLiquiditySingleToken`.
 
 ### Points Rewards
 
