@@ -43,17 +43,17 @@ Yield Tokenization is the foundation of Pendle, converting yield-bearing assets 
 
 The SY tokens themselves can be paused by the _Pendle Team_. Calling `pause` locks the supplied yield bearing assets in Pendle instantly without timelock protection. This could lead to permanent or temporary _loss of user funds_. Additionally, as a consequence of the smart contract infrastructure, during a paused SY token, trading between the associated YT and PT is paused.
 
-The `Governance` multisig account can change the fee on the earned interest on any market instantenously up to 20% leaving users no opportunity to exit their positions. Existing positions are affected as well as newly created positions. Existing positions will receive when claiming, less yield than previously expected (_loss of unclaimed yield_). Currently this fee is 3% and is 100% re-directed to vePENDLE voters.
+The `Governance` multisig account can change the fee on the earned interest on any market instantenously up to 20% leaving YT holders no opportunity to exit their positions before enforcement of the new fee regiment. Existing positions are affected as well as newly created positions. Existing positions will receive when claiming, less yield than previously expected (_loss of unclaimed yield_). Currently this fee is 3% and is 100% re-directed to vePENDLE voters. The docs mention this is subject to change in the future.
 
-The `PendleCommonSYFactory` is used to create new markets and instantiate SY contracts. The implementation code used by the Factory to deploy new SY tokens can be updated by `Pendle: Deployer 1`, an EOA. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this vulnerability, as the risk applies only to new SY token deployments.
+The `PendleCommonSYFactory` is used to create new markets and instantiate the corresponding SY token. The implementation code used by the Factory to deploy new SY tokens can be updated by `Pendle: Deployer 1`, an EOA. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this upgradeability vector, as the implementation update only applies to new SY token deployments.
 
 ### Pendle AMM Module
 
 Trading of PT and YT Tokens can be halted if the pause function on the SY token is called by the _Pendle Team_. If the pause is not resumed, PT owners can not claim the underlying asset at maturity, leading to _loss of user funds_.
 
-Are trading fees affected by `setOverriddenFee` ? what is this function `setLnFeeRateRoots` ? depending on the outcome handle the next paragraph
+can YT holders claim their yield when SY is paused?
 
-The _Pendle Team_ (`Governance multisig`) can update the trading fee for simple swaps and limit orders instantly. The fees are ultimately re-directed to the vePENDLE voters. If fees are reduced, the expected performance for vePENDLE voters does not hold true.
+The _Pendle Team_ (`Governance multisig`) can update the trading fee for simple swaps and limit orders instantly. The fees are ultimately re-directed to the vePENDLE voters. If fees are reduced, the expected performance for vePENDLE voters might not hold true.
 
 ### PENDLE incentives for LPs and Fees for vePENDLE voters
 
@@ -61,7 +61,7 @@ The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
 
 #### PENDLE emissions to LPs
 
-The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade this contract, or add and remove pools from receiving votes without timelock. A pool that has received votes but is removed before the epoch is finalized and broadcasted looses all promised PENDLE allocation (_loss of unclaimed yield_).
+The `PendleVotingControllerUpg` contract manages the gauge voting system that determines PENDLE incentive distribution across pools. The _Pendle Team_ can completely upgrade this contract, or add and remove pools from receiving votes without timelock. A pool that has received votes but is removed before the epoch is finalized and voting results are broadcasted looses all promised PENDLE allocation (_loss of unclaimed yield_).
 
 The `PendleGaugeControllerMainchainUpg` contract distributes PENDLE tokens pro rata as incentive for LPs to the markets on every market state change. The _Pendle Team_ can withdraw the PENDLE tokens from the `PendleGaugeControllerMainchainUpg` contract at any moment. As a consequence, the PENDLE tokens are not further distributed to the markets based on the voting they received. Already distributed PENDLE tokens cannot be withdrawn from the market contract, but future PENDLE incentives are less than expected.
 
