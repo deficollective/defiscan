@@ -224,11 +224,8 @@ Finally, LPs can claim their accumulated rewards directly from `PendleMarketV3` 
 
 The `PendleMultiTokenMerkleDistributor` manages token points system rewards for vePENDLE holders through a monthly cycle. The system takes a snapshot of vePENDLE balances on the 20th of each month, with token distributions occurring approximately one week later. The `DevMultisig` (2/3) controls this contract.
 
-The process uses the `setMerkleRoot` function to establish which addresses can claim which rewards. 
-The contract implements the UUPS upgradeability pattern, where the `DevMultisig` can call `upgradeToAndCall` to modify the implementation logic while preserving all stored data about claimed rewards.
-Administrative control of the distributor follows a two-step ownership transfer pattern via `transferOwnership`, requiring the pending owner to explicitly claim ownership for security.
-
-The `DevMultisig` can modify reward distributions through several mechanisms: changing which addresses receive rewards via `setMerkleRoot`, upgrading the contract implementation through `upgradeToAndCall`, and determining which token types are included in distributions. These parameters can be adjusted during the period between the monthly snapshot and distribution dates.
+The process uses the `setMerkleRoot` function to establish which addresses can claim specific reward amounts, allowing the `DevMultisig` to control reward distribution between the monthly snapshot and payout dates. 
+The contract implements the UUPS upgradeability pattern through `upgradeToAndCall`, enabling the `DevMultisig` to modify implementation logic while preserving claimed data, and can also determine which token types are included in distributions. Administrative control follows a two-step ownership transfer pattern via `transferOwnership`, requiring the pending owner to explicitly claim ownership for security.
 
 ![Voting and Fees](./diagrams/pendle-v2-voting-and-fees.png)
 
