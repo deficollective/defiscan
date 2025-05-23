@@ -16,8 +16,7 @@ update_date: "1970-01-01"
 
 # Todo (remove afterwards)
 - Check all rows and their impact (sagaciousyves)
-- Check timing of fees and re-direction (sagaciousyves)
-- check all 0x0 (permissions) if renounced or not
+- owner router (0x888..) (sagaciousyves)
 
 # Summary
 
@@ -135,16 +134,16 @@ In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens
 
 Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
 
+![Direct Minting](./diagrams/pendle-v2-direct-minting.png)
+
 ### Redeem Underlying
 
 SY → Underlying Assets (`redeemSyToToken`)  
 Users can convert SY tokens back to the underlying assets through the `PendleRouterV4`. The router calls the respective SY contract's redeem function, which unwraps the SY token and returns the underlying asset (such as ETH, USDC, or wstETH) directly to the user. This process allows users to exit the Pendle ecosystem completely and reclaim their original assets.
 
-![Direct Minting](./diagrams/pendle-v2-direct-minting.png)
-
 ## Providing Liquidity (LP)  
 
-Users can add liquidity through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury via the Proxy contract.
+Users can add liquidity through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury.
 
 Liquidity removal is performed via `removeLiquiditySingleToken`. The LP tokens are burned, the user receives their proportional share of SY and PT, the PT are converted to SY via `swapExactPtForSy`, and the SY are converted to underlying tokens. During both addition and removal, the `PendleGaugeController` contract distributes PENDLE rewards to the market and the user.
 
@@ -176,8 +175,6 @@ Users can acquire YT tokens without holding PT via `swapExactTokenForYt`. The ro
 Selling YT:
 When selling YT via `swapExactYtForToken`, the router borrows an equivalent amount of PT from the market, combines them with the user's YT to redeem SY (as both tokens are needed to unlock the underlying asset), then returns a portion of the SY to the market to repay the borrowed PT. The remaining SY are converted to the desired output token. As with buying, fees are collected and sent to the `Treasury`.
 
-These flash swap mechanisms allow users to gain exposure to yield alone (YT) without needing to manage the principal component (PT).
-
 `Governance` can `pause` SY token transfers, which completely blocks YT trading mechanisms. This pause prevents all essential operations on SY tokens (deposits, withdrawals, and transfers) that are necessary for flash swap functionality. Without these operations, it becomes technically impossible to buy or sell YT, as the process requires converting tokens to SY, minting PT+YT, and combining PT+YT to release SY. Users holding YT find themselves unable to exit their positions until governance decides to reactivate transfers.
 
 ## Router System and Action Modules
@@ -190,7 +187,7 @@ Unlike conventional proxies, the routing infrastructure of `PendleRouterV4` reli
 
 ## Limit Order System
 
-The protocol implements a limit order system through the `PendleLimitRouter` contract, enabling conditional execution of trades based on predefined parameters. This mechanism uses a hash-based identification system to track each order's status, recording both remaining amounts and filled portions.
+The protocol implemented the `PendleLimitRouter` contract which enables limit orders of PT and YT. 
 
 Users can create orders that execute only when specific price conditions are met and can cancel their orders individually or in batches. The system uses EIP-712 signatures for order validation and employs logarithmic calculations for fee determination. These fee parameters are configured via `setLnFeeRateRoots` by either `Governance` or the `hardwareDeployer`, while collected fees are directed to `Treasury1`.
 
@@ -202,7 +199,7 @@ The protocol implements a multi-stage fee distribution architecture with distinc
 
 From these Treasury accounts, tokens follow a standardized conversion path. The `hardwareDeployer` EOA serves as an intermediary conversion agent, receiving tokens from both Treasury multisigs. This EOA transforms various token types into ETH through the `PendleRouterV4`, then directs this ETH to the `PendleFeeDistributorV2Proxy` for final distribution.
 
-The `PendleFeeDistributorV2Proxy` functions as the distribution engine for rewards to vePENDLE holders. Under the `DevMultisig` (2/3) administration, this contract employs merkle proofs through `setMerkleRootAndFund` to validate claims while simultaneously receiving funds. Its architecture allows for protocol-specific allocations through `updateProtocolClaimable` and system upgrades via `upgradeToAndCall`.
+The `PendleFeeDistributorV2Proxy` functions as the distribution contract for the collected fees that are rewarded to vePENDLE holders for their respective voting power. Under the `DevMultisig` (2/3) administration, this contract employs merkle proofs through `setMerkleRootAndFund` to set the claims while simultaneously depositing funds for claiming.
 
 The `hardwareDeployer` EOA maintains additional protocol functionalities with its `GUARDIAN` and `ALICE` roles in the `PendleGovernanceProxy`. These capacities include fee rate modifications through `setLnFeeRate` and operational controls.
 
@@ -219,7 +216,6 @@ vePENDLE holders lock their PENDLE in the `VotingEscrowPendleMainchain` contract
 The `PendleVotingControllerUpg` sends voting results to the `PendleGaugeControllerMainchainUpg` via `updateVotingResults`, which then allocates PENDLE rewards to `PendleMarketV3` contracts dynamically.
 
 Finally, LPs can claim their accumulated rewards directly from `PendleMarketV3` contracts via `redeemRewards`, completing a system where incentives are continuously allocated in response to liquidity activity and governance decisions.
-Feedback submitted
 
 ### Points Rewards
 
