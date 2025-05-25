@@ -103,7 +103,7 @@ To reach Stage 0, Pendle should first verify all its contracts on Etherscan. The
 
 ⚠️ The `BaseSplitCodeFactoryContract` creates large contracts by splitting their bytecode into two separate fragments that function together as a single logical entity. The resulting fragment contracts remain unverified on Etherscan. The `BaseSplitCodeFactoryContract` is controlled by the EOA "Pendle: Deployer 1". The associated splitted unverified contracts are used as helper contracts to deploy markets and YT tokens.
 
-⚠️ vePENDLE balances are synchronized across chains, to boost LP positions on other chains than mainnet. This requires LayerZero as a dependency. Such an analysis is included in the report on the respective alternative chain.
+⚠️ vePENDLE balances are synchronized across chains, to boost LP positions on other chains than mainnet. This requires LayerZero as a dependency. Such an analysis would be included in the report on the respective alternative chain.
 
 # Protocol Analysis
 
