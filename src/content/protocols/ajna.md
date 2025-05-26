@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 The Ajna Protocol is a decentralized, noncustodial system for permissionless lending and borrowing that functions without governance or external price feeds. It operates through isolated pools where lenders provide liquidity at market-driven price levels, and borrowers secure loans using fungible or non-fungible collateral, ensuring autonomy, fairness, and resilience.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -52,13 +52,47 @@ Ajna Protocol's contracts are fully immutable, no upgrades or changes can be mad
 
 Two user interfaces exist and are operated by independent actors. However, these user interfaces are not _interoperable_ meaning that positions created on one cannot be managed or closed through the second frontend. This means that if one of the user interfaces is inaccessible or starts censoring users, users' positions and deposited funds are inaccessible or access is only possible at a large cost.
 
+The reason for this is that one of the interfaces, summer.fi, uses a smart account system in order to offer a better UX to end users. This smart account system effectively results in a smart contract, the smart account, "controlling" positions and users only being able to access their positions through this contract. However, this smart account system is not supported by the second user interface thus making it impossible, or possible only at a high cost, to access positions created through summer.fi on the second interface and vice-versa.
+
 > ℹ️The Ajna community has expressed plans to make available an emergency UI or instructions for emergency withdrawals. This situation will be monitored and the score reassessed if needed.
 
 A list of the third-party user interfaces to access the Ajna protocol can be found [here](https://www.ajna.finance/).
 
 > Accessibility score: Medium
 
-# Technical Analysis
+## Conclusion
+
+The Ajna protocl on Ethereum Mainnet achieves _Medium_ centralization score for _Accessibility_ and _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, and _Exit Window_ dimensions. It thus ranks Stage 1.
+
+To progress to _Stage 2_ the Ajna protocol should make an additional emergency UI available for emergency withdrawals.
+
+> Overall score: Stage 1
+
+# Reviewer Notes
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+No external dependency has been found.
+
+Ajna Finance enables borrowing and lending without external oracles by relying on a market-driven mechanism where lenders specify the price (in terms of quote tokens per unit of collateral) they are willing to lend at. This design eliminates the need for external price feeds by aggregating lender inputs into "price buckets," which act as discrete pricing tiers for collateral. Borrowers can access liquidity by pledging collateral against these buckets, while the protocol automatically adjusts interest rates based on pool utilization and collateralization levels. This ensures stability and fairness through self-regulating market dynamics, independent of external dependencies​.
+
+Ajna's liquidation works without oracles by triggering auctions when a loan's collateralization falls below the pool's Lowest Utilized Price (LUP). Liquidation is initiated by users posting a bond and proceeds through a Dutch auction, where collateral is sold at decaying prices until the debt is repaid. This market-driven process ensures fair price discovery, with penalties discouraging unnecessary liquidations and rewards incentivizing valid ones.
+
+# Governance
+
+## Security Council
+
+The protocol is completely immutable, thus no Security Council is required 🎉
+
+## Exit Window
+
+The protocol is completely immutable, thus no exit window is required. 🎉
+
+# Contracts & Permissions
 
 See [Whitepaper: AJNA PROTOCOL: Automated Lending Markets](https://www.ajna.finance/pdf/Ajna_Protocol_Whitepaper_01-11-2024.pdf)
 
@@ -75,34 +109,10 @@ See [Whitepaper: AJNA PROTOCOL: Automated Lending Markets](https://www.ajna.fina
 | BurnWrapper            | [0x936Ab482d6bd111910a42849D3A51Ff80BB0A711](https://etherscan.io/address/0x936Ab482d6bd111910a42849D3A51Ff80BB0A711) |
 | GrantFund              | [0x74d5b005ca64a5C9EE3611Bdc6F6C02D93C84b2f](https://etherscan.io/address/0x74d5b005ca64a5C9EE3611Bdc6F6C02D93C84b2f) |
 
-## Permission owners
+## All Permission Owners
 
 None. Ajna does not have any permissioned owners because it operates as a fully decentralized, governance-free protocol, with all functions controlled by deterministic smart contract rules. Anyone can deploy the protocol on compatible EVMs, ensuring its accessibility and independence from centralized authority or ownership.
 
 ## Permissions
 
 None. 🎉
-
-## Dependencies
-
-None.
-
-Ajna Finance enables borrowing and lending without external oracles by relying on a market-driven mechanism where lenders specify the price (in terms of quote tokens per unit of collateral) they are willing to lend at. This design eliminates the need for external price feeds by aggregating lender inputs into "price buckets," which act as discrete pricing tiers for collateral. Borrowers can access liquidity by pledging collateral against these buckets, while the protocol automatically adjusts interest rates based on pool utilization and collateralization levels. This ensures stability and fairness through self-regulating market dynamics, independent of external dependencies​.
-
-Ajna's liquidation works without oracles by triggering auctions when a loan's collateralization falls below the pool's Lowest Utilized Price (LUP). Liquidation is initiated by users posting a bond and proceeds through a Dutch auction, where collateral is sold at decaying prices until the debt is repaid. This market-driven process ensures fair price discovery, with penalties discouraging unnecessary liquidations and rewards incentivizing valid ones.
-
-## Exit Window
-
-The protocol is completely immutable, thus no exit window is required. 🎉
-
-# Security Council
-
-The protocol is completely immutable, thus no Security Council is required 🎉
-
-# User Interfaces
-
-Two user interfaces to access the Ajna protocol exist and can be found [here](https://www.ajna.finance/).
-
-These interfaces are operated independently offering different ways to access the Ajna protocol. However, the user interfaces are not _interoperable_ as positions created on one cannot (easily) be accessed through the other.
-
-The reason for this is that one of the interfaces, summer.fi, uses a smart account system in order to offer a better UX to end users. This smart account system effectively results in a smart contract, the smart account, "controlling" positions and users only being able to access their positions through this contract. However, this smart account system is not supported by the second user interface thus making it impossible, or possible only at a high cost, to access positions created through summer.fi on the second interface and vice-versa.

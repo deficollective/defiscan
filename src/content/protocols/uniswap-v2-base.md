@@ -24,7 +24,7 @@ Uniswap v2 is a decentralized automated market maker (AMM) that builds upon the 
 Another notable improvement is the introduction of flash swaps, which allow users to withdraw assets without upfront capital as long as the borrowed amount is returned by the end of the transaction. This feature facilitates advanced use cases like arbitrage, collateral swapping, and debt refinancing.
 Additionally, Uniswap v2 integrates price oracles that mitigate manipulation risks by providing time-weighted average prices (TWAP) over a given period, which has become a critical component for DeFi protocols reliant on secure pricing mechanisms.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -59,31 +59,25 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Technical Analysis
+## Conclusion
 
-## Contracts
+The Uniswap V2 deployment on Base falls into the _others_ category and not Stage 1 due to the contracts which are not verified on public block explorers.
 
-| Contract Name     | Address                                                                                                               |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------- |
-| UniswapV2Factory  | [0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6](https://basescan.org/address/0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6) |
-| UniswapV2Pair     | [0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb](https://basescan.org/address/0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb) |
-| UniswapV2Router02 | [0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24](https://basescan.org/address/0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24) |
-| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) |
+Despite this classification, our analysis shows that the Uniswap V2 deployment on Base receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
 
-The `UniswapV2Pair`'s address is an example instance of the contract. All pairs share the same implementation (based of Factory Pattern).
+> Overall score: Others
 
-## Permission owners
+# Reviewer notes
 
-| Name              | Account                                                                                                               | Type     |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
-| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) | Contract |
+⚠️ During our analysis, we identified two unverified contracts, ProxyAdmin and TransparentUpgradeableProxy, on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
-## Permissions
+# Protocol Analysis
 
-| Contract         | Function       | Impact                                                                                                                                                                                                                                                                                                                                                                                                                   | Owner             |
-| ---------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
-| UniswapV2Factory | setFeeTo       | This function allows the `FeeToSetter` to set the address where protocol fees are collected. If `feeTo` is the 0-address no fees are collected on any of the Uniswap V2 Pools. If fees are collected (`feeTo` != 0-address) they are fixed to be 1/6 of the LP collected fees from the moment where the fee switch is activated. If abused by the FeeToSetter role, fees could be redirected to an unauthorized address. | CrossChainAccount |
-| UniswapV2Factory | setFeeToSetter | This function permits the current `FeeToSetter` to assign a new `FeeToSetter`. A malicious actor could take control and redirect fees or alter the fee settings (see `setFeeTo`).                                                                                                                                                                                                                                        | CrossChainAccount |
+# Dependencies
+
+No external dependency has been found.
+
+# Governance
 
 ## Governance Decision Enforcement from L1 to Base
 
@@ -101,9 +95,13 @@ Only the Timelock contract on the L1 is allowed to trigger this on the L2. The t
 
 Since Base's native cross-chain messaging protocol cannot be censored by intermediaries, this cross-chain governance process does not introduce new risks for the Uniswap-v2 deployment on Base (apart from the risks captured with the Base chain score).
 
-## Dependencies
+## Security Council
 
-No external dependency has been found.
+On-chain governance is in place with no security council.
+
+| Name              | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) | Contract | N/A         | N/A             | N/A               | N/A            |
 
 ## Exit Window
 
@@ -111,6 +109,28 @@ The protocol fees can be changed by the DAO. A `Timelock` protects the contracts
 The lock period is at least two days and up to 30 days for governance actions. If the fee switch gets ever activated it fixed at 1/6 of the LP collected fees.
 When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days. Subsequently, governance actions initiated on Ethereum (L1) are enforced on Base (L2) with very strong guarantees ([see Governance Decision Enforcement from L1 to Base](#governance-decision-enforcement-from-l1-to-base)).
 
-# Security Council
+# Contracts & Permissions
 
-No security council needed because on-chain governance is in place.
+## Contracts
+
+| Contract Name     | Address                                                                                                               |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- |
+| UniswapV2Factory  | [0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6](https://basescan.org/address/0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6) |
+| UniswapV2Pair     | [0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb](https://basescan.org/address/0xb3b850f720d0d2f38a0189d8a986ff5f8d8d34bb) |
+| UniswapV2Router02 | [0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24](https://basescan.org/address/0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24) |
+| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) |
+
+The `UniswapV2Pair`'s address is an example instance of the contract. All pairs share the same implementation (based of Factory Pattern).
+
+## All Permission Owners
+
+| Name              | Account                                                                                                               | Type     |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| CrossChainAccount | [0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9](https://basescan.org/address/0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9) | Contract |
+
+## Permissions
+
+| Contract         | Function       | Impact                                                                                                                                                                                                                                                                                                                                                                                                                   | Owner             |
+| ---------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| UniswapV2Factory | setFeeTo       | This function allows the `FeeToSetter` to set the address where protocol fees are collected. If `feeTo` is the 0-address no fees are collected on any of the Uniswap V2 Pools. If fees are collected (`feeTo` != 0-address) they are fixed to be 1/6 of the LP collected fees from the moment where the fee switch is activated. If abused by the FeeToSetter role, fees could be redirected to an unauthorized address. | CrossChainAccount |
+| UniswapV2Factory | setFeeToSetter | This function permits the current `FeeToSetter` to assign a new `FeeToSetter`. A malicious actor could take control and redirect fees or alter the fee settings (see `setFeeTo`).                                                                                                                                                                                                                                        | CrossChainAccount |
