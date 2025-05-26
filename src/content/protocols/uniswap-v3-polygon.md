@@ -66,6 +66,10 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Conclusion
 
+The Uniswap V2 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. Since the protocol is deployed on a chain with no proof system, the deployment ranks _Stage 0_.
+
+> Overall score: Stage 0
+
 # Reviewer notes
 
 There were no particular discoveries made during the analysis of this protocol.

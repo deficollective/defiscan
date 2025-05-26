@@ -69,7 +69,7 @@ Currently, Possum Labs offers only a single user interface without a backup solu
 
 ## Conclusion
 
-The Possum Portals deployment on Ethereum Mainnet achieves _High_ centralization risk score for its _Upgradeability_, _Autonomy_ and _Exit Window_ dimensions. It ranks _Medium_ score for _Exit Window_. It thus ranks Stage 0.
+The Possum Portals deployment on Arbitrum achieves _High_ centralization risk score for its _Upgradeability_, _Autonomy_ and _Accessibility_ dimensions. It ranks _Medium_ score for _Exit Window_. It thus ranks Stage 0.
 
 > Overall score: Stage 0
 

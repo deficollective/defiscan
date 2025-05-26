@@ -60,9 +60,9 @@ Aerodrome provides multiple access points for users, including both centralized 
 
 ## Conclusion
 
-The Aerodrome protocol achieves Medium centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks Stage 1.
+The Aerodrome protocol achieves _Medium_ centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks _Stage 1_.
 
-The protocol could reach Stage 2 by transferring the permissions to an onchain governance with 30 days exit window.
+The protocol could reach _Stage 2_ by transferring the permissions to an _onchain governance_ with 30 days _Exit Window_.
 
 > Overall score: Stage 1
 

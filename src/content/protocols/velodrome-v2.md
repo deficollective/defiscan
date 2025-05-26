@@ -48,7 +48,7 @@ Velodrome does not have external dependencies 🎉
 
 ## Exit Window
 
-Existing permissions have a "Medium" risk score and are not protected by an exit window. Users are not able to withdraw funds in case of an unwanted update.
+Existing permissions have a _Medium_ risk score and are not protected by an _Exit Window_. Users are not able to withdraw funds in case of an unwanted update.
 
 > Exit Window score: Medium
 
@@ -60,9 +60,9 @@ Velodrome provides several access points to the protocol, both decentralized and
 
 ## Conclusion
 
-The Velodrome protocol achieves Medium centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks Stage 1.
+The Velodrome protocol achieves _Medium_ centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks _Stage 1_.
 
-The protocol could reach Stage 2 by transferring the permissions to an onchain governance with 30 days exit window.
+The protocol could reach _Stage_ 2 by transferring the permissions to an _onchain governance_ with 30 days _Exit Window_.
 
 > Overall score: Stage 1
 

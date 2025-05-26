@@ -54,7 +54,7 @@ PoolTogether provides access to the protocol through multiple independent interf
 
 ## Conclusion
 
-The Pooltogether V5 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Exit Window_ dimensions. It thus ranks Stage 2.
+The Pooltogether V5 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. It thus ranks Stage 2.
 
 > Overall score: Stage 2
 
