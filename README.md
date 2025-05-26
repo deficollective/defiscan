@@ -6,13 +6,11 @@ Read more about the methodology behind the DeFi stages and risks in this [post](
 
 DeFiScan is built and maintained by the [DeFi Collective](https://DeFiCollective.org), a non-profit organization with the mission to make DeFi more transparent and secure for all.
 
-## 🌟 Community Program
+## 🌟 Community Bounty Program
 
 💪 Join DeFiScan’s Community Review Program and help enhance the coverage of Decentralization of DeFi protocols!
 
-💰 Total Prize Pool: 10,000 LUSD! Each successful review earns you 500 LUSD. Your contributions will make a real impact on the DeFi ecosystem! ✨
-
-🤝 Who Can Participate? Anyone! Whether you're a seasoned expert or just passionate about DeFi, we want your insights. Just submit your reviews via a pull request (PR) on our GitHub. 📝
+Read this intro [blog article](https://deficollective.org/blog/defiscan-bounties/) 👈
 
 Check details on the program 👉 [here](./campaigns/README.MD) 👈
 

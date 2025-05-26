@@ -69,44 +69,45 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 > Accessibility score: Low/Medium/High
 
-# Informational
+## Conclusion
 
-Any information that you deem worth sharing and is not part of the report. That could be on something the protocol
-does different than others or hard decisions you took when writing your review (eg: whether
-to include something in the scope or not). If there is a reason why the protocol is in the category "others"
-you can explain in more details why.
+Some text in form of:
+
+The xyz protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks Stage 0.
+
+The protocol could reach Stage 1 by ...
+
+The project additionally could advance to Stage 2 if ...
+
+# Reviewer's Notes
+
+(Here, anything worth mentioning about what critical permissions you excluded from the scope or some elements that xyz protocol does in a unique way. If nothing seems relevant, just say that :)
+
+⚠️ During our analysis, we identified ...
 
 # Protocol Analysis
 
+Here include the diagram. Please explain what the main contracts are doing within the diagram.
+
 # Dependencies
+
+Go into more detail of the oracle, bridge, or other dependency the defi protocol is using
 
 # Governance
 
-## External Permission Owners and Security Council
+## Relevant Subsection
 
-Here we list permission owners that are subject to external interactions. This includes:
+Here anything relevant to the governance, in this case it could be what you highlighted in "Upgrade Process"
 
-- Governance contracts
-- Timelocks
-- Multisigs
-- EOAs
+## Security Council
 
-It doesn't include contracts that are permissions owners but in which the only permission holders are other contracts.
+New table with all the multisigs
 
-See http://defiscan.info/learn-more#security-council-requirements for guidance on the multisig requirements.
+| Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| Team Multisig | [0x123](https://etherscan.io/address/0x123) | Multisig | ✅          | ❌              | ❌                | ✅             |
 
-change ✅ or ❌ accordingly for multisigs, or use N/A for contracts, ❌ for EOAs.
-
-| Name                  | Account                                     | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| --------------------- | ------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| A typical Multisig    | [0x123](https://basescan.org/address/0x123) | Multisig x/n | ✅          | ✅              | ❌                | ❌             |
-| A Governance contract | [0x123](https://basescan.org/address/0x123) | Contract     | N/A         | N/A             | N/A               | N/A            |
-
-## Exit Window
-
-Explain the exit window in more technical details.
-
-# Contracts & Permissions
+# Technical Analysis
 
 ## Contracts
 
@@ -114,6 +115,8 @@ Explain the exit window in more technical details.
 | ------------- | ------------------------------------------- |
 | contract 1    | [0x123](https://etherscan.io/address/0x123) |
 | contract 2    | [0x456](https://etherscan.io/address/0x456) |
+
+## All Permission owners
 
 ## All Permission Owners
 
@@ -125,9 +128,6 @@ Explain the exit window in more technical details.
 
 ## Permissions
 
-| Contract      | Function     | Impact                                                                                                                               | Owner                   |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| contract name | functionname | Description in 3 Sentences.                                                                                                          | owner of the permission |
-| contract name | functionname | First sentence: what it does technically, e.g "It assigns a new address to the owner variable".                                      | owner of the permission |
-| contract name | functionname | Second sentence: what is the impact within the system, e.g "The owner is permissioned to raise fees".                                | owner of the permission |
-| contract name | functionname | Third sentence: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield. | owner of the permission |
+| Contract      | Function     | Impact                                                                                                                                                                                                                                                                                                                                     | Owner                   |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| contract name | functionname | First sentence: what it does technically, e.g "It assigns a new address to the owner variable". Second sentence: what is the impact within the system, e.g "The owner is permissioned to raise fees". Third sentence: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield. | owner of the permission |

@@ -9,9 +9,9 @@ github:
   ]
 defillama_slug: ["uniswap-v2"]
 chain: "Base"
-stage: 0
+stage: 1
 reasons: []
-risks: ["H", "L", "L", "L", "L"]
+risks: ["M", "L", "L", "L", "L"]
 author: ["CookingCryptos"]
 submission_date: "2025-01-14"
 publish_date: "2025-01-29"
@@ -30,9 +30,9 @@ Additionally, Uniswap v2 integrates price oracles that mitigate manipulation ris
 
 ## Chain
 
-Uniswap v2 is deployed on various chains. This review is based on the Base chain, an Ethereum L2 in Stage 0 according to L2BEAT.
+Uniswap v2 is deployed on various chains. This review is based on the Base chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: High
+> Chain score: Medium
 
 ## Upgradeability
 

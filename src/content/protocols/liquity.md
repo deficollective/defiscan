@@ -54,7 +54,7 @@ A list of third-party frontends can be found [here](https://www.liquity.org/fron
 
 > Accessibility score: Low
 
-# Informational
+# Reviewer notes
 
 There were no particular discoveries made during the analysis of this protocol.
 

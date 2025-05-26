@@ -70,7 +70,7 @@ The protocol could reach Stage 1 by 1) adopting a _Security Council_ setup for t
 
 > Overall score: Stage 0
 
-# Informational
+# Reviewer notes
 
 ⚠️ During our analysis, we noticed many of the contract addresses listed in the [official documentation](https://docs.compound.finance/) are out of date. This is most likely explained by the high frequency of updates to the implementation contracts. The list below was last updated on the 20th of February 2025.
 
