@@ -52,7 +52,13 @@ PoolTogether provides access to the protocol through multiple independent interf
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
+
+The Pooltogether V5 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Exit Window_ dimensions. It thus ranks Stage 2.
+
+> Overall score: Stage 2
+
+# Reviewer Notes
 
 ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could include upgradeable contracts. It is outside of the scope of this review to analyze these protocols too.
 
@@ -77,7 +83,7 @@ In normal conditions depositors should always expect to be able to withdraw thei
 
 # Governance
 
-## External Permission Owners and Security Council
+## Security Council
 
 The protocol is completely immutable, thus all permissions are revoked and no Security Council is required 🎉
 

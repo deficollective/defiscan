@@ -14,8 +14,6 @@ publish_date: "2024-10-23"
 update_date: "1970-01-01"
 ---
 
-> ⚠️ MaverickV2Factory is NOT verified on a public block explorer. For the MaverickV2Factory we currently rely on the technical documentation provided by the Maverick Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
-
 # Summary
 
 Maverick is a DEX supporting concentrated liquidity positions for LPs and the automation thereof with the goal of increasing capital efficiency and market liquidity. This results in better prices for traders and more fees for liquidity providers. This built-in feature also helps LPs to eliminate the high gas fees that come from adjusting positions around price themselves.
@@ -66,9 +64,17 @@ However, LPs are able to access Maverick-v2, and their positions therein, only t
 
 > Accessibility score: High
 
-# Informational
+## Conclusion
 
-There were no particular discoveries made during the analysis of this protocol.
+The Maverick V2 Protocol falls into the _others_ category and not Stage 0 due to the unverified contracts which are not verified on public block explorers.
+
+Despite this classification, our analysis shows that the Maverick V2 Protocol on Ethereum Mainnet receives _High_ centralization risk scores for _Upgradeability_, _Exit Window_, and _Accessibility_ dimensions and _Medium_ score for _Autonomy_.
+
+> Overall score: Others
+
+# Reviewer Notes
+
+⚠️ MaverickV2Factory is NOT verified on a public block explorer. For the MaverickV2Factory we currently rely on the technical documentation provided by the Maverick Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 # Protocol Analysis
 

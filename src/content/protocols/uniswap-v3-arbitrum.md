@@ -18,8 +18,6 @@ publish_date: "2024-12-16"
 update_date: "2025-01-31"
 ---
 
-⚠️ During our analysis, we identified three unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code), [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code) and [Multicall](https://arbiscan.io/address/0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
-
 # Summary
 
 Uniswap v3 is an AMM that builds upon Uniswap v2 by introducing a concentrated liquidity model, providing liquidity providers with granular control over capital allocation. Unlike v2, where liquidity is distributed uniformly across all price ranges, v3 allows LPs to specify custom price ranges in which their liquidity is active. This approach significantly improves capital efficiency, as LPs can concentrate their assets in high-demand price ranges, earning fees only within those specified ranges.
@@ -43,7 +41,7 @@ Two potential upgrades can be implemented for the contracts deployed on Arbitrum
 
 These updates require a governance vote on the Ethereum chain through Uniswap's on-chain governance system. The execution of this vote is trustless but involves the Arbitrum native cross-chain messaging protocol. This protocol cannot censor governance vote results and hence does not introduce new risks.
 
-Beyond these updates, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any other way. Importantly, no user funds or unclaimed yield are impacted by the remaining permissions or by the risk of manipulating Uniswap governance vote results through Arbitrum's cross-chain messaging protocol.
+Beyond these updates, the protocol’s contracts are immutable. No entity has the ability to pause, revert trade execution, or alter the protocol's behavior in any other way. Importantly, no _user funds_ or _unclaimed yield_ are impacted by the remaining permissions or by the risk of manipulating Uniswap governance vote results through Arbitrum's cross-chain messaging protocol.
 
 > Upgradeability score: Low
 
@@ -55,7 +53,7 @@ There are no particular dependencies for the Uniswap protocol.
 
 ## Exit Window
 
-No "Medium" or "High" risk permissions are found in the protocol that require protection with an Exit Window, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days Exit Window for approved updates.
+No _Medium_ or _High_ risk permissions are found in the protocol that require protection with an _Exit Window_, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days _Exit Window_ for approved updates.
 
 > Exit score: Low
 
@@ -66,9 +64,17 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
 
-There were no particular discoveries made during the analysis of this protocol.
+The Uniswap V3 deployment on Arbitrum falls into the _others_ category and not Stage 1 due to the unverified contracts which are not verified on public block explorers.
+
+Despite this classification, our analysis shows that the Uniswap V3 deployment on Arbitrum receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
+
+> Overall score: Others
+
+# Reviewer Notes
+
+⚠️ During our analysis, we identified three unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code), [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code) and [Multicall](https://arbiscan.io/address/0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
 # Protocol Analysis
 
@@ -94,7 +100,7 @@ The target and data could e.g specify `UniswapV3Factory` (target) and `enableFee
 
 [1] https://docs.arbitrum.io/how-arbitrum-works/l1-to-l2-messaging
 
-## External Permission Owners and Security Council
+## Security Council
 
 No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Arbitrum.
 

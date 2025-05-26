@@ -42,7 +42,7 @@ Upgrades happen through governance proposal on Ethereum Mainnet. A `Bridge Recei
 
 The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink or offer a fallback oracle mechanism. The replacement of a stale or untrusted oracle feed requires a Compound governance vote with a delay (see [Exit Window](#exit-window)).
 
-The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. This dependency thus introduces centralization risk in the Compound-v3 protocol.
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
 
 > Autonomy score: High
 
@@ -72,7 +72,7 @@ The protocol could reach Stage 1 by 1) adopting a _Security Council_ setup for t
 
 > Overall score: Stage 0
 
-# Informational
+# Reviewer Notes
 
 ⚠️ During our analysis, we noticed many of the contract addresses listed in the [official documentation](https://docs.compound.finance/) are out of date. This is most likely explained by the high frequency of updates to the implementation contracts. The list in this review was last updated on the 20th of February 2025.
 
@@ -104,7 +104,7 @@ The process is illustrated below.
 
 The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink feeds other than checking for a zero-value. The protocol further does not offer a fallback pricing mechanism in case the Chainlink oracle feeds are stale or untrusted. If not performing as expected, Chainlink oracle feeds can only be replaced through a regular Compound governance proposal with a delay (see Exit Window).
 
-The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a [multisig account](https://etherscan.io/address/0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA) with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
 
 # Governance
 
@@ -112,7 +112,7 @@ A security council called `Pause Guardian` has the power to pause all deposits, 
 in the Arbitrum `Comet` contracts. The guardian is currently a 4/7 multisig made of a diverse set of signers including more than 50% outsiders (community members, non-affiliated entities). The signers are announced [here](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18).
 A `Proposal Guardian` on Ethereum Mainnet has the power to cancel Governance Proposals before their executions. It is composed of a 4/8 multisig made of the same entities announced for the `Pause Guardian`, with one additional signer that prevents the `Proposal Guardian` to qualify as a security council according to our requirements. Its signers set however does not match the announced signers.
 
-&nbsp;
+## Security Council
 
 | Name              | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |

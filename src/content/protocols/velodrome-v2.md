@@ -58,13 +58,21 @@ Velodrome provides several access points to the protocol, both decentralized and
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
+
+The Velodrome protocol achieves Medium centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks Stage 1.
+
+The protocol could reach Stage 2 by transferring the permissions to an onchain governance with 30 days exit window.
+
+> Overall score: Stage 1
+
+# Reviewer notes
 
 There were no particular discoveries made during the analysis of this protocol.
 
 # Protocol Analysis
 
-## Notes regarding the killing of a gauge
+## Killing of a gauge
 
 After each period, VELO tokens from the `Minter` contract flow into the `Voter` contract via calling `updatePeriod()`. Once the tokens are in the `Voter` contract, they flow according to the voting weight to each `Gauge` through calling `distribute()` on the `Voter` contract. Once the VELO tokens ended up in the different `Gauge` contracts, the users can claim their reward no matter of the living status of the `Gauge`. It's the function call `distribute()` that sends the tokens to the `Gauge` which reverts if the `Gauge` is killed. For rewards to be claimable for users the function calls `updatePeriod()` and `distribute()` need to occur in succession and the killing of the `Gauge` before either one of them results in yield not being available to the user. But, since both functions are public everyone, can call them. And thus during the first block of each period where `updatePeriod()` is callable, the permission owner that kills the `Gauge` needs to frontrun the transactions which are calling `updatePeriod()` and `distribute()`. This centralisation vector is thus not definitive and only probabilistic.
 
@@ -76,7 +84,7 @@ No external dependency has been found.
 
 # Governance
 
-## External Permission Owners and Security Council
+## Security Council
 
 | Name                | Account                                                                                                                          | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |

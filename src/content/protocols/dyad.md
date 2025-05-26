@@ -40,6 +40,8 @@ The Multisig also owns the permission to add or remove vaults through the _Vault
 
 The DYAD protocol uses Chainlink oracles for the valuation of collateral assets (WETH, stETH, TBTC, and sUSDe). The Chainlink feeds are immutable and cannot be replaced. Sanity checks on the timeliness or validity of a price as well as a fallback are not implemented. A failure of Chainlink failure thus results in the freezing of collateral assets, and pausing of withdrawals, borrowing and liquidations.
 
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
+
 > Autonomy score: High
 
 ## Exit Window
@@ -54,7 +56,7 @@ Dyad Protocol offers a single user interface accessible through its website. The
 
 > Accessibility score: Medium
 
-# Informational
+# Reviewer Notes
 
 There were no particular discoveries made during the analysis of this protocol.
 
@@ -69,7 +71,7 @@ The protocol does not offer alternatives to replace or update the oracle depende
 
 # Governance
 
-## External Permission Owners and Security Council
+## Security Council
 
 | Name          | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |

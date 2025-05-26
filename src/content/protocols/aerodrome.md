@@ -58,7 +58,15 @@ Aerodrome provides multiple access points for users, including both centralized 
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
+
+The Aerodrome protocol achieves Medium centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks Stage 1.
+
+The protocol could reach Stage 2 by transferring the permissions to an onchain governance with 30 days exit window.
+
+> Overall score: Stage 1
+
+# Reviewer Notes
 
 There were no particular discoveries made during the analysis of this protocol.
 
@@ -78,7 +86,7 @@ No external dependency has been found.
 
 The permissions in Aerodrome are held by the multisigs highlighted below.
 
-## External Permission Owners and Security Council
+## Security Council
 
 | Name                                | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |

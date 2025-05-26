@@ -18,8 +18,6 @@ publish_date: "2025-01-22"
 update_date: "2025-01-31"
 ---
 
-⚠️ During our analysis, we identified two unverified contracts, [ProxyAdmin](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9#code) and [TransparentUpgradeableProxy](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463#code), on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
-
 # Summary
 
 Uniswap v3 is an AMM that builds upon Uniswap v2 by introducing a concentrated liquidity model, providing liquidity providers with granular control over capital allocation. Unlike v2, where liquidity is distributed uniformly across all price ranges, v3 allows LPs to specify custom price ranges in which their liquidity is active. This approach significantly improves capital efficiency, as LPs can concentrate their assets in high-demand price ranges, earning fees only within those specified ranges.
@@ -30,9 +28,9 @@ The protocol is deployed across multiple chains enabling a wide range of use cas
 
 ## Chain
 
-Uniswap v3 is deployed on various chains. This review is based on the Base chain, an Ethereum L2 in Stage 0 according to L2BEAT.
+Uniswap v3 is deployed on various chains. This review is based on the Base chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: High
+> Chain score: Medium
 
 ## Upgradeability
 
@@ -55,7 +53,7 @@ There are no particular dependencies for the Uniswap protocol.
 
 ## Exit Window
 
-No "Medium" or "High" risk permissions are found in the protocol that require protection with an Exit Window, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days Exit Window for approved updates.
+No _Medium_ or _High_ risk permissions are found in the protocol that require protection with an Exit Window, but parameters such as protocol fees can be changed by the DAO. Note that the permissions controlled by the DAO are protected with a 1-week on-chain voting window and 2 to 30 days _Exit Window_ for approved updates.
 
 > Exit score: Low
 
@@ -66,9 +64,17 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
 
-There were no particular discoveries made during the analysis of this protocol.
+The Uniswap V3 deployment on Base falls into the _others_ category and not Stage 1 due to the unverified contracts which are not verified on public block explorers.
+
+Despite this classification, our analysis shows that the Uniswap V3 deployment on Base receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
+
+> Overall score: Others
+
+# Reviewer notes
+
+⚠️ During our analysis, we identified two unverified contracts, [ProxyAdmin](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9#code) and [TransparentUpgradeableProxy](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463#code), on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
 # Protocol Analysis
 
@@ -94,7 +100,7 @@ Only the Timelock contract on the L1 is allowed to trigger this on the L2. The t
 
 Furthermore, Base's cross-chain messaging protocol cannot be censored by intermediaries and thus this protocol does not introduce new risks for Uniswap's cross-chain governance system.
 
-## External Permission Owners and Security Council
+## Security Council
 
 No security council needed because on-chain governance on Ethereum is in place, from which decisions get sent to Base.
 

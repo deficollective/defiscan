@@ -60,7 +60,15 @@ A list of the third-party user interfaces to access the Ajna protocol can be fou
 
 > Accessibility score: Medium
 
-# Informational
+## Conclusion
+
+The Ajna protocl on Ethereum Mainnet achieves _Medium_ centralization score for _Accessibility_ and _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, and _Exit Window_ dimensions. It thus ranks Stage 1.
+
+To progress to _Stage 2_ the Ajna protocol should make an additional emergency UI available for emergency withdrawals.
+
+> Overall score: Stage 1
+
+# Reviewer Notes
 
 There were no particular discoveries made during the analysis of this protocol.
 
@@ -76,7 +84,7 @@ Ajna's liquidation works without oracles by triggering auctions when a loan's co
 
 # Governance
 
-## External Permission Owners and Security Council
+## Security Council
 
 The protocol is completely immutable, thus no Security Council is required 🎉
 

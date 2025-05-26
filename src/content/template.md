@@ -107,7 +107,7 @@ New table with all the multisigs
 | ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
 | Team Multisig | [0x123](https://etherscan.io/address/0x123) | Multisig | ✅          | ❌              | ❌                | ✅             |
 
-# Technical Analysis
+# Contracts & Permissions
 
 ## Contracts
 
@@ -115,8 +115,6 @@ New table with all the multisigs
 | ------------- | ------------------------------------------- |
 | contract 1    | [0x123](https://etherscan.io/address/0x123) |
 | contract 2    | [0x456](https://etherscan.io/address/0x456) |
-
-## All Permission owners
 
 ## All Permission Owners
 

@@ -63,7 +63,13 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
+
+The Uniswap V3 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Exit Window_ dimensions. It thus ranks Stage 2.
+
+> Overall score: Stage 2
+
+# Reviewer Notes
 
 There were no particular discoveries made during the analysis of this protocol.
 
@@ -80,7 +86,7 @@ No external dependency has been found.
 
 # Governance
 
-## External Permission Owners and Security Council
+## Security Council
 
 On-chain governance is in place without security council.
 

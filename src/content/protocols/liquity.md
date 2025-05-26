@@ -54,6 +54,12 @@ A list of third-party frontends can be found [here](https://www.liquity.org/fron
 
 > Accessibility score: Low
 
+## Conclusion
+
+The Liquity V1 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. It thus ranks Stage 2.
+
+> Overall score: Stage 2
+
 # Reviewer notes
 
 There were no particular discoveries made during the analysis of this protocol.
@@ -67,6 +73,8 @@ The only external protocol dependency is an ETH/USD price feed (the Oracle) whic
 The system relies on two different oracles: Chainlink is the primary oracle and Tellor is the fallback oracle in case the chainlink price feed is frozen or untrusted. The Chainlink price feed is deployed at `0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0`, the Tellor oracle is deployed at `0xAd430500ECDa11E38C9bCB08a702274b94641112`.
 
 If both Chainlink and Tellor are frozen or untrusted the last good price is used and the system keeps operating allowing users to withdraw their assets.
+
+Chainlink itself achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
 
 # Governance
 

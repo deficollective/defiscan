@@ -64,7 +64,9 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
+
+# Reviewer notes
 
 There were no particular discoveries made during the analysis of this protocol.
 

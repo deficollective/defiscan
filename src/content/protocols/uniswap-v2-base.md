@@ -18,8 +18,6 @@ publish_date: "2025-01-29"
 update_date: "1970-01-01"
 ---
 
-⚠️ During our analysis, we identified two unverified contracts, ProxyAdmin and TransparentUpgradeableProxy, on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
-
 # Summary
 
 Uniswap v2 is a decentralized automated market maker (AMM) that builds upon the original Uniswap protocol by introducing several key features to enhance functionality and flexibility for liquidity providers (LPs) and traders. Unlike its predecessor, Uniswap v2 enables direct token-to-token swaps, eliminating the need to route trades through ETH as an intermediary.
@@ -61,9 +59,17 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Informational
+## Conclusion
 
-There were no particular discoveries made during the analysis of this protocol.
+The Uniswap V2 deployment on Base falls into the _others_ category and not Stage 1 due to the contracts which are not verified on public block explorers.
+
+Despite this classification, our analysis shows that the Uniswap V2 deployment on Base receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
+
+> Overall score: Others
+
+# Reviewer notes
+
+⚠️ During our analysis, we identified two unverified contracts, ProxyAdmin and TransparentUpgradeableProxy, on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
 
 # Protocol Analysis
 
@@ -89,7 +95,7 @@ Only the Timelock contract on the L1 is allowed to trigger this on the L2. The t
 
 Since Base's native cross-chain messaging protocol cannot be censored by intermediaries, this cross-chain governance process does not introduce new risks for the Uniswap-v2 deployment on Base (apart from the risks captured with the Base chain score).
 
-## External Permission Owners and Security Council
+## Security Council
 
 On-chain governance is in place with no security council.
 
