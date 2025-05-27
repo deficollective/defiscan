@@ -146,7 +146,13 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
+![Lending](./diagrams/aave-v3-arbitrum-lending.png)
+
+![Parameter Control](./diagrams/aave-v3-arbitrum-parameter.png)
+
 ## GHO
+
+![Gho](./diagrams/aave-v3-arbitrum-gho.png)
 
 # Dependencies
 
@@ -190,6 +196,8 @@ Community vote is enforced on Arbitrum through the following process:
 4.  When the vote has passed, the result is transferred back to Ethereum Mainnet
 5.  The vote can be executed. The call to execute the payload is bridged to Arbitrums PayloadController
 6.  After the Exit Window has passed, the community can trigger execution.
+
+![Governance](./diagrams/aave-v3-arbitrum-gov.png)
 
 ## Security Council
 
