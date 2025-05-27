@@ -1,6 +1,6 @@
 "use client";
 
-import { columns } from "./columns";
+import { createColumns } from "./columns";
 import { DataTable } from "./data-table";
 import { protocols } from "#site/content";
 import { useEffect, useState } from "react";
@@ -29,18 +29,30 @@ export default function Table() {
 
   let othersCount = 0;
   let defiCount = 0;
+  let infrastructureCount = 0;
   data?.forEach((el) => {
     if (el.stage === "O") othersCount++;
+    else if (el.stage === "I0" || el.stage === "I1" || el.stage === "I2")
+      infrastructureCount++;
     else defiCount++;
   });
+
+  // Define the getProtocolLogo function
+  const getProtocolLogo = (protocolName: string): string => {
+    const protocolData = data?.find((p) => p.protocol === protocolName);
+    return protocolData?.logo || "/images/placeholder.png";
+  };
+
+  const tableColumns = createColumns(getProtocolLogo);
 
   return (
     <div className="mx-auto w-full">
       <DataTable
-        columns={columns}
+        columns={tableColumns}
         data={data || []}
         othersCount={othersCount}
         defiCount={defiCount}
+        infrastructureCount={infrastructureCount}
       />
     </div>
   );
