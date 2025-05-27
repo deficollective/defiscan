@@ -146,6 +146,8 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
+## GHO
+
 # Dependencies
 
 ## Price Oracle
