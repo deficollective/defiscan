@@ -121,7 +121,7 @@ The _Curated Module_ is the original staking module for Lido. It is made of prof
 
 The _Simple-DVT Module_ is an experimenting module to develop _Distributed Validator Technologies_ and operates with implementations from both [Obol](https://obol.tech/) and [SSV Network](https://ssv.network/). New _Node Operators_ are approved by governance through the `Easytrack` process, which is explained in the [Governance section](#governance).
 
-Both of those modules are represented onchain by the contracts using the same implementation of the `NodeOperatorsRegistry` which simply stores information on the registered _Node Operators_, their validator keys, and potential penalties. The _Curated_ module's registry is solely managed by the governance's `Agent`, while the _Simple-DVT_ can additionally be managed through [Easytrack](#governance), but upgraded by the `Agent` only.
+Both of those modules are represented onchain by the contracts using the same implementation of the `NodeOperatorsRegistry` which simply stores information on the registered _Node Operators_, their validator keys, and potential penalties. The _Curated_ module's registry is solely managed by the governance's `Agent`, while the _Simple-DVT_ can additionally be managed through [Easytrack](#governance) by the [Simple-DVT Module Committee](#security-council), but upgraded by the `Agent` only.
 
 ### Community Staking Module
 
@@ -139,7 +139,7 @@ Those contracts are upgradeable by the governance through the `Agent` contract. 
 
 # Governance
 
-<-- DIAGRAM -->
+![Overview of Lido's Governance](./diagrams/lido-dao.png)
 
 Lido uses _Aragon_ for its governance model. _Aragon_ has _Apps_ which are referred to by namespace and app ID. The `Kernel` app is the core contract in the _Aragon_ framework. It acts as both a registry for applications and the central permissions management reference. The `Kernel` forwards all permission checks to the `ACL` which stores all the access control conditions for _Lido Aragon Apps_ All the _Aragon Apps_ currently used for the _Lido Governance_ are upgradeable.
 
@@ -147,7 +147,8 @@ The `Voting` app is the main governance entry point in which users can vote and 
 
 The `TokenManager` is an Aragon application that manages the `LDO` governance token, providing functionality for token distribution, vesting, and control. The `Finance` contract serves as a financial controller. It manages treasury funds through a Vault and handle recurring as well as one-time payments.
 
-An `Easytrack` handles a set of pre-approved governance operations that can be executed after a waiting period if there was no governance objection. **TODO**: just describe permissions,
+An `Easytrack` handles a set of pre-approved governance operations that can be executed after a waiting period if there was no governance objection. The _Factories_ through which operations can be created are created by the governance and only a _trusted caller_ can create the operations. For operations on the _Simple-DVT_ and _Community_ modules only their respective [committees](#security-council) can create motions. Once a motion is created it can be cancelled by 0.5% of the voting power during the 3 days delay. In addition to managing the staking modules, the `EasyTrack` is also used for treasury payments through the `Finance` contract. A variety of multisigs is allowed to make different payments through the `EasyTrack`, the complete list is
+documented by Lido [here](https://docs.lido.fi/multisigs/committees#21-lego-committee).
 
 ## Exit Window
 
@@ -156,6 +157,7 @@ Talk about how voting period works, delays, easytrack.
 ## Security Council
 
 Signers of the CSM committee: https://research.lido.fi/t/community-staking-module-committee/8333
+Signers of the Simple DVT Committee: https://research.lido.fi/t/simple-dvt-module-committee-multisig/6520
 
 | Name                                    | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
@@ -164,6 +166,7 @@ Signers of the CSM committee: https://research.lido.fi/t/community-staking-modul
 | DepositSecurityModule (Guardians)       | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.io/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
 | EmergencyBrakes                         | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.io/address/0x73b047fe6337183A454c5217241D780a932777bD) | Multisig 3/5 | ❌          | ✅              | ❌                | ✅             |
 | Community Staking Module Committee      | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅             |
+| Simple-DVT Module Committee             | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/7 | ✅          | ✅              | ✅                | ✅             |
 | GateSeal (CSModule) (CSM Committee)     | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅             |
 | GateSeal (CSAccounting) (CSM Committee) | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅             |
 
@@ -408,8 +411,8 @@ Signers of the CSM committee: https://research.lido.fi/t/community-staking-modul
 | TokenManager | burn | Burns the given amount of `LDO` tokens of any given address. This allows this contract to burn any user's `LDO` tokens. | ['arr', 'authP'] |
 | TokenManager | revokeVesting | Revokes a user's vesting plan. This will cancel all the tokens that are still locked. | ['arr', 'authP', 'vestingExists'] |
 | TokenManager | forward | Runs an Aragon EVM script on behalf of a token holder. The token holder needs to have permission and the contract uses a blakclist to prevent the holder from executing actions on behalf of the `TokenManager`. | [] |
-| Finance | newImmediatePayment | Makes a new instant payment of a given amount of tokens to a receiver. The tokens are taken out of the vault. The current vault is the `AragonAgent` | Voting, EasyTrack EVMSCriptExecutor |
-| Finance | newScheduledPayment | Creates a new recurring payment. Recurring payments have a starting date, an intervale at which they can be executed, and a total amount of executions. The intervals are fixed and in reference to the starting timestamp, the payment can be manually executed once per interval. It may also be executed late. | Voting, EasyTrack EVMSCriptExecutor |
+| Finance | newImmediatePayment | Makes a new instant payment of a given amount of tokens to a receiver. The tokens are taken out of the vault. The current vault is the `AragonAgent` | Voting, EVMSCriptExecutor (EasyTrack) |
+| Finance | newScheduledPayment | Creates a new recurring payment. Recurring payments have a starting date, an intervale at which they can be executed, and a total amount of executions. The intervals are fixed and in reference to the starting timestamp, the payment can be manually executed once per interval. It may also be executed late. | Voting, EVMSCriptExecutor (EasyTrack) |
 | Finance | setPeriodDuration | Sets the accounting period duration. The period is used for accounting and budget restrictions. The new duration will be effective from the next period. | TODO: ACL permission manager? |
 | Finance | setBudget | Sets the spending budget of a given token for per accounting period. This budget is enforced for each payment and resets at the end of the accounting period. | TODO: ACL permission manager? |
 | Finance | removeBudget | Removes the budget for a token and enables unlimited spending. | TODO: ACL permission manager? |
@@ -440,6 +443,7 @@ Signers of the CSM committee: https://research.lido.fi/t/community-staking-modul
 | EasyTrack | setMotionDuration | Sets the duration of a motion. This is a critical parameter as it represents the minimal waiting time before a motion can be enacted. If the time is too short users will not have time to object to the motion and cancel it. A duration cannot be set to less than 48 hours and is currently 72 hours at the time of writing. | Voting|
 | EasyTrack | setObjectionsThreshold | Sets the percent of total governance tokens required to object to a motion, in basis points (1% = 100). The current objection threshold is 0.5% of all governance tokens. | Voting |
 | EasyTrack | setMotionsCountLimit | Sets a limit for the number of motions which can be ongoing at all times. | Voting |
+| EasyTrack | createMotion | Creates a motion using one of the pre-created script factories. Although this function is permissionless the identity of the creator is passed on to the factory who is likely to check for a trusted caller. | Anyone |
 | EasyTrack | cancelMotion | Allows the creator of a motion to cancel it before execution. | Motion Creator |
 | EasyTrack | cancelMotions | Allows the governance to cancel a list of motions. | Voting |
 | EasyTrack | cancelAllMotions | Allows the governance to cancel all pending motions. | Voting |
