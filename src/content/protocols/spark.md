@@ -42,7 +42,7 @@ As part of the _Liquidity Management Layer (ALM)_ the two relayers have the righ
 
 Spark has a critical dependency on the Sky Protocol, a [Stage 0 protocol](./sky.md). This dependency is clear from the fact that all key permissions in Spark contracts are held by the _Sky Governance_.
 
-Finally, Chronicle price feeds are used in _SparkLend_ with no fallbacks for all asset prices. A failure of those oracles could lead to wrongful liquidations or even trigger the oracle killswitch, which freezes all borrowing within _SparkLend_ until manually reset by the governance. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a [dedicated report](/protocols/chronicle).
+Finally, Chronicle price feeds are used in _SparkLend_ with no fallbacks for all asset prices. A failure of those oracles could lead to wrongful liquidations or even trigger the oracle killswitch, which freezes all borrowing within _SparkLend_ until manually reset by the governance. We found Chronicle to be a _Medium Centralization_ dependency in a [dedicated report](/protocols/chronicle).
 
 More information on the centralization and functioning of those dependencies can be found in [dependencies](#dependencies).
 
@@ -104,13 +104,11 @@ Spark has two rewards modules named `SparkRewards` and `SparkLendRewards`. `Spar
 
 ## Sky
 
-Spark has a critical dependency on the Sky Protocol, a Stage 0 protocol. This dependency is at two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons, this would severely impact Spark. In addition to that, all critical permissions in Spark are held by the _Sky Governance_.
+Spark has a critical dependency on the Sky Protocol, a _Stage 0_ protocol. This dependency is at two levels. First, Spark revolves around `USDS`, the Sky USD stablecoin. If `USDS` came to fail due to various reasons, this would severely impact Spark. In addition to that, all critical permissions in Spark are held by the _Sky Governance_.
 
 ## Chronicle
 
-Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices.
-
-Chronicle is an oracle protocol that computes a median price from multiple sources. It uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that any changes to the validator set are subject to a _7-day exit window_. We therefore assessed that Chronicle is a _Stage 1_ equivalent dependency and explained it in detail in a [dedicated report](/protocols/chronicle).
+Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices. We assessed that Chronicle is a _Medium Centralization_ (_Stage 1_ equivalent) dependency and explained it in detail in a [dedicated report](/protocols/chronicle).
 
 Moreover, a `KillSwitchOracle` contract is used to set critical prices per asset. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the _Sky Governance_.
 
