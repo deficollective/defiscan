@@ -152,25 +152,22 @@ documented by Lido [here](https://docs.lido.fi/multisigs/committees#21-lego-comm
 
 ## Exit Window
 
-Talk about how voting period works, delays, easytrack.
+The voting period on _Lido Governance_ proposals is made of 5 days, only the first 3 of which can be used to approve a proposal, with 2 additional days to object to an accepted proposal. Once the voting period ends there are no delays before the proposal can be executed. Anyone can create a proposal, but it is only valid if at least 5% of the total `LDO` tokens are used to vote for one of the options. The proposal passes if more than 50% of the votes are in favour.
 
 ## Security Council
 
-Signers of the CSM committee: https://research.lido.fi/t/community-staking-module-committee/8333
-Signers of the Simple DVT Committee: https://research.lido.fi/t/simple-dvt-module-committee-multisig/6520
+This table shows the external permission owners and how they are rated against the security council criteria.
 
-| Name                                    | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| Consensus Committee                     | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.io/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/9 | ✅          | ✅              | ✅                | ✅             |
-| Relay Maintenance Committee             | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.io/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/7 | ✅          | ✅              | ❌                | ✅             |
-| DepositSecurityModule (Guardians)       | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.io/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
-| EmergencyBrakes                         | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.io/address/0x73b047fe6337183A454c5217241D780a932777bD) | Multisig 3/5 | ❌          | ✅              | ❌                | ✅             |
-| Community Staking Module Committee      | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅             |
-| Simple-DVT Module Committee             | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/7 | ✅          | ✅              | ✅                | ✅             |
-| GateSeal (CSModule) (CSM Committee)     | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅             |
-| GateSeal (CSAccounting) (CSM Committee) | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅             |
+| Name                                | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public                                                                          |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | --------------------------------------------------------------------------------------- |
+| Consensus Committee (HashConsensus) | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.io/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/9 | ✅          | ✅              | ✅                | ✅ ([source](https://docs.lido.fi/guides/oracle-operator-manual#committee-membership))  |
+| Relay Maintenance Committee         | [0x98be4a407Bff0c125e25fBE9Eb1165504349c37d](https://etherscan.io/address/0x98be4a407Bff0c125e25fBE9Eb1165504349c37d) | Multisig 5/7 | ✅          | ✅              | ❌                | ✅ ([source](https://docs.lido.fi/multisigs/committees#23-relay-maintenance-committee)) |
+| DepositSecurityModule (Guardians)   | [0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD](https://etherscan.io/address/0xfFA96D84dEF2EA035c7AB153D8B991128e3d72fD) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌                                                                                      |
+| EmergencyBrakes                     | [0x73b047fe6337183A454c5217241D780a932777bD](https://etherscan.io/address/0x73b047fe6337183A454c5217241D780a932777bD) | Multisig 3/5 | ❌          | ✅              | ❌                | ✅                                                                                      |
+| Community Staking Module Committee  | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/6 | ❌          | ✅              | ✅                | ✅ ([source](https://research.lido.fi/t/community-staking-module-committee/8333))       |
+| Simple-DVT Module Committee         | [0xc52fc3081123073078698f1eac2f1dc7bd71880f](https://etherscan.io/address/0xc52fc3081123073078698f1eac2f1dc7bd71880f) | Multisig 4/7 | ✅          | ✅              | ✅                | ✅ ([source](https://research.lido.fi/t/simple-dvt-module-committee-multisig/6520))     |
 
-## Exit Window
+Most Lido multisigs, as well as treasury management multisigs, are listed in the Lido docs with their corresponding capabilities [here](https://docs.lido.fi/multisigs/committees).
 
 # Contracts & Permissions
 
@@ -390,12 +387,12 @@ Signers of the Simple DVT Committee: https://research.lido.fi/t/simple-dvt-modul
 | ACL | burnPermissionManager | Permanently locks a permission so it can never be modified. This is done by changing the manager to a `BURN_ENTITY`. | ['onlyPermissionManager'] |
 | ACL | createBurnedPermission | Permanently locks a permission so it can never be modified. This variant is called when the manager of the role was already the zero address.| Voting |
 
-| Voting | changeSupportRequiredPct | Changes the required percentage of "yes" votes for a proposal to pass. The number has to be greater or equal than the quorum and less than 100%. | ['arr', 'authP'] |
-| Voting | changeMinAcceptQuorumPct | Changes the minimum quorum required for a proposal to pass. This is the percentage of "yes" votes in regard to the total voting power. The new value has to be less or equal than the support percentage. | ['arr', 'authP'] |
-| Voting | unsafelyChangeVoteTime | Changes the total duration of voting. This affects all existing unexecuted votes. The new value has to be greater than the objection time and will effectively change the main voting period. The main voting period is the time before objection during which users can vote "yes" or "no" for proposals. If the new time is smaller than the passed time on existing proposals this would fast forward the proposals to the objection or closed phase. | ['auth'] |
-| Voting | unsafelyChangeObjectionPhaseTime | Changes the duration of the objection phase. This affects all existing unexecuted votes and could be used to remove, fast forward, or exten the objection phase on existing and future proposals. The new value has to be less than the total vote time. | ['auth'] |
-| Voting | newVote | Creates a proposal with an associated execution script and description metadata. If the proposal is accepted the script will be executed and could perform any action that the Voting contract is allowed to do. | ['auth'] |
-| Voting | forward | Similar to `newVote` but without any description metadata. This is meant to be called as a result of other governance processes or smart contracts. | checks permissions by kernerl |
+| Voting | changeSupportRequiredPct | Changes the required percentage of "yes" votes for a proposal to pass. The number has to be greater or equal than the quorum and less than 100%. | Voting |
+| Voting | changeMinAcceptQuorumPct | Changes the minimum quorum required for a proposal to pass. This is the percentage of "yes" votes in regard to the total voting power. The new value has to be less or equal than the support percentage. | Voting |
+| Voting | unsafelyChangeVoteTime | Changes the total duration of voting. This affects all existing unexecuted votes. The new value has to be greater than the objection time and will effectively change the main voting period. The main voting period is the time before objection during which users can vote "yes" or "no" for proposals. If the new time is smaller than the passed time on existing proposals this would fast forward the proposals to the objection or closed phase. | 0x0 |
+| Voting | unsafelyChangeObjectionPhaseTime | Changes the duration of the objection phase. This affects all existing unexecuted votes and could be used to remove, fast forward, or exten the objection phase on existing and future proposals. The new value has to be less than the total vote time. | 0x0 |
+| Voting | newVote | Creates a proposal with an associated execution script and description metadata. If the proposal is accepted the script will be executed and could perform any action that the Voting contract is allowed to do. | TokenManager |
+| Voting | forward | Similar to `newVote` but without any description metadata. This is meant to be called as a result of other governance processes or smart contracts. | Voting |
 | Agent | execute | Executes arbitrary function calls to any external contract with a given ETH value. This can perform any action that is allowed to the Agent in other Lido contracts, which includes critical ones. | Voting |
 | Agent | transfer | Transfers a given ERC20 token out of the contract to a given address. | Finance |
 | Agent | forward | Executes a script as the Agent. This is meant to be called by the Voting contract to execute proposals through the Agent. | Voting |
