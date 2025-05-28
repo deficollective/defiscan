@@ -160,9 +160,9 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds can be one of 3 kind,
 
-1 - regular un-mitigated Chainlink price feed (for all volatile assets)
-2 - a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
-3 - a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
+regular un-mitigated Chainlink price feed (for all volatile assets)
+a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
+a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
@@ -190,12 +190,12 @@ Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet
 
 Community vote is enforced on Arbitrum through the following process:
 
-1 - The community registers a payload at the `PayloadsController` contract on Arbitrum
-2 - The community starts a vote on the Governance contract on Ethereum Mainnet specififying Arbitrum and the payload Id
-3 - The vote starts after 1 day delay and gets ported via a.DI to a voting network (currently Polygon)
-4 - When the vote has passed, the result is transferred back to Ethereum Mainnet
-5 - The vote can be executed. The call to execute the payload is bridged to Arbitrums PayloadController
-6 - After the Exit Window has passed, the community can trigger execution.
+The community registers a payload at the `PayloadsController` contract on Arbitrum
+The community starts a vote on the Governance contract on Ethereum Mainnet specififying Arbitrum and the payload Id
+The vote starts after 1 day delay and gets ported via a.DI to a voting network (currently Polygon)
+When the vote has passed, the result is transferred back to Ethereum Mainnet
+The vote can be executed. The call to execute the payload is bridged to Arbitrums PayloadController
+After the Exit Window has passed, the community can trigger execution.
 
 ![Governance](./diagrams/aave-v3-arbitrum-gov.png)
 
