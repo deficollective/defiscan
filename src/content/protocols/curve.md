@@ -28,7 +28,9 @@ Curve Finance's core governance (DAO) operates solely on Ethereum mainnet. While
 
 ## Upgradeability
 
-Curve incorporates significant upgradeability mechanisms, primarily managed by the Curve DAO via the `OwnershipAgentProxy`. This agent possesses administrative privileges over key contracts, including deployment factories, core DAO components, revenue distribution, and parameter setting contracts.  All DAO governance upgrades and actions happen through DAO votes, which occur over 7 days, with most voting happening in the first 3.5 days due to linear decay of veCRV voting power after this time.  However, the key wording for this section in the framework is the following:
+Curve incorporates significant upgradeability mechanisms, primarily managed by the Curve DAO via the `OwnershipAgentProxy`. This agent possesses administrative privileges over key contracts, including deployment factories, core DAO components, revenue distribution, and parameter setting contracts.  All DAO governance upgrades and actions happen through DAO votes, which occur over 7 days, with most voting happening in the first 3.5 days due to linear decay of veCRV voting power after this time.
+
+The key wording for this section in the framework is the following:
 
 > Possible updates may result in the theft or loss of user funds
 
