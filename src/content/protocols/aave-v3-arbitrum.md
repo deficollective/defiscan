@@ -141,3 +141,81 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 # Reviewer Notes
 
 ⚠️ During our analysis, we identified a unverified role (not mentioned in the docs https://github.com/bgd-labs/aave-permissions-book/blob/main/out/ARBITRUM_ONE-V3.md#admins). Role Id is 0xd1d2cf869016112a9af1107bcf43c3759daf22cf734aad47d0c9c726e33bc782. The owners of this role are related to the V2 to V3 migration.
+
+# Protocol Analysis
+
+## Upgradeable Pool Contract and mutable reserve parameters
+
+![Lending](./diagrams/aave-v3-arbitrum-lending.png)
+
+![Parameter Control](./diagrams/aave-v3-arbitrum-parameter.png)
+
+## GHO
+
+![Gho](./diagrams/aave-v3-arbitrum-gho.png)
+
+# Dependencies
+
+## Price Oracle
+
+Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds can be one of 3 kind,
+
+1. regular un-mitigated Chainlink price feed (for all volatile assets)
+2. a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
+3. a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
+
+The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a multisig account with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
+
+## Risk Oracle
+
+Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on Arbitrum automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
+
+## Price Oracle Sentinel
+
+Aave V3 instances on Layer 2s make use of the Sequencer oracle offered by Chainlink. This oracle informs smart contracts whether the sequencer of the respective rollup is currently offline. Sophisticated actors can force transactions on native rollups via posting them directly on Ethereum mainnet. To prevent sophisticated actors to liquidate users during sequencer downtime, Aave implemented the `PriceOracleSentinel` contract that prevents liquidations, if the oracle reports downtime of the sequencer. If this sequencer oracle does not report sequencer downtime, the protection for simple users fails. If the oracle reports downtime even if there is no downtime, the system's capability for liquidations is un-necessarily blocked for the grace period (1 hour). Even if the `PriceOracleSentinel` fails the protocol impact on users is marginal, thus the score for this dependency risk is low.
+
+## CCIP for GHO
+
+The GHO tokens on Arbitrum are bridged from Mainnet via [CCIP](https://docs.chain.link/ccip/directory/mainnet/token/GHO). CCIP stands for Cross-Chain Interoperability Protocol and is a product by Chainlink.
+
+The tokens are bridged by a token lock/release mechanism on mainnet, and a mint/burn mechanism on Arbitrum. For example a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
+
+Chainlink CCIP is covered in more detail in our separate report [here](/protocols/ccip).
+
+## Layer 1 Governance
+
+Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet and bridging votes from Polygon to mainnet. See the mainnet core instance report for a detailed system breakdown and analysis [here](./aave).
+
+# Governance
+
+Community vote is enforced on Arbitrum through the following process:
+
+1. The community registers a payload at the `PayloadsController` contract on Arbitrum
+2. The community starts a vote on the Governance contract on Ethereum Mainnet specififying Arbitrum and the payload Id
+3. The vote starts after 1 day delay and gets ported via a.DI to a voting network (currently Polygon)
+4. When the vote has passed, the result is transferred back to Ethereum Mainnet
+5. The vote can be executed. The call to execute the payload is bridged to Arbitrums PayloadController
+6. After the Exit Window has passed, the community can trigger execution.
+
+![Governance](./diagrams/aave-v3-arbitrum-gov.png)
+
+## Security Council
+
+This table shows the external permission owners and how they are rated against the security council criteria.
+
+| External Permission Owner                        | Address                                                                                                              | Type         | At least 7 signers | At least 51% threshold | Above 50% non-insiders signers | Signers publicly announced                                                                                                                  |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------ | ---------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Executor_lvl1                                    | [0xFF1137243698CaA18EE364Cc966CF0e02A4e6327](https://arbiscan.io/address/0xFF1137243698CaA18EE364Cc966CF0e02A4e6327) | Contract     | n/a                | n/a                    | n/a                            | n/a                                                                                                                                         |
+| Aave Governance Guardian Arbitrum                | [0x1a0581dd5c7c3da4ba1cda7e0bca7286afc4973b](https://arbiscan.io/address/0x1a0581dd5c7c3da4ba1cda7e0bca7286afc4973b) | Multisig 5/9 | ✅                 | ✅                     | ✅                             | ✅ ([source](https://aave.com/docs/primitives/governance#community-guardians-protocol-emergency-guardian))                                  |
+| Aave Protocol Guardian Arbitrum (EmergencyAdmin) | [0xcb45e82419baebcc9ba8b1e5c7858e48a3b26ea6](https://arbiscan.io/address/0xcb45e82419baebcc9ba8b1e5c7858e48a3b26ea6) | Multisig 5/9 | ✅                 | ✅                     | ❌                             | ✅ ([source](https://aave.com/docs/primitives/governance#community-guardians-governance-emergency-guardian))                                |
+| Risk Council                                     | [0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8](https://arbiscan.io/address/0x47c71dFEB55Ebaa431Ae3fbF99Ea50e0D3d30fA8) | Multisig 2/2 | ❌                 | ✅                     | ❌                             | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=197&ipfsHash=0x2f41406557b0fc69c256916c066a77c57434fa77ccab3cfe56c8db6a4f306c01)) |
+| Risk Council (for Gho)                           | [0x8513e6F37dBc52De87b166980Fa3F50639694B60](https://arbiscan.io/address/0x8513e6F37dBc52De87b166980Fa3F50639694B60) | Multisig 3/4 | ❌                 | ✅                     | ❌                             | ❌                                                                                                                                          |
+| Guardian (PoolExposureSteward)                   | [0x22740deBa78d5a0c24C58C740e3715ec29de1bFa](https://arbiscan.io/address/0x22740deBa78d5a0c24C58C740e3715ec29de1bFa) | Multisig ?/? | ❌                 | ✅                     | ❌                             | ❌                                                                                                                                          |
+| BGD Labs (Retry Role)                            | [0x1fcd437d8a9a6ea68da858b78b6cf10e8e0bf959](https://arbiscan.io/address/0x1fcd437d8a9a6ea68da858b78b6cf10e8e0bf959) | Multisig 2/3 | ❌                 | ✅                     | ❌                             | ✅ ([source](https://github.com/bgd-labs/aave-permissions-book/blob/main/out/ARBITRUM_ONE-V3.md#guardians))                                 |
+| ACI Automation (Bot)                             | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://arbiscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          | n/a                | n/a                    | n/a                            | n/a                                                                                                                                         |
+| CleanUp Admin                                    | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://arbiscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 | ❌                 | ✅                     | ❌                             | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=270&ipfsHash=0x4043001b72316afa6b6728772941bfa08f127b66c1c006316a3f20510b6738ab)) |
+| AaveStewardInjectorCaps guardian                 | [0x87dFb794364f2B117C8dbaE29EA622938b3Ce465](https://arbiscan.io/address/0x87dFb794364f2B117C8dbaE29EA622938b3Ce465) | Multisig 1/2 | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
+| Chaos Labs' Multi-sig?                           | [0x14C3fe96adf6068C2D5616D239fc93f61D85dF85](https://arbiscan.io/address/0x14C3fe96adf6068C2D5616D239fc93f61D85dF85) | Multisig 2/4 | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
+| Chaos Labs' Bot                                  | [0x42939e82df15afc586bb95f7dd69afb6dc24a6f9](https://arbiscan.io/address/0x42939e82df15afc586bb95f7dd69afb6dc24a6f9) | EOA          | n/a                | n/a                    | n/a                            | n/a                                                                                                                                         |
+
+💡 The BGD Labs maintains a public markdown page on the existing permissions to inform its users: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/ARBITRUM_ONE-V3.md
