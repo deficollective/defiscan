@@ -146,13 +146,17 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
-Pciture 1
+The only notable distinction between the Lending logic on Ethereum L1 and a L2 is the existence and reliance on the PriceOracleSentinel which prevents liquidations when the sequencer of a L2 is down, in this case the sequencer of Arbitrum.
+
 ![Lending](./diagrams/aave-v3-arbitrum-lending.png)
 
-Picture 2
+Notable distinction between Aave on Arbitrum and Aave on Ethereum Core, is the automation of risk parameters via the Risk Oracle. The Risk Oracle pushes parameters based on quantitative risk models, to optimize performance under current market risk. The values fetched from the Risk Oracle have to meet the criteria by the EdgeRiskSteward, which prevents excessive and malicious parameter updates.
+
 ![Parameter Control](./diagrams/aave-v3-arbitrum-parameter.png)
 
 ## GHO
+
+GHO is minted and issued on Ethereum mainnet based on crypto collateral. In order to expand the reach of GHO into Arbitrum, CCIP token bridge is used. When GHO is locked in the CCIP token pool on Ethereum mainnet, an equivalent amount minus fees is minted on Arbitrum. The CCIP token bridge is the solely bridge that is permissioned to bridge GHO. To release GHO on mainnet, the GHO tokens have to be returned into the GHO CCIP token pool on Arbitrum and are burned.
 
 ![Gho](./diagrams/aave-v3-arbitrum-gho.png)
 
