@@ -178,7 +178,7 @@ Aave V3 instances on Layer 2s make use of the Sequencer oracle offered by Chainl
 
 ## CCIP for GHO
 
-The GHO tokens on Arbitrum are bridged from Mainnet via [CCIP](https://docs.chain.link/ccip/directory/mainnet/token/GHO). CCIP stands for Cross-Chain Interoperability Protocol and is a product by Chainlink.
+The GHO tokens on Arbitrum are bridged from Mainnet via CCIP. CCIP stands for Cross-Chain Interoperability Protocol and is a product by Chainlink.
 
 The tokens are bridged by a token lock/release mechanism on mainnet, and a mint / burn mechanism on Arbitrum. For example a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
 
