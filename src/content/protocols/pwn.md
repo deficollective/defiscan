@@ -1,0 +1,140 @@
+---
+protocol: "PWN-1.3"
+website: "https://pwn.xyz"
+x: "https://x.com/pwndao"
+github: ["https://github.com/pwndao"]
+defillama_slug: ["pwn"]
+chain: "Ethereum"
+stage: 1
+reasons: []
+risks: ["L", "M", "L", "L", "M"]
+author: ["vojtch"]
+submission_date: "2025-02-07"
+publish_date: ""
+update_date: "1970-01-01"
+---
+
+# Summary
+PWN is a universal, peer-to-peer lending protocol that enables users to use any token (ERC-20, NFT, or bundled assets) as collateral and create fixed-interest loans with fully customizable terms (LTV, duration, APR). Any ERC-20 can be used as a credit in the loan. There are no price-based liquidation risks thanks to PWN oracle-less design. Operating as a trustless, permissionless, and immutable protocol, PWN ensures lenders enjoy predictable returns while borrowers retain control—collateral is only forfeited if repayment deadlines are missed. By combining composability with flexible asset support and removing reliance on external price feeds, PWN unlocks novel liquidity strategies, optimized capital efficiency, and leverage opportunities.
+
+# Overview
+
+## Chain
+
+PWN v1.3 is deployed on various chains. This review is based on the Ethereum mainnet deployment of the protocol.
+
+> Chain score: L
+
+## Upgradeability
+
+The PWN DAO can change parameters such as fees through the `PWNConfig` contract. Additionally, the PWN DAO can add and deprecate valid contracts in the protocol through the `PWNHub` contract. Note that even after removing a contract from the `PWNHub` existing loans are unaffected, only new ones cannot be created.
+
+No User funds nor unclaimed yield are affected by upgrades.
+
+`TransparentProxy` contract with the PWN DAO as admin is used for the `PWNConfig`. However, this does not impact user funds or otherwise materially change the protocol for already existing loans. Only new loans are affected by the change of parameters in the `PWNConfig`.
+
+There's also a timelock for the upgrades made by the DAO which ultimatelly owns `PWNConfig` and `PWNHub` that is currently set to 0 days.
+
+> Upgradeabillity score: M
+
+## Autonomy
+
+There are no particular dependencies for the PWN protocol. PWN is oracle-less and doesn't directly integrate with other protocols. Users can utilise funds from other protocols with PWN Pool Hooks, but these are optional and their failiure doesn't affect the protocol in any way.
+
+> Autonomy score: L
+
+## Exit Window
+
+Permissions are controlled by the PWN DAO and any parameter changes don't affect existing running loans, therefor there isn't a need for an exit window. Once a user starts using the protocol (creates a loan), the rules cannot change for them. 
+
+> Exit score: L
+
+## Accessibility
+
+PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, interactions with the protocol are simple enough to be feasibly done through etherscan in case of the main interface failure.
+
+> Accessibility score: M
+
+# Technical Analysis
+
+## Contracts
+
+| Contract Name                               | Address                                    |
+|------------------------------------|--------------------------------------------|
+| PWNConfig                             | 0xd52a2898d61636bB3eEF0d145f05352FF543bdCC |
+| PWNHub                                | 0x37807A2F031b3B44081F4b21500E5D70EbaDAdd5 |
+| PWNLOAN                         | 0x4440C069272cC34b80C7B11bEE657D0349Ba9C23 |
+| PWNRevokedNonce                      | 0x972204fF33348ee6889B2d0A3967dB67d7b08e4c |
+| PWNUtilizedCredit                 | 0x8E6F44DEa3c11d69C63655BDEcbA25Fa986BCE9D |
+| PWNSimpleLoan                       | 0x719A69d0dc67bd3Aa7648D4694081B3c87952797 |
+| PWNSimpleLoanSimpleProposal      | 0xe624E7D33baC728bE2bdB606Da0018B6E05A84D9 |
+| PWNSimpleLoanListProposal         | 0x7160Ec33788Df9AFb8AAEe777e7Ae21151B51eDd |
+| PWNSimpleLoanElasticProposal     | 0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626 |
+| PWNSimpleLoanDutchAuctionProposal| 0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369 |
+
+## Permission owners
+
+| Name | Account                                       | Type         |
+| ---- | --------------------------------------------- | ------------ |
+| TimelockController | [address](https://etherscan.io/address/0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB) | Contract |
+
+## Permissions
+
+| Contract      | Function     | Impact      | Owner                   |
+| ------------- | ------------ | ----------- | ----------------------- |
+| TransparentUpgradeableProxy | fallback | Fallback is called when no other function matches the call data. No specific malicious action can be done if admin is compromised. | TimelockController |
+| TransparentUpgradeableProxy | receive | Same as fallback but receive is called when calldata are empty. No specific malicious action can be done if admin is compromised. | TimelockController |
+| TransparentUpgradeableProxy | _fallback | Same as fallback but when caller is the admin. No specific malicious action can be done if admin is compromised. | TimelockController |
+| PWNConfig | transferOwnership | Transfers the PWNConfig contract ownership. Malicious actor could transfer the contract ownership to it's own account and control all protocol parameters. | TimelockController |
+| PWNConfig | renounceOwnership | Removes contract owner. No permissioned functions can be called after this function is executed. | TimelockController |
+| PWNConfig | initialize | Can only be called once. No malicious action can be done through this function. | Deployer |
+| PWNConfig | setFee | Changes the protocol fee. The fee is collected at the loan creation from the loan credit amount. Fee is hard-capped at 10%. Malicious actor could raise the protocol fee up to 10%. | TimelockController |
+| PWNConfig | setFeeCollector | Changes the account that receives the collected protocol fees. Malicious actor could change the address to his own account and collect all protocol fees. | TimelockController |
+| PWNConfig | setLOANMetadataUri | Sets metadata URI for the LOAN token. This is used to display dynamic thumbnails etc. with the LOAN NFTs. Malicious actor could change this to an URL that he owns which could be malicious/scam site. | TimelockController |
+| PWNConfig | setDefaultLOANMetadataUri | Sets default metadata URI for the LOAN token. This is used to display dynamic thumbnails etc. with the LOAN NFTs. Malicious actor could change this to an URL that he owns which could be malicious/scam site. | TimelockController |
+| PWNConfig | registerStateFingerprintComputer | Registers new State Fingerprint Computer contract in the protocol. This contract is used to get a state fingerprint for tokens which value depends on their state. Malicious actor could register a faulty computer and scam users with tokens that appear to have certain state but actually don't. | TimelockController |
+| PWNConfig | registerPoolAdapter | Registers a new Pool Adapter contract in the protocol. This contract is used to integrate with other DeFi protocols to dynamically use supply from them. Malicious actor could register a pool adapter which would transfter the tokens from the pool to an account owned by the malicious entity. Note that a user would have to manually choose to use this malicious contract. | TimelockController |
+| PWNHub | transferOwnership | Transfers the PWNHub contract ownership. Malicious actor could tag malicious contracts and make them valid in the protocol. | TimelockController |
+| PWNHub | renounceOwnership | Removes contract owner. No permissioned functions can be called after this function is executed. | TimelockController |
+| PWNHub | setTag | Sets tag for a specified contract. Having a tag makes a contract valid in the protocol. Malicious actor could make his own contract valid and act as for example the Loan contract. Users would have to manually specify the usage of this contract. | TimelockController |
+| PWNHub | setTags | Same as setTag. This function calls setTag multiple times. | TimelockController |
+| PWNLOAN | mint | Mints a LOAN token. LOAN token represents a loan in the protocol for the lender. It is required to claim repayment or collateral. Malicious actor could mint worthless LOAN tokens and try to use them as a collateral for loans. | Loan contract specified in an offer |
+| PWNLOAN | burn | Burns a LOAN token.LOAN token represents a loan in the protocol for the lender. It is required to claim repayment or collateral. Malicious actor could burn other LOAN tokens and make it impossible to claim loans. | Loan contract specified in an offer |
+| PWNRevokedNonce | revokeNonce | Revokes nonce for a offer. Used to revoke an offchain signed offer on behalf of an owner. Malicious actor could revoke offers that the user wants to be valid. | Contract with a valid tag in PWNHub |
+| PWNRevokedNonce | revokeNonce | Revokes nonce for a offer. Used to revoke an offchain signed offer on behalf of an owner. Malicious actor could revoke offers that the user wants to be valid. | Contract with a valid tag in PWNHub |
+| PWNSimpleLoan | createLOAN | Creates a loan in the PWN Protocol. The check in this function is for a valid lenderSpec check in case the caller is a lender. There's also a reentrancy protection modifier. | Lender |
+| PWNSimpleLoan | repayLOAN | Repays a running loan. There's a reentrancy protection modifier to make sure you can't repay more than once. | Borrower |
+| PWNSimpleLoan | claimLOAN | Claims repayment or defaulted collateral. There's a reentrancy protection modifier to make sure you can't claim more than once. | Lender |
+| PWNSimpleLoan | tryClaimRepaidLOAN | Tries to claim loan for a lender. The check is this function is to make sure this function can only be called by the Loan contract. Malicious actor could initiate the claim without the Loan contract. Note that it's not possible to claim through this function if the original loan lender has changed and therefor malicious actor cannot claim the assets to its wallets. | Loan contract |
+| PWNSimpleLoan | makeExtensionProposal | Makes an onchain proposal for loan extension. The borrower can create a proposal for extension. Malicious actor could create an extension proposal for any loan. | Proposer |
+| PWNSimpleLoan | extendLOAN | Extends a loan based on extension proposal. Both the lender and the borrower can call this function to extend a loan they're part of if the other party has signed the extension proposal. The checks in this function are to distinguish two possible states (lender or borrower calling the function). | Lender or borrower |
+| PWNSimpleLoanSimpleProposal | _makeProposal | Marks a proposalHash as valid. Caller has to also be a proposer of the corresponding offer. | Proposer |
+| PWNSimpleLoanSimpleProposal | _acceptProposal | Accepts a given proposal. Loan contracts call this function with the signed proposal on behalf of the acceptor. Malicious actor could accept proposals for different Loan contracts. | Loan contract specified in an offer |
+| PWNSimpleLoanSimpleProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
+| PWNSimpleLoanSimpleProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
+| PWNSimpleLoanListProposal | _makeProposal | Marks a proposalHash as valid. Caller has to also be a proposer of the corresponding offer. | Proposer |
+| PWNSimpleLoanListProposal | _acceptProposal | Accepts a given proposal. Loan contracts call this function with the signed proposal on behalf of the acceptor. Malicious actor could accept proposals for different Loan contracts. | Loan contract specified in an offer |
+| PWNSimpleLoanListProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
+| PWNSimpleLoanListProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
+| PWNSimpleLoanElasticProposal | _makeProposal | Marks a proposalHash as valid. Caller has to also be a proposer of the corresponding offer. | Proposer |
+| PWNSimpleLoanElasticProposal | _acceptProposal | Accepts a given proposal. Loan contracts call this function with the signed proposal on behalf of the acceptor. Malicious actor could accept proposals for different Loan contracts. | Loan contract specified in an offer |
+| PWNSimpleLoanElasticProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
+| PWNSimpleLoanElasticProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
+| PWNSimpleLoanDutchAuctionProposal | _makeProposal | Marks a proposalHash as valid. Caller has to also be a proposer of the corresponding offer. | Proposer |
+| PWNSimpleLoanDutchAuctionProposal | _acceptProposal | Accepts a given proposal. Loan contracts call this function with the signed proposal on behalf of the acceptor. Malicious actor could accept proposals for different Loan contracts. | Loan contract specified in an offer |
+| PWNSimpleLoanDutchAuctionProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
+| PWNSimpleLoanDutchAuctionProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
+| PWNUtilizedCredit | utilizeCredit | Updates utilised credit for an account. This is used to share credit between different proposal types. Malicious actor could update the utilised credit to go over the credit limit. | Contract with a valid tag in PWNHub |
+
+
+## Dependencies
+
+No external dependency has been found.
+
+## Exit Window
+
+Parameter changes don't affect existing running loans, therefor there isn't a need for an exit window. Once a user starts using the protocol (creates a loan), the rules cannot change.
+
+## Security Council
+
+No security council needed because on-chain governance is in place.
