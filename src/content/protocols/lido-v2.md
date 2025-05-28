@@ -20,7 +20,7 @@ Lido is a liquid-staking protocol. Liquid staking allows users to delegate their
 of _Node Operators_ who run validators with `ETH` staked in Lido. In exchange for their `ETH` users get `stETH` (staked `ETH`),
 a token issued by Lido which represents the staked `ETH`. This token can then be used throughout DeFi in other protocols, for example, as collateral. The benefits of liquid staking are that there is no barrier to entry, users can stake without meeting the minimum 32 `ETH` to create a validator, and the staked `ETH` can still be used to perform further actions in other protocols. In exchange for this service, Lido takes a 10% fee on the yield generated, which is split between the _Lido Treasury_ and the _Node Operators_.
 
-Lido uses a system of _Staking Modules_ as explained in the [Protocol Analysis](#protocol-analysis). Each _Staking Module_ has its own set of _Node Operators_, incentive mechanisms, and potential penalties. There currently are three modules: the _Curated_, _Simple-DVT_, and _Community_ staking modules. Validators in the first two have to be approved by governance, whereas anyone can become a _Node Operator_ for the _Community Staking Module_ by depositing a bond.
+Lido V2 uses a system of _Staking Modules_ as explained in the [Protocol Analysis](#protocol-analysis). Each _Staking Module_ has its own set of _Node Operators_, incentive mechanisms, and potential penalties. There currently are three modules: the _Curated_, _Simple-DVT_, and _Community_ staking modules. Validators in the first two have to be approved by governance, whereas anyone can become a _Node Operator_ for the _Community Staking Module_ by depositing a bond.
 
 # Ratings
 
@@ -44,9 +44,13 @@ Furthermore, the Governance contracts `Voting` and `Agent` may also be upgraded 
 
 ## Autonomy
 
-One dependency of Lido is the need for an oracle to report the state of the beacon chain to Lido's smart contracts on Ethereum. The beacon chain of Ethereum is responsible for creating new blocks and ensuring consensus. It is made up of all the validators who take part in the system with their stake (Proof-of-Stake). The state of the beacon chain is not accessible from within Ethereum smart contracts. This is why `AccountingOracle` and `ExitBusOracle` are used to report on this data. Lido has a consensus committee made of 9 members who report daily on the state of the beacon chain, 5 of which are necessary for a consensus to be reached. The signers are announced and respect our security council requirements. If colluding, those members could report false data onchain, which could result in inflation or deflation of `stETH` and lead to loss of protocol funds.
+## Consensus Oracles
 
-The _Deposit Security Module_ is another committee critical to the functioning of Lido. The _Deposit Security Module_ is made of 6 Guardians (4 necessary for quorum) and handles the deposits linked to the creation of new validators for Lido. Each new validator requires 32 ETH and only the _Deposit Security Module_ is allowed to sign off on the deposit. This committee was introduced to counter a possible frontrunning attack by node operators to steal the deposited ETH. The attack and the chosen mitigation are explained in this [post](https://research.lido.fi/t/mitigations-for-deposit-front-running-vulnerability/1239) (solution d). In case of collusion between 4 members of the security module and the node operator, the ETH deposited into new validators could be stolen, which would lead to loss of user funds. The _Deposit Security Module_ does not meet our security council requirements and therefore represents a _high-centralization_ dependency.
+One dependency of Lido is the need for an oracle to report the state of the beacon chain to Lido's smart contracts on Ethereum. The beacon chain of Ethereum is responsible for creating new blocks and ensuring consensus. It is made up of all the validators who take part in the system with their stake (Proof-of-Stake). The state of the beacon chain is not accessible from within Ethereum smart contracts. This is why `AccountingOracle` and `ExitBusOracle` are used to report on this data. Lido has a [Consensus Committee](#security-council) made of 9 members who report daily on the state of the beacon chain, 5 of which are necessary for a consensus to be reached. The signers are announced and respect our security council requirements. If colluding, those members could report false data onchain, which could result in inflation or deflation of `stETH` and lead to loss of protocol funds.
+
+## Deposit Guardians
+
+The [Deposit Security Module](#security-council) is another committee critical to the functioning of Lido. The [Deposit Security Module](#security-council) is made of 6 Guardians (4 necessary for quorum) and handles the deposits linked to the creation of new validators for Lido. Each new validator requires 32 ETH and only the [Deposit Security Module](#security-council) is allowed to sign off on the deposit. This committee was introduced to counter a possible frontrunning attack by node operators to steal the deposited ETH. The attack and the chosen mitigation are explained in this [post](https://research.lido.fi/t/mitigations-for-deposit-front-running-vulnerability/1239) (solution d). In case of collusion between 4 members of the security module and the node operator, the ETH deposited into new validators could be stolen, which would lead to loss of user funds. The _Deposit Security Module_ does not meet our security council requirements and therefore represents a _high-centralization_ dependency.
 
 > Autonomy score: High
 
@@ -71,7 +75,7 @@ In addition to that, it offers an extended list of [UI integration elements](htt
 
 ## Conclusion
 
-Lido exposes a _high centralization_ risk score in terms of _Upgradeability_, _Autonomy_, and _Exit Window_. While the [Consensus Committee](#security-council) satisfies our [security council requirements](https://defiscan.info/learn-more), this is not the case for the [DepositSecurityModule](#security-council). Moreover, there is no _security council_ nor _Exit Window_ to mitigate the risks of contract upgrades. For these reasons, Lido receives the score of **Stage 0**.
+Lido exposes a _High Centralization_ risk score in terms of _Upgradeability_, _Autonomy_, and _Exit Window_. While the [Consensus Committee](#security-council) satisfies our [security council requirements](https://defiscan.info/learn-more), this is not the case for the [DepositSecurityModule](#security-council). Moreover, there is no _Security Council_ nor _Exit Window_ to mitigate the risks of contract upgrades. For these reasons, Lido receives the score of **Stage 0**.
 
 Lido could reach _Stage 1_ by enforcing a _7-day Exit Window_ to the critical smart contract upgrades or any action that may result in the loss of user funds or adopting a Security Council to safeguard those actions. It would also need to respect our [security council requirements](https://defiscan.info/learn-more) for their already implemented [DepositSecurityModule](#security-council).
 
@@ -93,7 +97,7 @@ An overview of Lido's liquid staking protocol can be seen below.
 
 Users can stake their `ETH` with Lido through the `Lido` contract and obtain `stETH` in return. Users can then redeem their `stETH` for `ETH` by entering a withdrawal queue in interacting directly with the `WithdrawalQueueuErc721`. The deposits and withdrawals may balance each other, but when excess `ETH` is deposited or more `stETH` is redeemed, Ethereum validators operated by different _Node Operators_ are created or asked to exit.
 
-A _Consensus Committee_ is trusted to report the relevant state of the consensus layer onchain. The report includes information on the number of Lido validators on the consensus layer, their cumulative balance, exited validators, the balance of the rewards and withdrawal vaults, and the simulated share rate (total `ETH` per share emitted). This information is then processed and transmitted to other Lido contracts. It will influence how shares are rebased and whether validators may be created or asked to exit in future slots. The report of wrong data could therefore lead to the loss of unclaimed yield or loss of user funds. This makes the _Consensus Committee_ a critical dependency.
+A [Consensus Committee](#security-council) is trusted to report the relevant state of the consensus layer onchain. The report includes information on the number of Lido validators on the consensus layer, their cumulative balance, exited validators, the balance of the rewards and withdrawal vaults, and the simulated share rate (total `ETH` per share emitted). This information is then processed and transmitted to other Lido contracts. It will influence how shares are rebased and whether validators may be created or asked to exit in future slots. The report of wrong data could therefore lead to the loss of unclaimed yield or loss of user funds. This makes the [Consensus Committee](#security-council) a critical dependency.
 
 The governance contract `Voting` and its `Agent` have managing rights on all apps and ossifiable proxies respectively. This includes contract upgrades.
 
@@ -131,7 +135,7 @@ An overview of the _Community Staking Module_ can be seen below.
 
 The _Community Staking Module_ (CSM) is a permissionless module. _Node Operators_ can register themselves into the module by paying a bond per pair of validator keys added. _Node Operators_ interact with the `CSModule` contract which deposits data and interacts with the `StakingRouter`. An additional `CSAccounting` is responsible for the management of bonds, rewards, and penalties. The bonding curve used to determine bond prices can also be updated through this contract. The `CSEarlyAdoption` contract keeps track of early adopters who have lower bond prices.
 
-Finally, `CSFeeDistributor` handles the distribution of rewards to _Node Operators_. It receives the non-distributed rewards from the `CSModule` every time the `StakingRouter` mints additional _Node Operator_ rewards. It accepts calls from `CSAccounting` with reward claims and stores the balances of claims from each _Node Operator_ as well as the late Merkle proof of the rewards distribution Merkle tree. It receives this root from the _Consensus Committee_ through the `CSOracle`.
+Finally, `CSFeeDistributor` handles the distribution of rewards to _Node Operators_. It receives the non-distributed rewards from the `CSModule` every time the `StakingRouter` mints additional _Node Operator_ rewards. It accepts calls from `CSAccounting` with reward claims and stores the balances of claims from each _Node Operator_ as well as the late Merkle proof of the rewards distribution Merkle tree. It receives this root from the [Consensus Committee](#security-council) through the `CSOracle`.
 
 Those contracts are upgradeable by the governance through the `Agent` contract. The `Agent` also holds the right to change the exit charge, which could abuse the _Node Operators_' deposited bonds. The [Community Staking Module Committee](#security-council) can also report reward stealing from _Node Operators_ in order to penalize them. The committee may also pause the staking module at any time, prohibiting _Node Operators_ from claiming their rewards until it is resumed by the governance.
 
@@ -195,7 +199,7 @@ Most Lido multisigs, as well as treasury management multisigs, are listed in the
 | InsuranceFund                                    | [0x8B3f33234ABD88493c0Cd28De33D583B70beDe35](https://etherscan.io/address/0x8B3f33234ABD88493c0Cd28De33D583B70beDe35) |
 | EVMScriptExecutor                                | [0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977](https://etherscan.io/address/0xFE5986E06210aC1eCC1aDCafc0cc7f8D63B3F977) |
 | EasyTrack                                        | [0xF0211b7660680B49De1A7E9f25C65660F0a13Fea](https://etherscan.io/address/0xF0211b7660680B49De1A7E9f25C65660F0a13Fea) |
-| HashConsensus                                    | [0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288](https://etherscan.io/address/0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288) |
+| HashConsensus (AccountingOracle)                 | [0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288](https://etherscan.io/address/0xD624B08C83bAECF0807Dd2c6880C3154a5F0B288) |
 | Agent (Governance)                               | [0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c](https://etherscan.io/address/0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c) |
 | Voting (Governance)                              | [0x2e59A20f205bB85a89C53f1936454680651E618e](https://etherscan.io/address/0x2e59A20f205bB85a89C53f1936454680651E618e) |
 | Finance (proxy)                                  | [0xB9E5CBB9CA5b0d659238807E84D0176930753d86](https://etherscan.io/address/0xB9E5CBB9CA5b0d659238807E84D0176930753d86) |
@@ -203,7 +207,7 @@ Most Lido multisigs, as well as treasury management multisigs, are listed in the
 | TokenManager (proxy)                             | [0xf73a1260d222f447210581DDf212D915c09a3249](https://etherscan.io/address/0xf73a1260d222f447210581DDf212D915c09a3249) |
 | ACL (proxy)                                      | [0x9895f0f17cc1d1891b6f18ee0b483b6f221b37bb](https://etherscan.io/address/0x9895f0f17cc1d1891b6f18ee0b483b6f221b37bb) |
 | APMRegistry (proxy)                              | [0x0cb113890b04b49455dfe06554e2d784598a29c9](https://etherscan.io/address/0x0cb113890b04b49455dfe06554e2d784598a29c9) |
-| HashConsensus FOR EXIT BUS                       | [0x7FaDB6358950c5fAA66Cb5EB8eE5147De3df355a](https://etherscan.io/address/0x7FaDB6358950c5fAA66Cb5EB8eE5147De3df355a) |
+| HashConsensus (ExitBusOracle)                    | [0x7FaDB6358950c5fAA66Cb5EB8eE5147De3df355a](https://etherscan.io/address/0x7FaDB6358950c5fAA66Cb5EB8eE5147De3df355a) |
 | ValidatorsExitBusOracle (Proxy)                  | [0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e](https://etherscan.io/address/0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e) |
 | AccountingOracle (Proxy)                         | [0x852deD011285fe67063a08005c71a85690503Cee](https://etherscan.io/address/0x852deD011285fe67063a08005c71a85690503Cee) |
 | MEV Boost Relay Allowed List                     | [0xF95f069F9AD107938F6ba802a3da87892298610E](https://etherscan.io/address/0xF95f069F9AD107938F6ba802a3da87892298610E) |
@@ -223,7 +227,7 @@ Most Lido multisigs, as well as treasury management multisigs, are listed in the
 | CSEarlyAdoption                                  | [0x3D5148ad93e2ae5DedD1f7A8B3C19E7F67F90c0E](https://etherscan.io/address/0x3D5148ad93e2ae5DedD1f7A8B3C19E7F67F90c0E) |
 | CSFeeOracle (Proxy)                              | [0x4D4074628678Bd302921c20573EEa1ed38DdF7FB](https://etherscan.io/address/0x4D4074628678Bd302921c20573EEa1ed38DdF7FB) |
 | CSFeeOracle (Implementation)                     | [0x919ac5C6c62B6ef7B05cF05070080525a7B0381E](https://etherscan.io/address/0x919ac5C6c62B6ef7B05cF05070080525a7B0381E) |
-| HashConsensus                                    | [0x71093efF8D8599b5fA340D665Ad60fA7C80688e4](https://etherscan.io/address/0x71093efF8D8599b5fA340D665Ad60fA7C80688e4) |
+| HashConsensus (CSFeeOracle)                      | [0x71093efF8D8599b5fA340D665Ad60fA7C80688e4](https://etherscan.io/address/0x71093efF8D8599b5fA340D665Ad60fA7C80688e4) |
 | GateSeal (CSModule) (CSM Committee)              | [0x5cfca30450b1e5548f140c24a47e36c10ce306f0](https://etherscan.io/address/0x5cfca30450b1e5548f140c24a47e36c10ce306f0) |
 | GateSeal (CSAccounting) (CSM Committee)          | [0x16Dbd4B85a448bE564f1742d5c8cCdD2bB3185D0](https://etherscan.io/address/0x16Dbd4B85a448bE564f1742d5c8cCdD2bB3185D0) |
 
