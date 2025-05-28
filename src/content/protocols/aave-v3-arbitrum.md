@@ -144,18 +144,6 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 # Protocol Analysis
 
-## Upgradeable Pool Contract and mutable reserve parameters
-
-Pciture 1
-![Lending](./diagrams/aave-v3-arbitrum-lending.png)
-
-Picture 2
-![Parameter Control](./diagrams/aave-v3-arbitrum-parameter.png)
-
-## GHO
-
-![Gho](./diagrams/aave-v3-arbitrum-gho.png)
-
 # Dependencies
 
 ## Price Oracle
