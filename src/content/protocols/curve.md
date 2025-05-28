@@ -32,9 +32,9 @@ Curve incorporates significant upgradeability mechanisms, primarily managed by t
 
 > Possible updates may result in the theft or loss of user funds
 
-Within Curve's scrvUSD vault, the Curve DAO holds power as the `role_manager`, this allows the DAO to implement a malicious strategy and steal the underlying scrvUSD, if it voted to do so.  If the Curve DAO proposed to steal user funds in this way, the depositors would have 7 days to react to the proposal, and all trust within Curve's products would likely erode, and the value of the ~900M CRV locked by DAO members would likely collapse.  These incentives form a solid foundation for the DAO to act in a trustworthy manner, and are very similar to the dynamics Ethereum uses for it's proof of stake consensus.  Chainsecurity also validated the implementation of scrvUSD as safe ([Audit Report](https://github.com/curvefi/security-incident-reports/blob/main/audits/crvusd/ChainSecurity_Curve_scrvUSD_audit.pdf)).
+Within Curve's scrvUSD vault, the Curve DAO holds power as the `role_manager`, this allows the DAO to implement a malicious strategy and steal the underlying scrvUSD, if it voted to do so.  If the Curve DAO proposed to steal user funds in this way, the depositors would have 7 days to react to the proposal, and all trust within Curve's products would likely erode, and the value of the ~900M CRV locked by DAO members would likely collapse.  These incentives form a foundation for the DAO to act in a trustworthy manner, and are very similar to the dynamics Ethereum uses for it's proof of stake consensus, although this does assume a large decentralized DAO member set, of which no analysis was completed to validate this.
 
-The framework is clear though, and if the protocol can steal user funds in any way (even if doing so would likely kill itself) the Upgradeability must be classed as 'High'.
+The framework is clear, if the protocol can steal user funds in any way the Upgradeability must be classed as 'High'.
 
 > Upgradeability score: High
 
