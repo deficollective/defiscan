@@ -70,7 +70,7 @@ An unintended proposal could change the _Aave Governance_ system and reassign it
 
 ### CCIP
 
-GHO on arbitrum solely relies on CCIP for bridging native GHO from Ethereum. Chainlink CCIP achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/CCIP).
+GHO on arbitrum solely relies on CCIP for bridging native GHO from Ethereum. Chainlink CCIP achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/ccip).
 
 ### Risk Oracle
 
@@ -180,7 +180,7 @@ The GHO tokens on Arbitrum are bridged from Mainnet via [CCIP](https://docs.chai
 
 The tokens are bridged by a token lock/release mechanism on mainnet, and a mint/burn mechanism on Arbitrum. For example a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
 
-Chainlink CCIP is covered in more detail in our separate report [here](/protocols/CCIP).
+Chainlink CCIP is covered in more detail in our separate report [here](/protocols/ccip).
 
 ## Layer 1 Governance
 
