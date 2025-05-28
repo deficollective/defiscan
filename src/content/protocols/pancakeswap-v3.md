@@ -7,7 +7,7 @@ defillama_slug: ["pancakeswap-amm-v3"]
 chain: "BSC"
 stage: 0
 reasons: []
-risks: ["x", "x", "x", "x", "x"]
+risks: ["L", "L", "L", "L", "L"]
 author: ["CookingCryptos"]
 submission_date: "2025-05-28"
 publish_date: "1970-01-01"
