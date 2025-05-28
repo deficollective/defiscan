@@ -28,7 +28,7 @@ Compound-v2 is deployed on various chains. This review is based on the Ethereum 
 
 ## Upgradeability
 
-The Compound-v2 protocol is almost fully upgradeable allowing for the update of governance and markets logic, with implementation contracts such as `CErc20Delegate`, `Oracle`, `Comptroller` and `GovernorBravoDelegate` . This can result in the loss of funds or unclaimed yield as well as lead to other changes in the expected performance of the protocol.
+The Compound-v2 protocol is almost fully upgradeable allowing for the update of governance and markets logic, with implementation contracts such as `CErc20Delegate`, `Comptroller` and `GovernorBravoDelegate` . This can result in the loss of funds or unclaimed yield as well as lead to other changes in the expected performance of the protocol.
 
 Few markets use CErc20 or CEther contract (no “Delegator”) which are fixed implementation: once deployed, their logic (code) cannot be changed by the Timelock (DAO).
 
@@ -36,7 +36,7 @@ Compound retains privileged control over key protocol parameters (such as choosi
 
 Most Compound v2 markets are governed by an upgradable proxy pointing to a shared CToken implementation. The proxy’s admin, a Timelock contract under DAO control, retains the exclusive right to swap in a new implementation, tweak interest-rate models, and withdraw accumulated reserves. This means that a sufficiently powerful proposal could install a rate model that sets borrowing costs to extremes or redirect reserves out of the protocol, underscoring that market behavior ultimately hinges on a small set of privileged permissions rather than on immutable code alone.
 
-Price feeds in Compound v2 flow through a single oracle contract whose anchorAdmin and poster roles determine which on-chain prices are accepted. The oracle can be paused or remapped by its admin, and its update logic lacks a fallback mechanism —if the designated poster falls silent or the contract is paused, collateral valuations and liquidations grind to a halt. Governance can replace the oracle address, during any pause or outage there is no on-chain backup, except for a per-asset fixedPrice fallback set by the admin, exposing markets to temporary freezes or stale pricing.
+Compound v2 currently relies on a non-upgradeable oracle contract to deliver price feeds via Chainlink. While the contract itself cannot be upgraded, its configuration is governed by the Compound community multisig with broad administrative powers: it can change the Chainlink price feed source, add or remove asset markets, or set a fixed fallback price for individual tokens.
 
 Governance itself is upgradeable: **`GovernorBravoDelegator`** proxy points to a delegate contract whose admin may be rotated via a two-step handover (`setPendingAdmin` → `acceptAdmin`). COMP holders propose and vote on code changes, but a short review and timelock window (two days queue, two days delay) means that, once passed, any proposal can swiftly reassign all protocol-level privileges. While this model allows the community to evolve who holds those keys—potentially handing control from a multisig to a pure on-chain DAO—it also concentrates ultimate authority in whichever admin address the governance process currently recognizes.
 
@@ -100,7 +100,9 @@ So the protocol does not validate asset prices returned by Chainlink or offer a 
 
 The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a [multisig account](https://etherscan.io/address/0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA) with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
 
-The [Compound community multisig](https://etherscan.io/address/0xbbf3f1421d886e9b2c5d716b5192ac998af2012c) has the ability to update the configs on the Price Feed. The multisig has the flexibility to add / remove markets, update price feed or fixed price for market.
+For more information about the Chainlink price feed, see the corresponding review [here](https://www.defiscan.info/protocols/chainlink-oracles).
+
+The [Compound community multisig](https://etherscan.io/address/0xbbf3f1421d886e9b2c5d716b5192ac998af2012c) has the ability to update the configs on the Price Feed. The multisig has the flexibility toupdate price feed, add / remove markets or fixed price for market.
 
 # Governance
 
@@ -158,8 +160,7 @@ A security council called `Pause Guardian` has the power to pause all deposits, 
 | JumpRateModelV2 (IRM for USDC) | [0xD8EC56013EA119E7181d231E5048f90fBbe753c0](https://etherscan.io/address/0xD8EC56013EA119E7181d231E5048f90fBbe753c0) |
 | JumpRateModelV2 (IRM for UNI) | [0xd88b94128ff2b8cf2d7886cd1c1e46757418ca2a](https://etherscan.io/address/0xd88b94128ff2b8cf2d7886cd1c1e46757418ca2a) |
 | JumpRateModelV2 (IRM) | [0xd956188795ca6F4A74092ddca33E0Ea4cA3a1395](https://etherscan.io/address/0xd956188795ca6F4A74092ddca33E0Ea4cA3a1395) |
-| Oracle (Proxy) | [0xDDc46a3B076aec7ab3Fc37420A8eDd2959764Ec4](https://etherscan.io/address/0xDDc46a3B076aec7ab3Fc37420A8eDd2959764Ec4) |
-| Oracle (Implementation) | [0x02557a5e05defeffd4cae6d83ea3d173b272c904](https://etherscan.io/address/0x02557a5e05defeffd4cae6d83ea3d173b272c904) |
+| PriceOracle | [0x8CF42B08AD13761345531b839487aA4d113955d9](https://etherscan.io/address/0x8CF42B08AD13761345531b839487aA4d113955d9) |
 | Reservoir | [0x2775b1c75658Be0F640272CCb8c72ac986009e38](https://etherscan.io/address/0x2775b1c75658Be0F640272CCb8c72ac986009e38) |
 | Comptroller (Proxy) | [0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B](https://etherscan.io/address/0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B) |
 | Comptroller (Implementation) | [0xbafe01ff935c7305907c33bf824352ee5979b526](https://etherscan.io/address/0xbafe01ff935c7305907c33bf824352ee5979b526) |
@@ -167,7 +168,7 @@ A security council called `Pause Guardian` has the power to pause all deposits, 
 | GovernorBravoDelegator (Proxy) | [0xc0da02939e1441f497fd74f78ce7decb17b66529](https://etherscan.io/address/0xc0da02939e1441f497fd74f78ce7decb17b66529) |
 | GovernorBravoDelegate (Implementation) | [0x6f6e4785c97885d26466945055d4ae8931be6f7a](https://etherscan.io/address/0x6f6e4785c97885d26466945055d4ae8931be6f7a) |
 
-## All Permission Owners
+## All Permission Owners {#permissions}
 
 | Name | Account | Type |
 |------------------------|------------------------|------------------------|
@@ -175,9 +176,9 @@ A security council called `Pause Guardian` has the power to pause all deposits, 
 | Proposal Guardian | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c) | Multisig 4/8 |
 | Guardian | [0x8B8592E9570E96166336603a1b4bd1E8Db20fa20](https://etherscan.io/address/0x8B8592E9570E96166336603a1b4bd1E8Db20fa20) | EOA |
 | anchorAdmin | [0xF06e41aDD8A7E7A8aD81a07C0ACA291E4573ca50](https://etherscan.io/address/0xF06e41aDD8A7E7A8aD81a07C0ACA291E4573ca50) | EOA |
-| poster | [0x3c6809319201b978D821190Ba03fA19A3523BD96](https://etherscan.io/address/0x3c6809319201b978D821190Ba03fA19A3523BD96) | EOA |
 | Timelock (DAO) | [0x6d903f6003cca6255D85CcA4D3B5E5146dC33925](https://etherscan.io/address/0x6d903f6003cca6255D85CcA4D3B5E5146dC33925) | Contract |
 | Governor (DAO) | [0xc0Da02939E1441F497fd74F78cE7Decb17B66529](https://etherscan.io/address/0xc0Da02939E1441F497fd74F78cE7Decb17B66529) | Contract |
+| PriceOracleAdmin | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c#code) | Multisig 4/8 |
 
 ## Permissions
 
@@ -195,12 +196,12 @@ A security council called `Pause Guardian` has the power to pause all deposits, 
 | CErc20Delegate | \_becomeImplementation | Marks this contract as the new **`CErc20Delegator`** implementation, switching all cToken calls to its code for this market. This effectively lets the admin redefine every market operation—minting, borrowing, repaying, or liquidating—by swapping in arbitrary logic. A malicious upgrade could, for example, takes a small fee on every mint or prevents withdrawals entirely, redirecting protocol value or locking user deposits until a corrective upgrade is applied. | Timelock (DAO) |
 | CErc20Delegate | \_resignImplementation | Allows admin to resign this contract as an implementation. A malicious admin could resign without setting a valid successor, freezing the market. | Timelock (DAO) |
 | JumpRateModelV2 | updateJumpRateModel | Updates the per-block interest rate parameters. A rogue admin could set extreme parameters, forcing exorbitant interest rates. | Timelock (DAO) |
-| PriceOracleProxy | setSaiPrice | Updates the stored SAI price used by the protocol’s on-chain oracle. This directly affects how SAI-denominated positions and liquidations are valued. A compromised guardian could set the price to near-zero (triggering mass liquidations) or to an extreme high (preventing legitimate liquidations), either slamming user positions or freezing the market. | Guardian |
-| PriceOracle | \_setPendingAnchor | Writes a new entry into the pendingAnchors mapping, staging an updated anchor price for an asset. By staging anchors, the anchorAdmin controls when the baseline for price deviations is updated, directly affecting oracle stability and liquidations. A malicious anchorAdmin could leave pending anchors in limbo or set extreme values, causing erratic price‐deviation checks and unwarranted liquidations. | anchorAdmin |
-| PriceOracle | \_setPaused | Flips the paused boolean, enabling or disabling all oracle price updates. Pausing the oracle halts any further price submissions, effectively freezing price feeds across the system. A malicious anchorAdmin could pause the oracle indefinitely, blocking fresh price data and stalling all dependent markets. | anchorAdmin |
-| PriceOracle | \_setPendingAnchorAdmin | Writes a new pendingAnchorAdmin address. Controls who can then call `_acceptAnchorAdmin` to become the new admin. A malicious anchorAdmin could appoint a hostile address as pendingAnchorAdmin. | anchorAdmin |
-| PriceOracle | \_acceptAnchorAdmin | Moves `pendingAnchorAdmin` into admin and clears `pendingAnchorAdmin`, completing the admin transfer. Accepting transfers all oracle governance powers—pausing, anchoring, and price‐setting—to the new admin. If an attacker becomes pendingAnchorAdmin, they could call this and immediately wield full oracle control. | pendingAnchorAdmin (initially zero) |
-| PriceOracle | setPrice | Updates a single asset’s price in the `_assetPrices` mapping and records a new anchors value. The poster directly controls that asset’s reported price, which downstream contracts use for collateral valuations and liquidations. A malicious poster could report artificially low or high prices to trigger unwarranted liquidations or profitable oracle‐based exploits. | poster |
+| PriceOracle | addConfig | Adds a new token configuration, defining how the oracle fetches and scales prices for a given market. A malicious owner could onboard an asset with a broken or manipulated price feed, creating arbitrage or manipulation opportunities and undermining collateral valuations. | PriceOracleAdmin |
+| PriceOracle | updateConfigPriceFeed | Updates the Chainlink price feed address for a token config. Since Compound relies directly on Chainlink prices, a malicious update to a spoofed or compromised feed could misprice assets, causing liquidations or halting borrowing. | PriceOracleAdmin |
+| PriceOracle | updateConfigFixedPrice | Sets a hardcoded fallback price for a token. This fallback is used when the primary Chainlink price feed fails. An owner could set unrealistic fallback prices, either zero (triggering liquidations) or inflated values (allowing excessive borrowing or blocking liquidations). | PriceOracleAdmin |
+| PriceOracle | removeConfig | Removes an asset configuration entirely, effectively removing oracle support for the asset. This could lead to protocol dysfunction or force emergency governance intervention if collateral cannot be priced. | PriceOracleAdmin |
+| PriceOracle | transferOwnership | Initiates transfer of contract ownership to a new address. If the new owner is compromised or malicious, they gain full control over all price feed configurations and fallback mechanisms. | PriceOracleAdmin |
+| PriceOracle | renounceOwnership | Allows the current owner to give up ownership, which would lock the configuration permanently. If used irresponsibly, this could freeze the protocol’s ability to respond to oracle feed failures or asset additions. | PriceOracleAdmin |
 | Comptroller (Proxy) | \_setPendingImplementation | Assigns a new address to the pending Comptroller Implementation storage slot. This stages which implementation the Unitroller will switch to on the next upgrade, controlling the protocol’s core logic. A malicious admin could point pendingComptrollerImplementation to a backdoored contract, then finalize it to seize control of all markets. | Timelock (DAO) |
 | Comptroller (Proxy) | \_acceptImplementation | Replaces the active comptroller Implementation with whatever address is in `pendingComptrollerImplementation`, then clears the pending slot. This finalizes the upgrade, swapping in new logic for all market operations. A rogue admin could accept a malicious implementation they previously staged, instantly redirecting all protocol behavior to attacker-controlled code. | Comptroller (Implementation) |
 | Comptroller (Proxy) | \_setPendingAdmin | Writes a new pendingAdmin address. Controls who can then call `_acceptAdmin` to become the new admin, governing all Unitroller upgrades and critical settings. | Timelock (DAO) |
