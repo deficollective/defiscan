@@ -146,8 +146,10 @@ The project additionally could advance to **Stage 2** if the on-chain governance
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
+Pciture 1
 ![Lending](./diagrams/aave-v3-arbitrum-lending.png)
 
+Picture 2
 ![Parameter Control](./diagrams/aave-v3-arbitrum-parameter.png)
 
 ## GHO
@@ -178,7 +180,7 @@ Aave V3 instances on Layer 2s make use of the Sequencer oracle offered by Chainl
 
 The GHO tokens on Arbitrum are bridged from Mainnet via [CCIP](https://docs.chain.link/ccip/directory/mainnet/token/GHO). CCIP stands for Cross-Chain Interoperability Protocol and is a product by Chainlink.
 
-The tokens are bridged by a token lock/release mechanism on mainnet, and a mint/burn mechanism on Arbitrum. For example a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
+The tokens are bridged by a token lock/release mechanism on mainnet, and a mint / burn mechanism on Arbitrum. For example a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
 
 Chainlink CCIP is covered in more detail in our separate report [here](/protocols/ccip).
 
