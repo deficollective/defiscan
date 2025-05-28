@@ -186,7 +186,7 @@ Chainlink CCIP is covered in more detail in our separate report [here](/protocol
 
 ## Layer 1 Governance
 
-Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet and bridging votes from Polygon to mainnet. See the mainnet core instance report for a detailed system breakdown and analysis [here](./protocols/aave).
+Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet and bridging votes from Polygon to mainnet. See the mainnet core instance report for a detailed system breakdown and analysis [here](/protocols/aave).
 
 # Governance
 
