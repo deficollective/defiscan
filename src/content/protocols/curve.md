@@ -52,7 +52,7 @@ All governance votes occur over a 7 day time period, with voting frontloaded for
 
 ## Accessibility
 
-Curve's primary UI is at [curve.finance](https://curve.finance/).  Other UIs exist which offer most required functionality, e.g. [crvhub.com](https://crvhub.com), [curvemonitor.com](https://curvemonitor.com), [DeFi Saver](https://app.defisaver.com/)  Also most aggregators interface directly with Curve, allowing swaps to route through Curve no matter the UI's status.  
+Curve's primary UI is at [curve.finance](https://curve.finance/).  Other UIs exist which offer most required functionality, e.g. [crvhub.com](https://crvhub.com), [curvemonitor.com](https://curvemonitor.com), [DeFi Saver](https://app.defisaver.com/).  Also most aggregators interface directly with Curve, allowing swaps to route through Curve no matter the UI's status.  
 
 The full frontend code is open-source: [Curve Frontend Github Repo](https://github.com/curvefi/curve-frontend), however there are no current instructions to self-host.
 
