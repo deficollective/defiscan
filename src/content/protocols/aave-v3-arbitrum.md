@@ -190,12 +190,12 @@ Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet
 
 Community vote is enforced on Arbitrum through the following process:
 
-1.  The community registers a payload at the `PayloadsController` contract on Arbitrum
-2.  The community starts a vote on the Governance contract on Ethereum Mainnet specififying Arbitrum and the payload Id
-3.  The vote starts after 1 day delay and gets ported via a.DI to a voting network (currently Polygon)
-4.  When the vote has passed, the result is transferred back to Ethereum Mainnet
-5.  The vote can be executed. The call to execute the payload is bridged to Arbitrums PayloadController
-6.  After the Exit Window has passed, the community can trigger execution.
+1. The community registers a payload at the `PayloadsController` contract on Arbitrum
+2. The community starts a vote on the Governance contract on Ethereum Mainnet specififying Arbitrum and the payload Id
+3. The vote starts after 1 day delay and gets ported via a.DI to a voting network (currently Polygon)
+4. When the vote has passed, the result is transferred back to Ethereum Mainnet
+5. The vote can be executed. The call to execute the payload is bridged to Arbitrums PayloadController
+6. After the Exit Window has passed, the community can trigger execution.
 
 ![Governance](./diagrams/aave-v3-arbitrum-gov.png)
 
