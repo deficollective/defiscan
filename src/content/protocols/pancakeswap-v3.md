@@ -6,17 +6,17 @@ github: ["https://github.com/pancakeswap/"]
 defillama_slug: ["pancakeswap-amm-v3"]
 chain: "BSC"
 stage: 0
-reasons: ["remove", "if none"]
+reasons: []
 risks: ["x", "x", "x", "x", "x"]
-author: ["author-1", "author-2"]
-submission_date: "1970-01-01"
+author: ["CookingCryptos"]
+submission_date: "2025-05-28"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
 ---
 
 # Summary
 
-Add a summary of the protocols. What is it? What does it do? etc.
+PancakeSwap V3 is an automated market maker (AMM) on BNB Smart Chain with concentrated liquidity functionality. Unlike PancakeSwap V2's uniform liquidity distribution, V3 allows liquidity providers to deploy capital within specific price ranges. The protocol implements multiple fee tiers (0.01%, 0.05%, 0.3%, 1%), represents LP positions as NFTs instead of fungible tokens, and distributes CAKE token incentives only to liquidity positions that are in-range.
 
 # Overview
 
@@ -76,10 +76,9 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | Contract Name                                         | Address                                                                                                              |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | PancakeV3Factory                                      | [0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865](https://bscscan.com/address/0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865) |
-| PancakeV3Pool (example pool)                          | [0x98b141fc697cff2bc26da84fcdb48ced18450df9](https://bscscan.com/address/0x98b141fc697cff2bc26da84fcdb48ced18450df9) |
 | PancakeV3PoolDeployer                                 | [0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9](https://bscscan.com/address/0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9) |
+| PancakeV3Pool (example pool)                          | [0x98b141fc697cff2bc26da84fcdb48ced18450df9](https://bscscan.com/address/0x98b141fc697cff2bc26da84fcdb48ced18450df9) |
 | SwapRouter                                            | [0x1b81D678ffb9C0263b24A97847620C99d213eB14](https://bscscan.com/address/0x1b81D678ffb9C0263b24A97847620C99d213eB14) |
-| SmartRouter                                           | [0x13f4EA83D0bd40E75C8222255bc855a974568Dd4](https://bscscan.com/address/0x13f4EA83D0bd40E75C8222255bc855a974568Dd4) |
 | V3Migrator                                            | [0xbC203d7f83677c7ed3F7acEc959963E7F4ECC5C2](https://bscscan.com/address/0xbC203d7f83677c7ed3F7acEc959963E7F4ECC5C2) |
 | NonfungiblePositionManager                            | [0x46A15B0b27311cedF172AB29E4f4766fbE7F4364](https://bscscan.com/address/0x46A15B0b27311cedF172AB29E4f4766fbE7F4364) |
 | QuoterV2                                              | [0xB048Bbc1Ee6b733FFfCFb9e9CeF7375518e25997](https://bscscan.com/address/0xB048Bbc1Ee6b733FFfCFb9e9CeF7375518e25997) |
@@ -87,6 +86,7 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | UniswapInterfaceMulticall (PancakeInterfaceMulticall) | [0xac1cE734566f390A94b00eb9bf561c2625BF44ea](https://bscscan.com/address/0xac1cE734566f390A94b00eb9bf561c2625BF44ea) |
 | MixedRouteQuoterV1                                    | [0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86](https://bscscan.com/address/0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86) |
 | TokenValidator                                        | [0x864ED564875BdDD6F421e226494a0E7c071C06f8](https://bscscan.com/address/0x864ED564875BdDD6F421e226494a0E7c071C06f8) |
+| SmartRouter                                           | [0x13f4EA83D0bd40E75C8222255bc855a974568Dd4](https://bscscan.com/address/0x13f4EA83D0bd40E75C8222255bc855a974568Dd4) |
 | MasterChefV3                                          | [0x556B9306565093C855AEA9AE92A594704c2Cd59e](https://bscscan.com/address/0x556B9306565093C855AEA9AE92A594704c2Cd59e) |
 
 ## Permission owners
