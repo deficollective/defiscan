@@ -30,11 +30,9 @@ Curve Finance's core governance (the DAO) operates exclusively on Ethereum mainn
 
 ## Upgradeability
 
-The Curve DAO manages all upgrades, primarily through the OwnershipAgentProxy, which executes successful governance votes. Most Curve contracts have an owner or manager with varying permissions, all ultimately controlled by the DAO.
+The Curve DAO manages all upgrades, primarily through the `OwnershipAgentProxy`, which executes successful governance votes. Most Curve contracts have an owner or manager with varying permissions, all ultimately controlled by the DAO.
 
-The DAO's powers are extensive. It can upgrade core DAO contracts or delegate permissions to other entities through governance. It also controls key parameters, such as interest rate policies in crvUSD and lending markets, fee settings, and liquidity concentration in pools. Additionally, it can mint crvUSD and manages the scrvUSD vault, both of which could be used maliciously.
-
-Governance actions are executed through DAO votes that run for 7 days, with most voting activity occurring within the first 3.5 days due to the linear decay of veCRV voting power after that point.
+The DAO's powers are extensive. It can upgrade core DAO contracts or delegate permissions to other entities through governance. It also controls key parameters, such as interest rate policies in crvUSD and lending markets, fee settings, and liquidity concentration in pools. Additionally, it can mint crvUSD and manages the scrvUSD vault, both of which could be used maliciously.  All admin/ownership actions are locked behind successful 7 day governance votes, with very little power allocated to the `EmergencyDAO`.
 
 The key wording for this section in the framework is:
 
@@ -46,13 +44,13 @@ The framework is clear: if the protocol has any mechanism by which user funds ca
 
 ## Autonomy
 
-The only external dependency in Curve is the CoWSwap burner used in the DAO’s revenue collection architecture. It submits limit orders that are guaranteed to execute only within predefined price ranges, converting collected tokens into crvUSD. If this mechanism fails or malfunctions, DAO revenue remains in its original token form until it can be manually swapped through Curve pools via a DAO vote.
+The only external dependency in Curve is the CoWSwap burner used in the DAO’s revenue collection architecture. It submits limit orders that are guaranteed to execute only within predefined parameter ranges, converting collected tokens into crvUSD. If this mechanism fails or malfunctions, DAO revenue remains in its original token until it can be manually swapped through Curve pools via a DAO vote, or `EmergencyDAO` intervention.
 
 > Autonomy score: Low
 
 ## Exit Window
 
-All governance votes occur over a 7-day period, with voting frontloaded in the first half due to the linear decay of veCRV voting power after 3.5 days. There is no mandatory delay between the end of voting and execution. While the voting duration and decay mechanics provide some opportunity for users to react, this does not qualify as a formal delay under the framework.
+All governance votes occur over a 7-day period, with voting frontloaded in the first half due to the linear decay of veCRV voting power after 3.5 days (See governance section for more information). There is no mandatory delay between the end of voting and execution. While the voting duration and decay mechanics provide some opportunity for users to react, this does not qualify as a formal delay under the framework.
 
 > Exit Window score: High
 
@@ -66,12 +64,12 @@ The full frontend code is open source and available at the [Curve Frontend GitHu
 
 ## Conclusion
 
-My role as the reviewer is to assess Curve against the [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/). Based on the current criteria, Curve receives a rating of **Stage 0 – Full training wheels**.
+My role as the reviewer is to assess Curve against the current [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/). Based on its criteria, Curve receives a rating of **Stage 0 – Full training wheels**.
 
 There are three primary paths for Curve to advance to Stage 1 under the existing framework:
 
 1. Relinquish some control at the DAO level, specifically over crvUSD minting and scrvUSD vault management.
-2. Expand the authority of the `EmergencyDAO` to include permission to execute via the `OwnershipAgentProxy`, effectively enabling it to intervene in DAO operations.
+2. Expand the authority of the `EmergencyDAO` to include permission to execute via the `OwnershipAgentProxy`, effectively enabling it to intervene in DAO operations, but also act as the DAO without a 7-day voting period, or any transparency.
 3. Introduce a mandatory 7-day delay between the passage and execution of any governance proposal.
 
 These recommendations may appear reasonable within the framework's logic. However, as explored in the Reviewer's Notes below, the framework lacks a critical dimension: a method to assess decentralization itself, and the governance process.
@@ -80,21 +78,21 @@ These recommendations may appear reasonable within the framework's logic. Howeve
 
 ## On the Framework and Stage 0 Classification
 
-Although Curve is currently rated as Stage 0 under the [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/), there is a clear mismatch between the framework’s definition of Stage 0 and the actual structure of the protocol. The Stage 0 description states:
+Although Curve is currently rated as Stage 0 under the [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/), there is a clear mismatch between the framework’s definition of Stage 0 and the actual structure of Curve. The Stage 0 description states:
 
 > *Critical permissions are still controlled by centralized operators and external dependencies may expose critical risks to users.*
 
 In Curve's case, control lies entirely with an on-chain DAO operating transparently on Ethereum mainnet. There are no centralized operators or external dependencies that pose a critical risk to users. This highlights an important area for potential refinement: the framework currently does not assess or quantify the decentralization or incentive alignment of a protocol’s governance.
 
-Curve is explicitly designed to align incentives over the long term. Users must lock CRV for extended periods, up to four years, to participate in governance and earn rewards. Voting power is proportional to both the amount of CRV locked and the remaining lock duration. DAO members (CRV lockers) are rewarded through token appreciation and yield generation when they support proposals that increase long-term value, and penalized through token depreciation and reduced revenue when they support decisions that harm Curve, its users, or its reputation. This structure creates strong incentives to act in the protocol’s best interest.
+Curve is explicitly designed to align incentives over the long term. Users must lock CRV for extended periods, up to 4 years, to participate in governance and earn rewards. Voting power is proportional to both the amount of CRV locked and the remaining lock duration. DAO members (CRV lockers) are rewarded through token appreciation and yield generation when they support proposals that increase long-term value, and penalized through token depreciation and reduced revenue when they support decisions that harm Curve, its users, or its reputation. This structure creates strong incentives to act in the protocol’s best interest.
 
-These dynamics are similar to Ethereum's proof-of-stake model, which assumes an honest majority of ETH stakers. Technically, Ethereum itself can prevent user access, or even steal user funds, but due to the maturity, incentive alignment and decentralization of Ethereum, this largely isn't considered a possibility.  Any proposal to introduce a Security Council with veto power over blocks or transactions would likely be seen as a regression in decentralization.
+These dynamics are similar to Ethereum's proof-of-stake model, which assumes an honest majority of ETH stakers. Technically, Ethereum itself can prevent user access, or even steal user funds, but due to the maturity, incentive alignment and decentralization of Ethereum, this largely isn't considered a possibility.  Additionally, any proposal to introduce a Security Council to Ethereum with veto power over blocks or transactions would likely be seen as a regression in decentralization.
 
 The Curve DAO is one of the most active and longstanding in DeFi. Since launching in August 2020, it has maintained a steady governance cadence, averaging around 5 proposals per week (excluding gauge votes), all executed transparently on Ethereum mainnet. More recently, the DAO has actively sought to reduce reliance on the `EmergencyDAO` in favor of more fully decentralized governance.
 
-Of course, measuring decentralization is inherently complex, and no analysis has been conducted to assess the decentralization of Curve's governance structure. Still, I believe the framework would benefit from evolving to account for this dimension. Factors like immutability, execution delays, or restricted permissions represent only a narrow part of what makes a protocol truly decentralized or resilient.
+Of course, measuring decentralization is inherently complex, and this review does not attempt to assess the decentralization of Curve’s voter base or participation, both of which are essential elements of a robust governance system. These elements are also not included within the current framework, which instead emphasizes readily quantifiable attributes such as immutability, execution delays, and restricted permissions. While valuable, these factors represent only a partial view of decentralization and resilience. 
 
-In that light, while the Stage 0 classification may be technically accurate under the current framework rules, I do not believe it fully reflects the governance maturity and decentralization of the Curve DAO.
+Given Curve’s design and operational transparency, where governance control resides entirely with an on-chain DAO and is free from centralized operators or critical external dependencies, the Stage 0 classification may be technically accurate under the framework’s current guidelines but does not adequately reflect the maturity or the work Curve has done to decentralize its governance structure.
 
 ## Review Scope
 
