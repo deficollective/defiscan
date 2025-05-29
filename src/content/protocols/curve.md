@@ -16,127 +16,157 @@ update_date: "1970-01-01"
 
 # Summary
 
-Curve Finance is a DeFi protocol comprised of a decentralized exchange (DEX) primarily focused on stablecoin and correlated-asset swaps, isolated lending markets (Llamalend), and a decentralized stablecoin (crvUSD). The governance of all products and itself are solely managed via the Curve DAO using a vote-escrowed token model (veCRV), with voting power proportional to CRV locked, and time remaining on locks (max 4 years).
+Curve Finance is a DeFi protocol consisting of a decentralized exchange (DEX) focused on stablecoin and correlated-asset swaps, isolated lending markets (Llamalend), and a decentralized, overcollateralized stablecoin (crvUSD).
+
+Governance of all products, as well as the protocol itself, is managed entirely through the Curve DAO, using a vote-escrowed token model (veCRV) where voting power is proportional to the amount of CRV locked and the remaining lock duration (up to four years).
 
 # Ratings
 
 ## Chain
 
-Curve Finance's core governance (DAO) operates solely on Ethereum mainnet. While Curve products are deployed across numerous EVM-compatible chains, this review focuses exclusively on the Ethereum mainnet deployment. Cross-chain messaging contracts and deployments on other chains are outside the scope of this analysis. As Ethereum is a mature Layer 1 blockchain, it meets the criteria for the lowest risk category.
+Curve Finance's core governance (the DAO) operates exclusively on Ethereum mainnet. Although Curve products are deployed across multiple EVM-compatible chains, this review focuses only on the Ethereum mainnet. As a mature Layer 1 blockchain, Ethereum falls into the lowest risk category.
 
 > Chain score: Low
 
 ## Upgradeability
 
-Curve incorporates significant upgradeability mechanisms, primarily managed by the Curve DAO via the `OwnershipAgentProxy`. This agent possesses administrative privileges over key contracts, including deployment factories, core DAO components, revenue distribution, and parameter setting contracts.  All DAO governance upgrades and actions happen through DAO votes, which occur over 7 days, with most voting happening in the first 3.5 days due to linear decay of veCRV voting power after this time.
+The Curve DAO manages all upgrades, primarily through the OwnershipAgentProxy, which executes successful governance votes. Most Curve contracts have an owner or manager with varying permissions, all ultimately controlled by the DAO.
 
-The key wording for this section in the framework is the following:
+The DAO's powers are extensive. It can upgrade core DAO contracts or delegate permissions to other entities through governance. It also controls key parameters, such as interest rate policies in crvUSD and lending markets, fee settings, and liquidity concentration in pools. Additionally, it can mint crvUSD and manages the scrvUSD vault, both of which could be used maliciously.
+
+Governance actions are executed through DAO votes that run for 7 days, with most voting activity occurring within the first 3.5 days due to the linear decay of veCRV voting power after that point.
+
+The key wording for this section in the framework is:
 
 > Possible updates may result in the theft or loss of user funds
 
-Within Curve's scrvUSD vault, the Curve DAO holds power as the `role_manager`, this allows the DAO to implement a malicious strategy and steal the underlying scrvUSD, if it voted to do so.  If the Curve DAO proposed to steal user funds in this way, the depositors would have 7 days to react to the proposal, and all trust within Curve's products would likely erode, and the value of the ~900M CRV locked by DAO members would likely collapse.  These incentives form a foundation for the DAO to act in a trustworthy manner, and are very similar to the dynamics Ethereum uses for it's proof of stake consensus, although this does assume a large decentralized DAO member set, of which no analysis was completed to validate this.
-
-The framework is clear, if the protocol can steal user funds in any way the Upgradeability must be classed as 'High'.
+The framework is clear: if the protocol has any mechanism by which user funds can be stolen, upgradeability must be classified as 'High'.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The single dependency within Curve is the CoWSwap burner within the DAO's revenue collection architecture.  These orders are limit orders which are guaranteed to only execute within allowed price ranges, to swap all collected tokens to crvUSD.  This dependency malfunctioning or not working simply leaves DAO revenue as its original token until it can be swapped through Curve pools with a DAO vote.
+The only external dependency in Curve is the CoWSwap burner used in the DAO’s revenue collection architecture. It submits limit orders that are guaranteed to execute only within predefined price ranges, converting collected tokens into crvUSD. If this mechanism fails or malfunctions, DAO revenue remains in its original token form until it can be manually swapped through Curve pools via a DAO vote.
 
 > Autonomy score: Low
 
 ## Exit Window
 
-All governance votes occur over a 7 day time period, with voting frontloaded for the first half of the period due to the linear decay of veCRV voting power after this time.  There is no mandatory delay between vote time ending and execution.  The voting time and linear decay of voting power does allow for some time for users to react, but this does not count under the framework.
+All governance votes occur over a 7-day period, with voting frontloaded in the first half due to the linear decay of veCRV voting power after 3.5 days. There is no mandatory delay between the end of voting and execution. While the voting duration and decay mechanics provide some opportunity for users to react, this does not qualify as a formal delay under the framework.
 
 > Exit Window score: High
 
 ## Accessibility
 
-Curve's primary UI is at [curve.finance](https://curve.finance/).  Other UIs exist which offer most required functionality, e.g. [crvhub.com](https://crvhub.com), [curvemonitor.com](https://curvemonitor.com), [DeFi Saver](https://app.defisaver.com/).  Also most aggregators interface directly with Curve, allowing swaps to route through Curve no matter the UI's status.  
+Curve's primary user interface is hosted at [curve.finance](https://curve.finance/). Other interfaces also provide most core functionality, including [crvhub.com](https://crvhub.com), [curvemonitor.com](https://curvemonitor.com), and [DeFi Saver](https://app.defisaver.com/). Most major aggregators integrate directly with Curve, allowing swaps to route through Curve regardless of the UI’s status.
 
-The full frontend code is open-source: [Curve Frontend Github Repo](https://github.com/curvefi/curve-frontend), however there are no current instructions to self-host.
+The full frontend code is open source and available at the [Curve Frontend GitHub repository](https://github.com/curvefi/curve-frontend), though there are currently no published instructions for self-hosting.
 
 > Accessibility score: Low
 
 ## Conclusion
 
-With the framework introduced here: [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/) Curve receives **Stage 0 - Full training wheels**.  Curve has 3 ways of being able to get to Stage 1:
+My role as the reviewer is to assess Curve against the [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/). Based on the current criteria, Curve receives a rating of **Stage 0 – Full training wheels**.
 
-**WAITING TO RECEIVE FEEDBACK BECAUSE STAGE 0 FEELS WRONG**
+There are three primary paths for Curve to advance to Stage 1 under the existing framework:
 
-1. Relinquish all control over the scrvUSD vault
-2. Give `EmergencyDAO` more power over all DAO operations, most easily by letting them execute as `OwnershipAgentProxy`
-3. Implement a 7 day mandatory waiting period after proposals are passed before execution.
+1. Relinquish some control at the DAO level, specifically over crvUSD minting and scrvUSD vault management.
+2. Expand the authority of the `EmergencyDAO` to include permission to execute via the `OwnershipAgentProxy`, effectively enabling it to intervene in DAO operations.
+3. Introduce a mandatory 7-day delay between the passage and execution of any governance proposal.
+
+These recommendations may appear reasonable within the framework's logic. However, as explored in the Reviewer's Notes below, the framework lacks a critical dimension: a method to assess decentralization itself, and the governance process.
 
 # Reviewer's Notes
 
-Zap contracts were out of scope of this this review due to them having no permissioned functions and being optional.
+## On the Framework and Stage 0 Classification
 
-Also only the latest versions of each implementation was analyzed for this review.  Curve has had many different versions of contracts throughout it's time, but they have all followed the same basic format, with same basic permissions.  
+Although Curve is currently rated as Stage 0 under the [DeFiScan Framework](https://deficollective.org/blog/introducing-defiscan/), there is a clear mismatch between the framework’s definition of Stage 0 and the actual structure of the protocol. The Stage 0 description states:
+
+> *Critical permissions are still controlled by centralized operators and external dependencies may expose critical risks to users.*
+
+In Curve's case, control lies entirely with an on-chain DAO operating transparently on Ethereum mainnet. There are no centralized operators or external dependencies that pose a critical risk to users. This highlights an important area for potential refinement: the framework currently does not assess or quantify the decentralization or incentive alignment of a protocol’s governance.
+
+Curve is explicitly designed to align incentives over the long term. Users must lock CRV for extended periods, up to four years, to participate in governance and earn rewards. Voting power is proportional to both the amount of CRV locked and the remaining lock duration. DAO members (CRV lockers) are rewarded through token appreciation and yield generation when they support proposals that increase long-term value, and penalized through token depreciation and reduced revenue when they support decisions that harm Curve, its users, or its reputation. This structure creates strong incentives to act in the protocol’s best interest.
+
+These dynamics are similar to Ethereum's proof-of-stake model, which assumes an honest majority of ETH stakers. Technically, Ethereum itself can prevent user access, or even steal user funds, but due to the maturity, incentive alignment and decentralization of Ethereum, this largely isn't considered a possibility.  Any proposal to introduce a Security Council with veto power over blocks or transactions would likely be seen as a regression in decentralization.
+
+The Curve DAO is one of the most active and longstanding in DeFi. Since launching in August 2020, it has maintained a steady governance cadence, averaging around 5 proposals per week (excluding gauge votes), all executed transparently on Ethereum mainnet. More recently, the DAO has actively sought to reduce reliance on the `EmergencyDAO` in favor of more fully decentralized governance.
+
+Of course, measuring decentralization is inherently complex, and no analysis has been conducted to assess the decentralization of Curve's governance structure. Still, I believe the framework would benefit from evolving to account for this dimension. Factors like immutability, execution delays, or restricted permissions represent only a narrow part of what makes a protocol truly decentralized or resilient.
+
+In that light, while the Stage 0 classification may be technically accurate under the current framework rules, I do not believe it fully reflects the governance maturity and decentralization of the Curve DAO.
+
+## Review Scope
+
+Zap contracts were excluded from this review, as they have no permissioned functions and are optional to use.
+
+Deployments on other chains, including their associated cross-chain messaging contracts and the supporting Ethereum infrastructure, are also out of scope. This review focuses solely on Curve's functionality on Ethereum mainnet.
+
+Only the latest versions of each contract implementation were analyzed. While Curve has used various contract versions over time, they have all mostly followed the same basic architecture and permission structure.
 
 # Protocol Analysis
 
 ## Decentralized Exchange (DEX)
 
-Curve's DEX is the backbone of all products within the protocol.  There are 3 main types of pools:
+Curve’s DEX is the foundation of all products within the protocol, and user assets within pools are safe, except from smart contract risk. There are three main types of pools:
 
-- Stableswap: stablecoin and stableasset pools of up to 8 assets
-- Twocrypto: 2 volatile assets
-- Tricrypto: 3 volatile assets
+* **Stableswap**: Stablecoin and stable-asset pools with up to 8 assets
+* **Twocrypto**: Pools with 2 volatile assets
+* **Tricrypto**: Pools with 3 volatile assets
 
-There are also:
+In addition, Curve supports:
 
-- Basepools: Stableswap pools where the LP token can be used as an asset in other pools
-- Metapools: Pools with a Basepool asset as one of the chosen coins.
+* **Basepools**: Stableswap pools whose LP tokens can be used as assets in other pools
+* **Metapools**: Pools that include a Basepool LP token as one of the underlying assets
 
-The 3 basic types of pools have their own respective factories where any user can permissionlessly create their own pool.  The DAO owns all the pools in Curve by owning the parent factories, most pools (except very old pools) inherit the admin (owner) from their respective factory.  The admin has the power to set the liquidity concentration of pools, the fee, and sometimes other parameters like offpeg multiplier to increase the fee when the pool is slightly unbalanced.  All these parameters can be updated through a DAO vote, details can be found in the functions and contracts section.  The Tricrypto pools are the only ones which implement a mandatory 3 day waiting period to update parameters.
+Each of the three primary pool types has its own factory contract, allowing any user to permissionlessly create a pool. The DAO owns all pools by controlling the parent factories. Most pools (except for legacy deployments) inherit their admin address from the factory. This admin has the ability to adjust parameters such as liquidity concentration, trading fees, and, in some cases, other settings like the off-peg multiplier, which increases fees when a pool becomes imbalanced.
+
+All of these parameters can be updated via DAO vote. More details can be found in the Functions and Contracts section. Tricrypto pools are the only pool type that enforces a mandatory 3-day waiting period before parameter changes take effect.
 
 ![DEX](./diagrams/curve-dex-diagram.png)
 
-*Note: 4 older factories are owned by proxy contract like `FactoryOwnerProxy (old)` which grants permission to different admins for different functions within the factory and pools, essentially splitting the sole admin role up into 3 roles: `ownership_admin`, `parameter_admin`, `emergency_admin`.  This has been sunset in new factories, but could be implemented again if the DAO voted to change the admin to a proxy admin contract.*
+*Note: Four older factories are owned by a proxy contract, such as `FactoryOwnerProxy (old)`, which delegates different administrative functions to separate roles: `ownership_admin`, `parameter_admin`, and `emergency_admin`. This model has been deprecated in newer factories but could be reinstated by DAO vote.*
 
 ## crvUSD & scrvUSD
 
-crvUSD is Curve's overcollateralized stablecoin.  It is minted when users deposit collateral (BTC & ETH derivaties) and take out a loan.  Their collateral is deposited into the novel [LLAMMA](https://docs.curve.finance/crvUSD/amm/) which implements the soft-liquidation mechanism.
+crvUSD is Curve’s overcollateralized stablecoin. It is minted when users deposit collateral (currently only BTC or ETH derivatives) and take out a loan. The collateral is deposited into the novel [LLAMMA](https://docs.curve.finance/crvUSD/amm/), which implements the soft-liquidation mechanism.
 
-Interest rates are automatically calculated and constantly updated based on the current peg of crvUSD and reserves of PegKeepers.  PegKeepers are allocated crvUSD which they can deposit (sell) into a specific pool (e.g. crvUSD/USDC) when crvUSD goes above peg, and withdraw from the pool when crvUSD falls below peg.
+Interest rates are automatically calculated and continuously updated based on the crvUSD peg and the reserves held by PegKeepers. PegKeepers are allocated crvUSD, which they can deposit into a designated pool (e.g., crvUSD/USDC) when crvUSD trades above peg (i.e., selling crvUSD above peg), and withdraw when it trades below peg (i.e., buying crvUSD below peg)
 
-crvUSD creates revenue for the DAO by charging interest on debt, this revenue is split between the DAO (veCRV holders) and scrvUSD stakers.  scrvUSD is a vault which has complementary dynamics to PegKeepers, when crvUSD falls below peg, interest rates increase, increasing the yield for scrvUSD stakers, when crvUSD goes above peg, interest rates decrease, helping balance the peg and crvUSD demand.
+crvUSD generates revenue for the DAO by charging interest on outstanding debt. This revenue is distributed between the DAO (veCRV holders) and scrvUSD stakers. scrvUSD is a staking vault that complements PegKeeper dynamics. When crvUSD falls below peg, interest rates increase, raising yields for scrvUSD stakers, increasing crvUSD demand. When crvUSD rises above peg, interest rates decrease, helping to reduce demand and restore the peg.
 
-For more information see the overview below:
+For more information, see the overview below:
 
-![DEX](./diagrams/curve-crvusd-diagram.png)
+![crvUSD](./diagrams/curve-crvusd-diagram.png)
 
 ## Llamalend 
 
-Llamalend is a peer to peer lending protocol with the same structure as crvUSD loans, but with riskier assets.  Instead of the DAO taking on the risk for the collateral falling below loan value, users deposit crvUSD to vaults, and earn yield from borrows collateralized with specific assets within isolated markets.
+Llamalend is a peer-to-peer lending protocol that follows the same structure as crvUSD loans but supports riskier collateral. Unlike crvUSD, where the DAO assumes risk when collateral falls below the loan value, Llamalend distributes this risk to depositors. Users deposit crvUSD into vaults and earn yield from loans that are collateralized with specific assets, each within its own isolated market.
 
-![DEX](./diagrams/curve-dex-diagram.png)
+![Llamalend](./diagrams/curve-lending-diagram.png)
 
 ## Curve DAO - Revenue Sharing Contracts
 
-The Curve DAO earns revenue from it's decentralized exchange pools and from interest charged on crvUSD mints.  The DAO votes on how to allocate this revenue, and what portion of it flows back to veCRV holders.  This process is documented here: [Fee Collection](https://docs.curve.finance/fees/overview/).  In overview is also given below:
+The Curve DAO earns revenue from its decentralized exchange pools and from interest charged on crvUSD mints. The DAO votes on how this revenue is allocated, including what portion is distributed to veCRV holders.  This process is documented here: [Fee Collection](https://docs.curve.finance/fees/overview/).   An overview is also provided below:
 
 ![DAO revenue](./diagrams/curve-dao-rev-diagram.png)
 
 ## Gauges & CRV Minting
 
-Curve's Gauges are where CRV is minted, and users earn rewards, primarily for providing liquidity in DEX pools and supplying on Llamalend.  All pools and lending market vaults can have a gauge, but the DAO must vote to add one to the Gauge Controller, which lets it receive CRV emissions. 
+Curve’s gauges are where CRV is minted and distributed as rewards, primarily to users providing liquidity in DEX pools and supplying assets to Llamalend. Any pool or lending market vault can have a gauge, but the DAO must first vote to add it to the Gauge Controller to make it eligible for CRV emissions.
 
-DAO members (veCRV holders) vote maximum once every 10 days for which gauges to send CRV emissions to.  Every Thursday at 00:00 UTC, the weekly CRV emissions are split proportionally between all the gauges and their total votes.
+veCRV holders can vote once every 10 days to decide how CRV emissions are distributed across active gauges. Every Thursday at 00:00 UTC, the weekly CRV emissions are split proportionally based on the total votes each gauge received.
 
-While users have LP tokens staked in a gauge, they can boost their rewards to be more of their peers by owning more veCRV than anyone else, allowing their rewards to be up to 2.5x greater than their peers.  See the overview for how gauges operate below:
+Users who stake LP tokens in a gauge can boost their rewards relative to others by holding more veCRV. This boost can increase their rewards by up to 2.5 times compared to users with no veCRV. See the diagram below for an overview of how gauges operate:
 
-![DEX](./diagrams/curve-gauges-diagram.png)
+![Gauges](./diagrams/curve-gauges-diagram.png)
 
 
 # Dependencies
 
-Curve functions on Ethereum without relying on external dependencies: the sole exception is swapping fees to crvUSD with CoWSwap limit orders.  These only execute within allowable parameters set by the DAO, and Curve can use it's own pools as backup to swap assets with a DAO vote. The `EmergencyDAO` can also fulfil this duty currently.
+Curve operates on Ethereum without relying on external dependencies, with one exception: swapping collected fees into crvUSD using CoWSwap limit orders. These orders only execute within parameters set by the DAO, and Curve can fall back to using its own pools to perform swaps via a DAO vote. The `EmergencyDAO` currently also has the authority to carry out this function.
 
-Everything else is built in house, and all Curve products rely on internal price oracles from its own pools.
+All other components are developed in-house. Curve products rely solely on internal price oracles derived from its own pools.
 
 # Governance
 
@@ -205,9 +235,11 @@ At least 4 of the 5 signers on the `scrvusdEmergencyDAO` can be identified as me
 
 ## Exit Window
 
-All votes have a 7 day voting period and because of veCRV voting decay votes are usually frontloaded in the first 3 days of the period.  This allows anyone 7 days of notice for any contentious votes.  For all LPs in pools, lending markets, and gauges, the DAO can only vote to increase/decrease parameters within the hardcoded ranges.
+All DAO votes have a 7-day voting period. Due to veCRV voting decay, most votes are cast in the first 3.5 days, after which voting power linearly decays to zero. This structure provides up to 7 days of advance notice for any potentially contentious proposals.
 
-The `TriCryptoSwapFactory`'s current pool implementation also implements a mandatory 3 day extra delay on all parameter changes, which can also be vetoed by the `EmergencyDAO`.
+For all liquidity pools, lending markets, and gauges, the DAO can only vote to modify parameters within predefined, hardcoded ranges.
+
+In addition, the current `TriCryptoSwapFactory` pool implementation enforces a mandatory 3-day delay on all parameter changes, these changes can also be vetoed by the `EmergencyDAO`.
 
 
 # Contracts & Permissions
