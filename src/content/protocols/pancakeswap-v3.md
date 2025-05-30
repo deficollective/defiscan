@@ -113,6 +113,7 @@ Users primarily interact with PancakeSwap v3 through its official web interface 
 | PCSV3FeeHandler (Proxy)                               | [0x518D9643160cFd6FE469BFBd3BA66fC8035a68a3](https://bscscan.com/address/0x518D9643160cFd6FE469BFBd3BA66fC8035a68a3) |
 | PCSV3FeeHandler (Implementation)                      | [0xcb33967378a52b4e08a20953042b7a97fbef1b79](https://bscscan.com/address/0xcb33967378a52b4e08a20953042b7a97fbef1b79) |
 | PancakeV3LmPoolDeployer                               | [0xd93F5c7A894bb44BDc9231087c8E559502f737eD](https://bscscan.com/address/0xd93F5c7A894bb44BDc9231087c8E559502f737eD) |
+|  PancakeV3LmPool  (example pool)                      | [0x76bfce845094d8cdfb9fa45134132823f37ae307](https://bscscan.com/address/0x76bfce845094d8cdfb9fa45134132823f37ae307) |
 | FarmBooster                                           | [0xAADd7a07BFb5114f313612865553D0f897A6389A](https://bscscan.com/address/0xAADd7a07BFb5114f313612865553D0f897A6389A) |
 | MasterChefV3Receiver                                  | [0x07a57c7BdDfAda9a02DB89c58D0580344d95463C](https://bscscan.com/address/0x07a57c7BdDfAda9a02DB89c58D0580344d95463C) |
 | MasterChefV3KeeperV1                                  | [0x216B55f49B7aE82Bacbfa184Baf7703b7Cc55295](https://bscscan.com/address/0x216B55f49B7aE82Bacbfa184Baf7703b7Cc55295) |
