@@ -22,9 +22,14 @@ PancakeSwap V3 is an automated market maker (AMM) on BNB Smart Chain with concen
 
 ## Chain
 
-See http://defiscan.info/learn-more#chain for more guidance.
+PancakeSwap V3 is deployed on BNB Smart Chain (BSC), an EVM-compatible blockchain using a Proof of Staked Authority (PoSA) consensus mechanism with 45 active validators out of a total of 50.
 
-> Chain score: Low/Medium/High
+We typically use L2beat's "stages" framework to assess chain risk levels. However, this framework cannot be applied to BNB Smart Chain as it was specifically designed to evaluate Ethereum Layer 2 solutions (optimistic and ZK-rollups), not independent blockchains like BSC.
+
+BSC fundamentally differs from Ethereum L2s in several ways: it does not publish data on Ethereum, has no fraud proof or validity proof mechanisms, and its security depends entirely on its own validator set rather than inheriting Ethereum's security.The PoSA consensus mechanism grants considerable power to a limited number of validators, Binance continues to exert substantial influence over governance, and validators with the largest BNB stakes have disproportionate control.
+Fault tolerance is lower than on more decentralized networks, as the network's security relies on no more than one-third of validators acting maliciously, as per the PoSA consensus design.
+
+> Chain score: High
 
 ## Upgradeability
 
