@@ -22,12 +22,9 @@ PancakeSwap V3 is an automated market maker (AMM) on BNB Smart Chain with concen
 
 ## Chain
 
-PancakeSwap V3 is deployed on BNB Smart Chain (BSC), an EVM-compatible blockchain using a Proof of Staked Authority (PoSA) consensus mechanism with 45 active validators out of a total of 50.
+PancakeSwap V3 is deployed on multiple blockchains. This review focuses on its BNB Smart Chain (BSC) deployment, which uses a Proof of Staked Authority (PoSA) consensus with 45 active validators.
 
-We typically use L2beat's "stages" framework to assess chain risk levels. However, this framework cannot be applied to BNB Smart Chain as it was specifically designed to evaluate Ethereum Layer 2 solutions (optimistic and ZK-rollups), not independent blockchains like BSC.
-
-BSC fundamentally differs from Ethereum L2s in several ways: it does not publish data on Ethereum, has no fraud proof or validity proof mechanisms, and its security depends entirely on its own validator set rather than inheriting Ethereum's security.The PoSA consensus mechanism grants considerable power to a limited number of validators, Binance continues to exert substantial influence over governance, and validators with the largest BNB stakes have disproportionate control.
-Fault tolerance is lower than on more decentralized networks, as the network's security relies on no more than one-third of validators acting maliciously, as per the PoSA consensus design.
+While L2beat's "stages" framework is commonly used to evaluate Ethereum Layer 2 solutions, it's not applicable to BSC as an independent blockchain. Unlike L2s, BSC maintains its own security model without inheriting Ethereum's security guarantees. The PoSA consensus centralizes influence among major BNB holders, with Binance playing a significant governance role. The network's fault tolerance allows up to one-third of validators to act maliciously before security is compromised.
 
 > Chain score: High
 
@@ -70,9 +67,9 @@ See http://defiscan.info/learn-more#exit-window for more guidance.
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+Users primarily interact with PancakeSwap v3 through its official web interface at [https://pancakeswap.finance](https://pancakeswap.finance), which is developed and maintained by Pancake Labs. PancakeSwap’s frontend code is published under an MIT license [here](https://github.com/pancakeswap/pancake-frontend). The repository’s README contains instructions on how to clone the project, install dependencies, and launch the self-hosted app.
 
-> Accessibility score: Low/Medium/High
+> Autonomy score: Medium
 
 ## Conclusion
 
@@ -92,8 +89,6 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 |-----------------|-----------------------------------------------------------------------------------------------------------------------|--------------|--------------------|------------------------|--------------------------|----------------------------|
 | unknown multisig 1      | [0x21835332cBDf1b3530fAE9f6Cd66FEB9477dFC02](https://bscscan.com/address/0x21835332cBDf1b3530fAE9f6Cd66FEB9477dFC02) | Multisig 3/6 | ❌                  | ❌                      | ❌                        | ❌                          |
 | unknown multisig 2      | [0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 | ❌                  | ❌                      | ❌                        | ❌                          |
-
-A COMPLETER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 # Contracts and Permissions
