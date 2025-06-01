@@ -1,56 +1,5 @@
 # ⭐️ DeFiScan Community Review Program
 
-Are you deep in the trenches, knowing the protocols you use in and out? It’s time to put that knowledge to work, doing a service for the whole industry and getting paid for it!
-
-After the successful release of [DeFiScan](https://defiscan.info) and the “How much De is in my Fi” competition last week during Devcon, we will now shift gears and focus on increasing coverage of the reviewed DeFi protocols. And how better to do this than through an incentivized community program with a total prize pool of 10,000 LUSD!
-
-## TL;DR
-
-- Key Information
-- The total payout for community submitted protocol reviews is LUSD 10,000
-- Anyone can submit reviews through a PR on the DeFiScan GitHub
-- DeFi Collective members review and verify submissions
-- Only PRs containing a complete and accurate review are merged and earn the prize of 500 LUSD
-- Payouts are made in LUSD on Optimism
-- Participants can submit more than one review
-- The program ends as soon as LUSD 10,000 are paid out to community reviewers
-
-## Scope
-
-At this stage, and although all submissions are welcome, only the reviews of the following protocols (on the chains indicated in brackets) are eligible for the prize payout:
-
-<details>
-<summary>Protocols</summary>
-
-- Lido (Ethereum)
-- Aave v3 (Ethereum, Arbitrum, Avalanche, Polygon, Base, Optimism, Scroll, BSC, Gnosis)
-- Aave v2 (Ethereum, Polygon)
-- EigenLayer (Ethereum)
-- Ether.Fi Stake (Ethereum)
-- Ether.fi Vaults (Ethereum)
-- Ether.fi Liquid (Ethereum)
-- Maker / Sky (Ethereum)
-- Uniswap v3 (Ethereum, Arbitrum, Polygon, Base)
-- Uniswap v2 (Ethereum, Base)
-- Binance Staked ETH (Ethereum, BSC)
-- Rocket Pool (Ethereum)
-- Ethena (Ethereum)
-- Spark (Ethereum)
-- Pendle (Ethereum)
-- Compound v3 (Ethereum, Arbitrum)
-- Compound V2 (Ethereum)
-- Symbiotic (Ethereum)
-- Zircuit (Ethereum)
-- Venus (BSC, Ethereum)
-- PancakeSwap AMM (BSC)
-- PancakeSwap AMM v3 (BSC)
-- Morpho Blue (Ethereum, Base)
-- Renzo (Ethereum)
-- Curve DEX (Ethereum, Arbitrum)
-- Curve crvUSD (Ethereum)
-
-</details>
-
 ## Getting Started
 
 The following steps outline the process of registering for and conducting a successful protocol review. Make sure you understand and follow this process:
