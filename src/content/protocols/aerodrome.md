@@ -5,9 +5,9 @@ x: "https://x.com/AerodromeFi"
 github: ["https://github.com/aerodrome-finance"]
 defillama_slug: ["aerodrome-v1", "aerodrome-slipstream"]
 chain: "Base"
-stage: 0
+stage: 1
 reasons: []
-risks: ["H", "M", "L", "M", "L"]
+risks: ["M", "M", "L", "M", "L"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
@@ -22,9 +22,9 @@ Aerodrome Finance is a next-generation AMM designed to serve as Base's central l
 
 ## Chain
 
-Aerodrome is deployed on the Base chain, an Ethereum L2 in Stage 0 according to L2BEAT.
+Aerodrome is deployed on the Base chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: High
+> Chain score: Medium
 
 ## Upgradeability
 

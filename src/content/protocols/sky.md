@@ -10,7 +10,7 @@ reasons: []
 risks: ["L", "H", "H", "H", "L"]
 author: ["mmilien_"]
 submission_date: "2025-03-11"
-publish_date: "2025-01-01"
+publish_date: "2025-05-15"
 update_date: "1970-01-01"
 ---
 
@@ -22,37 +22,37 @@ Sky is a stablecoin protocol allowing users to mint its USDS stablecoin through 
 
 ## Chain
 
-This review focuses on the Ethereum deployment of Sky, currently the only chain on which Sky protocol is deployed. Ethereum achieves a Low centralization risk score."
+This review focuses on the Ethereum instance of Sky. Ethereum achieves a _Low_ centralization risk score.
 
 > Chain score: Low
 
 ## Upgradeability
 
-`USDS` and `sUSDS`, Sky's stablecoin and its corresponding yield-bearing version, are upgradeable contracts through Sky governance proposals. Updating those contracts could change the entire logic of those tokens and may incur a loss of funds for users.
+`USDS` and `sUSDS`, Sky's stablecoin and its corresponding yield-bearing version, are upgradeable contracts through _Sky Governance_ proposals. Updating those contracts could change the entire logic of those tokens and may incur a loss of funds for users.
 
-Many parameters in the Sky Protocol can be changed through governance proposals and may also incur loss of funds, loss of unclaimed yield, as well as materially impact the protocol's performance. Example actions are forced liquidations, which would result in loss of user funds, creating unbacked debt, which could endanger the protocol's stability, or pausing the contracts, which could trap user funds for an undetermined amount of time.
+Critical parameters in the Sky protocol can be changed through _Sky Governance_ proposals. Unwanted updates to these parameters can result in the loss of funds, loss of unclaimed yield, or otherwise materially impact the expected protocol performance. Example actions are forced liquidations, which would result in loss of user funds, creating unbacked debt, which could endanger the protocol's stability, or pausing the contracts, which could trap user funds for an undetermined amount of time.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-Sky has a centralized dependency on Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. This conversion may be stopped or paused in an emergency Sky Governance proposal. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. Nonetheless, at the time of writing, this debt ceiling is high enough that it does not prevent more than 50% of the collateral in Sky from being backed by `USDC`. The ceiling is explained further in the [dependencies](#dependencies) section.
+Sky has a centralized dependency on Circle and its `USDC` stablecoin token. This is because users can mint `USDS` from `USDC` at a fixed 1:1 rate. This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. This conversion may be stopped or paused in an emergency _Sky Governance_ proposal. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. Nonetheless, at the time of writing, this debt ceiling is high enough that it does not prevent more than 50% of the collateral in Sky from being backed by `USDC`. The ceiling is explained further in the [dependencies](#dependencies) section.
 
-The Sky protocol relies on the provider Chronicle for price feeds of collateral assets. The Chronicol protocol uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates on-chain. We found that any changes to the validator set are subject to a 7 days exit window. We therefore assessed that Chronicle is a Stage 1 dependency and explained it in detail in a [dedicated report](./chronicle.md).
+The Sky protocol also relies on Chronicle's oracle price feeds to assess the solvency of debt positions. The Chronicol protocol uses a system of validators hosted by various third parties such as Bitcoin Suisse, ETHGlobal, Gitcoin, and Etherscan. Validators push price updates onchain. We found that any changes to the validator set are subject to a 7 days exit window. Chronicle thus achieves a _Medium_ centralization risk score as discussed in a separate report [here](./chronicle.md).
 
-An Oracle Security Module (`OSM`) enforces a 1-hour delay on price updates, and the Sky governance can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
+An _Oracle Security Module_ (`OSM`) enforces a 1-hour delay on price updates, and the _Sky Governance_ can freeze the current price to prevent further updates in case of emergency. The price feed provider could be changed through a governance proposal.
 
 > Autonomy score: High
 
 ## Exit Window
 
-All permissions within Sky are held by the onchain Sky Governance. There are no external accounts or multisigs in control.
+All permissions within Sky are held by the onchain _Sky Governance_. There are no external accounts or multisigs in control.
 
-Governance is controlled by `MKR`/`SKY` token holders who locked their tokens to earn voting power, which allows them to submit and vote on respective proposals, or delegate their votes to another user. Any token holder can create a proposal, and the protocol uses a system of continuous approval, explained in more detail in the [governance section](#exit-window-1).
+The _Sky Governance_ is controlled by `MKR`/`SKY` token holders who locked their tokens to earn voting power, which allows them to submit and vote on respective proposals, or delegate their votes to another user. Any token holder can create a proposal, and the protocol uses a system of continuous approval, explained in more detail in the [governance section](#exit-window-1).
 
-The minimum delay between approval and execution of a governance proposal is currently **18 hours**. Governance proposals have a recurring weekly and monthly schedule. Those proposals usually have a courtesy delay duration of 2-3 days before taking effect, but proposals remain possible at any time with the minimum delay.
+The minimum delay between approval and execution of a proposal is currently **18 hours**. _Sky Governance_ proposals have a recurring weekly and monthly schedule. Those proposals usually have a courtesy delay duration of 2-3 days before taking effect, but proposals remain possible at any time with the minimum delay.
 
-Emergency measures allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost, no matter the emergency status. During an emergency shutdown, users can retrieve their supplied assets, but no additional supply or borrowing is allowed. This is explained further in the technical [governance section](#exit-window-1).
+Emergency measures allow the _Sky Governance_ to pause certain contracts through a proposal without being subject to the mandatory delay. In addition to that, an _Emergency Shutdown Module_ (ESM) exists and can irreversibly shutdown the entire protocol if **500'000** `MKR` tokens are sent to the Emergency Shutdown Contract. Funds sent to the contract are considered lost, no matter the emergency status. During an emergency shutdown, users can retrieve their supplied assets, but no additional supply or borrowing is allowed. This is explained further in the technical [governance section](#exit-window-1).
 
 > Exit Window score: High
 
@@ -64,13 +64,13 @@ Sky has a main frontend at [sky.money](https://sky.money). The frontend is not s
 
 ## Conclusion
 
-The Sky protocol exposes critical permissions that are not protected with an Exit Window of at least 7 days or a Security Council and thus earns a High centralization risk score for its Upgradeability and Exit Window dimensions.
+The Sky protocol exposes critical permissions that are not protected with an _Exit Window_ of at least 7 days or a _Security Council_ and thus earns a _High_ centralization risk score for its _Upgradeability_ and _Exit Window_ dimensions.
 
-Furthermore, Sky is exposed to centralization risks from its USDC and Chronicle dependencies, resulting in an overall High centralization risk score for the Autonomy dimension.
+Furthermore, Sky is exposed to centralization risks from its USDC and Chronicle dependencies, resulting in an overall _High_ centralization risk score for the _Autonomy_ dimension.
 
-Sky thus achieves a decentralization of Stage 0.
+Sky thus achieves a decentralization of _Stage 0_.
 
-The protocol could reach Stage 1 if it no longer swaps its `USDS` with Circle's `UDSC` in a blind fashion and increases its exit window to at least 7 days or a security council. It could further reach Stage 2 with an exit window of at least 30 days, and if it changes its oracle provider to a Stage 2 or equivalent protocol. This could also be achieved if Chronicle increases its exit window to 30 days.
+The protocol could reach _Stage 1_ if it no longer swaps its `USDS` with Circle's `UDSC` in a blind fashion and increases its _Exit Window_ to at least 7 days or establish a _Security Council_. It could further reach _Stage 2_ with an _Exit Window_ of at least 30 days, and if it changes its oracle provider to a _Stage 2_ or equivalent protocol. This could also be achieved if Chronicle increases its _Exit Window_ to 30 days.
 
 > Overall score: Stage 0
 
@@ -86,9 +86,9 @@ governance contract.
 
 ## Sky Stablecoin Module (CDP)
 
-The contracts related to the Collateralized Debt Module are highlighted below. The `Vat` is the core accounting system of the protocol and acts as a balance sheet for debt positions against all collaterals. Each collateral needs an adapter contract called `Join` so that it can be linked to the `Vat`. A `Dog` contract monitors the positions and can _bark_ when a position becomes liquidable. It _kicks_ the collateral's `Clipper` (or `LockstakeClipper` if the collateral is sealed `MKR`) and starts the auction process. The `Vow` is the contract that keeps track of all surplus and debt and is the beneficiary of all the `DAI` raised in the auction. The `Flopper` or `Flapper` is responsible for debt or surplus auctions, respectively. The `Vow` is the beneficiary of the `DAI` raised in auctions. It is important to note that the governance has permission on those contracts and could trigger unjustified liquidations by bypassing the `Dog` contract.
+The contracts related to the _Collateralized Debt Module_ are highlighted below. The `Vat` is the core accounting system of the protocol and acts as a balance sheet for debt positions against all collaterals. Each collateral needs an adapter contract called `Join` so that it can be linked to the `Vat`. A `Dog` contract monitors the positions and can _bark_ when a position becomes liquidable. It _kicks_ the collateral's `Clipper` (or `LockstakeClipper` if the collateral is sealed `MKR`) and starts the auction process. The `Vow` is the contract that keeps track of all surplus and debt and is the beneficiary of all the `DAI` raised in the auction. The `Flopper` or `Flapper` is responsible for debt or surplus auctions, respectively. The `Vow` is the beneficiary of the `DAI` raised in auctions. It is important to note that the governance has permission on those contracts and could trigger unjustified liquidations by bypassing the `Dog` contract.
 
-The `Spotter` feeds the price used for liquidation and auctions. It reads the price out of the `OSM` (Oracle Security Module), which delays price updates by one hour and can be frozen in case of emergency. Incorrect oracle prices could potentially liquidate the entire Maker ecosystem. The oracle provider Chronicle is, therefore, extremely trusted.
+The `Spotter` feeds the price used for liquidation and auctions. It reads the price out of the `OSM` (_Oracle Security Module_), which delays price updates by one hour and can be frozen in case of emergency. Incorrect oracle prices could potentially liquidate the entire Maker ecosystem. The oracle provider Chronicle is, therefore, extremely trusted.
 
 The `Pot` and `Jug` contracts represent the rates module. Respectively, the `Pot`contract allows users to save at a specific _DAI Savings rate_ and the `Jug` contract handles stability fees. We note that the savings rate is not limited and may become either highly negative or positive under future governance proposals.
 
@@ -98,9 +98,9 @@ As for the governance and tokens, the Mom contracts (`FlapperMom`, `FLopperMom`,
 
 ## Sky ↔ Maker Conversion Module
 
-The contracts related to the conversion from legacy Maker tokens to Sky are displayed in the diagram below. Following the _Sky End Game Plan_, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Conversion contracts allow for the swap from legacy to new tokens and back at a fixed rate. In addition to that, a `LitePSM` (Peg-stability-module) allows users to swap `USDC` for `USDS` with no impact on the peg thanks to pre-attributed reserves.
+The contracts related to the conversion from legacy Maker tokens to Sky are displayed in the diagram below. Following the _Sky End Game Plan_, the `DAI` and `MKR` have been replaced by `USDS` and `SKY` respectively. Conversion contracts allow for the swap from legacy to new tokens and back at a fixed rate. In addition to that, a `LitePSM` (_Peg Stability Module_) allows users to swap `USDC` for `USDS` with no impact on the peg thanks to pre-attributed reserves.
 
-A `LitePSM` (Peg-stability-module) allows users to swap other stablecoins for `USDS` with no impact on the peg, thanks to pre-attributed reserves.
+A `LitePSM` (_Peg Stability Module_) allows users to swap other stablecoins for `USDS` with no impact on the peg, thanks to pre-attributed reserves.
 
 The governance has admin privileges over all contracts and could, for example, arbitrarily mint tokens. `DSChief`, the (non-delayed) governance contract, is the authority over the `LitePSMMom`, which allows governance proposals to stop the `LitePSM` without any delay.
 
@@ -112,7 +112,7 @@ Finally, users can put their `USDS` into savings and obtain `sUSDS`. `sUDS` is t
 
 A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a reward according to an issuance chosen by the governance. Users can stake their `USDS` directly in the `StakingRewards` contract and claim their rewards with the same contract. `DssVestMintable` contracts allow the governance to create vested plans that will gradually mint tokens to distribute to some beneficiaries.
 
-![Overview of the sky rewards module](./diagrams/sky-rewards.png)
+![Overview of the Sky Rewards Module](./diagrams/sky-rewards.png)
 
 # Dependencies
 
@@ -120,9 +120,9 @@ A `StakingReward` contract allows users to stake `USDS` and receive `SKY` as a r
 
 `USDS` is pegged to Circle's `USDC` rather than `USD` due to its stability module.
 
-Users can mint `USDS` from `USDC` at a fixed 1:1 rate using the `LitePSM` (Peg-stability module). This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. This debt ceiling is dynamic, it can be increased every 12 hours by _400 Mio_ if the current debt approaches the ceiling (debt + 400 Mio > ceiling). The ceiling can reach up to **10 Billion** `USDS`, making `USDC` more than a collateral for Sky, but a peg for its stablecoin.
+Users can mint `USDS` from `USDC` at a fixed 1:1 rate using the `LitePSM` (_Peg Stability Module_). This means that `USDS` is directly pegged to `USDC` (instead of `USD`), which is a centralized stablecoin. There is a debt ceiling limiting how much `USDS` can be backed by `USDC`. This debt ceiling is dynamic, it can be increased every 12 hours by _400 Mio_ if the current debt approaches the ceiling (debt + 400 Mio > ceiling). The ceiling can reach up to **10 Billion** `USDS`, making `USDC` more than a collateral for Sky, but a peg for its stablecoin.
 
-The `LitePSM`, which allows this conversion, may be stopped or paused in an emergency Sky Governance proposal.
+The `LitePSM`, which allows this conversion, may be stopped or paused in an emergency _Sky Governance_ proposal.
 
 ## Chronicle
 
@@ -130,32 +130,32 @@ The Sky protocol also relies on the provider Chronicle for price feeds of collat
 
 Chronicle is an oracle protocol that computes a median price from multiple sources. The protocol contains validators who push new prices and challengers who can freeze and challenge new prices. The validator set of an oracle can be changed with a delay of 7 days. We analysed Chronicle's decentralization in a dedicated report [here](./chronicle.md).
 
-An Oracle Security Module enforces a 1-hour window on price updates, and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
+An _Oracle Security Module_ enforces a 1-hour window on price updates, and the governance can freeze the current price value to prevent further updates. In addition to freezing prices, the MakerDAO governance can change the oracle provider with a governance proposal.
 
 # Governance
 
 ## Sky Governance
 
-The governance process is highlighted below. Users need to seal `MKR` or `SKY` tokens into the `LockStakeEngine` in order to receive voting rights. Users may receive rewards for their sealed tokens. Withdrawing the tokens is currently subject to a fee starting at 5% and increasing up to 15% over time.
+The _Sky Governance_ process is highlighted below. Users need to seal `MKR` or `SKY` tokens into the `LockStakeEngine` in order to receive voting rights. Users may receive rewards for their sealed tokens. Withdrawing the tokens is currently subject to a fee starting at 5% and increasing up to 15% over time.
 
 The governance contract is `DSChief`; users can either vote or delegate their vote to other users. A list of _Aligned Delegates_ who vowed to respect the protocol's core values is published on the [governance webpage](https://vote.makerdao.com/delegates). The current aligned delegates hold a majority of the voting power and extreme influence over the protocol (see [security council](#security-council)).
 
-Each governance proposal comes under the form of a `DssSpell`, the points to a `DssSpellAction` contract which holds the logic to be executed upon approval. The governance uses continuous approval, which means one proposal can be executed at a time, and users need to shift their vote to support a new proposal. The proposal with the most votes at any time is the `Hat` that can be scheduled and executed. Each `Spell` may be executed just once and expires after 30 days if it has not been selected to be the `Hat`.
+Each proposal comes under the form of a `DssSpell`, the points to a `DssSpellAction` contract which holds the logic to be executed upon approval. The _Sky Governance_ uses continuous approval, which means one proposal can be executed at a time, and users need to shift their vote to support a new proposal. The proposal with the most votes at any time is the `Hat` that can be scheduled and executed. Each `Spell` may be executed just once and expires after 30 days if it has not been selected to be the `Hat`.
 
-Proposals can be scheduled for execution with the `DSPauseProxy`, which enforces a minimal 18-hour delay between approval and execution. Some proposals may exercise non-delayed action to pause some modules of the protocol such as the `LitePSM` (Peg Stability Module), `OSM` (Oracle Security Module), liquidations, and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (Emergency Shutdown Module). Funds sent to the contract cannot be recovered, even if no shutdown happens.
+Proposals can be scheduled for execution with the `DSPauseProxy`, which enforces a minimal 18-hour delay between approval and execution. Some proposals may exercise non-delayed action to pause some modules of the protocol such as the `LitePSM` (_Peg Stability Module_), `OSM` (_Oracle Security Module_), liquidations, and debt ceiling. Users can trigger an Emergency and irreversible shutdown of the system by sending 500'000 `MKR` to the `ESM` (_Emergency Shutdown Module_). Funds sent to the contract cannot be recovered, even if no shutdown happens.
 
-![Overview of the sky governance](./diagrams/sky-governance.png)
+![Overview of the _Sky Governance_](./diagrams/sky-governance.png)
 
 ## Exit Window
 
-The minimum delay between approval and execution of a governance proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The governance has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any time is accepted and can be executed once its delay has passed.
+The minimum delay between approval and execution of a _Sky Governance_ proposal is **18 hours**, recently reduced from 30 hours in an [emergency proposal](https://vote.makerdao.com/executive/template-executive-vote-out-of-schedule-executive-vote-risk-parameter-changes-february-18-2025). The _Sky Governance_ has a _continuous proposal_ model, which means voters need to migrate their vote from the current proposal to a new proposal. The proposal with the most votes at any time is accepted and can be executed once its delay has passed.
 
-Emergency measures permissions allow the governance to pause certain contracts through a governance proposal without being subject to the mandatory delay. This is the case for all contracts that have a `Mom` who can pause or stop their child.
+Emergency measures permissions allow the _Sky Governance_ to pause certain contracts through a proposal without being subject to the mandatory delay. This is the case for all contracts that have a `Mom` who can pause or stop their child.
 
 In addition to that, an _Emergency Shutdown Module_ exists and can shut down the entire protocol if 500'000 `MKR` tokens are irreversibly sent to the Emergency Shutdown Contract. Once the process is started, a [specific timeline](https://docs.makerdao.com/smart-contract-modules/shutdown/the-emergency-shutdown-process-for-multi-collateral-dai-mcd) allows token holders and vault users to receive the net value of their assets. If the process is activated, it is irreversible, a fork would need to be created in order to revive the protocol. It is assumed that there are 2 scenarios:
 
-1.  A malicious majority is hijacking the governance. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed, and the users who shut down the system see their funds restored.
-2.  A critical bug was discovered and prevented with a system shutdown. The governance can refund users who shut down the system by minting new tokens.
+1.  A malicious majority is hijacking the _Sky Governance_. The only option once the system is shut down is to set up an alternative fork in which the malicious users' funds are slashed, and the users who shut down the system see their funds restored.
+2.  A critical bug was discovered and prevented with a system shutdown. The _Sky Governance_ can refund users who shut down the system by minting new tokens.
 
 # Contracts & Permissions
 
@@ -265,7 +265,7 @@ The list of contract and deployment addresses is available in both the [official
 | MKR Token                             | mint                   | Mints new tokens. Can be abused with a malicious governance proposal.                                                                                                                                                                                                                                                                                                                                                                                  | DSPauseProxy (DAO), MkrAuthority(Flopper, MkrSky, DssVestMintable, DSPauseProxy)            |
 | MKR Token                             | burn                   | Burns tokens.                                                                                                                                                                                                                                                                                                                                                                                                                                          | MkrAuthority(Anyone)                                                                        |
 | MKR Token                             | setName                | Sets the name of the token.                                                                                                                                                                                                                                                                                                                                                                                                                            | DSPauseProxy (DAO), MkrAuthority(DSPauseProxy)                                              |
-| sUSDS (Proxy)                         | upgradeToAndCall       | Ugprades the `sUSDS` implementation contract and then calls a function in the new contract. . The new contract can contain arbitrary code. A malicious update could steal funds.                                                                                                                                                                                                                                                                       | DSPauseProxy (DAO)                                                                          |
+| sUSDS (Proxy)                         | upgradeToAndCall       | Ugprades the `sUSDS` implementation contract and the calls a function in the new contract. . The new contract can contain arbitrary code. A malicious update could steal funds.                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
 | sUSDS (Proxy)                         | rely                   | Grants admin privileges over the `USDS` contract to an additional address. The new admin can update the contract which could result in loss of funds.                                                                                                                                                                                                                                                                                                  | DSPauseProxy (DAO)                                                                          |
 | sUSDS (Proxy)                         | deny                   | Revokes admin privileges to a specific address.                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (DAO)                                                                          |
 | sUSDS (Proxy)                         | file                   | Updates a contract parameter. Currently only the savings rate can be updated.                                                                                                                                                                                                                                                                                                                                                                          | DSPauseProxy (DAO)                                                                          |

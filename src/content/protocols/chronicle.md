@@ -33,7 +33,7 @@ An overview of the Chronicle protocol can be seen below.
 
 The core of the protocol is the oracle contracts, the validators, and the `ValidatorRegistry_2`.
 
-Each oracle has its own validator set (a subset of all the validators). This set can be changed by a `TimelockController`, which is owned by the Chronicle multisig. A `Kisser` contract holds similar admin permissions over the oracles but is, by design, restricted to only being able to add new customers.
+Each oracle has its own validator set (a subset of all the validators). This set can be changed by a `TimelockController`, which is owned by the [Chronicle multisig](#security-council). A `Kisser` contract holds similar admin permissions over the oracles but is, by design, restricted to only being able to add new customers.
 
 There is a single `TimelockController` per chain with admin permissions on all oracles. The delay is therefore the same for each oracle: 7 days. According to the documentation (but not strictly verified), the same delay is enforced on each chain where Chronicle is deployed.
 
@@ -41,15 +41,15 @@ The `ValidatorRegistry_2` does _not_ directly affect the validators whitelisted 
 
 # Rating
 
-As mentioned in the [protocol analysis](#protocol-analysis), the Chronicle multisig has permissions to change each oracle's validator set. Changing the validator set could put the system at risk of controlled prices, which could lead to the loss of user funds in protocols that rely on ChronicleLabs' oracles. Any changes in an oracle's validator set are subject to a **7-day exit window**.
+As mentioned in the [protocol analysis](#protocol-analysis), the [Chronicle multisig](#security-council) has permissions to change each oracle's validator set. Changing the validator set could put the system at risk of controlled prices, which could lead to the loss of user funds in protocols that rely on ChronicleLabs' oracles. Any changes in an oracle's validator set are subject to a **7-day exit window**.
 
-Finally, 3 Externally Owned Accounts (EOAs) can add or remove validator public keys to the `ValidatorRegistry_2` without delay. Updating the registry in a malicious fashion does not weaken the assumptions on the possibility of price manipulation, as the validators perform all cryptographic actions based on the oracle contracts. Update or addition of a public key in the registry must come with a valid signature. The registry only improves the guarantees of the protocol by attesting that each validator owns their key, and this key is a single key (not a sum of keys). Moreover, it allows potential DoS mitigations on the peer-to-peer network by filtering messages based on recovered signers.
+Finally, 3 _Externally Owned Accounts_ (EOAs) can add or remove validator public keys to the `ValidatorRegistry_2` without delay. Updating the registry in a malicious fashion does not weaken the assumptions on the possibility of price manipulation, as the validators perform all cryptographic actions based on the oracle contracts. Update or addition of a public key in the registry must come with a valid signature. The registry only improves the guarantees of the protocol by attesting that each validator owns their key, and this key is a single key (not a sum of keys). Moreover, it allows potential DoS mitigations on the peer-to-peer network by filtering messages based on recovered signers.
 
 Oracles and validators are listed on ChronicleLabs' [public dashboard](https://chroniclelabs.org/dashboard). This allows anyone to verify the data cryptographically. The dashboard is not open-source, but this does not prevent the monitoring of the onchain activity from the side of projects using ChronicleLabs' oracles.
 
 ## Conclusion
 
-ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set, which are protected with a 7-day exit window. The protocol relies on third-party entities that collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities, including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a **Medium Centralization**, equivalent to Stage 1, as a dependency.
+ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set, which are protected with a 7-day _Exit Window_. The protocol relies on third-party entities that collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities, including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a **Medium Centralization**, equivalent to _Stage 1_, as a dependency.
 
 > Overall score: Medium
 
