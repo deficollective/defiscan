@@ -47,7 +47,7 @@ Chainlink's oracle protocol exposes critical permissions that are not protected 
 
 > Overall score: High
 
-# Revier Notes
+# Reviewer Notes
 
 This review is limited to Chainlink Oracles deployed on Ethereum mainnet. We note that the findings should generalize to all chains.
 
