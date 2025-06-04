@@ -78,9 +78,11 @@ The project additionally could advance to **Stage 2** if all critical permission
 
 # Protocol Analysis
 
+protocol analysis: again only point to diffs to core instance which I think is a diagram and explanation of risk oracle dependency (point to separate review) and explain guardrails through stewards. Eg the chaoslabs multisig is not part of Aave but part of the risk oracle dependency
+
 ## Upgradeable Pool Contract and mutable reserve parameters
 
-Specifically to the _EtherFi_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters associated with `wETH` reserve. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
+Specifically to the _Prime_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
 ![Reserve Parameter Control](./diagrams/Aave_V3_Prime_Reserve_Parameter_Control.png)
 
@@ -89,16 +91,6 @@ Specifically to the _EtherFi_ instance there is an additional Steward contract c
 ### Risk Oracle
 
 Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on the Prime instance automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on quantitative algorithmic risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
-
-### a.DI
-
-The a.DI is deployed once for each blockchain. The description of a.DI on Ethereum Mainnet is described in our _Core_ instance [report](/protocols/aave).
-
-### Oracle
-
-The centralization risk within Chainlink price oracles is described in the _Core_ instance report.
-
-Read more in our _Core_ instance [report](/protocols/aave).
 
 # Governance
 
