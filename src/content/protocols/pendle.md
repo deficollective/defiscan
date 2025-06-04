@@ -116,17 +116,13 @@ The `PendleCommonSYFactory` deploys Standardized Yield (SY) tokens via the `depl
 
 `PendleYieldContractFactory` enables the creation of Principal Token (PT) and Yield Token (YT) contracts through its `createYieldContract` function, which is also permissionless. This function can be called directly by users or programmatically via the `PendleCommonPoolDeployHelperV2` as part of a full pool deployment process which also deploys the market.
 
-![Market Creation](./diagrams/pendle-v2-market-creation.png)
+![Market Creation](./diagrams/pendle-v2-market-creation2.png)
 
 ## Yield Tokenization Process
 
 ### Direct Minting
 
-SY → PT+YT (`mintPyFromSy`)  
-Users with existing SY tokens can convert them directly into PT and YT through the `PendleRouterV4`. The router passes the request to the `PendleYieldToken` contract, which receives the SY tokens and then calls its `mintPY` function on the YT contract. The `PendleYieldToken` contract mints YT tokens and requests the `PendlePrincipalToken` contract to mint the corresponding amount of PT tokens via `mintByYT`.
-
-External tokens → PT+YT (`mintPyFromToken`)  
-Users can also convert external tokens (such as ETH or USDe) in a single transaction. The `PendleRouterV4` first converts these tokens to SY via a deposit operation, then transfers the SY to the `PendleYieldToken` contract which proceeds to issue PT and YT tokens in the same manner.
+PT and YT tokens are minted via the `PendleRouterV4`, fundamentally by converting Standardized Yield (SY) tokens. Users with SY can directly convert them to PT and YT using `mintPyFromSy`, where the `PendleYieldToken` contract receives SY, mints YT, and triggers `PendlePrincipalToken` to mint PT. Alternatively, `mintPyFromToken` allows users to start with external assets (e.g., ETH), which the router first converts to SY before following the same SY-to-PT/YT minting pathway.
 
 In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens and coordinates the creation of equal quantities of PT and YT. The `PendlePrincipalToken` contract does not hold any assets directly, while the `PendleYieldToken` contract retains all SY tokens as collateral.
 
@@ -195,7 +191,8 @@ Users can create orders that execute only when specific price conditions are met
 
 The protocol implements a multi-stage fee distribution architecture with distinct flows for different market types. Fee revenue generated through market operations flows into two separate Treasury multisig accounts: `Treasury1` (2/6 multisig) processes fees from pools created before October 8, 2024, while `Treasury2` (2/5 multisig) handles those from newer pools.
 
-From these Treasury accounts, tokens follow a standardized conversion path. The [hardwareDeployer](#security-council) EOA serves as an intermediary conversion agent, receiving tokens from both Treasury multisigs. This EOA transforms various token types into ETH through the `PendleRouterV4`, then directs this ETH to the `PendleFeeDistributorV2Proxy` for final distribution.
+From these Treasury accounts, tokens follow a standardized conversion path. The [hardwareDeployer](#security-council) EOA serves as an intermediary conversion agent, receiving tokens from both Treasury multisigs.
+This EOA is supposed to transform various token types into ETH through the `PendleRouterV4` and then direct this ETH to the `PendleFeeDistributorV2Proxy` for final distribution. However, as an EOA, nothing guarantees it will actually perform this fee distribution.
 
 The `PendleFeeDistributorV2Proxy` functions as the distribution contract for the collected fees that are rewarded to `vePENDLE` holders for their respective voting power. Under the [DevMultisig](#security-council) (2/3) administration, this contract employs merkle proofs through `setMerkleRootAndFund` to set the claims while simultaneously depositing funds for claiming.
 
