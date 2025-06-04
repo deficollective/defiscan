@@ -92,6 +92,8 @@ Specifically to the _Prime_ instance there is an additional Steward contract cal
 
 Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on the Prime instance automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on quantitative algorithmic risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
 
+See our report on [Chaos Labs' Risk Oracle](/protocols/chaos-labs-risk-oracle)
+
 # Governance
 
 The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
