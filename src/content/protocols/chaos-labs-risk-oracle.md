@@ -6,7 +6,7 @@ github: ["https://github.com/ChaosLabsInc/risk-oracle"]
 defillama_slug: [""]
 chain: "Ethereum"
 type: "Oracles"
-logo: "/images/infrastructure-logos/Chaos-Labs.png"
+logo: "/images/infrastructure-logos/Chaos-Labs.jpg"
 stage: "I0"
 protocols: ["Aave v3"]
 reasons: []
