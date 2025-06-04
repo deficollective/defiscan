@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Aave v3 Prime is a lending protocol with a specific focus on ETH, the Lido `stETH` token and restaking tokens which is governed by the Aave DAO. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile.
+Aave v3 Prime is a lending protocol which is governed by the Aave DAO with a specific focus on ETH, the Lido `stETH` token and restaking tokens. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile.
 
 Aave v3 Prime uses the same contract code overall, but redeployed modules _Lend & Borrow_ and _Reserve Parameters_, while re-using the same deployments for _Treasury, Aave Ecosystem Reserves & Rewards_, the _GHO Stablecoin_ and the _Aave Governance_.
 
