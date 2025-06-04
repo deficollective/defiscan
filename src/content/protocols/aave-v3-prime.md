@@ -42,7 +42,7 @@ A notable difference to the _Core_ instance is the introduced dependency on a Ri
 
 ## Autonomy
 
-The Aave v3 Prime instance uses the same dependencies as core plus an additional dependency the Risk Oracle.
+The Aave v3 Prime instance uses the same dependencies as the core instance plus an additional dependency which is the Risk Oracle.
 
 ### Risk Oracle
 
