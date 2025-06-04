@@ -53,7 +53,7 @@ ChronicleLabs' protocol exposes centralized permissions on the oracles' validato
 
 > Overall score: Medium
 
-# Revier Notes
+# Reviewer Notes
 
 This review is limited to Chornicle Oracles deployed on Ethereum mainnet. We note that the findings should generalize to all chains according to Chronicle's documentation.
 
