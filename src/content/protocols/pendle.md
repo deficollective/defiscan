@@ -217,7 +217,7 @@ The `PendleMultiTokenMerkleDistributor` manages token points system rewards for 
 The process uses the `setMerkleRoot` function to establish which addresses can claim specific reward amounts, allowing the [DevMultisig](#security-council) to control reward distribution between the monthly snapshot and payout dates. 
 The contract implements the UUPS upgradeability pattern through `upgradeToAndCall`, enabling the [DevMultisig](#security-council) to modify implementation logic while preserving claimed data, and can also determine which token types are included in distributions. Administrative control follows a two-step ownership transfer pattern via `transferOwnership`, requiring the pending owner to explicitly claim ownership for security.
 
-![Voting and Fees](./diagrams/pendle-v2-voting-and-fees.png)
+![Voting and Fees](./diagrams/pendle-v2-voting-and-fees2.png)
 
 # Dependencies
 
@@ -225,7 +225,7 @@ The Pendle V2 Ethereum deployment has no external dependencies. The other deploy
 
 # Governance
 
-![Upgradeability](./diagrams/pendle-v2-upgradeability.png)
+![Upgradeability](./diagrams/pendle-v2-upgradeability2.png)
 
 The Pendle protocol implements a governance model where the [Governance](#security-council) multisig (2/4) maintains extensive control over all protocol aspects through multiple mechanisms.
 
