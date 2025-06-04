@@ -179,7 +179,6 @@ This table summarizes the permission owner multisig accounts and the stewards wh
 | ConfigEngine                                        | [0x1097eDb85392932b7dCB630baDDC8A6D73585218](https://etherscan.io/address/0x1097eDb85392932b7dCB630baDDC8A6D73585218) |
 | EdgeRiskSteward                                     | [0x81aFd0F99c2Afa2f2DD7E387c2Ef9CD2a29b6E1A](https://etherscan.io/address/0x81aFd0F99c2Afa2f2DD7E387c2Ef9CD2a29b6E1A) |
 | AaveStewardInjector                                 | [0x834a5aC6e9D05b92F599A031941262F761c34859](https://etherscan.io/address/0x834a5aC6e9D05b92F599A031941262F761c34859) |
-| RiskOracle                                          | [0x7ABB46C690C52E919687D19ebF89C81A6136C1F2](https://etherscan.io/address/0x7ABB46C690C52E919687D19ebF89C81A6136C1F2) |
 | CapsPlusRiskSteward                                 | [0x3843b29118fFC18d5d12EE079d0324E1bF115e69](https://etherscan.io/address/0x3843b29118fFC18d5d12EE079d0324E1bF115e69) |
 | Manual AGRS (RiskSteward)                           | [0x30adC2f98ff78fDde12F191Acb82699f640694FB](https://etherscan.io/address/0x30adC2f98ff78fDde12F191Acb82699f640694FB) |
 | ProxyAdmin                                          | [0xD3cF979e676265e4f6379749DECe4708B9A22476](https://etherscan.io/address/0xD3cF979e676265e4f6379749DECe4708B9A22476) |

@@ -33,6 +33,8 @@ The `RiskOracle` contract includes the functions `publishRiskParameterUpdate` an
 
 Neither the EOA to update parameters nor the Chaos Labs Multisig Account do satisfy our [security council requirements](/learn-more#security-council-requirements).
 
+![Overview Risk Oracle](./diagrams/Chaos-labs-Risk-oracle.png)
+
 # Rating
 
 As mentioned in the [protocol analysis](#protocol-analysis), the [Chaos Labs Bot](#security-council) has permissions to change the parameters arbitrarily. This could be used to trigger liquidations in lending protocols like Aave.
