@@ -127,7 +127,11 @@ Spark's _Liquidity Management Layer (ALM)_ is a dependency for _SparkLend_ as it
 
 Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices. We assessed that Chronicle is a _Medium Centralization_ (_Stage 1_ equivalent) dependency and explained it in detail in a [dedicated report](/protocols/chronicle).
 
-A `KillSwitchOracle` contract is used to set critical prices per asset in case of potential oracle failure or manipulation. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets within _SparkLend_ until the killswitch is reset by the _Sky Governance_. This measure is not enough to mitigate the centralization of Chronicle, as it does not consider global oracle failure or upper bounds for price thresholds, leaving place for possible price manipulation. Moreover, at the time of writing, only one killswitch is in place within _SparkLend_, for the `stETH`/`ETH` price feed.
+A `KillSwitchOracle` contract is used to set critical prices per asset in case of potential oracle failure or manipulation. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets within _SparkLend_ until the killswitch is reset by the _Sky Governance_.
+
+This feature could potentially serve as an effective mitigation for centralization vectors in _SparkLend_'s oracle dependency. However, the current `KillSwitchOracle` contract only implements protections against untrusted lower prices and does not account for potential untrusted higher prices. Furthermore, at the time of writing this revew, only one killswitch is in place within _SparkLend_, for the stETH/ETH price feed, limiting potential depegs at 0.95 stETH/ETH.
+
+As a result, in its current form, the `KillSwitchOracle` contract does not offer a comprehensive mitigation for centralization risks in _SparkLend_'s oracle dependency.
 
 # Governance
 
