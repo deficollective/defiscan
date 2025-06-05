@@ -18,11 +18,11 @@ update_date: "1970-01-01"
 
 Spark is a protocol within the Sky ecosystem and consists of two main products: _Savings USDS_ and _SparkLend_.
 
-_Savings USDS_ is the savings rate which is a fixed rate return determined by the _Sky Governance_ for users locking their `USDS` in the savings module.
+_Savings USDS_ is a savings product offering a fixed return on various stablecoins including `USDS`, `DAI` and `USDC`.
 
-_SparkLend_ is a `USDS` and `DAI` centric lending protocol in which users can participate as lenders or borrowers. It combines liquidity from Sky and integrates with other DeFi protocols.
+_SparkLend_ is a lending protocol that enables users to lend and borrow various crypto assets. It offers deep stablecoin liquidity that is provided to a large part by Sky through Spark's _Liquidity Management Layer_.
 
-Another element of Spark, its _Liquidity Management Layer_, is also analysed in the [Protocol Analysis](#protocol-analysis). That being said, we do not consider it a user facing product and it only affects Spark's centralization as a dependency.
+Spark's _Liquidity Management Layer_ allocates Sky stablecoin liquidity to various DeFi lending markets including _SparkLend_. The focus in this review is thus on its role within _SparkLend_ itself.
 
 # Ratings
 
