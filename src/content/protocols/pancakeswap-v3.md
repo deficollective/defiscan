@@ -55,8 +55,6 @@ For some practical guidance follow this steps. It will help you in writing a nic
 
 ## Autonomy
 
-Users primarily interact with PancakeSwap v3 through its official web interface at [https://pancakeswap.finance](https://pancakeswap.finance), which is developed and maintained by Pancake Labs. PancakeSwap’s frontend code is published under an MIT license [here](https://github.com/pancakeswap/pancake-frontend). The repository’s README contains instructions on how to clone the project, install dependencies, and launch the self-hosted app.
-
 > Autonomy score: Medium
 
 ## Exit Window
@@ -67,9 +65,9 @@ See http://defiscan.info/learn-more#exit-window for more guidance.
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+Users primarily interact with PancakeSwap v3 through its official web interface at [https://pancakeswap.finance](https://pancakeswap.finance), which is developed and maintained by Pancake Labs. PancakeSwap’s frontend code is published under an MIT license [here](https://github.com/pancakeswap/pancake-frontend). The repository’s README contains instructions on how to clone the project, install dependencies, and launch the self-hosted app.
 
-> Accessibility score: Low/Medium/High
+> Accessibility score: High
 
 ## Conclusion
 
@@ -77,7 +75,54 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 # Protocol Analysis
 
-# Technical Analysis
+## Protocol Architecture & Pool Deployment
+
+The PancakeSwap V3 protocol architecture centers around a set of interconnected contracts. At the core of the pool creation system is the `PancakeV3Factory` contract, which maintains a comprehensive registry of all deployed pools. This factory contract handles the creation of new pools through its `createPool()` function, manages fee parameters for each pool, and maintains associations between standard pools and their corresponding farming pools (LmPools).
+
+When creating a V3 pool, two types of users can call `createPool()` on the `PancakeV3Factory` contract depending on the fee tier: any user for standard fee tiers (0.01%, 0.05%, 0.3%, 1%), and only whitelisted users for restricted fee tiers. The function validates token addresses, fee tier, and permissions, then calls `deploy()` on the `PancakeV3PoolDeployer` to create the `PancakeV3Pool` contract. The new pool is initialized with essential parameters and registered in the factory's mapping. 
+Pools then operate independently for trading operations, while the factory retains administrative capabilities.
+
+The creation of LmPools follows a precise sequence controlled by the `MasterChefV3` contract. When [Multisig 2](#security-council) calls the `add()` function on `MasterChefV3`, it specifies allocation points, the address of an existing `PancakeV3Pool`, and whether existing pools should be updated. `MasterChefV3` then verifies if an LmPool already exists for the specified `PancakeV3Pool`. If not, it calls the `deploy()` function on the `PancakeV3LmPoolDeployer` contract, which creates a new `PancakeV3LmPool` contract specific to that pool. After deployment, `MasterChefV3` immediately calls `setLmPool()` on `PancakeV3Factory` to associate the new LmPool with its corresponding `PancakeV3Pool`. The newly created pool is then registered in `MasterChefV3`'s internal state with its assigned allocation points.
+
+Each `PancakeV3Pool` contract stores liquidity reserves for both tokens, liquidity positions of providers including their price ranges, and the accumulated trading fees. The corresponding `PancakeV3LmPool` maintains a reference to its `PancakeV3Pool`, tracks accumulated rewards over time, and implements functions to calculate rewards based on provided liquidity. When trades occur in a `PancakeV3Pool`, it calls `accumulateReward()` on its associated `PancakeV3LmPool` to update the reward state based on price changes and elapsed time.
+
+## Rewards and Fees Distribution System
+
+### Fees
+
+In PancakeSwap V3, users pay trading fees on each swap according to the pool's fee tier (0.01%, 0.05%, 0.3%, or 1%). The majority of these fees are distributed to liquidity providers proportionally to their share of liquidity within the active price range during the exchange.
+
+The remainder of the trading fees is captured as "protocol fees." [Multisig 1](#security-council) controls these parameters by calling `setFactoryFeeProtocol()` on the `PCSV3FeeHandler` proxy, which then calls `setFeeProtocol()` on `PancakeV3Factory`. The factory forwards this call to individual `PancakeV3Pool` contracts via their `setFeeProtocol()` function, configuring the percentage of trading fees that will be directed to the protocol.
+[Multisig 1](#security-council) can modify protocol fee percentages up to 40% without any timelock, applying these changes to all existing pools simultaneously. 
+
+During swap operations, each `PancakeV3Pool` accumulates protocol fees in its protocolFees storage variable, separating amounts for token0 and token1. The fee calculation occurs within the swap execution, where a portion of the fee amount is set aside based on the configured protocol fee percentage.
+The [address 2 (Operator)](#security-council) or [Multisig 1](#security-council) can collect accumulated protocol fees through the `PCSV3FeeHandler` proxy contract, which orchestrates the fee collection process across all pools and transfers the fees to a designated recipient address.
+
+### Rewards
+
+PancakeSwap V3 liquidity providers receive `CAKE` rewards through a specialized distribution pathway. Rewards originate from the broader tokenomics system controlled by [Multisig 2](#security-council) and follow a specific flow: CAKE allocated to farming programs reaches `MasterChefV2`, which designates a portion for V3 incentives. The `MasterChefV3Receiver` contract serves as an intermediary, receiving tokens from `MasterChefV2` and making them available to `MasterChefV3`.
+
+The critical link in this system is the `MasterChefV3KeeperV1` contract, which [`Address 3 (Register)`](#security-council) calls via `performUpkeep()`. When executed, this function verifies that sufficient time has elapsed since the last period (using upkeepBufferSecond, default 12 hours), then calls `MasterChefV3Receiver.upkeep(0, PERIOD_DURATION, true)` to harvest CAKE from `MasterChefV2` and transfer it to `MasterChefV3`, establishing a new reward distribution period. Since rewards are only distributed for the duration defined in each upkeep call (configurable between 1-30 days), failure to execute `performUpkeep()` regularly would result in the depletion of the current period's rewards without establishing a new distribution period, effectively ceasing all V3 CAKE rewards until the next successful upkeep.
+
+`MasterChefV3` distributes these rewards according to allocation points configured by [Multisig 2](#security-council). Meanwhile, the interaction between `PancakeV3Pool` and `PancakeV3LmPool` ensures accurate reward tracking, with each swap in a pool triggering `accumulateReward()` to update the reward state based on price changes and liquidity.
+
+![V3 Pool Deployment & Rewards Architecture](./diagrams/V3 Pool Deployment & Rewards Architecture.png)
+
+## User Trading & Liquidity Management
+
+Users interact with PancakeSwap V3 through a multi-contract architecture centered around concentrated liquidity positions. The `NonfungiblePositionManager` contract, owned by [Multisig 2](#security-council), serves as the primary entry point for liquidity provision. This contract enables users to create positions by specifying token pairs, fee tiers, and custom price ranges, then mints an NFT representing ownership of that position. When a position is created, the underlying liquidity is deposited directly into the corresponding `PancakeV3Pool` contract while the NFT maintains a record of ownership rights and position parameters.
+
+The liquidity position management flow follows a precise sequence: users interact with `NonfungiblePositionManager` to create, modify, or collect fees from positions. The `NonfungiblePositionManager` communicates with the appropriate `PancakeV3Pool` contract to adjust on-chain liquidity. All position metadata is stored within the NFT token structure, enabling transferability and flexible management.
+
+For staking and reward earning, the system implements multiple contracts. When a user calls `deposit` on `MasterChefV3` which is controlled by [Multisig 2](#security-council), the following sequence occurs: `MasterChefV3` verifies the NFT belongs to the caller and corresponds to a valid pool. The NFT is transferred to `MasterChefV3`, which takes custody. `MasterChefV3` identifies the corresponding `PancakeV3LmPool` by calling the `PancakeV3Pool`. `MasterChefV3` then calls `updatePosition()` on `PancakeV3LmPool` to start tracking rewards. Finally, `PancakeV3LmPool` calls `getRewardGrowthInside()` to establish baseline reward state.
+
+When users initiate a harvest operation via `harvest` on `MasterChefV3`, the contract identifies the staked position, then calls `updatePosition()` on `PancakeV3LmPool`. The latter calculates accumulated rewards using `getRewardGrowthInside()`, then `MasterChefV3` distributes the calculated rewards to the specified recipient.
+
+For position withdrawal via `withdraw`, `MasterChefV3` first verifies ownership of the staked position, then calls `updatePosition()` on `PancakeV3LmPool` to calculate final rewards. Rewards are distributed to the user, and the position NFT is transferred back to the user.
+
+The reward tracking mechanism is continuously updated during trading operations. When users execute trades through the `UniversalRouter` contract, the router identifies optimal swap paths and calls the `swap()` function on the appropriate `PancakeV3Pool`. During swap execution, `PancakeV3Pool` updates price and liquidity state, then calls `accumulateReward()` on its associated `PancakeV3LmPool`. `PancakeV3LmPool` updates reward growth tracking variables based on price movements. Trading fees are allocated between liquidity providers and protocol collection.
+
+[Multisig 2](#security-council) maintains significant control over the reward system through privileged functions including: `setEmergency()` which can halt all new CAKE rewards, `setReceiver()` which can stop CAKE reward flow, `setLMPoolDeployer()` which can compromise new farm pools, `set()` which can dilute or deny pool rewards, `updateFarmBoostContract()` which can change the FarmBooster contract, `updateBoostMultiplier()` which can alter user boost parameters, and `upkeep()` which can affect CAKE supply or modify reward rates.
 
 # Dependencies
 
