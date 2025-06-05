@@ -43,7 +43,7 @@ Those changes can be made **without delay** and the [Chaos Labs Bot](#security-c
 
 ## Conclusion
 
-Chaos Labs's risk oracle protocol exposes critical permissions that are not protected by an _Exit Window_ nor a _Security Council_. This results in a **High Centralization score**, equivalent to _Stage 0_, as a dependency.
+Chaos Labs's risk oracle protocol is operated in a centralized manner by Chaos Labs. It exposes critical permissions that are not protected by an _Exit Window_ nor a _Security Council_. This results in a _High_ Centralization score.
 
 > Overall score: High
 

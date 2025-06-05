@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Aave v3 Prime is a lending protocol which is governed by the Aave DAO with a specific focus on ETH, the Lido `stETH` token and restaking tokens. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile.
 
-Aave v3 Prime uses the same contract code overall, but redeployed modules _Lend & Borrow_ and _Reserve Parameters_, while re-using the same deployments for _Treasury, Aave Ecosystem Reserves & Rewards_, the _GHO Stablecoin_ and the _Aave Governance_.
+Aave v3 Prime uses the same contract code as Aave v3 Core instance overall, but redeployed modules _Lend & Borrow_ and _Reserve Parameters_, while re-using the same deployments for _Treasury, Aave Ecosystem Reserves & Rewards_, the _GHO Stablecoin_ and the _Aave Governance_.
 
 We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our _Core_ instance [report](/protocols/aave).
 
@@ -34,15 +34,15 @@ The report is concerned with the Aave V3 _Prime_ instance deployed on Ethereum m
 
 ## Upgradeability
 
-The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same. The permission owners are the same multisig accounts as on the _Core_ instance. As a consequence, the same _upgradeability_ rating is assigned to the _Prime_ report.
+The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same to the Aave v3 Core instance. The permission owners are the same multisig accounts as on the _Core_ instance. As a consequence, the same _upgradeability_ rating is assigned to the _Prime_ report.
 
-A notable difference to the _Core_ instance is the introduced dependency on a Risk Oracle provided by Chaos Labs which helps to update risk parameters within governance set guardrails based on quantitative algorithmic risk models in real time. The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _upgradeability_ risk is introduced.
+The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _upgradeability_ risk compared to the _core_ instance is introduced.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Aave v3 Prime instance uses the same dependencies as the core instance plus an additional dependency which is the Risk Oracle.
+The Aave v3 Prime instance uses the same dependencies as the _core_ instance plus an additional dependency which is the Risk Oracle.
 
 ### Risk Oracle
 
@@ -60,11 +60,9 @@ Read more in our _Core_ instance [report](/protocols/aave).
 
 ## Accessibility
 
-The frontend of Aave V3 app is open source. The frontend allows to interact with all instances. Each commit (ie each change to the code base) is published to IPFS (https://github.com/aave/interface/releases).
+Aave V3 Prime is accessible through the same Aave UI and third party UIs than the _core_ instance.
 
-In addition to that Aave is also available through [DeFi Saver](https://app.defisaver.com/aave).
-
-https://aave.com/help/aave-101/accessing-aave
+Read more in our _Core_ instance [report](/protocols/aave).
 
 > Accessibility score: low
 
