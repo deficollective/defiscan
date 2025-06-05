@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Spark is a protocol within the Sky ecosystem and consists of two main products: _Savings USDS_ and _SparkLend_.
 
-_Savings USDS_ is the `USDS` savings rate which is a fixed rate return determined by the _Sky Governance_ for users locking their `USDS` in the savings module.
+_Savings USDS_ is the savings rate which is a fixed rate return determined by the _Sky Governance_ for users locking their `USDS` in the savings module.
 
 _SparkLend_ is a `USDS` and `DAI` centric lending protocol in which users can participate as lenders or borrowers. It combines liquidity from Sky and integrates with other DeFi protocols.
 
@@ -36,7 +36,7 @@ Spark's products are deployed on multiple chains. This review focuses on the Eth
 
 The upgradeability of Spark is limited. The _SparkLend_ markets are not upgradeable, but the treasury (collected fees) and rewards contracts may be upgraded through the _Sky Governance_. Upgrading the rewards contracts may cancel the existing rewards and result in the _loss of unclaimed yield_. This is because the rewards are part of the yield advertised to users. The _Sky Governance_ and the [SparkLend Freezer](#security-council) multisig can both freeze all funds deposited into _SparkLend_ with no delay. If those funds are not unfrozen by a _Sky Governance_ proposal, this would lea to the _loss of user funds_.
 
-_USDS Savings_ on Ethereum mainnet only interacts with the original `USDS` savings contract deployed by the _Sky Governance_. This contract is upgradeable, but this upgradeability is counted in Spark's dependency on Sky in the [autonomy section](#autonomy).
+_Savings USDS_ on Ethereum mainnet only interacts with the original `sUSDS` contract deployed by the _Sky Governance_. This contract is upgradeable, but this upgradeability is counted in Spark's dependency on Sky in the [autonomy section](#autonomy).
 
 > Upgradeability Score: High
 
@@ -46,7 +46,7 @@ Spark has a critical dependency on the Sky Protocol, a [Stage 0 protocol](./sky.
 
 Spark's own _Liquidity Management Layer (ALM)_ can be seen as a dependency for _SparkLend_ as it is responsible for providing a significant portion of the liquidity into _SparkLend_'s stablecoin markets. This layer is managed by [Relayers](#security-council) who allocate liquidity accross different DeFi protocols and chains within strict governance-defined limits. This can impact users indirectly by manipulation of interest rates. We explain this layer in more details in the [protocol analysis](#protocol-analysis) and [dependencies](#dependencies) sections.
 
-Finally, Chronicle price feeds are used in _SparkLend_ with no fallbacks for all asset prices. A failure of those oracles could lead to wrongful liquidations or even trigger the oracle killswitch, which freezes all borrowing within _SparkLend_ until manually reset by the _Sky Governance_. We found Chronicle to be a _Medium Centralization_ dependency in a [dedicated report](/protocols/chronicle).
+Finally, Chronicle price feeds are used in _SparkLend_ all asset prices. A failure of those oracles could lead to wrongful liquidations. We found Chronicle to be a _Medium Centralization_ dependency in a [dedicated report](/protocols/chronicle). An oracle killswitch was introduced to mitigate possible oracle failures. If a price falls below a certain threshold, the killswitch freezes all borrowing within _SparkLend_ until manually reset by the _Sky Governance_. Nonetheless, as discussed in [dependencies](#dependencies), this mitigation is only used for one price feed within _SparkLend_ and is not sufficient to mitigate all failures.
 
 More information on the centralization and functioning of those dependencies can be found in [dependencies](#dependencies).
 
@@ -54,11 +54,10 @@ More information on the centralization and functioning of those dependencies can
 
 ## Exit Window
 
-_Sky Governance_ proposals are delayed by **18 hours**, set by the _Sky Governance_ itself. This delay also applies to all permissioned calls within Spark, except emergency actions.
+Spark is governed by _Sky Governance_ and the same _Exit Window_ of **18 hours** applies to regular updates, including upgrading the `RewardsControllerManager`, unfreezing markets, changing contract permisisons, or resetting the oracle killswitch.
 
-Emergency proposals are prepared to freeze all markets within _SparkLend_ without any delay using the _Sky Governance_ emergency proposal model. This would prevent users from withdrawing their funds. In addition to that, a [SparkLend Freezer](#security-council) multisig holds the same emergency permissions with only 2 signatures required out of 5 possible signers.
-
-Oracles have a kill switch to pause all borrowing if an asset's price falls below a predetermined threshold. If that is the case, anyone can trigger the killswitch (see [dependencies](#dependencies)) which would disable the borrowing without delay for all assets across the protocol until the killswitch is reset by the governance.
+Emergency Actions, including freezing all markets within _SparkLend_, can be executed by the _Sky Governance_ with no delay.
+Furthermore, a [SparkLend Freezer](#security-council) multisig holds the same emergency permissions with only 2 signatures required out of 5 possible signers.
 
 > Exit Window Score: High
 
@@ -98,11 +97,11 @@ Spark has two rewards modules named `SparkRewards` and `SparkLendRewards`. `Spar
 
 ![Overview of the SparkLend](./diagrams/spark-sparklend.png)
 
-## USDS Savings
+## Savings USDS
 
-As shown in the picture, Spark's _USDS Savings_ on Ethereum mainnet is simply Sky's native savings rate. This module is managed by the _Sky Governance_ and is considered a dependency.
+As shown in the picture, Spark's _Savings USDS_ on Ethereum mainnet is simply Sky's native savings rate. This module is managed by the _Sky Governance_ and is considered a dependency.
 
-![Overview of USDS Savings](./diagrams/spark-savings.png)
+![Overview of Savings USDS](./diagrams/spark-savings.png)
 
 ## Spark Liquidity Management
 
@@ -128,7 +127,7 @@ Spark's _Liquidity Management Layer (ALM)_ is a dependency for _SparkLend_ as it
 
 Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices. We assessed that Chronicle is a _Medium Centralization_ (_Stage 1_ equivalent) dependency and explained it in detail in a [dedicated report](/protocols/chronicle).
 
-Moreover, a `KillSwitchOracle` contract is used to set critical prices per asset. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets until the killswitch is reset by the _Sky Governance_.
+A `KillSwitchOracle` contract is used to set critical prices per asset in case of potential oracle failure or manipulation. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets within _SparkLend_ until the killswitch is reset by the _Sky Governance_. This measure is not enough to mitigate the centralization of Chronicle, as it does not consider global oracle failure or upper bounds for price thresholds, leaving place for possible price manipulation. Moreover, at the time of writing, only one killswitch is in place within _SparkLend_, for the `stETH`/`ETH` price feed.
 
 # Governance
 
