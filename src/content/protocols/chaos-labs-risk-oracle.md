@@ -27,7 +27,7 @@ By giving permissions to the Risk Oracle as a DeFi protocol, the Risk Oracle can
 
 # Protocol Analysis
 
-The `RiskOracle` smart contract allows _authorized senders_ to publish and _update_ risk parameters, which then can be consumed by other smart contracts or off-chain systems. The only authorized sender at the moment is the EOA which we call [Chaos Labs Bot](#security-council). This EOA can push any updates to the `RiskOracle` contract.
+The `RiskOracle` smart contract allows _authorized senders_ to publish and _update_ risk parameters, which then can be consumed by other smart contracts or off-chain systems. The only authorized sender at the moment is the Externally Owned Account (EOA) which we call [Chaos Labs Bot](#security-council). This EOA can push any updates to the `RiskOracle` contract.
 
 The `RiskOracle` contract includes the functions `publishRiskParameterUpdate` and `publishBulkRiskParameterUpdates` to facilitate these updates to parameters. The list of authorized senders can be expanded and reduced by using the functions `addAuthorizedSender` and `removeAuthorizedSender` by [Chaos Labs multisig](#security-council).
 

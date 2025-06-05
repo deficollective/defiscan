@@ -9,14 +9,14 @@ stage: 0
 risks: ["L", "H", "H", "H", "L"]
 reasons: []
 author: ["sagaciousyves"]
-submission_date: "1970-01-01"
-publish_date: "1970-01-01"
+submission_date: "2025-05-30"
+publish_date: "2025-06-05"
 update_date: "1970-01-01"
 ---
 
 # Summary
 
-Aave v3 Prime is a lending protocol which is governed by the Aave DAO with a specific focus on ETH, the Lido `stETH` token and restaking tokens. Users are able to create positions that consist of debt in different loan assets which is secured by different collateral assets. The lending market allows anyone to liquidate insolvent positions, based on an external price feed and specific collateral factors representing an asset's specific risk profile.
+Aave v3 Prime is a lending protocol which is governed by the Aave DAO with a specific focus on ETH, the Lido `stETH` token and restaking tokens. Users can lend and borrow assets previous mentioned assets.
 
 Aave v3 Prime uses the same contract code as Aave v3 Core instance overall, but redeployed modules _Lend & Borrow_ and _Reserve Parameters_, while re-using the same deployments for _Treasury, Aave Ecosystem Reserves & Rewards_, the _GHO Stablecoin_ and the _Aave Governance_.
 
@@ -28,47 +28,47 @@ Due to the minimal differences to Aave v3 Core the same scores apply for Aave v3
 
 ## Chain
 
-The report is concerned with the Aave V3 _Prime_ instance deployed on Ethereum mainnet. Ethereum mainnet achieves a _Low_ centralization risk score.
+The report is concerned with the Aave V3 Prime instance deployed on Ethereum mainnet. Ethereum mainnet achieves a _Low_ centralization risk score.
 
 > Chain score: Low
 
 ## Upgradeability
 
-The permissions and upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same to the Aave v3 Core instance. The permission owners are the same multisig accounts as on the _Core_ instance. As a consequence, the same _upgradeability_ rating is assigned to the _Prime_ report.
+The permissions and Upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same to the Aave v3 Core instance. The permission owners are the same multisig accounts as on the Aave v3 Core instance. As a consequence, the same _Upgradeability_ rating is assigned to the Aave v3 Prime report.
 
-The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _upgradeability_ risk compared to the _core_ instance is introduced.
+The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _Upgradeability_ risk compared to the Aave v3 Core instance is introduced.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Aave v3 Prime instance uses the same dependencies as the _core_ instance plus an additional dependency which is the Risk Oracle.
+The Aave v3 Prime instance uses the same dependencies as the Aave v3 Core instance plus an additional dependency which is the Risk Oracle.
 
 ### Risk Oracle
 
-Next to handing some control over market parameters to the [Risk Council](#security-council) via steward contracts, the Aave V3 _Prime_ instance on Mainnet updates the interest rate by handing off the control to a Risk Oracle implemented by Chaos Labs (service provider to the DAO). The Risk Oracle by Chaos Labs receives a _high centralization_ rating but the `EdgeRiskSteward` makes sure the updated parameters by the `RiskOracle` contract are within guardrails to prevent abusive behavior. In case of failure of the Risk Oracle, the [Risk Council](#security-council) can still update the interest rate parameters in due time, so the Risk Oracle setup is fault tolerant. No additional dependency risk is introduced by using the Risk Oracle provided by Chaos Labs.
+Next to handing some control over market parameters to the [Risk Council](#security-council) via steward contracts, the Aave V3 _Prime_ instance on Mainnet updates the interest rate by handing off the control to a Risk Oracle implemented by Chaos Labs (service provider to the DAO). The Risk Oracle by Chaos Labs receives a _High centralization_ rating but the `EdgeRiskSteward` makes sure the updated parameters by the `RiskOracle` contract are within guardrails to prevent abusive behavior. In case of failure of the Risk Oracle, the [Risk Council](#security-council) can still update the interest rate parameters in due time, so the Risk Oracle setup is fault tolerant. No additional dependency risk is introduced by using the Risk Oracle provided by Chaos Labs.
 
-> Autonomy score: high
+> Autonomy score: High
 
 ## Exit Window
 
-The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
+The Aave v3 _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our _Core_ instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave).
 
-> Exit Window score: high
+> Exit Window score: High
 
 ## Accessibility
 
-Aave V3 Prime is accessible through the same Aave UI and third party UIs than the _core_ instance.
+Aave V3 Prime is accessible through the same Aave UI and third party UIs than the Aave v3 Core instance.
 
-Read more in our _Core_ instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave).
 
 > Accessibility score: low
 
 ## Conclusion
 
-The Aave-v3 Ethereum mainnet protocol, and specifically the _Prime_ instance achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_ and _Exit Window_ dimensions. It thus ranks **Stage 0**.
+The Aave-v3 Ethereum mainnet protocol, and specifically the Aave v3 Prime instance achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_ and _Exit Window_ dimensions. It thus ranks **Stage 0**.
 
 The protocol could reach **Stage 1** by; 1) adopting the security council requirements for the [Emergency Admin](#security-council) multisig account and 2) implementing fallback mechanism around the Chainlink oracle (or Chainlink adopting a _Security Council_ setup for its own multisig account).
 
@@ -80,7 +80,7 @@ protocol analysis: again only point to diffs to core instance which I think is a
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
-Specifically to the _Prime_ instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
+Specifically to the Aave v3 Prime instance there is an additional Steward contract called `EdgeRiskSteward` which calls changes to the risk parameters. The new values for the parameters are pushed on-chain by the Risk Oracle by Chaos Labs.
 
 ![Reserve Parameter Control](./diagrams/Aave_V3_Prime_Reserve_Parameter_Control.png)
 
@@ -94,9 +94,9 @@ See our report on [Chaos Labs' Risk Oracle](/protocols/chaos-labs-risk-oracle)
 
 # Governance
 
-The _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
+The The Aave v3 _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our _Core_ instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave).
 
 ## Security Council
 
