@@ -20,7 +20,7 @@ PoolTogether-V5 is the newest version of the prize savings protocol; where yield
 
 A prize savings protocol gives users a chance at a large upside without risking their deposit. Each day, the yield from deposits is awarded randomly as prizes. Users have a chance to win everyone else's yield!
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -32,23 +32,17 @@ PoolTogether V5 is deployed on Ethereum mainnet.
 
 Permissions in the PoolTogether-v5 protocol are fully revoked, the protocol is immutable 🎉
 
-> ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could include upgradeable contracts. It is outside of the scope of this review to analyze these protocols too.
-
 > Upgradeability score: Low
 
 ## Autonomy
 
 The protocol relies on the Witnet Oracle for randomness in prize draws. If the oracle fails, a new PrizePool and DrawManager must be deployed, though users can still withdraw their deposits and accrued rewards without interruption and are thus not affected by an oracle failure.
 
-> ⚠️ Note that anyone can create a new `PrizeVault` from the `PriceVaultFactory` and link it to third-party yield sources and utility contracts (e.g., `LiquidationPair` or `Claimer`). A flawed or malicious implementation of these contracts could result in the loss or theft of user funds. While it is outside of the scope of this review to analyze the underlying yield sources, it is important to note that PoolTogether v5 does NOT rely on a single external yield source and that PriceVaults are strictly isolated meaning that users only inherit the risks of the vault they are deposited in.
-
 > Autonomy score: Low
 
 ## Exit Window
 
 PoolTogether's contracts are fully immutable, no upgrades or changes can be made, removing the need for an exit window.
-
-> ⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could exhibit upgradeable contracts. It is outside of the scope of this review to analyze whether appropriate Exit Windows exist on these protocols too.
 
 > Exit Window score: Low
 
@@ -58,7 +52,46 @@ PoolTogether provides access to the protocol through multiple independent interf
 
 > Accessibility score: Low
 
-# Technical Analysis
+## Conclusion
+
+The Pooltogether V5 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. It thus ranks Stage 2.
+
+> Overall score: Stage 2
+
+# Reviewer Notes
+
+⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could include upgradeable contracts. It is outside of the scope of this review to analyze these protocols too.
+
+⚠️ Note that anyone can create a new `PrizeVault` from the `PriceVaultFactory` and link it to third-party yield sources and utility contracts (e.g., `LiquidationPair` or `Claimer`). A flawed or malicious implementation of these contracts could result in the loss or theft of user funds. While it is outside of the scope of this review to analyze the underlying yield sources, it is important to note that PoolTogether v5 does NOT rely on a single external yield source and that PriceVaults are strictly isolated meaning that users only inherit the risks of the vault they are deposited in.
+
+⚠️ Note that PoolTogether-v5 relies on third-party protocols, in particular as yield sources, which themselves could exhibit upgradeable contracts. It is outside of the scope of this review to analyze whether appropriate Exit Windows exist on these protocols too. discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+# Dependencies
+
+## Randomness Oracle (RngWitnet)
+
+Pooltogether needs randomness to make drawings who should win the yield accrued from all the prize vaults. PoolTogether uses Witnet Oracle for randomness. The oracle endpoint on Ethereum Mainnet is deployed to the address 0xC0FFEE98AD1434aCbDB894BbB752e138c1006fAB. This address has an EOA as owner. The owner is allowed to transfer the ownership, renounce the ownership, set baseFee and change Witnet Service Level Agreement (Number of nodes in the Witnet blockchain that will take part in solving the data request and fees for each node resolving the request).
+The oracle endpoint is referenced in the RngWitnet contract without any way to change (address is immutable). RngWitnet is immutably referenced inside the DrawManager. In case of oracle failure, a new DrawManager is needed to be deployed, as well as a new PrizePool and thus a whole new iteration of the PoolTogether protocol. However, claiming prizes and withdraw principal from pools is not affected from a frozen oracle. For claiming prizes a fallback function called withdrawShutdownBalance exists, where for each account and vault the prize money can be withdrawn proportional to the saved tokens and duration in a vault.
+
+## Underlying yield source (linked ERC4626 in a Prize Vault)
+
+In normal conditions depositors should always expect to be able to withdraw their full deposit amount and no more as long as global withdrawal limits meet or exceed their balance. However, since the protocol is fully permissionless everyone can create a new prize vault and link yield source and utility contracts to it. The yield source and the utility contracts like LiquidationPair or Claimer can be implemented with malicious intent, stealing underlying principal or stealing prize.
+
+**While a price vault, or its underlying yield source, can be based on a flawed implementation or be malicious, vaults are strictly isolated meaning that users only assume the risk of a specific vault and yield source but do not inherit risks from other vaults.**
+
+# Governance
+
+## Security Council
+
+The protocol is completely immutable, thus all permissions are revoked and no Security Council is required 🎉
+
+## Exit Window
+
+The protocol is completely immutable, thus no exit window is required 🎉
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -78,7 +111,7 @@ PoolTogether provides access to the protocol through multiple independent interf
 | StakingVault (underlying ERC4626 for POOL Prize Vault) | [0x68a100a3729fc04ab26fb4c0862df22ceec2f18b](https://etherscan.io/address/0x68a100a3729fc04ab26fb4c0862df22ceec2f18b)                                                                                                                        |
 | DrawManager                                            | [0x98305eb9a29d45ec93ce44ba02b315b631c675a7](https://etherscan.io/address/0x98305eb9a29d45ec93ce44ba02b315b631c675a7)                                                                                                                        |
 
-## Permission Owners
+## All Permission Owners
 
 All external permissions are revoked, the protocol is immutable 🎉
 
@@ -101,24 +134,3 @@ All external permissions are revoked, the protocol is immutable 🎉
 | PrizePool             | setDrawManager            | Allows the creator to set the DrawManager contract once.                                                                                                     | 0xc516fe1fee5122d66e9427721a63d6c27e1201ca                     |
 | PrizePool             | allocateRewardFromReserve | Allows the DrawManager to allocate a reward from the reserve to a recipient.                                                                                 | DrawManager contract0x98305eb9a29D45eC93CE44bA02B315B631c675a7 |
 | PrizePool             | awardDraw                 | Allows the Manager to award a draw with the winning random number.                                                                                           | DrawManager contract0x98305eb9a29D45eC93CE44bA02B315B631c675a7 |
-
-## Dependencies
-
-### Randomness Oracle (RngWitnet)
-
-Pooltogether needs randomness to make drawings who should win the yield accrued from all the prize vaults. PoolTogether uses Witnet Oracle for randomness. The oracle endpoint on Ethereum Mainnet is deployed to the address 0xC0FFEE98AD1434aCbDB894BbB752e138c1006fAB. This address has an EOA as owner. The owner is allowed to transfer the ownership, renounce the ownership, set baseFee and change Witnet Service Level Agreement (Number of nodes in the Witnet blockchain that will take part in solving the data request and fees for each node resolving the request).
-The oracle endpoint is referenced in the RngWitnet contract without any way to change (address is immutable). RngWitnet is immutably referenced inside the DrawManager. In case of oracle failure, a new DrawManager is needed to be deployed, as well as a new PrizePool and thus a whole new iteration of the PoolTogether protocol. However, claiming prizes and withdraw principal from pools is not affected from a frozen oracle. For claiming prizes a fallback function called withdrawShutdownBalance exists, where for each account and vault the prize money can be withdrawn proportional to the saved tokens and duration in a vault.
-
-### Underlying yield source (linked ERC4626 in a Prize Vault)
-
-In normal conditions depositors should always expect to be able to withdraw their full deposit amount and no more as long as global withdrawal limits meet or exceed their balance. However, since the protocol is fully permissionless everyone can create a new prize vault and link yield source and utility contracts to it. The yield source and the utility contracts like LiquidationPair or Claimer can be implemented with malicious intent, stealing underlying principal or stealing prize.
-
-**While a price vault, or its underlying yield source, can be based on a flawed implementation or be malicious, vaults are strictly isolated meaning that users only assume the risk of a specific vault and yield source but do not inherit risks from other vaults.**
-
-## Exit Window
-
-The protocol is completely immutable, thus no exit window is required 🎉
-
-# Security Council
-
-The protocol is completely immutable, thus no Security Council is required 🎉

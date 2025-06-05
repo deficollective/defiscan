@@ -24,7 +24,7 @@ Uniswap v3 is an AMM that builds upon Uniswap v2 by introducing a concentrated l
 Uniswap v3 also introduces multiple fee tiers (0.01%, 0.05%, 0.3%, and 1%) to support different asset volatility profiles, allowing LPs to adjust their fee preferences based on expected risk and return. Additionally, it incorporates "range orders," which effectively turn liquidity positions into limit orders, further enhancing LP strategy flexibility.
 The protocol is deployed across multiple chains enabling a wide range of use cases across decentralized finance (DeFi) applications.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -63,7 +63,46 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 > Accessibility score: Low
 
-# Technical Analysis
+## Conclusion
+
+The Uniswap V3 deployment on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Exit Window_ dimensions. It thus ranks Stage 2.
+
+> Overall score: Stage 2
+
+# Reviewer Notes
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+An overview of the contracts in Uniswap V3 can be found below. Users can interact
+through the routers or Multicall contracts, as well as interact with the pools directly. `UNI` token holders may vote in the governance, which can enable fees for specific pools, collect the fees, or upgrade the `NFTPositionDescriptor` contract, which is used for token descriptions. Anyone can create new pools.
+
+![Overview of Uniswap V3](./diagrams/uniswap-v3.png)
+
+# Dependencies
+
+No external dependency has been found.
+
+# Governance
+
+## Security Council
+
+On-chain governance is in place without security council.
+
+| Name                         | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| GovernorBravoDelegator (DAO) | [0x408ED6354d4973f66138C91495F2f2FCbd8724C3](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) | Contract | N/A         | N/A             | N/A               | N/A            |
+| TimeLock                     | [0x1a9C8182C09F50C8318d769245beA52c32BE35BC](https://etherscan.io/address/0x1a9C8182C09F50C8318d769245beA52c32BE35BC) | Contract | N/A         | N/A             | N/A               | N/A            |
+
+## Exit Window
+
+As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol
+fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravoDelegator` contract.
+The lock period is at least two days and up to 30 days for governance actions.
+When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -90,7 +129,7 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | GovernorBravoDelegator (Proxy)         | [0x408ED6354d4973f66138C91495F2f2FCbd8724C3](https://etherscan.io/address/0x408ED6354d4973f66138C91495F2f2FCbd8724C3) |
 | GovernorBravoDelegate (Implementation) | [0x53a328f4086d7c0f1fa19e594c9b842125263026](https://etherscan.io/address/0x53a328f4086d7c0f1fa19e594c9b842125263026) |
 
-## Permission owners
+## All Permission Owners
 
 | Name                         | Account                                                                                                               | Type     |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -120,18 +159,3 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 | GovernorBravoDelegator      | \_setImplementation | Updates the implementation of the `GovernorBravo` (DAO) contract. Can only be triggered by the DAO itself. The new contract would inherit all the DAO permissions mentioned above.                                                                  | TimeLock                                                               |
 | GovernorBravoDelegate       | \_setPendingAdmin   | Set a new address for the admin of the GovernorBravo. The new appointed admin has to call \_acceptAdmin before the transfer of admin rights is final.                                                                                               | TimeLock                                                               |
 | GovernorBravoDelegate       | \_acceptAdmin       | A newly appointed admin of the Governor has to call \_acceptAdmin.                                                                                                                                                                                  | only Pending Admin (assigned via setPendingAdmin), currently 0-address |
-
-## Dependencies
-
-No external dependency has been found.
-
-## Exit Window
-
-As the contracts are immutable the users can always withdraw their funds, but parameters such as protocol
-fees can be changed by the DAO. A `Timelock` protects the contracts and updates are governed by the `GovernorBravoDelegator` contract.
-The lock period is at least two days and up to 30 days for governance actions.
-When a proposal is created (at least 2.5M Uni), the community can cast their votes during a 3 day voting period. If a majority, and at least 4M votes are cast for the proposal, it is queued in the Timelock, and may be executed in a minimum of 2 days.
-
-## Security Council
-
-No security council needed because on-chain governance is in place.

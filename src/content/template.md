@@ -85,7 +85,6 @@ The project additionally could advance to Stage 2 if ...
 
 ⚠️ During our analysis, we identified ...
 
-
 # Protocol Analysis
 
 Here include the diagram. Please explain what the main contracts are doing within the diagram.
@@ -104,11 +103,11 @@ Here anything relevant to the governance, in this case it could be what you high
 
 New table with all the multisigs
 
-| Name          | Account | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ------------- | ------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| Team Multisig | [0x123](https://etherscan.io/address/0x123)  | Multisig | ✅          | ❌              | ❌                | ✅             |
+| Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| Team Multisig | [0x123](https://etherscan.io/address/0x123) | Multisig | ✅          | ❌              | ❌                | ✅             |
 
-# Technical Analysis
+# Contracts & Permissions
 
 ## Contracts
 
@@ -117,7 +116,7 @@ New table with all the multisigs
 | contract 1    | [0x123](https://etherscan.io/address/0x123) |
 | contract 2    | [0x456](https://etherscan.io/address/0x456) |
 
-## All Permission owners
+## All Permission Owners
 
 | Name | Account                                     | Type         |
 | ---- | ------------------------------------------- | ------------ |
