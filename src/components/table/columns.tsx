@@ -323,10 +323,11 @@ export const createColumns = (
       );
     },
     cell: ({ row }) => {
+      const tvl = row.getValue("tvl");
       return (
         <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
           <span className="hidden md:inline">
-            {formatUsd(row.getValue("tvl"))}
+            {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
           </span>
         </div>
       );
