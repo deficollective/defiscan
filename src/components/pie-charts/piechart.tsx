@@ -72,7 +72,10 @@ const aggregateByKey = (
 ): { key: string; value: number }[] => {
   return Object.entries(groupedData).map(([key, projects]) => {
     if (operation === "sum") {
-      const totalTvl = projects.reduce((sum, project) => sum + project.tvl, 0);
+      const totalTvl = projects.reduce(
+        (sum, project) => sum + (project.tvl === "n/a" ? 0 : project.tvl),
+        0
+      );
       key = keyToWord(key);
       return { key, value: totalTvl };
     } else {
