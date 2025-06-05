@@ -20,7 +20,7 @@ Aave v3 Prime is a lending protocol which is governed by the Aave DAO with a spe
 
 Aave v3 Prime uses the same contract code as Aave v3 Core instance overall, but redeployed modules _Lend & Borrow_ and _Reserve Parameters_, while re-using the same deployments for _Treasury, Aave Ecosystem Reserves & Rewards_, the _GHO Stablecoin_ and the _Aave Governance_.
 
-We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our _Core_ instance [report](/protocols/aave).
+We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our Aave v3 Core instance [report](/protocols/aave).
 
 Due to the minimal differences to Aave v3 Core the same scores apply for Aave v3 Prime.
 
@@ -64,7 +64,7 @@ Aave V3 Prime is accessible through the same Aave UI and third party UIs than th
 
 Read more in our Aave v3 Core instance [report](/protocols/aave).
 
-> Accessibility score: low
+> Accessibility score: Low
 
 ## Conclusion
 
@@ -75,8 +75,6 @@ The protocol could reach **Stage 1** by; 1) adopting the security council requir
 The project additionally could advance to **Stage 2** if all critical permissions were assigned to _Aave Governance_ and protected with a 30-day _Exit Window_.
 
 # Protocol Analysis
-
-protocol analysis: again only point to diffs to core instance which I think is a diagram and explanation of risk oracle dependency (point to separate review) and explain guardrails through stewards. Eg the chaoslabs multisig is not part of Aave but part of the risk oracle dependency
 
 ## Upgradeable Pool Contract and mutable reserve parameters
 
