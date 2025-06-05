@@ -8,7 +8,7 @@ chain: "Ethereum"
 type: "Oracles"
 logo: "/images/infrastructure-logos/chronicle-logo.png"
 stage: "I1"
-protocols: ["Sky"]
+protocols: ["Sky", "Spark"]
 reasons: []
 risks: ["L", "H", "L", "M", "L"]
 author: ["mmilien_"]
