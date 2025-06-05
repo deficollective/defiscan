@@ -9,8 +9,8 @@ stage: 0
 reasons: []
 risks: ["L", "H", "H", "H", "L"]
 author: ["mmilien_"]
-submission_date: "2025-09-04"
-publish_date: "2025-05-26"
+submission_date: "2025-04-09"
+publish_date: "2025-06-05"
 update_date: "1970-01-01"
 ---
 
@@ -71,9 +71,9 @@ However, _SparkLend_ is accessible on third-party applications such as DeFiSaver
 
 ## Conclusion
 
-Spark has a critical dependency on Sky, which results in a _high centralization_ score for the _Autonomy_, _Upgradeability_, and _Exit Window_ sections. Overall, this gives Spark the score of **Stage 0**.
+Spark has a critical, unmitigated dependency on Sky, a _Stage 0_ protocol, for both its _Savings USDS_ and _SparkLend_ products. This results in a _High_ centralization score for Spark's _Autonomy_, _Upgradeability_, and _Exit Window_. Spark thus also achieves **Stage 0**.
 
-Spark can only become Stage 1 if Sky becomes a Stage 1 protocol and the [Sparklend Freezer](#security-council) respects our security councils requirements. It could further become Stage 2 if Sky becomes Stage 2, Chronicle becomes a low centralization protocol, and Spark has a 30-day _Exit Window_.
+Spark can advance to _Stage 1_, if Sky achieves _Stage 1_ and the [Sparklend Freezer](#security-council) is updated to a Security Council setup. Spark could further advance to _Stage 2_ if Sky achieves _Stage 2_, its Chronicle dependency achieves a _Low_ centralization score, and the [Sparklend Freezer](#security-council) permissions are assigned to an onchain governance system with a 30-day _Exit Window_.
 
 > Overall score: Stage 0
 
