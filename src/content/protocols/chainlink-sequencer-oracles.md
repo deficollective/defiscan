@@ -31,7 +31,7 @@ Chainlink build the oracle contract that reports the sequencer uptime on the L2 
 
 The Chainlink Oracle network (OCR) reports to sequencer status with messages that are sent to the inbox of the L2 on Ethereum. The inbox of the L2 deployed on Ethereum is the queue where transactions are posted which should be forced into the L2 before native-L2 transactions are processed.
 
-If the sequencer was _down_ and gets back _up_ again, the sequencer will then include this queued transaction reporting sequencer downtime at the beginning and as such the state of the _L2 Sequencer Uptime Feeds_ contract on the L2 will report sequencer downtime for all following forced inclusions in the queue the sequencer is processing. At the end when all queued transactions are processed, the oracle can force a transaction to state the sequencer is up again.
+If the sequencer goes down and restarts, it will include a queued transaction reporting the downtime. Consequently, the _L2 Sequencer Uptime Feeds_ contract on the L2 will reflect sequencer downtime for all subsequent forced transactions in the queue being processed. Once all queued transactions are complete and the sequencer is working, the oracle can submit a transaction to update the state, indicating the sequencer is back online
 
 This also means that _L2 Sequencer Uptime Feeds_ is only as good as it manages to be the first in the queue that will be forced into the L2. All transactions that are in the queue before the oracle update, execute with the _L2 Sequencer Uptime Feeds_ reporting _uptime_.
 
