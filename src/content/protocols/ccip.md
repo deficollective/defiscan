@@ -8,7 +8,7 @@ chain: "mainnet"
 type: "Bridges"
 logo: "/images/infrastructure-logos/chainlink-logo.png"
 stage: "I0"
-protocols: []
+protocols: ["Aave v3"]
 reasons: []
 risks: ["L", "H", "L", "M", "L"]
 author: ["sagaciousyves"]
