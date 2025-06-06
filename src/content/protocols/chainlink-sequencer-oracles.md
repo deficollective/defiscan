@@ -67,7 +67,7 @@ Chainlink's _L2 Sequencer Uptime Feed_ exposes critical permissions that are not
 
 > Overall score: High
 
-# Revier Notes
+# Reviewer Notes
 
 This review is currently limited to Chainlink _L2 Sequencer Uptime Feed_ from Ethereum to Arbitrum. The findings should generalize for other L2s.
 
