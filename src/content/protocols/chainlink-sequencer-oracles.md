@@ -51,11 +51,15 @@ The Chainlink OCR oracle network observes the sequencer activity and sends an up
 
 The `ArbitrumUptimeFeedProxy` (name in the docs, actual contract name is `EACAggregatorProxy`) is a proxy which currently points to the `ArbitrumSequencerUptimeFeed` contract. Both contracts, `ArbitrumUptimeFeedProxy` and `ArbitrumSequencerUptimeFeed`, are under the control of the [Chainlink multisig](#security-council) multisig. If the proxy starts pointing to a new uptime feed, it could be a malicious or a faulty implementation that reports not the correct sequencer status. This requires the DeFi protocol to implement a grace period that is potentially also configurable because important functions related to liquidations could be permanently blocked, disrupting protocol functionality.
 
+Additionally, the Chainlink EOA on Ethereum can update the gas config (`setGasConfig`) that reported sequencer downtime cannot successfully be pushed onto the L2 because the gas costs are not met by paid gas in the L2 transaction.
+
+Moreover, the Chainlink Multisig can disrupt the oracle from functioning, by removing the permission to post data from the oracle off-chain network. This could also lead to failed oracle, that is unable to push new sequencer states.
+
 # Rating
 
-As mentioned in the [protocol analysis](#protocol-analysis), the [Chainlink multisig](#security-council) has permissions to change the _L2 Sequencer Uptime Feed_ arbitrarily. This could change the entire logic of the uptime feeds, disabling further updates or rendering inaccurate sequencer status.
+As mentioned in the [protocol analysis](#protocol-analysis), the [Chainlink multisig on Arbitrum](#security-council) has permissions to change the _L2 Sequencer Uptime Feed_ arbitrarily. This could change the entire logic of the uptime feeds, disabling further updates or rendering inaccurate sequencer status.
 
-Those changes can be made **without delay** and the [Chainlink multisig](#security-council) does not follow the requirements for a _Security Council_.
+Those changes can be made **without delay** and the [Chainlink multisig](#security-council) on Ethereum nor on Arbitrum do not follow the requirements for a _Security Council_.
 
 ## Conclusion
 
