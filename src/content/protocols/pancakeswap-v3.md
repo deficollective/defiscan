@@ -98,6 +98,8 @@ The remainder of the trading fees is captured as "protocol fees." [Multisig 1](#
 During swap operations, each `PancakeV3Pool` accumulates protocol fees in its protocolFees storage variable, separating amounts for token0 and token1. The fee calculation occurs within the swap execution, where a portion of the fee amount is set aside based on the configured protocol fee percentage.
 The [address 2 (Operator)](#security-council) or [Multisig 1](#security-council) can collect accumulated protocol fees through the `PCSV3FeeHandler` proxy contract, which orchestrates the fee collection process across all pools and transfers the fees to a designated recipient address.
 
+![V3 Trading, Liquidity Management & LP Staking](./diagrams/pancake-swap-v3-trading-liquidity-management-lp-staking.png)
+
 ### Rewards
 
 PancakeSwap V3 liquidity providers receive `CAKE` rewards through a specialized distribution pathway. Rewards originate from the broader tokenomics system controlled by [Multisig 2](#security-council) and follow a specific flow: CAKE allocated to farming programs reaches `MasterChefV2`, which designates a portion for V3 incentives. The `MasterChefV3Receiver` contract serves as an intermediary, receiving tokens from `MasterChefV2` and making them available to `MasterChefV3`.
@@ -106,7 +108,7 @@ The critical link in this system is the `MasterChefV3KeeperV1` contract, which [
 
 `MasterChefV3` distributes these rewards according to allocation points configured by [Multisig 2](#security-council). Meanwhile, the interaction between `PancakeV3Pool` and `PancakeV3LmPool` ensures accurate reward tracking, with each swap in a pool triggering `accumulateReward()` to update the reward state based on price changes and liquidity.
 
-![V3 Pool Deployment & Rewards Architecture](./diagrams/V3 Pool Deployment & Rewards Architecture.png)
+![V3 Pool Deployment & Rewards Architecture](./diagrams/pancake-swap-v3-pool-deployment-&-rewards-architecture.png)
 
 ## User Trading & Liquidity Management
 
