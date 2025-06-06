@@ -21,7 +21,7 @@ update_date: "1970-01-01"
 
 Chainlink offers realtime sequencer downtime information with the _L2 Sequencer Uptime Feeds_ contracts on the different L2s.
 
-DeFi protocols on L2s can consume this oracle for functions for which the protocol wants to create fairness for its user base. For example a DeFi protocol could prevent liquidations from happening by requiring that the L2 Sequencer Uptime Feed reports uptime for the respective L2. With that setup sophisticated users cannot force include liquidation transactions via posting the transaction to the L1 and extract value from non-sophisticated users.
+DeFi protocols on L2s can consume this oracle for functions for which the protocol wants to create fairness for its user base. For example a DeFi protocol could prevent liquidations from happening by requiring that the L2 Sequencer Uptime Feed reports uptime for the respective L2. With that setup, sophisticated users cannot force include liquidation transactions via posting the transaction to the L1 and extract value from non-sophisticated users.
 
 This report is a limited assessment of Chainlink's _L2 Sequencer Uptime Feeds_ to assess the centralization of DeFi projects that rely on Chainlink for sequencer uptime. We therefore limited our investigation to the main centralization vectors that we have found and listed below.
 
