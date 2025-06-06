@@ -20,5 +20,5 @@ export type Project = {
   protocols: string[];
   type: string;
   chain: string;
-  tvl: number;
+  tvl: number | "n/a";
 };
