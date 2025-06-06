@@ -39,7 +39,7 @@ The exact workings and contracts used for this system are dependent on the respe
 
 An overview of the _L2 Sequencer Uptime Feeds_ architecture can be seen below.
 
-[enter_image]
+![Overview of Chainlink oracle sequencer uptime feeds](./diagrams/Chainlink-sequencer-oracle.png)
 
 ## Arbitrum L2 Sequencer Uptime Feed
 
@@ -78,6 +78,7 @@ The multisig in control of the price feeds and aggregator contracts is a 4/9 mul
 | Name                          | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | Chainlink Multisig (Arbitrum) | [0x2F3b388EB017613eb51F06843DFEF12Db1fDD3c5 ](https://arbiscan.io/address/0x2F3b388EB017613eb51F06843DFEF12Db1fDD3c5)  | Multisig 4/9 | ✅          | ❌              | ❌                | ❌             |
+| Chainlink EOA (Ethereum)      | [0xcc8be80d607f087432541f49bdc5e9545f722356](https://etherscan.io/address/cc8be80d607f087432541f49bdc5e9545f722356)    | EOA          | ❌          | ❌              | ❌                | ❌             |
 | Chainlink Multisig (Ethereum) | [0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA](https://etherscan.org/address/0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA) | Multisig 4/9 | ✅          | ❌              | ❌                | ❌             |
 
 ## Contracts
@@ -97,8 +98,8 @@ The multisig in control of the price feeds and aggregator contracts is a 4/9 mul
 
 | Name                          | Account                                                                                                               | Type         |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Chainlink Multisig (Arbitrum) | [0x2F3b388EB017613eb51F06843DFEF12Db1fDD3c5 ](https://arbiscan.io/address/0x2F3b388EB017613eb51F06843DFEF12Db1fDD3c5) | Multisig 4/9 |
-| Chainlink EOA (Ethereum)      | [0xcc8be80d607f087432541f49bdc5e9545f722356 ](https://etherscan.io/address/cc8be80d607f087432541f49bdc5e9545f722356)  | EOA          |
+| Chainlink Multisig (Arbitrum) | [0x2F3b388EB017613eb51F06843DFEF12Db1fDD3c5](https://arbiscan.io/address/0x2F3b388EB017613eb51F06843DFEF12Db1fDD3c5)  | Multisig 4/9 |
+| Chainlink EOA (Ethereum)      | [0xcc8be80d607f087432541f49bdc5e9545f722356](https://etherscan.io/address/cc8be80d607f087432541f49bdc5e9545f722356)   | EOA          |
 | Chainlink Multisig (Ethereum) | [0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA](https://etherscan.io/address/0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA) | Multisig 4/9 |
 
 ## Permissions
