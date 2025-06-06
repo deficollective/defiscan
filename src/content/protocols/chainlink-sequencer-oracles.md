@@ -81,8 +81,6 @@ The multisig in control of the price feeds and aggregator contracts is a 4/9 mul
 
 ## Contracts
 
-We list here an example price feed. All Chainlink price feeds are listed [here](https://docs.chain.link/data-feeds/price-feeds/addresses?page=1&testnetPage=1&network=ethereum).
-
 &nbsp;
 
 | Contract Name                                | Address                                                                                                                    |
