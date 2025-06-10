@@ -4,7 +4,7 @@ website: "https://pancakeswap.finance/"
 x: "https://x.com/pancakeswap"
 github: ["https://github.com/pancakeswap/"]
 defillama_slug: ["pancakeswap-amm-v3"]
-chain: "BSC"
+chain: "Binance"
 stage: 0
 reasons: []
 risks: ["H", "M", "L", "H", "H"]
