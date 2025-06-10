@@ -7,7 +7,7 @@ defillama_slug: ["pancakeswap-amm"]
 chain: "Binance"
 stage: 1
 reasons: []
-risks: ["L", "M", "M", "H", "M"]
+risks: ["L", "M", "L", "M", "M"]
 author: ["noemacee"]
 submission_date: "2025-05-13"
 publish_date: "2025-05-19"
@@ -28,30 +28,29 @@ Deployed on **Binance Smart Chain**.
 
 ## Upgradeability
 
-### AMM (Liquidity Pairs)
-
-The `Factory` contract used to create new swapping _Pairs_ is upgradeable via an internal multisig ([GnosisSafeProxy #1](#security-council)), which has the authority to change the fee beneficiary of the 0.08% protocol fee collected from every pair.
-
 ### Incentive Layer
 
 Changes of parameters in the incentive layer of PancakeSwap V2 may result in the _loss of unclaimed yied_.
 
-Incentives are distributed to liquidity providers who stake their tokens through `MasterChef V1`. The only source of new `CAKE` is via immutable minting at a fixed rate of 40 `CAKE` per block, ([GnosisSafeProxy #1](#security-council)) can call the _dev()_ function at any time, with no delay, to change the address that receives 10% of each mint. The remaining 90% is forwarded to `MasterChef V2` for distribution to farms.
+Incentives are distributed to liquidity providers who stake their tokens through `MasterChef V1`. The only source of new `CAKE` is via immutable minting at a fixed rate of 40 `CAKE` per block, the multisig [GnosisSafeProxy #1](#security-council) can call the _dev()_ function at any time, with no delay, to change the address that receives 10% of each mint. The remaining 90% is forwarded to `MasterChef V2` for distribution to farms.
 
-All reward parameters in `MasterChef V2`; including the list of farms, their allocation points, the `CAKE` burn split, and the address designated to receive _burned_ `CAKE`, can be modified by another internal multisig ([GnosisSafeProxy #2](#security-council))following a minimum six-hour timelock. This allows the team to halt rewards to existing farms, funnel all new `CAKE` emissions to an insider pool, or redirect the burn address to one that simply receives the tokens without actually burning them.
+All reward parameters in `MasterChef V2`; including the list of farms, their allocation points, the `CAKE` burn split, and the address designated to receive _burned_ `CAKE`, can be modified by another internal multisig ([GnosisSafeProxy #2](#security-council)) following a minimum six-hour timelock. This allows the team to halt rewards to existing farms, funnel all new `CAKE` emissions to an insider pool, or redirect the burn address to one that simply receives the tokens without burning them.
 
 As a matter of fact, the current burn address is ([GnosisSafeProxy #1](#security-council)), meaning the decision to truly burn the tokens depends entirely on the multisig’s integrity.
 
 Only the `CAKE` token is exposed to these upgradeable risks. _Unclaimed yield_ from farms, in `CAKE`, is therefore vulnerable due to the permissions held by the team. However, users’ principal and the 0.17% liquidity provider fee earned from the pools remain secure.
 
+### AMM (Liquidity Pairs)
+
+An internal multisig ([GnosisSafeProxy #1](#security-council)) has the authority to change the fee beneficiary of the 0.08% protocol fee collected from every swapping pair created by the `Factory`.
+
 > Upgradeability score: **Medium**
 
 ## Autonomy
 
-PancakeSwap v2’s AMM contracts (`PancakeFactory`, `PancakePair`) have no external price oracle or off-chain dependency: swaps resolve only against onchain reserves.  
-The `CAKE` _incentive layer_ (MasterChef V1, V2), however, introduces an internal dependency: LP rewards rely on a single token (`CAKE`) that is minted at a fixed rate of 40 `CAKE` per block and distributed under the control of a _3-of-6 multisig_ (([GnosisSafeProxy #2](#security-council))). The distribution of `CAKE` can directly impact rewards in the system and thus may result in the _loss of unclaimed yield_.
+PancakeSwap v2’s AMM contracts (`PancakeFactory`, `PancakePair`) have no external price oracle or off-chain dependency: swaps resolve only against onchain reserves.
 
-> Autonomy score: **Medium**
+> Autonomy score: **Low**
 
 ## Exit Window
 
@@ -71,7 +70,7 @@ Users primarily interact with _PancakeSwap v2_ through its official web interfac
 
 ## Conclusion
 
-The _PancakeSwap v2_ protocol achieves _Medium centralization_ risk scores for the _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. This grants _PancakeSwap v2_ the score of Stage 1.
+The _PancakeSwap v2_ protocol achieves _Medium_ centralization risk scores for the _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. This grants _PancakeSwap v2_ the score of Stage 1.
 
 The project could advance to Stage 2 if all critical permissions concerning `CAKE` incentive distribution were irrevocably assigned to onchain governance and protected by a _30-day Exit Window_. In addition to those, it would require multiple independent front-ends ensuring continuous user access.
 
@@ -95,7 +94,7 @@ PancakeSwap follows the standard _Uniswap V2_ pattern with the addition of a i
 
 # Dependencies
 
-No external dependency has been found.
+No external external dependencies has been found.
 
 # Governance
 
@@ -140,15 +139,19 @@ Because none of the criteria are met, PancakeSwap v2 **lacks a qualifying Securi
 
 ## Permissions
 
-| Contract       | Function          | Impact                                                                                                                                                                                                                                                                                                       | Owner / Signer                                                                          |
-| -------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| PancakeFactory | setFeeTo          | Sets a new `feeTo` address that receives the 0.08 % protocol fee accross every `PancakePair`.                                                                                                                                                                                                                | [GnosisSafeProxy #1](#security-council)                                                 |
-| PancakeFactory | setFeeToSetter    | Assigns the right to call `setFeeTo` to a new address. This hands permanent control of fee-switch power to a different signer set.                                                                                                                                                                           | [GnosisSafeProxy #1](#security-council)                                                 |
-| MasterChefV2   | add               | Creates a new farm with arbitrary allocation points. This reshapes `CAKE` distribution and can siphon rewards from existing farms. A malicious owner could add a “ghost” pool with zero real liquidity that captures 100 % of farms' `CAKE` emissions.                                                       | [Timelock](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4)      |
-| MasterChefV2   | set               | Rewrites `allocPoint` of any existing pool. This re-weights how `CAKE` emissions are shared. A hostile change could drop public pools to near-zero rewards and funnel emissions to insider pools.                                                                                                            | [Timelock](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4)      |
-| MasterChefV2   | updateCakeRate    | Updates the percentages sent to burn, regular, and special farms. This alters `CAKE`’s inflation schedule. Setting burn rate to 0 % while doubling farm rewards would inflate supply rapidly and erode token value.                                                                                          | [Timelock](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4)      |
-| MasterChefV2   | burnCake          | Transfers accumulated `CAKE` to the `burnAdmin` address. Intended to reduce supply, it actually sends tokens to whatever address is set. If that address is switched to an attacker wallet, “burns” become free `CAKE`. Currently the `burnAdmin`is [GnosisSafeProxy #1](#security-council)                  | [Timelock](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4)      |
-| MasterChefV2   | transferOwnership | Writes a new `owner` for `MasterChef V2`. Control over emissions, pool lists, and admin settings moves with it.                                                                                                                                                                                              | [Timelock](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4)      |
-| Timelock       | setDelay          | Changes the global execution delay for queued governance calls. This defines the minimum exit window for users. The delay can be a minimum of 6 hours.                                                                                                                                                       | [Timelock](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4)      |
-| CakeToken      | mint              | Calls `_mint`, increasing total `CAKE` supply and sending tokens to any address. This is the root of all farming emissions. `MasterChef V1` is the only contract that can call this mint function, it is a fixed 40 `CAKE` per block mint maximum.                                                           | [MasterChef V1](https://bscscan.com/address/0x73feaa1eE314F8c655E354234017bE2193C9E24E) |
-| CakeToken      | transferOwnership | Assigns a new owner with full mint authority. Control of `CAKE` inflation moves entirely to the new address. If passed to a malicious contract, unlimited `CAKE` could be minted, destroying token economics. It is an 'uncallable' function since `MasterChef V1` functions have no direct ways to call it. | [MasterChef V1](https://bscscan.com/address/0x73feaa1eE314F8c655E354234017bE2193C9E24E) |
+| Contract       | Function          | Impact                                                                                                                                                                                                                                                                                                       | Owner / Signer                          |
+| -------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- |
+| PancakeFactory | setFeeTo          | Sets a new `feeTo` address that receives the 0.08 % protocol fee accross every `PancakePair`.                                                                                                                                                                                                                | [GnosisSafeProxy #1](#security-council) |
+| PancakeFactory | setFeeToSetter    | Assigns the right to call `setFeeTo` to a new address. This hands permanent control of fee-switch power to a different signer set.                                                                                                                                                                           | [GnosisSafeProxy #1](#security-council) |
+| MasterChefV2   | add               | Creates a new farm with arbitrary allocation points. This reshapes `CAKE` distribution and can siphon rewards from existing farms. A malicious owner could add a “ghost” pool with zero real liquidity that captures 100 % of farms' `CAKE` emissions.                                                       | Timelock                                |
+| MasterChefV2   | set               | Rewrites `allocPoint` of any existing pool. This re-weights how `CAKE` emissions are shared. A hostile change could drop public pools to near-zero rewards and funnel emissions to insider pools.                                                                                                            | Timelock                                |
+| MasterChefV2   | updateCakeRate    | Updates the percentages sent to burn, regular, and special farms. This alters `CAKE`’s inflation schedule. Setting burn rate to 0 % while doubling farm rewards would inflate supply rapidly and erode token value.                                                                                          | Timelock                                |
+| MasterChefV2   | burnCake          | Transfers accumulated `CAKE` to the `burnAdmin` address. Intended to reduce supply, it actually sends tokens to whatever address is set. If that address is switched to an attacker wallet, “burns” become free `CAKE`. Currently the `burnAdmin`is [GnosisSafeProxy #1](#security-council)                  | Timelock                                |
+| MasterChefV2   | transferOwnership | Writes a new `owner` for `MasterChef V2`. Control over emissions, pool lists, and admin settings moves with it.                                                                                                                                                                                              | Timelock                                |
+| Timelock       | setDelay          | Changes the global execution delay for queued governance calls. This defines the minimum exit window for users. The delay can be a minimum of 6 hours.                                                                                                                                                       | Timelock                                |
+| Timelock       | acceptAdmin       | Changes the admin to the new pending admin who is the only address allowed to call this function.                                                                                                                                                                                                            | pendingAdmin                            |
+| Timelock       | setPendingAdmin   | Names a new admin for the Timelock. The admin can queue and cancel transaction which grants them total control over the `MasterChefV2` and `CAKE` contracts. The admin needs to accept the role.                                                                                                             | Timelock                                |
+| Timelock       | queueTransaction  | Queues a transaction in the timelock. Once the delay has passed it can then be executed and might perform call any of the functions which have the Timelock as permission owner.                                                                                                                             | [GnosisSafeProxy #1](#security-council) |
+| Timelock       | cancelTransaction | Cancels a transaction that was queued before it is executed. It can no longer be executed once it was is cancelled.                                                                                                                                                                                          | [GnosisSafeProxy #1](#security-council) |
+| CakeToken      | mint              | Calls `_mint`, increasing total `CAKE` supply and sending tokens to any address. This is the root of all farming emissions. `MasterChef V1` is the only contract that can call this mint function, it is a fixed 40 `CAKE` per block mint maximum.                                                           | MasterChef V1                           |
+| CakeToken      | transferOwnership | Assigns a new owner with full mint authority. Control of `CAKE` inflation moves entirely to the new address. If passed to a malicious contract, unlimited `CAKE` could be minted, destroying token economics. It is an 'uncallable' function since `MasterChef V1` functions have no direct ways to call it. | MasterChef V1                           |
