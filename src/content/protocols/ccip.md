@@ -90,8 +90,8 @@ The CCIP protocol could advance to Medium Centralization if the Bypasser Role ow
 
 | Multisig / Role     | Address                                                                                                               | Type | At least 7 signers | At least 51% threshold | ≥50% non-insider signers | Signers publicly announced |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------- | ---- | ------------------ | ---------------------- | ------------------------ | -------------------------- |
-| BYPASSER (Ethereum) | [0x117ec8ad107976e1dbcc21717ff78407bc36aadc](https://etherscan.io/address/0x117ec8ad107976e1dbcc21717ff78407bc36aadc) | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
-| BYPASSER (Arbitrum) | [0xf4c257b5c6c526d56367a602e87b1932d13e67cb](https://etherscan.io/address/0xf4c257b5c6c526d56367a602e87b1932d13e67cb) | MCMS | ✅                 | ?                      | ❌                       | ❌                         |
+| BYPASSER (Ethereum) | [0x117ec8ad107976e1dbcc21717ff78407bc36aadc](https://etherscan.io/address/0x117ec8ad107976e1dbcc21717ff78407bc36aadc) | MCMS | ✅                 | ❌                     | ❌                       | ❌                         |
+| BYPASSER (Arbitrum) | [0xf4c257b5c6c526d56367a602e87b1932d13e67cb](https://etherscan.io/address/0xf4c257b5c6c526d56367a602e87b1932d13e67cb) | MCMS | ✅                 | ❌                     | ❌                       | ❌                         |
 
 ## Contracts
 
