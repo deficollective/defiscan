@@ -36,8 +36,6 @@ The report is concerned with the Aave V3 _EtherFi_ instance deployed on Ethereum
 
 The permissions and Upgradeability in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same to the Aave v3 Core instance. The permission owners are the same multisig accounts as on the Aave v3 Core instance. As a consequence, the same _Upgradeability_ rating is assigned to the Aave v3 EtherFi report.
 
-The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _Upgradeability_ risk compared to the Aave v3 Core instance is introduced.
-
 > Upgradeability score: High
 
 ## Autonomy
@@ -108,8 +106,6 @@ This table shows the external permission owners and how they are rated against t
 | ACI Automation (Bot)      | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://etherscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
 | CleanUp Admin             | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://etherscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 | ❌                 | ✅                     | ❌                             | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=270&ipfsHash=0x4043001b72316afa6b6728772941bfa08f127b66c1c006316a3f20510b6738ab)) |
 | Injector Owner (BGD Labs) | [0xff37939808EcF199A2D599ef91D699Fb13dab7F7](https://etherscan.io/address/0xff37939808EcF199A2D599ef91D699Fb13dab7F7) | Multisig 1/2 | ❌                 | ❌                     | ❌                             | ✅                                                                                                                                          |
-| Chaos Labs' Multi-sig?    | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 3/6 | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
-| Chaos Labs' Bot           | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
 
 💡 The BGD Labs maintains a public markdown page on the existing permissions to inform its users: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/MAINNET-ETHERFI.md
 

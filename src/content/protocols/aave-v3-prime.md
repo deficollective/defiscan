@@ -36,8 +36,6 @@ The report is concerned with the Aave V3 Prime instance deployed on Ethereum mai
 
 The permissions and _Upgradeability_ in the re-deployed contracts of the modules _Core Lend & Borrow_ and _Reserve Parameters_ are the same to the Aave v3 Core instance. The permission owners are the same multisig accounts as on the Aave v3 Core instance. As a consequence, the same _Upgradeability_ rating is assigned to the Aave v3 Prime report.
 
-The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _Upgradeability_ risk compared to the Aave v3 Core instance is introduced.
-
 > Upgradeability score: High
 
 ## Autonomy

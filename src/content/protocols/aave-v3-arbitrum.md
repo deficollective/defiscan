@@ -9,8 +9,8 @@ stage: 0
 risks: ["M", "H", "H", "H", "L"]
 reasons: []
 author: ["sagaciousyves"]
-submission_date: "1970-01-01"
-publish_date: "1970-01-01"
+submission_date: "2025-06-07"
+publish_date: "2025-06-10"
 update_date: "1970-01-01"
 ---
 
@@ -33,8 +33,6 @@ The report is concerned with the Aave V3 instance deployed on Arbitrum. Arbitrum
 ## Upgradeability
 
 The permissions and _Upgradeability_ in the re-deployed contracts of the modules _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_ are the same to the Aave v3 Core instance.
-
-The `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails and thus no additional _Upgradeability_ risk compared to the Aave v3 Core instance is introduced.
 
 ### GHO Stablecoin
 
@@ -161,8 +159,8 @@ This table shows the external permission owners and how they are rated against t
 | ACI Automation (Bot)                             | [0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193](https://arbiscan.io/address/0x3Cbded22F878aFC8d39dCD744d3Fe62086B76193) | EOA          | n/a                | n/a                    | n/a                            | n/a                                                                                                                                         |
 | CleanUp Admin                                    | [0xdeadD8aB03075b7FBA81864202a2f59EE25B312b](https://arbiscan.io/address/0xdeadD8aB03075b7FBA81864202a2f59EE25B312b) | Multisig 2/3 | ❌                 | ✅                     | ❌                             | ✅ ([source](https://vote.onaave.com/proposal/?proposalId=270&ipfsHash=0x4043001b72316afa6b6728772941bfa08f127b66c1c006316a3f20510b6738ab)) |
 | AaveStewardInjectorCaps guardian                 | [0x87dFb794364f2B117C8dbaE29EA622938b3Ce465](https://arbiscan.io/address/0x87dFb794364f2B117C8dbaE29EA622938b3Ce465) | Multisig 1/2 | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
-| Chaos Labs' Multi-sig?                           | [0x14C3fe96adf6068C2D5616D239fc93f61D85dF85](https://arbiscan.io/address/0x14C3fe96adf6068C2D5616D239fc93f61D85dF85) | Multisig 2/4 | ❌                 | ❌                     | ❌                             | ❌                                                                                                                                          |
-| Chaos Labs' Bot                                  | [0x42939e82df15afc586bb95f7dd69afb6dc24a6f9](https://arbiscan.io/address/0x42939e82df15afc586bb95f7dd69afb6dc24a6f9) | EOA          | n/a                | n/a                    | n/a                            | n/a                                                                                                                                         |
+
+|
 
 💡 The BGD Labs maintains a public markdown page on the existing permissions to inform its users: https://github.com/bgd-labs/aave-permissions-book/blob/main/out/ARBITRUM_ONE-V3.md
 

@@ -39,7 +39,9 @@ Neither the EOA to update parameters nor the Chaos Labs Multisig Account do sati
 
 As mentioned in the [protocol analysis](#protocol-analysis), the [Chaos Labs Bot](#security-council) has permissions to change the parameters arbitrarily. This could be used to trigger liquidations in lending protocols like Aave.
 
-Those changes can be made **without delay** and the [Chaos Labs Bot](#security-council) does not follow the requirements for a _security council_.
+Furthmore the [Chaos Labs' Multisig](#security-council) can assign any account to be the sender of risk parameter updates. Faulty or malicious assignment could increase the risk of the oracle exposing faulty or malicious parameters to consuming smart contracts that handle user funds.
+
+Those changes can be made **without delay** and the [Chaos Labs Bot](#security-council) nor the [Chaos Labs' Multisig](#security-council) do not follow the requirements for a _security council_.
 
 ## Conclusion
 
@@ -49,15 +51,15 @@ Chaos Labs's risk oracle protocol is operated in a centralized manner by Chaos L
 
 # Reviewer Notes
 
-This review is limited to the Chaos Labs `RiskOracle` deployed on Ethereum mainnet. It is used by Aave Prime and Aave EtherFi.
+This review is limited to the Chaos Labs `RiskOracle` deployed on Ethereum mainnet. It is used by [Aave Prime](/protocols/aave-v3-prime) and [Aave EtherFi](/protocols/aave-v3-etherfi).
 
 # Appendix
 
 ## Security Council
 
-| Name                  | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| Chaos Labs' Multi-sig | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 3/6 | ❌          | ❌              | ✅                | ❌             |
+| Name                 | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Chaos Labs' Multisig | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 3/6 | ❌          | ❌              | ✅                | ❌             |
 
 ## Contracts
 
@@ -67,19 +69,19 @@ This review is limited to the Chaos Labs `RiskOracle` deployed on Ethereum mainn
 
 ## All Permission Owners
 
-| Name                 | Account                                                                                                               | Type         |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Chaos Labs Multi-sig | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 3/6 |
-| Chaos Labs Bot       | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          |
+| Name                | Account                                                                                                               | Type         |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Chaos Labs Multisig | [0x2400ad77C8aCCb958b824185897db9B9DD771830](https://etherscan.io/address/0x2400ad77C8aCCb958b824185897db9B9DD771830) | Multisig 3/6 |
+| Chaos Labs Bot      | [0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9](https://etherscan.io/address/0x42939e82DF15afc586bb95f7dD69Afb6Dc24A6f9) | EOA          |
 
 ## Permissions
 
-| Contract   | Function                        | Impact                                                                                                                                                                                                                                                                                                                                                        | Owner                |
-| ---------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| RiskOracle | renounceOwnership               | The owner can update the list of authorized senders. If the ownership is transferred/revoked, further changes to the authorized senders is not possible. If the list was empty, the oracle is useless, otherwise the `RISK_ADMIN` role has to be revoked from the `EdgeRiskSteward` to prevent the remaining senders (if untrusted) to send untrusted prices. | Chaos Labs Multi-sig |
-| RiskOracle | transferOwnership               | The owner can update the list of authorized senders. If the new owner is unstrusted, the `RISK_ADMIN` role has to be revoked from the `EdgeRiskSteward` to prevent untrusted prices.                                                                                                                                                                          | Chaos Labs Multi-sig |
-| RiskOracle | addAuthorizedSender             | Authorized senders can call `publishRiskParameterUpdate` and `publishBulkRiskParameterUpdates` and push updates to the oracle contract. This function allows to add authorized senders. Mis-use can happen if an untrusted authorized sender was added. The impact is small, since the EdgeRiskSteward has guardrails on the updates.                         | Chaos Labs Multi-sig |
-| RiskOracle | removeAuthorizedSender          | This function removes authorized senders that can call `publishRiskParameterUpdate` and `publishBulkRiskParameterUpdates`. If there is none left, the parameters cannot be updated through this contract. The Aave governance can update parameters itself directly, so no real impact.                                                                       | Chaos Labs Multi-sig |
-| RiskOracle | addUpdateType                   | This function allows to support new parameter types to be supported.                                                                                                                                                                                                                                                                                          | Chaos Labs Multi-sig |
-| RiskOracle | publishRiskParameterUpdate      | Allows to update the parameters in the oracle contract. This parameter data is the _oracle data_ for the `EdgeRiskSteward`.                                                                                                                                                                                                                                   | Chaos Labs Bot       |
-| RiskOracle | publishBulkRiskParameterUpdates | Unlike `publishRiskParameterUpdate` this function allows to update multiple parameters at once.                                                                                                                                                                                                                                                               | Chaos Labs Bot       |
+| Contract   | Function                        | Impact                                                                                                                                                                                                                                                                                                                                                        | Owner               |
+| ---------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| RiskOracle | renounceOwnership               | The owner can update the list of authorized senders. If the ownership is transferred/revoked, further changes to the authorized senders is not possible. If the list was empty, the oracle is useless, otherwise the `RISK_ADMIN` role has to be revoked from the `EdgeRiskSteward` to prevent the remaining senders (if untrusted) to send untrusted prices. | Chaos Labs Multisig |
+| RiskOracle | transferOwnership               | The owner can update the list of authorized senders. If the new owner is unstrusted, the `RISK_ADMIN` role has to be revoked from the `EdgeRiskSteward` to prevent untrusted prices.                                                                                                                                                                          | Chaos Labs Multisig |
+| RiskOracle | addAuthorizedSender             | Authorized senders can call `publishRiskParameterUpdate` and `publishBulkRiskParameterUpdates` and push updates to the oracle contract. This function allows to add authorized senders. Mis-use can happen if an untrusted authorized sender was added. The impact is small, since the EdgeRiskSteward has guardrails on the updates.                         | Chaos Labs Multisig |
+| RiskOracle | removeAuthorizedSender          | This function removes authorized senders that can call `publishRiskParameterUpdate` and `publishBulkRiskParameterUpdates`. If there is none left, the parameters cannot be updated through this contract. The Aave governance can update parameters itself directly, so no real impact.                                                                       | Chaos Labs Multisig |
+| RiskOracle | addUpdateType                   | This function allows to support new parameter types to be supported.                                                                                                                                                                                                                                                                                          | Chaos Labs Multisig |
+| RiskOracle | publishRiskParameterUpdate      | Allows to update the parameters in the oracle contract. This parameter data is the _oracle data_ for the `EdgeRiskSteward`.                                                                                                                                                                                                                                   | Chaos Labs Bot      |
+| RiskOracle | publishBulkRiskParameterUpdates | Unlike `publishRiskParameterUpdate` this function allows to update multiple parameters at once.                                                                                                                                                                                                                                                               | Chaos Labs Bot      |
