@@ -28,11 +28,11 @@ Compound-v2 is deployed on various chains. This review is based on the Ethereum 
 
 ## Upgradeability
 
-The Compound-v2 protocol is almost fully upgradeable allowing for the update of governance and markets logic, with implementation contracts such as `CErc20Delegate`, `Comptroller` and `GovernorBravoDelegate` . This can result in the _loss of funds or unclaimed yield_ as well as lead to other changes in the expected performance of the protocol.
+The Compound-v2 protocol is almost fully upgradeable allowing for the update of governance and markets logic, with implementation contracts such as `CErc20Delegate`, `Comptroller` and `GovernorBravoDelegate`. This can result in the _loss of funds or unclaimed yield_ as well as lead to other changes in the expected performance of the protocol.
 
 The protocol's governance, through the Timelock contract, controls key protocol parameters, including interest rate models per asset. Most markets operate through upgradeable proxies pointing to `CToken` implementations. The `Timelock`, controlled by the governance, can update the markets' implementation, modify interest rates, and withdraw accumulated reserves. This means that a sufficiently powerful proposal could install a rate model that sets borrowing costs to extremes or redirect reserves out of the protocol. There are a few notable exceptions with unupgradeable markets using `CErc20` or `CEther` contracts.
 
-Compound v2 currently relies on a non-upgradeable oracle contract to deliver price feeds via Chainlink. While the contract itself cannot be upgraded, its configuration is governed by the Compound community multisig with broad administrative powers: it can change the Chainlink price feed source, add or remove asset markets, or set a fixed fallback price for individual tokens. This power on the price feed could be abused and lead to _loss of user funds_ through unlunjustified liquidations.
+Compound v2 currently relies on a non-upgradeable oracle contract to deliver price feeds via Chainlink. While the contract itself cannot be upgraded, its configuration is governed by the Compound community multisig with broad administrative powers: it can change the Chainlink price feed source, add or remove asset markets, or set a fixed fallback price for individual tokens. This power on the price feed could be abused and lead to _loss of user funds_ through unjustified liquidations.
 
 Finally, the governance itself is upgradeable: `GovernorBravoDelegator` proxy points to a delegate contract whose admin may be changed. COMP holders propose and vote on code changes, but once passed, any proposal can swiftly reassign all protocol-level privileges.
 
@@ -42,9 +42,9 @@ Finally, the governance itself is upgradeable: `GovernorBravoDelegator` proxy po
 
 Compound v2 relies on Chainlink price feeds to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink. The only fallback in place is the possibility for the governance to define default fixed prices for assets that will be used in case the oracle fails.
 
-`PiceOracle` fetches prices from Chainlink Price Feeds when requested for a specific cToken.
+`PiceOracle` fetches prices from Chainlink Price Feeds when requested for a specific `cToken`.
 
-The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions as we analyzed in a dedicated review [here](/protocols/chainlink-oracles). This dependency thus introduces centralization risk in the Compound v2 protocol.
+The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions as we analyzed in a dedicated review [here](/protocols/chainlink-oracles). This dependency thus introduces _High_ centralization risk in the Compound v2 protocol.
 
 > Autonomy score: High
 
@@ -54,19 +54,23 @@ Permissions, including protocol upgrades, are controlled by an onchain governanc
 
 While this does not meet the 7-day exit window requirement, malicious or unintended proposals can be intercepted by the `ProposalGuardian` multisig account.
 
-However, the [ProposalGuardian](#security-council) multisig do not meet the Security Council requirements ([see below](#security-council)).
+However, the [ProposalGuardian](#security-council) multisig do not meet the [Security Council Requirements](/learn-more#security-council-requirements).
 
 > Exit Window score: High
 
 ## Accessibility
 
-The original Compound V2 interface ( [app.compound.finance](https://app.compound.finance/?market=usdc-mainnet) ) is fully open-source; anyone can clone the repo, swap the public Graph endpoint (or run their own sub-graph) and launch a local or IPFS-hosted copy in a few minutes. In practice, users are not limited to this front-end: Compound V2 positions can be opened, closed, or managed from a wide list of third-party dashboards and wallets (DeFi Saver, Instadapp, Zapper, Zerion, Debank, and more). Because there are multiple independent ways to reach the contracts even if the official website goes offline, user funds remain accessible.
+The original Compound V2 interface [app.compound.finance](https://app.compound.finance/?market=usdc-mainnet) is fully open-source; anyone can clone the repo, swap the public Graph endpoint (or run their own sub-graph) and launch a local or IPFS-hosted copy in a few minutes.
+
+In practice, users are not limited to this front-end: Compound V2 positions can be opened, closed, or managed from a wide list of third-party dashboards and wallets (DeFi Saver, Instadapp, Zapper, Zerion, Debank, and more).
+
+Since there are multiple independent ways to reach the contracts even if the official website goes offline, user funds remain accessible.
 
 > Accessibility score: Low
 
 ## Conclusion
 
-The Compound-v2 Ethereum mainnet protocol achieves _High centralization risk_ scores for its _Upgradeability_, _Autonomy_ and _Exit Window_ dimensions. It thus ranks **Stage 0**.
+The Compound-v2 Ethereum mainnet protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_ and _Exit Window_ dimensions. It thus ranks **Stage 0**.
 
 The protocol could reach Stage 1 by 1) adopting a _Security Council_ setup for the `ProposalGuardian` and `PauseGuardian` multisig accounts, and 2) implementing validity checks and a valid fallback mechanism around the Chainlink oracle (or Chainlink adopting a _Security Council_ setup for its own multisig account).
 
@@ -82,27 +86,29 @@ Below is an overview of the contracts from the Compound V2 protocol.
 
 ![Overview of the compound protocol](diagrams/compound-v2-overview.png)
 
-The `CErc20Delegator` is the proxy layer for ERC20 markets in Compound v2. Each market is defined by it's own proxy contract. It holds all the market’s storage (balances, allowances, reserves, etc.) and forwards calls to a shared CErc20Delegate implementation. Its admin (the Timelock) can swap out that implementation to upgrade market logic without redeploying each market or migrating user funds. A malicious upgrade could hijack all funds in a market.
+The `CErc20Delegator` is the proxy layer for ERC20 markets in Compound v2. Each market is defined by it's own proxy contract. It holds all the market’s storage (balances, allowances, reserves, etc.) and forwards calls to a shared `CErc20Delegate` implementation. Its admin (the Timelock) can swap out that implementation to upgrade market logic without redeploying each market or migrating user funds. A malicious upgrade could hijack all funds in a market.
 
 The `Comptroller` is the risk management layer of the Compound protocol; it determines how much collateral a user is required to maintain, and whether (and by how much) a user can be liquidated. Each time a user interacts with a cToken, the `Comptroller` is asked to approve or deny the transaction. The `Comptroller` maps user balances to prices (via the `PriceOracle`) to risk weights (called _Collateral Factors_) to make its determinations.
 
 # Dependencies
 
-Compound v2 relies on Chainlink oracle feeds to price collateral and base assets in the system. It doesn’t have a full secondary oracle feed or liveness checks, but its `PriceOracle` contract does include a minimal “fallback” feature: if an administrator has set a _fixedPrice_ for a given asset, then _getUnderlyingPrice_ will return this hard-coded price in case of error on the primary price source. This allows the protocol to continue operating with a sane collateral price if the main feed is down or misbehaving, preventing total system paralysis. While this mitigates some possible oracle failures, it does not constitute a satisfying fallback solution for a centralized oracle such as Chainlink. The oracle can still act in malicious ways or have failures that result in non-zero prices, which would not be covered by the current solution.
+Compound v2 relies on Chainlink oracle feeds to price collateral and base assets in the system. It doesn’t have a full secondary oracle feed or liveness checks, but its `PriceOracle` contract does include a minimal “fallback” feature: if an administrator has set a _fixedPrice_ for a given asset, then _getUnderlyingPrice_ will return this hard-coded price in case of error on the primary price source. This allows the protocol to continue operating with a sane collateral price if the configured price feed is down or misbehaving, preventing total system paralysis.
 
-`PiceOracle` fetches prices from Chainlink Price Feeds when requested for a specific cToken. The Chainlink oracle system itself is upgradeable and achieves a _High centralization_ risk score as discussed in a separate report [here](https://www.defiscan.info/protocols/chainlink-oracles).
+While this mitigates some possible oracle failures, it does not constitute a satisfying fallback solution for a centralized oracle such as Chainlink. The oracle can still act in malicious ways or have failures that result in non-zero prices, which would not be covered by the current solution.
+
+`PiceOracle` fetches prices from Chainlink Price Feeds when requested for a specific `cToken`. The Chainlink oracle system itself is upgradeable and achieves a _High_ centralization risk score as discussed in a separate report [here](https://www.defiscan.info/protocols/chainlink-oracles).
 
 The [Compound community multisig](https://etherscan.io/address/0xbbf3f1421d886e9b2c5d716b5192ac998af2012c) has the ability to update the configs on the Price Feed. The multisig has the flexibility toupdate price feed, add / remove markets or fixed price for market.
 
 # Governance
 
-The Compound protocol is governed and upgraded by `COMP` token-holders, using three distinct components; the `COMP` token, governance module (`GovernorBravo`), and Timelock. Together, these contracts allow the community to propose, vote, and implement changes through the administrative functions of a cToken or the `Comptroller`. Proposals can modify system parameters, support new markets, or add entirely new functionality to the protocol.
+The Compound protocol is governed and upgraded by `COMP` token-holders, using three distinct components; the `COMP` token, governance module (`GovernorBravo`), and `Timelock`. Together, these contracts allow the community to propose, vote, and implement changes through the administrative functions of a `cToken` or the `Comptroller`. Proposals can modify system parameters, support new markets, or add entirely new functionality to the protocol.
 
 `COMP` token-holders can delegate their voting rights to themselves, or an address of their choice.
 
 Governor Bravo is the governance module of the protocol; it allows addresses with more than 25,000 `COMP` to propose changes to the protocol; any address can lock 100 `COMP` to create an _Autonomous Proposal_, which becomes a governance proposal after being delegated 25,000 `COMP` .The minimum number of votes required for an account to create a proposal is set via `proposalThreshold`. This can be changed through governance.
 
-When a governance proposal is created, it enters a 2-day review period, after which voting weights are recorded and voting begins. Voting lasts for 3 days, addresses that held voting weight, at the start of the proposal, invoked through the `getpriorvotes` function, can submit their votes. if a majority, and at least 400,000 votes are cast for the proposal, it is queued in the Timelock, and can be implemented 2 days later. In total, any change to the protocol takes at least one week.
+When a governance proposal is created, it enters a 2-day review period, after which voting weights are recorded and voting begins. Voting lasts for 3 days, addresses that held voting weight, at the start of the proposal, invoked through the `getpriorvotes` function, can submit their votes. If a majority, and at least 400,000 votes are cast for the proposal, it is queued in the `Timelock`, and can be implemented 2 days later. In total, any change to the protocol takes at least one week.
 
 [Source](https://docs.compound.finance/v2/governance/)
 
