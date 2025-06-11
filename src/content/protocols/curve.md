@@ -95,7 +95,7 @@ In addition, Curve supports:
 
 Each of the three primary pool types has its own factory contract, allowing any user to permissionlessly create a pool. The DAO owns all pools by controlling the parent factories. Most pools (except for legacy deployments) inherit their admin address from the factory. This admin has the ability to adjust parameters such as liquidity concentration, trading fees, and, in some cases, other settings like the off-peg multiplier, which increases fees when a pool becomes imbalanced. The implementation of the pools can also be updated by the factory admin (the DAO), but this will only affect future pools and not put existing user positions at risk.
 
-All of these parameters can be updated via DAO vote. More details can be found in the [Contracts and Permissions](#contracts--permissions) section. Tricrypto pools are the only pool type that enforces a mandatory 3-day waiting period before parameter changes take effect.
+All of these parameters can be updated via DAO vote. More details can be found in the [Contracts and Permissions](#permissions) section. Tricrypto pools are the only pool type that enforces a mandatory 3-day waiting period before parameter changes take effect.
 
 ![DEX](./diagrams/curve-dex-diagram.png)
 
