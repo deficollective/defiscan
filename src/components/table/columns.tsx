@@ -135,8 +135,32 @@ export const columns: ColumnDef<Project>[] = [
         })) || [];
 
       // No stage means its a wrapper for different chains.
-      // Therefore we assign the stage to variable.
-      if (stage === undefined) stage = "V";
+      // Calculate the highest stage and use variable styling.
+      if (stage === undefined) {
+        const getHighestStage = (subStages: Array<{stage: Stage}>): Stage => {
+          if (subStages.length === 0) return "V";
+          
+          const stagePriority: Record<Stage, number> = { 2: 5, 1: 4, 0: 3, "R": 2, "O": 1, "V": 0 };
+          
+          return subStages.reduce((highest, current) => {
+            return (stagePriority[current.stage] || 0) > (stagePriority[highest] || 0) ? current.stage : highest;
+          }, subStages[0]?.stage || ("V" as Stage));
+        };
+        
+        const highestStage = getHighestStage(subStages);
+        stage = "V"; // Keep variable color/behavior
+        
+        return (
+          <div className="w-full flex justify-center">
+            <StageBadge 
+              stage={stage} 
+              reasons={reasons} 
+              subStages={subStages}
+              highestStage={highestStage}
+            />
+          </div>
+        );
+      }
 
       return (
         <div className="w-full flex justify-center">

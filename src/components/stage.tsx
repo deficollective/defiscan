@@ -103,6 +103,7 @@ export interface BadgeProps {
   stage: Stage;
   reasons?: Reason[];
   subStages?: SubStage[];
+  highestStage?: Stage;
 }
 
 const stage_text = {
@@ -114,7 +115,16 @@ const stage_text = {
   [STAGE.VARIABLE]: "Variable",
 };
 
-const Badge = ({ stage, className }: { stage: Stage; className?: string }) => {
+
+const Badge = ({ 
+  stage, 
+  className, 
+  displayText 
+}: { 
+  stage: Stage; 
+  className?: string;
+  displayText?: string;
+}) => {
   return (
     <BadgeRaw
       variant="outline"
@@ -127,7 +137,7 @@ const Badge = ({ stage, className }: { stage: Stage; className?: string }) => {
         className
       )}
     >
-      {stage_text[stage]}
+      {displayText || stage_text[stage]}
     </BadgeRaw>
   );
 };
@@ -164,11 +174,20 @@ export function StageBadge({
   stage,
   reasons,
   subStages = [],
+  highestStage,
 }: BadgeProps) {
+  // For variable stages, show the highest stage label but keep variable color
+  const displayStage = stage === "V" && highestStage ? highestStage : stage;
+  const shouldUseVariableColor = stage === "V" && highestStage;
+
   return (
     <HoverCard>
       <HoverCardTrigger>
-        <Badge stage={stage} className={className} />
+        <Badge 
+          stage={shouldUseVariableColor ? "V" : displayStage} 
+          className={className}
+          displayText={shouldUseVariableColor ? stage_text[highestStage] : undefined}
+        />
       </HoverCardTrigger>
       <HoverCardContent
         side="top"
