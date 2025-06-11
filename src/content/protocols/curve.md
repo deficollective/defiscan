@@ -111,7 +111,7 @@ Interest rates are automatically calculated and continuously updated based on th
 
 For more information, see the overview below:
 
-![crvUSD](./diagrams/curve-`crvUSD`-diagram.png)
+![crvUSD](./diagrams/curve-crvUSD-diagram.png)
 
 ## Llamalend
 
