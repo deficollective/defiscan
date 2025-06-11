@@ -39,15 +39,15 @@ The Chainlink _Node Operators_ are a set of well-established companies in divers
 
 As mentioned in the [protocol analysis](#protocol-analysis), the [Chainlink multisig](#security-council) has permissions to change the price feeds arbitrarily. This could change the entire logic of the price feeds, disabling further updates or rendering inaccurate data.
 
-Those changes can be made **without delay** and the [Chainlink multisig](#security-council) does not follow the requirements for a _security council_.
+Those changes can be made **without delay** and the [Chainlink multisig](#security-council) does not follow the requirements for a _Security Council_.
 
 ## Conclusion
 
-Chainlink's oracle protocol exposes critical permissions that are not protected by an _Exit Window_ nor a _Security Council_. This results in a **High Centralization score**, equivalent to _Stage 0_, as a dependency.
+Chainlink's oracle protocol exposes critical permissions that are not protected by an _Exit Window_ nor a _Security Council_. This results in a _High_ Centralization score.
 
 > Overall score: High
 
-# Revier Notes
+# Reviewer Notes
 
 This review is limited to Chainlink Oracles deployed on Ethereum mainnet. We note that the findings should generalize to all chains.
 
