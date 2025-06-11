@@ -72,7 +72,10 @@ const aggregateByKey = (
 ): { key: string; value: number }[] => {
   return Object.entries(groupedData).map(([key, projects]) => {
     if (operation === "sum") {
-      const totalTvl = projects.reduce((sum, project) => sum + project.tvl, 0);
+      const totalTvl = projects.reduce(
+        (sum, project) => sum + (project.tvl === "n/a" ? 0 : project.tvl),
+        0
+      );
       key = keyToWord(key);
       return { key, value: totalTvl };
     } else {
@@ -278,6 +281,7 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
     </div>
   );
 };
+
 export async function mergeDefiLlamaWithMd() {
   const apiData = await defiLlama.getProtocolsWithCache();
 
@@ -294,6 +298,26 @@ export async function mergeDefiLlamaWithMd() {
         type = res?.category || frontmatterProtocol.type?.toString() || "";
         logo = res?.logo || frontmatterProtocol.logo?.toString() || "";
       }
+
+      if (
+        ["Aave v3 Prime", "Aave v3 EtherFi"].includes(
+          frontmatterProtocol.protocol
+        )
+      ) {
+        return {
+          logo: logo,
+          protocol: frontmatterProtocol.protocol,
+          slug: frontmatterProtocol.slug,
+          tvl: "n/a" as const,
+          chain: frontmatterProtocol.chain,
+          stage: frontmatterProtocol.stage,
+          reasons: frontmatterProtocol.reasons,
+          type: type,
+          risks: frontmatterProtocol.risks,
+          protocols: frontmatterProtocol.protocols,
+        } as Project;
+      }
+
       return {
         logo: logo,
         protocol: frontmatterProtocol.protocol,
