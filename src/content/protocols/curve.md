@@ -69,3 +69,26 @@ There are three primary paths for Curve to advance to Stage 1 under the existing
 1. Relinquish some control at the DAO level, specifically over crvUSD minting and scrvUSD vault management such that loss of user funds is no longer possible through DAO actions.
 2. Expand the authority of the `EmergencyDAO` to include a veto right on governance proposals, effectively enabling it to stop proposals that could result in the loss of user funds.
 3. Introduce a mandatory 7-day delay between the approval, and execution of governance proposals which may result in the loss of user funds.
+
+# Reviewer's Notes
+
+Zap contracts were excluded from this review, as they have no permissioned functions and are optional to use.
+
+Deployments on other chains, including their associated cross-chain messaging contracts and the supporting Ethereum infrastructure, are also out of scope.
+
+Only the latest versions of each contract implementation were analyzed. While Curve has used various contract versions over time, they have all mostly followed the same architecture and permission structure.
+
+# Protocol Analysis
+
+## Decentralized Exchange (DEX)
+
+Curve’s DEX is the foundation of all products within the protocol, and user assets within pools are safe, except from smart contract risk. There are three main types of pools:
+
+- **Stableswap**: Stablecoin and stable-asset pools with up to 8 assets
+- **Twocrypto**: Pools with 2 volatile assets
+- **Tricrypto**: Pools with 3 volatile assets
+
+In addition, Curve supports:
+
+- **Basepools**: Stableswap pools whose LP tokens can be used as assets in other pools
+- **Metapools**: Pools that include a Basepool LP token as one of the underlying assets
