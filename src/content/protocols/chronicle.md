@@ -49,7 +49,7 @@ Oracles and validators are listed on ChronicleLabs' [public dashboard](https://c
 
 ## Conclusion
 
-ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set, which are protected with a 7-day _Exit Window_. The protocol relies on third-party entities that collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities, including 14 publicly known in the Ethereum ecosystem. We believe that this brings the Chronicle protocol to a **Medium Centralization**, equivalent to _Stage 1_, as a dependency.
+ChronicleLabs' protocol exposes centralized permissions on the oracles' validator set, which are protected with a 7-day _Exit Window_. The protocol relies on third-party entities that collaborate offchain in a peer-to-peer fashion to produce a verifiable price onchain. The global list of validators contains 25 entities, including 14 publicly known in the Ethereum ecosystem. This results in a _Medium_ Centralization score.
 
 > Overall score: Medium
 
