@@ -54,7 +54,7 @@ All governance votes occur over a 7-day period, with voting frontloaded in the f
 
 ## Accessibility
 
-Curve's primary user interface is hosted at [curve.finance](https://curve.finance/). Other interfaces also provide most core functionality, including [crvhub.com](https://crvhub.com), [curvemonitor.com](https://curvemonitor.com), and [DeFi Saver](https://app.defisaver.com/). Different third-party apps integrate directly with Curve, allowing swaps to route through Curve regardless of the UI’s status.
+Curve's primary user interface is hosted at [curve](https://curve.finance/). Other interfaces also provide most core functionality, including [crvhub](https://crvhub.com), [curvemonitor](https://curvemonitor.com), and [DeFi Saver](https://app.defisaver.com/). Different third-party apps integrate directly with Curve, allowing swaps to route through Curve regardless of the UI’s status.
 
 The full frontend code is open source and available at the [Curve Frontend GitHub repository](https://github.com/curvefi/curve-frontend), although there are currently no published instructions for self-hosting.
 
