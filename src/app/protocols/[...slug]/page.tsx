@@ -19,6 +19,50 @@ import Link from "next/link";
 
 import "@/styles/mdx.css";
 
+// Component to render the conclusion content with markdown formatting
+function ConclusionRenderer({ conclusion }: { conclusion?: string }) {
+  if (!conclusion) {
+    return (
+      <div className="text-sm text-muted-foreground italic">
+        No conclusion section found in this protocol review.
+      </div>
+    );
+  }
+
+  // Simple markdown to JSX conversion for the most common formatting
+  const renderMarkdown = (text: string) => {
+    // Split by lines and process each paragraph
+    const paragraphs = text.split('\n\n').filter(p => p.trim());
+    
+    return paragraphs.map((paragraph, index) => {
+      // Process inline formatting
+      let processedText = paragraph
+        // Bold text: **text** -> <strong>text</strong>
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Italic text: _text_ -> <em>text</em>
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        // Code: `text` -> <code>text</code>
+        .replace(/`(.*?)`/g, '<code class="relative rounded border px-[0.3rem] py-[0.2rem] bg-secondary/50 font-code font-light text-sm">$1</code>')
+        // Links: [text](/url) -> <a href="/url">text</a>
+        .replace(/\[([^\]]*)\]\(([^)]*)\)/g, '<a href="$2" class="font-medium underline text-primary underline-offset-4">$1</a>');
+      
+      return (
+        <p 
+          key={index} 
+          className="text-sm leading-5 [&:not(:first-child)]:mt-6"
+          dangerouslySetInnerHTML={{ __html: processedText }}
+        />
+      );
+    });
+  };
+
+  return (
+    <div className="text-sm text-muted-foreground">
+      {renderMarkdown(conclusion)}
+    </div>
+  );
+}
+
 interface ProtocolPageItemProps {
   params: {
     slug: string[];
@@ -95,10 +139,9 @@ export default async function ProtocolPageItem({
                     className="h-8 mb-4 mx-auto"
                     reasons={protocol.reasons}
                   />
-                  <h2 className="text-xl font-semibold mb-2">Protocol Overview</h2>
-                  <p className="text-muted-foreground">
-                    This section will contain the main protocol information and description.
-                  </p>
+                  <div className="text-sm text-muted-foreground">
+                    <ConclusionRenderer conclusion={protocol.conclusion} />
+                  </div>
                 </div>
               </CardContent>
             </Card>

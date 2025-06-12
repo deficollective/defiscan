@@ -3,11 +3,54 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { Reasons } from "./src/lib/types";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 const computedFields = <T extends { slug: string }>(data: T) => ({
   ...data,
   slugAsParams: data.slug.split("/").slice(1).join("/"),
 });
+
+// Function to extract conclusion from markdown content
+const extractConclusionFromMarkdown = (content: string): string => {
+  if (!content) return '';
+  
+  // Split content into lines
+  const lines = content.split('\n');
+  let conclusionStart = -1;
+  let conclusionEnd = -1;
+  
+  // Find the start of the conclusion section
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].trim() === '## Conclusion') {
+      conclusionStart = i + 1;
+      break;
+    }
+  }
+  
+  if (conclusionStart === -1) return '';
+  
+  // Find the end of the conclusion section (next # heading)
+  for (let i = conclusionStart; i < lines.length; i++) {
+    if (lines[i].trim().startsWith('# ') && !lines[i].includes('Conclusion')) {
+      conclusionEnd = i;
+      break;
+    }
+  }
+  
+  // If no next section found, use end of file
+  if (conclusionEnd === -1) conclusionEnd = lines.length;
+  
+  // Extract and clean the conclusion text
+  const conclusionLines = lines.slice(conclusionStart, conclusionEnd);
+  return conclusionLines
+    .join('\n')
+    .trim()
+    // Remove the "Overall score:" quote block
+    .replace(/>\s*Overall score:.*$/gm, '')
+    .replace(/>\s*Overall Score:.*$/gm, '')
+    .trim();
+};
 
 // Define valid reasons
 const ReasonSchema = s
@@ -75,7 +118,22 @@ const reviews = defineCollection({
       update_date: s.isodate(),
       body: s.mdx(),
     })
-    .transform(computedFields),
+    .transform((data) => {
+      // Read the raw file content directly using the slug
+      let rawContent = '';
+      try {
+        // Convert slug to file path (slug is like "protocols/aave/ethereum")
+        const filePath = join(process.cwd(), 'src/content', `${data.slug}.md`);
+        rawContent = readFileSync(filePath, 'utf-8');
+      } catch (error) {
+        // Silently handle file reading errors
+      }
+      
+      return {
+        ...computedFields(data),
+        conclusion: extractConclusionFromMarkdown(rawContent),
+      };
+    }),
 });
 
 export default defineConfig({
