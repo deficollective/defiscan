@@ -54,7 +54,7 @@ The [Deposit Security Module](#security-council) is another committee critical t
 
 ## Autonomy
 
-Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), the funds are not in control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the NodeOperators may misbehave and lose some of the funds due to slashing. In addition to that, they could steal execution layer rewards by redirecting them to their own address. In the worst case, 1 validator can lose up to 16 ETH to slashing events before it is forcefully exited.
+Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), the funds are not in the control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the NodeOperators may misbehave and lose some of the funds due to slashing. In addition to that, they could steal execution layer rewards by redirecting them to their own address. In the worst case, 1 validator can lose up to 16 ETH to slashing events before it is forcefully exited.
 
 Lido addresses those issues differently for each staking module. In the _Curated Module_, the _Node Operators_ are trusted and approved by governance. There currently are 36 _Node Operators_ which handle on average 7'779 validators each. In the _Community Module_, anyone can become a _Node Operator_, but needs to provide a bond of ETH per validator. Any slashing penalty or rewards stolen are taken out of that bonds, with additional penalties for the _Node Operators_. There currently are 312 _Node Operators_ in this module with an average of 19 validators each. Potential additional losses are covered by the _Lido Treasury_.
 
@@ -146,6 +146,10 @@ Finally, `CSFeeDistributor` handles the distribution of rewards to _Node Operato
 Those contracts are upgradeable by the governance through the `Agent` contract. The `Agent` also holds the right to change the exit charge, which could abuse the _Node Operators_' deposited bonds. The [Community Staking Module Committee](#security-council) can also report reward stealing from _Node Operators_ in order to penalize them. The committee may also pause the staking module at any time, prohibiting _Node Operators_ from claiming their rewards until it is resumed by the governance.
 
 # Dependencies
+
+Lido relies on _Node Operators_ to operate the validators. The funds are not in the control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the NodeOperators may misbehave and lose some of the funds due to slashing.
+
+Lido addresses this issue differently for each staking module. This is explained in the respective staking modules' subsections of the [protocol analysis](#protocol-analysis).
 
 # Governance
 
