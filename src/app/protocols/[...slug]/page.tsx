@@ -78,7 +78,7 @@ export default async function ProtocolPageItem({
             <div className="flex flex-col w-full gap-2">
               <div className="flex items-end gap-4 py-2">
                 <h1 className="text-3xl shrink-0 text-primary">
-                  {getProtocolDisplayName(protocol.protocol, protocol.instance)}
+                  {getProtocolDisplayName(protocol.protocol || 'Unknown Protocol', protocol.instance)}
                 </h1>
               </div>
             </div>
