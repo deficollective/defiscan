@@ -14,6 +14,8 @@ const risks = {
     "All or some smart contracts are not published with available source code.",
   "Unverified Contracts":
     "All or some smart contracts are not verified with a public blockchain explorer.",
+  "Incorrect Docs":
+    "All or some contract addresses in the docs are incorrect.",
 };
 
 const requisites: { [K in Stage]: (reasons?: Reason[]) => React.JSX.Element } =
@@ -87,6 +89,9 @@ const requisites: { [K in Stage]: (reasons?: Reason[]) => React.JSX.Element } =
         </p>
       </div>
     ),
+    "I0": () => <p>High centralization. Equivalent to a Stage 0 as a dependency.</p>,
+    "I1": () => <p>Medium centralization. Equivalent to a Stage 1 as a dependency.</p>,
+    "I2": () => <p>Low centralization. Equivalent to a Stage 2 as a dependency.</p>,
   };
 
 const buildStageInfo = (stage: Stage, reasons?: Reason[]) =>
@@ -113,6 +118,9 @@ const stage_text = {
   [STAGE.UNDER_REVIEW]: "Review",
   [STAGE.UNQUALIFIED]: "Unqualified",
   [STAGE.VARIABLE]: "Variable",
+  "I0": "High",
+  "I1": "Medium", 
+  "I2": "Low",
 };
 
 
@@ -134,6 +142,9 @@ const Badge = ({
         stage === 0 && "bg-red-500 hover:bg-red-primary",
         stage === 1 && "bg-yellow-500 hover:bg-yellow-primary",
         stage === 2 && "bg-green-500 hover:bg-green-primary",
+        stage === "I0" && "bg-red-500 hover:bg-red-primary",
+        stage === "I1" && "bg-yellow-500 hover:bg-yellow-primary",
+        stage === "I2" && "bg-green-500 hover:bg-green-primary",
         className
       )}
     >

@@ -24,3 +24,7 @@ let USDollar = new Intl.NumberFormat("en-US", {
 export function formatUsd(input: number) {
   return USDollar.format(input);
 }
+
+export function getProtocolDisplayName(protocol: string, instance?: string): string {
+  return instance ? `${protocol} ${instance}` : protocol;
+}

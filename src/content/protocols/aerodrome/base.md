@@ -1,8 +1,8 @@
 ---
 chain: "Base"
-stage: 0
+stage: 1
 reasons: []
-risks: ["H", "M", "L", "M", "L"]
+risks: ["M", "M", "L", "M", "L"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
@@ -13,13 +13,13 @@ update_date: "2024-12-12"
 
 Aerodrome Finance is a next-generation AMM designed to serve as Base's central liquidity hub, combining a powerful liquidity incentive engine, vote-lock governance model, and friendly user experience. Aerodrome inherits the latest features from Velodrome V2.
 
-# Overview
+# Ratings
 
 ## Chain
 
-Aerodrome is deployed on the Base chain, an Ethereum L2 in Stage 0 according to L2BEAT.
+Aerodrome is deployed on the Base chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: H
+> Chain score: Medium
 
 ## Upgradeability
 
@@ -33,27 +33,70 @@ The undeclared multisig further is the owner of various contracts, and the assoc
 
 Another noteworthy permission in the protocol is the ability to _kill_ and _revive_ gauges and thereby stop, or enable, a gauge to receive and distribute rewards to LPs and voters. However, killing a gauge does not affect the rewards already distributed to LPs or voters and also does not affect the rewards, or any other aspect, of other gauges. This permission hence can not materially affect the protocol's expected performance.
 
-> Upgradeability score: M
+> Upgradeability score: Medium
 
 ## Autonomy
 
 Aerodrome does not have external dependencies 🎉
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 Existing permissions have a "Medium" risk score and are not protected by an exit window. Users are not able to withdraw funds in case of an unwanted update.
 
-> Exit Window score: M
+> Exit Window score: Medium
 
 ## Accessibility
 
 Aerodrome provides multiple access points for users, including both centralized interfaces ([aerodrome.finance](https://aerodrome.finance), [alt.aerodrome.finance](https://alt.aerodrome.finance)) and decentralized interfaces on IPFS ([aero.drome.eth](https://aero.drome.eth), [aero.drome.eth.limo](https://aero.drome.eth.limo), [aero.drome.eth.link](https://aero.drome.eth.link)). This diversity in user interfaces ensures redundancy, allowing users to access the protocol even if one interface becomes unavailable.
 
-> Accessibility score: L
+> Accessibility score: Low
 
-# Technical Analysis
+## Conclusion
+
+The Aerodrome protocol achieves _Medium_ centralization risk scores for its _Upgradeability_ and _Exit Window_ dimensions. It thus ranks _Stage 1_.
+
+The protocol could reach _Stage 2_ by transferring the permissions to an _onchain governance_ with 30 days _Exit Window_.
+
+> Overall score: Stage 1
+
+# Reviewer Notes
+
+There were no particular discoveries made during the analysis of this protocol.
+
+# Protocol Analysis
+
+## The killing of a gauge
+
+After each period, AERO tokens from the `Minter` contract flow into the `Voter` contract via calling `updatePeriod()`. Once the tokens are in the `Voter` contract, they flow according to the voting weight to each `Gauge` through calling `distribute()` on the `Voter` contract. Once the AERO tokens ended up in the different `Gauge` contracts, the users can claim their reward no matter of the living status of the `Gauge`. It's the function call `distribute()` that sends the tokens to the `Gauge` which reverts if the `Gauge` is killed. For rewards to be claimable for users the function calls `updatePeriod()` and `distribute()` need to occur in succession and the killing of the `Gauge` before either one of them results in yield not being available to the user. But, since both functions are public everyone, can call them. And thus during the first block of each period where `updatePeriod()` is callable, the permission owner that kills the `Gauge` needs to frontrun the transactions which are calling `updatePeriod()` and `distribute()`. This centralisation vector is thus not definitive and only probabilistic.
+
+On the other hand, Voters earn a claim on yield proportional to their allocated votes when calling the `vote()` for a gauge on the `Voter` contract. Function `vote()` will revert if the respective gauge is killed, thus not crediting a claim on yield for the killed gauge. However, previous votes and the credited yield claims, before the gauge is killed, are not affected by this. Voters will thus still be able to claim their accumulated yield.
+
+# Dependencies
+
+No external dependency has been found.
+
+# Governance
+
+The permissions in Aerodrome are held by the multisigs highlighted below.
+
+## Security Council
+
+| Name                                | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Aerodrome Foundation and Incentives | [0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a](https://basescan.org/address/0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a)  | Multisig 3/5 | ❌          | ❌              | ❌                | ❌             |
+| Public Goods Fund                   | [0x834C0DA026d5F933C2c18Fa9F8Ba7f1f792fDa52 ](https://basescan.org/address/0x834C0DA026d5F933C2c18Fa9F8Ba7f1f792fDa52) | Multisig 3/5 | ❌          | ❌              | ❌                | ❌             |
+| Emergency Council                   | [0x99249b10593fCa1Ae9DAE6D4819F1A6dae5C013D](https://basescan.org/address/0x99249b10593fCa1Ae9DAE6D4819F1A6dae5C013D)  | Multisig 3/5 | ❌          | ❌              | ❌                | ❌             |
+| Undeclared Multisig                 | [0xE6A41fE61E7a1996B59d508661e3f524d6A32075](https://basescan.org/address/0xE6A41fE61E7a1996B59d508661e3f524d6A32075)  | Multisig 3/7 | ✅          | ❌              | ❌                | ❌             |
+
+Info sourced from here: [https://aerodrome.finance/security#emergency](https://aerodrome.finance/security#emergency).
+
+## Exit Window
+
+No timelocks have been found protecting the various permissioned functions in the protocol. All updates take effect immediately.
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -86,7 +129,7 @@ Aerodrome provides multiple access points for users, including both centralized 
 | UniversalRouter                    | [0x6Cb442acF35158D5eDa88fe602221b67B400Be3E](https://basescan.org/address/0x6Cb442acF35158D5eDa88fe602221b67B400Be3E) |
 | SwapRouter                         | [0xBE6D8f0d05cC4be24d5167a3eF062215bE6D18a5](https://basescan.org/address/0xBE6D8f0d05cC4be24d5167a3eF062215bE6D18a5) |
 
-## Permission Owners
+## All Permission Owners
 
 | Name                                | Account                                                                                                                | Type         |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -145,28 +188,3 @@ Aerodrome provides multiple access points for users, including both centralized 
 | CLFactory                  | enableTickSpacing        | Enables a certain tickSpacing in the pools deployed from the factory.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Undeclared Multisig                                                    |
 | CustomSwapFeeModule        | setCustomFee             | Sets a custom fee between 0 and a max fee for a specified pool. The CLFactory gets the fee via calling getFee on this contract.                                                                                                                                                                                                                                                                                                                                                                                                                                       | SwapFeeManager (Undeclared Multisig)                                   |
 | CustomUnstakedFeeModule    | setCustomFee             | Sets a custom fee between 0 and a max fee for a specified pool. The CLFactory gets the fee via calling getFee on this contract.                                                                                                                                                                                                                                                                                                                                                                                                                                       | UnstakeFeeManager (Undeclared Multisig)                                |
-
-### Notes regarding the killing of a gauge
-
-After each period, AERO tokens from the `Minter` contract flow into the `Voter` contract via calling `updatePeriod()`. Once the tokens are in the `Voter` contract, they flow according to the voting weight to each `Gauge` through calling `distribute()` on the `Voter` contract. Once the AERO tokens ended up in the different `Gauge` contracts, the users can claim their reward no matter of the living status of the `Gauge`. It's the function call `distribute()` that sends the tokens to the `Gauge` which reverts if the `Gauge` is killed. For rewards to be claimable for users the function calls `updatePeriod()` and `distribute()` need to occur in succession and the killing of the `Gauge` before either one of them results in yield not being available to the user. But, since both functions are public everyone, can call them. And thus during the first block of each period where `updatePeriod()` is callable, the permission owner that kills the `Gauge` needs to frontrun the transactions which are calling `updatePeriod()` and `distribute()`. This centralisation vector is thus not definitive and only probabilistic.
-
-On the other hand, Voters earn a claim on yield proportional to their allocated votes when calling the `vote()` for a gauge on the `Voter` contract. Function `vote()` will revert if the respective gauge is killed, thus not crediting a claim on yield for the killed gauge. However, previous votes and the credited yield claims, before the gauge is killed, are not affected by this. Voters will thus still be able to claim their accumulated yield.
-
-## Dependencies
-
-No external dependency has been found.
-
-## Exit Window
-
-No timelocks have been found protecting the various permissioned functions in the protocol. All updates take effect immediately.
-
-# Security Council
-
-| Requirement                                             | Aerodrome Foundation and Incentives | Public Goods Fund | Emergency Council | Undeclared Multisig |
-| ------------------------------------------------------- | :---------------------------------: | ----------------- | ----------------- | :-----------------: |
-| At least 7 signers                                      |                 ❌                  | ❌                | ❌                |         ✅          |
-| At least 51% threshold                                  |                 ❌                  | ❌                | ❌                |         ❌          |
-| At least 50% non-team signers                           |                 ❌                  | ❌                | ❌                |         ❌          |
-| Signers are publicly announced (with name or pseudonym) |                 ❌                  | ❌                | ❌                |         ❌          |
-
-Info sourced from here: [https://aerodrome.finance/security#emergency](https://aerodrome.finance/security#emergency).

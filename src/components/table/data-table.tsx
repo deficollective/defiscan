@@ -1,21 +1,18 @@
 "use client";
 
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  ExpandedState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getFacetedUniqueValues,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  Table as TableType,
-  getFacetedRowModel,
-  getPaginationRowModel,
-  VisibilityState,
   getExpandedRowModel,
-  ExpandedState,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -27,10 +24,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 import { TableToolbar } from "./toolbar";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Badge } from "@/components/ui/badge";
+
+type TableType<T> = ReturnType<typeof useReactTable<T>>;
 
 const openProtocolReview = (slug: string) => (window.location.href = slug);
 
@@ -63,20 +65,35 @@ const renderTableBody = <TData, TValue>(
             row.depth > 0 && "bg-accent/20 hover:bg-accent py-4"
           )}
         >
-          {row.getVisibleCells().map((cell) => (
+          {row.getVisibleCells().map((cell, index) => (
             <TableCell
               key={cell.id}
               className={cn("first:pl-1", cell.column.id)}
             >
-              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              {index === 0 ? (
+                <div className="flex items-center">
+                  <div className="w-6 flex justify-center mr-2">
+                    {row.getCanExpand() && (
+                      row.getIsExpanded() ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )
+                    )}
+                  </div>
+                  <div className={cn(row.depth > 0 && "pl-4")}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </div>
+                </div>
+              ) : (
+                flexRender(cell.column.columnDef.cell, cell.getContext())
+              )}
             </TableCell>
           ))}
         </TableRow>
       );
     });
   }
-
-  // TODO: add loading state?.
 
   // No Rows found.
   return (
@@ -91,67 +108,85 @@ const renderTableBody = <TData, TValue>(
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  othersCount: number;
+  defiCount: number;
+  infrastructureCount: number;
+  getProtocolLogo?: (name: string) => string;
 }
 
-// Define the extended ColumnMeta type
 type ExtendedColumnMeta = {
   responsiveHidden?: boolean;
 };
 
-// const getInitialVisibility = (
-//   columns: ColumnDef<any, any>[],
-//   defiView: boolean
-// ) => {
-//   const initialState: Record<string, boolean> = {
-//     logo: true,
-//     protocol: true,
-//     stage: true,
-//     reasons: false, // disable with first load
-//     risks: true,
-//     type: true,
-//     chain: true,
-//     tvl: true,
-//   };
-//   return initialState;
-// };
+type ViewType = "defi" | "infrastructure" | "others";
 
-// const useResponsiveColumns = (
-//   table: TableType<any>,
-//   mobileBreakpoint = 800
-// ) => {
-//   useEffect(() => {
-//     const handleResize = () => {
-//       const isMobile = window.innerWidth < mobileBreakpoint;
-//       // Get all columns that should be responsive
-//       const responsiveColumns = table
-//         .getAllColumns()
-//         .filter((column: any) => column.columnDef.meta?.responsiveHidden);
-//       // Toggle visibility for all responsive columns
-//       responsiveColumns.forEach((column: any) => {
-//         column.toggleVisibility(!isMobile);
-//       });
-//     };
-//     handleResize();
-//     window.addEventListener("resize", handleResize);
-//     return () => window.removeEventListener("resize", handleResize);
-//   }, [table, mobileBreakpoint]);
-// };
+const getInitialVisibility = (
+  columns: ColumnDef<any, any>[],
+  activeView: ViewType
+) => {
+  const initialState: Record<string, boolean> = {
+    logo: true,
+    protocol: true,
+    stage: activeView === "defi" || activeView === "infrastructure",
+    reasons: activeView === "others",
+    risks: true,
+    type: true,
+    chain: activeView === "defi" || activeView === "others",
+    tvl: true,
+    infrastructure: activeView === "infrastructure",
+    centralization: activeView === "infrastructure",
+  };
+  
+  return initialState;
+};
+
+const useResponsiveColumns = (
+  table: TableType<any>,
+  mobileBreakpoint = 800
+) => {
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < mobileBreakpoint;
+      
+      table.getAllColumns().forEach((column) => {
+        const meta = column.columnDef.meta as ExtendedColumnMeta;
+        if (meta?.responsiveHidden) {
+          column.toggleVisibility(!isMobile);
+        }
+      });
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [table, mobileBreakpoint]);
+};
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  othersCount,
+  defiCount,
+  infrastructureCount,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
-
   const [sorting, setSorting] = useState<SortingState>([
     {
       id: "tvl",
       desc: true,
     },
   ]);
+
+  const [activeView, setActiveView] = useState<ViewType>("defi");
+
+  const initialVisibility = useMemo(
+    () => getInitialVisibility(columns, activeView),
+    [columns, activeView]
+  );
+
+  const [columnVisibility, setColumnVisibility] = useState(initialVisibility);
 
   const table = useReactTable({
     data,
@@ -168,20 +203,15 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onExpandedChange: setExpanded,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
     getExpandedRowModel: getExpandedRowModel(),
     // @ts-expect-error
     getSubRows: (row) => row.children,
     // @ts-expect-error
     getRowCanExpand: (row) => row?.children,
-    onExpandedChange: setExpanded,
-    manualPagination: true,
-
     initialState: {
       sorting: [
         {
@@ -192,33 +222,90 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  // useResponsiveColumns(table);
+  useEffect(() => {
+    setColumnVisibility((prev) => ({
+      ...prev,
+      stage: activeView === "defi",
+      centralization: activeView === "infrastructure",
+      protocols: activeView === "infrastructure",
+      reasons: activeView === "others",
+      tvl: activeView !== "infrastructure",
+      risks: activeView !== "infrastructure",
+      chain: activeView !== "infrastructure",
+    }));
+
+    table.resetColumnFilters();
+
+    if (activeView === "others") {
+      table.getColumn("stage")?.setFilterValue(["O"]);
+    } else if (activeView === "infrastructure") {
+      table.getColumn("stage")?.setFilterValue(["I0", "I1", "I2"]);
+    } else {
+      table.getColumn("stage")?.setFilterValue([0, 1, 2, "R"]);
+    }
+  }, [activeView, table]);
+
+  useResponsiveColumns(table);
+
+  const handleRowClick = (slug: string) => {
+    window.location.href = slug;
+  };
 
   return (
     <div className="w-full">
-      <TableToolbar table={table} />
-      <ScrollArea className="w-full">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-accent">
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>{renderTableBody(table, columns)}</TableBody>
-        </Table>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      <div className="pb-4">
+        <ToggleGroup type="single" value={activeView} onValueChange={(value) => value && setActiveView(value as ViewType)}>
+          <ToggleGroupItem
+            value="defi"
+            aria-label="Toggle DeFi"
+            className="hover:bg-accent/50 hover:text-accent-foreground"
+          >
+            DeFi
+            <Badge className="px-2 text-xs text-center ml-2">{defiCount}</Badge>
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="infrastructure"
+            aria-label="Toggle Infrastructure"
+            className="hover:bg-accent/50 hover:text-accent-foreground"
+          >
+            Infrastructure
+            <Badge className="px-2 text-xs text-center ml-2">{infrastructureCount}</Badge>
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="others"
+            aria-label="Toggle Others"
+            className="hover:bg-accent/50 hover:text-accent-foreground"
+          >
+            Others
+            <Badge className="px-2 text-xs text-center ml-2">{othersCount}</Badge>
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="overflow-hidden">
+        <TableToolbar table={table} />
+        <ScrollArea className="w-full">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="hover:bg-accent">
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>{renderTableBody(table, columns)}</TableBody>
+          </Table>
+        </ScrollArea>
+      </div>
     </div>
   );
 }

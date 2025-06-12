@@ -14,7 +14,8 @@ const ReasonSchema = s
   .literal("Central Custody")
   .or(s.literal("Missing Docs"))
   .or(s.literal("Closed-Source"))
-  .or(s.literal("Unverified Contracts"));
+  .or(s.literal("Unverified Contracts"))
+  .or(s.literal("Incorrect Docs"));
 
 const ReasonSetSchema = s
   .array(ReasonSchema)
@@ -47,7 +48,19 @@ const reviews = defineCollection({
     .object({
       slug: s.path(),
       chain: s.string(),
-      stage: s.number().gte(0).lte(2).or(s.literal("R")).or(s.literal("O")),
+      instance: s.string().optional(),
+      type: s.string().optional(),
+      logo: s.string().optional(),
+      protocols: s.array(s.string()).optional(),
+      stage: s
+        .number()
+        .gte(0)
+        .lte(2)
+        .or(s.literal("R"))
+        .or(s.literal("O"))
+        .or(s.literal("I0"))
+        .or(s.literal("I1"))
+        .or(s.literal("I2")),
       risks: s.tuple([
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
         s.literal("L").or(s.literal("M")).or(s.literal("H")),

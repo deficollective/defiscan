@@ -14,7 +14,7 @@ import { protocols, reviews } from "#site/content";
 import { Project, Review, Stage } from "@/lib/types";
 import { loadReviews } from "@/lib/data/utils";
 
-type ProjectWithReview = Project & Review;
+type ProjectWithReview = Omit<Project, 'tvl'> & Review;
 
 interface VisualisedData {
   key: string;
@@ -75,7 +75,10 @@ const aggregateByKey = (
 ): { key: string; value: number }[] => {
   return Object.entries(groupedData).map(([key, projects]) => {
     if (operation === "sum") {
-      const totalTvl = projects.reduce((sum, project) => sum + project.tvl, 0);
+      const totalTvl = projects.reduce(
+        (sum, project) => sum + (project.tvl === "n/a" ? 0 : project.tvl),
+        0
+      );
       key = keyToWord(key);
       return { key, value: totalTvl };
     } else {

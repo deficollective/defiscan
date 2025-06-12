@@ -7,7 +7,7 @@ import { BigPizzaRosette } from "@/components/rosette/big-rosette";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getProtocolDisplayName } from "@/lib/utils";
 import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
 import { Mdx } from "@/components/mdx-component";
 import { ProtocolLinks } from "@/components/protocol/links";
@@ -66,7 +66,6 @@ export default async function ProtocolPageItem({
   params,
 }: ProtocolPageItemProps) {
   const protocol = await getProtocolFromParams(params.slug);
-
   if (!protocol) {
     return <div>Protocol not found</div>; // Handle not found case
   }
@@ -79,7 +78,7 @@ export default async function ProtocolPageItem({
             <div className="flex flex-col w-full gap-2">
               <div className="flex items-end gap-4 py-2">
                 <h1 className="text-3xl shrink-0 text-primary">
-                  {protocol.protocol}
+                  {getProtocolDisplayName(protocol.protocol, protocol.instance)}
                 </h1>
               </div>
             </div>

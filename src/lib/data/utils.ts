@@ -19,6 +19,11 @@ export async function loadReviews() {
         const reviews = data.reviews
             .filter(r => r.slug.split("/")[1] === protocol.id)
             .map(r => {
+                // Force TVL to "n/a" for specific Aave instances
+                if (protocol.id === "aave" && (r.instance === "EtherFi" || r.instance === "Prime")) {
+                    return {tvl: "n/a" as const, ...r};
+                }
+
                 // Add TVL for each chain.
                 const tvl = defillama_data
                     .map(d => d?.chainTvls?.[r.chain] ?? 0)
@@ -31,7 +36,7 @@ export async function loadReviews() {
             });
 
         let type = defillama_data[0]?.category || "";
-        let logo = defillama_data[0]?.logo || "";
+        let logo = defillama_data[0]?.logo || reviews[0]?.logo || "";
 
         return {
             ...protocol,

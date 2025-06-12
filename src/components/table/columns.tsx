@@ -4,14 +4,19 @@ import { cn, formatUsd } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { PizzaRosetteCell } from "../rosette/rosette-cell";
 import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
-import { Project, Reason, RiskArray, Stage } from "@/lib/types";
+import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { StageBadge } from "../stage";
+import { infraScoreToText } from "@/app/protocols/stageToRequisites";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
-export const columns: ColumnDef<Project>[] = [
+export const createColumns = (
+  getProtocolLogo: (name: string) => string
+): ColumnDef<Project>[] => [
   {
     accessorKey: "protocol",
     header: ({ column }) => {
@@ -28,27 +33,21 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     cell: ({ row }) => {
-      const { logo, protocol, children } = row.original;
-      const collapsible = children && children.length > 1;
-
+      const protocol = row.getValue("protocol");
+      const baseProtocol = (row.original as any).baseProtocol || protocol;
       return (
         <div className="flex items-center">
-          <div className="w-6">
-            {collapsible &&
-              (row.getIsExpanded() ? (
-                <ChevronDown className="w-4 h-4" />
-              ) : (
-                <ChevronRight className="w-4 h-4" />
-              ))}
-          </div>
-          <Avatar className={cn("border", row.depth > 0 && "w-8 h-8 ml-4")}>
-            <AvatarImage src={logo} alt={protocol || ""} />
+          <Avatar className="h-8 w-8">
+            <AvatarImage
+              src={getProtocolLogo(baseProtocol as string)}
+              alt={protocol as string}
+            />
           </Avatar>
-          <span className="ml-2">{protocol}</span>
+          <span className="ml-2">{protocol as string}</span>
         </div>
       );
     },
-    sortingFn: "alphanumeric", // use built-in sorting function by name
+    sortingFn: "alphanumeric",
   },
   {
     id: "chain",
@@ -56,7 +55,6 @@ export const columns: ColumnDef<Project>[] = [
     header: ({ column }) => {
       return (
         <Button
-          // Remove hidden class to prevent layout shift
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -94,8 +92,42 @@ export const columns: ColumnDef<Project>[] = [
     },
     sortingFn: "alphanumeric",
     meta: {
-      // responsiveHidden: true, // This column will hide on mobile
+      responsiveHidden: true,
     },
+  },
+  {
+    id: "centralization",
+    accessorKey: "stage",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0 text-xs md:text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Centralization
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const stage = row.getValue("stage") as Stage;
+      
+      if (!stage?.toString().startsWith("I")) {
+        return null;
+      }
+
+      return (
+        <div className="w-full flex justify-center">
+          <StageBadge 
+            stage={stage} 
+            reasons={[]} 
+            subStages={[]}
+          />
+        </div>
+      );
+    },
+    sortingFn: "alphanumeric",
   },
   {
     id: "stage",
@@ -113,20 +145,21 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     filterFn: (row, columnId, filterValue) => {
-      // Handle filtering by staged for grouped.
       if (row.depth === 0 && row.original.children) {
         const stages = row.original.children.map((r) => r.stage);
-
         return filterValue.some((v: Stage) => stages.includes(v));
       }
-
       return filterValue.includes(row.getValue(columnId));
     },
     cell: ({ row }) => {
       let stage = row.getValue("stage") as Stage;
       const reasons = row.original.reasons as Reason[];
 
-      // Provides us with more information about the stages on different chains.
+      // Don't render infrastructure scores in this column
+      if (stage?.toString().startsWith("I")) {
+        return null;
+      }
+
       const subStages =
         row.original.children?.map((c) => ({
           chain: c.chain,
@@ -134,13 +167,11 @@ export const columns: ColumnDef<Project>[] = [
           reasons: c.reasons,
         })) || [];
 
-      // No stage means its a wrapper for different chains.
-      // Calculate the highest stage and use variable styling.
       if (stage === undefined) {
         const getHighestStage = (subStages: Array<{stage: Stage}>): Stage => {
           if (subStages.length === 0) return "V";
           
-          const stagePriority: Record<Stage, number> = { 2: 5, 1: 4, 0: 3, "R": 2, "O": 1, "V": 0 };
+          const stagePriority: Record<Stage, number> = { 2: 5, 1: 4, 0: 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 };
           
           return subStages.reduce((highest, current) => {
             return (stagePriority[current.stage] || 0) > (stagePriority[highest] || 0) ? current.stage : highest;
@@ -148,7 +179,7 @@ export const columns: ColumnDef<Project>[] = [
         };
         
         const highestStage = getHighestStage(subStages);
-        stage = "V"; // Keep variable color/behavior
+        stage = "V";
         
         return (
           <div className="w-full flex justify-center">
@@ -168,7 +199,45 @@ export const columns: ColumnDef<Project>[] = [
         </div>
       );
     },
-    sortingFn: "alphanumeric", // use built-in sorting function by name
+    sortingFn: "alphanumeric",
+  },
+  {
+    id: "reasons",
+    accessorKey: "reasons",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0 text-xs md:text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Reason
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const reasons = row.getValue("reasons") as Reasons;
+      if (!reasons || reasons.length === 0) return null;
+      
+      return (
+        <div>
+          {reasons.map((el, index) => (
+            <HoverCard key={index}>
+              <HoverCardTrigger>
+                <Badge className="my-1 bg-red-500 text-white">
+                  {el}
+                </Badge>
+              </HoverCardTrigger>
+              <HoverCardContent>
+                Reason for unqualified status
+              </HoverCardContent>
+            </HoverCard>
+          ))}
+        </div>
+      );
+    },
+    sortingFn: "alphanumeric",
   },
   {
     accessorKey: "risks",
@@ -196,7 +265,7 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     meta: {
-      // responsiveHidden: true, // This column will hide on mobile
+      responsiveHidden: true,
     },
   },
   {
@@ -205,36 +274,72 @@ export const columns: ColumnDef<Project>[] = [
     header: ({ column }) => {
       return (
         <Button
-          // Remove hidden class to prevent layout shift
-          className=" overflow-hidden p-0"
+          className="p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <span>Type</span>
+          Type
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
+      const type = row.getValue("type");
+      return <div className="text-center">{type as string}</div>;
+    },
+    sortingFn: "alphanumeric",
+  },
+  {
+    id: "protocols",
+    accessorKey: "protocols",
+    header: ({ column }) => {
       return (
-        <div className="overflow-hidden whitespace-nowrap">
-          <span>{row.getValue("type")}</span>
+        <Button
+          className="p-0 text-xs md:text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Protocols
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const protocols = row.getValue("protocols") as string[];
+
+      if (!protocols || protocols.length === 0) {
+        return null;
+      }
+
+      return (
+        <div className="flex flex-wrap gap-1 max-w-48">
+          {protocols.map((protocolName, index) => (
+            <img
+              key={index}
+              src={getProtocolLogo(protocolName)}
+              alt={protocolName}
+              title={protocolName}
+              className="w-6 h-6 rounded-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/images/placeholder.png";
+              }}
+            />
+          ))}
         </div>
       );
     },
-    sortingFn: "alphanumeric",
-    meta: {
-      // responsiveHidden: true, // This column will hide on mobile
+    sortingFn: (rowA, rowB) => {
+      const protocolsA = (rowA.getValue("protocols") as string[]) || [];
+      const protocolsB = (rowB.getValue("protocols") as string[]) || [];
+      return protocolsA.length - protocolsB.length;
     },
   },
-
   {
     id: "tvl",
     accessorKey: "tvl",
     header: ({ column }) => {
       return (
         <Button
-          // Remove hidden class to prevent layout shift
           className="w-0 w-auto overflow-hidden p-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -245,52 +350,18 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     cell: ({ row }) => {
+      const tvl = row.getValue("tvl");
       return (
-        <div className="overflow-hidden whitespace-nowrap">
-          <span className="">{formatUsd(row.getValue("tvl"))}</span>
+        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
+          <span className="hidden md:inline">
+            {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
+          </span>
         </div>
       );
     },
     sortingFn: "alphanumeric",
     meta: {
-      // responsiveHidden: true, // This column will hide on mobile
+      responsiveHidden: true,
     },
   },
 ];
-// {
-//   id: "reasons",
-//   accessorKey: "reasons",
-//   header: ({ column }) => {
-//     return (
-//       <Button
-//         className="p-0 text-xs md:text-sm"
-//         variant="ghost"
-//         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-//       >
-//         Reason
-//         <ArrowUpDown className="ml-2 h-4 w-4" />
-//       </Button>
-//     );
-//   },
-//   cell: ({ row }) => {
-//     const reasons = (row.getValue("reasons") || []) as Reasons;
-
-//     return (
-//       <div>
-//         {reasons.map((el) => (
-//           <TooltipProvider>
-//             <Badge
-//               className="my-1 bg-red-500"
-//               stage={"O"}
-//               reason={el}
-//               title="Reason"
-//             >
-//               {el}
-//             </Badge>
-//           </TooltipProvider>
-//         ))}
-//       </div>
-//     );
-//   },
-//   sortingFn: "alphanumeric", // use built-in sorting function by name
-// },
