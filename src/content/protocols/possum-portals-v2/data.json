@@ -1,0 +1,10 @@
+{
+  "id": "possum-portals-v2",
+  "protocol": "Possum Portals v2",
+  "website": "https://www.possumlabs.io",
+  "defillama_slug": ["possum-labs"],
+  "socials": {
+    "x": "https://x.com/Possum_Labs"
+  },
+  "github": ["https://github.com/PossumLabsCrypto"]
+}

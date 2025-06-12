@@ -1,0 +1,10 @@
+{
+  "id": "anja",
+  "protocol": "Ajna V2",
+  "website": "https://ajnafi.com/",
+  "defillama_slug": ["ajna-v2"],
+  "socials": {
+    "x": "https://x.com/ajnafi"
+  },
+  "github": ["https://github.com/ajna-finance"]
+}

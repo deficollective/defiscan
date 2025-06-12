@@ -1,0 +1,10 @@
+{
+  "id": "lowercase name of the protocol appended by the version if multiple versions exist (use an '-' and no whitespace)",
+  "protocol": "name of the protocol appended by the version if multiple versions exist (can use whitespace if needed)",
+  "website": "https://...",
+  "defillama_slug": ["the slug used by https://defillama.com"],
+  "socials": {
+    "x": "https://x.com/project_handle"
+  },
+  "github": ["https://github.com/project_github"]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "spark",
+  "protocol": "Spark",
+  "website": "https://spark.fi",
+  "defillama_slug": ["sparklend"],
+  "socials": {
+    "x": "https://x.com/sparkdotfi"
+  },
+  "github": ["https://github.com/sparkdotfi"]
+}

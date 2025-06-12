@@ -1,19 +1,67 @@
-"use client";
-
-import { Metadata } from "next";
-import { protocols as allProtocols } from "#site/content";
-import "@/styles/mdx.css";
-import { Mdx } from "@/components/mdx-component";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+// import { Metadata } from "next";
+import {
+  reviews as allReviews,
+  protocols as allProtocols,
+} from "#site/content";
 import { BigPizzaRosette } from "@/components/rosette/big-rosette";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChevronLeft } from "lucide-react";
+import { cn, getProtocolDisplayName } from "@/lib/utils";
 import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
-import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { Mdx } from "@/components/mdx-component";
+import { ProtocolLinks } from "@/components/protocol/links";
+import { Separator } from "@/components/ui/separator";
 import { Stage } from "@/lib/types";
-import { infraScoreToText } from "../stageToRequisites";
+import { StageBadge } from "@/components/stage";
+import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
+import Link from "next/link";
+
+import "@/styles/mdx.css";
+
+// Component to render the conclusion content with markdown formatting
+function ConclusionRenderer({ conclusion }: { conclusion?: string }) {
+  if (!conclusion) {
+    return (
+      <div className="text-sm text-muted-foreground italic">
+        No conclusion section found in this protocol review.
+      </div>
+    );
+  }
+
+  // Simple markdown to JSX conversion for the most common formatting
+  const renderMarkdown = (text: string) => {
+    // Split by lines and process each paragraph
+    const paragraphs = text.split('\n\n').filter(p => p.trim());
+    
+    return paragraphs.map((paragraph, index) => {
+      // Process inline formatting
+      let processedText = paragraph
+        // Bold text: **text** -> <strong>text</strong>
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Italic text: _text_ -> <em>text</em>
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        // Code: `text` -> <code>text</code>
+        .replace(/`(.*?)`/g, '<code class="relative rounded border px-[0.3rem] py-[0.2rem] bg-secondary/50 font-code font-light text-sm">$1</code>')
+        // Links: [text](/url) -> <a href="/url">text</a>
+        .replace(/\[([^\]]*)\]\(([^)]*)\)/g, '<a href="$2" class="font-medium underline text-primary underline-offset-4">$1</a>');
+      
+      return (
+        <p 
+          key={index} 
+          className="text-sm leading-5 [&:not(:first-child)]:mt-6"
+          dangerouslySetInnerHTML={{ __html: processedText }}
+        />
+      );
+    });
+  };
+
+  return (
+    <div className="text-sm text-muted-foreground">
+      {renderMarkdown(conclusion)}
+    </div>
+  );
+}
 
 interface ProtocolPageItemProps {
   params: {
@@ -22,12 +70,16 @@ interface ProtocolPageItemProps {
 }
 
 async function getProtocolFromParams(slug: string[]) {
-  const slugString = slug.join("/");
-  const protocol = allProtocols.find(
-    (protocol) => protocol.slugAsParams === slugString
-  );
+  const id = slug[0];
+  const protocol = allProtocols.find((p) => p.id === id);
 
-  return { ...protocol };
+  const reviewSlug = slug.join("/");
+  const review = allReviews.find((r) => r.slugAsParams === reviewSlug);
+  const chains = allReviews
+    .filter((r) => r.slugAsParams.includes(id))
+    .map((r) => r.chain);
+
+  return { ...protocol, ...review, chains };
 }
 
 // export async function generateMetadata({
@@ -62,201 +114,54 @@ export default async function ProtocolPageItem({
   }
 
   return (
-    <article className="container relative mx-auto py-6 lg:py-10">
+    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl">
       <div>
-        <h1 className="mt-2 mb-8 inline-block text-2xl md:text-4xl font-bold capitalize leading-tight text-primary lg:text-5xl">
-          {protocol.protocol}
-        </h1>
+        <div className="grid gap-2 grid-cols-4 lg:grid-rows-1">
+          <div className="flex flex-col col-span-full sm:col-span-2 lg:col-span-1">
+            <div className="flex flex-col w-full gap-2">
+              <div className="flex items-end gap-4 py-2">
+                <h1 className="text-3xl shrink-0 text-primary">
+                  {getProtocolDisplayName(protocol.protocol || 'Unknown Protocol', protocol.instance)}
+                </h1>
+              </div>
+            </div>
+            <div className="mt-auto" />
 
-        <table className="table-auto border-separate border-spacing-y-2 border-spacing-x-4 -ml-4">
-          <tbody>
-            <tr>
-              <td className="whitespace-nowrap">Website</td>
-              <td className="break-all max-w-xs">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={protocol.website}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.website}
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">X (Twitter)</td>
-              <td className="break-all max-w-xs">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={protocol.x}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.x}
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">GitHub</td>
-              <td className="break-all max-w-xs">
-                <div>
-                  {protocol.github!.map((slug, index) => (
-                    <a
-                      key={index}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`
-                          ${slug}`}
-                      className="text-blue-500 hover:underline text-sm md:text-base"
-                    >
-                      {index == 0 ? slug : ", " + slug}
-                    </a>
-                  ))}
-                </div>
-              </td>
-            </tr>
-            {!protocol.stage!.toString().startsWith("I") && (
-              <tr>
-                <td className="whitespace-nowrap">Defillama</td>
-                <td className="break-all max-w-xs">
-                  <div className="">
-                    {protocol.defillama_slug!.map((slug, index) => (
-                      <a
-                        key={index}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={`
-                        https://defillama.com/protocol/${slug}`}
-                        className="text-blue-500 hover:underline text-sm md:text-base"
-                      >
-                        {index == 0 ? slug : ", " + slug}
-                      </a>
-                    ))}
-                  </div>
-                </td>
-              </tr>
-            )}
-            {!protocol.stage!.toString().startsWith("I") && (
-              <tr>
-                <td className="whitespace-nowrap">Chain</td>
-                <td className="break-all max-w-xs">{protocol.chain}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Declaration
-        </h1>
-
-        <p>
-          This review has been submitted by {protocol.author!.join(", ")} on{" "}
-          {protocol.submission_date!.split("T")[0]}.
-        </p>
-        <p>
-          It was reviewed and published by the DeFi Collective team on{" "}
-          {protocol.publish_date!.split("T")[0]}.
-        </p>
-        <p>
-          {protocol.update_date!.split("T")[0] === "1970-01-01"
-            ? "The review has not been updated since the initial submission"
-            : "The last update to the review was made on " +
-              protocol.update_date!.split("T")[0]}
-          .
-        </p>
-        <p>
-          This content is provided "as is" and "as available". Read more in our
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={"../../terms"}
-            className="text-blue-500 hover:underline"
-          >
-            {" "}
-            Terms
-          </a>
-          .
-        </p>
-
-        {protocol.stage! != "O" ? (
-          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-            {!protocol.stage!.toString().startsWith("I")
-              ? "Stage"
-              : "Centralization"}
-          </h1>
-        ) : (
-          <></>
-        )}
-
-        {protocol.stage! != "O" ? (
-          <TooltipProvider>
-            <Badge
-              title={"Stage of Decentralisation"}
-              stage={protocol.stage! as Stage}
-              className={`${
-                protocol.stage! === "R"
-                  ? "bg-gray-500"
-                  : protocol.stage! === 0 || protocol.stage! === "I0"
-                    ? "bg-red-500"
-                    : protocol.stage! === 1 || protocol.stage! === "I1"
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
-              } text-white py-1 rounded "text-lg"`}
-            >
-              {protocol.stage! === "R"
-                ? "Review"
-                : protocol.stage?.toString().startsWith("I")
-                  ? infraScoreToText[protocol.stage!.toString()]
-                  : "Stage " + protocol.stage!}
-            </Badge>
-          </TooltipProvider>
-        ) : (
-          <></>
-        )}
-
-        {protocol.stage! === "O" ? (
-          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-            Missing Requirements for Stage 0
-          </h1>
-        ) : (
-          <></>
-        )}
-        {
-          <div>
-            {protocol.stage! === "O" ? (
-              protocol.reasons!.map((el) => (
-                <TooltipProvider>
-                  <Badge
-                    title={"Reason"}
-                    className="my-1 bg-red-500"
-                    stage={"O"}
-                    reason={el}
-                  >
-                    {el}
-                  </Badge>
-                </TooltipProvider>
-              ))
-            ) : (
-              <></>
-            )}
+            <Separator className="w-full mt-2 mb-2" />
+            <ProtocolLinks protocol={protocol} />
           </div>
-        }
+          <div className="col-span-full lg:col-span-2">
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <div className="text-center">
+                  <StageBadge
+                    stage={protocol.stage! as Stage}
+                    className="h-8 mb-4 mx-auto"
+                    reasons={protocol.reasons}
+                  />
+                  <div className="text-sm text-muted-foreground">
+                    <ConclusionRenderer conclusion={protocol.conclusion} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex flex-col gap-2 row-start-2 col-span-full sm:col-start-3 sm:row-start-1 sm:col-span-2 lg:col-span-1 lg:col-start-4">
+            <Card className="h-full flex items-center justify-center">
+              <CardContent className="pb-0 flex justify-center">
+                <TooltipProvider>
+                  <BigPizzaRosette
+                    values={getRiskDescriptions(protocol.risks!)}
+                  />
+                </TooltipProvider>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-        {!protocol.stage!.toString().startsWith("I") && (
-          <>
-            <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-              Risks
-            </h1>
-
-            <TooltipProvider>
-              <BigPizzaRosette
-                className="mt-auto"
-                values={getRiskDescriptions(protocol.risks!)}
-              />
-            </TooltipProvider>
-          </>
-        )}
-        <Mdx code={protocol.body!} />
+        <div className="mt-12">
+          <Mdx code={protocol.body!} />
+        </div>
         <hr className="mt-12" />
         <div className="flex justify-center py-6 lg:py-10">
           <Link href="/" className={cn(buttonVariants({ variant: "ghost" }))}>

@@ -1,52 +1,30 @@
 "use client";
 
-import { formatUsd } from "@/lib/utils";
+import { cn, formatUsd } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { TooltipProvider } from "../rosette/tooltip/tooltip";
 import { PizzaRosetteCell } from "../rosette/rosette-cell";
 import { getRiskDescriptions } from "../rosette/data-converter/data-converter";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "../ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
+import { Chain, ChainNames } from "../chain";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { StageBadge } from "../stage";
 import { infraScoreToText } from "@/app/protocols/stageToRequisites";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 export const createColumns = (
   getProtocolLogo: (name: string) => string
 ): ColumnDef<Project>[] => [
   {
-    id: "logo",
-    accessorKey: "logo",
-    header: "",
-    cell: ({ row }) => {
-      const logo = row.getValue("logo") as string;
-      const protocol = row.getValue("protocol") as string;
-      if (!logo)
-        return (
-          <img
-            src={"/images/placeholder.png"}
-            alt={protocol || ""}
-            className="min-w-8 min-h-8 max-w-10 max-h-10 md:max-w-12 md:max-h-12 object-cover"
-          />
-        );
-
-      return (
-        <img
-          src={logo}
-          alt={protocol || ""}
-          className="min-w-8 min-h-8 max-w-10 max-h-10 md:max-w-12 md:max-h-12 object-cover"
-        />
-      );
-    },
-  },
-  {
-    id: "protocol",
     accessorKey: "protocol",
     header: ({ column }) => {
       return (
         <Button
-          className="text-left justify-start p-0 text-xs md:text-sm"
+          className="text-left justify-start h-8 pl-6"
           variant="ghost"
+          size="sm"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Protocol
@@ -55,13 +33,71 @@ export const createColumns = (
       );
     },
     cell: ({ row }) => {
-      return <p className="text-xs md:text-sm">{row.getValue("protocol")}</p>;
+      const protocol = row.getValue("protocol");
+      const baseProtocol = (row.original as any).baseProtocol || protocol;
+      return (
+        <div className="flex items-center">
+          <Avatar className="h-8 w-8">
+            <AvatarImage
+              src={getProtocolLogo(baseProtocol as string)}
+              alt={protocol as string}
+            />
+          </Avatar>
+          <span className="ml-2">{protocol as string}</span>
+        </div>
+      );
     },
-    sortingFn: "alphanumeric", // use built-in sorting function by name
+    sortingFn: "alphanumeric",
+  },
+  {
+    id: "chain",
+    accessorKey: "chain",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Chain
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const chain = row.getValue("chain");
+
+      // No chain means the current row is expandable,
+      // i.e. a wrapper for reviews on multiple chains.
+      if (!chain) {
+        const chains = row.original.children!.map((c) => c.chain);
+
+        return (
+          <div className="flex items-center justify-center">
+            {chains.map((c, i) => (
+              <Chain
+                key={`chain-${i}`}
+                name={c as ChainNames}
+                className={cn(i > 0 && "-ml-3")}
+              />
+            ))}
+          </div>
+        );
+      }
+
+      return (
+        <div className="flex items-center justify-center">
+          <Chain name={chain as ChainNames} />
+        </div>
+      );
+    },
+    sortingFn: "alphanumeric",
+    meta: {
+      responsiveHidden: true,
+    },
   },
   {
     id: "centralization",
-    accessorKey: "stage", // Still uses stage as data source
+    accessorKey: "stage",
     header: ({ column }) => {
       return (
         <Button
@@ -76,27 +112,19 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const stage = row.getValue("stage") as Stage;
-      // Only show for infrastructure items
+      
       if (!stage?.toString().startsWith("I")) {
         return null;
       }
 
       return (
-        <TooltipProvider>
-          <Badge
-            stage={stage}
-            title="Level of Centralization"
-            className={`${
-              stage === "I0"
-                ? "bg-red-500"
-                : stage === "I1"
-                  ? "bg-yellow-500"
-                  : "bg-green-500"
-            } text-white py-1 rounded "text-lg"`}
-          >
-            {infraScoreToText[stage!.toString()]}
-          </Badge>
-        </TooltipProvider>
+        <div className="w-full flex justify-center">
+          <StageBadge 
+            stage={stage} 
+            reasons={[]} 
+            subStages={[]}
+          />
+        </div>
       );
     },
     sortingFn: "alphanumeric",
@@ -107,7 +135,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm"
+          className="p-0 text-xs md:text-sm w-full"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -117,35 +145,59 @@ export const createColumns = (
       );
     },
     filterFn: (row, columnId, filterValue) => {
-      // Check if the row's stage value is in the filterValue array
+      if (row.depth === 0 && row.original.children) {
+        const stages = row.original.children.map((r) => r.stage);
+        return filterValue.some((v: Stage) => stages.includes(v));
+      }
       return filterValue.includes(row.getValue(columnId));
     },
     cell: ({ row }) => {
-      const stage = row.getValue("stage") as Stage;
+      let stage = row.getValue("stage") as Stage;
+      const reasons = row.original.reasons as Reason[];
 
       // Don't render infrastructure scores in this column
       if (stage?.toString().startsWith("I")) {
         return null;
       }
 
+      const subStages =
+        row.original.children?.map((c) => ({
+          chain: c.chain,
+          stage: c.stage,
+          reasons: c.reasons,
+        })) || [];
+
+      if (stage === undefined) {
+        const getHighestStage = (subStages: Array<{stage: Stage}>): Stage => {
+          if (subStages.length === 0) return "V";
+          
+          const stagePriority: Record<Stage, number> = { "2": 5, "1": 4, "0": 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 };
+          
+          return subStages.reduce((highest, current) => {
+            return (stagePriority[current.stage] || 0) > (stagePriority[highest] || 0) ? current.stage : highest;
+          }, subStages[0]?.stage || ("V" as Stage));
+        };
+        
+        const highestStage = getHighestStage(subStages);
+        const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
+        stage = uniqueStages.length === 1 ? highestStage : "V";
+        
+        return (
+          <div className="w-full flex justify-center">
+            <StageBadge 
+              stage={stage} 
+              reasons={reasons} 
+              subStages={subStages}
+              highestStage={highestStage}
+            />
+          </div>
+        );
+      }
+
       return (
-        <TooltipProvider>
-          <Badge
-            stage={stage}
-            title="Stage of Decentralisation"
-            className={`${
-              stage === "R"
-                ? "bg-gray-500"
-                : stage === 0
-                  ? "bg-red-500"
-                  : stage === 1
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-            } text-white py-1 rounded "text-lg"`}
-          >
-            {stage === "R" ? "Review" : "Stage " + stage!}
-          </Badge>
-        </TooltipProvider>
+        <div className="w-full flex justify-center">
+          <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
+        </div>
       );
     },
     sortingFn: "alphanumeric",
@@ -167,41 +219,54 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const reasons = row.getValue("reasons") as Reasons;
+      if (!reasons || reasons.length === 0) return null;
+      
       return (
         <div>
-          {reasons.map((el) => (
-            <TooltipProvider>
-              <Badge
-                className="my-1 bg-red-500"
-                stage={"O"}
-                reason={el}
-                title="Reason"
-              >
-                {el}
-              </Badge>
-            </TooltipProvider>
+          {reasons.map((el, index) => (
+            <HoverCard key={index}>
+              <HoverCardTrigger>
+                <Badge className="my-1 bg-red-500 text-white">
+                  {el}
+                </Badge>
+              </HoverCardTrigger>
+              <HoverCardContent>
+                Reason for unqualified status
+              </HoverCardContent>
+            </HoverCard>
           ))}
         </div>
       );
     },
-    sortingFn: "alphanumeric", // use built-in sorting function by name
+    sortingFn: "alphanumeric",
   },
   {
     accessorKey: "risks",
     header: ({ column }) => {
-      return <p className="text-xs md:text-sm">Risks</p>;
+      return <p className="text-xs md:text-sm text-center">Risks</p>;
     },
     cell: ({ row }) => {
       const risks = row.getValue("risks") as RiskArray;
 
+      if (!risks) {
+        return (
+          <div className="w-full flex justify-center">
+            <Minus className="w-4 h-4" />
+          </div>
+        );
+      }
+
       return (
-        <TooltipProvider>
+        <div className="flex w-full justify-center">
           <PizzaRosetteCell
             values={getRiskDescriptions(risks)}
             isUnderReview={false}
           />
-        </TooltipProvider>
+        </div>
       );
+    },
+    meta: {
+      responsiveHidden: true,
     },
   },
   {
@@ -210,55 +275,20 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          // Remove hidden class to prevent layout shift
-          className="md:flex hidden w-0 md:w-auto overflow-hidden p-0"
+          className="p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <span className="hidden md:inline">Type</span>
-          <ArrowUpDown className="ml-2 h-4 w-4 hidden md:inline" />
+          Type
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      return (
-        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
-          <span className="hidden md:inline">{row.getValue("type")}</span>
-        </div>
-      );
+      const type = row.getValue("type");
+      return <div className="text-center">{type as string}</div>;
     },
     sortingFn: "alphanumeric",
-    meta: {
-      responsiveHidden: true, // This column will hide on mobile
-    },
-  },
-  {
-    id: "chain",
-    accessorKey: "chain",
-    header: ({ column }) => {
-      return (
-        <Button
-          // Remove hidden class to prevent layout shift
-          className="md:flex hidden w-0 md:w-auto overflow-hidden p-0"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <span className="hidden md:inline">Chain</span>
-          <ArrowUpDown className="ml-2 h-4 w-4 hidden md:inline" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
-          <span className="hidden md:inline">{row.getValue("chain")}</span>
-        </div>
-      );
-    },
-    sortingFn: "alphanumeric",
-    meta: {
-      responsiveHidden: true, // This column will hide on mobile
-    },
   },
   {
     id: "protocols",
@@ -292,7 +322,6 @@ export const createColumns = (
               title={protocolName}
               className="w-6 h-6 rounded-full object-cover"
               onError={(e) => {
-                // Fallback to placeholder if image doesn't exist
                 (e.target as HTMLImageElement).src = "/images/placeholder.png";
               }}
             />
@@ -312,13 +341,12 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          // Remove hidden class to prevent layout shift
-          className="md:flex hidden w-0 md:w-auto overflow-hidden p-0"
+          className="w-0 w-auto overflow-hidden p-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <span className="hidden md:inline">TVL</span>
-          <ArrowUpDown className="ml-2 h-4 w-4 hidden md:inline" />
+          <span>TVL</span>
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -334,7 +362,7 @@ export const createColumns = (
     },
     sortingFn: "alphanumeric",
     meta: {
-      responsiveHidden: true, // This column will hide on mobile
+      responsiveHidden: true,
     },
   },
 ];

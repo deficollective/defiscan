@@ -1,0 +1,12 @@
+{
+  "id": "chaos-labs-risk-oracle",
+  "protocol": "Chaos Labs Edge Risk Oracle",
+  "website": "https://chaoslabs.xyz/",
+  "defillama_slug": [""],
+  "socials": {
+    "x": "https://x.com/chaos_labs"
+  },
+  "github": [
+    "https://github.com/ChaosLabsInc/risk-oracle"
+  ]
+}
