@@ -1,5 +1,5 @@
 export type RiskLevel = "L" | "M" | "H";
-export type Stage = "O" | "R" | 0 | 1 | 2;
+export type Stage = "O" | "R" | 0 | 1 | 2 | "I0" | "I1" | "I2";
 export type RiskArray = [RiskLevel, RiskLevel, RiskLevel, RiskLevel, RiskLevel];
 export type Reason =
   | "Central Custody"
@@ -7,6 +7,7 @@ export type Reason =
   | "Closed-Source"
   | "Unverified Contracts"
   | "Incorrect Docs";
+
 export type Reasons = Array<Reason>;
 
 export type Project = {
@@ -16,7 +17,8 @@ export type Project = {
   stage: Stage;
   reasons: Reasons;
   risks: RiskArray;
+  protocols: string[];
   type: string;
   chain: string;
-  tvl: number;
+  tvl: number | "n/a";
 };

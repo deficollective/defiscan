@@ -9,8 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
+import { infraScoreToText } from "@/app/protocols/stageToRequisites";
 
-export const columns: ColumnDef<Project>[] = [
+export const createColumns = (
+  getProtocolLogo: (name: string) => string
+): ColumnDef<Project>[] => [
   {
     id: "logo",
     accessorKey: "logo",
@@ -57,6 +60,48 @@ export const columns: ColumnDef<Project>[] = [
     sortingFn: "alphanumeric", // use built-in sorting function by name
   },
   {
+    id: "centralization",
+    accessorKey: "stage", // Still uses stage as data source
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0 text-xs md:text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Centralization
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const stage = row.getValue("stage") as Stage;
+      // Only show for infrastructure items
+      if (!stage?.toString().startsWith("I")) {
+        return null;
+      }
+
+      return (
+        <TooltipProvider>
+          <Badge
+            stage={stage}
+            title="Level of Centralization"
+            className={`${
+              stage === "I0"
+                ? "bg-red-500"
+                : stage === "I1"
+                  ? "bg-yellow-500"
+                  : "bg-green-500"
+            } text-white py-1 rounded "text-lg"`}
+          >
+            {infraScoreToText[stage!.toString()]}
+          </Badge>
+        </TooltipProvider>
+      );
+    },
+    sortingFn: "alphanumeric",
+  },
+  {
     id: "stage",
     accessorKey: "stage",
     header: ({ column }) => {
@@ -77,6 +122,12 @@ export const columns: ColumnDef<Project>[] = [
     },
     cell: ({ row }) => {
       const stage = row.getValue("stage") as Stage;
+
+      // Don't render infrastructure scores in this column
+      if (stage?.toString().startsWith("I")) {
+        return null;
+      }
+
       return (
         <TooltipProvider>
           <Badge
@@ -92,12 +143,12 @@ export const columns: ColumnDef<Project>[] = [
                     : "bg-green-500"
             } text-white py-1 rounded "text-lg"`}
           >
-            {stage === "R" ? "Review" : "Stage " + stage}
+            {stage === "R" ? "Review" : "Stage " + stage!}
           </Badge>
         </TooltipProvider>
       );
     },
-    sortingFn: "alphanumeric", // use built-in sorting function by name
+    sortingFn: "alphanumeric",
   },
   {
     id: "reasons",
@@ -210,6 +261,52 @@ export const columns: ColumnDef<Project>[] = [
     },
   },
   {
+    id: "protocols",
+    accessorKey: "protocols",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0 text-xs md:text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Protocols
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const protocols = row.getValue("protocols") as string[];
+
+      if (!protocols || protocols.length === 0) {
+        return null;
+      }
+
+      return (
+        <div className="flex flex-wrap gap-1 max-w-48">
+          {protocols.map((protocolName, index) => (
+            <img
+              key={index}
+              src={getProtocolLogo(protocolName)}
+              alt={protocolName}
+              title={protocolName}
+              className="w-6 h-6 rounded-full object-cover"
+              onError={(e) => {
+                // Fallback to placeholder if image doesn't exist
+                (e.target as HTMLImageElement).src = "/images/placeholder.png";
+              }}
+            />
+          ))}
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB) => {
+      const protocolsA = (rowA.getValue("protocols") as string[]) || [];
+      const protocolsB = (rowB.getValue("protocols") as string[]) || [];
+      return protocolsA.length - protocolsB.length;
+    },
+  },
+  {
     id: "tvl",
     accessorKey: "tvl",
     header: ({ column }) => {
@@ -226,10 +323,11 @@ export const columns: ColumnDef<Project>[] = [
       );
     },
     cell: ({ row }) => {
+      const tvl = row.getValue("tvl");
       return (
         <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
           <span className="hidden md:inline">
-            {formatUsd(row.getValue("tvl"))}
+            {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
           </span>
         </div>
       );
