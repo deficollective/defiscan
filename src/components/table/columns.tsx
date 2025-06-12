@@ -171,7 +171,7 @@ export const createColumns = (
         const getHighestStage = (subStages: Array<{stage: Stage}>): Stage => {
           if (subStages.length === 0) return "V";
           
-          const stagePriority: Record<Stage, number> = { 2: 5, 1: 4, 0: 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 };
+          const stagePriority: Record<Stage, number> = { "2": 5, "1": 4, "0": 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 };
           
           return subStages.reduce((highest, current) => {
             return (stagePriority[current.stage] || 0) > (stagePriority[highest] || 0) ? current.stage : highest;
@@ -179,7 +179,8 @@ export const createColumns = (
         };
         
         const highestStage = getHighestStage(subStages);
-        stage = "V";
+        const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
+        stage = uniqueStages.length === 1 ? highestStage : "V";
         
         return (
           <div className="w-full flex justify-center">
