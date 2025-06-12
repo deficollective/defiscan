@@ -91,7 +91,7 @@ Due to its dependency on the [Consensus Committee](#security-council) and [Depos
 
 # Reviewer Notes
 
-Lido has different treasury management multisigs all listed [here](https://docs.lido.fi/multisigs/committees). For practical reasons and readability our [securty council](#security-council) section only lists the most important committees and multisigs.
+Lido has different treasury management multisigs all listed [here](https://docs.lido.fi/multisigs/committees). For practical reasons and readability, our [securty council](#security-council) section only lists the most important committees and multisigs.
 
 # Protocol Analysis
 
