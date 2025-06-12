@@ -11,7 +11,6 @@ import { cn, getProtocolDisplayName } from "@/lib/utils";
 import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
 import { Mdx } from "@/components/mdx-component";
 import { ProtocolLinks } from "@/components/protocol/links";
-import { ReviewTimeline } from "@/components/protocol/timeline";
 import { Separator } from "@/components/ui/separator";
 import { Stage } from "@/lib/types";
 import { StageBadge } from "@/components/stage";
@@ -85,17 +84,25 @@ export default async function ProtocolPageItem({
             <div className="mt-auto" />
 
             <Separator className="w-full mt-2 mb-2" />
-            <StageBadge
-              stage={protocol.stage! as Stage}
-              className="h-8 mb-2"
-              reasons={protocol.reasons}
-            />
             <ProtocolLinks protocol={protocol} />
           </div>
-          <ReviewTimeline
-            className="col-span-full lg:col-span-2"
-            protocol={protocol}
-          />
+          <div className="col-span-full lg:col-span-2">
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <div className="text-center">
+                  <StageBadge
+                    stage={protocol.stage! as Stage}
+                    className="h-8 mb-4 mx-auto"
+                    reasons={protocol.reasons}
+                  />
+                  <h2 className="text-xl font-semibold mb-2">Protocol Overview</h2>
+                  <p className="text-muted-foreground">
+                    This section will contain the main protocol information and description.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
           <div className="flex flex-col gap-2 row-start-2 col-span-full sm:col-start-3 sm:row-start-1 sm:col-span-2 lg:col-span-1 lg:col-start-4">
             <Card className="h-full flex items-center justify-center">
               <CardContent className="pb-0 flex justify-center">

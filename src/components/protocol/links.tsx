@@ -1,4 +1,4 @@
-import { ChevronDown, ExternalLink, Globe, Waypoints } from "lucide-react";
+import { ChevronDown, ExternalLink, Globe, Waypoints, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,6 +9,7 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
+import { ReviewTimeline } from "./timeline";
 
 export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
   return (
@@ -20,6 +21,20 @@ export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
           <ExternalLink className="w-3 h-3 ml-auto " />
         </a>
       </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="border-border">
+            <Clock className="w-4 h-4 mr-2" /> Review Timeline
+            <ChevronDown className="w-3 h-3 ml-auto " />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-96">
+          <ReviewTimeline
+            className="border-0 shadow-none"
+            protocol={protocol}
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="border-border">
