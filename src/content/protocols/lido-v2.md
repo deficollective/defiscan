@@ -33,6 +33,8 @@ Ethereum mainnet deployment.
 
 ## Upgradeability
 
+### Lido contracts
+
 Most critical contracts in the Lido protocol can be upgraded. In particular, this includes the main `Lido` contract which
 holds all the `ETH` staked with Lido, as well as the rewards and withdrawal contracts that receive the yield. Upgrading those contracts could lead to the _loss of user funds_ or _unclaimed yield_.
 
@@ -40,21 +42,21 @@ The staking module contracts `NodeOperatorsRegistry` and `CSModule` are also upg
 
 Furthermore, the Governance contracts `Voting` and `Agent` may also be upgraded to operate a different logic. This could redefine the permissions behind the upgrade and management of the rest of the Lido contracts.
 
-Finally, as explained in the [protocol analysis](#protocol-analysis), the funds are not in control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the NodeOperators may misbehave and lose some of the funds due to slashing. In addition to that, they could steal execution layer rewards by redirecting them to their own address. In the worst case, 1 validator can lose up to 16 ETH to slashing events before it is forcefully exited.
+### Consensus Oracles
 
-Lido addresses those issues differently for each staking module. In the _Curated Module_, the _Node Operators_ are trusted and approved by governance. There currently are 36 _Node Operators_ which handle on average 7'779 validators each. In the _Community Module_, anyone can become a _Node Operator_, but needs to provide a bond of ETH per validator. Any slashing penalty or rewards stolen are taken out of that bonds, with additional penalties for the _Node Operators_. There currently are 312 _Node Operators_ in this module with an average of 19 validators each. Potential additional losses are covered by the _Lido Treasury_.
+Lido operates an oracle to report the state of the beacon chain to Lido's smart contracts on Ethereum. The beacon chain of Ethereum is responsible for creating new blocks and ensuring consensus. The state of the beacon chain is not accessible from within Ethereum smart contracts. The duty of reporting the beacon chain is assigned to the [Consensus Committee](#security-council), which posts data to `AccountingOracle` and `ExitBusOracle` smart contracts. The [Consensus Committee](#security-council) is made of 9 members who report daily on the state of the beacon chain, 5 of which are necessary for a consensus to be reached. The signers are announced and respect our security council requirements. If colluding, those members could report false data onchain, which could result in inflation or deflation of `stETH` and lead to loss of protocol funds.
+
+### Deposit Guardians
+
+The [Deposit Security Module](#security-council) is another committee critical to the functioning of Lido. The [Deposit Security Module](#security-council) is made of 6 Guardians (4 necessary for quorum) and handles the deposits linked to the creation of new validators for Lido. Each new validator requires 32 ETH and only the [Deposit Security Module](#security-council) is allowed to sign off on the deposit. This committee was introduced to counter a possible frontrunning attack by node operators to steal the deposited ETH. The attack and the chosen mitigation are explained in this [post](https://research.lido.fi/t/mitigations-for-deposit-front-running-vulnerability/1239) (solution d). In case of collusion between 4 members of the security module and the node operator, the ETH deposited into new validators could be stolen, which would lead to _loss of user funds_. The _Deposit Security Module_ does not meet our security council requirements.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-### Consensus Oracles
+Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), the funds are not in control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the NodeOperators may misbehave and lose some of the funds due to slashing. In addition to that, they could steal execution layer rewards by redirecting them to their own address. In the worst case, 1 validator can lose up to 16 ETH to slashing events before it is forcefully exited.
 
-Lido needs an oracle to report the state of the beacon chain to Lido's smart contracts on Ethereum. The beacon chain of Ethereum is responsible for creating new blocks and ensuring consensus. The state of the beacon chain is not accessible from within Ethereum smart contracts. The duty of reporting the beacon chain is assigned to the [Consensus Committee](#security-council), which posts data to `AccountingOracle` and `ExitBusOracle` smart contracts. The [Consensus Committee](#security-council) is made of 9 members who report daily on the state of the beacon chain, 5 of which are necessary for a consensus to be reached. The signers are announced and respect our security council requirements. If colluding, those members could report false data onchain, which could result in inflation or deflation of `stETH` and lead to loss of protocol funds.
-
-### Deposit Guardians
-
-The [Deposit Security Module](#security-council) is another committee critical to the functioning of Lido. The [Deposit Security Module](#security-council) is made of 6 Guardians (4 necessary for quorum) and handles the deposits linked to the creation of new validators for Lido. Each new validator requires 32 ETH and only the [Deposit Security Module](#security-council) is allowed to sign off on the deposit. This committee was introduced to counter a possible frontrunning attack by node operators to steal the deposited ETH. The attack and the chosen mitigation are explained in this [post](https://research.lido.fi/t/mitigations-for-deposit-front-running-vulnerability/1239) (solution d). In case of collusion between 4 members of the security module and the node operator, the ETH deposited into new validators could be stolen, which would lead to loss of user funds. The _Deposit Security Module_ does not meet our security council requirements and therefore represents a _high-centralization_ dependency.
+Lido addresses those issues differently for each staking module. In the _Curated Module_, the _Node Operators_ are trusted and approved by governance. There currently are 36 _Node Operators_ which handle on average 7'779 validators each. In the _Community Module_, anyone can become a _Node Operator_, but needs to provide a bond of ETH per validator. Any slashing penalty or rewards stolen are taken out of that bonds, with additional penalties for the _Node Operators_. There currently are 312 _Node Operators_ in this module with an average of 19 validators each. Potential additional losses are covered by the _Lido Treasury_.
 
 > Autonomy score: High
 
@@ -62,7 +64,7 @@ The [Deposit Security Module](#security-council) is another committee critical t
 
 Governance votes are not subject to any delay once the voting period has ended. The voting period is made of 5 days, only the first 3 of which can be used to approve a proposal, with 2 additional days to object to an accepted proposal.
 
-A system of `Easytrack` is in place for a set of pre-approved actions to be executed without requiring a quorum. Actions in the `Easytrack` contract have a 3-day delay which can be vetoed with more than 0.5% of the voting power.
+A system of `Easytrack` is in place for a set of pre-approved actions to be executed without requiring a quorum. Actions in the `Easytrack` contract have a 3-day delay which can be vetoed with more than 0.5% of the voting power. Different multisigs can create `Easytrack` actions which may make treasury payments, control the _Simple-DVT Module_, or settle penalties in the _Community Module_. The control of the _Simple-DVT Module_ may lead to the loss of protocol funds as this includes approving new _Node Operators_, but in addition to the potential veto, the [Simple-DVT Module Committee](#security-council) who is allowed to create those actions respects our security council requirements. The `Easytrack` can be paused by the [Emergency Brakes](#security-council) multisig or the governance.
 
 Finally, there exist multiple emergency actions which can be taken. Any guardian in the `DepositSecurityModule` can trigger the pause of all deposits without delay. In addition to that, the _Community Staking Module_ can be completely paused by the [Community Staking Module Committee](#security-council), this includes the registering of new _Node Operators_ and claiming rewards.
 
