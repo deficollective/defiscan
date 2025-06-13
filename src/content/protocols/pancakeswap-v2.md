@@ -44,7 +44,7 @@ Only the `CAKE` token is exposed to these upgradeable risks. _Unclaimed yield_ f
 
 An internal multisig ([GnosisSafeProxy #1](#security-council)) has the authority to change the fee beneficiary of the 0.08% protocol fee collected from every swapping pair created by the `Factory`.
 
-> Upgradeability score: **Medium**
+> Upgradeability score: Medium
 
 ## Autonomy
 
