@@ -105,8 +105,8 @@ While this adds redundancy, the setup does not satisfy DeFiScan’s [Security Co
 
 | Name               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51 % threshold | ≥ 50 % non-insider | Signers public |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | ---------------- | ------------------ | -------------- |
-| GnosisSafeProxy #1 | [`0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e`](https://bscscan.com/address/0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
-| GnosisSafeProxy #2 | [`0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E`](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
+| GnosisSafeProxy #1 | [0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e](https://bscscan.com/address/0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
+| GnosisSafeProxy #2 | [0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
 
 Because none of the criteria are met, PancakeSwap v2 **lacks a qualifying Security Council** and cannot rely on this mechanism to mitigate central-admin risk.
 
