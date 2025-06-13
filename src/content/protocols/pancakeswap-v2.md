@@ -60,7 +60,7 @@ In contrast, governance can reassign the 0.08 % protocol fee at any time by call
 
 Once a liquidity pair is deployed, its internal fee-distribution logic is permanent: the 0.17 % trading fee directed to liquidity providers cannot be turned off or paused. Moreover, neither the `PancakePair` nor `MasterChef` is pausable, so LPs always retain the ability to remove their liquidity on demand.
 
-> Exit-Window score: **Medium**
+> Exit-Window score: Medium
 
 ## Accessibility
 
