@@ -50,7 +50,7 @@ An internal multisig ([GnosisSafeProxy #1](#security-council)) has the authority
 
 PancakeSwap v2’s AMM contracts (`PancakeFactory`, `PancakePair`) have no external price oracle or off-chain dependency: swaps resolve only against onchain reserves.
 
-> Autonomy score: **Low**
+> Autonomy score: Low
 
 ## Exit Window
 
