@@ -101,7 +101,7 @@ No external external dependencies has been found.
 ## Security Council
 
 _PancakeSwap v2_ is governed by two Gnosis Safe wallets configured as **3-of-6 multisigs**.
-While this adds redundancy, the setup **does not satisfy** DeFiScan’s [Security Council requirements](https://defiscan.info/learn-more#security-council-requirements).
+While this adds redundancy, the setup does not satisfy DeFiScan’s [Security Council requirements](https://defiscan.info/learn-more#security-council-requirements).
 
 | Name               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51 % threshold | ≥ 50 % non-insider | Signers public |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | ---------------- | ------------------ | -------------- |
