@@ -32,7 +32,7 @@ Deployed on **Binance Smart Chain**.
 
 Changes of parameters in the incentive layer of PancakeSwap V2 may result in the _loss of unclaimed yied_.
 
-Incentives are distributed to liquidity providers who stake their tokens through `MasterChef V1`. The only source of new `CAKE` is via immutable minting at a fixed rate of 40 `CAKE` per block, the multisig [GnosisSafeProxy #1](#security-council) can call the _dev()_ function at any time, with no delay, to change the address that receives 10% of each mint. The remaining 90% is forwarded to `MasterChef V2` for distribution to farms.
+Incentives are distributed to liquidity providers who stake their tokens through `MasterChef V1`. The only source of new `CAKE` is via immutable minting at a fixed rate of 40 `CAKE` per block, the multisig [GnosisSafeProxy #1](#security-council) can call the `dev()` function at any time, with no delay, to change the address that receives 10% of each mint. The remaining 90% is forwarded to `MasterChef V2` for distribution to farms.
 
 All reward parameters in `MasterChef V2`; including the list of farms, their allocation points, the `CAKE` burn split, and the address designated to receive _burned_ `CAKE`, can be modified by another internal multisig ([GnosisSafeProxy #2](#security-council)) following a minimum six-hour timelock. This allows the team to halt rewards to existing farms, funnel all new `CAKE` emissions to an insider pool, or redirect the burn address to one that simply receives the tokens without burning them.
 
