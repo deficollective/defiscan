@@ -1,9 +1,9 @@
 ---
-protocol: "cian-protocol-v3"
+protocol: "Cian Yield Layer"
 website: "https://cian.app/"
 x: "https://x.com/CIAN_protocol"
 github: ["https://github.com/cian-ai/cian-protocol"]
-defillama_slug: ["cian-protocol"]
+defillama_slug: ["cian-yield-layer"]
 chain: "Ethereum"
 stage: 0
 reasons: []
@@ -93,9 +93,6 @@ Cian-protocol uses chainlink oracles for in both their yield layer and strategy 
 
 # Governance
 
-
-
-
 ## Security Council
 
 New table with all the multisigs
@@ -110,40 +107,32 @@ New table with all the multisigs
 
 | Contract Name | Address |
 | ------------- | ------------------------------------------- |
-| ERC2612Verifier | [0x045969904402F5e674ef1f27713F3230929538DF](https://etherscan.io/address/0x045969904402F5e674ef1f27713F3230929538DF) |
-| WalletFactory | [0x8B46CB994218767f07C86Ba62fecAfdcb19cc001](https://etherscan.io/address/0x8B46CB994218767f07C86Ba62fecAfdcb19cc001) |
-| Automation | [0x53C8bF6875C66E8d7C42e30BeeF7e6241997F7e3](https://etherscan.io/address/0x53C8bF6875C66E8d7C42e30BeeF7e6241997F7e3) |
-| ControllerLib | [0x74D2Bef5Afe200DaCC76FE2D3C4022435b54CdbB](https://etherscan.io/address/0x74D2Bef5Afe200DaCC76FE2D3C4022435b54CdbB) |
-| ControllerLibSub | [0x68041721C81c695B72495F78BeaC4F7DFD7b19c8](https://etherscan.io/address/0x68041721C81c695B72495F78BeaC4F7DFD7b19c8) |
-| ControllerLink | [0xb329504622bd79329c6F82CF8c60c807dF2090c4](https://etherscan.io/address/0xb329504622bd79329c6F82CF8c60c807dF2090c4) |
-| Timelock | [0xb39e6f93cff9Af7011810f41a4ed9b14582019b7](https://etherscan.io/address/0xb39e6f93cff9Af7011810f41a4ed9b14582019b7) |
-| AdapterManager | [0xc936161B3C80494172ae58734e3CE16e26D493C1](https://etherscan.io/address/0xc936161B3C80494172ae58734e3CE16e26D493C1) |
-| WethGateway | [0xc397df95d7313159b667c58A541201BD936a2aA3](https://etherscan.io/address/0xc397df95d7313159b667c58A541201BD936a2aA3) |
-| AaveAdapter | [0x5b465489FF729f73ec911245A84B25231b5824bA](https://etherscan.io/address/0x5b465489FF729f73ec911245A84B25231b5824bA) |
-| FeeBoxStETH | [0xC5C9953516635659e03345738D8390b7ada6351c](https://etherscan.io/address/0xC5C9953516635659e03345738D8390b7ada6351c) |
-| FeeBoxETH | [0x0b20d5d59E14C71a948D55439019a2Aaf74Fa7B4](https://etherscan.io/address/0x0b20d5d59E14C71a948D55439019a2Aaf74Fa7B4) |
-| YlstETHVault (Implementation) | [0x0695ea1585e159368c95da0e65d611fd27ea3862](https://etherscan.io/address/0x0695ea1585e159368c95da0e65d611fd27ea3862) |
-| YlstETHVault (Proxy) | [0x3498fDed9C88Ae83b3BC6a302108F2da408e613b](https://etherscan.io/address/0x3498fDed9C88Ae83b3BC6a302108F2da408e613b) |
-|| VaultYieldETH (Proxy)       | [0xB13aa2d0345b0439b064f26B82D8dCf3f508775d](https://etherscan.io/address/0xB13aa2d0345b0439b064f26B82D8dCf3f508775d) |
-| VaultYieldETH (Implementation) | [0xa1dc0b6a02ab091580dc57bdd5fe8a9e577e0842](https://etherscan.io/address/0xa1dc0b6a02ab091580dc57bdd5fe8a9e577e0842) |
-| Vault (Proxy)               | [0xd4Cc9b31e9eF33E392FF2f81AD52BE8523e0993b](https://etherscan.io/address/0xd4Cc9b31e9eF33E392FF2f81AD52BE8523e0993b) |
-| Vault (Implementation)      | [0x7a9ca85e0d4f32004d47620df03982b1afd18e37](https://etherscan.io/address/0x7a9ca85e0d4f32004d47620df03982b1afd18e37) |
-| VaultYieldRSETH (Proxy)     | [0xd87a19fF681AE98BF10d2220D1AE3Fbd374ADE4e](https://etherscan.io/address/0xd87a19fF681AE98BF10d2220D1AE3Fbd374ADE4e) |
-| VaultYieldRSETH (Implementation) | [0x90639665f88fb7a8258608fcc6d5e2bf8d5dfc01](https://etherscan.io/address/0x90639665f88fb7a8258608fcc6d5e2bf8d5dfc01) |
-| TransparentUpgradeableProxy | [0x8D76e7847dFbEA6e9F4C235CADF51586bA3560A2](https://etherscan.io/address/0x8D76e7847dFbEA6e9F4C235CADF51586bA3560A2) |
-| VaultYieldFBTC (Proxy)      | [0x9fdDAD44eD6b77e6777dC1b16ee4FCcCBaF0A019](https://etherscan.io/address/0x9fdDAD44eD6b77e6777dC1b16ee4FCcCBaF0A019) |
-| VaultYieldFBTC (Implementation) | [0x5200817ce523f8340a6fa00f800b7df71c000af4](https://etherscan.io/address/0x5200817ce523f8340a6fa00f800b7df71c000af4) |
-
+| Manager                                   | [0x6d425B3D302DD82cC611866eC8176d435307b616](https://etherscan.io/address/0x6d425B3D302DD82cC611866eC8176d435307b616) |
+| RedeemOperator                            | [0xdAc6748CbB7CD9DA1868eB7aD598273122f012db](https://etherscan.io/address/0xdAc6748CbB7CD9DA1868eB7aD598273122f012db) |
+| StrategyETHConverter (Proxy)              | [0xe2da457580a0b4aDA538fea681daaBA3A1BdEA7E](https://etherscan.io/address/0xe2da457580a0b4aDA538fea681daaBA3A1BdEA7E) |
+| StrategyETHConverter (Implementation)     | [0x89ad2070b7522b08aa046e100350a9c2afc9758c](https://etherscan.io/address/0x89ad2070b7522b08aa046e100350a9c2afc9758c) |
+| StrategyAAVEV3LIDO (Proxy)                | [0x07833EAdF87CD3079da281395f2fBA24b61F90f7](https://etherscan.io/address/0x07833EAdF87CD3079da281395f2fBA24b61F90f7) |
+| StrategyAAVEV3LIDO (Implementation)       | [0x9191dc9e81bef6feea0dc4d6994d5392b898edf8](https://etherscan.io/address/0x9191dc9e81bef6feea0dc4d6994d5392b898edf8) |
+| StrategyMellowSteakhouse (Proxy)          | [0xFed44EdF4560DC09271d3a7d514B843F789540A5](https://etherscan.io/address/0xFed44EdF4560DC09271d3a7d514B843F789540A5) |
+| StrategyMellowSteakhouse (Implementation) | [0x77521826f516f02a123fd1f2ffe262f2133169b7](https://etherscan.io/address/0x77521826f516f02a123fd1f2ffe262f2133169b7) |
+| StrategyCompoundRSETH (Proxy)             | [0x3e2fC649E407e4bf0e14d620284ADd5366f2AC2d](https://etherscan.io/address/0x3e2fC649E407e4bf0e14d620284ADd5366f2AC2d) |
+| StrategyCompoundRSETH (Implementation)    | [0xb45222a152d4a05f791df8e101f8bf8e86e640e9](https://etherscan.io/address/0xb45222a152d4a05f791df8e101f8bf8e86e640e9) |
+| StrategyAAVEV3EzETH (Proxy)               | [0xd6813390a28c8e3bc0dc838a346bd48f98b6da6f](https://etherscan.io/address/0xd6813390a28c8e3bc0dc838a346bd48f98b6da6f) |
+| StrategyAAVEV3EzETH (Implementation)      | [0x64909259bc66e45ab66ee38a5fe3d284102254a3](https://etherscan.io/address/0x64909259bc66e45ab66ee38a5fe3d284102254a3) |
+| StrategyAAVEV3RsETH (Proxy)               | [0x1114D5C199dAe5f94a045947e3DF776e9f9C07c4](https://etherscan.io/address/0x1114D5C199dAe5f94a045947e3DF776e9f9C07c4) |
+| StrategyAAVEV3RsETH (Implementation)      | [0x48bf0e645054b5cbe5636acd267d20022179d72f](https://etherscan.io/address/0x48bf0e645054b5cbe5636acd267d20022179d72f) |
+| VaultYieldETH (Proxy)                     | [0xB13aa2d0345b0439b064f26B82D8dCf3f508775d](https://etherscan.io/address/0xB13aa2d0345b0439b064f26B82D8dCf3f508775d) |
+| VaultYieldETH (Implementation)            | [0xA1Dc0B6A02AB091580DC57bDd5Fe8a9E577E0842](https://etherscan.io/address/0xA1Dc0B6A02AB091580DC57bDd5Fe8a9E577E0842) |
 
 ## All Permission owners
 
 | Name | Account                                     					    | Type         |
 | ---- | ---------------------------------------------------------------------------------- | ------------ |
-| TimeLock | [0xb39e6f93cff9Af7011810f41a4ed9b14582019b7](https://etherscan.io/address/0xb39e6f93cff9Af7011810f41a4ed9b14582019b7)| Contract |
-| Cian Deployer | [0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553](https://etherscan.io/address/0x8fa9aa69a6e94c1cd49fbf214c833b2911d02553) | EOA |
-| AdapterManager | [0xc936161B3C80494172ae58734e3CE16e26D493C1](https://etherscan.io/address/0xc936161B3C80494172ae58734e3CE16e26D493C1) | Contract 
-| Undeclared multisig | [0x261090afE1E7305474F4e3eEFCAca9964eBffFf5](https://etherscan.io/address/0x261090afE1E7305474F4e3eEFCAca9964eBffFf5) | Multisig |
-
+| Owner | [0x261090afE1E7305474F4e3eEFCAca9964eBffFf5](https://etherscan.io/address/0x261090afE1E7305474F4e3eEFCAca9964eBffFf5)| Multisig |
+| Vault Owner | [0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553](https://etherscan.io/address/0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553) | EOA |
+| Operator | [0x994Cc8Ef6aC289d0016dC28E691CF75eaE4e776b](https://etherscan.io/address/0x994Cc8Ef6aC289d0016dC28E691CF75eaE4e776b) | Contract 
+| Rebalancer 2 | [0x7c0393F1CF1faf3106478960bEf21635Ff6182C4](https://etherscan.io/address/0x7c0393F1CF1faf3106478960bEf21635Ff6182C4) | Multisig |
+| FeeReceiver | [0xc554747ffde2e378a562a09f2f72f4121C1d493D](https://etherscan.io/address/0xc554747ffde2e378a562a09f2f72f4121C1d493D) | EOA |
 
 ## Permissions
 
@@ -251,3 +240,130 @@ New table with all the multisigs
 | VaultYieldETH               | pause                          | It reads vault parameters, pausable storage, and ownership storage. This function allows the owner or rebalancer to pause certain vault operations. A malicious owner or rebalancer could pause the vault indefinitely, preventing deposits, withdrawals, or redemptions. | Account Owner or Rebalancer Role                          |
 | VaultYieldETH               | unpause                        | This function allows the owner to unpause the contract. A malicious owner could unpause the contract prematurely after an issue is detected but not fully resolved. | `Undeclared Multisig` (0x261090afE1E7305474F4e3eEFCAca9964eBffFf5) |
 
+
+
+| Contract                                  | Function                       | Impact | Owner                             |
+| ----------------------------------------- | ------------------------------ | ------ | --------------------------------- |
+| Manager                                   | renounceOwnership              | ...    | Owner                             |
+| Manager                                   | transferOwnership              | ...    | Owner                             |
+| Manager                                   | addOperator                    | ...    | Owner                             |
+| Manager                                   | removeOperator                 | ...    | Owner                             |
+| Manager                                   | multiCall                      | ...    | Operator (YlstETH)                |
+| RedeemOperator                            | renounceOwnership              | ...    | Owner                             |
+| RedeemOperator                            | transferOwnership              | ...    | Owner                             |
+| RedeemOperator                            | updateOperator                 | ...    | Owner                             |
+| RedeemOperator                            | updateFeeReceiver              | ...    | Owner                             |
+| RedeemOperator                            | confirmWithdrawal              | ...    | Manager                           |
+| RedeemOperator                            | sweep                          | ...    | Owner                             |
+| RedeemOperator                            | registerWithdrawal             | ...    | VaultYieldETH                     |
+| StrategyETHConverter (Proxy)              | upgradeToAndCall               | ...    | Owner                             |
+| StrategyETHConverter (Implementation)     | renounceOwnership              | ...    | Owner                             |
+| StrategyETHConverter (Implementation)     | transferOwnership              | ...    | Owner                             |
+| StrategyETHConverter (Implementation)     | updateRebalancer               | ...    | Owner                             |
+| StrategyETHConverter (Implementation)     | convertToken                   | ...    | Manager                           |
+| StrategyETHConverter (Implementation)     | claimUnstake                   | ...    | Manager                           |
+| StrategyETHConverter (Implementation)     | onTransferIn                   | ...    | VaultYieldETH                     |
+| StrategyETHConverter (Implementation)     | transferToVault                | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Proxy)                | upgradeToAndCall               | ...    | Owner                             |
+| StrategyAAVEV3LIDO (Implementation)       | renounceOwnership              | ...    | Owner                             |
+| StrategyAAVEV3LIDO (Implementation)       | transferOwnership              | ...    | Owner                             |
+| StrategyAAVEV3LIDO (Implementation)       | updateFlashloanHelper          | ...    | Owner                             |
+| StrategyAAVEV3LIDO (Implementation)       | updateRebalancer               | ...    | Owner                             |
+| StrategyAAVEV3LIDO (Implementation)       | updateSafeProtocolRatio        | ...    | Owner                             |
+| StrategyAAVEV3LIDO (Implementation)       | convertToken                   | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Implementation)       | onTransferIn                   | ...    | VaultYieldETH                     |
+| StrategyAAVEV3LIDO (Implementation)       | transferToVault                | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Implementation)       | wrap                           | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Implementation)       | unwrap                         | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Implementation)       | repay                          | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Implementation)       | leverage                       | ...    | Manager                           |
+| StrategyAAVEV3LIDO (Implementation)       | deleverage                     | ...    | Manager                           |
+| StrategyMellowSteakhouse (Proxy)          | upgradeToAndCall               | ...    | Owner                             |
+| StrategyMellowSteakhouse (Implementation) | renounceOwnership              | ...    | Owner                             |
+| StrategyMellowSteakhouse (Implementation) | transferOwnership              | ...    | Owner                             |
+| StrategyMellowSteakhouse (Implementation) | updateRebalancer               | ...    | Owner                             |
+| StrategyMellowSteakhouse (Implementation) | convertToken                   | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | claimUnstake                   | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | onTransferIn                   | ...    | VaultYieldETH                     |
+| StrategyMellowSteakhouse (Implementation) | transferToVault                | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | enterProtocol                  | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | exitProtocol                   | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | claim                          | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | wrap                           | ...    | Manager                           |
+| StrategyMellowSteakhouse (Implementation) | unwrap                         | ...    | Manager                           |
+| StrategyCompoundRSETH (Proxy)             | upgradeToAndCall               | ...    | Owner                             |
+| StrategyCompoundRSETH (Implementation)    | renounceOwnership              | ...    | Owner                             |
+| StrategyCompoundRSETH (Implementation)    | transferOwnership              | ...    | Owner                             |
+| StrategyCompoundRSETH (Implementation)    | updateFlashloanHelper          | ...    | Owner                             |
+| StrategyCompoundRSETH (Implementation)    | updateRebalancer               | ...    | Owner                             |
+| StrategyCompoundRSETH (Implementation)    | updateSafeProtocolRatio        | ...    | Owner                             |
+| StrategyCompoundRSETH (Implementation)    | convertToken                   | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | claimUnstake                   | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | onTransferIn                   | ...    | VaultYieldETH                     |
+| StrategyCompoundRSETH (Implementation)    | transferToVault                | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | swapToken                      | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | stake                          | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | unstake                        | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | confirmUnstake                 | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | leverage                       | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | deleverage                     | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | repay                          | ...    | Manager                           |
+| StrategyCompoundRSETH (Implementation)    | claimAndSwap                   | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Proxy)               | upgradeToAndCall               | ...    | Owner                             |
+| StrategyAAVEV3EzETH (Implementation)      | renounceOwnership              | ...    | Owner                             |
+| StrategyAAVEV3EzETH (Implementation)      | transferOwnership              | ...    | Owner                             |
+| StrategyAAVEV3EzETH (Implementation)      | enterProtocol                  | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | updateFlashloanHelper          | ...    | Owner                             |
+| StrategyAAVEV3EzETH (Implementation)      | updateRebalancer               | ...    | Owner                             |
+| StrategyAAVEV3EzETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner                             |
+| StrategyAAVEV3EzETH (Implementation)      | onTransferIn                   | ...    | VaultYieldETH                     |
+| StrategyAAVEV3EzETH (Implementation)      | transferToVault                | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | repay                          | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | wrap                           | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | unwrap                         | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | convertToEzETH                 | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | convertFromEzETH               | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | claimExited                    | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | leverage                       | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | deleverage                     | ...    | Manager                           |
+| StrategyAAVEV3EzETH (Implementation)      | claim                          | ...    | Manager                           |
+| StrategyAAVEV3RsETH (Proxy)               | upgradeToAndCall               | ...    | Owner                             |
+| StrategyAAVEV3RsETH (Implementation)      | renounceOwnership              | ...    | Owner                             |
+| StrategyAAVEV3RsETH (Implementation)      | transferOwnership              | ...    | Owner                             |
+| StrategyAAVEV3RsETH (Implementation)      | updateFlashloanHelper          | ...    | Owner                             |
+| StrategyAAVEV3RsETH (Implementation)      | updateRebalancer               | ...    | Owner                             |
+| StrategyAAVEV3RsETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner                             |
+| StrategyAAVEV3RsETH (Implementation)      | convertToken                   | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | claimUnstake                   | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | onTransferIn                   | ...    | VaultYieldETH                     |
+| StrategyAAVEV3RsETH (Implementation)      | transferToVault                | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | swapToken                      | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | stake                          | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | unstake                        | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | repay                          | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | leverage                       | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | deleverage                     | ...    | Rebalancer 2 (YlstETH)            |
+| StrategyAAVEV3RsETH (Implementation)      | enterProtocol                  | ...    | Rebalancer 2 (YlstETH)            |
+| VaultYieldETH (Proxy)                     | upgradeToAndCall               | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | createStrategy                 | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | removeStrategy                 | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateStrategyLimit            | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | renounceOwnership              | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | transferOwnership              | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateMarketCapacity           | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateManagementFee            | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateManagementFeeClaimPeriod | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateMaxPriceUpdatePeriod     | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateRevenueRate              | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateExitFeeRate              | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateRebalancer               | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateFeeReceiver              | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateRedeemOperator           | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | updateExchangePrice            | ...    | Manager or Rebalancer 2 (YlstETH) |
+| VaultYieldETH (Implementation)            | stakeTo                        | ...    | Manager or Rebalancer 2 (YlstETH) |
+| VaultYieldETH (Implementation)            | migrateMint                    | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | collectManagementFee           | ...    | FeeReceiver                       |
+| VaultYieldETH (Implementation)            | collectRevenue                 | ...    | FeeReceiver                       |
+| VaultYieldETH (Implementation)            | sweep                          | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | pause                          | ...    | Vault Owner                       |
+| VaultYieldETH (Implementation)            | unpause                        | ...    | Vault Owner                       |
