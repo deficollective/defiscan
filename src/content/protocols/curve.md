@@ -3,7 +3,7 @@ protocol: "Curve Finance"
 website: "https://curve.finance/"
 x: "https://x.com/CurveFinance"
 github: ["https://github.com/CurveFi"]
-defillama_slug: ["curve-finance"]
+defillama_slug: ["curve-dex", "curve-llamalend", "crvusd"]
 chain: "Ethereum"
 stage: 0
 reasons: []
