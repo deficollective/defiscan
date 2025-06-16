@@ -140,19 +140,29 @@ New table with all the multisigs
 | StrategyPump (Implementation)             | [0xe170ee6fb2222b42362181537a21bd429cf7f1cc](https://etherscan.io/address/0xe170ee6fb2222b42362181537a21bd429cf7f1cc) |
 | Vault (Proxy)                             | [0x6c77bdE03952BbcB923815d90A73a7eD7EC895D1](https://etherscan.io/address/0x6c77bdE03952BbcB923815d90A73a7eD7EC895D1) |
 | Vault (Implementation)                    | [0xa994911ee05de3c183533b2dd68ceeb7490de97c](https://etherscan.io/address/0xa994911ee05de3c183533b2dd68ceeb7490de97c) |
+| Manager (YlFBTC)                          | [0x140B58b84ea6923325b2325577b9E141B4480A7c](https://etherscan.io/address/0x140B58b84ea6923325b2325577b9E141B4480A7c) |
+| StrategySolv (Proxy)                      | [0x597d42F0Cd2888C53726bD64f4aD06c3636ef796](https://etherscan.io/address/0x597d42F0Cd2888C53726bD64f4aD06c3636ef796) |
+| StrategySolv (Implementation)             | [0xf703e47280f5ad1de97373b89b9b4d0b41df6681](https://etherscan.io/address/0xf703e47280f5ad1de97373b89b9b4d0b41df6681) |
+| StrategyBedrock (Proxy)                   | [0xe67Ab3036C866519a0885A58d4408c164eA897e9](https://etherscan.io/address/0xe67Ab3036C866519a0885A58d4408c164eA897e9) |
+| StrategyBedrock (Implementation)          | [0xc091a0078889b3b12b6d9e44273a782a73678ff5](https://etherscan.io/address/0xc091a0078889b3b12b6d9e44273a782a73678ff5) |
+| StrategyPumpBTC (Proxy)                   | [0x71b3Bf3FCc6d59aE9317595Cc4126EcfF2f8FCc8](https://etherscan.io/address/0x71b3Bf3FCc6d59aE9317595Cc4126EcfF2f8FCc8) |
+| StrategyPumpBTC (Implementation)          | [0xf12e223408bc50b64b33dae393ef0fb1d926b491](https://etherscan.io/address/0xf12e223408bc50b64b33dae393ef0fb1d926b491) |
+| VaultYieldFBTC (Proxy)                    | [0x9fdDAD44eD6b77e6777dC1b16ee4FCcCBaF0A019](https://etherscan.io/address/0x9fdDAD44eD6b77e6777dC1b16ee4FCcCBaF0A019) |
+| VaultYieldFBTC (Implementation)           | [0x2fdc50b1e91bc810646ad933e2734579b4c632ba](https://etherscan.io/address/0x2fdc50b1e91bc810646ad933e2734579b4c632ba) |
 
 ## All Permission owners
 
-| Name | Account                                     					    | Type         |
-| ---- | ---------------------------------------------------------------------------------- | ------------ |
-| Owner (YlstETH)| [0x261090afE1E7305474F4e3eEFCAca9964eBffFf5](https://etherscan.io/address/0x261090afE1E7305474F4e3eEFCAca9964eBffFf5)| Multisig |
-| Vault Owner (YlstETH, YlrsETH, YlBTCLST) | [0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553](https://etherscan.io/address/0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553) | EOA |
-| Operator (YlstETH, YlrsETH, YlBTCLST)  | [0x994Cc8Ef6aC289d0016dC28E691CF75eaE4e776b](https://etherscan.io/address/0x994Cc8Ef6aC289d0016dC28E691CF75eaE4e776b) | Contract |
+| Name                   | Account                                                                                                               | Type     |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | -------- |
+| Owner (YlstETH)        | [0x261090afE1E7305474F4e3eEFCAca9964eBffFf5](https://etherscan.io/address/0x261090afE1E7305474F4e3eEFCAca9964eBffFf5) | Multisig |
+| Vault Owner            | [0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553](https://etherscan.io/address/0x8FA9aa69a6e94c1cd49FbF214C833B2911D02553) | EOA      |
+| Operator               | [0x994Cc8Ef6aC289d0016dC28E691CF75eaE4e776b](https://etherscan.io/address/0x994Cc8Ef6aC289d0016dC28E691CF75eaE4e776b) | Contract |
 | Rebalancer 2 (YlstETH) | [0x7c0393F1CF1faf3106478960bEf21635Ff6182C4](https://etherscan.io/address/0x7c0393F1CF1faf3106478960bEf21635Ff6182C4) | Multisig |
 | Rebalancer 2 (YlrsETH) | [0x20E5737D4B888154c8220304310aBb8b63881D2a](https://etherscan.io/address/0x20E5737D4B888154c8220304310aBb8b63881D2a) | Multisig |
-| FeeReceiver (YlstETH, YlrsETH, YlBTCLST) | [0xc554747ffde2e378a562a09f2f72f4121C1d493D](https://etherscan.io/address/0xc554747ffde2e378a562a09f2f72f4121C1d493D) | EOA |
-| Owner (YlrsETH) | [0x0b5d3121E144cf1410850c9608651a039BFd543e](https://etherscan.io/address/0x0b5d3121E144cf1410850c9608651a039BFd543e) | Multisig |
-| Owner (YlBTCLST) | [0x28784DbF1DA93da28873c9f4A8B471D64A11FCfd](https://etherscan.io/address/0x28784DbF1DA93da28873c9f4A8B471D64A11FCfd) | Multisig |
+| FeeReceiver            | [0xc554747ffde2e378a562a09f2f72f4121C1d493D](https://etherscan.io/address/0xc554747ffde2e378a562a09f2f72f4121C1d493D) | EOA      |
+| Owner (YlrsETH)        | [0x0b5d3121E144cf1410850c9608651a039BFd543e](https://etherscan.io/address/0x0b5d3121E144cf1410850c9608651a039BFd543e) | Multisig |
+| Owner (YlBTCLST)       | [0x28784DbF1DA93da28873c9f4A8B471D64A11FCfd](https://etherscan.io/address/0x28784DbF1DA93da28873c9f4A8B471D64A11FCfd) | Multisig |
+
 
 ## Permissions
 
@@ -262,278 +272,309 @@ New table with all the multisigs
 
 
 
-| Contract                                  | Function                       | Impact | Owner                                    |
-| ----------------------------------------- | ------------------------------ | ------ | ---------------------------------------- |
-| Manager (YlstETH)                         | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| Manager (YlstETH)                         | transferOwnership              | ...    | Owner (YlstETH)                          |
-| Manager (YlstETH)                         | addOperator                    | ...    | Owner (YlstETH)                          |
-| Manager (YlstETH)                         | removeOperator                 | ...    | Owner (YlstETH)                          |
-| Manager (YlstETH)                         | multiCall                      | ...    | Operator (YlstETH)                       |
-| RedeemOperator (YlstETH)                  | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| RedeemOperator (YlstETH)                  | transferOwnership              | ...    | Owner (YlstETH)                          |
-| RedeemOperator (YlstETH)                  | updateOperator                 | ...    | Owner (YlstETH)                          |
-| RedeemOperator (YlstETH)                  | updateFeeReceiver              | ...    | Owner (YlstETH)                          |
-| RedeemOperator (YlstETH)                  | confirmWithdrawal              | ...    | Manager (YlstETH)                        |
-| RedeemOperator (YlstETH)                  | sweep                          | ...    | Owner (YlstETH)                          |
-| RedeemOperator (YlstETH)                  | registerWithdrawal             | ...    | VaultYieldETH                            |
-| StrategyETHConverter (Proxy)              | upgradeToAndCall               | ...    | Owner (YlstETH)                          |
-| StrategyETHConverter (Implementation)     | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyETHConverter (Implementation)     | transferOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyETHConverter (Implementation)     | updateRebalancer               | ...    | Owner (YlstETH)                          |
-| StrategyETHConverter (Implementation)     | convertToken                   | ...    | Manager (YlstETH)                        |
-| StrategyETHConverter (Implementation)     | claimUnstake                   | ...    | Manager (YlstETH)                        |
-| StrategyETHConverter (Implementation)     | onTransferIn                   | ...    | VaultYieldETH                            |
-| StrategyETHConverter (Implementation)     | transferToVault                | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Proxy)                | upgradeToAndCall               | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3LIDO (Implementation)       | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3LIDO (Implementation)       | transferOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3LIDO (Implementation)       | updateFlashloanHelper          | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3LIDO (Implementation)       | updateRebalancer               | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3LIDO (Implementation)       | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3LIDO (Implementation)       | convertToken                   | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Implementation)       | onTransferIn                   | ...    | VaultYieldETH                            |
-| StrategyAAVEV3LIDO (Implementation)       | transferToVault                | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Implementation)       | wrap                           | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Implementation)       | unwrap                         | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Implementation)       | repay                          | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Implementation)       | leverage                       | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3LIDO (Implementation)       | deleverage                     | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Proxy)          | upgradeToAndCall               | ...    | Owner (YlstETH)                          |
-| StrategyMellowSteakhouse (Implementation) | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyMellowSteakhouse (Implementation) | transferOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyMellowSteakhouse (Implementation) | updateRebalancer               | ...    | Owner (YlstETH)                          |
-| StrategyMellowSteakhouse (Implementation) | convertToken                   | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | claimUnstake                   | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | onTransferIn                   | ...    | VaultYieldETH                            |
-| StrategyMellowSteakhouse (Implementation) | transferToVault                | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | enterProtocol                  | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | exitProtocol                   | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | claim                          | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | wrap                           | ...    | Manager (YlstETH)                        |
-| StrategyMellowSteakhouse (Implementation) | unwrap                         | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Proxy)             | upgradeToAndCall               | ...    | Owner (YlstETH)                          |
-| StrategyCompoundRSETH (Implementation)    | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyCompoundRSETH (Implementation)    | transferOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyCompoundRSETH (Implementation)    | updateFlashloanHelper          | ...    | Owner (YlstETH)                          |
-| StrategyCompoundRSETH (Implementation)    | updateRebalancer               | ...    | Owner (YlstETH)                          |
-| StrategyCompoundRSETH (Implementation)    | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                          |
-| StrategyCompoundRSETH (Implementation)    | convertToken                   | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | claimUnstake                   | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | onTransferIn                   | ...    | VaultYieldETH                            |
-| StrategyCompoundRSETH (Implementation)    | transferToVault                | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | swapToken                      | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | stake                          | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | unstake                        | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | confirmUnstake                 | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | leverage                       | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | deleverage                     | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | repay                          | ...    | Manager (YlstETH)                        |
-| StrategyCompoundRSETH (Implementation)    | claimAndSwap                   | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Proxy)               | upgradeToAndCall               | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3EzETH (Implementation)      | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3EzETH (Implementation)      | transferOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3EzETH (Implementation)      | enterProtocol                  | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | updateFlashloanHelper          | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3EzETH (Implementation)      | updateRebalancer               | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3EzETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3EzETH (Implementation)      | onTransferIn                   | ...    | VaultYieldETH                            |
-| StrategyAAVEV3EzETH (Implementation)      | transferToVault                | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | repay                          | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | wrap                           | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | unwrap                         | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | convertToEzETH                 | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | convertFromEzETH               | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | claimExited                    | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | leverage                       | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | deleverage                     | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3EzETH (Implementation)      | claim                          | ...    | Manager (YlstETH)                        |
-| StrategyAAVEV3RsETH (Proxy)               | upgradeToAndCall               | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | renounceOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | transferOwnership              | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | updateFlashloanHelper          | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | updateRebalancer               | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | convertToken                   | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | claimUnstake                   | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | onTransferIn                   | ...    | VaultYieldETH                            |
-| StrategyAAVEV3RsETH (Implementation)      | transferToVault                | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | swapToken                      | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | stake                          | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | unstake                        | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | repay                          | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | leverage                       | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | deleverage                     | ...    | Rebalancer 2 (YlstETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | enterProtocol                  | ...    | Rebalancer 2 (YlstETH)                   |
-| VaultYieldETH (Proxy)                     | upgradeToAndCall               | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | createStrategy                 | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | removeStrategy                 | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateStrategyLimit            | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | renounceOwnership              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | transferOwnership              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateMarketCapacity           | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateManagementFee            | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateManagementFeeClaimPeriod | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateMaxPriceUpdatePeriod     | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateRevenueRate              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateExitFeeRate              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateRebalancer               | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateFeeReceiver              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateRedeemOperator           | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | updateExchangePrice            | ...    | Manager (YlstETH)                        |
-| VaultYieldETH (Implementation)            | stakeTo                        | ...    | Manager (YlstETH)                        |
-| VaultYieldETH (Implementation)            | migrateMint                    | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | collectManagementFee           | ...    | FeeReceiver (YlstETH)                    |
-| VaultYieldETH (Implementation)            | collectRevenue                 | ...    | FeeReceiver (YlstETH)                    |
-| VaultYieldETH (Implementation)            | sweep                          | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | pause                          | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldETH (Implementation)            | unpause                        | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| Manager (YlrsETH)                         | renounceOwnership              | ...    | Owner (YlrsETH)                          |
-| Manager (YlrsETH)                         | transferOwnership              | ...    | Owner (YlrsETH)                          |
-| Manager (YlrsETH)                         | addOperator                    | ...    | Owner (YlrsETH)                          |
-| Manager (YlrsETH)                         | removeOperator                 | ...    | Owner (YlrsETH)                          |
-| Manager (YlrsETH)                         | multiCall                      | ...    | Operator (YlstETH, YlrsETH)              |
-| RedeemOperator (YlrsETH)                  | renounceOwnership              | ...    | Owner (YlrsETH)                          |
-| RedeemOperator (YlrsETH)                  | transferOwnership              | ...    | Owner (YlrsETH)                          |
-| RedeemOperator (YlrsETH)                  | updateOperator                 | ...    | Owner (YlrsETH)                          |
-| RedeemOperator (YlrsETH)                  | updateFeeReceiver              | ...    | Owner (YlrsETH)                          |
-| RedeemOperator (YlrsETH)                  | confirmWithdrawal              | ...    | Manager (YlrsETH)                        |
-| RedeemOperator (YlrsETH)                  | sweep                          | ...    | Owner (YlrsETH)                          |
-| RedeemOperator (YlrsETH)                  | registerWithdrawal             | ...    | VaultYieldRSETH                          |
-| StrategyCompound (Proxy)                  | upgradeToAndCall               | ...    | Owner (YlrsETH)                          |
-| StrategyCompound (Implementation)         | renounceOwnership              | ...    | Owner (YlrsETH)                          |
-| StrategyCompound (Implementation)         | transferOwnership              | ...    | Owner (YlrsETH)                          |
-| StrategyCompound (Implementation)         | updateFlashloanHelper          | ...    | Owner (YlrsETH)                          |
-| StrategyCompound (Implementation)         | updateRebalancer               | ...    | Owner (YlrsETH)                          |
-| StrategyCompound (Implementation)         | updateSafeProtocolRatio        | ...    | Owner (YlrsETH)                          |
-| StrategyCompound (Implementation)         | unstake                        | ...    | Manager (YlrsETH)                        |
-| StrategyCompound (Implementation)         | onTransferIn                   | ...    | VaultYieldRSETH                          |
-| StrategyCompound (Implementation)         | transferToVault                | ...    | Manager (YlrsETH)                        |
-| StrategyCompound (Implementation)         | repay                          | ...    | Manager (YlrsETH)                        |
-| StrategyCompound (Implementation)         | leverage                       | ...    | Manager (YlrsETH)                        |
-| StrategyCompound (Implementation)         | deleverage                     | ...    | Manager (YlrsETH)                        |
-| StrategyCompound (Implementation)         | claimAndSwap                   | ...    | Manager (YlrsETH)                        |
-| StrategyAAVEV3RsETH (Proxy)               | upgradeToAndCall               | ...    | Owner (YlrsETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | renounceOwnership              | ...    | Owner (YlrsETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | transferOwnership              | ...    | Owner (YlrsETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | updateFlashloanHelper          | ...    | Owner (YlrsETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | updateRebalancer               | ...    | Owner (YlrsETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner (YlrsETH)                          |
-| StrategyAAVEV3RsETH (Implementation)      | convertToken                   | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | claimUnstake                   | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | onTransferIn                   | ...    | VaultYieldRSETH                          |
-| StrategyAAVEV3RsETH (Implementation)      | transferToVault                | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | swapToken                      | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | stake                          | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | unstake                        | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | repay                          | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | leverage                       | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | deleverage                     | ...    | Rebalancer 2 (YlrsETH)                   |
-| StrategyAAVEV3RsETH (Implementation)      | enterProtocol                  | ...    | Rebalancer 2 (YlrsETH)                   |
-| VaultYieldRSETH (Proxy)                   | upgradeToAndCall               | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateMarketCapacity           | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateManagementFee            | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateManagementFeeClaimPeriod | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateMaxPriceUpdatePeriod     | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateRevenueRate              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateExitFeeRate              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateRebalancer               | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateUnbackedMinter           | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateFeeReceiver              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateRedeemOperator           | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | addToken                       | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | removeToken                    | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateExchangePrice            | ...    | Manager (YlrsETH)                        |
-| VaultYieldRSETH (Implementation)          | burnUnbacked                   | ...    | 0x0                                      |
-| VaultYieldRSETH (Implementation)          | mintUnbacked                   | ...    | 0x0                                      |
-| VaultYieldRSETH (Implementation)          | collectManagementFee           | ...    | FeeReceiver (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | collectRevenue                 | ...    | FeeReceiver (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | pause                          | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | unpause                        | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | createStrategy                 | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | removeStrategy                 | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | updateStrategyLimit            | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | renounceOwnership              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| VaultYieldRSETH (Implementation)          | transferOwnership              | ...    | Vault Owner (YlstETH, YlrsETH)           |
-| Manager (YlBTCLST)                        | renounceOwnership              | ...    | Owner (YlBTCLST)                         |
-| Manager (YlBTCLST)                        | transferOwnership              | ...    | Owner (YlBTCLST)                         |
-| Manager (YlBTCLST)                        | addOperator                    | ...    | Owner (YlBTCLST)                         |
-| Manager (YlBTCLST)                        | removeOperator                 | ...    | Owner (YlBTCLST)                         |
-| Manager (YlBTCLST)                        | multiCall                      | ...    | Operator (YlstETH, YlrsETH, YlBTCLST)    |
-| StrategySolv (Proxy)                      | upgradeToAndCall               | ...    | Owner (YlBTCLST)                         |
-| StrategySolv (Implementation)             | updateRebalancer               | ...    | Owner (YlBTCLST)                         |
-| StrategySolv (Implementation)             | transferToVault                | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | renounceOwnership              | ...    | Owner (YlBTCLST)                         |
-| StrategySolv (Implementation)             | transferOwnership              | ...    | Owner (YlBTCLST)                         |
-| StrategySolv (Implementation)             | onTransferIn                   | ...    | Vault (YlBTCLst)                         |
-| StrategySolv (Implementation)             | convertToken                   | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | enterPendle                    | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | exitPendle                     | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | enterEqb                       | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | exitEqb                        | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | swapYtToToken                  | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | claim                          | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | claimAll                       | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | claimEqb                       | ...    | Manager (YlBTCLst)                       |
-| StrategySolv (Implementation)             | sendXEQB                       | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Proxy)                   | upgradeToAndCall               | ...    | Owner (YlBTCLST)                         |
-| StrategyBedrock (Implementation)          | updateRebalancer               | ...    | Owner (YlBTCLST)                         |
-| StrategyBedrock (Implementation)          | transferToVault                | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | renounceOwnership              | ...    | Owner (YlBTCLST)                         |
-| StrategyBedrock (Implementation)          | transferOwnership              | ...    | Owner (YlBTCLST)                         |
-| StrategyBedrock (Implementation)          | onTransferIn                   | ...    | Vault (YlBTCLst)                         |
-| StrategyBedrock (Implementation)          | convertToken                   | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | enterPendle                    | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | exitPendle                     | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | exitPendleDualToken            | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | enterEqb                       | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | exitEqb                        | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | swapYtToToken                  | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | claim                          | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | claimEqb                       | ...    | Manager (YlBTCLst)                       |
-| StrategyBedrock (Implementation)          | sendXEQB                       | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Proxy)                      | upgradeToAndCall               | ...    | Owner (YlBTCLST)                         |
-| StrategyPump (Implementation)             | updateRebalancer               | ...    | Owner (YlBTCLST)                         |
-| StrategyPump (Implementation)             | transferToVault                | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | renounceOwnership              | ...    | Owner (YlBTCLST)                         |
-| StrategyPump (Implementation)             | transferOwnership              | ...    | Owner (YlBTCLST)                         |
-| StrategyPump (Implementation)             | onTransferIn                   | ...    | Vault (YlBTCLst)                         |
-| StrategyPump (Implementation)             | convertToken                   | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | enterPendle                    | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | exitPendle                     | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | enterEqb                       | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | exitEqb                        | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | swapYtToToken                  | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | claim                          | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | claimAll                       | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | claimEqb                       | ...    | Manager (YlBTCLst)                       |
-| StrategyPump (Implementation)             | sendXEQB                       | ...    | Manager (YlBTCLst)                       |
-| Vault (YlBTCLst) (Proxy)                  | upgradeToAndCall               | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateMarketCapacity           | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateManagementFee            | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateManagementFeeClaimPeriod | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateMaxPriceUpdatePeriod     | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateRevenueRate              | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateExitFeeRate              | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateRebalancer               | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateFeeReceiver              | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateRedeemOperator           | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | addToken                       | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | removeToken                    | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateExchangePrice            | ...    | Manager (YlBTCLst)                       |
-| Vault (YlBTCLst) (Implementation)         | transferToStrategy             | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | optionalDeposit                | ...    | ['onlyWhiteList']                        |
-| Vault (YlBTCLst) (Implementation)         | adminRedeem                    | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | deposit                        | ...    | ['onlyWhiteList']                        |
-| Vault (YlBTCLst) (Implementation)         | mint                           | ...    | ['onlyWhiteList']                        |
-| Vault (YlBTCLst) (Implementation)         | collectManagementFee           | ...    | FeeReceiver (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | collectRevenue                 | ...    | FeeReceiver (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | sweep                          | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | pause                          | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | unpause                        | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | createStrategy                 | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | removeStrategy                 | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | updateStrategyLimit            | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | renounceOwnership              | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | transferOwnership              | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | addWhiteList                   | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
-| Vault (YlBTCLst) (Implementation)         | removeWhiteList                | ...    | Vault Owner (YlstETH, YlrsETH, YlBTCLST) |
+| Contract                                  | Function                       | Impact | Owner                          |
+| ----------------------------------------- | ------------------------------ | ------ | ------------------------------ |
+| Manager (YlstETH)                         | renounceOwnership              | ...    | Owner (YlstETH)                |
+| Manager (YlstETH)                         | transferOwnership              | ...    | Owner (YlstETH)                |
+| Manager (YlstETH)                         | addOperator                    | ...    | Owner (YlstETH)                |
+| Manager (YlstETH)                         | removeOperator                 | ...    | Owner (YlstETH)                |
+| Manager (YlstETH)                         | multiCall                      | ...    | Operator (YlstETH)             |
+| RedeemOperator (YlstETH)                  | renounceOwnership              | ...    | Owner (YlstETH)                |
+| RedeemOperator (YlstETH)                  | transferOwnership              | ...    | Owner (YlstETH)                |
+| RedeemOperator (YlstETH)                  | updateOperator                 | ...    | Owner (YlstETH)                |
+| RedeemOperator (YlstETH)                  | updateFeeReceiver              | ...    | Owner (YlstETH)                |
+| RedeemOperator (YlstETH)                  | confirmWithdrawal              | ...    | Manager (YlstETH)              |
+| RedeemOperator (YlstETH)                  | sweep                          | ...    | Owner (YlstETH)                |
+| RedeemOperator (YlstETH)                  | registerWithdrawal             | ...    | VaultYieldETH                  |
+| StrategyETHConverter (Proxy)              | upgradeToAndCall               | ...    | Owner (YlstETH)                |
+| StrategyETHConverter (Implementation)     | renounceOwnership              | ...    | Owner (YlstETH)                |
+| StrategyETHConverter (Implementation)     | transferOwnership              | ...    | Owner (YlstETH)                |
+| StrategyETHConverter (Implementation)     | updateRebalancer               | ...    | Owner (YlstETH)                |
+| StrategyETHConverter (Implementation)     | convertToken                   | ...    | Manager (YlstETH)              |
+| StrategyETHConverter (Implementation)     | claimUnstake                   | ...    | Manager (YlstETH)              |
+| StrategyETHConverter (Implementation)     | onTransferIn                   | ...    | VaultYieldETH                  |
+| StrategyETHConverter (Implementation)     | transferToVault                | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Proxy)                | upgradeToAndCall               | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3LIDO (Implementation)       | renounceOwnership              | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3LIDO (Implementation)       | transferOwnership              | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3LIDO (Implementation)       | updateFlashloanHelper          | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3LIDO (Implementation)       | updateRebalancer               | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3LIDO (Implementation)       | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3LIDO (Implementation)       | convertToken                   | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Implementation)       | onTransferIn                   | ...    | VaultYieldETH                  |
+| StrategyAAVEV3LIDO (Implementation)       | transferToVault                | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Implementation)       | wrap                           | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Implementation)       | unwrap                         | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Implementation)       | repay                          | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Implementation)       | leverage                       | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3LIDO (Implementation)       | deleverage                     | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Proxy)          | upgradeToAndCall               | ...    | Owner (YlstETH)                |
+| StrategyMellowSteakhouse (Implementation) | renounceOwnership              | ...    | Owner (YlstETH)                |
+| StrategyMellowSteakhouse (Implementation) | transferOwnership              | ...    | Owner (YlstETH)                |
+| StrategyMellowSteakhouse (Implementation) | updateRebalancer               | ...    | Owner (YlstETH)                |
+| StrategyMellowSteakhouse (Implementation) | convertToken                   | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | claimUnstake                   | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | onTransferIn                   | ...    | VaultYieldETH                  |
+| StrategyMellowSteakhouse (Implementation) | transferToVault                | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | enterProtocol                  | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | exitProtocol                   | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | claim                          | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | wrap                           | ...    | Manager (YlstETH)              |
+| StrategyMellowSteakhouse (Implementation) | unwrap                         | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Proxy)             | upgradeToAndCall               | ...    | Owner (YlstETH)                |
+| StrategyCompoundRSETH (Implementation)    | renounceOwnership              | ...    | Owner (YlstETH)                |
+| StrategyCompoundRSETH (Implementation)    | transferOwnership              | ...    | Owner (YlstETH)                |
+| StrategyCompoundRSETH (Implementation)    | updateFlashloanHelper          | ...    | Owner (YlstETH)                |
+| StrategyCompoundRSETH (Implementation)    | updateRebalancer               | ...    | Owner (YlstETH)                |
+| StrategyCompoundRSETH (Implementation)    | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                |
+| StrategyCompoundRSETH (Implementation)    | convertToken                   | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | claimUnstake                   | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | onTransferIn                   | ...    | VaultYieldETH                  |
+| StrategyCompoundRSETH (Implementation)    | transferToVault                | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | swapToken                      | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | stake                          | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | unstake                        | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | confirmUnstake                 | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | leverage                       | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | deleverage                     | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | repay                          | ...    | Manager (YlstETH)              |
+| StrategyCompoundRSETH (Implementation)    | claimAndSwap                   | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Proxy)               | upgradeToAndCall               | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3EzETH (Implementation)      | renounceOwnership              | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3EzETH (Implementation)      | transferOwnership              | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3EzETH (Implementation)      | enterProtocol                  | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | updateFlashloanHelper          | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3EzETH (Implementation)      | updateRebalancer               | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3EzETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3EzETH (Implementation)      | onTransferIn                   | ...    | VaultYieldETH                  |
+| StrategyAAVEV3EzETH (Implementation)      | transferToVault                | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | repay                          | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | wrap                           | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | unwrap                         | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | convertToEzETH                 | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | convertFromEzETH               | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | claimExited                    | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | leverage                       | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | deleverage                     | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3EzETH (Implementation)      | claim                          | ...    | Manager (YlstETH)              |
+| StrategyAAVEV3RsETH (Proxy)               | upgradeToAndCall               | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | renounceOwnership              | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | transferOwnership              | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | updateFlashloanHelper          | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | updateRebalancer               | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner (YlstETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | convertToken                   | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | claimUnstake                   | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | onTransferIn                   | ...    | VaultYieldETH                  |
+| StrategyAAVEV3RsETH (Implementation)      | transferToVault                | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | swapToken                      | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | stake                          | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | unstake                        | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | repay                          | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | leverage                       | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | deleverage                     | ...    | Rebalancer 2 (YlstETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | enterProtocol                  | ...    | Rebalancer 2 (YlstETH)         |
+| VaultYieldETH (Proxy)                     | upgradeToAndCall               | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | createStrategy                 | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | removeStrategy                 | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateStrategyLimit            | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | renounceOwnership              | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | transferOwnership              | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateMarketCapacity           | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateManagementFee            | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateManagementFeeClaimPeriod | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateMaxPriceUpdatePeriod     | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateRevenueRate              | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateExitFeeRate              | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateRebalancer               | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateFeeReceiver              | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateRedeemOperator           | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | updateExchangePrice            | ...    | Manager (YlstETH)              |
+| VaultYieldETH (Implementation)            | stakeTo                        | ...    | Manager (YlstETH)              |
+| VaultYieldETH (Implementation)            | migrateMint                    | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | collectManagementFee           | ...    | FeeReceiver (YlstETH)          |
+| VaultYieldETH (Implementation)            | collectRevenue                 | ...    | FeeReceiver (YlstETH)          |
+| VaultYieldETH (Implementation)            | sweep                          | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | pause                          | ...    | Vault Owner                    |
+| VaultYieldETH (Implementation)            | unpause                        | ...    | Vault Owner                    |
+| Manager (YlrsETH)                         | renounceOwnership              | ...    | Owner (YlrsETH)                |
+| Manager (YlrsETH)                         | transferOwnership              | ...    | Owner (YlrsETH)                |
+| Manager (YlrsETH)                         | addOperator                    | ...    | Owner (YlrsETH)                |
+| Manager (YlrsETH)                         | removeOperator                 | ...    | Owner (YlrsETH)                |
+| Manager (YlrsETH)                         | multiCall                      | ...    | Operator                       |
+| RedeemOperator (YlrsETH)                  | renounceOwnership              | ...    | Owner (YlrsETH)                |
+| RedeemOperator (YlrsETH)                  | transferOwnership              | ...    | Owner (YlrsETH)                |
+| RedeemOperator (YlrsETH)                  | updateOperator                 | ...    | Owner (YlrsETH)                |
+| RedeemOperator (YlrsETH)                  | updateFeeReceiver              | ...    | Owner (YlrsETH)                |
+| RedeemOperator (YlrsETH)                  | confirmWithdrawal              | ...    | Manager (YlrsETH)              |
+| RedeemOperator (YlrsETH)                  | sweep                          | ...    | Owner (YlrsETH)                |
+| RedeemOperator (YlrsETH)                  | registerWithdrawal             | ...    | VaultYieldRSETH                |
+| StrategyCompound (Proxy)                  | upgradeToAndCall               | ...    | Owner (YlrsETH)                |
+| StrategyCompound (Implementation)         | renounceOwnership              | ...    | Owner (YlrsETH)                |
+| StrategyCompound (Implementation)         | transferOwnership              | ...    | Owner (YlrsETH)                |
+| StrategyCompound (Implementation)         | updateFlashloanHelper          | ...    | Owner (YlrsETH)                |
+| StrategyCompound (Implementation)         | updateRebalancer               | ...    | Owner (YlrsETH)                |
+| StrategyCompound (Implementation)         | updateSafeProtocolRatio        | ...    | Owner (YlrsETH)                |
+| StrategyCompound (Implementation)         | unstake                        | ...    | Manager (YlrsETH)              |
+| StrategyCompound (Implementation)         | onTransferIn                   | ...    | VaultYieldRSETH                |
+| StrategyCompound (Implementation)         | transferToVault                | ...    | Manager (YlrsETH)              |
+| StrategyCompound (Implementation)         | repay                          | ...    | Manager (YlrsETH)              |
+| StrategyCompound (Implementation)         | leverage                       | ...    | Manager (YlrsETH)              |
+| StrategyCompound (Implementation)         | deleverage                     | ...    | Manager (YlrsETH)              |
+| StrategyCompound (Implementation)         | claimAndSwap                   | ...    | Manager (YlrsETH)              |
+| StrategyAAVEV3RsETH (Proxy)               | upgradeToAndCall               | ...    | Owner (YlrsETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | renounceOwnership              | ...    | Owner (YlrsETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | transferOwnership              | ...    | Owner (YlrsETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | updateFlashloanHelper          | ...    | Owner (YlrsETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | updateRebalancer               | ...    | Owner (YlrsETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | updateSafeProtocolRatio        | ...    | Owner (YlrsETH)                |
+| StrategyAAVEV3RsETH (Implementation)      | convertToken                   | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | claimUnstake                   | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | onTransferIn                   | ...    | VaultYieldRSETH                |
+| StrategyAAVEV3RsETH (Implementation)      | transferToVault                | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | swapToken                      | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | stake                          | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | unstake                        | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | repay                          | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | leverage                       | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | deleverage                     | ...    | Rebalancer 2 (YlrsETH)         |
+| StrategyAAVEV3RsETH (Implementation)      | enterProtocol                  | ...    | Rebalancer 2 (YlrsETH)         |
+| VaultYieldRSETH (Proxy)                   | upgradeToAndCall               | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateMarketCapacity           | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateManagementFee            | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateManagementFeeClaimPeriod | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateMaxPriceUpdatePeriod     | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateRevenueRate              | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateExitFeeRate              | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateRebalancer               | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateUnbackedMinter           | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateFeeReceiver              | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateRedeemOperator           | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | addToken                       | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | removeToken                    | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateExchangePrice            | ...    | Manager (YlrsETH)              |
+| VaultYieldRSETH (Implementation)          | burnUnbacked                   | ...    | 0x0                            |
+| VaultYieldRSETH (Implementation)          | mintUnbacked                   | ...    | 0x0                            |
+| VaultYieldRSETH (Implementation)          | collectManagementFee           | ...    | FeeReceiver (YlstETH, YlrsETH) |
+| VaultYieldRSETH (Implementation)          | collectRevenue                 | ...    | FeeReceiver (YlstETH, YlrsETH) |
+| VaultYieldRSETH (Implementation)          | pause                          | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | unpause                        | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | createStrategy                 | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | removeStrategy                 | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | updateStrategyLimit            | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | renounceOwnership              | ...    | Vault Owner                    |
+| VaultYieldRSETH (Implementation)          | transferOwnership              | ...    | Vault Owner                    |
+| Manager (YlBTCLST)                        | renounceOwnership              | ...    | Owner (YlBTCLST)               |
+| Manager (YlBTCLST)                        | transferOwnership              | ...    | Owner (YlBTCLST)               |
+| Manager (YlBTCLST)                        | addOperator                    | ...    | Owner (YlBTCLST)               |
+| Manager (YlBTCLST)                        | removeOperator                 | ...    | Owner (YlBTCLST)               |
+| Manager (YlBTCLST)                        | multiCall                      | ...    | Operator                       |
+| StrategySolv (Proxy)                      | upgradeToAndCall               | ...    | Owner (YlBTCLST)               |
+| StrategySolv (Implementation)             | updateRebalancer               | ...    | Owner (YlBTCLST)               |
+| StrategySolv (Implementation)             | transferToVault                | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | renounceOwnership              | ...    | Owner (YlBTCLST)               |
+| StrategySolv (Implementation)             | transferOwnership              | ...    | Owner (YlBTCLST)               |
+| StrategySolv (Implementation)             | onTransferIn                   | ...    | Vault (YlBTCLst)               |
+| StrategySolv (Implementation)             | convertToken                   | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | enterPendle                    | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | exitPendle                     | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | enterEqb                       | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | exitEqb                        | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | swapYtToToken                  | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | claim                          | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | claimAll                       | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | claimEqb                       | ...    | Manager (YlBTCLst)             |
+| StrategySolv (Implementation)             | sendXEQB                       | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Proxy)                   | upgradeToAndCall               | ...    | Owner (YlBTCLST)               |
+| StrategyBedrock (Implementation)          | updateRebalancer               | ...    | Owner (YlBTCLST)               |
+| StrategyBedrock (Implementation)          | transferToVault                | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | renounceOwnership              | ...    | Owner (YlBTCLST)               |
+| StrategyBedrock (Implementation)          | transferOwnership              | ...    | Owner (YlBTCLST)               |
+| StrategyBedrock (Implementation)          | onTransferIn                   | ...    | Vault (YlBTCLst)               |
+| StrategyBedrock (Implementation)          | convertToken                   | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | enterPendle                    | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | exitPendle                     | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | exitPendleDualToken            | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | enterEqb                       | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | exitEqb                        | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | swapYtToToken                  | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | claim                          | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | claimEqb                       | ...    | Manager (YlBTCLst)             |
+| StrategyBedrock (Implementation)          | sendXEQB                       | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Proxy)                      | upgradeToAndCall               | ...    | Owner (YlBTCLST)               |
+| StrategyPump (Implementation)             | updateRebalancer               | ...    | Owner (YlBTCLST)               |
+| StrategyPump (Implementation)             | transferToVault                | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | renounceOwnership              | ...    | Owner (YlBTCLST)               |
+| StrategyPump (Implementation)             | transferOwnership              | ...    | Owner (YlBTCLST)               |
+| StrategyPump (Implementation)             | onTransferIn                   | ...    | Vault (YlBTCLst)               |
+| StrategyPump (Implementation)             | convertToken                   | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | enterPendle                    | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | exitPendle                     | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | enterEqb                       | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | exitEqb                        | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | swapYtToToken                  | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | claim                          | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | claimAll                       | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | claimEqb                       | ...    | Manager (YlBTCLst)             |
+| StrategyPump (Implementation)             | sendXEQB                       | ...    | Manager (YlBTCLst)             |
+| Vault (YlBTCLst) (Proxy)                  | upgradeToAndCall               | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateMarketCapacity           | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateManagementFee            | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateManagementFeeClaimPeriod | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateMaxPriceUpdatePeriod     | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateRevenueRate              | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateExitFeeRate              | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateRebalancer               | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateFeeReceiver              | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateRedeemOperator           | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | addToken                       | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | removeToken                    | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateExchangePrice            | ...    | Manager (YlBTCLst)             |
+| Vault (YlBTCLst) (Implementation)         | transferToStrategy             | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | optionalDeposit                | ...    | ['onlyWhiteList']              |
+| Vault (YlBTCLst) (Implementation)         | adminRedeem                    | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | deposit                        | ...    | ['onlyWhiteList']              |
+| Vault (YlBTCLst) (Implementation)         | mint                           | ...    | ['onlyWhiteList']              |
+| Vault (YlBTCLst) (Implementation)         | collectManagementFee           | ...    | FeeReceiver                    |
+| Vault (YlBTCLst) (Implementation)         | collectRevenue                 | ...    | FeeReceiver                    |
+| Vault (YlBTCLst) (Implementation)         | sweep                          | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | pause                          | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | unpause                        | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | createStrategy                 | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | removeStrategy                 | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | updateStrategyLimit            | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | renounceOwnership              | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | transferOwnership              | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | addWhiteList                   | ...    | Vault Owner                    |
+| Vault (YlBTCLst) (Implementation)         | removeWhiteList                | ...    | Vault Owner                    |
+| Manager (YlFBTC)                          | renounceOwnership              | ...    | Vault Owner                    |
+| Manager (YlFBTC)                          | transferOwnership              | ...    | Vault Owner                    |
+| Manager (YlFBTC)                          | addOperator                    | ...    | Vault Owner                    |
+| Manager (YlFBTC)                          | removeOperator                 | ...    | Vault Owner                    |
+| Manager (YlFBTC)                          | multiCall                      | ...    | Operator                       |
+| StrategySolv (Proxy)                      | upgradeToAndCall               | ...    | Vault Owner                    |
+| StrategySolv (Implementation)             | renounceOwnership              | ...    | Vault Owner                    |
+| StrategySolv (Implementation)             | transferOwnership              | ...    | Vault Owner                    |
+| StrategySolv (Implementation)             | updateRebalancer               | ...    | Vault Owner                    |
+| StrategySolv (Implementation)             | onTransferIn                   | ...    | VaultYieldFBTC                 |
+| StrategySolv (Implementation)             | transferToVault                | ...    | Manager (YlFBTC)               |
+| StrategySolv (Implementation)             | enterProtocol                  | ...    | Manager (YlFBTC)               |
+| StrategySolv (Implementation)             | exitProtocol                   | ...    | Manager (YlFBTC)               |
+| StrategySolv (Implementation)             | claimUnstake                   | ...    | Manager (YlFBTC)               |
+| StrategyBedrock (Proxy)                   | upgradeToAndCall               | ...    | Vault Owner                    |
+| StrategyBedrock (Implementation)          | renounceOwnership              | ...    | Vault Owner                    |
+| StrategyBedrock (Implementation)          | transferOwnership              | ...    | Vault Owner                    |
+| StrategyBedrock (Implementation)          | updateRebalancer               | ...    | Vault Owner                    |
+| StrategyBedrock (Implementation)          | onTransferIn                   | ...    | VaultYieldFBTC                 |
+| StrategyBedrock (Implementation)          | transferToVault                | ...    | Manager (YlFBTC)               |
+| StrategyBedrock (Implementation)          | enterProtocol                  | ...    | Manager (YlFBTC)               |
+| StrategyBedrock (Implementation)          | enterPendle                    | ...    | Manager (YlFBTC)               |
+| StrategyBedrock (Implementation)          | exitPendle                     | ...    | Manager (YlFBTC)               |
+| StrategyPumpBTC (Proxy)                   | upgradeToAndCall               | ...    | Vault Owner                    |
+| StrategyPumpBTC (Implementation)          | renounceOwnership              | ...    | Vault Owner                    |
+| StrategyPumpBTC (Implementation)          | transferOwnership              | ...    | Vault Owner                    |
+| StrategyPumpBTC (Implementation)          | updateRebalancer               | ...    | Vault Owner                    |
+| StrategyPumpBTC (Implementation)          | onTransferIn                   | ...    | VaultYieldFBTC                 |
+| StrategyPumpBTC (Implementation)          | transferToVault                | ...    | Manager (YlFBTC)               |
+| StrategyPumpBTC (Implementation)          | enterProtocol                  | ...    | Manager (YlFBTC)               |
+| VaultYieldFBTC (Proxy)                    | upgradeToAndCall               | ...    | Vault Owner                    |
