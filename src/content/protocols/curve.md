@@ -82,7 +82,7 @@ Only the latest versions of each contract implementation were analyzed. While Cu
 
 ## Decentralized Exchange (DEX)
 
-Curve’s DEX is the foundation of all products within the protocol, and user assets within pools are safe, except from smart contract risk. There are three main types of pools:
+Curve’s DEX is the foundation of all products within the protocol. There are three main types of pools:
 
 - **Stableswap**: Stablecoin and stable-asset pools with up to 8 assets
 - **Twocrypto**: Pools with 2 volatile assets
