@@ -131,6 +131,15 @@ New table with all the multisigs
 | StrategyCompound (Implementation)         | [0x21047effcc9dc9f88f47fe823ea9e2453593d7a0](https://etherscan.io/address/0x21047effcc9dc9f88f47fe823ea9e2453593d7a0) |
 | VaultYieldRSETH (Proxy)                   | [0xd87a19fF681AE98BF10d2220D1AE3Fbd374ADE4e](https://etherscan.io/address/0xd87a19fF681AE98BF10d2220D1AE3Fbd374ADE4e) |
 | VaultYieldRSETH (Implementation)          | [0x90639665f88fb7a8258608fcc6d5e2bf8d5dfc01](https://etherscan.io/address/0x90639665f88fb7a8258608fcc6d5e2bf8d5dfc01) |
+| Manager (YlBTCLST)                        | [0x5085B552639cFC0e49Bb645Ae4637F6e55F0F01f](https://etherscan.io/address/0x5085B552639cFC0e49Bb645Ae4637F6e55F0F01f) |
+| StrategySolv (Proxy)                      | [0x103e04A36B1123f6Ba48874AC47d39acbFe20b97](https://etherscan.io/address/0x103e04A36B1123f6Ba48874AC47d39acbFe20b97) |
+| StrategySolv (Implementation)             | [0x41076df3ed1c59860245471b918f423ec44b840d](https://etherscan.io/address/0x41076df3ed1c59860245471b918f423ec44b840d) |
+| StrategyBedrock (Proxy)                   | [0x53a6F68c159518eB1ecFbac5d1e4c77F0A683B26](https://etherscan.io/address/0x53a6F68c159518eB1ecFbac5d1e4c77F0A683B26) |
+| StrategyBedrock (Implementation)          | [0xa22772cf929c4a38a03c927e688a51684f4c6465](https://etherscan.io/address/0xa22772cf929c4a38a03c927e688a51684f4c6465) |
+| StrategyPump (Proxy)                      | [0x54e1C5834A65877d121CC63504cC36A1A10abfD5](https://etherscan.io/address/0x54e1C5834A65877d121CC63504cC36A1A10abfD5) |
+| StrategyPump (Implementation)             | [0xe170ee6fb2222b42362181537a21bd429cf7f1cc](https://etherscan.io/address/0xe170ee6fb2222b42362181537a21bd429cf7f1cc) |
+| Vault (Proxy)                             | [0x6c77bdE03952BbcB923815d90A73a7eD7EC895D1](https://etherscan.io/address/0x6c77bdE03952BbcB923815d90A73a7eD7EC895D1) |
+| Vault (Implementation)                    | [0xa994911ee05de3c183533b2dd68ceeb7490de97c](https://etherscan.io/address/0xa994911ee05de3c183533b2dd68ceeb7490de97c) |
 
 ## All Permission owners
 
