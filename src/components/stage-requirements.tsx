@@ -65,8 +65,7 @@ const StageRequirementSection = ({
   return (
     <AccordionItem 
       value={`stage-${stageNumber}`} 
-      className="border-none" 
-      style={{ marginTop: stageNumber > 0 ? '-16px' : '0', paddingTop: '0' }}
+      className={`border-none pt-0 ${stageNumber > 0 ? '-mt-4' : ''}`}
     >
       <AccordionTrigger className={`text-sm font-semibold pb-1 hover:no-underline hover:opacity-80 ${statusColor}`}>
         {statusIcon} {getStageLabel(stageNumber)}{statusText}
