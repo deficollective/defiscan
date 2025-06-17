@@ -21,7 +21,7 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
   const numericStage = isInfrastructure ? parseInt(currentStage.slice(1)) : currentStage;
   
   return (
-    <div className={cn("w-full max-w-full mx-auto px-4", className)}>
+    <div className={cn("w-full max-w-full mx-auto px-8", className)}>
       
       {/* Continuous progress bar */}
       <div className="relative">
