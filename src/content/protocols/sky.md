@@ -3,7 +3,7 @@ protocol: "Sky"
 website: "https://sky.money/"
 x: "https://x.com/SkyEcosystem"
 github: ["https://github.com/makerdao"]
-defillama_slug: ["sky-lending"]
+defillama_slug: ["sky-lending", "sky-rwa"]
 chain: "Ethereum"
 stage: 0
 reasons: []
