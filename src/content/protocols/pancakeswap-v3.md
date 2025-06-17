@@ -7,7 +7,7 @@ defillama_slug: ["pancakeswap-amm-v3"]
 chain: "Binance"
 stage: 0
 reasons: []
-risks: ["H", "M", "L", "H", "H"]
+risks: ["H", "M", "L", "H", "M"]
 author: ["CookingCryptos"]
 submission_date: "2025-06-06"
 publish_date: "1970-01-01"
@@ -69,7 +69,7 @@ PancakeSwap V3 implements no timelock mechanisms for any critical protocol funct
 
 Users primarily interact with PancakeSwap v3 through its official web interface at [https://pancakeswap.finance](https://pancakeswap.finance), which is developed and maintained by Pancake Labs. PancakeSwap’s frontend code is published under an MIT license [here](https://github.com/pancakeswap/pancake-frontend). The repository’s README contains instructions on how to clone the project, install dependencies, and launch the self-hosted app.
 
-> Accessibility score: High
+> Accessibility score: Medium
 
 ## Conclusion
 
