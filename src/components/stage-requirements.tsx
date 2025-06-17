@@ -67,8 +67,12 @@ const StageRequirementSection = ({
       value={`stage-${stageNumber}`} 
       className={`border-none pt-0 ${stageNumber > 0 ? '-mt-4' : ''}`}
     >
-      <AccordionTrigger className={`text-sm font-semibold pb-1 hover:no-underline hover:opacity-80 ${statusColor}`}>
-        {statusIcon} {getStageLabel(stageNumber)}{statusText}
+      <AccordionTrigger className="text-sm font-semibold pb-1 hover:no-underline hover:opacity-80 text-black text-left">
+        <div className="flex items-center">
+          <span className={statusColor}>{statusIcon}</span>
+          <span className="ml-1">{getStageLabel(stageNumber)}</span>
+          <span className="font-normal ml-0">{statusText}</span>
+        </div>
       </AccordionTrigger>
       {hasRequirements && (
         <AccordionContent className="pb-2 pt-1">
