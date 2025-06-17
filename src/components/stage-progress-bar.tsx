@@ -21,7 +21,7 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
   const numericStage = isInfrastructure ? parseInt(currentStage.slice(1)) : currentStage;
   
   return (
-    <div className={cn("w-full mx-auto", className)}>
+    <div className={cn("w-full max-w-full mx-auto px-4", className)}>
       
       {/* Continuous progress bar */}
       <div className="relative">
@@ -37,9 +37,9 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
         </div>
         
         {/* Stage markers */}
-        <div className="flex justify-between items-center absolute inset-0 px-0">
+        <div className="flex justify-between items-center absolute inset-0 px-4">
           <div className="flex flex-col items-center">
-            <div className={`w-20 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white -translate-x-10 px-2 ${
+            <div className={`w-16 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-1 ${
               numericStage === 0 ? 'border-red-500 text-red-500' :
               numericStage === 1 ? 'border-yellow-500 text-yellow-500' :
               numericStage === 2 ? 'border-green-500 text-green-500' : 
@@ -50,7 +50,7 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
           </div>
           
           <div className="flex flex-col items-center">
-            <div className={`w-20 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-2 ${
+            <div className={`w-16 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-1 ${
               numericStage === 1 ? 'border-yellow-500 text-yellow-500' :
               numericStage === 2 ? 'border-green-500 text-green-500' : 
               'border-gray-300 text-gray-400'
@@ -60,7 +60,7 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
           </div>
           
           <div className="flex flex-col items-center">
-            <div className={`w-20 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white translate-x-10 px-2 ${
+            <div className={`w-16 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-1 ${
               numericStage === 2 ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-400'
             }`}>
               {isInfrastructure ? 'Low' : 'Stage 2'}
