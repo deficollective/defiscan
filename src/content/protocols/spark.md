@@ -3,7 +3,7 @@ protocol: "Spark"
 website: "https://spark.fi"
 x: "https://x.com/sparkdotfi"
 github: ["https://github.com/sparkdotfi"]
-defillama_slug: ["sparklend"]
+defillama_slug: ["sparklend", "spark-liquidity-layer"]
 chain: "Ethereum"
 stage: 0
 reasons: []
