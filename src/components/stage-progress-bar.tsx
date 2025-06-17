@@ -37,8 +37,8 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
         </div>
         
         {/* Stage markers */}
-        <div className="flex justify-between items-center absolute inset-0 px-4">
-          <div className="flex flex-col items-center">
+        <div className="flex justify-between items-center absolute inset-0">
+          <div className="flex flex-col items-center -translate-x-8">
             <div className={`w-16 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-1 ${
               numericStage === 0 ? 'border-red-500 text-red-500' :
               numericStage === 1 ? 'border-yellow-500 text-yellow-500' :
@@ -59,7 +59,7 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
             </div>
           </div>
           
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center translate-x-8">
             <div className={`w-16 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-1 ${
               numericStage === 2 ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-400'
             }`}>
