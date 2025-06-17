@@ -14,6 +14,11 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
   // Debug: log the stage value
   console.log("StageProgressBar - Current stage:", currentStage, typeof currentStage);
   
+  // Check if it's an infrastructure review
+  const isInfrastructure = typeof currentStage === 'string' && currentStage.startsWith('I');
+  
+  // Get the numeric stage for infrastructure reviews
+  const numericStage = isInfrastructure ? parseInt(currentStage.slice(1)) : currentStage;
   
   return (
     <div className={cn("w-full max-w-md mx-auto", className)}>
@@ -26,14 +31,14 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
           style={{ backgroundColor: '#e5e7eb' }}
         >
           {/* Colored progress fill - only render when there's progress */}
-          {(currentStage === 1 || currentStage === 2) && (
+          {(numericStage === 1 || numericStage === 2) && (
             <div
               className="absolute top-0 left-0 h-full rounded-full transition-all duration-500"
               style={{
-                width: currentStage === 1 ? '50%' : 
-                       currentStage === 2 ? '100%' : '0%',
-                backgroundColor: currentStage === 1 ? '#eab308' : 
-                                currentStage === 2 ? '#22c55e' : 'transparent'
+                width: numericStage === 1 ? '50%' : 
+                       numericStage === 2 ? '100%' : '0%',
+                backgroundColor: numericStage === 1 ? '#eab308' : 
+                                numericStage === 2 ? '#22c55e' : 'transparent'
               }}
             />
           )}
@@ -45,17 +50,17 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
             <div
               className="w-20 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white -translate-x-10 px-2"
               style={{
-                borderColor: currentStage === 0 ? '#ef4444' :
-                           currentStage === 1 ? '#eab308' :
-                           currentStage === 2 ? '#22c55e' : '#d1d5db',
+                borderColor: numericStage === 0 ? '#ef4444' :
+                           numericStage === 1 ? '#eab308' :
+                           numericStage === 2 ? '#22c55e' : '#d1d5db',
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                color: currentStage === 0 ? '#ef4444' :
-                       currentStage === 1 ? '#eab308' :
-                       currentStage === 2 ? '#22c55e' : '#9ca3af'
+                color: numericStage === 0 ? '#ef4444' :
+                       numericStage === 1 ? '#eab308' :
+                       numericStage === 2 ? '#22c55e' : '#9ca3af'
               }}
             >
-              Stage 0
+              {isInfrastructure ? 'High' : 'Stage 0'}
             </div>
           </div>
           
@@ -63,15 +68,15 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
             <div
               className="w-20 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white px-2"
               style={{
-                borderColor: currentStage === 1 ? '#eab308' :
-                           currentStage === 2 ? '#22c55e' : '#d1d5db',
+                borderColor: numericStage === 1 ? '#eab308' :
+                           numericStage === 2 ? '#22c55e' : '#d1d5db',
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                color: currentStage === 1 ? '#eab308' :
-                       currentStage === 2 ? '#22c55e' : '#9ca3af'
+                color: numericStage === 1 ? '#eab308' :
+                       numericStage === 2 ? '#22c55e' : '#9ca3af'
               }}
             >
-              Stage 1
+              {isInfrastructure ? 'Medium' : 'Stage 1'}
             </div>
           </div>
           
@@ -79,13 +84,13 @@ export function StageProgressBar({ stage, className }: StageProgressBarProps) {
             <div
               className="w-20 h-6 rounded-md border-2 flex items-center justify-center text-xs font-semibold transition-colors bg-white translate-x-10 px-2"
               style={{
-                borderColor: currentStage === 2 ? '#22c55e' : '#d1d5db',
+                borderColor: numericStage === 2 ? '#22c55e' : '#d1d5db',
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                color: currentStage === 2 ? '#22c55e' : '#9ca3af'
+                color: numericStage === 2 ? '#22c55e' : '#9ca3af'
               }}
             >
-              Stage 2
+              {isInfrastructure ? 'Low' : 'Stage 2'}
             </div>
           </div>
         </div>

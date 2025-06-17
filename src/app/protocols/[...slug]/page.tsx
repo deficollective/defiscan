@@ -111,17 +111,19 @@ export default async function ProtocolPageItem({
               </CardContent>
             </Card>
           </div>
-          <div className="flex flex-col gap-2 row-start-2 col-span-full sm:col-start-3 sm:row-start-1 sm:col-span-2 lg:col-span-1 lg:col-start-4">
-            <Card className="h-full flex items-center justify-center">
-              <CardContent className="pb-0 flex justify-center">
-                <TooltipProvider>
-                  <BigPizzaRosette
-                    values={getRiskDescriptions(protocol.risks!)}
-                  />
-                </TooltipProvider>
-              </CardContent>
-            </Card>
-          </div>
+          {!(typeof protocol.stage === 'string' && protocol.stage.startsWith('I')) && (
+            <div className="flex flex-col gap-2 row-start-2 col-span-full sm:col-start-3 sm:row-start-1 sm:col-span-2 lg:col-span-1 lg:col-start-4">
+              <Card className="h-full flex items-center justify-center">
+                <CardContent className="pb-0 flex justify-center">
+                  <TooltipProvider>
+                    <BigPizzaRosette
+                      values={getRiskDescriptions(protocol.risks!)}
+                    />
+                  </TooltipProvider>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
 
         <div className="mt-12">
