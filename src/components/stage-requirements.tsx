@@ -71,7 +71,7 @@ const StageRequirementSection = ({
         {statusIcon} {getStageLabel(stageNumber)}{statusText}
       </AccordionTrigger>
       {hasRequirements && (
-        <AccordionContent className="pb-2 pt-0 -mt-2">
+        <AccordionContent className="pb-2 pt-1">
           <ul className="text-sm text-muted-foreground space-y-2 ml-6">
             {requirements.map((requirement, index) => (
               <li key={index} className="flex items-start leading-6">
