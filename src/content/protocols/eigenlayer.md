@@ -8,7 +8,7 @@ chain: "Mainnet"
 stage: 0
 reasons: ["add if any"]
 risks: ["x", "x", "x", "x", "x"]
-author: ["author-1", "author-2"]
+author: ["sagaciousyves"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
