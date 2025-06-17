@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Compound-v3 is a lending protocol that accepts a base asset as liquidity and allows borrowing this base asset with a variety of other assets as collateral. Multiple base assets are supported such as USDC, WETH, USDT, wstETH, and USDS. Each base asset represents an isolated lending market managed by a separate instance of the protocol. Compound governance is able to update various parameters for each of these markets.
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -40,7 +40,7 @@ Furthermore, another multisig account, the `PauseGuardian`, has the permission t
 
 The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink or offer a fallback oracle mechanism. The replacement of a stale or untrusted oracle feed requires a Compound governance vote with a delay (see [Exit Window](#exit-window)).
 
-The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. This dependency thus introduces centralization risk in the Compound-v3 protocol.
+The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions. Chainlink Price feeds thus achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
 
 > Autonomy score: High
 
@@ -70,15 +70,53 @@ The protocol could reach Stage 1 by 1) adopting a _Security Council_ setup for t
 
 > Overall score: Stage 0
 
-# Technical Analysis
+# Reviewer notes
+
+⚠️ During our analysis, we noticed many of the contract addresses listed in the [official documentation](https://docs.compound.finance/) are out of date. This is most likely explained by the high frequency of updates to the implementation contracts. The list below was last updated on the 20th of February 2025.
+
+# Protocol Analysis
 
 Below is an overview of the contracts from the Compound V3 protocol.
 
 ![Overview of the compound protocol](./diagrams/compound-v3-overview.png)
 
-## Contracts
+## Upgrade process
 
-⚠️ During our analysis, we noticed many of the contract addresses listed in the [official documentation](https://docs.compound.finance/) are out of date. This is most likely explained by the high frequency of updates to the implementation contracts. The list below was last updated on the 20th of February 2025.
+Any market parameter change requires a new `Comet` deployment. The process is as follows:
+
+1.  new parameters are set using setters in the `Configurator` contract.
+2.  the `ProxyAdmin` contract uses `deployAndUpgradeTo`:
+    1. Deploys a new comet contract through the `Configurator`, which uses the `CometFactory`.
+    2. Updates the corresponding `Comet Proxy` to point to this newly deployed contract.
+
+A malicious update could simply perform the update to the `Comet Proxy`to introduce a malicious `Comet Implementation` contract, effectively stealing funds.
+This is because the `upgrade` function can still be called by the DAO in addition to `deployAndUpgradeTo`, allowing the DAO to deploy `Comet` contracts not created by the `Configurator`.
+
+The process is illustrated below.
+
+![Update scheme for a comet contract](./diagrams/compound-v3-update.png)
+
+# Dependencies
+
+The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink feeds other than checking for a zero-value. The protocol further does not offer a fallback pricing mechanism in case the Chainlink oracle feeds are stale or untrusted. If not performing as expected, Chainlink oracle feeds can only be replaced through a regular Compound governance proposal with a delay (see Exit Window).
+
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
+
+# Governance
+
+A security council called `Pause Guardian` has the power to pause all deposits, withdrawals, and transfers
+in the protocol. The guardian is currently a 4/8 multisig made of Compound DAO community members. The signers announced [on the governance forum](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18) do not match the current [signers set](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c#readProxyContract#F9) . The same multisig is also `Proposal Guardian` and has the power to cancel Governance Proposals before their executions.
+
+## Security Council
+
+| Name              | Account                                                                                                                                                        | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| Pause Guardian    | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://arbiscan.io/address/0x78E6317DD6D43DdbDa00Dce32C20xbbf3f1421D886E9b2c5D716B5192aC998af2012cCbaFc99361a9d) | Multisig 4/8 | ✅          | ❌              | ❌                | ❌             |
+| Proposal Guardian | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c)                                          | Multisig 4/8 | ✅          | ❌              | ❌                | ❌             |
+
+# Contracts & Permissions
+
+## Contracts
 
 &nbsp;
 
@@ -111,7 +149,7 @@ Below is an overview of the contracts from the Compound V3 protocol.
 | TimeLock                           | [0x6d903f6003cca6255D85CcA4D3B5E5146dC33925](https://etherscan.io/address/0x6d903f6003cca6255D85CcA4D3B5E5146dC33925) |
 | Comp                               | [0xc00e94Cb662C3520282E6f5717214004A7f26888](https://etherscan.io/address/0xc00e94Cb662C3520282E6f5717214004A7f26888) |
 
-## Permission owners
+## All Permission Owners
 
 | Name              | Account                                                                                                               | Type         |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -190,39 +228,3 @@ Below is an overview of the contracts from the Compound V3 protocol.
 
 The permissions for all Comet contracts (USDC, WETH, wsETH, USDT, USDS) are similar and therefore only
 represented once as `Comet Proxy` and `Comet Implementation`in the table above.
-
-## Dependencies
-
-The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink feeds other than checking for a zero-value. The protocol further does not offer a fallback pricing mechanism in case the Chainlink oracle feeds are stale or untrusted. If not performing as expected, Chainlink oracle feeds can only be replaced through a regular Compound governance proposal with a delay (see Exit Window).
-
-The Chainlink oracle system itself is upgradeable potentially resulting in the publishing of unintended or malicious prices. The permissions to upgrade are controlled by a [multisig account](https://etherscan.io/address/0x21f73D42Eb58Ba49dDB685dc29D3bF5c0f0373CA) with a 4-of-9 signers threshold. This multisig account is listed in the Chainlink docs but signers are not publicly announced. The Chainlink multisig thus does not suffice the Security Council requirements specified by either L2Beat or DeFiScan resulting in a High centralization score.
-
-## Upgrade process
-
-Any market parameter change requires a new `Comet` deployment. The process is as follows:
-
-1.  new parameters are set using setters in the `Configurator` contract.
-2.  the `ProxyAdmin` contract uses `deployAndUpgradeTo`:
-    1. Deploys a new comet contract through the `Configurator`, which uses the `CometFactory`.
-    2. Updates the corresponding `Comet Proxy` to point to this newly deployed contract.
-
-A malicious update could simply perform the update to the `Comet Proxy`to introduce a malicious `Comet Implementation` contract, effectively stealing funds.
-This is because the `upgrade` function can still be called by the DAO in addition to `deployAndUpgradeTo`, allowing the DAO to deploy `Comet` contracts not created by the `Configurator`.
-
-The process is illustrated below.
-
-![Update scheme for a comet contract](./diagrams/compound-v3-update.png)
-
-# Security Council
-
-A security council called `Pause Guardian` has the power to pause all deposits, withdrawals, and transfers
-in the protocol. The guardian is currently a 4/8 multisig made of Compound DAO community members. The signers announced [on the governance forum](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18) do not match the current [signers set](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c#readProxyContract#F9) . The same multisig is also `Proposal Guardian` and has the power to cancel Governance Proposals before their executions.
-
-&nbsp;
-
-| Requirement                                             | Pause Guardian | Proposal Guardian |
-| ------------------------------------------------------- | -------------- | ----------------- |
-| At least 7 signers                                      | ✅             | ✅                |
-| At least 51% threshold                                  | ❌             | ❌                |
-| At least 50% non-insider signers                        | ❌             | ❌                |
-| Signers are publicly announced (with name or pseudonym) | ❌             | ❌                |
