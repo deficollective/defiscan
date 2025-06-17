@@ -4,7 +4,7 @@ website: "https://venus.io/"
 x: "https://x.com/VenusProtocol"
 github: ["https://github.com/VenusProtocol"]
 defillama_slug: ["venus"]
-chain: "BSC"
+chain: "Binance"
 stage: 0
 reasons: ["remove", "if none"]
 risks: ["x", "x", "x", "x", "x"]
@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 Note: This report only covers the core pool which has 2B TVL, while isolated pools only have 3.6M
 
-# Overview
+# Ratings
 
 ## Chain
 
@@ -69,7 +69,45 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 
 > Accessibility score: Low/Medium/High
 
-# Technical Analysis
+## Conclusion
+
+Some text in form of:
+
+The xyz protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks Stage 0.
+
+The protocol could reach Stage 1 by ...
+
+The project additionally could advance to Stage 2 if ...
+
+# Reviewer's Notes
+
+(Here, anything worth mentioning about what critical permissions you excluded from the scope or some elements that xyz protocol does in a unique way. If nothing seems relevant, just say that :)
+
+⚠️ During our analysis, we identified ...
+
+# Protocol Analysis
+
+Here include the diagram. Please explain what the main contracts are doing within the diagram.
+
+# Dependencies
+
+Go into more detail of the oracle, bridge, or other dependency the defi protocol is using
+
+# Governance
+
+## Relevant Subsection
+
+Here anything relevant to the governance, in this case it could be what you highlighted in "Upgrade Process"
+
+## Security Council
+
+New table with all the multisigs
+
+| Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| Team Multisig | [0x123](https://etherscan.io/address/0x123) | Multisig | ✅          | ❌              | ❌                | ✅             |
+
+# Contracts & Permissions
 
 ## Contracts
 
@@ -220,24 +258,3 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 | contract name | functionname | First sentence: what it does technically, e.g "It assigns a new address to the owner variable".                                      | owner of the permission |
 | contract name | functionname | Second sentence: what is the impact within the system, e.g "The owner is permissioned to raise fees".                                | owner of the permission |
 | contract name | functionname | Third sentence: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield. | owner of the permission |
-
-## Dependencies
-
-Explain the autonomy section in more technical details.
-
-## Exit Window
-
-Explain the exit window in more technical details.
-
-# Security Council
-
-See http://defiscan.info/learn-more#security-council-requirements for guidance.
-
-change ✅ or ❌ accordingly
-
-| ✅ /❌ | Requirement                                             |
-| ------ | ------------------------------------------------------- |
-| ❌     | At least 7 signers                                      |
-| ❌     | At least 51% threshold                                  |
-| ❌     | At least 50% non-insider signers                        |
-| ❌     | Signers are publicly announced (with name or pseudonym) |
