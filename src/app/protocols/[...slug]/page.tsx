@@ -14,6 +14,8 @@ import { ProtocolLinks } from "@/components/protocol/links";
 import { Separator } from "@/components/ui/separator";
 import { Stage } from "@/lib/types";
 import { StageBadge } from "@/components/stage";
+import { StageProgressBar } from "@/components/stage-progress-bar";
+import { StageRequirements } from "@/components/stage-requirements";
 import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import Link from "next/link";
 
@@ -84,21 +86,27 @@ export default async function ProtocolPageItem({
             <div className="mt-auto" />
 
             <Separator className="w-full mt-2 mb-2" />
+            <StageBadge
+              stage={protocol.stage! as Stage}
+              className="h-8 mb-2 self-start"
+              reasons={protocol.reasons}
+            />
             <ProtocolLinks protocol={protocol} />
           </div>
           <div className="col-span-full lg:col-span-2">
             <Card className="h-full">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <StageBadge
+                  <h2 className="text-xl font-semibold mb-4 text-primary">Protocol Decentralization</h2>
+                  <StageProgressBar 
                     stage={protocol.stage! as Stage}
-                    className="h-8 mb-4 mx-auto"
-                    reasons={protocol.reasons}
+                    className="mb-4"
                   />
-                  <h2 className="text-xl font-semibold mb-2">Protocol Overview</h2>
-                  <p className="text-muted-foreground">
-                    This section will contain the main protocol information and description.
-                  </p>
+                  <StageRequirements 
+                    stage={protocol.stage! as Stage}
+                    stage_requirements={protocol.stage_requirements}
+                    className="mt-4 text-left"
+                  />
                 </div>
               </CardContent>
             </Card>

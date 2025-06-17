@@ -69,6 +69,11 @@ const reviews = defineCollection({
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
       ]),
       reasons: ReasonSetSchema,
+      stage_requirements: s.tuple([
+        s.array(s.string()),
+        s.array(s.string()),
+        s.array(s.string())
+      ]).optional(),
       author: s.array(s.string()),
       submission_date: s.isodate(),
       publish_date: s.isodate(),

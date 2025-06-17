@@ -7,6 +7,7 @@ author: ["mmilien_"]
 submission_date: "2024-11-27"
 publish_date: "2025-05-21"
 update_date: "1970-01-01"
+stage_requirements: [["Funds are not in a centralized custody"], ["Immutable contracts"], ["Reward token is not in a centralized control", "All dependencies are of low centralization"]]
 ---
 
 # Summary

@@ -7,6 +7,7 @@ author: ["mmilien_"]
 submission_date: "2025-04-09"
 publish_date: "2025-06-05"
 update_date: "1970-01-01"
+stage_requirements: [["Funds are not in a centralized custody"], ["Critical dependency on Sky"], ["All dependencies have low centralization"]]
 ---
 
 # Summary

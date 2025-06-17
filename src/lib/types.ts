@@ -29,6 +29,7 @@ export type Review = {
   chain: string;
   instance?: string;
   tvl: number | "n/a";
+  stage_requirements?: [string[], string[], string[]];
 };
 
 export interface Project {
