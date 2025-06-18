@@ -3,7 +3,7 @@ import {
   reviews as allReviews,
   protocols as allProtocols,
 } from "#site/content";
-import { BigPizzaRosette } from "@/components/rosette/big-rosette";
+import { DimensionBadgesContainer } from "@/components/dimension-badges-container";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
@@ -16,7 +16,6 @@ import { Stage } from "@/lib/types";
 import { StageBadge } from "@/components/stage";
 import { StageProgressBar } from "@/components/stage-progress-bar";
 import { StageRequirements } from "@/components/stage-requirements";
-import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
 import Link from "next/link";
 
 import "@/styles/mdx.css";
@@ -113,13 +112,14 @@ export default async function ProtocolPageItem({
           </div>
           {!(typeof protocol.stage === 'string' && protocol.stage.startsWith('I')) && (
             <div className="flex flex-col gap-2 row-start-2 col-span-full sm:col-start-3 sm:row-start-1 sm:col-span-2 lg:col-span-1 lg:col-start-4">
-              <Card className="h-full flex items-center justify-center">
-                <CardContent className="pb-0 flex justify-center">
-                  <TooltipProvider>
-                    <BigPizzaRosette
+              <Card className="h-full">
+                <CardContent className="p-0 w-full h-full">
+                  <div className="text-center" style={{ marginLeft: '2px', marginRight: '2px' }}>
+                    <h2 className="text-xl font-semibold mb-4 text-primary mt-6">Risk Areas</h2>
+                    <DimensionBadgesContainer
                       values={getRiskDescriptions(protocol.risks!)}
                     />
-                  </TooltipProvider>
+                  </div>
                 </CardContent>
               </Card>
             </div>
