@@ -112,9 +112,9 @@ At the time of writing there are 26 public oracles curated by Chronicle Labs dep
 | Name               | Account                                                                                                                 | Type         |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Chronicle Multisig | [0xc8910d85511dfe915630bfccb6bf98973e67f827](https://etherscan.io/address/0xc8910d85511dfe915630bfccb6bf98973e67f827)   | Multisig 2/3 |
-| Undeclared EOA     | [0x74258a92611e029b748f79c50024dd851339db15](https://etherscan.io/address/0x0x74258a92611e029b748f79c50024dd851339db15) | EOA          |
-| Undeclared EOA     | [0x39abd7819e5632fa06d2ecbba45dca5c90687ee3](https://etherscan.io/address/0x0x39abd7819e5632fa06d2ecbba45dca5c90687ee3) | EOA          |
-| Undeclared EOA     | [0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b](https://etherscan.io/address/0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b)   | EOA          |
+| Chronicle EOA 1    | [0x74258a92611e029b748f79c50024dd851339db15](https://etherscan.io/address/0x0x74258a92611e029b748f79c50024dd851339db15) | EOA          |
+| Chronicle EOA 2    | [0x39abd7819e5632fa06d2ecbba45dca5c90687ee3](https://etherscan.io/address/0x0x39abd7819e5632fa06d2ecbba45dca5c90687ee3) | EOA          |
+| Chronicle EOA 3    | [0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b](https://etherscan.io/address/0xc50dfedb7e93ef7a3daccad7987d0960c4e2cd4b)   | EOA          |
 
 The EOAs are Chronicle wallets authorized on the ValidatorRegistry long-term. However, the ValidatorRegistry doesn’t impact the security of the oracle contracts, it simply provides public data for verifying validator public keys. In addition, those wallets may temporarily be granted admin privileges on newly deployed oracle during the setup phase. Authorization on oracle contracts is renounced before they go officially live, meaning before customers are given read access.
 
