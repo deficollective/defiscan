@@ -33,14 +33,15 @@ While L2beat's "stages" framework is commonly used to evaluate Ethereum Layer 2 
 PancakeSwap V3 presents several upgradeability vectors that primarily affect revenues and expected returns rather than users' principal funds.
 
 ### Protocol Infrastructure Upgradeability
-[Multisig 1](#security-council) controls the `PCSV3FeeHandler` proxy through `upgradeTo` and `upgradeToAndCall` functions, allowing complete replacement of contract logic without restrictions. The proxy has extensive authority over the factory contract through functions like `setOwner`, `enableFeeAmount`, `setWhiteListAddress`, and `setFeeAmountExtraInfo`, controlling pool creation and operation parameters.
 
-[Multisig 1](#security-council) can modify connections between pools and farming contracts via `setLmPool` and `setLmPoolDeployer`, redirecting rewards to different contracts without affecting liquidity positions themselves.
+The PancakeSwap Team which owns [Multisig 1](#security-council) administers PancakeSwap V3 through the upgradeable `PCSV3FeeHandler` contract, which serves as the primary interface for protocol management. This includes factory ownership transfers, fee configurations, and parameter updates. The contract's upgradeability via `upgradeTo` and `upgradeToAndCall` is limited to administrative functions, keeping core AMM logic immutable.
+
+The `PancakeV3Factory`, controlled through `PCSV3FeeHandler`, manages reward distributions via `setLmPool` and `setLmPoolDeployer`. These functions allow redirecting farming incentives without affecting underlying liquidity positions. While the upgrade capability introduces risks related to administrative control, the design ensures core trading functionality remains unaffected.
 
 ### Fees and Rewards System Upgradeability
 [Multisig 1](#security-council) can adjust protocol fees up to 40% which are deducted from LP earnings. This would affect future revenue distribution but not principal capital nor unclaimed yield.
 
-[Multisig 2](#security-council) maintains complete control over the CAKE reward distribution system. The multisig can halt all CAKE rewards across the protocol immediately, and modify allocation points to redistribute rewards between different pools, effectively changing the economic incentives for liquidity providers in specific token pairs.
+[Multisig 2](#security-council) maintains complete control over the `CAKE` reward distribution system. The multisig can halt all `CAKE` rewards across the protocol immediately, and modify allocation points to redistribute rewards between different pools, effectively changing the economic incentives for liquidity providers in specific token pairs.
 
 For the distribution of `CAKE` the reward system depends on [Address 3](#security-council) triggering `performUpkeep()` on `MasterChefV3KeeperV1`. Failure to execute this function or [Multisig 2](#security-council) calling `pause()` would halt reward distribution after the current period and would reduce future yield.
 
