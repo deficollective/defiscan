@@ -40,7 +40,7 @@ PancakeSwap V3 presents several upgradeability vectors that primarily affect rev
 ### Fees and Rewards System Upgradeability
 [Multisig 1](#security-council) can adjust protocol fees up to 40% which are deducted from LP earnings. This would affect future revenue distribution but not principal capital nor unclaimed yield.
 
-[Multisig 2](#security-council) controls reward distribution through multiple functions in `MasterChefV3`: `setEmergency` can halt new `CAKE` rewards, `setLMPoolDeployer` affects future farming pools, and `set` can modify allocation points, diluting or removing rewards from specific pools. The `add` function determines which token pairs receive rewards and in what proportion.
+[Multisig 2](#security-council) maintains complete control over the CAKE reward distribution system. The multisig can halt all CAKE rewards across the protocol immediately, and modify allocation points to redistribute rewards between different pools, effectively changing the economic incentives for liquidity providers in specific token pairs.
 
 For the distribution of `CAKE` the reward system depends on [Address 3](#security-council) triggering `performUpkeep()` on `MasterChefV3KeeperV1`. Failure to execute this function or [Multisig 2](#security-council) calling `pause()` would halt reward distribution after the current period and would reduce future yield.
 
