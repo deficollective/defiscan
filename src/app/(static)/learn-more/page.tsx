@@ -120,14 +120,6 @@ const stagesData = [
       '✅ At least "Low" risk score for Chain, Autonomy, Exit Window, Accessibility',
     ],
   },
-  {
-    stage: "Review",
-    description:
-      "The review of a protocol cannot be completed due to missing information or a change in conditions. As a result, the analysis is incomplete or inaccurate and the Stage unclear.",
-    qualifications: [
-      "✅ Analysis is in the process of being completed, corrected or reviewed",
-    ],
-  },
 ];
 
 const securityCouncilRequirements = [
@@ -160,40 +152,50 @@ function createIdFromTitle(title: string) {
 const IntroSection = () => (
   <>
     <a href={`#${createIdFromTitle("WTF is DeFiScan?")}`}>
-      <h2
+      <h1
         id={createIdFromTitle("WTF is DeFiScan?")}
+        className="inline-block tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
         style={{ scrollMarginTop: "100px" }}
       >
         {introContent.title}
-      </h2>
+      </h1>
     </a>
 
-    <div className="">
+    <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
       {introContent.paragraphs.map((paragraph, index) => (
         <p key={index} className={index > 0 ? "mt-4" : ""}>
           {paragraph}
         </p>
       ))}
-      <ul className="">
+      <ul className="list-disc ml-6">
         {introContent.bulletPoints.map((point, index) => (
           <li key={index}>{point}</li>
         ))}
       </ul>
-      <h2 className="">{introContent2.title}</h2>
+      <br></br>
+      <h1 className="inline-block tracking-tight mb-6 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
+        {introContent2.title}
+      </h1>
       {introContent2.paragraphs.map((paragraph, index) => (
         <p key={index} className={index > 0 ? "mt-4" : ""}>
           {paragraph}
         </p>
       ))}
-      <ul className="">
+      <ul className="list-disc ml-6">
         {introContent2.bulletPoints.map((point, index) => (
           <li key={index}>{point}</li>
         ))}
       </ul>
-      <p className="">
+      <p className="mt-4">
         Here we provide an overview of the framework. For a more detailed
         discussion, please refer to the introduction{" "}
-        <a href={introContent.blogLink.url}>{introContent.blogLink.text}</a>.
+        <a
+          href={introContent.blogLink.url}
+          className="font-medium text-primary hover:underline"
+        >
+          {introContent.blogLink.text}
+        </a>
+        .
       </p>
     </div>
   </>
@@ -202,15 +204,16 @@ const IntroSection = () => (
 const RisksSection = () => (
   <>
     <a href={`#${createIdFromTitle("DeFi Centralization Risks")}`}>
-      <h2
+      <h1
         id={createIdFromTitle("DeFi Centralization Risks")}
+        className="inline-block mt-10 tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
         style={{ scrollMarginTop: "100px" }}
       >
         DeFi Centralization Risks
-      </h2>
+      </h1>
     </a>
 
-    <div className="">
+    <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
       {/* Mobile Accordion View */}
       <div className="md:hidden">
         <Accordion type="single" collapsible className="w-full">
@@ -282,15 +285,16 @@ const RisksSection = () => (
 const StagesSection = () => (
   <>
     <a href={`#${createIdFromTitle("DeFi Stages Framework")}`}>
-      <h2
+      <h1
         id={createIdFromTitle("DeFi Stages Framework")}
+        className="inline-block mt-10 tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
         style={{ scrollMarginTop: "100px" }}
       >
         DeFi Stages Framework
-      </h2>
+      </h1>
     </a>
 
-    <div className="">
+    <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
       {/* Mobile Accordion View */}
       <div className="md:hidden">
         <Accordion type="single" collapsible className="w-full">
@@ -354,28 +358,25 @@ const StagesSection = () => (
 const SecurityCouncilSection = () => (
   <>
     <a href={`#${createIdFromTitle("Security Council Requirements")}`}>
-      <h2
+      <h1
         id={createIdFromTitle("Security Council Requirements")}
-        className=""
+        className="mt-10 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
         style={{ scrollMarginTop: "100px" }}
       >
         Security Council Requirements
-      </h2>
+      </h1>
     </a>
 
-    <div className="">
-      <p className="">
-        A Security Council can represent an effective intermediate step of
-        decentralized control over permissions that cannot be revoked or
-        protected with an Exit Window. In particular, a Security Council enables
-        a protocol to mitigate risks of centralized control over such
-        permissions and enter Stage 1.
+    <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
+      <p className="mb-4">
+        A Security Council can represent an effective intermediate step of decentralized control over permissions that cannot be revoked or protected with an Exit Window.
+        In particular, a Security Council enables a protocol to mitigate risks of centralized control over such permissions and enter Stage 1.
       </p>
-      <p className="">
-        Any multisig account with the following minimal requirements is an
-        acceptable Security Council setup:
+      <p className="mb-4">
+        Any multisig account with the following minimal requirements is an acceptable
+        Security Council setup:
       </p>
-      <ul className="">
+      <ul className="list-disc ml-6">
         {securityCouncilRequirements.map((requirement, index) => (
           <li key={index}>{requirement}</li>
         ))}
@@ -421,7 +422,7 @@ const OthersSection = () => (
 
 export default function LearnMorePage() {
   return (
-    <div className="container relative mb-20 max-w-6xl py-6 lg:py-10 prose prose-headings:text-primary marker:text-gray-600">
+    <div className="container relative mb-20 max-w-6xl py-6 lg:py-10">
       <IntroSection />
       <RisksSection />
       <StagesSection />
