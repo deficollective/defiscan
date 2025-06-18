@@ -45,7 +45,8 @@ PancakeSwap V3 presents several upgradeability vectors that primarily affect rev
 For the distribution of `CAKE` the reward system depends on [Address 3](#security-council) triggering `performUpkeep()` on `MasterChefV3KeeperV1`. Failure to execute this function or [Multisig 2](#security-council) calling `pause()` would halt reward distribution after the current period and would reduce future yield.
 
 ### User Position Management Upgradeability
-The `NonfungiblePositionManager` contract is owned by [Multisig 1](#security-council). This contract does not implement a proxy upgrade pattern, limiting upgradeability to parameter changes via owner functions.
+
+The `NonfungiblePositionManager` contract is non-upgradeable and doesn't implement an ownership mechanism. This contract is immutable after deployment, with no privileged addresses that can modify its behavior.
 
 For staked positions, [Multisig 2](#security-council) controls the `MasterChefV3` contract which holds position NFTs. The `updateFarmBoostContract` function allows replacement of reward multiplier logic, affecting reward distribution fairness without compromising principal capital.
 
@@ -118,7 +119,7 @@ The critical link in this system is the `MasterChefV3KeeperV1` contract, which [
 
 ## User Trading & Liquidity Management
 
-Users interact with PancakeSwap V3 through a multi-contract architecture centered around concentrated liquidity positions. The `NonfungiblePositionManager` contract, owned by [Multisig 2](#security-council), serves as the primary entry point for liquidity provision. This contract enables users to create positions by specifying token pairs, fee tiers, and custom price ranges, then mints an NFT representing ownership of that position. When a position is created, the underlying liquidity is deposited directly into the corresponding `PancakeV3Pool` contract while the NFT maintains a record of ownership rights and position parameters.
+Users interact with PancakeSwap V3 through a multi-contract architecture centered around concentrated liquidity positions. The `NonfungiblePositionManager` contract serves as the primary entry point for liquidity provision. This contract enables users to create positions by specifying token pairs, fee tiers, and custom price ranges, then mints an NFT representing ownership of that position. When a position is created, the underlying liquidity is deposited directly into the corresponding `PancakeV3Pool` contract while the NFT maintains a record of ownership rights and position parameters.
 
 The liquidity position management flow follows a precise sequence: users interact with `NonfungiblePositionManager` to create, modify, or collect fees from positions. The `NonfungiblePositionManager` communicates with the appropriate `PancakeV3Pool` contract to adjust on-chain liquidity. All position metadata is stored within the NFT token structure, enabling transferability and flexible management.
 
