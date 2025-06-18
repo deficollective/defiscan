@@ -38,7 +38,7 @@ PancakeSwap V3 presents several upgradeability vectors that primarily affect rev
 [Multisig 1](#security-council) can modify connections between pools and farming contracts via `setLmPool` and `setLmPoolDeployer`, redirecting rewards to different contracts without affecting liquidity positions themselves.
 
 ### Fees and Rewards System Upgradeability
-[Multisig 1](#security-council) can adjust protocol fees up to 40% via `setFactoryFeeProtocol` and extract accumulated fees through `collectProtocol` to any address. These actions affect future revenue distribution but not principal capital.
+[Multisig 1](#security-council) can adjust protocol fees up to 40% which are deducted from LP earnings. This would affect future revenue distribution but not principal capital nor unclaimed yield.
 
 [Multisig 2](#security-council) controls reward distribution through multiple functions in `MasterChefV3`: `setEmergency` can halt new `CAKE` rewards, `setLMPoolDeployer` affects future farming pools, and `set` can modify allocation points, diluting or removing rewards from specific pools. The `add` function determines which token pairs receive rewards and in what proportion.
 
