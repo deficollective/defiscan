@@ -42,7 +42,7 @@ PancakeSwap V3 presents several upgradeability vectors that primarily affect rev
 
 [Multisig 2](#security-council) controls reward distribution through multiple functions in `MasterChefV3`: `setEmergency` can halt new `CAKE` rewards, `setLMPoolDeployer` affects future farming pools, and `set` can modify allocation points, diluting or removing rewards from specific pools. The `add` function determines which token pairs receive rewards and in what proportion.
 
-The reward system depends on [Address 3](#security-council) triggering `performUpkeep()` on `MasterChefV3KeeperV1`. Failure to execute this function or [Multisig 2](#security-council) calling `pause()` would halt reward distribution after the current period.
+For the distribution of `CAKE` the reward system depends on [Address 3](#security-council) triggering `performUpkeep()` on `MasterChefV3KeeperV1`. Failure to execute this function or [Multisig 2](#security-council) calling `pause()` would halt reward distribution after the current period and would reduce future yield.
 
 ### User Position Management Upgradeability
 The `NonfungiblePositionManager` contract is owned by [Multisig 1](#security-council). This contract does not implement a proxy upgrade pattern, limiting upgradeability to parameter changes via owner functions.
