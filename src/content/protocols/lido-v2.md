@@ -79,7 +79,7 @@ Lido exposes a _High Centralization_ risk score in terms of _Upgradeability_ and
 
 Lido could reach _Stage 1_ by enforcing a _7-day Exit Window_ to the critical smart contract upgrades or any action that may result in the _loss of user funds_ or adopting a _Security Council_ to safeguard those actions. It would also need to respect our [security council requirements](https://defiscan.info/learn-more) for their already implemented [DepositSecurityModule](#security-council).
 
-Due to its dependency on the [Consensus Committee](#security-council) and [DepositSecurityModule](#security-council), we do not see a way for Lido to become _Stage 2_ at this point, if not by replacing those committees and increasing its _Exit Window_ to 30 days.
+Lido could reach _Stage 2_ by having a 30-day _Exit Window_ and replacing the [Consensus Committee](#security-council) and [DepositSecurityModule](#security-council) by solutions with low centralization.
 
 > Overall score: Stage 0
 
