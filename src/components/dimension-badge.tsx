@@ -68,18 +68,26 @@ const DimensionBadgeInner = ({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }) => {
+  // Get pie chart inspired colors
+  const getBgColor = () => {
+    switch (sentiment) {
+      case "low": return "#4ade80"; // green-400 (between green-300 and green-500)
+      case "medium": return "#facc15"; // yellow-400 (between yellow-200 and yellow-500)  
+      case "high": return "#ea580ce6"; // orange-600 at 90% opacity
+      case "neutral":
+      case "UnderReview":
+      default: return "#9ca3af"; // gray-400
+    }
+  };
+
   return (
     <div
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      style={{ backgroundColor: getBgColor() }}
       className={cn(
-        "border-none text-white rounded mx-auto bg-gray-500 flex justify-center w-full h-8 cursor-pointer items-center text-xs font-semibold",
-        // Color mapping based on sentiment
-        sentiment === "low" && "bg-green-500",
-        sentiment === "medium" && "bg-yellow-500", 
-        sentiment === "high" && "bg-red-500",
-        (sentiment === "neutral" || sentiment === "UnderReview") && "bg-gray-500",
+        "border-none text-white rounded mx-auto flex justify-center w-full h-8 cursor-pointer items-center text-xs font-semibold",
         className
       )}
     >

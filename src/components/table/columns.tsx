@@ -92,7 +92,7 @@ export const createColumns = (
     },
     sortingFn: "alphanumeric",
     meta: {
-      responsiveHidden: true,
+      responsiveHidden: false,
     },
   },
   {
@@ -289,6 +289,9 @@ export const createColumns = (
       return <div className="text-center">{type as string}</div>;
     },
     sortingFn: "alphanumeric",
+    meta: {
+      responsiveHidden: true,
+    },
   },
   {
     id: "protocols",

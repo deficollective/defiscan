@@ -99,7 +99,7 @@ export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="border-border">
-            {protocol.chain}
+            {getProtocolDisplayName(protocol.chain, protocol.instance)}
             <ChevronDown className="w-3 h-3 ml-auto " />
           </Button>
         </DropdownMenuTrigger>
