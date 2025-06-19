@@ -72,7 +72,7 @@ In addition to that, multiple third-party frontends, applications and wallets, s
 
 ## Conclusion
 
-Lido receives a _High Centralization_ score in terms of _Upgradeability_ and _Exit Window_. This is due to its contracts allowing for critical upgrades that are not protected with a sufficient _Exit Window_. Furthermore, its [DepositSecurityModule](#security-council) multisig exposes over critical permissions without . For these reasons, Lido achieves **Stage 0**.
+Lido receives a _High Centralization_ score in terms of _Upgradeability_ and _Exit Window_. This is due to its contracts allowing for critical upgrades that are not protected with a sufficient _Exit Window_. Furthermore, its [DepositSecurityModule](#security-council) multisig exposes critical permissions without meeting the Security Council requirements. For these reasons, Lido achieves **Stage 0**.
 
 Lido could reach _Stage 1_ by enforcing a _7-day Exit Window_ to the critical smart contract upgrades or any action that may result in the _loss of user funds_ or adopting a _Security Council_ to safeguard those actions. It would also need to update the [DepositSecurityModule](#security-council) to a _Security Council_.
 
