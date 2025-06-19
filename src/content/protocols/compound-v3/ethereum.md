@@ -7,6 +7,23 @@ author: ["mmilien_"]
 submission_date: "2025-01-26"
 publish_date: "2025-03-18"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      "Assets are not in custody by a centralized entity",
+      "All contracts are verified",
+      "Source-available codebase",
+      "Public documentation exists",
+    ],
+    [
+      "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
+      "Dependency with a High centralization risk score without mitigation",
+    ],
+    [
+      "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+      "Existing dependencies with High or Medium centralization score and without mitigation measures in place",
+    ],
+  ]
 ---
 
 # Summary

@@ -16,6 +16,17 @@ author: ["mmilien"]
 submission_date: "2024-11-12"
 publish_date: "2025-01-08"
 update_date: "2025-01-31"
+stage_requirements:
+  [
+    [
+      "Assets are not in custody by a centralized entity",
+      "All contracts are verified",
+      "Source-available codebase",
+      "Public documentation exists",
+    ],
+    [],
+    [],
+  ]
 ---
 
 # Summary

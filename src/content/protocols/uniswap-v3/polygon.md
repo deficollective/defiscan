@@ -16,6 +16,17 @@ author: ["mmilien", "CookingCryptos", "sagaciousyves"]
 submission_date: "2025-01-16"
 publish_date: "2025-01-22"
 update_date: "2025-01-31"
+stage_requirements:
+  [
+    [
+      "Assets are not in custody by a centralized entity",
+      "All contracts are verified",
+      "Source-available codebase",
+      "Public documentation exists",
+    ],
+    [""],
+    [""],
+  ]
 ---
 
 # Summary
