@@ -16,11 +16,10 @@ update_date: "1970-01-01"
 
 # Summary
 
-Lido is a liquid-staking protocol. Liquid staking allows users to delegate their `ETH` for staking to a set
-of _Node Operators_ who run validators with `ETH` staked in Lido. In exchange for their `ETH` users get `stETH` (staked `ETH`),
-a token issued by Lido which represents the staked `ETH`. This token can then be used throughout DeFi in other protocols, for example, as collateral. Liquid staking removes barriers to entry by allowing users to stake without minimum, while keeping their assets liquid. Lido takes a 10% fee on the yield, split between the _Lido Treasury_ and _Node Operators_.
+_Lido V2_ is a liquid-staking protocol. Liquid staking allows users to deposit `ETH` for staking to a set
+of _Node Operators_ who run validators with `ETH` staked in Lido. In exchange for depositing `ETH` users get `stETH`, _Liquid staked Ether_, a token issued by Lido which represents the staked `ETH`. This token can then be used throughout DeFi in other protocols, for example, as collateral. Lido takes a 10% fee on the yield, split between the _Lido Treasury_ and _Node Operators_.
 
-Lido V2 uses a system of _Staking Modules_ as explained in the [Protocol Analysis](#protocol-analysis). Each _Staking Module_ has its own set of _Node Operators_, incentive mechanisms, and potential penalties. There currently are three modules: the _Curated_, _Simple-DVT_, and _Community_ staking modules. Validators in the first two have to be approved by governance, whereas anyone can become a _Node Operator_ for the _Community Staking Module_ by depositing a bond.
+_Lido V2_ uses a system of _Staking Modules_ as explained in the [Protocol Analysis](#protocol-analysis). Each _Staking Module_ has its own set of _Node Operators_, incentive mechanisms, and potential penalties. Currently three modules exist: the _Curated_, _Simple-DVT_, and _Community_ staking modules. Validators in the first two have to be approved by _Lido Governance_, whereas anyone can become a _Node Operator_ for the _Community Staking Module_ by depositing a bond.
 
 # Ratings
 
@@ -33,59 +32,57 @@ Ethereum mainnet deployment.
 
 ## Upgradeability
 
-Most critical contracts in the Lido protocol can be upgraded. In particular, this includes the main `Lido` contract which
-holds all the `ETH` staked with Lido, as well as the rewards and withdrawal contracts that receive the yield. Upgrading those contracts could lead to the _loss of user funds_ or _unclaimed yield_.
+Most contracts in the Lido protocol can be upgraded. In particular, this includes the deposit, withdrawal and rewards contracts through which `ETH` deposits and withdrawals are processed and staking yield is distributed. Upgrading those contracts can lead to the _loss of funds_ or _unclaimed yield_ for Lido users.
 
-The staking module contracts `NodeOperatorsRegistry` and `CSModule` are also upgradeable by the `Agent` (governance). Those contracts are responsible for tracking the _Node Operators_ and upgrading those may lead to the _loss of funds_ for _Node Operators_ or trigger the loss of funds to the benefit of _Node Operators_.
+The staking module contracts `NodeOperatorsRegistry` and `CSModule` are also upgradeable. Those contracts are responsible for tracking the _Node Operators_. Upgrading these contracts may lead to the _loss of funds_ for _Node Operators_ or users (to the benefit of _Node Operators_).
 
-Furthermore, the Governance contracts `Voting` and `Agent` may also be upgraded to operate a different logic. This could redefine the permissions behind the upgrade and management of the rest of the Lido contracts.
+Furthermore, the governance contracts `Voting` and `Agent` can also be upgraded, with the potential impact of replacing the current implementation of the _Lido Governance_ permissions and processes.
 
-Finally, the [Consensus Committee](#security-council) is in control of reporting on the state of the beacon chain through the `AccountingOracle` and `ExitBusOracle` smart contracts. If compromised, it could manipulate the stETH supply through false data reporting, leading to inflation or deflation of stETH. Similarly, the guardians of the [Deposit Security Module](#security-council) control the creation of new Lido validators and, if colluding with _Node Operators_, could enable theft of deposited ETH. Both these centralization vectors can thus result in the _loss of user funds_.
+Finally, the [Consensus Committee](#security-council) is in control of reporting on the state of the beacon chain through the `AccountingOracle` and `ExitBusOracle` contracts. If compromised, it could manipulate the `stETH` supply through false data reporting, leading to inflation or deflation of `stETH`. Similarly, the guardians of the [Deposit Security Module](#security-council) control the creation of new Lido validators and, if colluding with _Node Operators_, could enable theft of deposited `ETH`. Both these centralization vectors can thus result in the _loss of funds_ for users.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), users' staked funds not controlled by the _Node Operators_ as Lido enforces that these funds are always withdrawn to a withdrawal address controled by the Lido protocol. Nonetheless, the _Node Operators_ may misbehave and lose some of the funds due to slashing. In addition to that, they could steal part of the yield (execution rewards) by redirecting them to their own address. In the worst case, 1 validator can lose up to 16 ETH to slashing events before it is forcefully exited.
+Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), users' staked funds are not in control by the _Node Operators_. This is because Lido enforces that these funds can only be withdrawn to a fixed withdrawal account, that is controled by the Lido protocol. Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. In addition to that, _Node Operators_ could steal parts of the earned staking yield, by redirecting them to their own address. In the worst case, a validator can lose up to 16 `ETH` to slashing events before it is forcefully exited and the remaining `ETH` withdrawn to Lido's withdrawal account.
 
-Lido addresses those issues differently for each staking module. In the _Curated Module_, the _Node Operators_ are trusted and approved by governance. There currently are 36 _Node Operators_ which handle on average 7'779 validators each. In the _Community Module_, anyone can become a _Node Operator_, but needs to provide a bond of ETH per validator. Any slashing penalty or rewards stolen are taken out of that bonds, with additional penalties for the _Node Operators_. There currently are 312 _Node Operators_ in this module with an average of 19 validators each. Potential additional losses are covered by the _Lido Treasury_.
+Lido addresses those risks differently for each staking module. In the _Curated Module_, the _Node Operators_ are trusted and approved by _Lido Governance_. Currently 36 _Node Operators_ exist which manage on average 7'779 validators each. Different diversification measures are implemented to mitigate the risk of centralized infrastructure. This is detailed on a dedicated [dashboard](https://app.hex.tech/8dedcd99-17f4-49d8-944e-4857a355b90a/app/3f7d6967-3ef6-4e69-8f7b-d02d903f045b/latest). We computed that in a worst-case scenario, the failure of a _Node Operator_ in the _Curated Module_ would impact less than 1% of the total funds staked through Lido (see more in [dependencies](#dependencies)).
 
-_Curated Node Operators_ have different diversification measures to mitigate the risk of bugs or infrastructure failures. This is detailed on a dedicated [dashboard](https://app.hex.tech/8dedcd99-17f4-49d8-944e-4857a355b90a/app/3f7d6967-3ef6-4e69-8f7b-d02d903f045b/latest). We computed that in a worst-case scenario, the failure of a _Curated Node Operator_ would impact less than 1% of the funds locked in Lido (see more in [dependencies](#dependencies)). This results in a _Low_ centralization risk in regard to the autonomy of Lido.
+In the _Community Module_, anyone can become a _Node Operator_, but needs to deposit a bond of up to 2.4 `ETH` for the first validator or 1.3 `ETH` for all additional validators. Funds lost by the _Node Operators_ in the _Community Module_, eg due to slashing or theft of staking yield, are compensated through this bond and additional penalties for the _Node Operators_ applied on top. Currently 312 _Node Operators_ are active in the _Community Module_ with an average of 19 validators operated by each. Additional losses, that exceed the _Node Operator's_ deposited bond, are covered by the _Lido Treasury_.
 
 > Autonomy score: Low
 
 ## Exit Window
 
-Governance votes are not subject to any delay once the voting period has ended. The voting period is made of 5 days, only the first 3 of which can be used to approve a proposal, with 2 additional days to object to an accepted proposal.
+_Lido Governance_ is an onchain governance system that allows `LDO` holders to vote on contract upgrades and other governance matters. The voting period is made of 5 days, only the first 3 of which can be used to approve a proposal, with 2 additional days to object to an accepted proposal. No _Exit Window_ is enforced once the voting period has ended.
 
-A system of `Easytrack` is in place for a set of pre-approved actions to be executed without requiring a quorum. Actions in the `Easytrack` contract have a 3-day delay which can be vetoed with more than 0.5% of the voting power. Different multisigs can create `Easytrack` actions which may make treasury payments, control the _Simple-DVT Module_, or settle penalties in the _Community Module_. The control of the _Simple-DVT Module_ may lead to the loss of funds as this includes approving new _Node Operators_, but in addition to the potential veto, the [Simple-DVT Module Committee](#security-council) who is allowed to create those actions respects our security council requirements. The `Easytrack` can be paused by the [Emergency Brakes](#security-council) multisig or the governance.
+A system of `Easytrack` is in place for a set of pre-approved actions to be executed without requiring a quorum. Actions in the `Easytrack` contract have a 3-day delay which can be vetoed with more than 0.5% of the voting power. Different multisigs can create `Easytrack` actions which may make treasury payments, control the _Simple-DVT Module_, or settle penalties in the _Community Module_. The [Simple-DVT Module Committee](#security-council) has the permission to create `Easytrack` actions for the _Simple-DVT Module_, these actions include the approval of new _Node Operators_ on the _Simple-DVT Module_ and thus potentially impact user funds. The [Simple-DVT Module Committee](#security-council) complies with the _Security Council_ requirements, thus mitigating the respective risks. The `Easytrack` can be paused by the [Emergency Brakes](#security-council) multisig or by _Lido Governance_.
 
-Finally, there exist multiple emergency actions which can be taken. Any guardian in the `DepositSecurityModule` can trigger the pause of all deposits without delay. In addition to that, the _Community Staking Module_ can be completely paused by the [Community Staking Module Committee](#security-council), this includes the registering of new _Node Operators_ and claiming rewards.
+Finally, there exist multiple _Emergency Actions_ which can be initiated by different Lido multisig accounts. Any signer in the `DepositSecurityModule` can trigger the pause of all deposits without delay. In addition to that, the _Community Staking Module_ can be completely paused by the [Community Staking Module Committee](#security-council), this includes the registering of new _Node Operators_ and claiming rewards.
 
 > Exit Window score: High
 
 ## Accessibility
 
-Lido has a main frontend at [stake.lido.fi](https://stake.lido.fi). This UI is released on IPFS and there are
-instructions in the [docs](https://docs.lido.fi/ipfs/about) to access the latest release using any IPFS gateway of choice.
+Lido has a main frontend at [stake.lido.fi](https://stake.lido.fi). The different releases of this frontend are published on IPFS and instructions to access the latest release using an IPFS gateway of choice are available on the public [docs](https://docs.lido.fi/ipfs/about).
 
-In addition to that, it offers an extended list of [UI integration elements](https://ui.lido.fi/) to help others integrate interaction with the Lido contracts. Several third-party applications or wallets, such as Metamask, Argent, and Infinex use this integration to enable direct interaction with Lido. Those apps, in addition to IPFS, represent an acceptable backup solution to access the protocol.
+In addition to that, multiple third-party frontends, applications and wallets, such as Metamask, Argent, and Infinex, exist and enable direct access to the Lido protocol. In fact, Lido offers a public library of [UI integration elements](https://ui.lido.fi/) that enables third parties to seamlessly build more frontends to Lido.
 
 > Accessibility score: Low
 
 ## Conclusion
 
-Lido exposes a _High Centralization_ risk score in terms of _Upgradeability_ and _Exit Window_. While the [Consensus Committee](#security-council) satisfies our [security council requirements](https://defiscan.info/learn-more), this is not the case for the [DepositSecurityModule](#security-council). Moreover, there is no _Security Council_ nor _Exit Window_ to mitigate the risks of contract upgrades. For these reasons, Lido receives the score of **Stage 0**.
+Lido receives a _High Centralization_ score in terms of _Upgradeability_ and _Exit Window_. This is due to its contracts allowing for critical upgrades that are not protected with a sufficient _Exit Window_. Furthermore, its [DepositSecurityModule](#security-council) multisig exposes over critical permissions without . For these reasons, Lido achieves **Stage 0**.
 
-Lido could reach _Stage 1_ by enforcing a _7-day Exit Window_ to the critical smart contract upgrades or any action that may result in the _loss of user funds_ or adopting a _Security Council_ to safeguard those actions. It would also need to respect our [security council requirements](https://defiscan.info/learn-more) for their already implemented [DepositSecurityModule](#security-council).
+Lido could reach _Stage 1_ by enforcing a _7-day Exit Window_ to the critical smart contract upgrades or any action that may result in the _loss of user funds_ or adopting a _Security Council_ to safeguard those actions. It would also need to update the [DepositSecurityModule](#security-council) to a _Security Council_.
 
-Lido could reach _Stage 2_ by having a 30-day _Exit Window_ and replacing the [Consensus Committee](#security-council) and [DepositSecurityModule](#security-council) by solutions with low centralization.
+Lido could reach _Stage 2_ by implementing a 30-day _Exit Window_ and replacing the [Consensus Committee](#security-council) and [DepositSecurityModule](#security-council) through sufficiently decentralizated solutions.
 
 > Overall score: Stage 0
 
 # Reviewer Notes
 
-Lido has different treasury management multisigs all listed [here](https://docs.lido.fi/multisigs/committees). For practical reasons and readability, our [securty council](#security-council) section only lists the most important committees and multisigs.
+⚠️ Lido has different treasury management multisigs all listed [here](https://docs.lido.fi/multisigs/committees). For practical reasons and readability, our [securty council](#security-council) section only lists the most important committees and multisigs.
 
 # Protocol Analysis
 
