@@ -2,9 +2,16 @@ import * as React from "react";
 import { Stage } from "@/lib/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
+interface Requirement {
+  text: string;
+  status: 'fixed' | 'unfixed';
+}
+
+type RequirementInput = string | Requirement;
+
 interface StageRequirementsProps {
   stage: Stage;
-  stage_requirements?: [string[], string[], string[]];
+  stage_requirements?: [RequirementInput[], RequirementInput[], RequirementInput[]];
   className?: string;
 }
 
@@ -16,11 +23,18 @@ const StageRequirementSection = ({
 }: { 
   stageNumber: number; 
   currentStage: Stage; 
-  requirements: string[];
+  requirements: RequirementInput[];
   isInfrastructure: boolean;
 }) => {
-  const hasRequirements = requirements.length > 0;
-  const issueCount = requirements.length;
+  // Convert requirements to normalized format
+  const normalizedRequirements: Requirement[] = requirements.map(req => 
+    typeof req === 'string' ? { text: req, status: 'unfixed' as const } : req
+  );
+  
+  const hasRequirements = normalizedRequirements.length > 0;
+  const fixedCount = normalizedRequirements.filter(req => req.status === 'fixed').length;
+  const unfixedCount = normalizedRequirements.filter(req => req.status === 'unfixed').length;
+  const totalCount = normalizedRequirements.length;
 
   // Get numeric stage for infrastructure reviews
   const numericCurrentStage = isInfrastructure && typeof currentStage === 'string' 
@@ -46,7 +60,7 @@ const StageRequirementSection = ({
     // Stage is completed (current stage >= this stage number)
     statusColor = 'text-green-500';
     statusIcon = '✅';
-    statusText = '';
+    statusText = hasRequirements && fixedCount > 0 ? `: ${fixedCount} issue${fixedCount !== 1 ? 's' : ''} resolved` : '';
   } else if (typeof numericCurrentStage === 'number' && (
     numericCurrentStage === stageNumber - 1 || 
     (numericCurrentStage === 0 && stageNumber > 0)
@@ -54,7 +68,17 @@ const StageRequirementSection = ({
     // This is the next stage that needs to be achieved OR when at Stage 0, show Stage 1 and 2 as incomplete
     statusColor = 'text-red-500';
     statusIcon = '❌';
-    statusText = hasRequirements ? `: ${issueCount} issue${issueCount !== 1 ? 's' : ''} need${issueCount === 1 ? 's' : ''} fixing` : '';
+    if (hasRequirements) {
+      if (unfixedCount > 0 && fixedCount > 0) {
+        statusText = `: ${unfixedCount} of ${totalCount} issue${totalCount !== 1 ? 's' : ''} need${unfixedCount === 1 ? 's' : ''} fixing`;
+      } else if (unfixedCount > 0) {
+        statusText = `: ${unfixedCount} issue${unfixedCount !== 1 ? 's' : ''} need${unfixedCount === 1 ? 's' : ''} fixing`;
+      } else {
+        statusText = `: ${totalCount} issue${totalCount !== 1 ? 's' : ''} resolved`;
+      }
+    } else {
+      statusText = '';
+    }
   } else {
     // Future stages beyond next
     statusColor = 'text-gray-500';
@@ -77,14 +101,20 @@ const StageRequirementSection = ({
       {hasRequirements && (
         <AccordionContent className="pb-2 pt-1">
           <ul className="text-sm text-muted-foreground space-y-2 ml-6">
-            {requirements.map((requirement, index) => (
-              <li key={index} className="flex items-start leading-6">
-                <span className={`mr-2 flex-shrink-0 ${statusColor}`}>
-                  {statusIcon}
-                </span>
-                <span>{requirement}</span>
-              </li>
-            ))}
+            {normalizedRequirements.map((requirement, index) => {
+              const isFixed = requirement.status === 'fixed';
+              const itemIcon = isFixed ? '✅' : '❌';
+              const itemColor = isFixed ? 'text-green-500' : 'text-red-500';
+              
+              return (
+                <li key={index} className="flex items-start leading-6">
+                  <span className={`mr-2 flex-shrink-0 ${itemColor}`}>
+                    {itemIcon}
+                  </span>
+                  <span>{requirement.text}</span>
+                </li>
+              );
+            })}
           </ul>
         </AccordionContent>
       )}

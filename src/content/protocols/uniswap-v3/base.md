@@ -19,9 +19,9 @@ update_date: "2025-01-31"
 stage_requirements:
   [
     [
-      "Assets are not in custody by a centralized entity",
-      "Source-available codebase",
-      "Public documentation exists",
+      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
+      { text: "Source-available codebase", status: "unfixed" },
+      { text: "Public documentation exists", status: "unfixed" },
     ],
     [],
     [],

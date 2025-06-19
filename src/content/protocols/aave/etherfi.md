@@ -11,18 +11,18 @@ update_date: "1970-01-01"
 stage_requirements:
   [
     [
-      "Assets are not in custody by a centralized entity",
-      "All contracts are verified",
-      "Source-available codebase",
-      "Public documentation exists",
+      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [
-      "Dependency with a High centralization risk score without mitigation",
-      "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
+      { text: "Dependency with a High centralization score without mitigation", status: "unfixed" },
+      { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
     ],
     [
-      "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
-      "Existing dependencies with High or Medium centralization score and without mitigation measures in place",
+      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
+      { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
     ],
   ]
 ---

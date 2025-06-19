@@ -10,14 +10,14 @@ update_date: "2024-12-12"
 stage_requirements:
   [
     [
-      "Assets are not in custody by a centralized entity",
-      "All contracts are verified",
-      "Source-available codebase",
-      "Public documentation exists",
+      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [],
     [
-      "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
     ],
   ]
 ---

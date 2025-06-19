@@ -10,10 +10,10 @@ update_date: "1970-01-01"
 stage_requirements:
   [
     [
-      "Assets are not in custody by a centralized entity",
-      "All contracts are verified",
-      "Source-available codebase",
-      "Public documentation exists",
+      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [],
     [],
