@@ -7,7 +7,7 @@ defillama_slug: ["pancakeswap-amm-v3"]
 chain: "Binance"
 stage: 0
 reasons: []
-risks: ["H", "M", "L", "H", "M"]
+risks: ["H", "H", "L", "H", "M"]
 author: ["CookingCryptos"]
 submission_date: "2025-06-06"
 publish_date: "1970-01-01"
@@ -36,7 +36,7 @@ PancakeSwap V3 presents several upgradeability vectors that primarily affect rev
 
 The PancakeSwap Team which owns [Multisig 1](#security-council) administers PancakeSwap V3 through the upgradeable `PCSV3FeeHandler` contract, which serves as the primary interface for protocol management. This includes factory ownership transfers, fee configurations, and parameter updates. The contract's upgradeability via `upgradeTo` and `upgradeToAndCall` is limited to administrative functions, keeping core AMM logic immutable.
 
-The `PancakeV3Factory`, controlled through `PCSV3FeeHandler`, manages reward distributions via `setLmPool` and `setLmPoolDeployer`. These functions allow redirecting farming incentives without affecting underlying liquidity positions. While the upgrade capability introduces risks related to administrative control, the design ensures core trading functionality remains unaffected.
+The `PancakeV3Factory`, controlled through `PCSV3FeeHandler`, manages reward distributions via `setLmPool` and `setLmPoolDeployer`. If `setLmPool` is called with the zero address, the `lmPool()` getter will return zero, effectively disabling both harvesting and withdrawing functions for that pool.
 
 ### Fees and Rewards System Upgradeability
 
@@ -50,9 +50,11 @@ For the distribution of `CAKE` the reward system depends on [Address 3](#securit
 
 For staked positions, [Multisig 2](#security-council) controls the `MasterChefV3` contract which holds position NFTs. The `updateFarmBoostContract` function allows replacement of reward multiplier logic, affecting reward distribution fairness without compromising principal capital.
 
-In conclusion, PancakeSwap V3 presents a medium upgradeability risk. While significant modifications are possible through permissioned functions, these primarily affect rewards, yields, and protocol operations rather than users' principal funds, which remain protected by the fundamental design of V3 AMM pools.
+The `MasterChefV3` contract includes a `setEmergency` function that, when set to `true`, prevents users from withdrawing their staked position-NFTs from the contract. This effectively blocks access to their underlying LP positions and prevents them from harvesting any yield via the `harvest` function. This emergency state can be activated indefinitely by the protocol's multisig, with no built-in time limit for deactivation.
 
-> Upgradeability score: Medium
+In conclusion, PancakeSwap V3 presents a high upgradeability risk. The protocol includes mechanisms like the `setEmergency` function in `MasterChefV3` that can block user withdrawals and harvesting indefinitely. Additionally, the `setLmPool` function can be used to disable specific pools' functionality when called with the zero address. These capabilities significantly impact users' ability to access their funds and rewards.
+
+> Upgradeability score: High
 
 ## Autonomy
 
