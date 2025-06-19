@@ -7,6 +7,24 @@ author: ["stengarl", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      "Assets are not in custody by a centralized entity",
+      "All contracts are verified",
+      "Source-available codebase",
+      "Public documentation exists",
+    ],
+    [
+      "Dependency with a High centralization risk score without mitigation",
+      "No Frontend backup or self-hosting option exists",
+    ],
+    [
+      "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+      "Existing dependencies with High or Medium centralization score and without mitigation measures in place",
+      "No alternative third-party frontends exist",
+    ],
+  ]
 ---
 
 # Summary

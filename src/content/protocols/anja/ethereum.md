@@ -7,6 +7,17 @@ author: ["brianmcmichael"]
 submission_date: "2024-11-19"
 publish_date: "2024-11-23"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      "Assets are not in custody by a centralized entity",
+      "All contracts are verified",
+      "Source-available codebase",
+      "Public documentation exists",
+    ],
+    [],
+    ["No alternative third-party frontends exist"],
+  ]
 ---
 
 # Summary

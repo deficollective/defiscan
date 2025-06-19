@@ -7,6 +7,7 @@ author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
 publish_date: "2024-10-23"
 update_date: "1970-01-01"
+stage_requirements: [[], [], []]
 ---
 
 # Summary
