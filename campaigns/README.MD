@@ -1,37 +1,90 @@
 # ⭐️ DeFiScan Community Review Program
 
+[![Reward: 500 LUSD](https://img.shields.io/badge/Reward-500%20LUSD-orange)](#payout)
+[![Status: Open](https://img.shields.io/badge/Status-Open-brightgreen)](#getting-started)
+
+Help us grow DeFi transparency!  Complete a decentralization **protocol review** and earn **500 LUSD** on Optimism.
+
+---
+
+## 📚 Table of Contents
+- [Overview](#overview)
+- [Bounty at a Glance](#bounty-at-a-glance)
+- [Getting Started](#getting-started)
+- [Workflow](#workflow)
+- [Rules](#rules)
+- [Success Checklist](#success-checklist)
+- [Payout](#payout)
+- [FAQ](#faq)
+- [Contact](#contact)
+
+## Overview
+The Community Review Program rewards researchers, auditors & curious degens for adding high-quality protocol reviews to DeFiScan.  Reviews assess decentralization risks and assign a Stage (0–2) score.
+
+## Bounty at a Glance
+| Item | Details |
+|------|---------|
+| Reward | **500 LUSD** per accepted review |
+| Network | Optimism |
+| Time Budget | 14 days from reservation |
+| Scope | One protocol **on one chain** |
+| Template | [`src/content/template.md`](../src/content/template.md) |
+| Tooling | [Permission-Scanner](https://github.com/deficollective/permission-scanner) |
+
 ## Getting Started
+1. **Read** the [methodology blog](https://deficollective.org/blog/introducing-defiscan) & skim existing reviews.
+2. **Check open bounties** in the Issues tab or reach out on Discord to suggest a new one.
+3. **Fork** this repo & clone it locally.
 
-The following steps outline the process of registering for and conducting a successful protocol review. Make sure you understand and follow this process:
+## Workflow
+```mermaid
+flowchart LR
+  A[Reserve Draft PR] --> B[Analyse & Draft Report]
+  B --> C[Submit PR for Review]
+  C --> D[Core Team Feedback]
+  D -- Fixes --> B
+  D --> E[PR Approved & Merged]
+  E --> F[Payout 500 LUSD 💸]
+```
 
-1. Read the defiscan methodology and existing reviews to familiarize yourself with the expected submission process
-2. Clone the permission-scanner repository from our GitHub
-3. Fork the defiscan repository from our GitHub
-4. Copy the review template and complete the information in the frontmatter with the details of the targeted DeFi protocol
-5. Register your participation for the specific protocol by creating a draft PR with the review template on the defiscan repository
-6. Complete the review within 2 weeks of registration (through step 5) by updating your PR with the full information
-7. Ping the team in the DeFiScan channel on our GitHub
-8. Assist the team in finalizing the review if any information is missing or incomplete
-9. Once verified the team will merge your PR and coordinate for the payout - thank you!
+1. **Reserve** – Open a **draft PR** named `protocol | chain | YYYY-MM-DD` (deadline = today + 14 days).
+2. **Analyse & Draft** – Run Permission-Scanner, fill the template (MDX front-matter + sections).
+3. **Submit** – Mark PR as "Ready for review"; team will leave feedback within ~3 days.
+4. **Iterate** – Address comments quickly; we're friendly 😊.
+5. **Merge & Payout** – After approval, PR is merged and reward sent on Optimism.
 
 ## Rules
+1. **One active PR per reviewer** (unless analysing different chains).
+2. Reviews must target **one chain deployment**.
+3. Stay within the **14-day window** or the bounty re-opens.
+4. Use the naming convention exactly: `protocol | chain | YYYY-MM-DD`.
+5. Follow the template & include all required tables (contracts, permissions, security councils, etc.).
 
-1. One PR per reviewer at once
-   - Exception: If the same protocol is analysed on different chains
-2. The review includes only one chain deployment (as we want to see all the specific params in the report, e.g. ownership entity can be different on different chains, and our reports look at a protocol on only one chain (see framework))
-3. The reviewer can start after we confirmed the draft PR. The reviewer has 2 weeks time before the specific Protocol is open for other people to complete.
-4. The schema for the PR name is `protocol name | chain | deadline (now+2weeks)`
+## Success Checklist
+- [ ] Draft PR opened & approved for reservation
+- [ ] Template front-matter completed (metadata, stage, risks, etc.)
+- [ ] Permission table generated via Permission-Scanner
+- [ ] Narrative sections filled (Upgradeability, Autonomy, etc.)
+- [ ] All links (Etherscan, docs, etc.) verified
+- [ ] Review ready within 14 days
+- [ ] Feedback addressed, PR merged
 
-## Successful Reviews
+## Payout
+- **Amount**: 500 LUSD (Liquity USD)
+- **Network**: Optimism
+- **Timing**: Within 1 week after merge
+- **Process**: We'll DM you on Discord/Twitter to collect your Optimism address.  Alternatively leave it in the PR description.
 
-A review is considered successful if it follows the process outlined above and is ultimately merged to the main repository. In particular, this requires that:
+## FAQ
+**Q: Can I review a protocol that isn't listed yet?**  
+A: Yes! Ping us on Discord to coordinate and avoid duplicate work.
 
-- [ ] Registration of a protocol/chain by submitting a draft PR (not yet in review)
-- [ ] Complete and submit final PR with accurate review within 2 weeks after registration
-- [ ] Assist DeFi Collective team with final corrections and cleanups, merge PR within 1 week after final PR submission
+**Q: Do I need prior auditing experience?**  
+A: Not strictly—just follow the methodology carefully.  We review every submission.
 
-> The prize of 500 LUSD is only awarded to successful reviews and paid out in LUSD on Optimism.
+## Contact
+- 🗣️ Discord: <https://discord.gg/Z467Ehv6VU> (`#defiscan` channel)  
+- 🐦 X / Twitter: <https://x.com/defiscan_info>
 
-## Final Notes
-
-DeFiScan is an open source initiative driven by the DeFi Collective, a non-profit organization, and the broader DeFi community. We are very grateful for your participation in this initiative and support of the DeFi ecosystem. If you cannot participate in the DeFiScan Community Review Program but still want to support us, please consider donating to the DeFi Collective or spreading the word!
+*
+Thanks for contributing to DeFi decentralization!*
