@@ -2,7 +2,7 @@
   "id": "spark",
   "protocol": "Spark",
   "website": "https://spark.fi",
-  "defillama_slug": ["sparklend"],
+  "defillama_slug": ["sparklend", "spark-liquidity-layer"],
   "socials": {
     "x": "https://x.com/sparkdotfi"
   },
