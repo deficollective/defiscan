@@ -15,8 +15,15 @@ stage_requirements:
       { text: "Source-available codebase", status: "fixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
-    [],
-    [],
+    [
+      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+    ],
+    [
+      { text: "There are no external dependencies", status: "fixed" },
+      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
+      { text: "Alternative third-party frontends exist", status: "fixed" }  
+    ],
   ]
 ---
 
@@ -41,6 +48,8 @@ The Uniswap V2 protocol allows UNI token holders to update certain fee parameter
 These updates require a governance vote on the Ethereum chain through Uniswap's on-chain governance system. The execution of this vote is trustless but involves the Base (Optimism stack) native cross-chain messaging protocol. This protocol cannot censor governance vote results and hence does not introduce new risks.
 
 Apart from these fee parameters, the protocol's contracts are immutable. No party is able to pause, revert trade execution, or otherwise change the behavior of the protocol.
+
+> Upgradeability score: Low
 
 ## Autonomy
 

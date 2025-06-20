@@ -24,7 +24,7 @@ stage_requirements:
     [
       { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
       { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
-            { text: "Alternative third-party frontends exist", status: "fixed" }
+      { text: "Alternative third-party frontends exist", status: "fixed" }
 
     ],
   ]

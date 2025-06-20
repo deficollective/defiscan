@@ -15,9 +15,15 @@ stage_requirements:
       { text: "Source-available codebase", status: "fixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
-    [],
+    [ 
+      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+
+    ],
     [
+      { text: "There are no external dependencies", status: "fixed" },
       { text: "No alternative third-party frontends exist", status: "unfixed" },
+      { text: "Contracts are immutable", status: "fixed" }
     ],
   ]
 ---
