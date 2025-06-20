@@ -70,9 +70,18 @@ const reviews = defineCollection({
       ]),
       reasons: ReasonSetSchema,
       stage_requirements: s.tuple([
-        s.array(s.string()),
-        s.array(s.string()),
-        s.array(s.string())
+        s.array(s.string().or(s.object({
+          text: s.string(),
+          status: s.literal("fixed").or(s.literal("unfixed"))
+        }))),
+        s.array(s.string().or(s.object({
+          text: s.string(),
+          status: s.literal("fixed").or(s.literal("unfixed"))
+        }))),
+        s.array(s.string().or(s.object({
+          text: s.string(),
+          status: s.literal("fixed").or(s.literal("unfixed"))
+        })))
       ]).optional(),
       author: s.array(s.string()),
       submission_date: s.isodate(),

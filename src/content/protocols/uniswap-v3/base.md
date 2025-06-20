@@ -16,6 +16,23 @@ author: ["mmilien", "CookingCryptos"]
 submission_date: "2025-01-16"
 publish_date: "2025-01-22"
 update_date: "2025-01-31"
+stage_requirements:
+  [
+    [
+      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
+      { text: "Source-available codebase", status: "unfixed" },
+      { text: "Public documentation exists", status: "unfixed" },
+    ],
+    [
+      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+    ],
+    [
+      { text: "There are no external dependencies", status: "fixed" },
+      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
+      { text: "Alternative third-party frontends exist", status: "fixed" }  
+    ],
+  ]
 ---
 
 # Summary

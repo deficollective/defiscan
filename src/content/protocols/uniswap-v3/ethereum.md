@@ -16,6 +16,24 @@ author: ["mmilien"]
 submission_date: "2024-11-12"
 publish_date: "2025-01-08"
 update_date: "2025-01-31"
+stage_requirements:
+  [
+    [
+      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [
+      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+    ],
+    [
+      { text: "There are no external dependencies", status: "fixed" },
+      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
+      { text: "Alternative third-party frontends exist", status: "fixed" }  
+    ],
+  ]
 ---
 
 # Summary

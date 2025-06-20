@@ -7,6 +7,25 @@ author: ["brianmcmichael"]
 submission_date: "2024-11-19"
 publish_date: "2024-11-23"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [ 
+      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+
+    ],
+    [
+      { text: "There are no external dependencies", status: "fixed" },
+      { text: "No alternative third-party frontends exist", status: "unfixed" },
+      { text: "Contracts are immutable", status: "fixed" }
+    ],
+  ]
 ---
 
 # Summary
