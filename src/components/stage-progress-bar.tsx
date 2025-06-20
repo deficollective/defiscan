@@ -81,7 +81,7 @@ export function StageProgressBar({ stage, stage_requirements, className }: Stage
               className={`absolute top-0 left-0 h-full rounded-full transition-all duration-500 ${
                 progressPercentage >= 100 ? 'bg-green-500' : 
                 progressPercentage >= 50 ? 'bg-yellow-500' : 
-                'bg-yellow-500'
+                'bg-red-500'
               }`}
               style={{ width: `${Math.min(progressPercentage, 100)}%` }}
             />
