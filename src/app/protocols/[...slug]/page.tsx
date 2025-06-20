@@ -99,6 +99,7 @@ export default async function ProtocolPageItem({
                   <h2 className="text-xl font-semibold mb-4 text-primary">Protocol Decentralization</h2>
                   <StageProgressBar 
                     stage={protocol.stage! as Stage}
+                    stage_requirements={protocol.stage_requirements}
                     className="mb-4"
                   />
                   <StageRequirements 
