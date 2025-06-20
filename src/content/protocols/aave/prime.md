@@ -19,10 +19,13 @@ stage_requirements:
     [
       { text: "Dependency with a High centralization score without mitigation", status: "unfixed" },
       { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
+      { text: "Frontend backups or self-hosting option exists", status: "fixed"}
     ],
     [
       { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
       { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
+            { text: "Alternative third-party frontends exist", status: "fixed" }
+
     ],
   ]
 ---
