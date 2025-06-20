@@ -1,0 +1,10 @@
+{
+  "id": "sky",
+  "protocol": "Sky",
+  "website": "https://sky.money/",
+  "defillama_slug": ["sky-lending", "sky-rwa"],
+  "socials": {
+    "x": "https://x.com/SkyEcosystem"
+  },
+  "github": ["https://github.com/makerdao"]
+}

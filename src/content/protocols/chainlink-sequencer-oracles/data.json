@@ -1,0 +1,12 @@
+{
+  "id": "chainlink-sequencer-oracles",
+  "protocol": "Chainlink Sequencer Oracle",
+  "website": "https://chain.link/",
+  "defillama_slug": [""],
+  "socials": {
+    "x": "https://x.com/chainlink"
+  },
+  "github": [
+    "https://github.com/smartcontractkit"
+  ]
+}

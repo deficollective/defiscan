@@ -52,12 +52,13 @@ type Category =
 const categories = Object.keys(riskMatrix) as Category[];
 
 // Create a function to get risk descriptions
-export function getRiskDescriptions(risks: RiskArray): {
+export function getRiskDescriptions(risks: RiskArray | undefined): {
   name: string;
   sentiment: Sentiment;
   description: string;
 }[] {
   // const parsedRisks = JSON.parse(risks.replace(/'/g, '"'));
+  if (!risks) return [];
   return risks.map((level: RiskLevel, index: number) => {
     const category = categories[index];
     return {

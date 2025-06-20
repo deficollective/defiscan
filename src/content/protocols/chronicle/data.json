@@ -1,0 +1,12 @@
+{
+  "id": "chronicle",
+  "protocol": "Chronicle",
+  "website": "https://chroniclelabs.org/",
+  "defillama_slug": [""],
+  "socials": {
+    "x": "https://x.com/ChronicleLabs"
+  },
+  "github": [
+    "https://github.com/chronicleprotocol"
+  ]
+}

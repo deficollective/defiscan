@@ -1,0 +1,10 @@
+{
+  "id": "dyad",
+  "protocol": "Dyad",
+  "website": "https://dyadstable.xyz",
+  "defillama_slug": ["dyad"],
+  "socials": {
+    "x": "https://x.com/0xDYAD"
+  },
+  "github": ["https://github.com/DyadStablecoin"]
+}
