@@ -36,7 +36,7 @@ Aave v3 EtherFi is a lending protocol which is governed by the Aave DAO with a s
 
 Aave v3 EtherFi uses the same contract code as Aave v3 Core instance overall, but redeployed modules _Lend & Borrow_ and _Reserve Parameters_, while re-using the same deployments for _Treasury, Aave Ecosystem Reserves & Rewards_, the _GHO Stablecoin_ and the _Aave Governance_.
 
-We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our Aave v3 Core instance [report](/protocols/aave).
+We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 Due to the minimal differences to Aave v3 Core the same scores apply for Aave v3 Prime.
 
@@ -68,7 +68,7 @@ Next to handing some control over market parameters to the [Risk Council](#secur
 
 The Aave v3 _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our Aave v3 Core instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 > Exit Window score: High
 
@@ -76,7 +76,7 @@ Read more in our Aave v3 Core instance [report](/protocols/aave).
 
 Aave V3 EtherFi is accessible through the same Aave UI and third party UIs than the Aave v3 Core instance.
 
-Read more in our Aave v3 Core instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 > Accessibility score: Low
 
@@ -102,13 +102,13 @@ Specifically to the Aave v3 EtherFi instance there is an additional Steward cont
 
 Besides the [Risk Council](#security-council) having control over market parameters via steward contracts, the Aave V3 instance on the Aave v3 EtherFi instance automates the borrow and supply cap automatically by handing off the updates of this caps to a risk oracle implemented by Chaos Labs (service provider to the DAO). This allows automatic updates of these risk parameters based on quantitative algorithmic risk models in real time. `EdgeRiskSteward` makes sure the values submitted by the `RiskOracle` contract are within guardrails to prevent abusive behavior by malicious intent.
 
-See our report on [Chaos Labs' Risk Oracle](/protocols/chaos-labs-risk-oracle)
+See our report on [Chaos Labs' Risk Oracle](/protocols/chaos-labs-risk-oracle/ethereum)
 
 # Governance
 
 The The Aave v3 _Prime_, _Core_ and _Etherfi_ instances use the same governance structure, thus the same exit window risks apply.
 
-Read more in our Aave v3 Core instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 ## Security Council
 

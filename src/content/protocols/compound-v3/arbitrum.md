@@ -56,7 +56,7 @@ Upgrades happen through governance proposal on Ethereum Mainnet. A `Bridge Recei
 
 The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink or offer a fallback oracle mechanism. The replacement of a stale or untrusted oracle feed requires a Compound governance vote with a delay (see [Exit Window](#exit-window)).
 
-Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
 
 > Autonomy score: High
 
@@ -118,7 +118,7 @@ The process is illustrated below.
 
 The compound-v3 protocol relies on a Chainlink oracle feed to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink feeds other than checking for a zero-value. The protocol further does not offer a fallback pricing mechanism in case the Chainlink oracle feeds are stale or untrusted. If not performing as expected, Chainlink oracle feeds can only be replaced through a regular Compound governance proposal with a delay (see Exit Window).
 
-Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
 
 # Governance
 

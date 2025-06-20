@@ -83,7 +83,7 @@ Also note that the (current) implementation of `GovernanceV3` enables a native m
 
 The Aave V3 protocol relies on Chainlink oracle feeds to price collateral and borrowed assets in the system.
 
-Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
+Chainlink achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
 
 The protocol does currently have limited validation on asset prices provided by Chainlink. These checks include upper caps for stablecoins and LSTs and a sanity check that the price is above 0 for all assets. If the reported price by the price feed was below 0, a fallback oracle would be queried.
 
@@ -230,7 +230,7 @@ Aave stores the oracle price feeds in the `AaveOracle` contract. The price feeds
 2. a `PriceCapAdapterStable` contract which wraps the regular Chainlink price feed and adds an upper cap to the reported stablecoin price, if the price is above the cap, the cap is returned, otherwise the price is returned
 3. a price cap adapter for LSTs which checks the price ratio of the asset/underlying and compares it to an upper cap computed by the maximum allowed growth rate and the duration since the last check
 
-The Chainlink oracle system itself is upgradeable potentially as discussed in a separate report [here](/protocols/chainlink-oracles).
+The Chainlink oracle system itself is upgradeable potentially as discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
 
 # Governance
 

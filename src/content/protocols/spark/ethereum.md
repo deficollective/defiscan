@@ -60,7 +60,7 @@ Spark has a critical dependency on the Sky Protocol, a [Stage 0 protocol](/proto
 
 Spark's own _Liquidity Management Layer (ALM)_ can be seen as a dependency for _SparkLend_ as it is responsible for providing a significant portion of the liquidity into _SparkLend_'s stablecoin markets. This layer is managed by [Relayers](#security-council) who allocate liquidity accross different DeFi protocols and chains within strict governance-defined limits. This can impact users indirectly by manipulation of interest rates. We explain this layer in more details in the [protocol analysis](#protocol-analysis) and [dependencies](#dependencies) sections.
 
-Finally, Chronicle price feeds are used in _SparkLend_ all asset prices. A failure of those oracles could lead to wrongful liquidations. We found Chronicle to be a _Medium Centralization_ dependency in a [dedicated report](/protocols/chronicle). An oracle killswitch was introduced to mitigate possible oracle failures. If a price falls below a certain threshold, the killswitch freezes all borrowing within _SparkLend_ until manually reset by the _Sky Governance_. Nonetheless, as discussed in [dependencies](#dependencies), this mitigation is only used for one price feed within _SparkLend_ and is not sufficient to mitigate all failures.
+Finally, Chronicle price feeds are used in _SparkLend_ all asset prices. A failure of those oracles could lead to wrongful liquidations. We found Chronicle to be a _Medium Centralization_ dependency in a [dedicated report](/protocols/chronicle/ethereum). An oracle killswitch was introduced to mitigate possible oracle failures. If a price falls below a certain threshold, the killswitch freezes all borrowing within _SparkLend_ until manually reset by the _Sky Governance_. Nonetheless, as discussed in [dependencies](#dependencies), this mitigation is only used for one price feed within _SparkLend_ and is not sufficient to mitigate all failures.
 
 More information on the centralization and functioning of those dependencies can be found in [dependencies](#dependencies).
 
@@ -103,7 +103,7 @@ We believe it is worth noting that funds in the _Liquidity Management Layer_ may
 
 _SparkLend_ is a `USDS` and `DAI`-centric lending protocol in which users can participate as lenders or borrowers.
 
-The protocol is a fork of [Aave v3](/protocols/aave) with some particularities highlighted in the diagram below. Most contracts, including markets, are non-upgradeable, with upgrades only possible on the `Treasury` and `RewardsControllerManager` contracts. Upgrading the rewards may revoke unclaimed rewards and lead to the _loss of unclaimed yield_, as rewards are advertised as part of the yield. All critical permissions are held by the _Sky Governance_ through the `DSPause Proxy`.
+The protocol is a fork of [Aave v3](/protocols/aave/ethereum) with some particularities highlighted in the diagram below. Most contracts, including markets, are non-upgradeable, with upgrades only possible on the `Treasury` and `RewardsControllerManager` contracts. Upgrading the rewards may revoke unclaimed rewards and lead to the _loss of unclaimed yield_, as rewards are advertised as part of the yield. All critical permissions are held by the _Sky Governance_ through the `DSPause Proxy`.
 
 Some emergency actions can be taken, such as freezing all new borrowing in _SparkLend_ if a certain asset price falls below a predetermined threshold. A multisig called [SparkLend Freezer](#security-council), as well as the _Sky Governance_, can freeze or pause any market in _SparkLend_ without any delay. They can then be reactivated through the delayed _Sky Governance_.
 
@@ -139,7 +139,7 @@ Spark's _Liquidity Management Layer (ALM)_ is a dependency for _SparkLend_ as it
 
 ## Chronicle
 
-Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices. We assessed that Chronicle is a _Medium Centralization_ (_Stage 1_ equivalent) dependency and explained it in detail in a [dedicated report](/protocols/chronicle).
+Currently, Chronicle oracles are used in _SparkLend_ with no fallbacks for all asset prices. We assessed that Chronicle is a _Medium Centralization_ (_Stage 1_ equivalent) dependency and explained it in detail in a [dedicated report](/protocols/chronicle/ethereum).
 
 A `KillSwitchOracle` contract is used to set critical prices per asset in case of potential oracle failure or manipulation. If the oracle returns a price below the critical price for an asset, anyone can disable the oracle and pause all borrowing of all assets within _SparkLend_ until the killswitch is reset by the _Sky Governance_.
 

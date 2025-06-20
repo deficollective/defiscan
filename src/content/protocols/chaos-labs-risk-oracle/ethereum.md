@@ -46,7 +46,7 @@ Chaos Labs's risk oracle protocol is operated in a centralized manner by Chaos L
 
 # Reviewer Notes
 
-This review is limited to the Chaos Labs `RiskOracle` deployed on Ethereum mainnet. It is used by [Aave Prime](/protocols/aave-v3-prime) and [Aave EtherFi](/protocols/aave-v3-etherfi).
+This review is limited to the Chaos Labs `RiskOracle` deployed on Ethereum mainnet. It is used by [Aave Prime](/protocols/aave/prime) and [Aave EtherFi](/protocols/aave/etherfi).
 
 # Appendix
 

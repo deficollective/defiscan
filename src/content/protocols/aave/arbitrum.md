@@ -35,7 +35,7 @@ Aave v3 is a lending protocol that allows users to lend and borrow different ERC
 
 Aave v3 on Arbitrum uses for most the same contract code as Aave v3 Core on Ethereum mainnet instance. The Aave DAO deployed the _Lend & Borrow_, the _Reserve Parameters_ and the _Treasury, Aave Ecosystem Reserves & Rewards_ modules to offer the same functionality on Arbitrum.
 
-We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our Aave v3 Core instance [report](/protocols/aave).
+We only report on the specific differences in this report, to understand the redeployed and re-used modules check out our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 # Ratings
 
@@ -59,7 +59,7 @@ The _Aave Governance_ can upgrade the GHO contract, which is unlike the Ethereum
 
 ### Aave Governance
 
-The _Aave Governance_ on Arbitrum is unlike the _Aave Governance_ on Ethereum mainnet only for execution of registered and voted payloads. Aave DAO voters cannot vote on Arbitrum. The setup of the executor, time exit and bridging votes from Mainnet to Arbitrum has been discussed in our Aave v3 Core instance [report](/protocols/aave).
+The _Aave Governance_ on Arbitrum is unlike the _Aave Governance_ on Ethereum mainnet only for execution of registered and voted payloads. Aave DAO voters cannot vote on Arbitrum. The setup of the executor, time exit and bridging votes from Mainnet to Arbitrum has been discussed in our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 > Upgradeability score: High
 
@@ -67,7 +67,7 @@ The _Aave Governance_ on Arbitrum is unlike the _Aave Governance_ on Ethereum ma
 
 ### CCIP
 
-GHO on arbitrum solely relies on CCIP for bridging native GHO from Ethereum. Chainlink CCIP achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/ccip).
+GHO on arbitrum solely relies on CCIP for bridging native GHO from Ethereum. Chainlink CCIP achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/ccip/mainnet).
 
 ### Risk Oracle
 
@@ -79,7 +79,7 @@ Next to handing some control over market parameters to the [Risk Council](#secur
 
 The Aave v3 instance on Arbitrum uses the same exit window as the Aave v3 Core instance on Ethereum mainnet.
 
-Read more in our Aave v3 Core instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 > Exit Window score: High
 
@@ -87,7 +87,7 @@ Read more in our Aave v3 Core instance [report](/protocols/aave).
 
 Aave V3 deployment on Arbitrum is accessible through the same Aave UI and third party UIs than the Aave v3 Core instance.
 
-Read more in our Aave v3 Core instance [report](/protocols/aave).
+Read more in our Aave v3 Core instance [report](/protocols/aave/ethereum).
 
 > Accessibility score: low
 
@@ -129,7 +129,7 @@ Besides the [Risk Council](#security-council) having control over market paramet
 
 ## Price Oracle Sentinel
 
-Aave V3 instances on Layer 2s make use of the Sequencer oracle offered by Chainlink. This oracle informs smart contracts whether the sequencer of the respective rollup is currently offline. Sophisticated actors can force transactions on native rollups via posting them directly on Ethereum mainnet. To prevent sophisticated actors to liquidate users during sequencer downtime, Aave implemented the `PriceOracleSentinel` contract that prevents liquidations, if the Chainlink _L2 Sequencer Uptime Oracle_ reports downtime of the sequencer. The _L2 Sequencer Uptime Oracle_ was assessed to be highly centralized as written in this [report](/protocols/chainlink-sequencer-oracles).
+Aave V3 instances on Layer 2s make use of the Sequencer oracle offered by Chainlink. This oracle informs smart contracts whether the sequencer of the respective rollup is currently offline. Sophisticated actors can force transactions on native rollups via posting them directly on Ethereum mainnet. To prevent sophisticated actors to liquidate users during sequencer downtime, Aave implemented the `PriceOracleSentinel` contract that prevents liquidations, if the Chainlink _L2 Sequencer Uptime Oracle_ reports downtime of the sequencer. The _L2 Sequencer Uptime Oracle_ was assessed to be highly centralized as written in this [report](/protocols/chainlink-sequencer-oracles/ethereum).
 
 If this sequencer oracle does not report sequencer downtime, the protection for non-sophisticated users fails. If the oracle reports downtime even if there is no downtime, the system's capability for liquidations is un-necessarily blocked for the grace period (1 hour). This grace period can be set to 0, if the oracle is permanently misbehaving or out of order. Even if the _L2 Sequencer Uptime Oracle_ by Chainlink fails the protocol impact on users is marginal, thus the reliance on the dependency is low and as such the Dependency risk is _Low_.
 
@@ -139,11 +139,11 @@ The GHO tokens on Arbitrum are bridged from Mainnet via CCIP. CCIP stands for Cr
 
 The GHO tokens are bridged by lock/release mechanism on mainnet, and a mint/burn mechanism on Arbitrum. In the case of GHO a user locks GHO on mainnet, and an equivalent amount gets minted by the GHO contract on Arbitrum. The GHO token on Arbitrum, unlike the GHO token on mainnnet, is upgradeable.
 
-Chainlink CCIP is covered in more detail in our separate report [here](/protocols/ccip).
+Chainlink CCIP is covered in more detail in our separate report [here](/protocols/ccip/mainnet).
 
 ## Layer 1 Governance
 
-Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet and bridging votes from Polygon to mainnet. See the mainnet core instance report for a detailed system breakdown and analysis [here](/protocols/aave).
+Aave V3 on Arbitrum relies on the governance smart contracts on Ethereum Mainnet and bridging votes from Polygon to mainnet. See the mainnet core instance report for a detailed system breakdown and analysis [here](/protocols/aave/ethereum).
 
 # Governance
 

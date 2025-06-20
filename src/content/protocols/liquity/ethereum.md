@@ -85,7 +85,7 @@ The system relies on two different oracles: Chainlink is the primary oracle and 
 
 If both Chainlink and Tellor are frozen or untrusted the last good price is used and the system keeps operating allowing users to withdraw their assets.
 
-Chainlink itself achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles).
+Chainlink itself achieves a _High_ centralization risk score as discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
 
 # Governance
 
