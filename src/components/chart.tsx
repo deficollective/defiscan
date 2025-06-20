@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -15,12 +15,24 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { ChainTvlData, defiLlama } from "@/services/defillama";
+import { loadHistoricalTvlByStage, TvlByStageData } from "@/lib/data/utils";
 
 const chartConfig = {
-  tvl: {
-    label: "TVL",
-    color: "#7c22b2",
+  stage0: {
+    label: "Stage 0",
+    color: "#ef4444", // red-500
+  },
+  stage1: {
+    label: "Stage 1",
+    color: "#eab308", // yellow-500
+  },
+  stage2: {
+    label: "Stage 2",
+    color: "#22c55e", // green-500
+  },
+  other: {
+    label: "Other",
+    color: "#6b7280", // gray-500
   },
 } satisfies ChartConfig;
 
@@ -29,11 +41,11 @@ type ChartProps = {
 };
 
 const Chart: React.FC<ChartProps> = ({ className }) => {
-  const [data, setData] = useState<ChainTvlData[]>();
+  const [data, setData] = useState<TvlByStageData[]>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await defiLlama.getHistoricalChainTvl();
+      const data = await loadHistoricalTvlByStage();
       setData(data);
     };
     fetchData();
@@ -71,14 +83,43 @@ const Chart: React.FC<ChartProps> = ({ className }) => {
                 return date.toLocaleDateString("en-US");
               }}
             />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              ticks={[50_000_000_000, 100_000_000_000, 180_000_000_000]}
+              tick={{fontSize: 12 }}
+              tickFormatter={(value) => {
+                return `$${(value / 1_000_000_000).toFixed(0)}B`;
+              }}
+            />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
             <Area
-              dataKey="tvl"
-              fill={`var(--color-tvl)`}
-              stroke={`var(--color-tvl)`}
+              dataKey="other"
+              stackId="1"
+              fill="var(--color-other)"
+              stroke="var(--color-other)"
+            />
+            <Area
+              dataKey="stage0"
+              stackId="1"
+              fill="var(--color-stage0)"
+              stroke="var(--color-stage0)"
+            />
+            <Area
+              dataKey="stage1"
+              stackId="1"
+              fill="var(--color-stage1)"
+              stroke="var(--color-stage1)"
+            />
+            <Area
+              dataKey="stage2"
+              stackId="1"
+              fill="var(--color-stage2)"
+              stroke="var(--color-stage2)"
             />
           </AreaChart>
         </ChartContainer>
