@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "@/components/table/page";
 import { TVLCoverageComponent } from "@/components/tvl-coverage";
-import { StageDistributionChart, TVLByStageChart } from "@/components/stage-distribution";
+import { CombinedStageChart } from "@/components/stage-distribution";
 import { ChainCoverageComponent } from "@/components/chain-coverage";
 
 export default function Home() {
@@ -21,10 +21,7 @@ export default function Home() {
 
           {/* Right Side Components Grid */}
           <div className="flex flex-col w-full lg:w-1/3 gap-4">
-            <div className="flex flex-row gap-4">
-              <StageDistributionChart className="w-1/2" />
-              <TVLByStageChart className="w-1/2" />
-            </div>
+            <CombinedStageChart className="w-full" />
             <ChainCoverageComponent className="w-full" />
           </div>
         </div>

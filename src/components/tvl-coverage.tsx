@@ -5,6 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { loadReviews } from "@/lib/data/utils";
 import { formatUsd } from "@/lib/utils";
+import { reviews as allReviews } from "#site/content";
+import { defiLlama } from "@/services/defillama";
+import Link from "next/link";
+import Image from "next/image";
 
 interface CoverageData {
   reviewedTvl: number;
@@ -13,8 +17,17 @@ interface CoverageData {
   protocolCount: number;
 }
 
+interface RecentAddition {
+  protocol: string;
+  logo: string;
+  chain: string;
+  slug: string;
+  publish_date: string;
+}
+
 export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ className }) => {
   const [data, setData] = useState<CoverageData | null>(null);
+  const [recentAdditions, setRecentAdditions] = useState<RecentAddition[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +41,8 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
         return sum + projectTvl;
       }, 0);
 
-      // Estimate total DeFi TVL (this could be fetched from DefiLlama API)
-      // For now, using a reasonable estimate based on current market
-      const totalTvl = 80000000000; // $80B as rough DeFi total
+      // Get today's total DeFi TVL
+      const totalTvl = await defiLlama.getCurrentTotalTvl();
       
       const coveragePercentage = (reviewedTvl / totalTvl) * 100;
       
@@ -43,6 +55,26 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
         coveragePercentage: Math.min(coveragePercentage, 100), // Cap at 100%
         protocolCount,
       });
+
+      // Get recent additions - exclude infrastructure reviews and sort by publish_date
+      const recentReviews = allReviews
+        .filter(review => !review.stage?.toString().startsWith("I")) // Exclude infrastructure
+        .sort((a, b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime())
+        .slice(0, 5); // Get top 5 most recent
+
+      // Map to recent additions with project data
+      const additions: RecentAddition[] = recentReviews.map(review => {
+        const project = projects.find(p => p.reviews.some(r => r.slug === review.slug));
+        return {
+          protocol: project?.protocol || review.slug.split('/')[1] || 'Unknown',
+          logo: project?.logo || '/images/default-logo.png',
+          chain: review.chain,
+          slug: review.slug,
+          publish_date: review.publish_date,
+        };
+      });
+
+      setRecentAdditions(additions);
     };
     
     fetchData();
@@ -73,7 +105,7 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
           </p>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Progress Bar */}
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
@@ -105,6 +137,32 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
             <p className="text-xs text-center text-muted-foreground">
               Covering major DeFi protocols across multiple chains
             </p>
+
+            {/* Recent Additions */}
+            {recentAdditions.length > 0 && (
+              <div className="border-t pt-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-medium">Recent Additions:</span>
+                  <div className="flex gap-2">
+                    {recentAdditions.map((addition, index) => (
+                      <Link
+                        key={index}
+                        href={`/protocols/${addition.slug}`}
+                        className="relative w-8 h-8 hover:scale-110 transition-transform"
+                      >
+                        <Image
+                          src={addition.logo}
+                          alt={`${addition.protocol} logo`}
+                          fill
+                          className="rounded-full object-cover"
+                          sizes="32px"
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

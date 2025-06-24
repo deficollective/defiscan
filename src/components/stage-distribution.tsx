@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Pie, PieChart, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from "recharts";
 import { loadReviews } from "@/lib/data/utils";
 import { formatUsd } from "@/lib/utils";
 import { Stage } from "@/lib/types";
@@ -28,94 +28,7 @@ const getStageInfo = (stage: Stage) => {
   return { name: `Stage ${stage}`, colorClass: "bg-gray-500", color: "#6b7280" };
 };
 
-export const StageDistributionChart: React.FC<{ className?: string }> = ({ className }) => {
-  const [data, setData] = useState<StageData[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const projects = await loadReviews();
-      
-      // Flatten all reviews and filter out infrastructure stages for count
-      const allReviews = projects.flatMap(project => 
-        project.reviews.map(review => ({
-          ...project,
-          ...review,
-          protocol: project.protocol,
-          baseProtocol: project.protocol
-        }))
-      ).filter(review => !review.stage?.toString().startsWith("I")); // Exclude infrastructure
-
-      // Group by stage
-      const stageGroups = allReviews.reduce((acc, review) => {
-        const stage = review.stage;
-        if (!acc[stage]) {
-          acc[stage] = { reviews: [], totalTvl: 0 };
-        }
-        acc[stage].reviews.push(review);
-        acc[stage].totalTvl += review.tvl === "n/a" ? 0 : review.tvl;
-        return acc;
-      }, {} as Record<string, { reviews: any[], totalTvl: number }>);
-
-      const totalCount = allReviews.length;
-      const totalTvl = allReviews.reduce((sum, review) => sum + (review.tvl === "n/a" ? 0 : review.tvl), 0);
-
-      const stageData: StageData[] = Object.entries(stageGroups).map(([stage, data]) => {
-        const stageInfo = getStageInfo(stage as Stage);
-        return {
-          stage: stageInfo.name,
-          count: data.reviews.length,
-          tvl: data.totalTvl,
-          colorClass: stageInfo.colorClass,
-          color: stageInfo.color,
-          percentage: (data.reviews.length / totalCount) * 100,
-          tvlPercentage: totalTvl > 0 ? (data.totalTvl / totalTvl) * 100 : 0,
-        };
-      }).sort((a, b) => b.count - a.count);
-
-      setData(stageData);
-    };
-    
-    fetchData();
-  }, []);
-
-  const maxCount = Math.max(...data.map(d => d.count));
-
-  return (
-    <div className={className}>
-      <Card className="h-full">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold">Projects by Stage</CardTitle>
-          <p className="text-xs text-muted-foreground">
-            Decentralization progress distribution
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {data.map((item, index) => (
-              <div key={index} className="space-y-1">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-medium">{item.stage}</span>
-                  <span className="text-muted-foreground">{item.count}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="h-2 rounded-full transition-all duration-300"
-                    style={{
-                      width: `${(item.count / maxCount) * 100}%`,
-                      backgroundColor: item.color,
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
-
-export const TVLByStageChart: React.FC<{ className?: string }> = ({ className }) => {
+export const CombinedStageChart: React.FC<{ className?: string }> = ({ className }) => {
   const [data, setData] = useState<StageData[]>([]);
 
   useEffect(() => {
@@ -143,25 +56,24 @@ export const TVLByStageChart: React.FC<{ className?: string }> = ({ className })
         return acc;
       }, {} as Record<string, { reviews: any[], totalTvl: number }>);
 
+      const totalCount = allReviews.length;
       const totalTvl = allReviews.reduce((sum, review) => sum + (review.tvl === "n/a" ? 0 : review.tvl), 0);
 
-      const stageData: StageData[] = Object.entries(stageGroups).map(([stage, data]) => {
+      // Create ordered data for Others, Stage 0, Stage 1, Stage 2
+      const orderedStages = ["O", 0, 1, 2];
+      const stageData: StageData[] = orderedStages.map(stage => {
         const stageInfo = getStageInfo(stage as Stage);
+        const data = stageGroups[stage] || { reviews: [], totalTvl: 0 };
         return {
           stage: stageInfo.name,
           count: data.reviews.length,
           tvl: data.totalTvl,
           colorClass: stageInfo.colorClass,
           color: stageInfo.color,
-          percentage: (data.reviews.length / allReviews.length) * 100,
+          percentage: (data.reviews.length / totalCount) * 100,
           tvlPercentage: totalTvl > 0 ? (data.totalTvl / totalTvl) * 100 : 0,
         };
-      }).sort((a, b) => {
-        // Put "Others" first, then sort by TVL descending
-        if (a.stage === "Others") return -1;
-        if (b.stage === "Others") return 1;
-        return b.tvl - a.tvl;
-      });
+      }).filter(item => item.count > 0); // Only show stages with data
 
       setData(stageData);
     };
@@ -169,37 +81,27 @@ export const TVLByStageChart: React.FC<{ className?: string }> = ({ className })
     fetchData();
   }, []);
 
-  const maxTvl = Math.max(...data.map(d => d.tvl));
-
   return (
     <div className={className}>
       <Card className="h-full">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold">TVL by Stage</CardTitle>
+          <CardTitle className="text-sm font-semibold">Projects & TVL by Stage</CardTitle>
           <p className="text-xs text-muted-foreground">
-            Value locked in reviewed protocols per stage
+            Protocol distribution and value by decentralization stage
           </p>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={120}>
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey="tvl"
-                nameKey="stage"
-                cx="50%"
-                cy="50%"
-                innerRadius={25}
-                outerRadius={50}
-                strokeWidth={2}
-                stroke="white"
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={data} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+              <XAxis 
+                dataKey="stage" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 11 }}
+              />
+              <YAxis hide />
               <Tooltip
-                content={({ active, payload }) => {
+                content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     const formattedTvl = data.tvl >= 1e9 ? `$${(data.tvl / 1e9).toFixed(1)}B` : 
@@ -207,18 +109,28 @@ export const TVLByStageChart: React.FC<{ className?: string }> = ({ className })
                                        formatUsd(data.tvl);
                     return (
                       <div className="bg-white p-2 rounded shadow-lg border text-xs">
-                        <p className="font-medium">{data.stage}</p>
-                        <p className="text-muted-foreground">{formattedTvl}</p>
+                        <p className="font-medium">{label}</p>
+                        <p className="text-muted-foreground">{data.count} protocols</p>
+                        <p className="text-muted-foreground">{formattedTvl} TVL</p>
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-            </PieChart>
+              <Bar 
+                dataKey="count" 
+                radius={[2, 2, 0, 0]}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
     </div>
   );
 };
+
