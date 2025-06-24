@@ -72,7 +72,7 @@ export const createColumns = (
         const chains = row.original.children!.map((c) => c.chain);
 
         return (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center max-w-16 md:max-w-none">
             {chains.map((c, i) => (
               <Chain
                 key={`chain-${i}`}
@@ -85,7 +85,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center max-w-16 md:max-w-none">
           <Chain name={chain as ChainNames} className="scale-75 md:scale-100" />
         </div>
       );
@@ -185,7 +185,7 @@ export const createColumns = (
         stage = uniqueStages.length === 1 ? highestStage : "V";
         
         return (
-          <div className="w-full flex justify-center">
+          <div className="max-w-20 md:w-full flex justify-center">
             <div className="scale-75 md:scale-100">
               <StageBadge 
                 stage={stage} 
@@ -199,7 +199,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="w-full flex justify-center">
+        <div className="max-w-20 md:w-full flex justify-center">
           <div className="scale-75 md:scale-100">
             <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
           </div>
