@@ -74,7 +74,7 @@ export default function Table() {
   const tableColumns = createColumns(getProtocolLogo);
 
   return (
-    <div className="mx-auto w-full">
+    <div className="mx-auto w-auto">
       <DataTable
         columns={tableColumns}
         data={projects || []}

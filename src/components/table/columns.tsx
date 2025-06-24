@@ -19,7 +19,6 @@ export const createColumns = (
 ): ColumnDef<Project>[] => [
   {
     accessorKey: "protocol",
-    size: 160, // Fixed width for mobile table-fixed layout (32px expand + 128px content)
     header: ({ column }) => {
       return (
         <Button
@@ -37,7 +36,7 @@ export const createColumns = (
       const protocol = row.getValue("protocol");
       const baseProtocol = (row.original as any).baseProtocol || protocol;
       return (
-        <div className="flex items-center w-32 md:max-w-48">
+        <div className="flex items-center max-w-36 md:max-w-48">
           <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage
               src={getProtocolLogo(baseProtocol as string)}
@@ -53,7 +52,6 @@ export const createColumns = (
   {
     id: "chain",
     accessorKey: "chain",
-    size: 60, // Fixed width for mobile table-fixed layout
     header: ({ column }) => {
       return (
         <Button
@@ -137,7 +135,6 @@ export const createColumns = (
   {
     id: "stage",
     accessorKey: "stage",
-    size: 60, // Fixed width for mobile table-fixed layout
     header: ({ column }) => {
       return (
         <Button
