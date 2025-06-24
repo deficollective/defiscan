@@ -284,8 +284,41 @@ export function DataTable<TData, TValue>({
 
       <div className="overflow-hidden">
         <TableToolbar table={table} />
-        <ScrollArea className="w-full">
-          <Table>
+        
+        {/* Desktop: Use ScrollArea for styled scrollbars */}
+        <div className="hidden md:block">
+          <ScrollArea className="w-full">
+            <Table className="min-w-[500px]">
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="hover:bg-accent">
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>{renderTableBody(table, columns)}</TableBody>
+            </Table>
+          </ScrollArea>
+        </div>
+
+        {/* Mobile: Use native horizontal scrolling */}
+        <div 
+          className="block md:hidden overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent" 
+          style={{ 
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'thin'
+          }}
+        >
+          <Table className="min-w-[500px]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="hover:bg-accent">
@@ -304,7 +337,7 @@ export function DataTable<TData, TValue>({
             </TableHeader>
             <TableBody>{renderTableBody(table, columns)}</TableBody>
           </Table>
-        </ScrollArea>
+        </div>
       </div>
     </div>
   );

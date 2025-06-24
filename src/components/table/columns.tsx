@@ -36,14 +36,14 @@ export const createColumns = (
       const protocol = row.getValue("protocol");
       const baseProtocol = (row.original as any).baseProtocol || protocol;
       return (
-        <div className="flex items-center">
-          <Avatar className="h-8 w-8">
+        <div className="flex items-center max-w-36 md:max-w-48">
+          <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage
               src={getProtocolLogo(baseProtocol as string)}
               alt={protocol as string}
             />
           </Avatar>
-          <span className="ml-2">{protocol as string}</span>
+          <span className="ml-2 truncate">{protocol as string}</span>
         </div>
       );
     },
@@ -77,7 +77,7 @@ export const createColumns = (
               <Chain
                 key={`chain-${i}`}
                 name={c as ChainNames}
-                className={cn(i > 0 && "-ml-3")}
+                className={cn(i > 0 && "-ml-3", "scale-75 md:scale-100")}
               />
             ))}
           </div>
@@ -86,7 +86,7 @@ export const createColumns = (
 
       return (
         <div className="flex items-center justify-center">
-          <Chain name={chain as ChainNames} />
+          <Chain name={chain as ChainNames} className="scale-75 md:scale-100" />
         </div>
       );
     },
@@ -119,11 +119,13 @@ export const createColumns = (
 
       return (
         <div className="w-full flex justify-center">
-          <StageBadge 
-            stage={stage} 
-            reasons={[]} 
-            subStages={[]}
-          />
+          <div className="scale-75 md:scale-100">
+            <StageBadge 
+              stage={stage} 
+              reasons={[]} 
+              subStages={[]}
+            />
+          </div>
         </div>
       );
     },
@@ -184,19 +186,23 @@ export const createColumns = (
         
         return (
           <div className="w-full flex justify-center">
-            <StageBadge 
-              stage={stage} 
-              reasons={reasons} 
-              subStages={subStages}
-              highestStage={highestStage}
-            />
+            <div className="scale-75 md:scale-100">
+              <StageBadge 
+                stage={stage} 
+                reasons={reasons} 
+                subStages={subStages}
+                highestStage={highestStage}
+              />
+            </div>
           </div>
         );
       }
 
       return (
         <div className="w-full flex justify-center">
-          <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
+          <div className="scale-75 md:scale-100">
+            <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
+          </div>
         </div>
       );
     },
@@ -218,7 +224,18 @@ export const createColumns = (
       );
     },
     cell: ({ row }) => {
-      const reasons = row.getValue("reasons") as Reasons;
+      let reasons = row.getValue("reasons") as Reasons;
+      
+      // For aggregated rows (parent rows with children), collect reasons from all children
+      if (row.original.children && row.original.children.length > 0) {
+        const childReasons = row.original.children
+          .flatMap((child: any) => child.reasons || [])
+          .filter((reason: string, index: number, arr: string[]) => 
+            arr.indexOf(reason) === index // Remove duplicates
+          );
+        reasons = [...(reasons || []), ...childReasons];
+      }
+      
       if (!reasons || reasons.length === 0) return null;
       
       return (
@@ -226,9 +243,11 @@ export const createColumns = (
           {reasons.map((el, index) => (
             <HoverCard key={index}>
               <HoverCardTrigger>
-                <Badge className="my-1 bg-red-500 text-white">
-                  {el}
-                </Badge>
+                <div className="scale-75 md:scale-100">
+                  <Badge className="my-1 bg-red-500 text-white">
+                    {el}
+                  </Badge>
+                </div>
               </HoverCardTrigger>
               <HoverCardContent>
                 Reason for unqualified status
@@ -242,7 +261,7 @@ export const createColumns = (
   },
   {
     accessorKey: "risks",
-    header: ({ column }) => {
+    header: () => {
       return <p className="text-xs md:text-sm text-center">Risks</p>;
     },
     cell: ({ row }) => {
@@ -303,7 +322,7 @@ export const createColumns = (
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Protocols
+          Used by
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -316,7 +335,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex flex-wrap gap-1 max-w-48">
+        <div className="flex flex-wrap gap-1 max-w-32">
           {protocols.map((protocolName, index) => (
             <img
               key={index}
@@ -353,8 +372,29 @@ export const createColumns = (
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const tvl = row.getValue("tvl");
+    cell: ({ row, table }) => {
+      let tvl = row.getValue("tvl");
+      
+      // For aggregated rows (parent rows with children), calculate TVL only from children 
+      // that match the current tab's stage filter
+      if (row.original.children && row.original.children.length > 0) {
+        // Get the current stage filter from the table's column filters
+        const stageFilter = table.getColumn("stage")?.getFilterValue() as string[];
+        
+        if (stageFilter && stageFilter.length > 0) {
+          // Sum TVL only from children that match the stage filter
+          const filteredTvl = row.original.children
+            .filter((child: any) => stageFilter.includes(child.stage))
+            .reduce((sum: number, child: any) => {
+              const childTvl = child.tvl;
+              if (childTvl === "n/a" || childTvl === null || childTvl === undefined) return sum;
+              return sum + (typeof childTvl === "number" ? childTvl : 0);
+            }, 0);
+          
+          tvl = filteredTvl > 0 ? filteredTvl : "n/a";
+        }
+      }
+      
       return (
         <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
           <span className="hidden md:inline">

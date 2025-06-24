@@ -137,7 +137,7 @@ const Badge = ({
     <BadgeRaw
       variant="outline"
       className={cn(
-        "border-none text-white rounded mx-auto bg-gray-500 hover:bg-gray-600 flex justify-center",
+        "border-none text-white rounded mx-auto bg-gray-500 hover:bg-gray-600 flex justify-center whitespace-nowrap",
         stage === "O" && "bg-red-300 hover:bg-red-400",
         stage === 0 && "bg-red-500 hover:bg-red-primary",
         stage === 1 && "bg-yellow-500 hover:bg-yellow-primary",
