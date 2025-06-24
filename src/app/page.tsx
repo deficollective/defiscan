@@ -28,15 +28,9 @@ export default function Home() {
             <ChainCoverageComponent className="w-full" />
           </div>
         </div>
-        <p className="text-sm text-gray-500 -mt-6">Data source: DefiLlama</p>
+        <p className="text-sm text-gray-500 -mt-6">TVL Data source: DefiLlama</p>
         
         <div className="mb-32">
-          <h2 className="text-xl font-semibold text-primary mb-4">
-            Protocol Reviews Database
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Browse our comprehensive decentralization analysis for each protocol
-          </p>
           <Table />
         </div>
       </div>

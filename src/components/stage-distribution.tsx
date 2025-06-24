@@ -18,12 +18,13 @@ interface StageData {
 }
 
 const getStageInfo = (stage: Stage) => {
-  // Handle both number and string versions of stages
-  if (stage === 0 || stage === "0" || stage === "I0") return { name: "Stage 0", colorClass: "bg-red-500", color: "#ef4444" };
-  if (stage === 1 || stage === "1" || stage === "I1") return { name: "Stage 1", colorClass: "bg-yellow-500", color: "#eab308" };
-  if (stage === 2 || stage === "2" || stage === "I2") return { name: "Stage 2", colorClass: "bg-green-500", color: "#22c55e" };
+  // Handle number and string versions of stages
+  if (stage === 0 || stage === "I0") return { name: "Stage 0", colorClass: "bg-red-500", color: "#ef4444" };
+  if (stage === 1 || stage === "I1") return { name: "Stage 1", colorClass: "bg-yellow-500", color: "#eab308" };
+  if (stage === 2 || stage === "I2") return { name: "Stage 2", colorClass: "bg-green-500", color: "#22c55e" };
   if (stage === "R") return { name: "Review", colorClass: "bg-gray-500", color: "#6b7280" };
   if (stage === "O") return { name: "Others", colorClass: "bg-red-300", color: "#f87171" };
+  if (stage === "V") return { name: "Variable", colorClass: "bg-gray-400", color: "#9ca3af" };
   return { name: `Stage ${stage}`, colorClass: "bg-gray-500", color: "#6b7280" };
 };
 
