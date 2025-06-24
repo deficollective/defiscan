@@ -36,14 +36,14 @@ export const createColumns = (
       const protocol = row.getValue("protocol");
       const baseProtocol = (row.original as any).baseProtocol || protocol;
       return (
-        <div className="flex items-center max-w-36 md:max-w-48">
+        <div className="flex items-center max-w-36 md:max-w-48 relative z-10">
           <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage
               src={getProtocolLogo(baseProtocol as string)}
               alt={protocol as string}
             />
           </Avatar>
-          <span className="ml-2 truncate">{protocol as string}</span>
+          <span className="ml-2 whitespace-nowrap overflow-visible">{protocol as string}</span>
         </div>
       );
     },
@@ -73,7 +73,7 @@ export const createColumns = (
         const chains = row.original.children!.map((c) => c.chain);
 
         return (
-          <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none">
+          <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none relative z-5">
             {chains.map((c, i) => (
               <Chain
                 key={`chain-${i}`}
@@ -86,7 +86,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none">
+        <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none relative z-5">
           <Chain name={chain as ChainNames} className="scale-75 md:scale-100" />
         </div>
       );
