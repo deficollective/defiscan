@@ -68,11 +68,11 @@ const renderTableBody = <TData, TValue>(
           {row.getVisibleCells().map((cell, index) => (
             <TableCell
               key={cell.id}
-              className={cn("first:pl-1", cell.column.id)}
+              className={cn("md:first:pl-1", cell.column.id)}
             >
               {index === 0 ? (
                 <div className="flex items-center">
-                  <div className="w-6 flex justify-center mr-2">
+                  <div className="w-4 md:w-6 flex justify-center mr-1 md:mr-2">
                     {row.getCanExpand() && (
                       row.getIsExpanded() ? (
                         <ChevronDown className="h-4 w-4" />

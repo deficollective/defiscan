@@ -19,6 +19,7 @@ export const createColumns = (
 ): ColumnDef<Project>[] => [
   {
     accessorKey: "protocol",
+    size: 140, // Fixed width for mobile table-fixed layout
     header: ({ column }) => {
       return (
         <Button
@@ -43,7 +44,7 @@ export const createColumns = (
               alt={protocol as string}
             />
           </Avatar>
-          <span className="ml-2 truncate">{protocol as string}</span>
+          <span className="ml-1 md:ml-2 truncate">{protocol as string}</span>
         </div>
       );
     },
@@ -52,9 +53,11 @@ export const createColumns = (
   {
     id: "chain",
     accessorKey: "chain",
+    size: 60, // Fixed width for mobile table-fixed layout
     header: ({ column }) => {
       return (
         <Button
+          className="justify-start md:justify-center"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -72,7 +75,7 @@ export const createColumns = (
         const chains = row.original.children!.map((c) => c.chain);
 
         return (
-          <div className="flex items-center justify-center max-w-16 md:max-w-none">
+          <div className="flex items-center justify-center md:justify-center">
             {chains.map((c, i) => (
               <Chain
                 key={`chain-${i}`}
@@ -85,7 +88,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex items-center justify-center max-w-16 md:max-w-none">
+        <div className="flex items-center justify-center md:justify-center">
           <Chain name={chain as ChainNames} className="scale-75 md:scale-100" />
         </div>
       );
@@ -134,10 +137,11 @@ export const createColumns = (
   {
     id: "stage",
     accessorKey: "stage",
+    size: 60, // Fixed width for mobile table-fixed layout
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm w-full"
+          className="p-0 text-xs md:text-sm justify-start md:w-full"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -185,7 +189,7 @@ export const createColumns = (
         stage = uniqueStages.length === 1 ? highestStage : "V";
         
         return (
-          <div className="max-w-20 md:w-full flex justify-center">
+          <div className="flex justify-start md:justify-center">
             <div className="scale-75 md:scale-100">
               <StageBadge 
                 stage={stage} 
@@ -199,7 +203,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="max-w-20 md:w-full flex justify-center">
+        <div className="flex justify-start md:justify-center">
           <div className="scale-75 md:scale-100">
             <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
           </div>
