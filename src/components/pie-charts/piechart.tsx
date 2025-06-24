@@ -207,7 +207,12 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
         })
         .flat();
 
-      const groupedBy = groupBy(merged, groupByKey);
+      // Filter out infrastructure stages (I0, I1, I2) when grouping by stage
+      const filteredMerged = groupByKey === "stage" 
+        ? merged.filter((item) => !item.stage?.toString().startsWith("I"))
+        : merged;
+
+      const groupedBy = groupBy(filteredMerged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
       const coloredResults = extendWithColor(aggregated, baseColor);
       setData(coloredResults);
