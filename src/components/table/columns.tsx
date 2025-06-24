@@ -22,7 +22,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="text-left justify-start h-8 pl-6"
+          className="text-left justify-start h-8 pl-6 max-w-36 md:max-w-48"
           variant="ghost"
           size="sm"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -55,7 +55,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="justify-start md:justify-center"
+          className="justify-center p-0 max-w-16 md:max-w-none md:justify-center"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
