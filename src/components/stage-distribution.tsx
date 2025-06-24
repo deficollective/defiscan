@@ -99,9 +99,10 @@ export const StageDistributionChart: React.FC<{ className?: string }> = ({ class
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className={`h-2 rounded-full transition-all duration-300 ${item.colorClass}`}
+                    className="h-2 rounded-full transition-all duration-300"
                     style={{
                       width: `${(item.count / maxCount) * 100}%`,
+                      backgroundColor: item.color,
                     }}
                   />
                 </div>
@@ -176,7 +177,7 @@ export const TVLByStageChart: React.FC<{ className?: string }> = ({ className })
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold">TVL by Stage</CardTitle>
           <p className="text-xs text-muted-foreground">
-            Value locked per stage
+            Value locked in reviewed protocols per stage
           </p>
         </CardHeader>
         <CardContent>
