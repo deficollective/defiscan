@@ -73,7 +73,7 @@ export const createColumns = (
         const chains = row.original.children!.map((c) => c.chain);
 
         return (
-          <div className="flex items-center justify-center md:justify-center">
+          <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none">
             {chains.map((c, i) => (
               <Chain
                 key={`chain-${i}`}
@@ -86,7 +86,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex items-center justify-center md:justify-center">
+        <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none">
           <Chain name={chain as ChainNames} className="scale-75 md:scale-100" />
         </div>
       );
