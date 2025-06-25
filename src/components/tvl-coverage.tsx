@@ -9,6 +9,7 @@ import { reviews as allReviews } from "#site/content";
 import { defiLlama } from "@/services/defillama";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 interface CoverageData {
   reviewedTvl: number;
@@ -28,6 +29,23 @@ interface RecentAddition {
 export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ className }) => {
   const [data, setData] = useState<CoverageData | null>(null);
   const [recentAdditions, setRecentAdditions] = useState<RecentAddition[]>([]);
+
+  const scrollToReviews = () => {
+    // Look for the tabs (DeFi, Infrastructure, Others) - ToggleGroup component
+    const tabsElement = document.querySelector('[data-state]') || // ToggleGroup items have data-state
+                       document.querySelector('button[aria-label="Toggle DeFi"]') || // Specific DeFi button
+                       document.querySelector('[role="radiogroup"]') || // ToggleGroup has radiogroup role
+                       document.querySelector('button[value="defi"]'); // Button with defi value
+    
+    if (tabsElement) {
+      // If we found a toggle item, scroll to its parent container
+      const container = tabsElement.closest('div') || tabsElement;
+      container.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start' 
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,6 +159,12 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
             {/* Recent Additions */}
             {recentAdditions.length > 0 && (
               <div className="border-t pt-6">
+                <div className="mb-4">
+                        <p className="text-xs text-center text-muted-foreground">
+                          DeFiScan reviews DeFi protocols to assess their decentralization progress and centralization risks. 
+                          We score protocols from Stage 0 (centralized) to Stage 2 (decentralized) to help users make informed decisions.
+                        </p>
+                </div>
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-medium">Recent Additions:</span>
                   <div className="flex gap-2">
@@ -160,6 +184,18 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
                       </Link>
                     ))}
                   </div>
+                </div>
+                
+                {/* See all reviews button */}
+                <div className="pt-4 text-center">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={scrollToReviews}
+                    className="text-xs border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  >
+                    See all reviews
+                  </Button>
                 </div>
               </div>
             )}

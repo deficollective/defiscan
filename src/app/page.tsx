@@ -11,10 +11,6 @@ export default function Home() {
         <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
           Transparency on Decentralization in DeFi
         </h1>
-        <p className="text-lg text-muted-foreground max-w-4xl">
-          DeFiScan reviews DeFi protocols to assess their decentralization progress and centralization risks. 
-          We score protocols from Stage 0 (centralized) to Stage 2 (decentralized) to help users make informed decisions.
-        </p>
         <div className="flex flex-col w-full my-2 lg:flex-row gap-4">
           {/* Main Coverage Component */}
           <TVLCoverageComponent className="w-full lg:w-2/3" />
