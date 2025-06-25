@@ -189,13 +189,12 @@ export const createColumns = (
         if (qualifiedStages.length > 1) {
           return (
             <div className="flex justify-start md:justify-center">
-              <div className="scale-75 md:scale-100">
-                <StackedStageBadge 
-                  stages={qualifiedStages}
-                  reasons={reasons} 
-                  subStages={subStages}
-                />
-              </div>
+              <StackedStageBadge 
+                stages={qualifiedStages}
+                reasons={reasons} 
+                subStages={subStages}
+                className="scale-75 md:scale-100"
+              />
             </div>
           );
         }
@@ -205,23 +204,25 @@ export const createColumns = (
         
         return (
           <div className="flex justify-start md:justify-center">
-            <div className="scale-75 md:scale-100">
-              <StageBadge 
-                stage={stage} 
-                reasons={reasons} 
-                subStages={subStages}
-                highestStage={highestStage}
-              />
-            </div>
+            <StageBadge 
+              stage={stage} 
+              reasons={reasons} 
+              subStages={subStages}
+              highestStage={highestStage}
+              className="scale-75 md:scale-100"
+            />
           </div>
         );
       }
 
       return (
         <div className="flex justify-start md:justify-center">
-          <div className="scale-75 md:scale-100">
-            <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
-          </div>
+          <StageBadge 
+            stage={stage} 
+            reasons={reasons} 
+            subStages={subStages}
+            className="scale-75 md:scale-100"
+          />
         </div>
       );
     },

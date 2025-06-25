@@ -2,8 +2,11 @@ import * as React from "react";
 import { Badge as BadgeRaw } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Reason, STAGE, Stage } from "@/lib/types";
-import { HoverCard } from "./ui/hover-card";
-import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
 
 const risks = {
   "Central Custody":
@@ -193,17 +196,16 @@ export function StageBadge({
 
   return (
     <HoverCard>
-      <HoverCardTrigger>
+      <HoverCardTrigger className={className}>
         <Badge 
           stage={shouldUseVariableColor ? "V" : displayStage} 
-          className={className}
           displayText={shouldUseVariableColor ? stage_text[highestStage] : undefined}
         />
       </HoverCardTrigger>
       <HoverCardContent
+        className="z-50 p-4 rounded-md bg-white"
         side="top"
         sideOffset={4}
-        className="z-50 p-4 rounded-md bg-white"
       >
         <div className="prose-sm max-w-md">
           <h3 className="mr-2">Stage of Decentralisation</h3>
@@ -243,27 +245,27 @@ export function StackedStageBadge({
 
   return (
     <HoverCard>
-      <HoverCardTrigger>
+      <HoverCardTrigger className={className}>
         <div className="relative flex items-center">
           {/* Main badge in front */}
           <Badge 
             stage={highestStage} 
-            className={cn("relative z-10", className)}
+            className="relative z-30"
           />
           
           {/* Background badges - shifted to the left */}
           {backgroundStages.map((stage, index) => {
             const offsetClasses = [
-              "absolute -left-2 scale-90 opacity-80 z-0",
-              "absolute -left-4 scale-90 opacity-70 z-0", 
-              "absolute -left-6 scale-90 opacity-60 z-0"
+              "absolute -left-2 scale-90 opacity-80 z-20",
+              "absolute -left-4 scale-90 opacity-70 z-10", 
+              "absolute -left-6 scale-90 opacity-60 z-5"
             ];
             return (
               <Badge
                 key={`bg-${stage}-${index}`}
                 stage={stage}
                 className={cn(
-                  offsetClasses[index] || "absolute -left-2 scale-90 opacity-80 z-0",
+                  offsetClasses[index] || "absolute -left-2 scale-90 opacity-80 z-20",
                   className
                 )}
               />
@@ -272,9 +274,9 @@ export function StackedStageBadge({
         </div>
       </HoverCardTrigger>
       <HoverCardContent
+        className="z-50 p-4 rounded-md bg-white"
         side="top"
         sideOffset={4}
-        className="z-50 p-4 rounded-md bg-white"
       >
         <div className="prose-sm max-w-md">
           <h3 className="mr-2">Stage of Decentralisation</h3>
