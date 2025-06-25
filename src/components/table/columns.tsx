@@ -295,7 +295,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm"
+          className="hidden md:flex p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -306,7 +306,7 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const type = row.getValue("type");
-      return <div className="text-center">{type as string}</div>;
+      return <div className="hidden md:block text-center">{type as string}</div>;
     },
     sortingFn: "alphanumeric",
     meta: {
@@ -319,7 +319,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm"
+          className="hidden md:flex p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -336,7 +336,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex flex-wrap gap-1 max-w-32">
+        <div className="hidden md:flex flex-wrap gap-1 max-w-32">
           {protocols.map((protocolName, index) => (
             <img
               key={index}
@@ -364,7 +364,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="w-0 w-auto overflow-hidden p-0"
+          className="hidden md:flex w-auto overflow-hidden p-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -397,8 +397,8 @@ export const createColumns = (
       }
       
       return (
-        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
-          <span className="hidden md:inline">
+        <div className="hidden md:block w-auto overflow-hidden whitespace-nowrap">
+          <span>
             {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
           </span>
         </div>
