@@ -10,7 +10,7 @@ import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { StageBadge } from "../stage";
+import { StageBadge, StackedStageBadge } from "../stage";
 import { infraScoreToText } from "@/app/protocols/stageToRequisites";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
@@ -183,6 +183,24 @@ export const createColumns = (
         
         const highestStage = getHighestStage(subStages);
         const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
+        const qualifiedStages = uniqueStages.filter(stage => stage !== "O");
+        
+        // If multiple unique qualified stages, use stacked badges
+        if (qualifiedStages.length > 1) {
+          return (
+            <div className="flex justify-start md:justify-center">
+              <div className="scale-75 md:scale-100">
+                <StackedStageBadge 
+                  stages={qualifiedStages}
+                  reasons={reasons} 
+                  subStages={subStages}
+                />
+              </div>
+            </div>
+          );
+        }
+        
+        // Single stage or use traditional variable badge
         stage = uniqueStages.length === 1 ? highestStage : "V";
         
         return (

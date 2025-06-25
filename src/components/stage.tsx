@@ -216,3 +216,73 @@ export function StageBadge({
     </HoverCard>
   );
 }
+
+export function StackedStageBadge({
+  className,
+  stages,
+  reasons,
+  subStages = [],
+}: {
+  className?: string;
+  stages: Stage[];
+  reasons?: Reason[];
+  subStages?: SubStage[];
+}) {
+  // Filter out "Unqualified" stages and sort by priority (highest first)
+  const stagePriority: Record<Stage, number> = { 
+    "2": 5, "1": 4, "0": 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 
+  };
+  
+  const filteredStages = stages.filter(stage => stage !== "O");
+  const sortedStages = [...filteredStages].sort((a, b) => 
+    (stagePriority[b] || 0) - (stagePriority[a] || 0)
+  );
+  
+  const highestStage = sortedStages[0];
+  const backgroundStages = sortedStages.slice(1);
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger>
+        <div className="relative flex items-center">
+          {/* Main badge in front */}
+          <Badge 
+            stage={highestStage} 
+            className={cn("relative z-10", className)}
+          />
+          
+          {/* Background badges - shifted to the left */}
+          {backgroundStages.map((stage, index) => {
+            const offsetClasses = [
+              "absolute -left-2 scale-90 opacity-80 z-0",
+              "absolute -left-4 scale-90 opacity-70 z-0", 
+              "absolute -left-6 scale-90 opacity-60 z-0"
+            ];
+            return (
+              <Badge
+                key={`bg-${stage}-${index}`}
+                stage={stage}
+                className={cn(
+                  offsetClasses[index] || "absolute -left-2 scale-90 opacity-80 z-0",
+                  className
+                )}
+              />
+            );
+          })}
+        </div>
+      </HoverCardTrigger>
+      <HoverCardContent
+        side="top"
+        sideOffset={4}
+        className="z-50 p-4 rounded-md bg-white"
+      >
+        <div className="prose-sm max-w-md">
+          <h3 className="mr-2">Stage of Decentralisation</h3>
+          <p>This protocol has multiple implementations with different stages:</p>
+          
+          <SubStagesTable items={subStages} />
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+}
