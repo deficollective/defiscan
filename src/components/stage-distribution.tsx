@@ -92,7 +92,10 @@ export const CombinedStageChart: React.FC<{ className?: string }> = ({ className
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={data} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+            <BarChart 
+              data={data} 
+              margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+            >
               <XAxis 
                 dataKey="stage" 
                 axisLine={false}
@@ -101,6 +104,7 @@ export const CombinedStageChart: React.FC<{ className?: string }> = ({ className
               />
               <YAxis hide />
               <Tooltip
+                cursor={false}
                 content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
@@ -121,9 +125,14 @@ export const CombinedStageChart: React.FC<{ className?: string }> = ({ className
               <Bar 
                 dataKey="count" 
                 radius={[2, 2, 0, 0]}
+                className="cursor-pointer"
+                activeBar={{ opacity: 0.8 }}
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.color}
+                  />
                 ))}
               </Bar>
             </BarChart>
