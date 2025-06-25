@@ -68,7 +68,7 @@ const renderTableBody = <TData, TValue>(
           {row.getVisibleCells().map((cell, index) => (
             <TableCell
               key={cell.id}
-              className={cn("first:pl-1", cell.column.id)}
+              className={cn("md:first:pl-1", cell.column.id)}
             >
               {index === 0 ? (
                 <div className="flex items-center">
@@ -142,6 +142,7 @@ const getInitialVisibility = (
 
 const useResponsiveColumns = (
   table: TableType<any>,
+  activeView: ViewType,
   mobileBreakpoint = 800
 ) => {
   useEffect(() => {
@@ -151,7 +152,12 @@ const useResponsiveColumns = (
       table.getAllColumns().forEach((column) => {
         const meta = column.columnDef.meta as ExtendedColumnMeta;
         if (meta?.responsiveHidden) {
-          column.toggleVisibility(!isMobile);
+          // Special case: show risks column on mobile for DeFi tab
+          if (column.id === "risks" && activeView === "defi") {
+            column.toggleVisibility(true);
+          } else {
+            column.toggleVisibility(!isMobile);
+          }
         }
       });
     };
@@ -159,7 +165,7 @@ const useResponsiveColumns = (
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [table, mobileBreakpoint]);
+  }, [table, activeView, mobileBreakpoint]);
 };
 
 export function DataTable<TData, TValue>({
@@ -170,7 +176,9 @@ export function DataTable<TData, TValue>({
   infrastructureCount,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    { id: "stage", value: [0, 1, 2, "R"] } // Initial filter for "defi" view
+  ]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -245,7 +253,7 @@ export function DataTable<TData, TValue>({
     }
   }, [activeView, table]);
 
-  useResponsiveColumns(table);
+  useResponsiveColumns(table, activeView);
 
   const handleRowClick = (slug: string) => {
     window.location.href = slug;
@@ -288,7 +296,7 @@ export function DataTable<TData, TValue>({
         {/* Desktop: Use ScrollArea for styled scrollbars */}
         <div className="hidden md:block">
           <ScrollArea className="w-full">
-            <Table className="min-w-[500px]">
+            <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="hover:bg-accent">
@@ -318,7 +326,7 @@ export function DataTable<TData, TValue>({
             scrollbarWidth: 'thin'
           }}
         >
-          <Table className="min-w-[500px]">
+          <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="hover:bg-accent">

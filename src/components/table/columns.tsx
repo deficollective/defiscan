@@ -10,7 +10,7 @@ import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { StageBadge } from "../stage";
+import { StageBadge, StackedStageBadge } from "../stage";
 import { infraScoreToText } from "@/app/protocols/stageToRequisites";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
@@ -22,7 +22,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="text-left justify-start h-8 pl-6"
+          className="text-left justify-start h-8 pl-6 max-w-36 md:max-w-48"
           variant="ghost"
           size="sm"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -36,14 +36,14 @@ export const createColumns = (
       const protocol = row.getValue("protocol");
       const baseProtocol = (row.original as any).baseProtocol || protocol;
       return (
-        <div className="flex items-center max-w-36 md:max-w-48">
+        <div className="flex items-center max-w-36 md:max-w-48 relative z-10">
           <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage
               src={getProtocolLogo(baseProtocol as string)}
               alt={protocol as string}
             />
           </Avatar>
-          <span className="ml-2 truncate">{protocol as string}</span>
+          <span className="ml-2 whitespace-nowrap overflow-visible">{protocol as string}</span>
         </div>
       );
     },
@@ -55,6 +55,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
+          className="justify-center p-0 max-w-16 md:max-w-none md:justify-center"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -72,7 +73,7 @@ export const createColumns = (
         const chains = row.original.children!.map((c) => c.chain);
 
         return (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none relative z-5">
             {chains.map((c, i) => (
               <Chain
                 key={`chain-${i}`}
@@ -85,7 +86,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center md:justify-center max-w-8 md:max-w-none relative z-5">
           <Chain name={chain as ChainNames} className="scale-75 md:scale-100" />
         </div>
       );
@@ -137,7 +138,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm w-full"
+          className="p-0 text-xs md:text-sm justify-start md:w-full"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -182,27 +183,46 @@ export const createColumns = (
         
         const highestStage = getHighestStage(subStages);
         const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
+        const qualifiedStages = uniqueStages.filter(stage => stage !== "O");
+        
+        // If multiple unique qualified stages, use stacked badges
+        if (qualifiedStages.length > 1) {
+          return (
+            <div className="flex justify-start md:justify-center">
+              <StackedStageBadge 
+                stages={qualifiedStages}
+                reasons={reasons} 
+                subStages={subStages}
+                className="scale-75 md:scale-100"
+              />
+            </div>
+          );
+        }
+        
+        // Single stage or use traditional variable badge
         stage = uniqueStages.length === 1 ? highestStage : "V";
         
         return (
-          <div className="w-full flex justify-center">
-            <div className="scale-75 md:scale-100">
-              <StageBadge 
-                stage={stage} 
-                reasons={reasons} 
-                subStages={subStages}
-                highestStage={highestStage}
-              />
-            </div>
+          <div className="flex justify-start md:justify-center">
+            <StageBadge 
+              stage={stage} 
+              reasons={reasons} 
+              subStages={subStages}
+              highestStage={highestStage}
+              className="scale-75 md:scale-100"
+            />
           </div>
         );
       }
 
       return (
-        <div className="w-full flex justify-center">
-          <div className="scale-75 md:scale-100">
-            <StageBadge stage={stage} reasons={reasons} subStages={subStages} />
-          </div>
+        <div className="flex justify-start md:justify-center">
+          <StageBadge 
+            stage={stage} 
+            reasons={reasons} 
+            subStages={subStages}
+            className="scale-75 md:scale-100"
+          />
         </div>
       );
     },
@@ -294,7 +314,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm"
+          className="hidden md:flex p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -305,7 +325,7 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const type = row.getValue("type");
-      return <div className="text-center">{type as string}</div>;
+      return <div className="hidden md:block text-center">{type as string}</div>;
     },
     sortingFn: "alphanumeric",
     meta: {
@@ -318,7 +338,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm"
+          className="hidden md:flex p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -335,7 +355,7 @@ export const createColumns = (
       }
 
       return (
-        <div className="flex flex-wrap gap-1 max-w-32">
+        <div className="hidden md:flex flex-wrap gap-1 max-w-32">
           {protocols.map((protocolName, index) => (
             <img
               key={index}
@@ -363,7 +383,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="w-0 w-auto overflow-hidden p-0"
+          className="hidden md:flex w-auto overflow-hidden p-0"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -396,8 +416,8 @@ export const createColumns = (
       }
       
       return (
-        <div className="w-0 md:w-auto overflow-hidden whitespace-nowrap">
-          <span className="hidden md:inline">
+        <div className="hidden md:block w-auto overflow-hidden whitespace-nowrap">
+          <span>
             {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
           </span>
         </div>
