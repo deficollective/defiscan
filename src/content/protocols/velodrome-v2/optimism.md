@@ -17,10 +17,12 @@ stage_requirements:
     ],
     [
       { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+      { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
       { text: "Frontend backups or self-hosting option exists", status: "fixed"},
     ],
     [
       { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
+      { text: "There are no external dependencies", status: "fixed" },
       { text: "Alternative third-party frontends exist", status: "fixed" }  
 
     ],

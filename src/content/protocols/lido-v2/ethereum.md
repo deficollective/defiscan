@@ -17,7 +17,7 @@ stage_requirements:
     ],
     [
       { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
-      { text: "Dependency with High or Medium centralization are mitigated", status: "fixed" },
+      { text: "Dependency with High centralization are mitigated", status: "fixed" },
       { text: "Frontend backups or self-hosting option exists", status: "fixed"}
     ],
     [

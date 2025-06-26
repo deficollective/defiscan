@@ -16,11 +16,12 @@ stage_requirements: [
       ], 
       [
             { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+            { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
             { text: "Frontend backups or self-hosting option exists", status: "fixed"},
       ], 
       [
-            { text: "Dependency with a High or Medium centralization score is mitigated", status: "fixed" },
             { text: "Contracts are immutable", status: "fixed" },
+            { text: "Dependency with a High or Medium centralization score is mitigated", status: "fixed" },
             { text: "Alternative third-party frontends exist", status: "fixed" }  
       ]]
 ---
