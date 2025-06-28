@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Important pages for indexing
+Allow: /privacy
+Allow: /terms
+Allow: /submit-review
+
+# Sitemap location (auto-generated with all protocol URLs)
+Sitemap: https://defiscan.info/sitemap.xml
+
+# Common crawl directives
+Crawl-delay: 1
+
+# Block any potential admin or internal paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/

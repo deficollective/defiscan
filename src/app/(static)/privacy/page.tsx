@@ -2,7 +2,20 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Statement",
+  title: "Privacy Policy | DeFiScan",
+  description: "DeFiScan privacy policy. Learn how we collect, use, and protect your personal data when using our DeFi protocol analysis platform. GDPR compliant data practices.",
+  keywords: ["privacy policy", "data protection", "GDPR", "DeFiScan", "personal data", "data security"],
+  openGraph: {
+    title: "Privacy Policy | DeFiScan",
+    description: "Learn about DeFiScan's data collection and protection practices. GDPR compliant privacy policy for our DeFi protocol analysis platform.",
+    url: "https://defiscan.info/privacy",
+    siteName: "DeFiScan",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function PrivacyPage() {

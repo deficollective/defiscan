@@ -1,4 +1,4 @@
-// import { Metadata } from "next";
+import { Metadata } from "next";
 import {
   reviews as allReviews,
   protocols as allProtocols,
@@ -39,28 +39,77 @@ async function getProtocolFromParams(slug: string[]) {
   return { ...protocol, ...review, chains };
 }
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: { slug: string[] };
-// }): Promise<Metadata> {
-//   const protocol = await getProtocolFromParams(params.slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] };
+}): Promise<Metadata> {
+  const protocol = await getProtocolFromParams(params.slug);
 
-//   if (!protocol) {
-//     return {
-//       title: "Protocol not found",
-//       description: "Protocol details could not be found.",
-//     };
-//   }
+  if (!protocol) {
+    return {
+      title: "Protocol not found | DeFiScan",
+      description: "The requested DeFi protocol analysis could not be found. Browse our database of 200+ DeFi protocols and their decentralization stages.",
+      openGraph: {
+        title: "Protocol not found | DeFiScan",
+        description: "The requested DeFi protocol analysis could not be found.",
+        url: "https://defiscan.info",
+        siteName: "DeFiScan",
+        type: "website",
+      },
+    };
+  }
 
-//   return {
-//     title: protocol.protocol,
-//     description: "DeFi Scan decentralization report for " + protocol.protocol,
-//     authors: {
-//       name: protocol.author!.join(", "),
-//     },
-//   };
-// }
+  const stageName = protocol.stage === 0 ? "Stage 0" : 
+                   protocol.stage === 1 ? "Stage 1" : 
+                   protocol.stage === 2 ? "Stage 2" : 
+                   protocol.stage === "R" ? "Review" : 
+                   protocol.stage === "O" ? "Others" : 
+                   protocol.stage?.toString().startsWith("I") ? `Infrastructure ${protocol.stage}` : 
+                   `Stage ${protocol.stage}`;
+
+  const chainText = protocol.chain ? ` on ${protocol.chain}` : "";
+
+  return {
+    title: `${protocol.protocol} Analysis - ${stageName} | DeFiScan`,
+    description: `Comprehensive decentralization analysis of ${protocol.protocol}${chainText}. Current stage: ${stageName}. View security assessment, infrastructure details, and risk analysis.`,
+    keywords: [
+      protocol.protocol,
+      "DeFi",
+      "decentralization",
+      "centralization", 
+      "protocol analysis",
+      stageName,
+      protocol.chain,
+      "Protocol Permissions",
+      "DeFi stages"
+    ].filter((keyword): keyword is string => Boolean(keyword)),
+    authors: protocol.author ? {
+      name: protocol.author.join(", "),
+    } : undefined,
+    openGraph: {
+      title: `${protocol.protocol} - ${stageName} Analysis | DeFiScan`,
+      description: `Detailed decentralization analysis of ${protocol.protocol}${chainText}. Stage: ${stageName}. Centralization assessment and infrastructure review.`,
+      url: `https://defiscan.info/protocols/${params.slug.join("/")}`,
+      siteName: "DeFiScan",
+      type: "article",
+      images: [
+        {
+          url: "https://defiscan.info/images/logo.png",
+          width: 800,
+          height: 600,
+          alt: `${protocol.protocol} DeFi Protocol Analysis`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${protocol.protocol} - ${stageName} Analysis`,
+      description: `Decentralization analysis: ${stageName} on ${chainText}. View full security assessment on DeFiScan.`,
+      images: ["https://defiscan.info/images/logo.png"],
+    },
+  };
+}
 
 export default async function ProtocolPageItem({
   params,

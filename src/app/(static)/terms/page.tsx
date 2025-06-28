@@ -2,7 +2,20 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "User Terms v.2",
+  title: "Terms of Service | DeFiScan",
+  description: "DeFiScan terms of service and user agreement. Understand the terms and conditions for using our DeFi protocol analysis platform and data services.",
+  keywords: ["terms of service", "user agreement", "terms and conditions", "DeFiScan", "legal terms"],
+  openGraph: {
+    title: "Terms of Service | DeFiScan",
+    description: "Read DeFiScan's terms of service and user agreement for our DeFi protocol analysis platform.",
+    url: "https://defiscan.info/terms",
+    siteName: "DeFiScan",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function TermsPage() {
