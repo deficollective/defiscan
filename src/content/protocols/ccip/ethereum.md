@@ -1,5 +1,5 @@
 ---
-chain: "mainnet"
+chain: "Ethereum"
 type: "Bridges"
 logo: "/images/infrastructure-logos/chainlink-logo.png"
 stage: "I0"
