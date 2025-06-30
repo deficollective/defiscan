@@ -5,11 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { loadReviews } from "@/lib/data/utils";
 import { formatUsd } from "@/lib/utils";
-import { reviews as allReviews } from "#site/content";
 import { defiLlama } from "@/services/defillama";
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { ProtocolCarousel } from "@/components/protocol-carousel";
 
 interface CoverageData {
   reviewedTvl: number;
@@ -18,17 +15,9 @@ interface CoverageData {
   protocolCount: number;
 }
 
-interface RecentAddition {
-  protocol: string;
-  logo: string;
-  chain: string;
-  slug: string;
-  publish_date: string;
-}
 
 export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ className }) => {
   const [data, setData] = useState<CoverageData | null>(null);
-  const [recentAdditions, setRecentAdditions] = useState<RecentAddition[]>([]);
 
   const scrollToReviews = () => {
     // Look for the tabs (DeFi, Infrastructure, Others) - ToggleGroup component
@@ -73,26 +62,6 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
         coveragePercentage: Math.min(coveragePercentage, 100), // Cap at 100%
         protocolCount,
       });
-
-      // Get recent additions - exclude infrastructure reviews and sort by publish_date
-      const recentReviews = allReviews
-        .filter(review => !review.stage?.toString().startsWith("I")) // Exclude infrastructure
-        .sort((a, b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime())
-        .slice(0, 5); // Get top 5 most recent
-
-      // Map to recent additions with project data
-      const additions: RecentAddition[] = recentReviews.map(review => {
-        const project = projects.find(p => p.reviews.some(r => r.slug === review.slug));
-        return {
-          protocol: project?.protocol || review.slug.split('/')[1] || 'Unknown',
-          logo: project?.logo || '/images/default-logo.png',
-          chain: review.chain,
-          slug: review.slug,
-          publish_date: review.publish_date,
-        };
-      });
-
-      setRecentAdditions(additions);
     };
     
     fetchData();
@@ -152,53 +121,12 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
               </div>
             </div>
 
-            <p className="text-xs text-center text-muted-foreground">
+            {/* <p className="text-xs text-center text-muted-foreground">
               Covering major DeFi protocols across multiple chains
-            </p>
+            </p> */}
 
-            {/* Recent Additions */}
-            {recentAdditions.length > 0 && (
-              <div className="border-t pt-6">
-                <div className="mb-4">
-                        <p className="text-xs text-center text-muted-foreground">
-                          DeFiScan reviews DeFi protocols to assess their decentralization progress and centralization risks. 
-                          We score protocols from Stage 0 (centralized) to Stage 2 (decentralized) to help users make informed decisions.
-                        </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium">Recent Additions:</span>
-                  <div className="flex gap-2">
-                    {recentAdditions.map((addition, index) => (
-                      <Link
-                        key={index}
-                        href={`/protocols/${addition.slug}`}
-                        className="relative w-8 h-8 hover:scale-110 transition-transform"
-                      >
-                        <Image
-                          src={addition.logo}
-                          alt={`${addition.protocol} logo`}
-                          fill
-                          className="rounded-full object-cover"
-                          sizes="32px"
-                        />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* See all reviews button */}
-                <div className="pt-4 text-center">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={scrollToReviews}
-                    className="text-xs border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                  >
-                    See all reviews
-                  </Button>
-                </div>
-              </div>
-            )}
+            {/* Protocols Carousel */}
+            <ProtocolCarousel onSeeAllClick={scrollToReviews} />
           </div>
         </CardContent>
       </Card>
