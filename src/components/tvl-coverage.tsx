@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { loadReviews } from "@/lib/data/utils";
-import { formatUsd } from "@/lib/utils";
+import { formatUsd, formatUsdMobile } from "@/lib/utils";
 import { defiLlama } from "@/services/defillama";
 import { ProtocolCarousel } from "@/components/protocol-carousel";
 
@@ -109,7 +109,8 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-primary">
-                  {formatUsd(data.reviewedTvl)}
+                  <span className="hidden sm:inline">{formatUsd(data.reviewedTvl)}</span>
+                  <span className="sm:hidden">{formatUsdMobile(data.reviewedTvl)}</span>
                 </p>
                 <p className="text-xs text-muted-foreground">Reviewed TVL</p>
               </div>
