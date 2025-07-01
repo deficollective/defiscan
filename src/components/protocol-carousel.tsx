@@ -24,17 +24,17 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     const fetchProtocols = async () => {
       try {
         const data = await loadReviews();
-        // Filter out protocols without logos, infrastructure reviews, and sort by name for consistency
+        // Filter out protocols without logos, infrastructure reviews, unqualified protocols, and sort by name for consistency
         const protocolsWithLogos = data
           .filter(protocol => {
             // Filter out protocols without logos
             if (!protocol.logo) return false;
             
-            // Filter out protocols that only have infrastructure reviews (stages starting with "I")
-            const hasNonInfrastructureReview = protocol.reviews.some(review => 
-              !review.stage?.toString().startsWith("I")
+            // Filter out protocols that only have infrastructure reviews (stages starting with "I") or unqualified ("O")
+            const hasValidReview = protocol.reviews.some(review => 
+              !review.stage?.toString().startsWith("I") && review.stage !== "O"
             );
-            return hasNonInfrastructureReview;
+            return hasValidReview;
           })
           .sort((a, b) => a.protocol.localeCompare(b.protocol));
         
@@ -139,9 +139,9 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
               }}
             >
               {extendedProtocols.map((protocol, index) => {
-                // Find the first non-infrastructure review for this protocol to create the link
+                // Find the first valid review (not infrastructure or unqualified) for this protocol to create the link
                 const firstValidReview = protocol.reviews.find(review => 
-                  !review.stage?.toString().startsWith("I")
+                  !review.stage?.toString().startsWith("I") && review.stage !== "O"
                 );
                 // Use the same slug approach as the table
                 const protocolSlug = firstValidReview ? firstValidReview.slug : null;
