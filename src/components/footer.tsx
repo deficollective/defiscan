@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer
-      className={`fixed bottom-0 left-0 right-0 p-4 backdrop-filter backdrop-blur-lg bg-white/30 transition-opacity duration-500 ${
+      className={`fixed bottom-0 left-0 right-0 p-2 backdrop-filter backdrop-blur-lg bg-white/30 transition-opacity duration-500 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >

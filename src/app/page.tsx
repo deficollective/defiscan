@@ -6,7 +6,7 @@ import { PieChartComponent } from "@/components/pie-charts/piechart";
 export default function Home() {
   return (
     <section className="mx-auto pb-8 md:pb-12 md:pt-10 lg:py-10">
-      <div className="container mt-6 flex max-w-5xl flex-col gap-10 text-left xl:mt-0">
+      <div className="container mt-2 flex max-w-5xl flex-col gap-10 text-left xl:mt-0">
         <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl">
           Transparency on Decentralization in DeFi
         </h1>
