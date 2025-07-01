@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { loadReviews } from '@/lib/data/utils';
 import { Project } from '@/lib/types';
 import Link from "next/link";
@@ -16,6 +16,9 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
   const [currentOffset, setCurrentOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
+  const pauseTimeRef = useRef(0);
+  const totalPausedTimeRef = useRef(0);
 
   useEffect(() => {
     const fetchProtocols = async () => {
@@ -46,9 +49,21 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     fetchProtocols();
   }, []);
 
+  // Update ref when state changes and track pause times
+  useEffect(() => {
+    if (isPaused && !isPausedRef.current) {
+      // Starting to pause - record the time
+      pauseTimeRef.current = performance.now();
+    } else if (!isPaused && isPausedRef.current) {
+      // Resuming from pause - add the paused duration to total
+      totalPausedTimeRef.current += performance.now() - pauseTimeRef.current;
+    }
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
+
   // Constant sliding animation
   useEffect(() => {
-    if (protocols.length === 0 || isPaused) return;
+    if (protocols.length === 0) return;
 
     const logoWidth = 40; // 32px logo + 8px gap
     const totalWidth = protocols.length * logoWidth;
@@ -58,12 +73,14 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       
-      // Calculate how much we should have moved based on time
-      const elapsed = currentTime - startTime;
-      const speed = 30; // pixels per second - adjust this to change speed
-      const newOffset = (elapsed * speed / 1000) % totalWidth;
+      // Only update position when not paused (using ref to get current value)
+      if (!isPausedRef.current) {
+        const elapsed = (currentTime - startTime) - totalPausedTimeRef.current;
+        const speed = 30; // pixels per second - adjust this to change speed
+        const newOffset = (elapsed * speed / 1000) % totalWidth;
+        setCurrentOffset(newOffset);
+      }
       
-      setCurrentOffset(newOffset);
       animationId = requestAnimationFrame(animate);
     };
 
@@ -74,7 +91,7 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
         cancelAnimationFrame(animationId);
       }
     };
-  }, [protocols.length, isPaused]);
+  }, [protocols.length]); // Only depend on protocols.length, not isPaused
 
   if (loading) {
     return (
@@ -113,7 +130,7 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
         onMouseLeave={() => setIsPaused(false)}
       >
         <div className="overflow-hidden">
-          <div className="relative h-8">
+          <div className="relative h-8 my-2">
             <div 
               className="flex gap-2 absolute inset-0"
               style={{
