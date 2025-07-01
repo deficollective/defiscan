@@ -152,10 +152,12 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
                   <Link
                     key={`${protocol.protocol}-${index}`}
                     href={protocolSlug}
-                    className="relative w-8 h-8 hover:scale-110 transition-all duration-300 flex-shrink-0"
+                    className="relative w-8 h-8 hover:scale-110 transition-all duration-300 flex-shrink-0 cursor-pointer"
                     onClick={(e) => {
-                      // Ensure normal click behavior
+                      // Ensure immediate navigation
                       e.stopPropagation();
+                      e.preventDefault();
+                      window.location.href = protocolSlug;
                     }}
                   >
                     <Image
