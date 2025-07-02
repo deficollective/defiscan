@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import App from "@/components/app";
 import Head from "next/head";
+import { Analytics } from "@vercel/analytics/next"
 
 const lexend = Lexend({ subsets: ["latin"], variable: "--font-lexend" });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
         )}
       >
         <App>{children}</App>
+        <Analytics /> {/* Vercel Analytics */}
       </body>
     </html>
   );

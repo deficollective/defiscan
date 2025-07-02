@@ -152,7 +152,7 @@ Those contracts are upgradeable by the governance through the `Agent` contract. 
 
 # Dependencies
 
-Lido relies on _Node Operators_ to operate the validators. The funds are not in the control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the NodeOperators may misbehave and lose some of the funds due to slashing.
+Lido relies on _Node Operators_ to operate the validators. The funds are not in the control of the _Node Operators_ and will be returned to Lido in case of withdrawal. Nonetheless, the _Node Operators_ may misbehave and lose some of the funds due to slashing.
 
 Lido addresses this issue differently for each staking module. This is explained in the respective staking modules' subsections of the [protocol analysis](#protocol-analysis).
 
