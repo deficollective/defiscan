@@ -29,7 +29,7 @@ const chains = {
   },
 };
 
-export type ChainNames = keyof typeof chains;
+export type ChainNames = keyof typeof chains | string;
 
 export const Chain = ({
   name,
@@ -38,7 +38,20 @@ export const Chain = ({
   name: ChainNames;
   className?: string;
 }) => {
-  const chain = chains[name];
+  const chain = chains[name as keyof typeof chains];
+
+  // Handle unknown chains gracefully
+  if (!chain) {
+    return (
+      <Avatar
+        className={cn("w-6 h-6 flex items-center justify-center", className)}
+      >
+        <AvatarFallback className="text-xs font-bold">
+          {name?.substring(0, 2)?.toUpperCase() || "?"}
+        </AvatarFallback>
+      </Avatar>
+    );
+  }
 
   return (
     <Avatar
