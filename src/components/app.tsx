@@ -11,7 +11,7 @@ export default function App({ children }: PropsWithChildren) {
       
       {/* Configuration for the announcement banner */}
       <AnnouncementBanner
-        show={true} // Set to true to show the banner
+        show={false} // Set to true to show the banner
         text={
           <>
             🎉 New feature: This banner shows cool information! 
