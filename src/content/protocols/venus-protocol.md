@@ -1,118 +1,250 @@
 ---
-protocol: "Venus Protocol"
+protocol: "venus-core"
 website: "https://venus.io/"
 x: "https://x.com/VenusProtocol"
-github: ["https://github.com/VenusProtocol"]
-defillama_slug: ["venus"]
+github: [https://github.com/VenusProtocol/venus-protocol#]
+defillama_slug: ["venus-core-pool"]
 chain: "Binance"
 stage: 0
-reasons: ["remove", "if none"]
-risks: ["x", "x", "x", "x", "x"]
-author: ["author-1", "author-2"]
-submission_date: "1970-01-01"
+reasons: []
+risks: ["H", "H", "L", "H", "M"]
+author: ["GiantDole"]
+submission_date: "2025-07-02"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
----
+--- 
 
 # Summary
 
-Note: This report only covers the core pool which has 2B TVL, while isolated pools only have 3.6M
+The Venus Protocol is a lending protocol deployed on Binance Smart Chain. Users can create lending positions by depositing BEP20 tokens or BNB in the respective lending pools. This allows them to create borrow positions for supported BEP20 tokens or BNB against their collateral. If a position becomes liquidatable, anyone can execute the liquidation for an incentive. 
+
+The upgrades and parameter changes are protected by on-chain governance of XVS holders. Any XVS holder posessing a minimum amount can create a proposal voted on by the community. If the proposal passes, it can be executed after 2 days in most cases, and 1 hour for fast track proposals accepted for certain functionalities.
 
 # Ratings
 
 ## Chain
 
-See http://defiscan.info/learn-more#chain for more guidance.
+This report is concerned with Venus Core Protocol deployed on Binance Smart Chain (BSC). BSC achieves a *High* centralization score.
 
-> Chain score: Low/Medium/High
+> Chain score: High
 
 ## Upgradeability
 
-In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+All upgradeable contracts can currently be upgraded by governance through the normal timelock which implements a delay of 2 days. 
 
-We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
+> Upgradeability score: High 
 
-For some practical guidance follow this steps. It will help you in writing a nice report:
+## Parameter Changes
 
-1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
-2. Fill in all the permissioned functions in the table (`## Permissions`)
-   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
-3. Get a mechanistic and precise understanding of each permissioned function
-4. Assess impact for each function, look out for
-   - loss/blocking of user funds
-   - loss of unclaimed yield
-   - change expected behavior significantly (blacklisting/kyc/fees/...)
-5. Write the impact column based on your understanding
-   - A good tipp when writing the impact column below, think of least 2,3 sentences:
-   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
-   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
-   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
-6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
+Venus Protocol has numerous permissioned functions that allow for parameter changes without requiring contract upgrades. These parameters can significantly impact protocol behavior and user funds.
+In the tables blow, the `admin` refers to the Normal Timelock contract, while the `accessControlManager` is a granular permission contract that delegates specific rights to various roles, as detailed in the Permissions table.
 
-> Upgradeability score: Low/Medium/High
+### Market Parameters
+
+| Function | Impact | Owner |
+| --- | --- | --- |
+| `_setCollateralFactor()` | Sets the percentage of an asset's value that can be borrowed against. Higher collateral factors increase liquidation risk for users. A malicious actor could set factors too high, causing mass liquidations, or too low, preventing efficient capital usage. | `admin`, `Multisig Critical` |
+| `_setLiquidationIncentive()` | Sets the bonus liquidators receive when liquidating positions. High incentives can lead to predatory liquidations, while low incentives may prevent necessary liquidations during market stress. | `admin` |
+| `_setMarketBorrowCaps()` | Limits how much can be borrowed from a market. Setting caps too low could prevent legitimate borrowing, while removing caps could allow excessive borrowing that threatens protocol solvency. | `admin`, `Multisig Critical` |
+| `_setMarketSupplyCaps()` | Limits how much can be supplied to a market. Low caps restrict capital inflows, while removing caps on risky assets could concentrate too much risk in the protocol. | `admin`, `Multisig Critical` |
+| `_setReserveFactor()` | Determines what percentage of interest goes to protocol reserves. High reserve factors reduce user yield, while low factors may not build sufficient protocol reserves for emergencies. | `accessControlManager` |
+| `_setInterestRateModel()` | Changes how interest rates respond to utilization. An exploitative model could set rates unfavorably for borrowers or lenders, redirecting value unfairly. | `accessControlManager` |
+
+### Protocol Control
+
+| Function | Impact | Owner |
+| --- | --- | --- |
+| `_setActionsPaused()` | Pauses specific actions (supply, borrow, etc.) for individual markets. This can prevent users from accessing their funds or managing positions during critical market events. | `admin`, `Pause Guardian` |
+| `_setProtocolPaused()` | Pauses all protocol operations. While useful in emergencies, it completely blocks user access to their funds until unpaused. | `admin`, `Pause Guardian` |
+| `_setForcedLiquidation()` | Enables forced liquidations for a market regardless of health factor. This could be used to liquidate healthy positions, stealing user collateral through forced liquidations. | `accessControlManager` |
+| `_setForcedLiquidationForUser()` | Enables forced liquidations for a specific user. This could be used to target and liquidate specific users even if their positions are healthy. | `accessControlManager` |
+| `_supportMarket()` | Adds new markets to the protocol. Adding unsafe or malicious tokens could introduce systemic risk to the entire protocol. | `admin` |
+| `unlistMarket()` | Removes markets from the protocol. This could force users to repay loans or withdraw funds from deprecated markets, potentially at unfavorable times. | `accessControlManager` |
+
+### Oracle and Price Feed Control
+
+| Function | Impact | Owner |
+| --- | --- | --- |
+| `_setPriceOracle()` | Changes the oracle contract used for asset pricing. A malicious oracle could manipulate prices to force unfair liquidations or enable exploitative borrowing. | `admin` |
+| `setTokenConfig()` | Sets oracle configuration for assets. Misconfigured oracles could lead to incorrect pricing, enabling exploits or causing unfair liquidations. | `accessControlManager` |
+| `setOracle()` | Changes individual oracle feeds. Replacing reliable oracles with manipulated ones could enable price exploitation. | `accessControlManager` |
+| `enableOracle()` | Enables/disables specific oracle feeds. Disabling reliable oracles could force fallback to less secure price sources. | `accessControlManager` |
+| `pause()/unpause()` | Pauses the entire oracle system. This would freeze all protocol operations requiring price data, effectively locking user funds. | `accessControlManager` |
+
+### Reward and Token Management
+
+| Function | Impact | Owner |
+| --- | --- | --- |
+| `_setVenusSpeeds()` | Sets emission rates for XVS rewards. Manipulating these rates could unfairly distribute incentives or suddenly reduce expected yields for users. | `admin` |
+| `_grantXVS()` | Directly grants XVS tokens to recipients. Could be used to mint rewards to insiders or malicious addresses, diluting token value. | `admin` |
+| `seizeVenus()` | Allows seizing XVS from any address. This function could be used to confiscate user tokens without justification. | `accessControlManager` |
+| `setRewardAmountPerBlockOrSecond()` | Changes reward distribution rates in the XVS Vault. Sudden changes could significantly impact expected yields for stakers. | `accessControlManager` |
+
+### Liquidation Controls
+
+| Function | Impact | Owner |
+| --- | --- | --- |
+| `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. This could centralize liquidations to preferred parties, preventing fair market access. | `accessControlManager` |
+| `addToAllowlist()` | Adds addresses to the liquidator allowlist. Selective allowlisting could give unfair advantages to certain liquidators. | `accessControlManager` |
+| `setTreasuryPercent()` | Sets percentage of liquidation proceeds going to treasury. High percentages reduce liquidator incentives, potentially slowing necessary liquidations. | `accessControlManager` |
+| `setMinLiquidatableVAI()` | Sets minimum VAI debt that can be liquidated. Setting this too high could prevent small position liquidations, increasing protocol risk. | `accessControlManager` |
+
+### VAI Stablecoin Parameters
+
+| Function | Impact | Owner |
+| --- | --- | --- |
+| `setBaseRate()` | Sets base interest rate for VAI minting. High rates could make VAI uncompetitive, while low rates might not adequately compensate for risk. | `admin`, `Fast Track Timelock` |
+| `setFloatRate()` | Sets floating interest rate for VAI. Improper rates could destabilize the peg or discourage VAI usage. | `admin`, `Fast Track Timelock` |
+| `setMintCap()` | Sets maximum total supply for VAI. Setting this to zero would halt all new VAI minting, while excessive caps could lead to oversupply. | `admin`, `Fast Track Timelock` |
+| `toggleOnlyPrimeHolderMint()` | Restricts VAI minting to only Prime token holders. This could suddenly prevent most users from minting VAI, centralizing control. | `accessControlManager` |
+
+All these parameter changes can be executed without changing contract bytecode but still significantly impact protocol behavior and user funds. The most critical parameters are controlled by the Normal Timelock (admin) with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock or security multisigs. This creates a centralized control structure where governance has extensive power to alter protocol behavior in ways that could potentially harm users.
 
 ## Autonomy
 
-See http://defiscan.info/learn-more#autonomy for more guidance.
+The oracle risk is mitigated by integrating several oracles per asset. Only if two of three oracles return a price within the accepted boundaries, the price will be accepted. Otherwise, the transaction reverts.
 
-> Autonomy score: Low/Medium/High
+> Autonomy score: Low
 
 ## Exit Window
 
-See http://defiscan.info/learn-more#exit-window for more guidance.
+The upgradeability score is High and most permissions are protected with an exit window of 2 days, while some can be changed within 1 hour.
 
-> Exit Window score: Low/Medium/High
+> Exit Window score: High
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+The Venus Protocol frontend is open source and can be self-hosted. The repo can be found [here](https://github.com/VenusProtocol/venus-protocol-interface). No wallets or alternative interfaces were found that offer full integration, although some staking positions can be managed, e.g., through the Bitget wallet.
 
-> Accessibility score: Low/Medium/High
+> Accessibility score: Medium
 
 ## Conclusion
+The Venus protocol achieves High centralization risk scores for its Upgradeability, Chain and Exit Window dimensions. Due to the High centralization risk of the Binance Smart Chain, it ranks Stage 0.
 
-Some text in form of:
+The protocol could reach Stage 1 by deploying on a more decentralized chain of stage 1.
 
-The xyz protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks Stage 0.
-
-The protocol could reach Stage 1 by ...
-
-The project additionally could advance to Stage 2 if ...
+The project additionally could advance to Stage 2 if
+1) multiple different user interfaces existed
+2) the ability to upgrade contracts was removed OR the timelock delay to upgrade contracts was at least 30 days
+3) the protocol was deployed on a more decentralized chain of stage 2.
 
 # Reviewer's Notes
 
-(Here, anything worth mentioning about what critical permissions you excluded from the scope or some elements that xyz protocol does in a unique way. If nothing seems relevant, just say that :)
+The analysis focuses on the core risks associated with lending, liquidations, and centralized control within the main protocol. It does not extend to a full risk analysis of newer, more complex additions like the **Prime Token program** or the **cross-chain governance and token wrapping functionalities** (`XVSBridgeAdmin`, `XVSProxyOFTSrc`). These systems introduce their own unique economic and smart contract risks that are beyond the scope of this core protocol review.
 
-⚠️ During our analysis, we identified ...
+A unique architectural feature is the `Comptroller`'s use of the **Diamond Standard (EIP-2535)**, where logic is delegated to multiple `Facet` contracts. This allows for more granular and potentially safer upgrades compared to monolithic proxy upgrades, as changes can be isolated to specific facets of the protocol's logic.
+
 
 # Protocol Analysis
 
-Here include the diagram. Please explain what the main contracts are doing within the diagram.
+In this section, the Venus Protocol will be analyzed in its following components: The core lending protocol, the incentive mechansim, and the treasury. The governance structure will be analyzed in the subsequent section.
+
+## Core Lending
+
+The core lending components consist of the `Comptroller` and `VToken` contracts. The `Comptroller` is a proxy contracts that delegates calls to one of four `Facet` contracts, which are generally resposible for managing all lending markets: 
+- `MarketFacet`: responsible for market management like entering / exiting markets and listings
+- `PolicyFacet`: enforces policies for minting, borrowing, liquidating, etc.
+- `RewardFacet`: distributes the XVS rewards
+- `SetterFacet`: contains admin functions for setting protocol parameters
+
+Each `Facet` can be individually upgraded through the `Comptroller` and are abstracted away in the displayed diagram.  
+For each market, one `VToken` contract is deployed which contains all the functionalities for supplying, borrowing, and liquidating the respective asset. s
+
+![Venus Core Lending](./diagrams/venus_lending_core.png)
+
+## Incentives
+
+The `RewardFacet`, which is part of the `Comptroller` Diamond Proxy structure, is responsible for distributing rewards. Users can call the `claimVenus()` function to claim the `XVS` accrued from supplying and borrowing accross all markets. For each market, two parameters can be set that define the reward per block for borrowing and supplying activities, respectively. 
+Furthermore, users can stake their `XVS` in the `XVSVault` for additional `XVS` yield.
+
+## Treasury
+
+A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the venus protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
+The reserves are collected to the treasury through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the treasury, governance can vote on proposals to spend the treasury.
 
 # Dependencies
 
-Go into more detail of the oracle, bridge, or other dependency the defi protocol is using
+The Venus Protocol implements a three oracle system where the price of at least two of those oracles are compared to each other. If the price diversion between those oracle feeds is above or below a defined threshold, the transaction will revert. The transaction will also revert if two of the three oracles return invalid values.
+
+Venus currently supports the following oracles: Chainlink, RedStone, Pyth, TWAP (PancakeSwap), and Binance Oracle. For any asset pool, the three oracles as well as the threshold boundaries are individually configured. These configs can only be set and changed by the governance.
 
 # Governance
 
-## Relevant Subsection
+Venus protocol utilized Compound's `Governor Bravo` framework to implement their governance structure. 
+Any privileged access roles in the entire protocol are either directly or indirectly controlled by the governance. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` has specific access rights through the `accessControlManager`.
+While their configuration can change, these timelock contracts are currently configured as follows:
+* `Normal Timelock`:
+   * `votingDelay`: 1 block
+   * `votingPeriod`: 57600 blocks
+   * `proposalThreshold` : 300,000 XVS
+   * `timelock delay`: 48 hours
+* `Fast Timelock`:
+   * `votingDelay`: 1 block
+   * `votingPeriod`: 57600 blocks
+   * `proposalThreshold` : 300,000 XVS
+   * `timelock delay`: 1 hour
+* `Critical Timelock` (currently unused):
+   * `votingDelay`: 1 block
+   * `votingPeriod`: 14400 blocks
+   * `proposalThreshold` : 300,000 XVS
+   * `timelock delay`: 1 hour
 
-Here anything relevant to the governance, in this case it could be what you highlighted in "Upgrade Process"
+The governance process is as follows:
+1. *Proposal Creation*: A user with enough `XVS` creates a proposal with a set of transactions to execute and the timelock to be used. Dependent on the chosen timelock, the timelock parameters change as outlined above.
+2. *Voting*: In the timelock-dependent `votingPeriod`, `XVS` holders can vote. To be successful, a minimum number of votes must be cast and the majority of votes needs to vote `For` the proposal.
+3. *Timelock Queuing*: The passed proposal is sent to the respective timelock contract.
+4. *Execution*: Anyone can execute the set of transactions after the respective `timelock delay` has passed.
+
+In the following diagram, the governance structure is outlined while abstracting the specific permissioned contract. Specific functions, as outlined in the Permissions section, will query the `accessControlManager` to authorize transactions.
+
+![Venus Governance](./diagrams/venus_governance.png)
 
 ## Security Council
 
-New table with all the multisigs
+The Venus Protocol has deployed three Gnosis Safe contracts, which are currently 3/6 multisigs. Neither of these contracts currently adhere to the minimum requirements for a secure council.
+The security council contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. Nevertheless, the granted access rights are limited and can always be assigned or revoked by the governance structure. 
+The security councils can be given access rights to specific functions by the protocol governance through the `accessControlManager` contract. 
 
 | Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| Team Multisig | [0x123](https://etherscan.io/address/0x123) | Multisig | ✅          | ❌              | ❌                | ✅             |
+| Multisig Critical | [0x7B1AE5Ea599bC56734624b95589e7E8E64C351c9](https://bscscan.com/address/0x7B1AE5Ea599bC56734624b95589e7E8E64C351c9) | Multisig 3/6 | ❌          | ❌              | ❌                | ❌             |
+| Pause Guardian | [0x1C2CAc6ec528c20800B2fe734820D87b581eAA6B](https://bscscan.com/address/0x1C2CAc6ec528c20800B2fe734820D87b581eAA6B) | Multisig 3/6 | ❌          | ❌              | ❌                | ❌             |
+| Treasury Guardian | [0x3a3284dC0FaFfb0b5F0d074c4C704D14326C98cF](https://bscscan.com/address/0x3a3284dC0FaFfb0b5F0d074c4C704D14326C98cF) | Multisig 3/6 | ❌          | ❌              | ❌                | ❌             |
+
+## Upgrade Process
+
+The upgrade process for the Venus Protocol is comprehensive and managed entirely by on-chain governance. The upgrade process can be split into two distinct categories: parameter changes and contract logic upgrades.
+
+### Parameter Changes
+Parameter changes are executed by calling privileged functions on various protocol contracts. Control over these functions is managed through a multi-layered permissions structure:
+1.  **Direct `admin` Control**: The most critical parameters are directly alterable by the `admin` role, which is the `Normal Timelock` contract (48-hour delay).
+2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract. This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
+    *   The `Normal Timelock` is granted permission for significant but non-emergency changes.
+    *   The `Fast Track Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., VAI interest rates).
+    *   Emergency multisigs like `Pause Guardian` and `Multisig Critical` are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard governance process.
+
+### Contract Upgrades (Code Changes)
+Upgrades to the smart contract logic itself also follow the governance process, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
+
+1.  **Diamond Proxy (`Comptroller`)**: The main `Comptroller` is a Diamond Proxy. Upgrades are performed via `diamondCut` proposals, which allow governance to add, replace, or remove individual `Facets` (e.g., `PolicyFacet`, `RewardFacet`). This modularity allows for isolated changes without redeploying the entire `Comptroller`.
+2.  **Beacon Proxies (`VTokens`)**: The markets (`VToken` contracts) are deployed as proxies pointing to a central `UpgradeableBeacon`. To upgrade all markets at once, a governance proposal simply needs to change the implementation contract address within the beacon. This single transaction atomically upgrades the logic for all `VToken` contracts.
 
 # Contracts & Permissions
 
 ## Contracts
 
-| Contract Name                                                          | Address                                                                                                              |
-| ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Contract Name | Address                                     |
+| ------------- | ------------------------------------------- |
+| Comptroller (Proxy)   | [0xfD36E2c2a6789Db23113685031d7F16329158384](https://bscscan.com/address/0xfD36E2c2a6789Db23113685031d7F16329158384) |
+| Diamond    | [0x347ba9559fFC65A94af0F6a513037Cd4982b7b18](https://bscscan.com/address/0x347ba9559fFC65A94af0F6a513037Cd4982b7b18) |
+| MarketFacet    | [0x4b093a3299F39615bA6b34B7897FDedCe7b83D63](https://bscscan.com/address/0x4b093a3299F39615bA6b34B7897FDedCe7b83D63) |
+| PolicyFacet    | [0x93e7Ff7c87B496aE76fFb22d437c9d46461A9B51](https://bscscan.com/address/0x93e7Ff7c87B496aE76fFb22d437c9d46461A9B51) |
+| RewardFacet    | [0xc2F6bDCEa4907E8CB7480d3d315bc01c125fb63C](https://bscscan.com/address/0xc2F6bDCEa4907E8CB7480d3d315bc01c125fb63C) |
+| SetterFacet    | [0x9B0D9D7c50d90f23449c4BbCAA671Ce7cd19DbCf](https://bscscan.com/address/0x9B0D9D7c50d90f23449c4BbCAA671Ce7cd19DbCf) |
+| VenusLens    | [0xe4C455cBf870A86399043B8A36A669FfA1583e95](https://bscscan.com/address/0xe4C455cBf870A86399043B8A36A669FfA1583e95) |
+| ResilientOracle (Proxy)  | [0x6592b5DE802159F3E74B2486b091D11a8256ab8A](https://bscscan.com/address/0x6592b5DE802159F3E74B2486b091D11a8256ab8A) |
+| ResilientOracle    | [0xb5d7a073d77102ad56b7482b18e7204c1a71c8b9](https://bscscan.com/address/0xb5d7a073d77102ad56b7482b18e7204c1a71c8b9) |
+| AccessControlManager    | [0x4788629ABc6cFCA10F9f969efdEAa1cF70c23555](https://bscscan.com/address/0x4788629ABc6cFCA10F9f969efdEAa1cF70c23555) |
 | PoolRegistry (Proxy)                                                   | [0x9F7b01A536aFA00EF10310A162877fd792cD0666](https://bscscan.com/address/0x9F7b01A536aFA00EF10310A162877fd792cD0666) |
 | PoolRegistry (Implementation)                                          | [0xc4953e157d057941a9a71273b0af4d4477ed2770](https://bscscan.com/address/0xc4953e157d057941a9a71273b0af4d4477ed2770) |
 | PoolLens                                                               | [0x0461c613433d42C06831C8e60Bf0C86FC9495072](https://bscscan.com/address/0x0461c613433d42C06831C8e60Bf0C86FC9495072) |
@@ -242,19 +374,75 @@ New table with all the multisigs
 | ConverterNetwork (Proxy)                                               | [0xF7Caad5CeB0209165f2dFE71c92aDe14d0F15995](https://bscscan.com/address/0xF7Caad5CeB0209165f2dFE71c92aDe14d0F15995) |
 | ConverterNetwork (Implementation)                                      | [0x8d17874cda682adcbcdd8eef8dfe8eeb9d4d6f8d](https://bscscan.com/address/0x8d17874cda682adcbcdd8eef8dfe8eeb9d4d6f8d) |
 
-## Permission owners
+## All Permission Owners
 
-| Name                               | Account                                                                                                              | Type         |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Guardian 1 (Critical Risk Params)  | [0x7B1AE5Ea599bC56734624b95589e7E8E64C351c9](https://bscscan.com/address/0x7B1AE5Ea599bC56734624b95589e7E8E64C351c9) | Multisig x/y |
-| Guardian 2 (Pause/Resume Features) | [0x1C2CAc6ec528c20800B2fe734820D87b581eAA6B](https://bscscan.com/address/0x1C2CAc6ec528c20800B2fe734820D87b581eAA6B) | Multisig x/y |
-| Guardian 3 (Oracles)               | [0x3a3284dC0FaFfb0b5F0d074c4C704D14326C98cF](https://bscscan.com/address/0x3a3284dC0FaFfb0b5F0d074c4C704D14326C98cF) | Multisig x/y |
+| Name | Account                                     | Type         |
+| ---- | ------------------------------------------- | ------------ |
+| `admin` (`Timelock Normal Track`) | [0x939bD8d64c0A9583A7Dcea9933f7b21697ab6396](https://bscscan.com/address/0x939bD8d64c0A9583A7Dcea9933f7b21697ab6396) | Governance Timelock |
+| `Timelock Fast Track` | [0x555ba73db1b006f3f2c7db7126d6e4343adbce02](https://bscscan.com/address/0x555ba73db1b006f3f2c7db7126d6e4343adbce02) | Governance Timelock     |
+| `pauseGuardian` | [0x1C2CAc6ec528c20800B2fe734820D87b581eAA6B](https://bscscan.com/address/0x1C2CAc6ec528c20800B2fe734820D87b581eAA6B) | Multisig     |
+| `treasuryGuardian` | [0x3a3284dC0FaFfb0b5F0d074c4C704D14326C98cF](https://bscscan.com/address/0x3a3284dC0FaFfb0b5F0d074c4C704D14326C98cF) | Multisig     |
+| `accessControlManager` | [0x4788629abc6cfca10f9f969efdeaa1cf70c23555](https://bscscan.com/address/0x4788629abc6cfca10f9f969efdeaa1cf70c23555) | Access Manager    |
+
 
 ## Permissions
 
-| Contract      | Function     | Impact                                                                                                                               | Owner                   |
-| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| contract name | functionname | Description in 3 Sentences.                                                                                                          | owner of the permission |
-| contract name | functionname | First sentence: what it does technically, e.g "It assigns a new address to the owner variable".                                      | owner of the permission |
-| contract name | functionname | Second sentence: what is the impact within the system, e.g "The owner is permissioned to raise fees".                                | owner of the permission |
-| contract name | functionname | Third sentence: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield. | owner of the permission |
+In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in paranthesis. If no roles are listed, no roles are currently assigned but can be introduced by governance. These roles have not changed since Oct-26-2022 and can only be adjusted through the Governance structure.
+
+| Contract      | Function     | Impact                                                                                                                                                                                                                                                                                                                                     | Owner                   |
+| ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| Comptroller Proxy | `_setPendingImplementation()` | Set a pending implementation for Comptroller (still requires activation) | `admin` |
+| Comptroller Proxy | `_setPendingAdmin()` | Set a new pending `admin` (requires confirmation by proposed `admin`) | `admin` |
+| SetterFacet | `_setPriceOracle()` | Changes the `ResilientOracle` contract used | `admin` |
+| SetterFacet | `_setPauseGuardian()` | Transfers emergency `PauseGuardian` to new address  | `admin` |
+| SetterFacet | `_setAccessControl()` | Sets a new `AccessControlManager` address  | `admin` |
+| SetterFacet | `_setLiquidatorContract()` | Sets a new liquidation contract  | `admin` |
+| SetterFacet | `_setCloseFactor()` | Sets maximum percentage that can be repaid in single liquidation  | `admin` |
+| SetterFacet | `_setVAIController()` | Sets a new VAI controller | `admin` |
+| SetterFacet | `_setVAIMintRate()` | Sets the mint rate for VAI | `admin` |
+| SetterFacet | `_setVenusVAIVaultRate()` | Sets the vault rate for the Venus VAI vault | `admin` |
+| SetterFacet | `_setXVSToken()` | Sets a new XVS token | `admin` |
+| SetterFacet | `_setXVSVToken()` | Sets a new XVS vToken | `admin` |
+| SetterFacet | `_setTreasuryData()` | Sets a new treasury address, guardian, and percentage | `admin`, `treasuryGuardian` |
+| SetterFacet | `_setComptrollerLens()` | Sets a new comptroller lens | `admin` |
+| SetterFacet | `_setCollateralFactor()` | Set the collateral factor across all markets   | `accessControlManager` (`admin`, `Multisig Critical`) |
+| SetterFacet | `_setLiquidationIncentive()` | Set the liquidation incentive across all markets   | `accessControlManager` (`admin`) |
+| SetterFacet | `_setMarketBorrowCaps()` | Sets limit on total amount that can be borrowed from a market  | `accessControlManager` (`admin`, `Multisig Critical`) |
+| SetterFacet | `_setMarketSupplyCaps()` | Sets limit on total amount that can be supplied to market   | `accessControlManager` (`admin`, `Multisig Critical`) |
+| SetterFacet | `_setActionsPaused()` | Pause or unpause any specific protocol action (e.g. Supply, Borrow) for any market |  `accessControlManager` (`admin`, `Pause Guardian`) |
+| SetterFacet | `_setProtocolPaused()` | Pause or unpause the entire protocol |  `accessControlManager` (`admin`, `Pause Guardian`) |
+| SetterFacet | `_setForcedLiquidation()` | Enable or disable forced liquidations for a market |  `accessControlManager` |
+| SetterFacet | `_setForcedLiquidationForUser()` | Enable or disable forced liquidations for a user |  `accessControlManager` |
+| MarketFacet | `_supportMarket()` | Add new market to the protocol | `accessControlManager` (`admin`) |
+| MarketFacet | `unlistMarket()` | Remove existing market from the protocol | `accessControlManager` |
+| RewardFacet | `_grantXVS()` | Directly grants a specified amount of XVS to a recipient, bypassing the normal reward accrual process. | `admin` |
+| RewardFacet | `seizeVenus()` | Seize XVS from any addresses | `accessControlManager` |
+| PolicyFacet | `_setVenusSpeeds()` | Sets emission rate of XVS tokens for supplying/borrowing | `admin` |
+| VToken Delegator | `_setImplementation()` | Upgrades the logic contract for a specific market, allowing arbitrary code execution. Can lead to rug pull. | `admin` |
+| VToken Delegator | `_setComptroller()` | Sets a new Comptroller for the market. A malicious comptroller could disable liquidations or change parameters to steal funds. | `admin` |
+| VToken | `_setReserveFactor()` | Changes the percentage of interest collected as protocol reserves. | `accessControlManager` |
+| VToken | `_reduceReserves()` | Withdraws accumulated reserves from the market. Can drain reserves if called maliciously. | `accessControlManager` |
+| VToken | `_setInterestRateModel()` | Changes the interest rate model for the market, allowing for manipulation of borrow/supply rates. | `accessControlManager` |
+| ResilientOracle | `pause()` / `unpause()` | Pauses or resumes the entire oracle system, freezing all protocol operations that require prices. | `accessControlManager` |
+| ResilientOracle | `setTokenConfig()` | Sets the full [main, pivot, fallback] oracle configuration for an asset. A malicious config could point to controlled oracles to manipulate prices. | `accessControlManager` |
+| ResilientOracle | `setOracle()` | Changes a single oracle (e.g., the Chainlink feed) for an asset, enabling price manipulation. | `accessControlManager` |
+| ResilientOracle | `enableOracle()` | Enables or disables a specific oracle for an asset. Disabling valid oracles can force a fallback to a malicious one. | `accessControlManager` |
+| VAIController | `setPrimeToken()` | Sets the Prime token contract. Can be used to replace with a malicious contract. | `admin` |
+| VAIController | `setVAIToken()` | Sets the VAI token contract. Can be used to replace with a malicious contract. | `admin` |
+| VAIController | `toggleOnlyPrimeHolderMint()` | Restricts VAI minting to only Prime token holders. Can enable/disable minting for majority of users. | `accessControlManager` |
+| VAIController | `setBaseRate()` | Sets the base interest rate for VAI. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
+| VAIController | `setFloatRate()` | Sets the floating interest rate for VAI. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
+| VAIController | `setMintCap()` | Sets the maximum total supply for VAI. Can be set to 0 to halt all new VAI mints. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
+| XVSVault | `pause()` / `resume()` | Pauses or resumes all staking and withdrawal operations in the XVS Vault. | `accessControlManager` |
+| XVSVault | `add()` | Adds a new staking pool to the vault, controlling where rewards can be directed. | `accessControlManager` |
+| XVSVault | `set()` | Modifies the allocation points for an existing staking pool, changing reward distribution. | `accessControlManager` |
+| XVSVault | `setRewardAmountPerBlockOrSecond()`| Changes the rate of rewards distributed. Can be set to 0. | `accessControlManager` |
+| Liquidator | `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. Can centralize liquidations. | `accessControlManager` |
+| Liquidator | `addToAllowlist()` | Adds a specific address to the liquidator allowlist. | `accessControlManager` |
+| Liquidator | `setTreasuryPercent()` | Sets the percentage of liquidation proceeds that go to the treasury. | `accessControlManager` |
+| Liquidator | `setMinLiquidatableVAI()` | Sets the minimum amount of VAI debt that can be liquidated. Can prevent small liquidations. | `accessControlManager` |
+| Prime | `addMarket()` | Adds a new market to the Prime program, changing reward eligibility. | `accessControlManager` |
+| Prime | `issue()` | Triggers the issuance of Prime rewards. | `accessControlManager` |
+| Prime | `togglePause()` | Pauses or unpauses the Prime rewards program. | `accessControlManager` |
+| PrimeLiquidityProvider | `pauseFundsTransfer()` | Pauses the distribution of rewards from the provider contract. | `accessControlManager` |
+| PrimeLiquidityProvider | `setTokensDistributionSpeed()` | Sets the speed at which reward tokens are distributed. | `accessControlManager` |
