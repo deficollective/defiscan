@@ -1,0 +1,12 @@
+{
+  "id": "ccip",
+  "protocol": "CCIP",
+  "website": "https://chain.link/cross-chain",
+  "defillama_slug": [""],
+  "socials": {
+    "x": "https://x.com/chainlink"
+  },
+  "github": [
+    "https://github.com/smartcontractkit"
+  ]
+}
