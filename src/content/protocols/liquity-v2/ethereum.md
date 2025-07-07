@@ -29,7 +29,7 @@ stage_requirements: [
 
 Liquity v2 is a decentralized borrowing protocol that lets users deposit ETH or LSTs as collateral and mint the stablecoin BOLD. 
 
-BOLD loans need to maintain a minimum collateral ratio of 110% for ETH and 120% for  rETH and wstETH collaterals respectively.
+BOLD loans need to maintain a minimum collateral ratio of 110% for ETH and 120% for RETH and WSTETH collaterals respectively.
 
 In addition to the collateral, the loans on each collateral branch are secured by a Stability Pool containing BOLD and by fellow borrowers collectively acting as guarantors of last resort.
 
@@ -49,11 +49,11 @@ All permissions in the system have been renounced and the protocol is fully immu
 
 ## Autonomy
 
-Liquity v2 relies on a combination of external Chainlink market oracles - ETH-USD, RETH-ETH and STETH-USD - as well as LST smart contract exchange rates, in order to price collateral.
+Liquity v2 relies on a combination of external Chainlink market oracles - ETH-USD, RETH-ETH and STETH-USD - as well as LST smart contract exchange rates in order to price collateral.
 
-For a given collateral branch, if its market oracle or LST exchange rate fails, the system shuts that branch down: it freezes new debt issuance, and enables “urgent redemptions” to clear debt and collateral as fast as possible. Borrowers are free to repay BOLD, withdraw collateral and close their loans on the shutdown branch.
+If the market oracle or LST exchange rate fails on a given collateral branch, the system shuts that branch down: it freezes new debt issuance, and enables “urgent redemptions” in order to clear debt and collateral as fast as possible. Borrowers are free to repay BOLD, withdraw collateral and close their loans on the shut down branch.
 
-If a branch’s LST market oracle fails, the branch falls back to pricing collateral via a combination of the LST exchange rate and ETH-USD price.
+Additionally, if a branch’s LST market oracle fails, the branch falls back to pricing collateral via a combination of the LST exchange rate and ETH-USD price.
 
 Finally, each collateral branch uses the "last good price" as a last resort if all its price sources become untrusted. This ensures the protocol can continue pricing collateral without interruption, minimizing the impact of oracle failure on its operations. Despite its reliance on external oracles, Liquity v2’s branch shutdown mechanism and fallback pricing logic mitigate the risk of disruption due to price source failure.
 
@@ -82,9 +82,9 @@ The Liquity v2 deployment on Ethereum Mainnet achieves Low centralization risk s
 
 The system has the following external dependencies:
 
-- LST ERC20 tokens - RocketPool ETH (RETH) and Lido Wrapped Staked ETH (WSTETH)
+- LST ERC20 tokens: RocketPool ETH (RETH) and Lido Wrapped Staked ETH (WSTETH)
 
-- Chainlink market oracles - ETH-USD, rETH-ETH and stETH-USD
+- Chainlink market oracles: ETH-USD, RETH-ETH and STETH-USD
 
 Any problem or failure with the collateral contracts could have a significant impact on the Liquity v2 system. However, the system separates different collateral branches and shuts a collateral branch down if the branch collateralization ratio falls too low, or if the LST’s smart contract exchange rate fails. Thus it does its best to mitigate economic or technical collateral failure and remain functional.
 
@@ -98,7 +98,7 @@ Liquity v2 incorporates a governance module which gives LQTY stakers voting righ
 
 LQTY stakers vote weekly on initiatives, deciding where to direct that week’s PIL rewards. The intent is to incentivize BOLD liquidity on external markets as per the protocol’s needs.
 
-Stakers have no control over any other system logic or parameters. Both proposing initiatives and claiming their accrued rewards are completely permissionless.
+LQTY stakers have no control over any other system logic or parameters. Proposing initiatives and claiming an initiative's accrued rewards are completely permissionless.
 
 
 ## External Permission Owners and Security Council
