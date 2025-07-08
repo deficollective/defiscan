@@ -2,7 +2,20 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Submit Review",
+  title: "Submit Protocol Review | DeFiScan",
+  description: "Submit a DeFi protocol review to DeFiScan. Learn how to contribute and increase our coverage of DeFi protocols.",
+  keywords: ["submit review", "protocol analysis", "DeFi review", "contribute", "protocol assessment", "decentralization analysis", "bounty program"],
+  openGraph: {
+    title: "Submit Protocol Review | DeFiScan",
+    description: "Contribute to DeFiScan by submitting DeFi protocol reviews. Help analyze decentralization stages and security assessments.",
+    url: "https://defiscan.info/submit-review",
+    siteName: "DeFiScan",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function SubmitReviewPage() {
