@@ -1,18 +1,34 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Lexend } from "next/font/google";
 import "@/styles/globals.css";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import App from "@/components/app";
-import Head from "next/head";
+import { Analytics } from "@vercel/analytics/next"
 
 const lexend = Lexend({ subsets: ["latin"], variable: "--font-lexend" });
 
 export const metadata: Metadata = {
   title: {
     template: "%s | DeFiScan",
-    default: "DeFiScan",
+    default: "DeFiScan - DeFi Protocol Decentralization Analysis",
   },
+  description: "Comprehensive DeFi protocol analysis platform. Track decentralization stages and transparency across DeFi protocols on multiple blockchains.",
+  keywords: ["DeFi", "decentralization", "protocol analysis", "blockchain", "smart contracts", "DeFi transparency"],
+  metadataBase: new URL("https://defiscan.info"),
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -22,12 +38,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" href="/favicon.ico" />
-        {/* You can also specify other sizes or formats if needed */}
-        <link rel="icon" sizes="32x32" href="/favicon.ico" />
-        <link rel="icon" sizes="16x16" href="/favicon.ico" />
-      </Head>
       <body
         className={cn(
           "min-h-screen antialiased font-lexend bg-background",
@@ -35,6 +45,7 @@ export default function RootLayout({
         )}
       >
         <App>{children}</App>
+        <Analytics /> {/* Vercel Analytics */}
       </body>
     </html>
   );
