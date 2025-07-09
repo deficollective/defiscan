@@ -7,6 +7,25 @@ author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-05-25"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      { text: "All contracts are verified", status: "unfixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [
+      { text: "Upgrades with potential of “loss of funds” are protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed"},
+      { text: "Dependency with High centralization are mitigated", status: "fixed" },
+      { text: "Frontend backups or self-hosting option exists", status: "unfixed"} 
+      ],
+    [
+      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
+      { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
+      { text: "Alternative third-party frontends exist", status: "unfixed" }
+    ],
+  ]
 ---
 
 
