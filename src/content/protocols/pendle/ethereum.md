@@ -82,11 +82,13 @@ The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
 
 #### PENDLE emissions to LPs
 
-The `PendleVotingControllerUpg` contract manages the gauge voting system that determines `PENDLE` incentive distribution across pools. The [Governance](#security-council) multisig can completely upgrade this contract, or add and remove pools from receiving votes without timelock. A pool that has received votes but is removed before the epoch is finalized and voting results are broadcasted looses chances to earn `PENDLE` emissions in the next week.
+Each week the `vePENDLE` voters decide in a vote which pendle markets receive `PENDLE` emissions the next week by allocating their voting power to specific markets. The received voting share of each market from the total `vePENDLE` voting power determines the fraction of `PENDLE` issued to a single market. During the vote the `PENDLE` tokens reside in the `PendleVotingControllerUpg` contract before distribution to the markets. LPs can claim the emission only from the market contracts.
 
-The `PendleGaugeControllerMainchainUpg` contract distributes `PENDLE` tokens pro rata as incentive for LPs to the markets on every market action. The [Governance](#security-council) multisig can withdraw the `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` contract at any moment. As a consequence, the `PENDLE` tokens are not further distributed to the markets based on the voting they received. Already distributed `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` to the market contract cannot be withdrawn from the market contract, but future `PENDLE` incentives are less than expected.
+The [Governance](#security-council) multisig can completely upgrade the `PendleVotingControllerUpg`, or add and remove pools from receiving votes without timelock. A market that has received votes but is removed before the epoch is finalized and voting results are broadcasted looses chances to earn `PENDLE` emissions in the next week.
 
-Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and the logic of the updated contract can change future payouts of PENDLE to LPs which _materially affects the expected performance_ for the LPs of the protocol.
+After a vote concluded, the `PENDLE` tokens are sent to the market contract over course of the entire week for LPs to claim (pro rata). The `PENDLE` tokens that are accounted for the LPs can, before sent to the market contract, be withheld by the [Governance](#security-council) multisig by withdrawing the `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` contract which causes a _loss of unclaimed yield_ for the LPs.
+
+Already distributed `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` to the market contract cannot be withdrawn from the market contract, but future `PENDLE` incentives are less than expected.
 
 #### Redirection of Fees to vePENDLE voters
 
