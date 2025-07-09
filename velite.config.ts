@@ -36,6 +36,17 @@ const protocols = defineCollection({
       x: s.string()
     }),
     github: s.array(s.string().url())
+  }).transform((data, context) => {
+    // Extract folder name from the file path
+    const filePath = context.meta.path;
+    const folderName = filePath.split('/').slice(-2, -1)[0]; // Get folder name from path like "protocols/uniswap-v3/data.json"
+    
+    // Check if id matches folder name
+    if (data.id !== folderName) {
+      throw new Error(`Protocol ID "${data.id}" does not match folder name "${folderName}" in ${filePath}`);
+    }
+    
+    return data;
   })
 })
 
