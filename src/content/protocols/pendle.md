@@ -61,7 +61,7 @@ Additionally the `PendleGaugeControllerMainchainUpg` is fully upgradeable and th
 
 Charged fees from market activities are automatically sent to the `Treasury` multisig. The fees allocated for the `vePENDLE` holders are manually forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The collected fees can be withhold at any stage of the transfer from the Treasury to the `vePENDLE` holders. This could lead to _loss of unclaimed yield_.
 
-The `PendleMultiTokenMerkleDistributor` allows `vePENDLE` holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` contains is upgradeable by the [DevMultisig](#security-council). These functions allow replacing the contract implementation used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
+The `PendleMultiTokenMerkleDistributor` allows `vePENDLE` holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` is upgradeable by the [DevMultisig](#security-council). These functions allow replacing the contract implementation used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
 
 > Upgradeability score: High
 
