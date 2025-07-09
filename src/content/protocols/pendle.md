@@ -75,7 +75,9 @@ Please read the [Reviewer Notes](#reviewer-notes) to informed about the dependen
 
 ## Exit Window
 
-With the exception of the `PENDLE` token which implements a 7-day delay through the `initiateConfigChanges` function, most other protocol contracts can be upgraded or modified instantly without any delay or warning to users. 
+With the exception of the `PENDLE` token which implements a 7-day delay through the `initiateConfigChanges` function, most other protocol contracts can be upgraded or modified instantly without any delay or warning to users.
+
+The governance multisig can instantly pause SY tokens (blocking all deposits and withdrawals), increase protocol fees (reducing user yields), remove pools from voting systems (eliminating promised PENDLE rewards), or upgrade core contracts implementations. These changes directly affect user positions in PT/YT markets and LP pools. A Medium score would require either a Medium Upgradeability score or at least 7-day exit windows for all critical permissions, but the current setup provides no such buffer for the vast majority of critical functions.
 
 > Exit window score: High
 
