@@ -1,9 +1,4 @@
 ---
-protocol: "Pendle V2"
-website: "https://www.pendle.finance/"
-x: "https://x.com/pendle_fi"
-github: ["https://github.com/pendle-finance"]
-defillama_slug: ["pendle"]
 chain: "Ethereum"
 stage: "O"
 reasons: ["Unverified Contracts"]
