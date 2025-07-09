@@ -1,0 +1,10 @@
+{
+  "id": "liquity",
+  "protocol": "Liquity",
+  "website": "https://www.liquity.org",
+  "defillama_slug": ["liquity-v1"],
+  "socials": {
+    "x": "https://x.com/LiquityProtocol"
+  },
+  "github": ["https://github.com/liquity"]
+}
