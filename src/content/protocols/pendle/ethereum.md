@@ -100,7 +100,7 @@ The `PendleMultiTokenMerkleDistributor` allows `vePENDLE` holders to claim token
 
 ## Autonomy
 
-Pendle deployment on Ethereum does not depend on any dependency. However, Pendle markets are built on third-party protocols through their respective yield-bearing tokens. While this does not affect the decentralization assessment of the Pendle protocol itself, users should be aware that the performance and security of specific markets depend on the underlying yield-bearing protocols.
+Pendle deployment on Ethereum does not rely on any dependency. However, Pendle markets are built on third-party protocols through their respective yield-bearing tokens. While this does not affect the decentralization assessment of the Pendle protocol itself, users should be aware that the performance and security of specific markets depend on the underlying yield-bearing tokens of third-party protocols.
 
 Please read the [Reviewer Notes](#reviewer-notes) to informed about the dependency risk on other chain deployments.
 
