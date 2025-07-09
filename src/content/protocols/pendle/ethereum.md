@@ -118,7 +118,7 @@ The [Governance](#security-council) multisig can _instantly_
 - remove pools from voting systems (eliminating anticipated PENDLE rewards)
 - withdrawing `PENDLE` emissions before distributed to market contracts (leading to _loss of unclaimed yield_ of LPs)
 
-A _Medium_ score would require either a Medium _Upgradeability_ score or at least _7-day Exit Window_ for all critical permissions, but the current setup provides any _Exit Window_ protection.
+A _Medium_ score would require either a _Medium_ _Upgradeability_ score or at least _7-day Exit Window_ for all critical permissions, but the current setup provides any _Exit Window_ protection.
 
 > Exit window score: High
 
