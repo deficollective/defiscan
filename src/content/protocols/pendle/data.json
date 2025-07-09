@@ -1,6 +1,6 @@
 {
     "id": "pendle-v2",
-    "protocol": "Pendle V2",
+    "protocol": "PendleV2",
     "website": "https://www.pendle.finance/",
     "defillama_slug": ["pendle"],
     "socials": {
