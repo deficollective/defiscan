@@ -130,7 +130,7 @@ The `PendleCommonSYFactory` is used to create new markets and instantiate the co
 
 `PendleYieldContractFactory` enables the creation of Principal Token (PT) and Yield Token (YT) contracts through its `createYieldContract` function, which is also permissionless. This function can be called directly by users or programmatically via the `PendleCommonPoolDeployHelperV2` as part of a full pool deployment process which also deploys the market.
 
-![Market Creation](./diagrams/pendle-v2-market-creation.png)
+![Market Creation](../diagrams/pendle-v2-market-creation.png)
 
 ## Yield Tokenization Process
 
@@ -142,7 +142,7 @@ In both cases, the `PendleYieldToken` contract serves as the vault for SY tokens
 
 Governance can interrupt this process by pausing SY operations, thus blocking deposits, withdrawals, and transfers and preventing the creation of new PT/YT.
 
-![Direct Minting](./diagrams/pendle-v2-direct-minting.png)
+![Direct Minting](../diagrams/pendle-v2-direct-minting.png)
 
 ### Redeem Underlying
 
@@ -155,7 +155,7 @@ Users can add liquidity through the `addLiquiditySingleToken` function of `Pendl
 
 Liquidity removal is performed via `removeLiquiditySingleToken`. The LP tokens are burned, the user receives their proportional share of SY and PT, the PT are converted to SY via `swapExactPtForSy`, and the SY are converted to underlying tokens. During both addition and removal, the `PendleGaugeController` contract distributes `PENDLE` rewards to the market and the user.
 
-![LP to Market](./diagrams/pendle-v2-lp.png)
+![LP to Market](../diagrams/pendle-v2-lp.png)
 
 ## AMM PT and YT Trading
 
@@ -171,7 +171,7 @@ When redeeming PT for external tokens, users call `swapExactPtForToken`. The PT 
 
 [Governance](#security-council) can `pause` SY token transfers, which technically prevents all PT trading operations. This pause blocks essential SY functions (deposits, withdrawals, transfers) that are required for both buying PT (cannot convert assets to SY or transfer SY to markets) and selling PT (cannot convert received SY back to underlying assets). Users with PT positions would be unable to exit until governance reactivates the SY token.
 
-![Trade PT](./diagrams/pendle-v2-trade-PT.png)
+![Trade PT](../diagrams/pendle-v2-trade-PT.png)
 
 ### Trade YT
 
@@ -231,7 +231,7 @@ The `PendleMultiTokenMerkleDistributor` manages token points system rewards for 
 The process uses the `setMerkleRoot` function to establish which addresses can claim specific reward amounts, allowing the [DevMultisig](#security-council) to control reward distribution between the monthly snapshot and payout dates. 
 The contract implements the UUPS upgradeability pattern through `upgradeToAndCall`, enabling the [DevMultisig](#security-council) to modify implementation logic while preserving claimed data, and can also determine which token types are included in distributions. Administrative control follows a two-step ownership transfer pattern via `transferOwnership`, requiring the pending owner to explicitly claim ownership for security.
 
-![Voting and Fees](./diagrams/pendle-v2-voting-and-fees.png)
+![Voting and Fees](../diagrams/pendle-v2-voting-and-fees.png)
 
 # Dependencies
 
@@ -239,7 +239,7 @@ The Pendle V2 Ethereum deployment has no external dependencies. The other deploy
 
 # Governance
 
-![Upgradeability](./diagrams/pendle-v2-upgradeability.png)
+![Upgradeability](../diagrams/pendle-v2-upgradeability.png)
 
 The Pendle protocol implements a governance model where the [Governance](#security-council) multisig (2/4) maintains extensive control over all protocol aspects through multiple mechanisms.
 
