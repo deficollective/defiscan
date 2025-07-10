@@ -81,7 +81,7 @@ Curve received a _Low_ centralization risk score for its _Chain_ and _Accessibil
 
 There are three primary paths for Curve to advance to Stage 1 under the existing framework:
 
-1. Relinquish some control at the DAO level, specifically over `crvUSD` minting and `scrvUSD` vault management such that loss of user funds is no longer possible through DAO actions.
+1. Relinquish some control at the DAO level, specifically over `crvUSD` minting and `scrvUSD` vault management such that loss of user funds is no longer possible through governance actions.
 2. Expand the authority of the `EmergencyDAO` to include a veto right on governance proposals, effectively enabling it to stop proposals that could result in the loss of user funds.
 3. Introduce a mandatory 7-day delay between the approval, and execution of governance proposals which may result in the loss of user funds.
 
@@ -106,7 +106,7 @@ In addition, Curve supports:
 
 Each of the three primary pool types have its own factory contract, allowing any user to permissionlessly create a pool. The DAO owns all pools by controlling the parent factories. Most pools (except for legacy deployments) inherit their admin address from the factory. This admin has the ability to adjust parameters such as liquidity concentration, trading fees, and, in some cases, other settings like the off-peg multiplier, which increases fees when a pool becomes imbalanced. The implementation of the pools can also be updated by the factory admin (the DAO), but this will only affect future pools and not put existing user positions at risk.
 
-All of these parameters can be updated the _Curve DAO_. More details can be found in the [Contracts and Permissions](#permissions) section. _Tricrypto Pools_ are the only pool type that enforces a mandatory 3-day waiting period before parameter changes take effect.
+All of these parameters can be updated by the _Curve DAO_. More details can be found in the [Contracts and Permissions](#permissions) section. _Tricrypto Pools_ are the only pool type that enforces a mandatory 3-day waiting period before parameter changes take effect.
 
 ![DEX](../diagrams/curve-dex-diagram.png)
 
