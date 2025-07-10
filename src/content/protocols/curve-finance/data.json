@@ -2,7 +2,7 @@
   "id": "curve-finance",
   "protocol": "Curve Finance",
   "website": "https://curve.finance/",
-  "defillama_slug": ["crvusd", "curve-dex", "curve-llamalend"],
+  "defillama_slug": ["curve-dex", "crvusd", "curve-llamalend"],
   "socials": {
     "x": "https://x.com/CurveFinance"
   },
