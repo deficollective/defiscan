@@ -60,15 +60,15 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, Fees and Incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by various multisigs with insufficient decentralisation and no distributed onchain Governance voting exists to this date. See the [Security Council Table](#security-council) for more details on the accounts that are the permission owners.
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_ and _vePENDLE, Fees and Incentives_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by various multisigs with insufficient decentralisation and no distributed Onchain Governance voting exists to this date. See the [Security Council Table](#security-council) for more details on the accounts that are the permission owners.
 
 With the current setup the _Upgradeability_ Score is _High_.
 
 ### Yield Tokenization
 
-Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield or fix the yield until the maturity date of a given market.
+Yield Tokenization is the foundation of Pendle. It allows to convert yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield or fix the yield until the maturity date of a given market.
 
-The technical foundation, the yield bearing token wrapper, _SY tokens_ can be paused by the [Governance](#security-council) multisig or the [hardwareDeployer](#security-council) EOA. Calling `pause` locks the supplied yield bearing assets in Pendle instantly _without timelock_ protection and beyond maturity. This could lead to permanent or temporary _loss of user funds_. Likewise, the YT holders cannot claim the interest because of the paused SY token.
+The technical foundation, the yield bearing token wrapper, _SY tokens_ can be paused by the [Governance](#security-council) multisig or the [hardwareDeployer](#security-council) EOA. Calling `pause` locks the supplied yield bearing assets in Pendle instantly _without timelock_ protection and the funds could be locked beyond maturity. This could lead to permanent or temporary _loss of user funds_. Likewise due to implementation the YT holders cannot claim the interest because of the paused SY token.
 
 YT holders pay fees on the claimed yield to the Pendle Protocol. The [Governance](#security-council) multisig account can change the fee on the earned interest on any market instantly up to 20%, leaving YT holders no opportunity to exit their positions before enforcement of the new fee regime. As a consequence existing positions will receive less yield than previously expected (_loss of unclaimed yield_). Currently, this fee is 5% and 100% is redirected to vePENDLE voters. The official Pendle documentation mentions that the fee is subject to change in the future.
 
@@ -86,21 +86,21 @@ Each week the `vePENDLE` voters decide in a vote which pendle markets receive `P
 
 The [Governance](#security-council) multisig can completely upgrade the `PendleVotingControllerUpg`, or add and remove pools from receiving votes without timelock. A market that has received votes but is removed before the epoch is finalized and voting results are broadcasted does not receive `PENDLE` emissions in the next week.
 
-After a vote concluded, the `PENDLE` tokens are sent to the market contract over course of the entire week for LPs to claim. The `PENDLE` tokens that are accounted for the LPs can, before sent to the market contract, be withheld by the [Governance](#security-council) multisig by withdrawing the `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` contract which causes a _loss of unclaimed yield_ for the LPs.
+After a vote concluded, the `PENDLE` tokens are sent to the market contract over the course of the entire week for LPs to claim. The `PENDLE` tokens that are accounted for the LPs can, before sent to the market contract, be withheld by the [Governance](#security-council) multisig by withdrawing the `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` contract which would cause a _loss of unclaimed yield_ for the LPs.
 
-Already distributed `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` to the market contract cannot be withdrawn from the market contract.
+Already distributed `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` to the market contract cannot be withdrawn by a privileged permission owner, like the [Governance](#security-council) multisig.
 
 #### Redirection of Fees to vePENDLE voters
 
-Charged fees from trading activities (see this [section](#pendle-amm-module))are automatically sent to the `Treasury` multisig. The fees allocated for the `vePENDLE` holders are forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The collected fees can be withhold at any stage of the transfer from the Treasury to the `vePENDLE` holders. This could lead to complete _loss of unclaimed yield_ for an entire week.
+Charged fees from trading activities (see this [section](#pendle-amm-module)) are automatically sent to the `Treasury` multisig. The fees allocated for the `vePENDLE` holders are forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The collected fees can be withhold at any stage of the transfer from the Treasury to the `vePENDLE` holders. This could lead to complete _loss of unclaimed yield_ for an entire week.
 
-The `PendleMultiTokenMerkleDistributor` allows `vePENDLE` holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` is upgradeable by the [DevMultisig](#security-council). These functions allow replacing the contract implementation used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
+The `PendleMultiTokenMerkleDistributor` allows `vePENDLE` holders to claim token rewards issued by third parties. The `PendleMultiTokenMerkleDistributor` is upgradeable by the [DevMultisig](#security-council) allowing to replace the contract implementation used to validate reward claims, without timelock or other protection. This could lead to _loss of unclaimed yield_.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-Pendle deployment on Ethereum does not rely on any external dependency. However, Pendle markets use yield bearing tokens from third-party protocols. While this does not affect the decentralization assessment of the Pendle protocol itself, users should be aware that the performance and security of specific markets depend on the underlying yield-bearing tokens of third-party protocols.
+Pendle deployment on Ethereum does not rely on any external dependency. However, Pendle markets use yield bearing tokens from third-party protocols. While this does not affect the decentralization assessment of the Pendle protocol itself, users should be aware that the performance and security of specific markets depend on the underlying yield bearing tokens of third-party protocols.
 
 Please read the [Reviewer Notes](#reviewer-notes) to informed about the dependency risk on other chain deployments.
 
@@ -131,7 +131,7 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 ## Conclusion
 
-The Pendle V2 protocol falls into the N/A category and not _Stage 0_ due to the `sySwapper` contract which is not verified on public block explorers.
+The Pendle V2 protocol falls into the others category and not _Stage 0_ due to the unverified `sySwapper` contract.
 
 Despite this classification, our analysis shows that Pendle V2 protocol receives _High centralization risk_ scores for _Upgradeability_, _Exit Window_, and _Accessibility_ dimensions, and a _Low_ score for _Autonomy_.
 
