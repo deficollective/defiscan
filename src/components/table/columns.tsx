@@ -424,8 +424,5 @@ export const createColumns = (
       );
     },
     sortingFn: "alphanumeric",
-    meta: {
-      responsiveHidden: true,
-    },
   },
 ];
