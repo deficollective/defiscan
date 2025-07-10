@@ -60,21 +60,21 @@ Pendle is deployed on various chains. This review is based on the Ethereum mainn
 
 ## Upgradeability
 
-The V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, Fees and Incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by various multisigs with insufficient decentralisation and no distributed onchain Governance voting exists to this date. See the [Security Council Table](#security-council) for more details on the accounts that are the permission owners.
+The Pendle V2 protocol can be analyzed in a number of logical modules: _Yield Tokenization_, _Pendle AMM_, _vePENDLE, Fees and Incentives_ and _Governance_. Each module has upgradeable parts. Overall, these vectors could result in the _loss of user funds_, _loss of unclaimed yield_ or otherwise _materially affect the expected performance_ of the protocol. All the control vectors are held by various multisigs with insufficient decentralisation and no distributed onchain Governance voting exists to this date. See the [Security Council Table](#security-council) for more details on the accounts that are the permission owners.
 
 With the current setup the _Upgradeability_ Score is _High_.
 
 ### Yield Tokenization
 
-Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield or fix the yield for a duration.
+Yield Tokenization is the foundation of Pendle, converting yield-bearing assets into standardized yield (SY) tokens which are then split into Principal Tokens (PT) and Yield Tokens (YT). This separation allows users to trade yield or fix the yield until the maturity date of a given market.
 
-The SY tokens themselves can be paused by the [Governance](#security-council) multisig or the [hardwareDeployer](#security-council) EOA. Calling `pause` locks the supplied yield bearing assets in Pendle instantly without timelock protection and beyond maturity. This could lead to permanent or temporary _loss of user funds_. Likewise, the YT holders cannot claim the interest because of the paused SY token.
+The technical foundation, the yield bearing token wrapper, _SY tokens_ can be paused by the [Governance](#security-council) multisig or the [hardwareDeployer](#security-council) EOA. Calling `pause` locks the supplied yield bearing assets in Pendle instantly _without timelock_ protection and beyond maturity. This could lead to permanent or temporary _loss of user funds_. Likewise, the YT holders cannot claim the interest because of the paused SY token.
 
-The [Governance](#security-council) multisig account can change the fee on the earned interest on any market instantly up to 20%, leaving YT holders no opportunity to exit their positions before enforcement of the new fee regime. As a consequence existing positions will receive less yield than previously expected (_loss of unclaimed yield_). Currently, this fee is 3% and 100% is redirected to vePENDLE voters. The official Pendle documentation mentions that the fee is subject to change in the future.
+YT holders pay fees on the claimed yield to the Pendle Protocol. The [Governance](#security-council) multisig account can change the fee on the earned interest on any market instantly up to 20%, leaving YT holders no opportunity to exit their positions before enforcement of the new fee regime. As a consequence existing positions will receive less yield than previously expected (_loss of unclaimed yield_). Currently, this fee is 5% and 100% is redirected to vePENDLE voters. The official Pendle documentation mentions that the fee is subject to change in the future.
 
 ### Pendle AMM Module
 
-The [Governance](#security-council) multisig can update the trading fee for simple swaps and limit orders instantly. The fees are ultimately re-directed to the `vePENDLE` voters. If fees are changed, the expected performance for `vePENDLE` voters might not hold true.
+The [Governance](#security-council) multisig can update the trading fee for AMM swaps and limit orders instantly. The fees are re-directed to the `vePENDLE` voters. If fees are changed, the expected performance for `vePENDLE` voters might not hold true. The maximal trading fee on existing markets is up to 5%. If a new Factory was deployed, new markets from this new Factory could have no limit on fees (100%).
 
 ### vePENDLE, Fees and Incentives
 
