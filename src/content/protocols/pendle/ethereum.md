@@ -110,7 +110,7 @@ Please read the [Reviewer Notes](#reviewer-notes) to informed about the dependen
 
 With the exception of the `PENDLE` token which implements a 7-day delay through the `initiateConfigChanges` function, most other protocol contracts can be upgraded or modified instantly without any delay or warning to users.
 
-The [Governance](#security-council) multisig can _instantly_
+The [Governance](#security-council) multisig can _instantly_:
 
 - pause SY tokens (blocking redemption of the underlying yield bearing token after maturity leading to _loss of funds_, and blocking trading of PT/YT)
 - increase protocol fees on yield (leading to _loss of unclaimed yield_ of YT holders)
