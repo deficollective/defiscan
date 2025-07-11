@@ -81,11 +81,11 @@ The overview of the protocol can be seen in the diagram below.
 
 ![Overview of Binance Staked ETH](../diagrams/binance-wbeth-overview.png)
 
-The protocol relies on Externally Owned Accounts (EOAs) to function correctly. Those accounts need to provide exchange rates for `ETH` to `wBETH` and liquidity for withdrawals. `ETH` deposited in the contract can be sent out to an EOA for deposits in the Ethereum Proof-of-Stake network. This process is not documented and entirely up to Binance, as mentioned in their [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking).
+The protocol relies on Externally Owned Accounts (EOAs) to function correctly. Those accounts need to provide exchange rates for `ETH` to `wBETH` and liquidity for withdrawals. `ETH` deposited in the contract can withdrawn to the [Binance EOA 7](#all-permission-owners) for deposits in the Ethereum Proof-of-Stake network by calling `moveToStakingAddress`. This process is not documented and entirely up to Binance, as mentioned in their [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking).
 
-When withdrawing their `ETH` (_unwrapping_ their `wBETH` back to `ETH`), the request is forwarded to the `UnwrapToken` contract that enforces a 7-day delay. EOAs acting as operators need to allocate liquidity to this contract to address the withdrawals.
+When withdrawing their `ETH` (_unwrapping_ their `wBETH` back to `ETH`), the request is forwarded to the `UnwrapToken` contract that enforces a 7-day delay. EOAs acting as operators ([Binance EOA 3 and 6](#all-permission-owners)) need to allocate liquidity to this contract to address the withdrawals.
 
-The`ExchangeRateUpdator` allows another EOA to update the `ETH`/`wBETH` rate arbitrarily, this rate determines how much `wBETH` will users receive when depositing, and how much `ETH` they will receive when withdrawing.
+The`ExchangeRateUpdator` allows the [Binance EOA 3](#all-permission-owners) to update the `ETH`/`wBETH` rate arbitrarily, this rate determines how much `wBETH` will users receive when depositing, and how much `ETH` they will receive when withdrawing. Users need to trust that the rate is set correctly.
 
 # Dependencies
 
