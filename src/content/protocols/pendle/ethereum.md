@@ -119,7 +119,7 @@ The [Governance](#security-council) multisig can _instantly_:
 - withdrawing `PENDLE` emissions before distributed to market contracts (leading to _loss of unclaimed yield_ of LPs)
 - withholding Fee distribution to `vePENDLE` voters
 
-A _Medium_ score would require either a _Medium_ _Upgradeability_ score or at least _7-day Exit Window_ for all critical permissions, but the current setup provides any _Exit Window_ protection.
+A _Medium_ score would require either a _Medium_ _Upgradeability_ score or at least _7-day Exit Window_ for all critical permissions, but the current setup does not provide any _Exit Window_ protection.
 
 > Exit window score: High
 
