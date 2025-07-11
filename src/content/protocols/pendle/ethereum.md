@@ -146,7 +146,7 @@ And 3) improve accessibility by publishing the frontend code to IPFS or developi
 
 ## Market Creation
 
-The Pendle protocol utilizes a yield-bearing token wrapper (SY) which then is split into principal (PT) and yield (YT) components. The creation of a market that connects the 3 contracts is permissionless.
+The Pendle protocol utilizes a yield-bearing token wrapper (SY) which then is split into principal (PT) and yield (YT) components. The creation of a market is permissionless.
 
 The `PendleCommonSYFactory` is used to create new markets and instantiate the corresponding SY token via the `deploySY` function. The implementation code used by the Factory to deploy new SY tokens can be updated by [Pendle: Deployer 1](#security-council), an EOA, using creation code registered with `setSYCreationCode`. Importantly, existing SY token contracts and user funds already deposited in the protocol are not affected by this upgradeability vector, as the implementation update only applies to new SY token deployments.
 
@@ -173,7 +173,7 @@ Users can convert SY tokens back to the underlying assets through the `PendleRou
 
 ## Providing Liquidity (LP)
 
-Users can add liquidity through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury.
+Users can add liquidity to Pendle Markets to earn `PENDLE` emission rewards through the `addLiquiditySingleToken` function of `PendleRouterV4`, which delegates the operation to the `ActionAddRemoveLiqV3` contract. This process converts the deposited tokens to SY, uses a portion to acquire PT via `swapSyForExactPt`, and issues LP tokens representing a position in the PT/SY pool. Fees are collected and transferred to the Treasury.
 
 Liquidity removal is performed via `removeLiquiditySingleToken`. The LP tokens are burned, the user receives their proportional share of SY and PT, the PT are converted to SY via `swapExactPtForSy`, and the SY are converted to underlying tokens. During both addition and removal, the `PendleGaugeController` contract distributes `PENDLE` rewards to the market and the user.
 
@@ -197,7 +197,7 @@ When redeeming PT for external tokens, users call `swapExactPtForToken`. The PT 
 
 ### Trade YT
 
-Yield Tokens can be traded through the `PendleRouterV4` which delegates operations to the `ActionSwapYTV3` contract. Trading YT uses a sophisticated flash swap mechanism to enable buying or selling YT independently.
+Yield Tokens can be traded through the `PendleRouterV4` which delegates operations to the `ActionSwapYTV3` contract. Trading YT uses a flash swap mechanism to enable buying or selling YT independently.
 
 Buying YT:
 Users can acquire YT tokens without holding PT via `swapExactTokenForYt`. The router converts the external tokens to SY tokens, then temporarily borrows additional SY from the `PendleMarketV3` contract. All SY are used to mint both PT and YT (as they must be created in equal quantities), but only the YT are kept for the user. The PT are immediately sold back to the market to repay the borrowed SY. A portion of SY is sent as fees to the `Treasury`.
@@ -211,9 +211,9 @@ When selling YT via `swapExactYtForToken`, the router borrows an equivalent amou
 
 The `PendleRouterV4` functions as the protocol's central interface hub, directing user interactions to specialized execution modules. This architecture employs a selector-based routing mechanism where each function call is mapped to one of seven dedicated action modules, each responsible for specific protocol operations.
 
-The primary modules include `ActionAddRemoveLiqV3` for liquidity management in Pendle pools, `ActionSwapPTV3` for Principal Token exchange operations, and `ActionSwapYTV3` for Yield Token transactions. Supporting modules such as `ActionMiscV3` handle yield redemption, token conversions, and position exits, while `ActionSimple` provides core utility functions. Advanced functionalities are enabled through `ActionAggregator` for batched operations and `ActionLimitOrder` for conditional trades.
-
 Unlike conventional Transparent proxies, the routing infrastructure of `PendleRouterV4` relies on a diamond proxy with `ActionStorageV4` to manage function selector mappings. The owner of the proxy is set to the governance multisig. By updating the different contracts which receive calls via the `PendleRouterV4` new endpoints can be established.
+
+The primary modules include `ActionAddRemoveLiqV3` for liquidity management in Pendle pools, `ActionSwapPTV3` for Principal Token exchange operations, and `ActionSwapYTV3` for Yield Token transactions. Supporting modules such as `ActionMiscV3` handle yield redemption, token conversions, and position exits, while `ActionSimple` provides core utility functions. Advanced functionalities are enabled through `ActionAggregator` for batched operations and `ActionLimitOrder` for conditional trades.
 
 ## Limit Order System
 
