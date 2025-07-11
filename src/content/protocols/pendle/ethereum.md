@@ -14,7 +14,7 @@ stage_requirements:
         text: "Assets are not in custody by a centralized entity",
         status: "fixed",
       },
-      { text: "All contracts are verified", status: "unfixed" },
+      { text: "All contracts are verified", status: "fixed" },
       { text: "Source-available codebase", status: "fixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
@@ -39,7 +39,7 @@ stage_requirements:
       },
       {
         text: "Dependencies with High or Medium centralization score and no mitigations.",
-        status: "unfixed",
+        status: "fixed",
       },
       { text: "Alternative third-party frontends exist", status: "unfixed" },
     ],
@@ -131,11 +131,9 @@ Users can only access Pendle through a single user interface: [app.pendle.financ
 
 ## Conclusion
 
-The Pendle V2 protocol falls into the others category and not _Stage 0_ due to the unverified `sySwapper` contract.
+The Pendle V2 protocol receives _High_ centralization scores for _Upgradeability_, _Exit Window_, and _Accessibility_ dimensions, and a _Low_ score for _Autonomy_.
 
-Despite this classification, our analysis shows that Pendle V2 protocol receives _High centralization risk_ scores for _Upgradeability_, _Exit Window_, and _Accessibility_ dimensions, and a _Low_ score for _Autonomy_.
-
-To reach _Stage 0_, Pendle should first verify all its contracts on Etherscan. Then, to progress toward _Stage 1_, the protocol would need to: 1) assign permissions to an account that suffices the _Security Council requirements_ with at least 7 signers, a 51% threshold, and at least 50% publicly identified external signers Or 2) implement timelock mechanisms for critical functions.
+The protocol could advance to **Stage 1** by; 1) assign permissions to an account that suffices the _Security Council requirements_ Or 2) implement 7-day exit window for critical functions.
 And 3) improve accessibility by publishing the frontend code to IPFS or developing alternative interfaces.
 
 # Reviewer Notes
