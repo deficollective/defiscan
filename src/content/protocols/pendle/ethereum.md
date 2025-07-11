@@ -80,8 +80,6 @@ The [Governance](#security-council) multisig can update the trading fee for AMM 
 
 The _vePENDLE, fees and incentives_ module handles voting, boosts and rewards.
 
-#### PENDLE emissions to LPs
-
 Each week the `vePENDLE` voters decide in a vote which pendle markets receive `PENDLE` emissions the next week by allocating their voting power to specific markets. The received voting share of each market from the total `vePENDLE` voting power determines the fraction of `PENDLE` issued to a single market. During the vote the `PENDLE` tokens reside in the `PendleVotingControllerUpg` contract before distribution to the markets. LPs can claim the emission only from the market contracts.
 
 The [Governance](#security-council) multisig can completely upgrade the `PendleVotingControllerUpg`, or add and remove pools from receiving votes without timelock. A market that has received votes but is removed before the epoch is finalized and voting results are broadcasted does not receive `PENDLE` emissions in the next week.
@@ -89,8 +87,6 @@ The [Governance](#security-council) multisig can completely upgrade the `PendleV
 After a vote concluded, the `PENDLE` tokens are sent to the market contract over the course of the entire week for LPs to claim. The `PENDLE` tokens that are accounted for the LPs can, before sent to the market contract, be withheld by the [Governance](#security-council) multisig by withdrawing the `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` contract which would cause a _loss of unclaimed yield_ for the LPs.
 
 Already distributed `PENDLE` tokens from the `PendleGaugeControllerMainchainUpg` to the market contract cannot be withdrawn by a privileged permission owner, like the [Governance](#security-council) multisig.
-
-#### Redirection of Fees to vePENDLE voters
 
 Charged fees from trading activities (see this [section](#pendle-amm-module)) are automatically sent to the `Treasury` multisig. The fees allocated for the `vePENDLE` holders are forwarded to the `PendleFeeDistributorV2Proxy` from the `Treasury` multisig account via the EOA `Hardware Deployer`. The collected fees can be withhold at any stage of the transfer from the Treasury to the `vePENDLE` holders. This could lead to complete _loss of unclaimed yield_ for an entire week.
 
