@@ -48,7 +48,7 @@ All the critical contracts in the protocol are upgradeable, including its mintin
 
 ## Autonomy
 
-As mentioned in the [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking#:~:text=Binance%20Group%20Entities%20may%2C%20in,their%20sole%20and%20absolute%20discretion), the protocol relies on _Binance Group_ as the sole operator of Ethereum validators. Users' `ETH` is
+As mentioned in the [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking#:~:text=Binance%20Group%20Entities%20may%2C%20in,their%20sole%20and%20absolute%20discretion), Binance Staked ETH relies on the _Binance Group_ as the sole operator of Ethereum validators. Users' `ETH` is
 in total custody of Externally Owned Accounts (EOAs) who handle privately the creation of new validators.
 
 > Autonomy score: High
