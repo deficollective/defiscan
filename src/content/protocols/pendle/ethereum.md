@@ -1,7 +1,7 @@
 ---
 chain: "Ethereum"
-stage: "O"
-reasons: ["Unverified Contracts"]
+stage: 0
+reasons: []
 risks: ["L", "H", "L", "H", "H"]
 author: ["CookingCryptos, PaulDeFi"]
 submission_date: "2025-05-25"
