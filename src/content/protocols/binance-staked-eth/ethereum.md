@@ -1,9 +1,4 @@
 ---
-protocol: "Binance Staked ETH"
-website: "https://www.binance.com/en/wbeth"
-x: "https://x.com/binance"
-github: ["https://github.com/binance"]
-defillama_slug: ["binance-staked-eth"]
 chain: "Ethereum"
 stage: "O"
 reasons: ["Central Custody"]
@@ -12,6 +7,25 @@ author: ["Mmilien_"]
 submission_date: "2025-06-24"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "unfixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [
+      { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
+      { text: "Dependencies with High centralization score and no mitigations.", status: "unfixed" },
+      { text: "No Frontend backup or self-hosting option exists", status: "unfixed" },
+    ],
+    [
+      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
+      { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
+      { text: "No alternative third-party frontends exist", status: "unfixed" },
+    ],
+  ]
 ---
 
 # Summary
@@ -22,7 +36,7 @@ _Binance's Staked ETH_ is represented by the token `wBETH` (_Wrapped Beacon ETH_
 
 ## Chain
 
-`wBETH` is issued on both Ethereum and Binance Smart Chain. This review focuses on the Ethereum deployment.
+`wBETH` is issued on both Ethereum mainnet and Binance Smart Chain. This review focuses on the Ethereum deployment.
 
 > Chain score: Low
 
@@ -41,7 +55,7 @@ in total custody of Externally Owned Accounts (EOAs) who handle privately the cr
 
 ## Exit Window
 
-All changes and upgrades can be made without delay. The withdrawal delay when converting `wBETH` back to `ETH` can be increased arbitrarily and is currently 7 days. Users may be blacklisted or the contracts frozen without delay, preventing any further actions such as transfers or withdrawals.
+All changes and upgrades can be made without delay. There is a delay when users convert `wBETH` back to `ETH` which can be increased arbitrarily and is currently 7 days. Users may be blacklisted or the contracts frozen without delay, preventing any further actions such as transfers or withdrawals.
 
 > Exit Window score: High
 
@@ -65,9 +79,9 @@ There are no particular remarks for this review.
 
 The overview of the protocol can be seen in the diagram below.
 
-![Overview of Binance Staked ETH](./diagrams/binance-wbeth-overview.png)
+![Overview of Binance Staked ETH](../diagrams/binance-wbeth-overview.png)
 
-The protocol relies on Externally Owned Accounts (EOAs) to function correctly. Those accounts need to provide exchange rates for `ETH` to `wBETH` and liquidity for withdrawals. `ETH` deposited in the contract can be sent out to an EOA for deposits in the Ethereum Proof-of-Stake network. This process is not documented and entirely up to Binance, as mentioned in their [terms](https://www.binance.com/en/terms-ETH-2-0-staking).
+The protocol relies on Externally Owned Accounts (EOAs) to function correctly. Those accounts need to provide exchange rates for `ETH` to `wBETH` and liquidity for withdrawals. `ETH` deposited in the contract can be sent out to an EOA for deposits in the Ethereum Proof-of-Stake network. This process is not documented and entirely up to Binance, as mentioned in their [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking).
 
 When withdrawing their `ETH` (_unwrapping_ their `wBETH` back to `ETH`), the request is forwarded to the `UnwrapToken` contract that enforces a 7-day delay. EOAs acting as operators need to allocate liquidity to this contract to address the withdrawals.
 
