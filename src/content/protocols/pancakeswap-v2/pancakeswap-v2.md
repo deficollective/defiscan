@@ -48,13 +48,13 @@ stage_requirements:
 
 # Summary
 
-PancakeSwap V2 is an automated market maker on BNB Smart Chain, a fork of [Uniswap v2](/protocols/uniswap-v2-ethereum) extended with an incentive layer. Users exchange `BEP-20` tokens through liquidity pools, with trading fees distributed to the liquidity providers and the protocol. Holders of liquidity-provider (LP) tokens can also deposit them in their corresponding _Farm_ to receive additional `CAKE` incentives.
+PancakeSwap V2 is an automated market maker on BNB Smart Chain, a fork of [Uniswap v2](/protocols/uniswap-v2-ethereum) extended with an incentive layer. Users exchange `BEP-20` tokens through liquidity pools, with trading fees distributed to the liquidity providers and the protocol. LPs can lock their LP tokens in the _Incentive Layer_ to receive additional yield in form of `CAKE` tokens.
 
 # Ratings Overview
 
 ## Chain
 
-Deployed on Binance Smart Chain.
+This review is based on the BNB chain deployment
 
 > Chain score: Low
 
