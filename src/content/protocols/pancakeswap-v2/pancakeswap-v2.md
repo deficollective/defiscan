@@ -114,7 +114,7 @@ PancakeSwap follows the standard _Uniswap V2_ pattern with the addition of a i
 
 # Protocol Analysis
 
-![Overview of the PancakeSwap v2 protocol](./diagrams/pancakeswap-v2-bsc.png)
+![Overview of the PancakeSwap v2 protocol](../diagrams/pancakeswap-v2-bsc.png)
 
 `PancakeFactory` serves as the onchain registry and deployer for all liquidity pools. When _createPair(tokenA, tokenB)_ is called, it clones the `PancakePair` template and initializes a new `PancakePair` contract. Two mutable variables control the protocol fees: _feeTo_, which receives the 0.08% protocol cut, and _feeToSetter_, which has the authority to update _feeTo_. The remaining 0.17% fee is distributed immutably to the liquidity providers of the corresponding pair.
 
