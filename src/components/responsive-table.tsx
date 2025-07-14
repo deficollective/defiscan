@@ -1,10 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
-import React, {
-  HTMLAttributes,
-  useEffect,
-  useState,
-  ReactElement,
-} from "react";
+import React, { useEffect, useState, ReactElement } from "react";
 import {
   Accordion,
   AccordionContent,

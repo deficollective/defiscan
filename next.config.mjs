@@ -2,6 +2,16 @@ import { build } from "velite";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'icons.llama.fi',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
   webpack: (config) => {
     config.plugins.push(new VeliteWebpackPlugin());
     return config;

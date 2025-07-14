@@ -60,6 +60,13 @@ class DeFiLlamaService {
     return data.filter((x) => x.date > startTimestamp);
   }
 
+  // Get current total DeFi TVL
+  public async getCurrentTotalTvl(): Promise<number> {
+    const data = await this.fetch<ChainTvlData[]>("/v2/historicalChainTvl");
+    // Return the most recent TVL value
+    return data[data.length - 1].tvl;
+  }
+
   // Get TVL for specific protocol
   public async getProtocolTvl(slug: string): Promise<number> {
     const data = await this.fetch<Protocol>(`/protocol/${slug}`);
