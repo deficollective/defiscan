@@ -39,6 +39,14 @@ async function getProtocolFromParams(slug: string[]) {
   return { ...protocol, ...review, chains };
 }
 
+export async function generateStaticParams(): Promise<
+  ProtocolPageItemProps["params"][]
+> {
+  return allReviews.map((review) => ({
+    slug: review.slugAsParams.split("/"),
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: {
