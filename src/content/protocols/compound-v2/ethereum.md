@@ -76,7 +76,7 @@ Compound v2 relies on Chainlink price feeds to price collateral and base assets 
 
 `PiceOracle` fetches prices from Chainlink Price Feeds when requested for a specific `cToken`.
 
-The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions as we analyzed in a dedicated review [here](/protocols/chainlink-oracles). This dependency thus introduces _High_ centralization risk in the Compound v2 protocol.
+The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions as we analyzed in a dedicated review [here](/protocols/chainlink-oracles/ethereum). This dependency thus introduces _High_ centralization risk in the Compound v2 protocol.
 
 > Autonomy score: High
 
@@ -116,7 +116,7 @@ There aren’t critical permissions or upgrade paths in Compound V2 that we’ve
 
 Below is an overview of the contracts from the Compound V2 protocol.
 
-![Overview of the compound protocol](diagrams/compound-v2-overview.png)
+![Overview of the compound protocol](../diagrams/compound-v2-overview.png)
 
 The `CErc20Delegator` is the proxy layer for ERC20 markets in Compound v2. Each market is defined by it's own proxy contract. It holds all the market’s storage (balances, allowances, reserves, etc.) and forwards calls to a shared `CErc20Delegate` implementation. Its admin (the Timelock) can swap out that implementation to upgrade market logic without redeploying each market or migrating user funds. A malicious upgrade could hijack all funds in a market.
 
