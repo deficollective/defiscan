@@ -132,42 +132,40 @@ No external external dependencies has been found.
 
 ## Security Council
 
-_PancakeSwap v2_ is governed by two Gnosis Safe wallets configured as **3-of-6 multisigs**.
-While this adds redundancy, the setup does not satisfy DeFiScan’s [Security Council requirements](https://defiscan.info/learn-more#security-council-requirements).
+_PancakeSwap v2_ is governed by two Gnosis Safe wallets configured as 3-of-6 multisigs.
+While this adds redundancy, the setup does not satisfy DeFiScan’s [Security Council requirements](https://defiscan.info/learn-more#security-council-requirements) because none of the criteria are met. Thus PancakeSwap v2 lacks a qualifying _Security Council_ and cannot rely on this mechanism to mitigate central-admin risk.
 
 | Name               | Account                                                                                                              | Type         | ≥ 7 signers | ≥ 51 % threshold | ≥ 50 % non-insider | Signers public |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | ---------------- | ------------------ | -------------- |
 | GnosisSafeProxy #1 | [0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e](https://bscscan.com/address/0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
 | GnosisSafeProxy #2 | [0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
 
-Because none of the criteria are met, PancakeSwap v2 **lacks a qualifying Security Council** and cannot rely on this mechanism to mitigate central-admin risk.
-
 # Technical Analysis
 
 ## Contracts
 
-| Contract               | Address                                                                                                                |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| PancakeFactory         | [`0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73`](https://bscscan.com/address/0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73) |
-| PancakeRouter V2       | [`0x10ED43C718714eb63d5aA57B78B54704E256024E`](https://bscscan.com/address/0x10ED43C718714eb63d5aA57B78B54704E256024E) |
-| PancakePair (CAKE-BNB) | [`0x0eD7e52944161450477ee417DE9Cd3a859b14fD0`](https://bscscan.com/address/0x0eD7e52944161450477ee417DE9Cd3a859b14fD0) |
-| MasterChefV2           | [`0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652`](https://bscscan.com/address/0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652) |
-| Timelock               | [`0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4`](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4) |
-| MigrationHelper        | [`0x6e85689f055B6894803d5135981F7B108C9DAfd5`](https://bscscan.com/address/0x6e85689f055B6894803d5135981F7B108C9DAfd5) |
-| CakeToken              | [`0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82`](https://bscscan.com/address/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82) |
-| MasterChef V1          | [`0x73feaa1eE314F8c655E354234017bE2193C9E24E`](https://bscscan.com/address/0x73feaa1eE314F8c655E354234017bE2193C9E24E) |
+| Contract               | Address                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| PancakeFactory         | [0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73](https://bscscan.com/address/0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73) |
+| PancakeRouter V2       | [0x10ED43C718714eb63d5aA57B78B54704E256024E](https://bscscan.com/address/0x10ED43C718714eb63d5aA57B78B54704E256024E) |
+| PancakePair (CAKE-BNB) | [0x0eD7e52944161450477ee417DE9Cd3a859b14fD0](https://bscscan.com/address/0x0eD7e52944161450477ee417DE9Cd3a859b14fD0) |
+| MasterChefV2           | [0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652](https://bscscan.com/address/0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652) |
+| Timelock               | [0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4) |
+| MigrationHelper        | [0x6e85689f055B6894803d5135981F7B108C9DAfd5](https://bscscan.com/address/0x6e85689f055B6894803d5135981F7B108C9DAfd5) |
+| CakeToken              | [0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82](https://bscscan.com/address/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82) |
+| MasterChef V1          | [0x73feaa1eE314F8c655E354234017bE2193C9E24E](https://bscscan.com/address/0x73feaa1eE314F8c655E354234017bE2193C9E24E) |
 
 ## All Permission owners
 
-| Name               | Address                                                                                                                | Type         |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ |
-| PancakeFactory     | [`0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73`](https://bscscan.com/address/0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73) | Contract     |
-| Timelock           | [`0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4`](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4) | Contract     |
-| MasterChefV2       | [`0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652`](https://bscscan.com/address/0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652) | Contract     |
-| MigrationHelper    | [`0x6e85689f055B6894803d5135981F7B108C9DAfd5`](https://bscscan.com/address/0x6e85689f055B6894803d5135981F7B108C9DAfd5) | Contract     |
-| MasterChef V1      | [`0x73feaa1eE314F8c655E354234017bE2193C9E24E`](https://bscscan.com/address/0x73feaa1eE314F8c655E354234017bE2193C9E24E) | Contract     |
-| GnosisSafeProxy #2 | [`0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E`](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 |
-| GnosisSafeProxy #1 | [`0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e`](https://bscscan.com/address/0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e) | Multisig 3/6 |
+| Name               | Address                                                                                                              | Type         |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------ |
+| PancakeFactory     | [0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73](https://bscscan.com/address/0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73) | Contract     |
+| Timelock           | [0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4](https://bscscan.com/address/0xA1f482Dc58145Ba2210bC21878Ca34000E2e8fE4) | Contract     |
+| MasterChefV2       | [0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652](https://bscscan.com/address/0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652) | Contract     |
+| MigrationHelper    | [0x6e85689f055B6894803d5135981F7B108C9DAfd5](https://bscscan.com/address/0x6e85689f055B6894803d5135981F7B108C9DAfd5) | Contract     |
+| MasterChef V1      | [0x73feaa1eE314F8c655E354234017bE2193C9E24E](https://bscscan.com/address/0x73feaa1eE314F8c655E354234017bE2193C9E24E) | Contract     |
+| GnosisSafeProxy #2 | [0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 |
+| GnosisSafeProxy #1 | [0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e](https://bscscan.com/address/0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e) | Multisig 3/6 |
 
 ## Permissions
 
