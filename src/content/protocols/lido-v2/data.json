@@ -1,0 +1,10 @@
+{
+  "id": "lido-v2",
+  "protocol": "Lido V2",
+  "website": "https://lido.fi/",
+  "defillama_slug": ["lido"],
+  "socials": {
+    "x": "https://x.com/LidoFinance"
+  },
+  "github": ["https://github.com/lidofinance"]
+}

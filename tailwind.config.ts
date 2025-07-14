@@ -15,7 +15,12 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "1rem",
+      padding: {
+        DEFAULT: "0.5rem",
+        sm: "1rem",
+        // lg: "4rem",
+        // xl: "5rem",
+      },
       screens: {
         "2xl": "1400px",
       },
@@ -92,7 +97,10 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('@tailwindcss/typography')
+  ],
 } satisfies Config;
 
 export default config;

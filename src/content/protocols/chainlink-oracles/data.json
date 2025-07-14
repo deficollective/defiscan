@@ -1,0 +1,12 @@
+{
+  "id": "chainlink-oracles",
+  "protocol": "Chainlink Price Feeds",
+  "website": "https://chain.link/",
+  "defillama_slug": [""],
+  "socials": {
+    "x": "https://x.com/chainlink"
+  },
+  "github": [
+    "https://github.com/smartcontractkit"
+  ]
+}
