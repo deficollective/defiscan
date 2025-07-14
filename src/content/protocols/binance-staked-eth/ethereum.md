@@ -67,7 +67,7 @@ Binance Staked ETH can be accessed using the Binance app on [binance.com](https:
 
 ## Conclusion
 
-_Binance's Staked ETH_ achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_. Furthermore, as described in the _Protocol Analysis_, the user funds are sent out to a centralized custody. For this reason, _Binance's Stake ETH_ does not qualify as a DeFi product.
+_Binance's Staked ETH_ achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_. Furthermore, as described in the _Protocol Analysis_, the user funds are sent out to a centralized custody. For this reason, _Binance's Staked ETH_ does not meet the [Stage 0 requirements](/learn-more#others-protocol-category) and thus does not qualify as a DeFi product according to our framework.
 
 It could become _Stage 0_ if it implemented a decentralized protocol to stake users' `ETH` without relying on centralized custody.
 
