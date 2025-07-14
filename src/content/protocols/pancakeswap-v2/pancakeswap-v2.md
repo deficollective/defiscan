@@ -1,9 +1,4 @@
 ---
-protocol: "PancakeSwap-v2"
-website: "https://pancakeswap.finance/"
-x: "https://x.com/PancakeSwap"
-github: ["https://github.com/pancakeswap"]
-defillama_slug: ["pancakeswap-amm"]
 chain: "Binance"
 stage: 1
 reasons: []
@@ -12,19 +7,56 @@ author: ["noemacee"]
 submission_date: "2025-05-13"
 publish_date: "2025-05-19"
 update_date: "2025-05-30"
+stage_requirements:
+  [
+    [
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [
+      {
+        text: "Upgrades have no potential of “loss of funds“ ",
+        status: "fixed",
+      },
+      {
+        text: "Dependency with a High centralization score is mitigated",
+        status: "fixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "fixed",
+      },
+    ],
+    [
+      {
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+        status: "unfixed",
+      },
+      {
+        text: "Dependencies with High or Medium centralization score and no mitigations.",
+        status: "fixed",
+      },
+      { text: "Alternative third-party frontends exist", status: "fixed" },
+    ],
+  ]
 ---
 
 # Summary
 
-PancakeSwap v2 is an automated market maker on BNB Smart Chain, a fork of [Uniswap v2](/protocols/uniswap-v2-ethereum) extended with an incentive layer. Users exchange `BEP-20` tokens through liquidity pools, with trading fees distributed to the liquidity providers and the protocol. Holders of liquidity-provider (LP) tokens can also deposit them in their corresponding _Farm_ to receive additional `CAKE` incentives.
+PancakeSwap V2 is an automated market maker on BNB Smart Chain, a fork of [Uniswap v2](/protocols/uniswap-v2-ethereum) extended with an incentive layer. Users exchange `BEP-20` tokens through liquidity pools, with trading fees distributed to the liquidity providers and the protocol. Holders of liquidity-provider (LP) tokens can also deposit them in their corresponding _Farm_ to receive additional `CAKE` incentives.
 
 # Ratings Overview
 
 ## Chain
 
-Deployed on **Binance Smart Chain**.
+Deployed on Binance Smart Chain.
 
-> Chain score: **Low**
+> Chain score: Low
 
 ## Upgradeability
 
@@ -66,13 +98,13 @@ Once a liquidity pair is deployed, its internal fee-distribution logic is perman
 
 Users primarily interact with _PancakeSwap v2_ through its official web interface at [https://pancakeswap.finance](https://pancakeswap.finance), which is developed and maintained by Pancake Labs. PancakeSwap’s frontend code is published under an MIT license [here](https://github.com/pancakeswap/pancake-frontend). The repository’s README contains instructions on how to clone the project, install dependencies, and launch the self-hosted app.
 
-> Accessibility score: **Medium**
+> Accessibility score: Medium
 
 ## Conclusion
 
-The _PancakeSwap v2_ protocol achieves _Medium_ centralization risk scores for the _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. This grants _PancakeSwap v2_ the score of Stage 1.
+The _PancakeSwap v2_ protocol achieves _Medium_ centralization risk scores for the _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. This grants _PancakeSwap v2_ the score of **Stage 1**.
 
-The project could advance to Stage 2 if all critical permissions concerning `CAKE` incentive distribution were irrevocably assigned to onchain governance and protected by a _30-day Exit Window_. In addition to those, it would require multiple independent front-ends ensuring continuous user access.
+The project could advance to **Stage 2** if all critical permissions concerning `CAKE` incentive distribution were irrevocably assigned to onchain governance and protected by a _30-day Exit Window_. In addition to those, it would require multiple independent front-ends ensuring continuous user access.
 
 # Reviewer's Notes
 
@@ -103,8 +135,8 @@ No external external dependencies has been found.
 _PancakeSwap v2_ is governed by two Gnosis Safe wallets configured as **3-of-6 multisigs**.
 While this adds redundancy, the setup does not satisfy DeFiScan’s [Security Council requirements](https://defiscan.info/learn-more#security-council-requirements).
 
-| Name               | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51 % threshold | ≥ 50 % non-insider | Signers public |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | ---------------- | ------------------ | -------------- |
+| Name               | Account                                                                                                              | Type         | ≥ 7 signers | ≥ 51 % threshold | ≥ 50 % non-insider | Signers public |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | ---------------- | ------------------ | -------------- |
 | GnosisSafeProxy #1 | [0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e](https://bscscan.com/address/0xcEba60280fb0ecd9A5A26A1552B90944770a4a0e) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
 | GnosisSafeProxy #2 | [0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E](https://bscscan.com/address/0xeCc90d54B10ADd1ab746ABE7E83abe178B72aa9E) | Multisig 3/6 | ❌          | ❌               | ❌                 | ❌             |
 
