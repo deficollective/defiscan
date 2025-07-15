@@ -90,7 +90,7 @@ However, the [Proposal Guardian](#security-council) multisig do not meet the [Se
 
 ## Accessibility
 
-The original Compound V2 interface [app.compound.finance](https://app.compound.finance/?market=usdc-mainnet) is fully open-source; anyone can clone the repo, swap the public Graph endpoint (or run their own sub-graph) and launch a local or IPFS-hosted copy in a few minutes.
+The original Compound V2 interface [app.compound.finance](https://app.compound.finance/?market=usdc-mainnet) is fully open-source; anyone can clone the repo, swap the public Graph endpoint (or run their own sub-graph) and launch a local or IPFS-hosted copy in a few minutes. The public repository can be found [here](https://github.com/compound-finance/palisade).
 
 In practice, users are not limited to this front-end: Compound V2 positions can be opened, closed, or managed from third-party dashboards and wallets (eg. DeFiSaver). Compound offers an open-source set of [integration components](https://github.com/compound-finance/compound-components) to facilitate this.
 
