@@ -112,7 +112,7 @@ export default function BlogClient() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredPosts.map((post) => (
-          <Card key={post.slug} className="hover:shadow-md transition-shadow">
+          <Card key={post.slug} className="hover:shadow-md transition-shadow flex flex-col">
             <CardHeader>
               <div className="space-y-1">
                 <CardTitle className="text-xl">
@@ -123,20 +123,7 @@ export default function BlogClient() {
                 <CardDescription>{post.description}</CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <div>
-                  By {post.authors.join(", ")}
-                </div>
-                <div>
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </div>
-              </div>
-              
+            <CardContent className="flex-1 flex flex-col justify-end space-y-3">
               {post.tags && post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
@@ -151,6 +138,19 @@ export default function BlogClient() {
                   ))}
                 </div>
               )}
+              
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div>
+                  By {post.authors.join(", ")}
+                </div>
+                <div>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </div>
+              </div>
             </CardContent>
           </Card>
         ))}
