@@ -2,7 +2,7 @@
 chain: "Mainnet"
 stage: 0
 reasons: []
-risks: ["x", "x", "x", "x", "x"]
+risks: ["L", "H", "H", "H", "H"]
 author: ["sagaciousyves"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
