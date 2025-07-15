@@ -144,7 +144,7 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
 
   return (
     <div className={cn("overflow-x-auto 2xl:overflow-x-visible", className)}>
-      <table className="table-auto w-full border-collapse border">
+      <table className="table-fixed w-full border-collapse border">
         {children}
       </table>
     </div>
