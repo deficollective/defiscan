@@ -5,7 +5,7 @@ date: 2025-01-08T05:00:00Z
 published: true
 categories: ["Campaign"]
 authors: ["tokenbrice"]
-tags: ["Community Review Program", "The Great Unmasking", "Others"]
+tags: ["Community Review Program"]
 ---
 
 "One of the best ways to achieve decentralization is to expose centralization."
