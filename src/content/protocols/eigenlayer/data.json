@@ -1,0 +1,10 @@
+{
+  "id": "morpho",
+  "protocol": "Eigenlayer",
+  "website": "https://www.eigenlayer.xyz/",
+  "defillama_slug": ["eigenlayer"],
+  "socials": {
+    "x": "https://x.com/eigenlayer"
+  },
+  "github": ["https://github.com/Layr-Labs/eigenlayer-contracts"]
+}
