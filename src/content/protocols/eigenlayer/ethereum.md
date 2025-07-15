@@ -1,5 +1,5 @@
 ---
-chain: "Mainnet"
+chain: "Ethereum"
 stage: 0
 reasons: []
 risks: ["L", "H", "H", "H", "H"]
