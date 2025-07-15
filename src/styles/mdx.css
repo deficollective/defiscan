@@ -38,13 +38,13 @@
   @apply no-underline before:content-["#"] hover:before:content-["#"] -ml-4 before:text-background hover:before:text-primary transition-colors before:mr-1 before:text-lg;
 }
 
-/* Table column styling for permissions tables */
-table.table-fixed {
+/* Table column styling for permissions tables only */
+table.permissions-table {
   table-layout: fixed !important;
 }
 
-table.table-fixed th:nth-child(1),
-table.table-fixed td:nth-child(1) {
+table.permissions-table th:nth-child(1),
+table.permissions-table td:nth-child(1) {
   width: 20% !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
@@ -52,8 +52,8 @@ table.table-fixed td:nth-child(1) {
   word-break: break-word !important;
 }
 
-table.table-fixed th:nth-child(2),
-table.table-fixed td:nth-child(2) {
+table.permissions-table th:nth-child(2),
+table.permissions-table td:nth-child(2) {
   width: 15% !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
@@ -61,14 +61,14 @@ table.table-fixed td:nth-child(2) {
   word-break: break-word !important;
 }
 
-table.table-fixed th:nth-child(3),
-table.table-fixed td:nth-child(3) {
+table.permissions-table th:nth-child(3),
+table.permissions-table td:nth-child(3) {
   width: 45% !important;
   word-break: normal !important;
 }
 
-table.table-fixed th:nth-child(4),
-table.table-fixed td:nth-child(4) {
+table.permissions-table th:nth-child(4),
+table.permissions-table td:nth-child(4) {
   width: 20% !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
