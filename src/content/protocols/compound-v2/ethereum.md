@@ -14,7 +14,7 @@ stage_requirements:
         text: "Assets are not in custody by a centralized entity",
         status: "fixed",
       },
-      { text: "All contracts are verified", status: "fixed" },
+      { text: "Critical contracts are verified", status: "fixed" },
       { text: "Source-available codebase", status: "fixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
@@ -34,11 +34,11 @@ stage_requirements:
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days",
         status: "unfixed",
       },
       {
-        text: "Dependencies with High or Medium centralization score and no mitigations.",
+        text: "Dependencies with High or Medium centralization and are mitigated",
         status: "unfixed",
       },
       { text: "Alternative third-party frontends exist", status: "fixed" },
