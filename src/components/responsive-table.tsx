@@ -82,6 +82,9 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const { headers, rows } = parseTableData(children);
+  
+  // Check if this is a permissions table
+  const isPermissionsTable = headers.includes("Function") && headers.includes("Impact");
 
   useEffect(() => {
     const checkMobile = () => {
@@ -143,8 +146,14 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
   }
 
   return (
-    <div className={cn("overflow-x-auto", className)}>
-      <table className="table-auto w-full border-collapse border">
+    <div className={cn(
+      isPermissionsTable ? "overflow-x-auto 2xl:overflow-x-visible" : "overflow-x-auto", 
+      className
+    )}>
+      <table className={cn(
+        "w-full border-collapse border",
+        isPermissionsTable ? "table-fixed permissions-table" : "table-auto"
+      )}>
         {children}
       </table>
     </div>
