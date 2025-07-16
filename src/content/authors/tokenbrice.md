@@ -2,7 +2,8 @@
 title: TokenBrice
 email: tokenbrice@deficollective.org
 image: "/images/authors/avatar-tokenbrice.png"
-description: Author profile for TokenBrice
+description: Board member and DeFi connaisseur
+teamMember: true
 social:
   - name: github
     icon: fa-brands fa-github

@@ -23,7 +23,7 @@ export default function AuthorLink({ authorName, showAvatar = false, className =
 
   return (
     <Link 
-      href={`/authors/${author.slugAsParams}`}
+      href={`/about/${author.slugAsParams}`}
       className={`hover:underline inline-flex items-center gap-1${className}`}
     >
       {showAvatar && (

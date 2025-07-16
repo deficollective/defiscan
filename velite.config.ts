@@ -113,6 +113,7 @@ const authors = defineCollection({
       email: s.string().email(),
       image: s.string(),
       description: s.string().max(999),
+      teamMember: s.boolean().default(true),
       social: s.array(s.object({
         name: s.string(),
         icon: s.string(),

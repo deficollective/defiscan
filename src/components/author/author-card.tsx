@@ -36,7 +36,7 @@ export default function AuthorCard({ author }: AuthorCardProps) {
           </Avatar>
         </div>
         <CardTitle className="text-xl">
-          <Link href={`/authors/${author.slugAsParams}`} className="hover:underline">
+          <Link href={`/about/${author.slugAsParams}`} className="hover:underline">
             {author.title}
           </Link>
         </CardTitle>

@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/authors`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.6,
@@ -70,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Author pages
     const authorPages: MetadataRoute.Sitemap = authors.map((author) => ({
-      url: `${baseUrl}/authors/${author.slugAsParams}`,
+      url: `${baseUrl}/about/${author.slugAsParams}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.6,

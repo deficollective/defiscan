@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: AuthorPageProps) {
   }
 
   return {
-    title: `${author.title} - DeFiScan Authors`,
+    title: `${author.title} - DeFiScan Team`,
     description: author.description,
   };
 }
