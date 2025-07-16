@@ -53,7 +53,7 @@ export function PostItem({ post }: PostItemProps) {
           </div>
           <div>
             {new Date(post.date).toLocaleDateString("en-US", {
-              month: "long",
+              month: "short",
               day: "numeric",
               year: "numeric",
             })}
