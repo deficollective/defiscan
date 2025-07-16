@@ -4,7 +4,7 @@ description: "How much De is in my Fi? Help the crowds figure it out, and earn L
 date: 2024-11-19T05:00:00Z
 published: true
 categories: ["Campaign"]
-authors: ["nils"]
+authors: ["nilsbundi"]
 tags: ["Community Review Program", "Bounty"]
 ---
 

@@ -5,6 +5,7 @@ import { posts } from "#site/content";
 import { Mdx } from "@/components/mdx-component";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft } from "lucide-react";
+import { AuthorLink } from "@/components/author";
 
 interface BlogPostPageProps {
   params: {
@@ -62,8 +63,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div>
-            By {post.authors.join(", ")}
+          <div className="flex items-center gap-2">
+            <span>By</span>
+            <div className="flex items-center gap-1">
+              {post.authors.map((author, index) => (
+                <span key={author} className="flex items-center gap-1">
+                  <AuthorLink authorName={author} showAvatar />
+                  {index < post.authors.length - 1 && <span>, </span>}
+                </span>
+              ))}
+            </div>
           </div>
           <div>
             {new Date(post.date).toLocaleDateString("en-US", {

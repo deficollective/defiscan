@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
           </Button>
           <Button variant="ghost" size="icon" asChild>
             <a
-              href="https://www.linkedin.com/company/defi-collective"
+              href="https://www.linkedin.com/company/defiscan"
               target="_blank"
               rel="noopener noreferrer"
               className=""
