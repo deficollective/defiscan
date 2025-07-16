@@ -21,7 +21,7 @@ interface AuthorCardProps {
 
 export default function AuthorCard({ author }: AuthorCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow flex flex-col h-full">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
           <Avatar className="w-16 h-16">
@@ -42,7 +42,7 @@ export default function AuthorCard({ author }: AuthorCardProps) {
         </CardTitle>
         <CardDescription>{author.description}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="flex-1 flex flex-col justify-end">
         {author.social && author.social.length > 0 && (
           <div className="flex flex-wrap gap-2 justify-center">
             {author.social.map((social) => (
