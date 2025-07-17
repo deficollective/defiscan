@@ -1,13 +1,8 @@
 ---
-protocol: "PWN-1.3"
-website: "https://pwn.xyz"
-x: "https://x.com/pwndao"
-github: ["https://github.com/pwndao"]
-defillama_slug: ["pwn"]
 chain: "Ethereum"
 stage: 1
 reasons: []
-risks: ["L", "M", "L", "L", "M"]
+risks: ["L", "L", "L", "L", "M"]
 author: ["vojtch"]
 submission_date: "2025-02-07"
 publish_date: ""
@@ -15,68 +10,103 @@ update_date: "1970-01-01"
 ---
 
 # Summary
+
 PWN is a universal, peer-to-peer lending protocol that enables users to use any token (ERC-20, NFT, or bundled assets) as collateral and create fixed-interest loans with fully customizable terms (LTV, duration, APR). Any ERC-20 can be used as a credit in the loan. There are no price-based liquidation risks thanks to PWN oracle-less design. Operating as a trustless, permissionless, and immutable protocol, PWN ensures lenders enjoy predictable returns while borrowers retain control—collateral is only forfeited if repayment deadlines are missed. By combining composability with flexible asset support and removing reliance on external price feeds, PWN unlocks novel liquidity strategies, optimized capital efficiency, and leverage opportunities.
 
-# Overview
+# Ratings
 
 ## Chain
 
 PWN v1.3 is deployed on various chains. This review is based on the Ethereum mainnet deployment of the protocol.
 
-> Chain score: L
+> Chain score: Low
 
 ## Upgradeability
 
 The PWN DAO can change parameters such as fees through the `PWNConfig` contract. Additionally, the PWN DAO can add and deprecate valid contracts in the protocol through the `PWNHub` contract. Note that even after removing a contract from the `PWNHub` existing loans are unaffected, only new ones cannot be created.
 
-No User funds nor unclaimed yield are affected by upgrades.
+No user funds nor unclaimed yield are affected by upgrades.
 
 `TransparentProxy` contract with the PWN DAO as admin is used for the `PWNConfig`. However, this does not impact user funds or otherwise materially change the protocol for already existing loans. Only new loans are affected by the change of parameters in the `PWNConfig`.
 
 There's also a timelock for the upgrades made by the DAO which ultimatelly owns `PWNConfig` and `PWNHub` that is currently set to 0 days.
 
-> Upgradeabillity score: M
+> Upgradeability score: Low
 
 ## Autonomy
 
-There are no particular dependencies for the PWN protocol. PWN is oracle-less and doesn't directly integrate with other protocols. Users can utilise funds from other protocols with PWN Pool Hooks, but these are optional and their failiure doesn't affect the protocol in any way.
+There are no particular dependencies for the PWN protocol. Each proposal type is independent and can be used without the other proposal types. Some proposal types are oracle-less and don't require any external dependencies. Some proposals are using Chainlink price feeds for credit pricing during the loan creation. After a loan is created, it is immutable and oracles are not used anymore.
+Furthermore, users can utilise funds from other protocols with PWN Pool Hooks. All of these are on opt-in basis and their failiure doesn't affect the core protocol in any way.
 
-> Autonomy score: L
+> Autonomy score: Low
 
 ## Exit Window
 
 Permissions are controlled by the PWN DAO and any parameter changes don't affect existing running loans, therefor there isn't a need for an exit window. Once a user starts using the protocol (creates a loan), the rules cannot change for them. 
 
-> Exit score: L
+> Exit Window score: Low
 
 ## Accessibility
 
-PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, interactions with the protocol are simple enough to be feasibly done through etherscan in case of the main interface failure.
+PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, interactions with the protocol are simple enough to be feasibly done through etherscan in case of the main interface failure. PWN additionally provides a guide for funds recovery using Etherscan: https://docs.pwn.xyz/Guides/other/recover.
 
-> Accessibility score: M
+> Accessibility score: Medium
 
-# Technical Analysis
+## Conclusion
+
+The PWN protocol achieves Low centralization risk scores for its Upgradeability, Autonomy, Exit Window and Medium for the Accessibility dimension. It thus ranks Stage 1.
+
+The protocol could reach Stage 2 if it would have multiple independent interfaces and longer timelock for upgrades made by the DAO.
+
+# Reviewer's Notes
+
+TODO: Add reviewer's notes
+
+# Protocol Analysis
+
+![Overview of the PWN protocol](../diagrams/pwn-overview.png)
+
+Detailed description of the contracts and their interactions is available in the [official documentation](https://dev-docs.pwn.xyz/smart-contracts/core/deep-dive).
+
+# Dependencies
+
+Some proposal types in PWN are using Chainlink price feeds for credit pricing. This feature is opt-in and not required to use the protocol with other proposal types.
+
+The Chainlink oracle system itself is discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
+
+# Governance
+
+PWN is governed by the PWN DAO, which is built on the Aragon OSx Framework for modular, extensible, and secure protocol management. Governance combines two structures: Optimistic (Steward) governance, where community-elected Stewards can make whitelisted decisions via multisig unless vetoed by 10% of voting power, and Token (Community) governance, where all staked $PWN holders can propose, vote, and veto, with proposals requiring a 20% quorum and 60% approval to pass. This dual system ensures efficient protocol operation while maintaining ultimate community control.
+
+## Security Council
+
+
+| Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
+| Stewards | [0xd56635c0E91D31F88B89F195D3993a9e34516e59](https://etherscan.io/address/0xd56635c0E91D31F88B89F195D3993a9e34516e59) | Multisig | ❌          | ❌              | ❌                | ❌             |
+
+# Contracts & Permissions
 
 ## Contracts
 
-| Contract Name                               | Address                                    |
-|------------------------------------|--------------------------------------------|
-| PWNConfig                             | 0xd52a2898d61636bB3eEF0d145f05352FF543bdCC |
-| PWNHub                                | 0x37807A2F031b3B44081F4b21500E5D70EbaDAdd5 |
-| PWNLOAN                         | 0x4440C069272cC34b80C7B11bEE657D0349Ba9C23 |
-| PWNRevokedNonce                      | 0x972204fF33348ee6889B2d0A3967dB67d7b08e4c |
-| PWNUtilizedCredit                 | 0x8E6F44DEa3c11d69C63655BDEcbA25Fa986BCE9D |
-| PWNSimpleLoan                       | 0x719A69d0dc67bd3Aa7648D4694081B3c87952797 |
-| PWNSimpleLoanSimpleProposal      | 0xe624E7D33baC728bE2bdB606Da0018B6E05A84D9 |
-| PWNSimpleLoanListProposal         | 0x7160Ec33788Df9AFb8AAEe777e7Ae21151B51eDd |
-| PWNSimpleLoanElasticProposal     | 0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626 |
-| PWNSimpleLoanDutchAuctionProposal| 0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369 |
+| Contract Name | Address                                     |
+| ------------- | ------------------------------------------- |
+| PWNConfig    | [0xd52a2898d61636bB3eEF0d145f05352FF543bdCC](https://etherscan.io/address/0xd52a2898d61636bB3eEF0d145f05352FF543bdCC) |
+| PWNHub    | [0x37807A2F031b3B44081F4b21500E5D70EbaDAdd5](https://etherscan.io/address/0x37807A2F031b3B44081F4b21500E5D70EbaDAdd5) |
+| PWNLOAN    | [0x4440C069272cC34b80C7B11bEE657D0349Ba9C23](https://etherscan.io/address/0x4440C069272cC34b80C7B11bEE657D0349Ba9C23) |
+| PWNRevokedNonce    | [0x972204fF33348ee6889B2d0A3967dB67d7b08e4c](https://etherscan.io/address/0x972204fF33348ee6889B2d0A3967dB67d7b08e4c) |
+| PWNUtilizedCredit    | [0x8E6F44DEa3c11d69C63655BDEcbA25Fa986BCE9D](https://etherscan.io/address/0x8E6F44DEa3c11d69C63655BDEcbA25Fa986BCE9D) |
+| PWNSimpleLoan    | [0x719A69d0dc67bd3Aa7648D4694081B3c87952797](https://etherscan.io/address/0x719A69d0dc67bd3Aa7648D4694081B3c87952797) |
+| PWNSimpleLoanSimpleProposal    | [0xe624E7D33baC728bE2bdB606Da0018B6E05A84D9](https://etherscan.io/address/0xe624E7D33baC728bE2bdB606Da0018B6E05A84D9) |
+| PWNSimpleLoanListProposal    | [0x7160Ec33788Df9AFb8AAEe777e7Ae21151B51eDd](https://etherscan.io/address/0x7160Ec33788Df9AFb8AAEe777e7Ae21151B51eDd) |
+| PWNSimpleLoanElasticProposal    | [0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626](https://etherscan.io/address/0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626) |
+| PWNSimpleLoanDutchAuctionProposal    | [0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369](https://etherscan.io/address/0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369) |
 
-## Permission owners
+## All Permission Owners
 
 | Name | Account                                       | Type         |
 | ---- | --------------------------------------------- | ------------ |
-| TimelockController | [address](https://etherscan.io/address/0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB) | Contract |
+| TimelockController | [0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB](https://etherscan.io/address/0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB) | Contract |
 
 ## Permissions
 
@@ -84,7 +114,7 @@ PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, inter
 | ------------- | ------------ | ----------- | ----------------------- |
 | TransparentUpgradeableProxy | fallback | Fallback is called when no other function matches the call data. No specific malicious action can be done if admin is compromised. | TimelockController |
 | TransparentUpgradeableProxy | receive | Same as fallback but receive is called when calldata are empty. No specific malicious action can be done if admin is compromised. | TimelockController |
-| TransparentUpgradeableProxy | _fallback | Same as fallback but when caller is the admin. No specific malicious action can be done if admin is compromised. | TimelockController |
+| TransparentUpgradeableProxy | _fallback | Same as fallback but when caller is the admin the call is processed internally. If admin is compromised, it can update the implementation and change PWN Config fee receiver to its own account. These fees are PWN DAO's and not user funds. | TimelockController |
 | PWNConfig | transferOwnership | Transfers the PWNConfig contract ownership. Malicious actor could transfer the contract ownership to it's own account and control all protocol parameters. | TimelockController |
 | PWNConfig | renounceOwnership | Removes contract owner. No permissioned functions can be called after this function is executed. | TimelockController |
 | PWNConfig | initialize | Can only be called once. No malicious action can be done through this function. | Deployer |
@@ -100,8 +130,8 @@ PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, inter
 | PWNHub | setTags | Same as setTag. This function calls setTag multiple times. | TimelockController |
 | PWNLOAN | mint | Mints a LOAN token. LOAN token represents a loan in the protocol for the lender. It is required to claim repayment or collateral. Malicious actor could mint worthless LOAN tokens and try to use them as a collateral for loans. | Loan contract specified in an offer |
 | PWNLOAN | burn | Burns a LOAN token.LOAN token represents a loan in the protocol for the lender. It is required to claim repayment or collateral. Malicious actor could burn other LOAN tokens and make it impossible to claim loans. | Loan contract specified in an offer |
-| PWNRevokedNonce | revokeNonce | Revokes nonce for a offer. Used to revoke an offchain signed offer on behalf of an owner. Malicious actor could revoke offers that the user wants to be valid. | Contract with a valid tag in PWNHub |
-| PWNRevokedNonce | revokeNonce | Revokes nonce for a offer. Used to revoke an offchain signed offer on behalf of an owner. Malicious actor could revoke offers that the user wants to be valid. | Contract with a valid tag in PWNHub |
+| PWNRevokedNonce | revokeNonce | Revokes nonce for an offer. Used to revoke an offchain signed offer on behalf of an owner. Malicious actor could revoke offers that the user wants to be valid. | Contract with a valid tag in PWNHub |
+| PWNRevokedNonce | revokeNonce | Revokes nonce for an offer. Used to revoke an offchain signed offer on behalf of an owner. Malicious actor could revoke offers that the user wants to be valid. | Contract with a valid tag in PWNHub |
 | PWNSimpleLoan | createLOAN | Creates a loan in the PWN Protocol. The check in this function is for a valid lenderSpec check in case the caller is a lender. There's also a reentrancy protection modifier. | Lender |
 | PWNSimpleLoan | repayLOAN | Repays a running loan. There's a reentrancy protection modifier to make sure you can't repay more than once. | Borrower |
 | PWNSimpleLoan | claimLOAN | Claims repayment or defaulted collateral. There's a reentrancy protection modifier to make sure you can't claim more than once. | Lender |
@@ -125,16 +155,3 @@ PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, inter
 | PWNSimpleLoanDutchAuctionProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
 | PWNSimpleLoanDutchAuctionProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
 | PWNUtilizedCredit | utilizeCredit | Updates utilised credit for an account. This is used to share credit between different proposal types. Malicious actor could update the utilised credit to go over the credit limit. | Contract with a valid tag in PWNHub |
-
-
-## Dependencies
-
-No external dependency has been found.
-
-## Exit Window
-
-Parameter changes don't affect existing running loans, therefor there isn't a need for an exit window. Once a user starts using the protocol (creates a loan), the rules cannot change.
-
-## Security Council
-
-No security council needed because on-chain governance is in place.
