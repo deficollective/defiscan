@@ -14,6 +14,15 @@ export const stageToRequisites = {
   "2": [
     "Critical permissions have either been revoked or delegated to an on-chain governance system with ample time for users to exit in case of an unwanted protocol update. Risks from external dependencies have been further reduced such that users’ funds and unclaimed yield remain unaffected by a failure. In addition, different independent user interfaces and a fully decentralized underlying chain guarantee access to users’ funds at any time.",
   ],
+  I0: ["High centralization. Equivalent to a Stage 0 as a dependency."],
+  I1: ["Medium centralization. Equivalent to a Stage 1 as a dependency."],
+  I2: ["Low centralization. Equivalent to a Stage 2 as a dependency."],
+};
+
+export const infraScoreToText: { [key: string]: string } = {
+  I0: "High",
+  I1: "Medium",
+  I2: "Low",
 };
 
 export const reasonToText = {
@@ -25,4 +34,5 @@ export const reasonToText = {
     "All or some smart contracts are not published with available source code.",
   "Unverified Contracts":
     "All or some smart contracts are not verified with a public blockchain explorer.",
+  "Incorrect Docs": "All or some contract addresses in the docs are incorrect.",
 };

@@ -1,18 +1,24 @@
-"use client";
-
 import { Metadata } from "next";
-import { protocols as allProtocols } from "#site/content";
-import "@/styles/mdx.css";
-import { Mdx } from "@/components/mdx-component";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
+import {
+  reviews as allReviews,
+  protocols as allProtocols,
+} from "#site/content";
+import { DimensionBadgesContainer } from "@/components/dimension-badges-container";
 import { buttonVariants } from "@/components/ui/button";
-import { BigPizzaRosette } from "@/components/rosette/big-rosette";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChevronLeft } from "lucide-react";
+import { cn, getProtocolDisplayName } from "@/lib/utils";
 import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
-import { TooltipProvider } from "@/components/rosette/tooltip/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { Mdx } from "@/components/mdx-component";
+import { ProtocolLinks } from "@/components/protocol/links";
+import { Separator } from "@/components/ui/separator";
 import { Stage } from "@/lib/types";
+import { StageBadge } from "@/components/stage";
+import { StageProgressBar } from "@/components/stage-progress-bar";
+import { StageRequirements } from "@/components/stage-requirements";
+import Link from "next/link";
+
+import "@/styles/mdx.css";
 
 interface ProtocolPageItemProps {
   params: {
@@ -21,228 +27,166 @@ interface ProtocolPageItemProps {
 }
 
 async function getProtocolFromParams(slug: string[]) {
-  const slugString = slug.join("/");
-  const protocol = allProtocols.find(
-    (protocol) => protocol.slugAsParams === slugString
-  );
+  const id = slug[0];
+  const protocol = allProtocols.find((p) => p.id === id);
 
-  return { ...protocol };
+  const reviewSlug = slug.join("/");
+  const review = allReviews.find((r) => r.slugAsParams === reviewSlug);
+  const chains = allReviews
+    .filter((r) => r.slugAsParams.includes(id))
+    .map((r) => r.chain);
+
+  return { ...protocol, ...review, chains };
 }
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: { slug: string[] };
-// }): Promise<Metadata> {
-//   const protocol = await getProtocolFromParams(params.slug);
+export async function generateStaticParams(): Promise<
+  ProtocolPageItemProps["params"][]
+> {
+  return allReviews.map((review) => ({
+    slug: review.slugAsParams.split("/"),
+  }));
+}
 
-//   if (!protocol) {
-//     return {
-//       title: "Protocol not found",
-//       description: "Protocol details could not be found.",
-//     };
-//   }
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] };
+}): Promise<Metadata> {
+  const protocol = await getProtocolFromParams(params.slug);
 
-//   return {
-//     title: protocol.protocol,
-//     description: "DeFi Scan decentralization report for " + protocol.protocol,
-//     authors: {
-//       name: protocol.author!.join(", "),
-//     },
-//   };
-// }
+  if (!protocol) {
+    return {
+      title: "Protocol not found | DeFiScan",
+      description: "The requested DeFi protocol analysis could not be found. Browse our database of DeFi protocols and their decentralization stages.",
+      openGraph: {
+        title: "Protocol not found | DeFiScan",
+        description: "The requested DeFi protocol analysis could not be found.",
+        url: "https://defiscan.info",
+        siteName: "DeFiScan",
+        type: "website",
+      },
+    };
+  }
+
+  const stageName = protocol.stage === 0 ? "Stage 0" : 
+                   protocol.stage === 1 ? "Stage 1" : 
+                   protocol.stage === 2 ? "Stage 2" : 
+                   protocol.stage === "R" ? "Review" : 
+                   protocol.stage === "O" ? "Others" : 
+                   protocol.stage?.toString().startsWith("I") ? `Infrastructure ${protocol.stage}` : 
+                   `Stage ${protocol.stage}`;
+
+  const chainText = protocol.chain ? ` on ${protocol.chain}` : "";
+
+  return {
+    title: `${protocol.protocol} Analysis - ${stageName} | DeFiScan`,
+    description: `Comprehensive decentralization analysis of ${protocol.protocol}${chainText}. Current stage: ${stageName}. View security assessment, infrastructure details, and risk analysis.`,
+    keywords: [
+      protocol.protocol,
+      "DeFi",
+      "decentralization",
+      "centralization", 
+      "protocol analysis",
+      stageName,
+      protocol.chain,
+      "Protocol Permissions",
+      "DeFi stages"
+    ].filter((keyword): keyword is string => Boolean(keyword)),
+    authors: protocol.author ? {
+      name: protocol.author.join(", "),
+    } : undefined,
+    openGraph: {
+      title: `${protocol.protocol} - ${stageName} Analysis | DeFiScan`,
+      description: `Detailed decentralization analysis of ${protocol.protocol}${chainText}. Stage: ${stageName}. Centralization assessment and infrastructure review.`,
+      url: `https://defiscan.info/protocols/${params.slug.join("/")}`,
+      siteName: "DeFiScan",
+      type: "article",
+      images: [
+        {
+          url: "https://defiscan.info/images/logo.png",
+          width: 800,
+          height: 600,
+          alt: `${protocol.protocol} DeFi Protocol Analysis`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${protocol.protocol} - ${stageName} Analysis`,
+      description: `Decentralization analysis: ${stageName} on ${chainText}. View full security assessment on DeFiScan.`,
+      images: ["https://defiscan.info/images/logo.png"],
+    },
+  };
+}
 
 export default async function ProtocolPageItem({
   params,
 }: ProtocolPageItemProps) {
   const protocol = await getProtocolFromParams(params.slug);
-
   if (!protocol) {
     return <div>Protocol not found</div>; // Handle not found case
   }
 
   return (
-    <article className="container relative mx-auto py-6 lg:py-10">
+    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl 2xl:max-w-none">
       <div>
-        <h1 className="mt-2 mb-8 inline-block text-2xl md:text-4xl font-bold capitalize leading-tight text-primary lg:text-5xl">
-          {protocol.protocol}
-        </h1>
+        <div className="grid gap-2 grid-cols-4 lg:grid-rows-1">
+          <div className="flex flex-col col-span-full sm:col-span-2 lg:col-span-1">
+            <div className="flex flex-col w-full gap-2">
+              <div className="flex items-end gap-4 py-2">
+                <h1 className="text-3xl shrink-0 text-primary">
+                  {getProtocolDisplayName(protocol.protocol || 'Unknown Protocol', protocol.instance)}
+                </h1>
+              </div>
+            </div>
+            <div className="mt-auto" />
 
-        <table className="table-auto border-separate border-spacing-y-2 border-spacing-x-4 -ml-4">
-          <tbody>
-            <tr>
-              <td className="whitespace-nowrap">Website</td>
-              <td className="break-all max-w-xs">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={protocol.website}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.website}
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">X (Twitter)</td>
-              <td className="break-all max-w-xs">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={protocol.x}
-                  className="text-blue-500 hover:underline text-sm md:text-base"
-                >
-                  {protocol.x}
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">GitHub</td>
-              <td className="break-all max-w-xs">
-                <div>
-                  {protocol.github!.map((slug, index) => (
-                    <a
-                      key={index}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`
-                          ${slug}`}
-                      className="text-blue-500 hover:underline text-sm md:text-base"
-                    >
-                      {index == 0 ? slug : ", " + slug}
-                    </a>
-                  ))}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">Defillama</td>
-              <td className="break-all max-w-xs">
-                <div className="">
-                  {protocol.defillama_slug!.map((slug, index) => (
-                    <a
-                      key={index}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`
-                        ${slug}`}
-                      className="text-blue-500 hover:underline text-sm md:text-base"
-                    >
-                      {index == 0 ? slug : ", " + slug}
-                    </a>
-                  ))}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td className="whitespace-nowrap">Chain</td>
-              <td className="break-all max-w-xs">{protocol.chain}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Declaration
-        </h1>
-
-        <p>
-          This review has been submitted by {protocol.author!.join(", ")} on{" "}
-          {protocol.submission_date!.split("T")[0]}.
-        </p>
-        <p>
-          It was reviewed and published by the DeFi Collective team on{" "}
-          {protocol.publish_date!.split("T")[0]}.
-        </p>
-        <p>
-          {protocol.update_date!.split("T")[0] === "1970-01-01"
-            ? "The review has not been updated since the initial submission"
-            : "The last update to the review was made on " +
-              protocol.update_date!.split("T")[0]}
-          .
-        </p>
-        <p>
-          This content is provided "as is" and "as available". Read more in our
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={"../../terms"}
-            className="text-blue-500 hover:underline"
-          >
-            {" "}
-            Terms
-          </a>
-          .
-        </p>
-
-        {protocol.stage! != "O" ? (
-          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-            Stage
-          </h1>
-        ) : (
-          <></>
-        )}
-
-        {protocol.stage! != "O" ? (
-          <TooltipProvider>
-            <Badge
-              title={"Stage of Decentralisation"}
+            <Separator className="w-full mt-2 mb-2" />
+            <StageBadge
               stage={protocol.stage! as Stage}
-              className={`${
-                protocol.stage! === "R"
-                  ? "bg-gray-500"
-                  : protocol.stage! === 0
-                    ? "bg-red-500"
-                    : protocol.stage! === 1
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
-              } text-white py-1 rounded "text-lg"`}
-            >
-              {protocol.stage! === "R" ? "Review" : "Stage " + protocol.stage!}
-            </Badge>
-          </TooltipProvider>
-        ) : (
-          <></>
-        )}
-
-        {protocol.stage! === "O" ? (
-          <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-            Missing Requirements for Stage 0
-          </h1>
-        ) : (
-          <></>
-        )}
-        {
-          <div>
-            {protocol.stage! === "O" ? (
-              protocol.reasons!.map((el) => (
-                <TooltipProvider>
-                  <Badge
-                    title={"Reason"}
-                    className="my-1 bg-red-500"
-                    stage={"O"}
-                    reason={el}
-                  >
-                    {el}
-                  </Badge>
-                </TooltipProvider>
-              ))
-            ) : (
-              <></>
-            )}
+              className="h-8 mb-2 self-start"
+              reasons={protocol.reasons}
+            />
+            <ProtocolLinks protocol={protocol} />
           </div>
-        }
+          <div className="col-span-full lg:col-span-2">
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <div className="text-center">
+                  <h2 className="text-xl font-semibold mb-4 text-primary">Protocol Decentralization</h2>
+                  <StageProgressBar 
+                    stage={protocol.stage! as Stage}
+                    stage_requirements={protocol.stage_requirements}
+                    className="mb-4"
+                  />
+                  <StageRequirements 
+                    stage={protocol.stage! as Stage}
+                    stage_requirements={protocol.stage_requirements}
+                    className="mt-4 text-left"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          {!(typeof protocol.stage === 'string' && protocol.stage.startsWith('I')) && (
+            <div className="flex flex-col gap-2 row-start-2 col-span-full sm:col-start-3 sm:row-start-1 sm:col-span-2 lg:col-span-1 lg:col-start-4">
+              <Card className="h-full">
+                <CardContent className="p-0 w-full h-full">
+                  <div className="text-center" style={{ marginLeft: '2px', marginRight: '2px' }}>
+                    <h2 className="text-xl font-semibold mb-4 text-primary mt-6">Risk Areas</h2>
+                    <DimensionBadgesContainer
+                      values={getRiskDescriptions(protocol.risks!)}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
 
-        <h1 className="mt-10 mb-4 scroll-m-20 text-2xl md:text-4xl font-bold text-primary tracking-tight">
-          Risks
-        </h1>
-
-        <TooltipProvider>
-          <BigPizzaRosette
-            className="mt-auto"
-            values={getRiskDescriptions(protocol.risks!)}
-          />
-        </TooltipProvider>
-        <Mdx code={protocol.body!} />
+        <div className="mt-12">
+          <Mdx code={protocol.body!} />
+        </div>
         <hr className="mt-12" />
         <div className="flex justify-center py-6 lg:py-10">
           <Link href="/" className={cn(buttonVariants({ variant: "ghost" }))}>
