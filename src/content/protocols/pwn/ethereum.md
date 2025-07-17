@@ -100,6 +100,7 @@ PWN is governed by the PWN DAO, which is built on the Aragon OSx Framework for m
 | PWNSimpleLoanSimpleProposal    | [0xe624E7D33baC728bE2bdB606Da0018B6E05A84D9](https://etherscan.io/address/0xe624E7D33baC728bE2bdB606Da0018B6E05A84D9) |
 | PWNSimpleLoanListProposal    | [0x7160Ec33788Df9AFb8AAEe777e7Ae21151B51eDd](https://etherscan.io/address/0x7160Ec33788Df9AFb8AAEe777e7Ae21151B51eDd) |
 | PWNSimpleLoanElasticProposal    | [0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626](https://etherscan.io/address/0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626) |
+| PWNSimpleLoanElasticChainlinkProposal    | [0xBA58E16BE93dAdcBB74a194bDfD9E5933b24016B](https://etherscan.io/address/0xBA58E16BE93dAdcBB74a194bDfD9E5933b24016B) |
 | PWNSimpleLoanDutchAuctionProposal    | [0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369](https://etherscan.io/address/0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369) |
 
 ## All Permission Owners
@@ -154,4 +155,8 @@ PWN is governed by the PWN DAO, which is built on the Aragon OSx Framework for m
 | PWNSimpleLoanDutchAuctionProposal | _acceptProposal | Accepts a given proposal. Loan contracts call this function with the signed proposal on behalf of the acceptor. Malicious actor could accept proposals for different Loan contracts. | Loan contract specified in an offer |
 | PWNSimpleLoanDutchAuctionProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
 | PWNSimpleLoanDutchAuctionProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
+| PWNSimpleLoanElasticChainlinkProposal | _makeProposal | Marks a proposalHash as valid. Caller has to also be a proposer of the corresponding offer. | Proposer |
+| PWNSimpleLoanElasticChainlinkProposal | _acceptProposal | Accepts a given proposal. Loan contracts call this function with the signed proposal on behalf of the acceptor. Malicious actor could accept proposals for different Loan contracts. | Loan contract specified in an offer |
+| PWNSimpleLoanElasticChainlinkProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
+| PWNSimpleLoanElasticChainlinkProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
 | PWNUtilizedCredit | utilizeCredit | Updates utilised credit for an account. This is used to share credit between different proposal types. Malicious actor could update the utilised credit to go over the credit limit. | Contract with a valid tag in PWNHub |
