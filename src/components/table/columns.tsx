@@ -31,7 +31,7 @@ const STAGE_PRIORITY: Record<string, number> = {
 const getHighestStage = (stages: Stage[]): Stage => {
   if (stages.length === 0) return "V";
   
-  let highest = "V";
+  let highest: Stage = "V";
   let highestPriority = 0;
   
   for (const stage of stages) {
