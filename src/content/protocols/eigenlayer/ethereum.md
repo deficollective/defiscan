@@ -2,7 +2,7 @@
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "H", "H", "H", "H"]
+risks: ["L", "H", "L", "H", "H"]
 author: ["sagaciousyves"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
