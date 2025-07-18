@@ -159,11 +159,11 @@ export default async function ProtocolPageItem({
                     stage_requirements={protocol.stage_requirements}
                     className="mb-4"
                   />
-                  <StageRequirements 
+                  {!protocol.stage!.toString().startsWith("I") && <StageRequirements 
                     stage={protocol.stage! as Stage}
                     stage_requirements={protocol.stage_requirements}
                     className="mt-4 text-left"
-                  />
+                  />}
                 </div>
               </CardContent>
             </Card>
