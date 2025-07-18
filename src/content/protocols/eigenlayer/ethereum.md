@@ -142,6 +142,34 @@ Open questions regarding reward distribution
 - what's the wind down phase for a staker to change operators, in consideration that the operator redirects future rewards 100% to itself.
 - is the merkle proof at some point invalid, ie a claimer cannot claim after a certain time period?
 
+## Strategies
+
+Each ERC20 token that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate `Strategy` contract. The `StrategyFactory` creates new strategies, with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. The `StrategyFactory` is _upgradeable_ through the `ProxyAdmin`, which could modify strategy behavior and potentially lead to _loss of funds_ if compromised. To prevent delegation of the token/strategy, _AVSs_ need to delist _Strategies_ from their _Operatorsets_.
+
+## `DelegationManager`
+
+The `DelegationManager` is the contract that allows _Stakers_ to delegate their shares to _Operators_. It also allows _Operators_ to register as _Operator_ in the Eigenlayer system. The `DelegationManager` allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_.
+
+The `DelegationManager` calls `removeDepositShares` and `addShares` on the `StrategyManager` contract to update delegated shares and link them to deposits. These functions are essential for maintaining accurate accounting of staked assets.
+
+_Operators_ can configure a _Delegation Approver_, that requires _Stakers_ to first get an approval before they may delegate to the _Operator_ through the `DelegationManager` contract.
+
+The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an upgradeability risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty.
+
+## `AllocationManager`
+
+The `AllocationManager` forwards the slashing request to the `DelegationManager` which keeps track of the shares and the suffered slashes. This functionality requires precise accounting to prevent incorrect slashing that could lead to _loss of funds_ of _Stakers_.
+
+Through the `AllocationManager` the `AVSs` can manage operator sets and AVS configurations. The `AllocationManager` allows _Operators_ to register and deregister from _Operator Sets_ and _AVSs_.
+
+The contract's management of _Operator Sets_ and _AVS_ configurations requires careful coordination with other system components. The ability to slash operator shares through the DelegationManager represents a powerful capability that must be carefully controlled to prevent abuse or incorrect slashing.
+
+## `RewardsCoordinator`
+
+The 7-day delay mechanism for new reward splits provides a safety buffer against rapid, potentially malicious changes to reward structures. The contract's reliance on a trusted Merkle root poster for reward distribution introduces a trusted component.
+
+The _upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that the economic parameters governing reward distribution could be modified. This includes the 90/10 default split between _Stakers_ and _Operators_, which represents a significant economic lever. The contract's ability to manage reward claims and distribution schedules makes it a critical component of EigenLayer's incentive system.
+
 ## AVSs
 
 (rewrite in own words)
