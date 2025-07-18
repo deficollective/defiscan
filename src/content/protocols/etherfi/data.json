@@ -1,0 +1,10 @@
+{
+  "id": "etherfi",
+  "protocol": "EtherFi",
+  "website": "https://www.ether.fi/app/weeth",
+  "defillama_slug": ["ether.fi-stake"],
+  "socials": {
+    "x": "https://x.com/ether_fi"
+  },
+  "github": ["https://github.com/project_github"]
+}
