@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from "recharts";
-import { loadReviews } from "@/lib/data/utils";
+import { loadReviewsWithTvl } from "@/lib/data/utils";
 import { formatUsd } from "@/lib/utils";
 import { Stage } from "@/lib/types";
 
@@ -33,7 +33,7 @@ export const CombinedStageChart: React.FC<{ className?: string }> = ({ className
 
   useEffect(() => {
     const fetchData = async () => {
-      const projects = await loadReviews();
+      const projects = await loadReviewsWithTvl();
       
       // Flatten all reviews and filter out infrastructure stages
       const allReviews = projects.flatMap(project => 

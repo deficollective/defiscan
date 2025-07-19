@@ -4,7 +4,7 @@ import { createColumns } from "./columns";
 import { DataTable } from "./data-table";
 import { useEffect, useState } from "react";
 import { Project } from "@/lib/types";
-import { loadReviews } from "@/lib/data/utils";
+import { loadReviews, loadReviewsWithTvl } from "@/lib/data/utils";
 import { getProtocolDisplayName } from "@/lib/utils";
 
 export const getData = async (): Promise<Project[]> => {
@@ -14,10 +14,24 @@ export const getData = async (): Promise<Project[]> => {
 
 export default function Table() {
   const [data, setData] = useState<Project[]>();
+  const [isRefreshingTvl, setIsRefreshingTvl] = useState(false);
 
   const fetchData = async () => {
-    const data = await getData();
-    setData(data);
+    // Load cached data immediately for instant UI
+    const cachedData = await getData();
+    setData(cachedData);
+
+    // Then refresh with live TVL data in background
+    setIsRefreshingTvl(true);
+    try {
+      const liveData = await loadReviewsWithTvl();
+      setData(liveData);
+    } catch (error) {
+      console.warn('Failed to fetch live TVL data, using cached data:', error);
+      // Keep cached data if live fetch fails
+    } finally {
+      setIsRefreshingTvl(false);
+    }
   };
 
   useEffect(() => {
@@ -26,11 +40,14 @@ export default function Table() {
 
   // Use the original transformation logic that worked before
   const projects = data?.map((project) => {
-    const { protocol: key, reviews, ...protocol } = project;
+    const { protocol: key, reviews, isLoading, ...protocol } = project;
+    // Override isLoading based on TVL refresh state - show as loading only for TVL refresh
+    const tvlLoading = isRefreshingTvl && !isLoading;
 
     const children = reviews.map((review) => ({
       protocol: getProtocolDisplayName(key, review.instance),
       baseProtocol: key,
+      isLoading: tvlLoading,
       ...protocol,
       ...review,
     }));
@@ -38,11 +55,11 @@ export default function Table() {
     // There is only 1 review. No need to create a collapsible table row.
     if (children.length === 1) {
       const review = children[0];
-      return { ...protocol, ...review };
+      return { ...protocol, ...review, isLoading: tvlLoading };
     }
 
     // Return protocol with children.
-    return { protocol: key, children, ...protocol };
+    return { protocol: key, children, isLoading: tvlLoading, ...protocol };
   }) as Project[];
 
   // Flatten all reviews for counting purposes only
@@ -75,6 +92,12 @@ export default function Table() {
 
   return (
     <div className="mx-auto w-auto">
+      {isRefreshingTvl && (
+        <div className="mb-2 text-sm text-muted-foreground flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
+          Refreshing TVL data...
+        </div>
+      )}
       <DataTable
         columns={tableColumns}
         data={projects || []}

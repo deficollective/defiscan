@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run cache-protocols && next build",
+    "build:next": "next build",
+    "cache-protocols": "node scripts/cache-protocol-data.js",
     "start": "next start",
     "lint": "next lint",
     "prettier": "pnpx prettier --write ."

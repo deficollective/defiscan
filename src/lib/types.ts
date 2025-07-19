@@ -44,4 +44,5 @@ export interface Project {
   reviews: Review[];
   children?: Review[];
   reasons?: Reasons;
+  isLoading?: boolean;
 }

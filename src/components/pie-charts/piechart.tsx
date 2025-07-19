@@ -12,7 +12,7 @@ import {
 import { defiLlama } from "@/services/defillama";
 import { protocols, reviews } from "#site/content";
 import { Project, Review, Stage } from "@/lib/types";
-import { loadReviews } from "@/lib/data/utils";
+import { loadReviewsWithTvl } from "@/lib/data/utils";
 
 type ProjectWithReview = Omit<Project, 'tvl'> & Review;
 
@@ -198,7 +198,7 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const projects = await loadReviews();
+      const projects = await loadReviewsWithTvl();
 
       const merged = projects
         .map((project) => {

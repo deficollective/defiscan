@@ -40,3 +40,7 @@ next-env.d.ts
 #velite generated files
 .velite
 public/static
+
+# build-time cached data
+src/lib/data/cached-protocol-data.json
+public/images/protocols/

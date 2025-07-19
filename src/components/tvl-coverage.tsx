@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { loadReviews } from "@/lib/data/utils";
+import { loadReviewsWithTvl } from "@/lib/data/utils";
 import { formatUsd, formatUsdMobile } from "@/lib/utils";
 import { defiLlama } from "@/services/defillama";
 import { ProtocolCarousel } from "@/components/protocol-carousel";
@@ -38,7 +38,7 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
 
   useEffect(() => {
     const fetchData = async () => {
-      const projects = await loadReviews();
+      const projects = await loadReviewsWithTvl();
       
       // Calculate reviewed TVL
       const reviewedTvl = projects.reduce((sum, project) => {

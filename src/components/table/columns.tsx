@@ -10,6 +10,7 @@ import { ArrowUpDown, ChevronDown, ChevronRight, Minus } from "lucide-react";
 import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { StageBadge, StackedStageBadge } from "../stage";
 import { infraScoreToText } from "@/app/protocols/stageToRequisites";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -66,13 +67,21 @@ export const createColumns = (
     cell: ({ row }) => {
       const protocol = row.getValue("protocol");
       const baseProtocol = (row.original as any).baseProtocol || protocol;
+      const isLoading = (row.original as any).isLoading;
+      const logoSrc = getProtocolLogo(baseProtocol as string);
+      const isPlaceholder = logoSrc === "/images/placeholder.png";
+      
       return (
         <div className="flex items-center max-w-36 md:max-w-48 relative z-10">
           <Avatar className="h-8 w-8 flex-shrink-0">
-            <AvatarImage
-              src={getProtocolLogo(baseProtocol as string)}
-              alt={protocol as string}
-            />
+            {isLoading && isPlaceholder ? (
+              <Skeleton className="h-8 w-8 rounded-full" />
+            ) : (
+              <AvatarImage
+                src={logoSrc}
+                alt={protocol as string}
+              />
+            )}
           </Avatar>
           <span className="ml-2 whitespace-nowrap overflow-visible">{protocol as string}</span>
         </div>
@@ -438,6 +447,7 @@ export const createColumns = (
       );
     },
     cell: ({ row, table }) => {
+      const isLoading = (row.original as any).isLoading;
       let tvl = row.getValue("tvl");
       
       // For aggregated rows (parent rows with children), calculate TVL only from children 
@@ -462,7 +472,7 @@ export const createColumns = (
       
       return (
         <div className="hidden md:block w-auto overflow-hidden whitespace-nowrap">
-          <span>
+          <span className={isLoading ? "animate-pulse opacity-70" : ""}>
             {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
           </span>
         </div>
