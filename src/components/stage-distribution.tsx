@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from "recharts";
-import { loadReviewsWithTvl } from "@/lib/data/utils";
+import { loadReviews, loadReviewsWithTvl } from "@/lib/data/utils";
 import { formatUsd } from "@/lib/utils";
 import { Stage } from "@/lib/types";
 
@@ -29,56 +29,106 @@ const getStageInfo = (stage: Stage) => {
 };
 
 export const CombinedStageChart: React.FC<{ className?: string }> = ({ className }) => {
-  const [data, setData] = useState<StageData[]>([]);
+  const [data, setData] = useState<StageData[]>(() => {
+    // Initialize with cached data immediately
+    const cachedProjects = loadReviews();
+    
+    // Flatten all reviews and filter out infrastructure stages
+    const allReviews = cachedProjects.flatMap(project => 
+      project.reviews.map(review => ({
+        ...project,
+        ...review,
+        protocol: project.protocol,
+        baseProtocol: project.protocol
+      }))
+    ).filter(review => !review.stage?.toString().startsWith("I")); // Exclude infrastructure
+    
+    // Group by stage
+    const stageGroups = allReviews.reduce((acc, review) => {
+      const stage = review.stage;
+      if (!acc[stage]) {
+        acc[stage] = { reviews: [], totalTvl: 0 };
+      }
+      acc[stage].reviews.push(review);
+      acc[stage].totalTvl += review.tvl === "n/a" ? 0 : review.tvl;
+      return acc;
+    }, {} as Record<string, { reviews: any[], totalTvl: number }>);
+
+    const totalCount = allReviews.length;
+    const totalTvl = allReviews.reduce((sum, review) => sum + (review.tvl === "n/a" ? 0 : review.tvl), 0);
+
+    // Create ordered data for Others, Stage 0, Stage 1, Stage 2
+    const orderedStages = ["O", 0, 1, 2];
+    const stageData: StageData[] = orderedStages.map(stage => {
+      const stageInfo = getStageInfo(stage as Stage);
+      const data = stageGroups[stage] || { reviews: [], totalTvl: 0 };
+      return {
+        stage: stageInfo.name,
+        count: data.reviews.length,
+        tvl: data.totalTvl,
+        colorClass: stageInfo.colorClass,
+        color: stageInfo.color,
+        percentage: totalCount > 0 ? (data.reviews.length / totalCount) * 100 : 0,
+        tvlPercentage: totalTvl > 0 ? (data.totalTvl / totalTvl) * 100 : 0,
+      };
+    }); // Show all stages, including those with 0 count for immediate display
+
+    return stageData;
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const projects = await loadReviewsWithTvl();
-      
-      // Flatten all reviews and filter out infrastructure stages
-      const allReviews = projects.flatMap(project => 
-        project.reviews.map(review => ({
-          ...project,
-          ...review,
-          protocol: project.protocol,
-          baseProtocol: project.protocol
-        }))
-      ).filter(review => !review.stage?.toString().startsWith("I")); // Exclude infrastructure
+    // Background update with live data
+    const fetchLiveData = async () => {
+      try {
+        const liveProjects = await loadReviewsWithTvl();
+        
+        // Flatten all reviews and filter out infrastructure stages
+        const allReviews = liveProjects.flatMap(project => 
+          project.reviews.map(review => ({
+            ...project,
+            ...review,
+            protocol: project.protocol,
+            baseProtocol: project.protocol
+          }))
+        ).filter(review => !review.stage?.toString().startsWith("I")); // Exclude infrastructure
 
-      // Group by stage
-      const stageGroups = allReviews.reduce((acc, review) => {
-        const stage = review.stage;
-        if (!acc[stage]) {
-          acc[stage] = { reviews: [], totalTvl: 0 };
-        }
-        acc[stage].reviews.push(review);
-        acc[stage].totalTvl += review.tvl === "n/a" ? 0 : review.tvl;
-        return acc;
-      }, {} as Record<string, { reviews: any[], totalTvl: number }>);
+        // Group by stage
+        const stageGroups = allReviews.reduce((acc, review) => {
+          const stage = review.stage;
+          if (!acc[stage]) {
+            acc[stage] = { reviews: [], totalTvl: 0 };
+          }
+          acc[stage].reviews.push(review);
+          acc[stage].totalTvl += review.tvl === "n/a" ? 0 : review.tvl;
+          return acc;
+        }, {} as Record<string, { reviews: any[], totalTvl: number }>);
 
-      const totalCount = allReviews.length;
-      const totalTvl = allReviews.reduce((sum, review) => sum + (review.tvl === "n/a" ? 0 : review.tvl), 0);
+        const totalCount = allReviews.length;
+        const totalTvl = allReviews.reduce((sum, review) => sum + (review.tvl === "n/a" ? 0 : review.tvl), 0);
 
-      // Create ordered data for Others, Stage 0, Stage 1, Stage 2
-      const orderedStages = ["O", 0, 1, 2];
-      const stageData: StageData[] = orderedStages.map(stage => {
-        const stageInfo = getStageInfo(stage as Stage);
-        const data = stageGroups[stage] || { reviews: [], totalTvl: 0 };
-        return {
-          stage: stageInfo.name,
-          count: data.reviews.length,
-          tvl: data.totalTvl,
-          colorClass: stageInfo.colorClass,
-          color: stageInfo.color,
-          percentage: (data.reviews.length / totalCount) * 100,
-          tvlPercentage: totalTvl > 0 ? (data.totalTvl / totalTvl) * 100 : 0,
-        };
-      }).filter(item => item.count > 0); // Only show stages with data
+        // Create ordered data for Others, Stage 0, Stage 1, Stage 2
+        const orderedStages = ["O", 0, 1, 2];
+        const stageData: StageData[] = orderedStages.map(stage => {
+          const stageInfo = getStageInfo(stage as Stage);
+          const data = stageGroups[stage] || { reviews: [], totalTvl: 0 };
+          return {
+            stage: stageInfo.name,
+            count: data.reviews.length,
+            tvl: data.totalTvl,
+            colorClass: stageInfo.colorClass,
+            color: stageInfo.color,
+            percentage: (data.reviews.length / totalCount) * 100,
+            tvlPercentage: totalTvl > 0 ? (data.totalTvl / totalTvl) * 100 : 0,
+          };
+        }).filter(item => item.count > 0); // Only show stages with data
 
-      setData(stageData);
+        setData(stageData);
+      } catch (error) {
+        console.warn('Failed to fetch live stage distribution data, keeping cached data:', error);
+      }
     };
     
-    fetchData();
+    fetchLiveData();
   }, []);
 
   return (
@@ -91,11 +141,16 @@ export const CombinedStageChart: React.FC<{ className?: string }> = ({ className
           </p>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart 
-              data={data} 
-              margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-            >
+          {data.length === 0 ? (
+            <div className="flex items-center justify-center h-[180px] text-muted-foreground text-sm">
+              Loading chart data...
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart 
+                data={data} 
+                margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+              >
               <XAxis 
                 dataKey="stage" 
                 axisLine={false}
@@ -137,6 +192,7 @@ export const CombinedStageChart: React.FC<{ className?: string }> = ({ className
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
     </div>

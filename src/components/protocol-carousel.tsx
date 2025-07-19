@@ -12,42 +12,30 @@ interface ProtocolCarouselProps {
 }
 
 export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClick }) => {
-  const [protocols, setProtocols] = useState<Project[]>([]);
+  const [protocols, setProtocols] = useState<Project[]>(() => {
+    const data = loadReviews();
+    // Filter out protocols without logos, infrastructure reviews, unqualified protocols, and sort by name for consistency
+    const protocolsWithLogos = data
+      .filter(protocol => {
+        // Filter out protocols without logos
+        if (!protocol.logo) return false;
+        
+        // Filter out protocols that only have infrastructure reviews (stages starting with "I") or unqualified ("O")
+        const hasValidReview = protocol.reviews.some(review => 
+          !review.stage?.toString().startsWith("I") && review.stage !== "O"
+        );
+        return hasValidReview;
+      })
+      .sort((a, b) => a.protocol.localeCompare(b.protocol));
+    
+    return protocolsWithLogos;
+  });
   const [currentOffset, setCurrentOffset] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const isPausedRef = useRef(false);
   const pauseTimeRef = useRef(0);
   const totalPausedTimeRef = useRef(0);
 
-  useEffect(() => {
-    const fetchProtocols = async () => {
-      try {
-        const data = await loadReviews();
-        // Filter out protocols without logos, infrastructure reviews, unqualified protocols, and sort by name for consistency
-        const protocolsWithLogos = data
-          .filter(protocol => {
-            // Filter out protocols without logos
-            if (!protocol.logo) return false;
-            
-            // Filter out protocols that only have infrastructure reviews (stages starting with "I") or unqualified ("O")
-            const hasValidReview = protocol.reviews.some(review => 
-              !review.stage?.toString().startsWith("I") && review.stage !== "O"
-            );
-            return hasValidReview;
-          })
-          .sort((a, b) => a.protocol.localeCompare(b.protocol));
-        
-        setProtocols(protocolsWithLogos);
-      } catch (error) {
-        console.error('Error loading protocols:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProtocols();
-  }, []);
 
   // Update ref when state changes and track pause times
   useEffect(() => {
@@ -93,19 +81,6 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     };
   }, [protocols.length]); // Only depend on protocols.length, not isPaused
 
-  if (loading) {
-    return (
-      <div className="border-t pt-6">
-        <div className="mb-4">
-          <p className="text-xs text-center text-muted-foreground">
-            DeFiScan reviews DeFi protocols to assess their decentralization progress and centralization risks. 
-            We score protocols from Stage 0 to Stage 2 to help users make informed decisions.
-          </p>
-        </div>
-        <div className="text-center text-muted-foreground">Loading protocols...</div>
-      </div>
-    );
-  }
 
   if (protocols.length === 0) {
     return null;

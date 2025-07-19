@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { loadReviewsWithTvl } from "@/lib/data/utils";
+import { loadReviews, loadReviewsWithTvl } from "@/lib/data/utils";
 import { formatUsd, formatUsdMobile } from "@/lib/utils";
 import { defiLlama } from "@/services/defillama";
 import { ProtocolCarousel } from "@/components/protocol-carousel";
@@ -17,7 +17,29 @@ interface CoverageData {
 
 
 export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ className }) => {
-  const [data, setData] = useState<CoverageData | null>(null);
+  const [data, setData] = useState<CoverageData>(() => {
+    // Initialize with cached data immediately
+    const cachedProjects = loadReviews();
+    
+    // Calculate reviewed TVL from cached data
+    const cachedReviewedTvl = cachedProjects.reduce((sum, project) => {
+      const projectTvl = project.reviews.reduce((reviewSum, review) => {
+        return reviewSum + (review.tvl === "n/a" ? 0 : review.tvl);
+      }, 0);
+      return sum + projectTvl;
+    }, 0);
+
+    // Use a reasonable default for total TVL while loading live data
+    const placeholderTotalTvl = 200000000000; // $200B placeholder
+    const placeholderCoveragePercentage = (cachedReviewedTvl / placeholderTotalTvl) * 100;
+    
+    return {
+      reviewedTvl: cachedReviewedTvl,
+      totalTvl: placeholderTotalTvl,
+      coveragePercentage: Math.min(placeholderCoveragePercentage, 100),
+      protocolCount: cachedProjects.length,
+    };
+  });
 
   const scrollToReviews = () => {
     // Look for the tabs (DeFi, Infrastructure, Others) - ToggleGroup component
@@ -37,50 +59,39 @@ export const TVLCoverageComponent: React.FC<{ className?: string }> = ({ classNa
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const projects = await loadReviewsWithTvl();
-      
-      // Calculate reviewed TVL
-      const reviewedTvl = projects.reduce((sum, project) => {
-        const projectTvl = project.reviews.reduce((reviewSum, review) => {
-          return reviewSum + (review.tvl === "n/a" ? 0 : review.tvl);
+    // Background update with live data
+    const fetchLiveData = async () => {
+      try {
+        const liveProjects = await loadReviewsWithTvl();
+        
+        // Calculate reviewed TVL from live data
+        const liveReviewedTvl = liveProjects.reduce((sum, project) => {
+          const projectTvl = project.reviews.reduce((reviewSum, review) => {
+            return reviewSum + (review.tvl === "n/a" ? 0 : review.tvl);
+          }, 0);
+          return sum + projectTvl;
         }, 0);
-        return sum + projectTvl;
-      }, 0);
 
-      // Get today's total DeFi TVL
-      const totalTvl = await defiLlama.getCurrentTotalTvl();
-      
-      const coveragePercentage = (reviewedTvl / totalTvl) * 100;
-      
-      // Count total protocols (not reviews)
-      const protocolCount = projects.length;
-
-      setData({
-        reviewedTvl,
-        totalTvl,
-        coveragePercentage: Math.min(coveragePercentage, 100), // Cap at 100%
-        protocolCount,
-      });
+        // Get today's total DeFi TVL
+        const totalTvl = await defiLlama.getCurrentTotalTvl();
+        
+        const coveragePercentage = (liveReviewedTvl / totalTvl) * 100;
+        
+        // Update with live data
+        setData({
+          reviewedTvl: liveReviewedTvl,
+          totalTvl,
+          coveragePercentage: Math.min(coveragePercentage, 100),
+          protocolCount: liveProjects.length,
+        });
+      } catch (error) {
+        console.warn('Failed to fetch live TVL coverage data, keeping cached data:', error);
+      }
     };
     
-    fetchData();
+    fetchLiveData();
   }, []);
 
-  if (!data) {
-    return (
-      <div className={className}>
-        <Card className="h-full">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold">DeFi TVL Coverage</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center text-muted-foreground">Loading...</div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className={className}>

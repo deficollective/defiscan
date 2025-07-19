@@ -7,21 +7,18 @@ import { Project } from "@/lib/types";
 import { loadReviews, loadReviewsWithTvl } from "@/lib/data/utils";
 import { getProtocolDisplayName } from "@/lib/utils";
 
-export const getData = async (): Promise<Project[]> => {
-  const data_new = await loadReviews();
+export const getData = (): Project[] => {
+  const data_new = loadReviews();
   return data_new as Project[];
 };
 
 export default function Table() {
-  const [data, setData] = useState<Project[]>();
+  // Initialize with cached data immediately - no "No results" flash!
+  const [data, setData] = useState<Project[]>(() => getData());
   const [isRefreshingTvl, setIsRefreshingTvl] = useState(false);
 
-  const fetchData = async () => {
-    // Load cached data immediately for instant UI
-    const cachedData = await getData();
-    setData(cachedData);
-
-    // Then refresh with live TVL data in background
+  const fetchLiveData = async () => {
+    // Only fetch live TVL data in background
     setIsRefreshingTvl(true);
     try {
       const liveData = await loadReviewsWithTvl();
@@ -35,7 +32,7 @@ export default function Table() {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchLiveData();
   }, []);
 
   // Use the original transformation logic that worked before

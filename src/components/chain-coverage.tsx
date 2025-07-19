@@ -12,34 +12,31 @@ interface ChainData {
 }
 
 export const ChainCoverageComponent: React.FC<{ className?: string }> = ({ className }) => {
-  const [data, setData] = useState<ChainData[]>([]);
-  const [totalProtocols, setTotalProtocols] = useState(0);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const projects = await loadReviews();
-      
-      // Get unique chains and their counts
-      const chainCounts = projects.reduce((acc, project) => {
-        project.reviews.forEach(review => {
-          if (review.chain) {
-            acc[review.chain] = (acc[review.chain] || 0) + 1;
-          }
-        });
-        return acc;
-      }, {} as Record<string, number>);
-
-      const chainData = Object.entries(chainCounts)
-        .map(([chain, count]) => ({ chain, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 6); // Show top 6 chains
-
-      setData(chainData);
-      setTotalProtocols(projects.length);
-    };
+  const [data, setData] = useState<ChainData[]>(() => {
+    const projects = loadReviews();
     
-    fetchData();
-  }, []);
+    // Get unique chains and their counts
+    const chainCounts = projects.reduce((acc, project) => {
+      project.reviews.forEach(review => {
+        if (review.chain) {
+          acc[review.chain] = (acc[review.chain] || 0) + 1;
+        }
+      });
+      return acc;
+    }, {} as Record<string, number>);
+
+    const chainData = Object.entries(chainCounts)
+      .map(([chain, count]) => ({ chain, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6); // Show top 6 chains
+
+    return chainData;
+  });
+  
+  const [totalProtocols, setTotalProtocols] = useState(() => {
+    const projects = loadReviews();
+    return projects.length;
+  });
 
   const totalChains = data.length;
 

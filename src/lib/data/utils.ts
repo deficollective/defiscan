@@ -4,7 +4,7 @@ import { Project } from "../types";
 import { CachedDataFile } from "../types/cached-data";
 import cachedProtocolData from "./cached-protocol-data.json";
 
-export async function loadReviews() {
+export function loadReviews() {
     const protocols = data.protocols.map((protocol) => {
         // Find cached data for this protocol
         const typedCachedData = cachedProtocolData as CachedDataFile;
