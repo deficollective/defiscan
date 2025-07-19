@@ -1,6 +1,6 @@
 {
-  "id": "etherfi",
-  "protocol": "EtherFi",
+  "id": "etherfi-stake",
+  "protocol": "EtherFi Staking",
   "website": "https://www.ether.fi/app/weeth",
   "defillama_slug": ["ether.fi-stake"],
   "socials": {
