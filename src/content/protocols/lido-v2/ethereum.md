@@ -10,20 +10,38 @@ update_date: "1970-01-01"
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
       { text: "All contracts are verified", status: "fixed" },
       { text: "Source-available codebase", status: "fixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
-      { text: "Dependency with High centralization are mitigated", status: "fixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"}
+      {
+        text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
+        status: "unfixed",
+      },
+      {
+        text: "Dependency with High centralization are mitigated",
+        status: "fixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "fixed",
+      },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
-      { text: "Dependencies with High or Medium centralization score impact less than 5% of the TVL", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }
+      {
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+        status: "unfixed",
+      },
+      {
+        text: "Dependencies with High or Medium centralization score impact less than 5% of the TVL",
+        status: "fixed",
+      },
+      { text: "Alternative third-party frontends exist", status: "fixed" },
     ],
   ]
 ---
@@ -39,8 +57,7 @@ _Lido V2_ uses a system of _Staking Modules_ as explained in the [Protocol Analy
 
 ## Chain
 
-Lido is currently deployed on multiple chains. This review focuses on the
-Ethereum mainnet deployment.
+Lido is currently deployed on multiple chains. This review focuses on the Ethereum mainnet deployment.
 
 > Chain score: Low
 
@@ -58,7 +75,7 @@ Finally, the [Consensus Committee](#security-council) is in control of reporting
 
 ## Autonomy
 
-Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), users' staked funds are not in control by the _Node Operators_. This is because Lido enforces that these funds can only be withdrawn to a fixed withdrawal account, that is controled by the Lido protocol. Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. In addition to that, _Node Operators_ could steal parts of the earned staking yield, by redirecting them to their own address. In the worst case, a validator can lose up to 16 `ETH` to slashing events before it is forcefully exited and the remaining `ETH` withdrawn to Lido's withdrawal account.
+Lido relies on _Node Operators_ to operate the validators. As explained in the [protocol analysis](#protocol-analysis), users' staked funds are not in control by the _Node Operators_. This is because Lido enforces that these funds can only be withdrawn to a fixed withdrawal account, that is controlled by the Lido protocol. Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. In addition to that, _Node Operators_ could steal parts of the earned staking yield, by redirecting them to their own address. In the worst case, a validator can lose up to 16 `ETH` to slashing events before it is forcefully exited and the remaining `ETH` withdrawn to Lido's withdrawal account.
 
 Lido addresses those risks differently for each staking module. In the _Curated Module_, the _Node Operators_ are trusted and approved by _Lido Governance_. Currently 36 _Node Operators_ exist which manage on average 7'779 validators each. Different diversification measures are implemented to mitigate the risk of centralized infrastructure. This is detailed on a dedicated [dashboard](https://app.hex.tech/8dedcd99-17f4-49d8-944e-4857a355b90a/app/3f7d6967-3ef6-4e69-8f7b-d02d903f045b/latest). We computed that in a worst-case scenario, the failure of a _Node Operator_ in the _Curated Module_ would impact less than 1% of the total funds staked through Lido (see more in [dependencies](#dependencies)).
 
@@ -68,11 +85,11 @@ In the _Community Module_, anyone can become a _Node Operator_, but needs to dep
 
 ## Exit Window
 
-_Lido Governance_ is an onchain governance system that allows `LDO` holders to vote on contract upgrades and other governance matters. The voting period is made of 5 days, only the first 3 of which can be used to approve a proposal, with 2 additional days to object to an accepted proposal. No _Exit Window_ is enforced once the voting period has ended.
+_Lido Governance_ is an onchain governance system that allows `LDO` holders to vote on contract upgrades and other governance matters. The voting period lasts 5 days, only the first 3 of which can be used to approve a proposal, with 2 additional days to object to an accepted proposal. No _Exit Window_ is enforced once the voting period has ended.
 
 A system of `Easytrack` is in place for a set of pre-approved actions to be executed without requiring a quorum. Actions in the `Easytrack` contract have a 3-day delay which can be vetoed with more than 0.5% of the voting power. Different multisigs can create `Easytrack` actions which may make treasury payments, control the _Simple-DVT Module_, or settle penalties in the _Community Module_. The [Simple-DVT Module Committee](#security-council) has the permission to create `Easytrack` actions for the _Simple-DVT Module_, these actions include the approval of new _Node Operators_ on the _Simple-DVT Module_ and thus potentially impact user funds. The [Simple-DVT Module Committee](#security-council) complies with the _Security Council_ requirements, thus mitigating the respective risks. The `Easytrack` can be paused by the [Emergency Brakes](#security-council) multisig or by _Lido Governance_.
 
-Finally, there exist multiple _Emergency Actions_ which can be initiated by different Lido multisig accounts. Any signer in the `DepositSecurityModule` can trigger the pause of all deposits without delay. In addition to that, the _Community Staking Module_ can be completely paused by the [Community Staking Module Committee](#security-council), this includes the registering of new _Node Operators_ and claiming rewards.
+Finally, multiple _Emergency Actions_ exist which can be initiated by different Lido multisig accounts. Any signer in the `DepositSecurityModule` can trigger the pause of all deposits without delay. In addition to that, the _Community Staking Module_ can be completely paused by the [Community Staking Module Committee](#security-council), this includes the registering of new _Node Operators_ and claiming rewards.
 
 > Exit Window score: High
 
