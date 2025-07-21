@@ -16,9 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Venus Protocol is a lending protocol deployed on Binance Smart Chain. Users can create lending positions by depositing `BEP20` tokens or `BNB` in the respective lending pools. This allows them to create borrow positions for supported `BEP20` tokens or `BNB` against their collateral. If a position becomes liquidatable, anyone can execute the liquidation for an incentive. 
-
-The upgrades and parameter changes are protected by onchain governance of XVS holders. Any `XVS` holder posessing a minimum amount can create a proposal voted on by the community. If the proposal passes, it can be executed after 2 days in most cases, and 1 hour for fast track proposals accepted for certain functionalities.
+Venus Protocol is a decentralized lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by XVS token holders who vote on upgrades and parameter changes through an on-chain governance system with built-in timelocks.
 
 # Ratings
 
