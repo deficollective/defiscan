@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Venus Protocol is a lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by XVS token holders who vote on upgrades and parameter changes through an on-chain governance system with built-in timelocks.
+Venus Protocol is a lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by XVS token holders who vote on upgrades and parameter changes through an on-chain _Governance_ system with built-in timelocks.
 
 # Ratings
 
@@ -28,13 +28,13 @@ This report is concerned with Venus Core Protocol deployed on Binance Smart Chai
 
 ## Upgradeability
 
-The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the loss of user funds through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. These upgrades can only be performed through a governance proposal with the Normal Timelock, which implements a 48-hour delay.
+The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the loss of user funds through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. These upgrades can only be performed through a _Governance_ proposal with the Normal Timelock, which implements a 48-hour delay.
 
-The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. Oracle upgrades can only be executed through governance proposals with the Normal Timelock's 48-hour delay.
+The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. _Oracle_ upgrades can only be executed through _Governance_ proposals with the Normal Timelock's 48-hour delay.
 
-The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in loss of unclaimed yield if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses. These upgrades require governance approval through the Normal Timelock with a 48-hour delay.
+The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in loss of unclaimed yield if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses. These upgrades require _Governance_ approval through the Normal Timelock with a 48-hour delay.
 
-The `VAIController` and related stablecoin contracts are upgradeable. This could change the minting logic, interest rate calculations, or collateral requirements, potentially leading to bad debt that impacts all protocol users. Upgrades to these contracts can only be done through governance with the Normal Timelock's 48-hour delay.
+The `VAIController` and related stablecoin contracts are upgradeable. This could change the minting logic, interest rate calculations, or collateral requirements, potentially leading to bad debt that impacts all protocol users. Upgrades to these contracts can only be done through _Governance_ with the Normal Timelock's 48-hour delay.
 
 Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock (1-hour delay) or emergency multisigs.
 
@@ -83,11 +83,11 @@ A unique architectural feature is the `Comptroller`'s use of the **Diamond Stand
 
 # Protocol Analysis
 
-In this section, the Venus Protocol will be analyzed in its following components: The core lending protocol, the incentive mechansim, and the treasury. The governance structure will be analyzed in the subsequent section.
+In this section, the Venus Protocol will be analyzed in its following components: The _Core Lending Protocol_, the _Incentive Mechanism_, and the _Treasury_. The _Governance Structure_ will be analyzed in the subsequent section.
 
 ## Core Lending
 
-The core lending components consist of the `Comptroller` and `VToken` contracts. The `Comptroller` is a proxy contracts that delegates calls to one of four `Facet` contracts, which are generally resposible for managing all lending markets: 
+The _Core Lending_ components consist of the `Comptroller` and `VToken` contracts. The `Comptroller` is a proxy contracts that delegates calls to one of four `Facet` contracts, which are generally resposible for managing all lending markets: 
 - `MarketFacet`: responsible for market management like entering / exiting markets and listings
 - `PolicyFacet`: enforces policies for minting, borrowing, liquidating, etc.
 - `RewardFacet`: distributes the XVS rewards
@@ -125,17 +125,17 @@ Furthermore, users can stake their `XVS` in the `XVSVault` for additional `XVS` 
 
 ## Treasury
 
-A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the venus protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
-The reserves are collected to the treasury through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the treasury, governance can vote on proposals to spend the treasury.
+A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
+The reserves are collected to the _Treasury_ through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the _Treasury_, _Governance_ can vote on proposals to spend the _Treasury_.
 
 ### Key Permissions in Treasury
 
-- `admin` and `treasuryGuardian` can set treasury address and parameters
+- Normal Timelock and Treasury Guardian can set _Treasury_ address and parameters
 - `accessControlManager` controls reserve factor changes and reserve withdrawals
 
 # Dependencies
 
-Venus Protocol uses an oracle system that can support up to three price feeds per asset, though the actual configuration varies by asset. When multiple oracles are configured, prices must agree within defined boundaries or transactions will revert. The configuration of each asset can only be changed through governance.
+Venus Protocol uses an _Oracle System_ that can support up to three price feeds per asset, though the actual configuration varies by asset. When multiple oracles are configured, prices must agree within defined boundaries or transactions will revert. The configuration of each asset can only be changed through _Governance_.
 
 ## Oracle Configuration for Top Assets by TVL
 
@@ -166,17 +166,17 @@ Venus integrates the following oracle types:
 - **Binance Oracle** (0x594810b741d136f1960141C0d8Fb4a91bE78A820): Available but not used for top TVL assets
 - **Custom Oracles**: Specialized oracles for specific assets (e.g., SOLVBTC.BBN)
 
-All oracle configurations and boundaries can only be modified through governance proposals with a 48-hour timelock delay.
+All oracle configurations and boundaries can only be modified through _Governance_ proposals with a 48-hour timelock delay.
 
 ### Key Permissions in Oracle System
 
-**ResilientOracle Permissions:**
+**ResilientOracle                                                  Permissions:**
 - `accessControlManager` can pause/unpause oracle, set token configurations, change oracle feeds, and enable/disable specific oracles
 
 # Governance
 
-Venus protocol utilized Compound's `Governor Bravo` framework to implement their governance structure. 
-Any privileged access roles in the entire protocol are either directly or indirectly controlled by the governance. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` has specific access rights through the `accessControlManager`.
+Venus Protocol utilized Compound's `Governor Bravo` framework to implement their _Governance Structure_. 
+Any privileged access roles in the entire protocol are either directly or indirectly controlled by the _Governance_. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` has specific access rights through the `accessControlManager`.
 While their configuration can change, these timelock contracts are currently configured as follows:
 * `Normal Timelock`:
    * `votingDelay`: 1 block
@@ -194,13 +194,13 @@ While their configuration can change, these timelock contracts are currently con
    * `proposalThreshold` : 300,000 `XVS`
    * `timelock delay`: 1 hour
 
-The governance process is as follows:
+The _Governance_ process is as follows:
 1. *Proposal Creation*: A user with enough `XVS` creates a proposal with a set of transactions to execute and the timelock to be used. Dependent on the chosen timelock, the timelock parameters change as outlined above.
 2. *Voting*: In the timelock-dependent `votingPeriod`, `XVS` holders can vote. To be successful, a minimum number of votes must be cast and the majority of votes needs to vote `For` the proposal.
 3. *Timelock Queuing*: The passed proposal is sent to the respective timelock contract.
 4. *Execution*: Anyone can execute the set of transactions after the respective `timelock delay` has passed.
 
-In the following diagram, the governance structure is outlined while abstracting the specific permissioned contract. Specific functions will query the `accessControlManager` to authorize transactions.
+In the following diagram, the _Governance Structure_ is outlined while abstracting the specific permissioned contract. Specific functions will query the `accessControlManager` to authorize transactions.
 
 ![Venus Governance](./diagrams/venus_governance.png)
 
@@ -213,13 +213,13 @@ In the following diagram, the governance structure is outlined while abstracting
 
 **AccessControlManager:**
 - Grants specific permissions to timelocks and multisigs
-- Can be updated only by `admin` (Normal Timelock)
+- Can be updated only by Normal Timelock
 
 ## Security Council
 
 The Venus Protocol has deployed three Gnosis Safe contracts, which are currently 3/6 multisigs. None of these contracts currently adhere to the minimum requirements for a security council.
-The multisig contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by the governance structure. 
-The multisigs can be given access rights to specific functions by the protocol governance through the `accessControlManager` contract. 
+The _Multisig_ contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by the _Governance Structure_. 
+The _Multisigs_ can be given access rights to specific functions by the protocol _Governance_ through the `accessControlManager` contract. 
 
 | Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
@@ -229,7 +229,7 @@ The multisigs can be given access rights to specific functions by the protocol g
 
 ## Upgrade Process
 
-The upgrade process for the Venus Protocol is comprehensive and managed entirely by onchain governance. The upgrade process can be split into two distinct categories: parameter changes and contract logic upgrades.
+The _Upgrade Process_ for the Venus Protocol is comprehensive and managed entirely by onchain _Governance_. The _Upgrade Process_ can be split into two distinct categories: parameter changes and contract logic upgrades.
 
 ### Parameter Changes
 Parameter changes are executed by calling privileged functions on various protocol contracts. Control over these functions is managed through a multi-layered permissions structure:
@@ -237,10 +237,10 @@ Parameter changes are executed by calling privileged functions on various protoc
 2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract. This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
     *   The `Normal Timelock` is granted permission for significant but non-emergency changes.
     *   The `Fast Track Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
-    *   Emergency multisigs like `Pause Guardian` and `Multisig Critical` are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard governance process.
+    *   Emergency multisigs like `Pause Guardian` and `Multisig Critical` are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard _Governance_ process.
 
 ### Contract Upgrades (Code Changes)
-Upgrades to the smart contract logic itself also follow the governance process, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
+Upgrades to the smart contract logic itself also follow the _Governance_ process, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
 
 1.  **Diamond Proxy (`Comptroller`)**: The main `Comptroller` is a Diamond Proxy. Upgrades are performed via `diamondCut` proposals, which allow governance to add, replace, or remove individual `Facets` (e.g., `PolicyFacet`, `RewardFacet`). This modularity allows for isolated changes without redeploying the entire `Comptroller`.
 2.  **Beacon Proxies (`VTokens`)**: The markets (`VToken` contracts) are deployed as proxies pointing to a central `UpgradeableBeacon`. To upgrade all markets at once, a governance proposal simply needs to change the implementation contract address within the beacon. This single transaction atomically upgrades the logic for all `VToken` contracts.
@@ -403,7 +403,7 @@ Upgrades to the smart contract logic itself also follow the governance process, 
 
 ## Permissions
 
-In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in paranthesis. If no roles are listed, no roles are currently assigned but can be introduced by governance. These roles have not changed since Oct-26-2022 and can only be adjusted through the Governance structure.
+In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in paranthesis. If no roles are listed, no roles are currently assigned but can be introduced by _Governance_. These roles have not changed since Oct-26-2022 and can only be adjusted through the _Governance Structure_.
 
 | Contract      | Function     | Impact                                                                                                                                                                                                                                                                                                                                     | Owner                   |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
