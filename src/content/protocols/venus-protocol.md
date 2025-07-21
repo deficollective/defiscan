@@ -52,6 +52,12 @@ The oracle risk is mitigated by integrating several oracles per asset. Only if t
 
 The upgradeability score is High and most permissions are protected with an exit window of 2 days, while some can be changed within 1 hour.
 
+**48-hour delay (Normal Timelock):** Controls critical functions including contract upgrades, oracle configurations, collateral factors, and liquidation parameters. This covers the majority of high-risk permissions.
+
+**1-hour delay (Fast Track):** Limited to operational parameters like VAI interest rates and specific reward distribution speeds that have restricted impact.
+
+**No delay:** Emergency pause functions allow immediate response to threats but can only halt operations, not modify parameters or access funds.
+
 > Exit Window score: High
 
 ## Accessibility
