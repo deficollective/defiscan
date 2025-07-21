@@ -87,13 +87,15 @@ In this section, the Venus Protocol will be analyzed in its following components
 
 ## Core Lending
 
-The _Core Lending_ components consist of the `Comptroller` and `VToken` contracts. The `Comptroller` is a proxy contracts that delegates calls to one of four `Facet` contracts, which are generally resposible for managing all lending markets: 
-- `MarketFacet`: responsible for market management like entering / exiting markets and listings
-- `PolicyFacet`: enforces policies for minting, borrowing, liquidating, etc.
-- `RewardFacet`: distributes the XVS rewards
-- `SetterFacet`: contains admin functions for setting protocol parameters
+The _Core Lending_ components consist of the `Comptroller` and `VToken` contracts. The `Comptroller` is implemented using the **Diamond Standard (EIP-2535)**, which provides a modular architecture for upgradeability. 
 
-Each `Facet` can be individually upgraded through the `Comptroller` and are abstracted away in the displayed diagram.  
+The `Comptroller` proxy (also called `Unitroller`) delegates all calls to a `Diamond` contract, which then routes function calls to one of four `Facet` contracts based on function selectors:
+- `MarketFacet`: Manages market operations like entering/exiting markets and market listings
+- `PolicyFacet`: Enforces protocol policies for minting, borrowing, liquidating, and integrates with the price oracle
+- `RewardFacet`: Handles XVS reward distribution and claiming
+- `SetterFacet`: Contains administrative functions for setting protocol parameters
+
+This diamond architecture allows for granular upgrades where individual facets can be upgraded without affecting others, providing more flexibility and reduced risk compared to monolithic proxy upgrades. Each `Facet` can be individually upgraded through the `Comptroller`'s `diamondCut` function and are abstracted away in the displayed diagram.  
 For each market, one `VToken` contract is deployed which contains all the functionalities for supplying, borrowing, and liquidating the respective asset.
 
 ![Venus Core Lending](./diagrams/venus_lending_core.png)
@@ -242,7 +244,13 @@ Parameter changes are executed by calling privileged functions on various protoc
 ### Contract Upgrades (Code Changes)
 Upgrades to the smart contract logic itself also follow the _Governance_ process, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
 
-1.  **Diamond Proxy (`Comptroller`)**: The main `Comptroller` is a Diamond Proxy. Upgrades are performed via `diamondCut` proposals, which allow governance to add, replace, or remove individual `Facets` (e.g., `PolicyFacet`, `RewardFacet`). This modularity allows for isolated changes without redeploying the entire `Comptroller`.
+1.  **Diamond Proxy (`Comptroller`)**: The main `Comptroller` uses the Diamond Standard (EIP-2535). Upgrades are performed via `diamondCut` proposals, which allow governance to:
+    *   Add new facets with additional functionality
+    *   Replace existing facets to fix bugs or add features
+    *   Remove facets that are no longer needed
+    
+    Each facet upgrade only affects specific functions mapped to that facet, allowing for surgical precision in upgrades. For example, updating reward logic only requires replacing the `RewardFacet` without touching market operations in `MarketFacet`. This modularity significantly reduces the risk of introducing bugs to unrelated functionality during upgrades.
+
 2.  **Beacon Proxies (`VTokens`)**: The markets (`VToken` contracts) are deployed as proxies pointing to a central `UpgradeableBeacon`. To upgrade all markets at once, a governance proposal simply needs to change the implementation contract address within the beacon. This single transaction atomically upgrades the logic for all `VToken` contracts.
 
 # Contracts & Permissions
