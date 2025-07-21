@@ -2,7 +2,7 @@
 protocol: "venus-core"
 website: "https://venus.io/"
 x: "https://x.com/VenusProtocol"
-github: ["https://github.com/VenusProtocol/venus-protocol#"]
+github: ["https://github.com/VenusProtocol/venus-protocol"]
 defillama_slug: ["venus-core-pool"]
 chain: "Binance"
 stage: 0
@@ -12,7 +12,7 @@ author: ["GiantDole"]
 submission_date: "2025-07-02"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
---- 
+---
 
 # Summary
 
@@ -106,9 +106,38 @@ The reserves are collected to the treasury through the `_reduceReserves()` funct
 
 # Dependencies
 
-The Venus Protocol implements a three oracle system where the price of at least two of those oracles are compared to each other. If the price diversion between those oracle feeds is above or below a defined threshold, the transaction will revert. The transaction will also revert if two of the three oracles return invalid values.
+Venus Protocol uses an oracle system that can support up to three price feeds per asset, though the actual configuration varies by asset. When multiple oracles are configured, prices must agree within defined boundaries or transactions will revert. The configuration of each asset can only be changed through governance.
 
-Venus currently supports the following oracles: Chainlink, RedStone, Pyth, TWAP (PancakeSwap), and Binance Oracle. For any asset pool, the three oracles as well as the threshold boundaries are individually configured. These configs can only be set and changed by the governance.
+## Oracle Configuration for Top Assets by TVL
+
+In the following, the configuration for the top 6 assets by TVL are listed:
+
+| Asset | Oracle Setup | Boundary | Oracle Providers |
+|-------|--------------|----------|------------------|
+| **BTCB** | 3 oracles | ±1% | Main: RedStone, Pivot: Chainlink, Fallback: Chainlink |
+| **BNB** | 1 oracle | N/A | Chainlink only |
+| **SOLVBTC** | 3 oracles | ±1% | Main: RedStone, Pivot: Chainlink, Fallback: Chainlink |
+| **USDT** | 1 oracle | N/A | Chainlink only |
+| **SOLVBTC.BBN** | 1 oracle | N/A | Custom Oracle (0xf5534f78Df9b610B19A63956d498d00CFaD8B9D3) |
+| **ETH** | 1 oracle | N/A | Chainlink only |
+
+## How the Oracle System Works
+
+1. **Multi-Oracle Assets**: For assets with multiple oracles (like BTCB and SOLVBTC), at least two oracles must report prices within the configured boundary percentage. If prices diverge beyond the threshold, transactions revert.
+
+2. **Single Oracle Assets**: Many major assets (BNB, USDT, ETH) rely on a single oracle provider, primarily Chainlink. For these assets, no boundary validation occurs.
+
+3. **Boundary Configuration**: When boundaries are set, they define the maximum acceptable price deviation between oracles. For example, BTCB's 1% boundary means oracles must agree within 1% of each other (upperBound: 1.01, lowerBound: 0.99).
+
+## Oracle Providers
+
+Venus integrates the following oracle types:
+- **Chainlink** (0x1B2103441A0A108daD8848D8F5d790e4D402921F): The primary oracle for most assets
+- **RedStone** (0x8455EFA4D7Ff63b8BFD96AdD889483Ea7d39B70a): Used as the main oracle for BTC-related assets
+- **Binance Oracle** (0x594810b741d136f1960141C0d8Fb4a91bE78A820): Available but not used for top TVL assets
+- **Custom Oracles**: Specialized oracles for specific assets (e.g., SOLVBTC.BBN)
+
+All oracle configurations and boundaries can only be modified through governance proposals with a 48-hour timelock delay.
 
 # Governance
 
