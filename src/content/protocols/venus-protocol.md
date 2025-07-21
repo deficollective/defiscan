@@ -403,62 +403,62 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 
 ## Permissions
 
-In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in paranthesis. If no roles are listed, no roles are currently assigned but can be introduced by _Governance_. These roles have not changed since Oct-26-2022 and can only be adjusted through the _Governance Structure_.
+In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in parentheses. If no roles are listed, no roles are currently assigned but can be introduced by _Governance_. The `accessControlManager` itself is managed by the Normal Timelock. These roles have not changed since Oct-26-2022 and can only be adjusted through the _Governance Structure_.
 
 | Contract      | Function     | Impact                                                                                                                                                                                                                                                                                                                                     | Owner                   |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| Comptroller Proxy | `_setPendingImplementation()` | Set a pending implementation for Comptroller (still requires activation) | `admin` |
-| Comptroller Proxy | `_setPendingAdmin()` | Set a new pending `admin` (requires confirmation by proposed `admin`) | `admin` |
-| SetterFacet | `_setPriceOracle()` | Changes the `ResilientOracle` contract used | `admin` |
-| SetterFacet | `_setPauseGuardian()` | Transfers emergency `PauseGuardian` to new address  | `admin` |
-| SetterFacet | `_setAccessControl()` | Sets a new `AccessControlManager` address  | `admin` |
-| SetterFacet | `_setLiquidatorContract()` | Sets a new liquidation contract  | `admin` |
-| SetterFacet | `_setCloseFactor()` | Sets maximum percentage that can be repaid in single liquidation  | `admin` |
-| SetterFacet | `_setVAIController()` | Sets a new `VAI` controller | `admin` |
-| SetterFacet | `_setVAIMintRate()` | Sets the mint rate for `VAI` | `admin` |
-| SetterFacet | `_setVenusVAIVaultRate()` | Sets the vault rate for the Venus `VAI` vault | `admin` |
-| SetterFacet | `_setXVSToken()` | Sets a new `XVS` token | `admin` |
-| SetterFacet | `_setXVSVToken()` | Sets a new `XVS` vToken | `admin` |
-| SetterFacet | `_setTreasuryData()` | Sets a new treasury address, guardian, and percentage | `admin`, `treasuryGuardian` |
-| SetterFacet | `_setComptrollerLens()` | Sets a new comptroller lens | `admin` |
-| SetterFacet | `_setCollateralFactor()` | Set the collateral factor across all markets   | `accessControlManager` (`admin`, `Multisig Critical`) |
-| SetterFacet | `_setLiquidationIncentive()` | Set the liquidation incentive across all markets   | `accessControlManager` (`admin`) |
-| SetterFacet | `_setMarketBorrowCaps()` | Sets limit on total amount that can be borrowed from a market  | `accessControlManager` (`admin`, `Multisig Critical`) |
-| SetterFacet | `_setMarketSupplyCaps()` | Sets limit on total amount that can be supplied to market   | `accessControlManager` (`admin`, `Multisig Critical`) |
-| SetterFacet | `_setActionsPaused()` | Pause or unpause any specific protocol action (e.g. Supply, Borrow) for any market |  `accessControlManager` (`admin`, `Pause Guardian`) |
-| SetterFacet | `_setProtocolPaused()` | Pause or unpause the entire protocol |  `accessControlManager` (`admin`, `Pause Guardian`) |
-| SetterFacet | `_setForcedLiquidation()` | Enable or disable forced liquidations for a market |  `accessControlManager` |
-| SetterFacet | `_setForcedLiquidationForUser()` | Enable or disable forced liquidations for a user |  `accessControlManager` |
-| MarketFacet | `_supportMarket()` | Add new market to the protocol | `accessControlManager` (`admin`) |
-| MarketFacet | `unlistMarket()` | Remove existing market from the protocol | `accessControlManager` |
-| RewardFacet | `_grantXVS()` | Directly grants a specified amount of `XVS` to a recipient, bypassing the normal reward accrual process. | `admin` |
-| RewardFacet | `seizeVenus()` | Seize `XVS` from any addresses | `accessControlManager` |
-| PolicyFacet | `_setVenusSpeeds()` | Sets emission rate of `XVS` tokens for supplying/borrowing | `admin` |
-| VToken Delegator | `_setImplementation()` | Upgrades the logic contract for a specific market, allowing arbitrary code execution. Can lead to rug pull. | `admin` |
-| VToken Delegator | `_setComptroller()` | Sets a new Comptroller for the market. A malicious comptroller could disable liquidations or change parameters to steal funds. | `admin` |
-| VToken | `_setReserveFactor()` | Changes the percentage of interest collected as protocol reserves. | `accessControlManager` |
-| VToken | `_reduceReserves()` | Withdraws accumulated reserves from the market. Can drain reserves if called maliciously. | `accessControlManager` |
-| VToken | `_setInterestRateModel()` | Changes the interest rate model for the market, allowing for manipulation of borrow/supply rates. | `accessControlManager` |
-| ResilientOracle | `pause()` / `unpause()` | Pauses or resumes the entire oracle system, freezing all protocol operations that require prices. | `accessControlManager` |
-| ResilientOracle | `setTokenConfig()` | Sets the full [main, pivot, fallback] oracle configuration for an asset. A malicious config could point to controlled oracles to manipulate prices. | `accessControlManager` |
-| ResilientOracle | `setOracle()` | Changes a single oracle (e.g., the Chainlink feed) for an asset, enabling price manipulation. | `accessControlManager` |
-| ResilientOracle | `enableOracle()` | Enables or disables a specific oracle for an asset. Disabling valid oracles can force a fallback to a malicious one. | `accessControlManager` |
-| VAIController | `setPrimeToken()` | Sets the `Prime` token contract. Can be used to replace with a malicious contract. | `admin` |
-| VAIController | `setVAIToken()` | Sets the `VAI` token contract. Can be used to replace with a malicious contract. | `admin` |
-| VAIController | `toggleOnlyPrimeHolderMint()` | Restricts `VAI` minting to only Prime token holders. Can enable/disable minting for majority of users. | `accessControlManager` |
-| VAIController | `setBaseRate()` | Sets the base interest rate for `VAI`. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
-| VAIController | `setFloatRate()` | Sets the floating interest rate for `VAI`. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
-| VAIController | `setMintCap()` | Sets the maximum total supply for `VAI`. Can be set to 0 to halt all new `VAI` mints. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
-| XVSVault | `pause()` / `resume()` | Pauses or resumes all staking and withdrawal operations in the `XVS` Vault. | `accessControlManager` |
-| XVSVault | `add()` | Adds a new staking pool to the vault, controlling where rewards can be directed. | `accessControlManager` |
-| XVSVault | `set()` | Modifies the allocation points for an existing staking pool, changing reward distribution. | `accessControlManager` |
-| XVSVault | `setRewardAmountPerBlockOrSecond()`| Changes the rate of rewards distributed. Can be set to 0. | `accessControlManager` |
-| Liquidator | `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. Can centralize liquidations. | `accessControlManager` |
-| Liquidator | `addToAllowlist()` | Adds a specific address to the liquidator allowlist. | `accessControlManager` |
-| Liquidator | `setTreasuryPercent()` | Sets the percentage of liquidation proceeds that go to the treasury. | `accessControlManager` |
-| Liquidator | `setMinLiquidatableVAI()` | Sets the minimum amount of `VAI` debt that can be liquidated. Can prevent small liquidations. | `accessControlManager` |
-| Prime | `addMarket()` | Adds a new market to the Prime program, changing reward eligibility. | `accessControlManager` |
-| Prime | `issue()` | Triggers the issuance of Prime rewards. | `accessControlManager` |
-| Prime | `togglePause()` | Pauses or unpauses the Prime rewards program. | `accessControlManager` |
-| PrimeLiquidityProvider | `pauseFundsTransfer()` | Pauses the distribution of rewards from the provider contract. | `accessControlManager` |
-| PrimeLiquidityProvider | `setTokensDistributionSpeed()` | Sets the speed at which reward tokens are distributed. | `accessControlManager` |
+| Comptroller Proxy | `_setPendingImplementation()` | Set a pending implementation for Comptroller (still requires activation) | Normal Timelock |
+| Comptroller Proxy | `_setPendingAdmin()` | Set a new pending `admin` (requires confirmation by proposed `admin`) | Normal Timelock |
+| SetterFacet | `_setPriceOracle()` | Changes the `ResilientOracle` contract used | Normal Timelock |
+| SetterFacet | `_setPauseGuardian()` | Transfers emergency `PauseGuardian` to new address  | Normal Timelock |
+| SetterFacet | `_setAccessControl()` | Sets a new `AccessControlManager` address  | Normal Timelock |
+| SetterFacet | `_setLiquidatorContract()` | Sets a new liquidation contract  | Normal Timelock |
+| SetterFacet | `_setCloseFactor()` | Sets maximum percentage that can be repaid in single liquidation  | Normal Timelock |
+| SetterFacet | `_setVAIController()` | Sets a new `VAI` controller | Normal Timelock |
+| SetterFacet | `_setVAIMintRate()` | Sets the mint rate for `VAI` | Normal Timelock |
+| SetterFacet | `_setVenusVAIVaultRate()` | Sets the vault rate for the Venus `VAI` vault | Normal Timelock |
+| SetterFacet | `_setXVSToken()` | Sets a new `XVS` token | Normal Timelock |
+| SetterFacet | `_setXVSVToken()` | Sets a new `XVS` vToken | Normal Timelock |
+| SetterFacet | `_setTreasuryData()` | Sets a new treasury address, guardian, and percentage | Normal Timelock, Treasury Guardian |
+| SetterFacet | `_setComptrollerLens()` | Sets a new comptroller lens | Normal Timelock |
+| SetterFacet | `_setCollateralFactor()` | Set the collateral factor across all markets   | accessControlManager(Normal Timelock, Multisig Critical) |
+| SetterFacet | `_setLiquidationIncentive()` | Set the liquidation incentive across all markets   | accessControlManager(Normal Timelock) |
+| SetterFacet | `_setMarketBorrowCaps()` | Sets limit on total amount that can be borrowed from a market  | accessControlManager(Normal Timelock, Multisig Critical) |
+| SetterFacet | `_setMarketSupplyCaps()` | Sets limit on total amount that can be supplied to market   | accessControlManager(Normal Timelock, Multisig Critical) |
+| SetterFacet | `_setActionsPaused()` | Pause or unpause any specific protocol action (e.g. Supply, Borrow) for any market |  accessControlManager(Normal Timelock, Pause Guardian) |
+| SetterFacet | `_setProtocolPaused()` | Pause or unpause the entire protocol |  accessControlManager(Normal Timelock, Pause Guardian) |
+| SetterFacet | `_setForcedLiquidation()` | Enable or disable forced liquidations for a market |  accessControlManager |
+| SetterFacet | `_setForcedLiquidationForUser()` | Enable or disable forced liquidations for a user |  accessControlManager |
+| MarketFacet | `_supportMarket()` | Add new market to the protocol | accessControlManager(Normal Timelock) |
+| MarketFacet | `unlistMarket()` | Remove existing market from the protocol | accessControlManager |
+| RewardFacet | `_grantXVS()` | Directly grants a specified amount of `XVS` to a recipient, bypassing the normal reward accrual process. | Normal Timelock |
+| RewardFacet | `seizeVenus()` | Seize `XVS` from any addresses | accessControlManager |
+| PolicyFacet | `_setVenusSpeeds()` | Sets emission rate of `XVS` tokens for supplying/borrowing | Normal Timelock |
+| VToken Delegator | `_setImplementation()` | Upgrades the logic contract for a specific market, allowing arbitrary code execution. Can lead to rug pull. | Normal Timelock |
+| VToken Delegator | `_setComptroller()` | Sets a new Comptroller for the market. A malicious comptroller could disable liquidations or change parameters to steal funds. | Normal Timelock |
+| VToken | `_setReserveFactor()` | Changes the percentage of interest collected as protocol reserves. | accessControlManager |
+| VToken | `_reduceReserves()` | Withdraws accumulated reserves from the market. Can drain reserves if called maliciously. | accessControlManager |
+| VToken | `_setInterestRateModel()` | Changes the interest rate model for the market, allowing for manipulation of borrow/supply rates. | accessControlManager |
+| ResilientOracle | `pause()` / `unpause()` | Pauses or resumes the entire oracle system, freezing all protocol operations that require prices. | accessControlManager |
+| ResilientOracle | `setTokenConfig()` | Sets the full [main, pivot, fallback] oracle configuration for an asset. A malicious config could point to controlled oracles to manipulate prices. | accessControlManager |
+| ResilientOracle | `setOracle()` | Changes a single oracle (e.g., the Chainlink feed) for an asset, enabling price manipulation. | accessControlManager |
+| ResilientOracle | `enableOracle()` | Enables or disables a specific oracle for an asset. Disabling valid oracles can force a fallback to a malicious one. | accessControlManager |
+| VAIController | `setPrimeToken()` | Sets the `Prime` token contract. Can be used to replace with a malicious contract. | Normal Timelock |
+| VAIController | `setVAIToken()` | Sets the `VAI` token contract. Can be used to replace with a malicious contract. | Normal Timelock |
+| VAIController | `toggleOnlyPrimeHolderMint()` | Restricts `VAI` minting to only Prime token holders. Can enable/disable minting for majority of users. | accessControlManager |
+| VAIController | `setBaseRate()` | Sets the base interest rate for `VAI`. | accessControlManager(Normal Timelock, Fast Track Timelock) |
+| VAIController | `setFloatRate()` | Sets the floating interest rate for `VAI`. | accessControlManager(Normal Timelock, Fast Track Timelock) |
+| VAIController | `setMintCap()` | Sets the maximum total supply for `VAI`. Can be set to 0 to halt all new `VAI` mints. | accessControlManager(Normal Timelock, Fast Track Timelock) |
+| XVSVault | `pause()` / `resume()` | Pauses or resumes all staking and withdrawal operations in the `XVS` Vault. | accessControlManager |
+| XVSVault | `add()` | Adds a new staking pool to the vault, controlling where rewards can be directed. | accessControlManager |
+| XVSVault | `set()` | Modifies the allocation points for an existing staking pool, changing reward distribution. | accessControlManager |
+| XVSVault | `setRewardAmountPerBlockOrSecond()`| Changes the rate of rewards distributed. Can be set to 0. | accessControlManager |
+| Liquidator | `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. Can centralize liquidations. | accessControlManager |
+| Liquidator | `addToAllowlist()` | Adds a specific address to the liquidator allowlist. | accessControlManager |
+| Liquidator | `setTreasuryPercent()` | Sets the percentage of liquidation proceeds that go to the treasury. | accessControlManager |
+| Liquidator | `setMinLiquidatableVAI()` | Sets the minimum amount of `VAI` debt that can be liquidated. Can prevent small liquidations. | accessControlManager |
+| Prime | `addMarket()` | Adds a new market to the Prime program, changing reward eligibility. | accessControlManager |
+| Prime | `issue()` | Triggers the issuance of Prime rewards. | accessControlManager |
+| Prime | `togglePause()` | Pauses or unpauses the Prime rewards program. | accessControlManager |
+| PrimeLiquidityProvider | `pauseFundsTransfer()` | Pauses the distribution of rewards from the provider contract. | accessControlManager |
+| PrimeLiquidityProvider | `setTokensDistributionSpeed()` | Sets the speed at which reward tokens are distributed. | accessControlManager |
