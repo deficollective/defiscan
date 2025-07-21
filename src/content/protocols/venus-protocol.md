@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Venus Protocol is a decentralized lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by XVS token holders who vote on upgrades and parameter changes through an on-chain governance system with built-in timelocks.
+Venus Protocol is a lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by XVS token holders who vote on upgrades and parameter changes through an on-chain governance system with built-in timelocks.
 
 # Ratings
 
@@ -30,7 +30,7 @@ This report is concerned with Venus Core Protocol deployed on Binance Smart Chai
 
 The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the loss of user funds through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. These upgrades can only be performed through a governance proposal with the Normal Timelock, which implements a 48-hour delay.
 
-The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. This could allow manipulation of asset prices leading to unfair liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. Oracle upgrades can only be executed through governance proposals with the Normal Timelock's 48-hour delay.
+The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. Oracle upgrades can only be executed through governance proposals with the Normal Timelock's 48-hour delay.
 
 The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in loss of unclaimed yield if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses. These upgrades require governance approval through the Normal Timelock with a 48-hour delay.
 
@@ -67,18 +67,18 @@ The Venus Protocol frontend is open source and can be self-hosted. The repo can 
 ## Conclusion
 The Venus protocol achieves High centralization risk scores for its *Upgradeability*, *Chain* and *Exit Window* dimensions. Due to the High centralization risk of the Binance Smart Chain, it ranks Stage 0.
 
-The protocol could reach Stage 1 by deploying on a more decentralized chain of stage 1.
+The protocol could reach Stage 1 by deploying on a chain of stage 1.
 
 The project additionally could advance to Stage 2 if
 1) multiple different user interfaces existed
 2) the ability to upgrade contracts was removed OR the timelock delay to upgrade contracts was at least 30 days
-3) the protocol was deployed on a more decentralized chain of stage 2.
+3) the protocol was deployed on a chain of stage 2.
 
 # Reviewer's Notes
 
 The analysis focuses on the core risks associated with lending, liquidations, and centralized control within the main protocol. It does not extend to a full risk analysis of newer, more complex additions like the **Prime Token program** or the **cross-chain governance and token wrapping functionalities** (`XVSBridgeAdmin`, `XVSProxyOFTSrc`). These systems introduce their own unique economic and smart contract risks that are beyond the scope of this core protocol review.
 
-A unique architectural feature is the `Comptroller`'s use of the **Diamond Standard (EIP-2535)**, where logic is delegated to multiple `Facet` contracts. This allows for more granular and potentially safer upgrades compared to monolithic proxy upgrades, as changes can be isolated to specific facets of the protocol's logic.
+A unique architectural feature is the `Comptroller`'s use of the **Diamond Standard (EIP-2535)**, where logic is delegated to multiple `Facet` contracts. This allows for more granular upgrades compared to monolithic proxy upgrades, as changes can be isolated to specific facets of the protocol's logic.
 
 
 # Protocol Analysis
@@ -176,8 +176,8 @@ In the following diagram, the governance structure is outlined while abstracting
 
 ## Security Council
 
-The Venus Protocol has deployed three Gnosis Safe contracts, which are currently 3/6 multisigs. Neither of these contracts currently adhere to the minimum requirements for a secure council.
-The security council contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. Nevertheless, the granted access rights are limited and can always be assigned or revoked by the governance structure. 
+The Venus Protocol has deployed three Gnosis Safe contracts, which are currently 3/6 multisigs. None of these contracts currently adhere to the minimum requirements for a security council.
+The security council contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by the governance structure. 
 The security councils can be given access rights to specific functions by the protocol governance through the `accessControlManager` contract. 
 
 | Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
