@@ -94,19 +94,44 @@ The core lending components consist of the `Comptroller` and `VToken` contracts.
 - `SetterFacet`: contains admin functions for setting protocol parameters
 
 Each `Facet` can be individually upgraded through the `Comptroller` and are abstracted away in the displayed diagram.  
-For each market, one `VToken` contract is deployed which contains all the functionalities for supplying, borrowing, and liquidating the respective asset. s
+For each market, one `VToken` contract is deployed which contains all the functionalities for supplying, borrowing, and liquidating the respective asset.
 
 ![Venus Core Lending](./diagrams/venus_lending_core.png)
+
+### Key Permissions in Core Lending
+
+**Comptroller Permissions:**
+- `admin` can upgrade facets, set oracle, pause guardian, and core parameters
+- `accessControlManager` controls collateral factors, liquidation incentives, market caps, and pause functions
+- Emergency multisigs (Pause Guardian) can pause/unpause protocol actions
+
+**VToken Permissions:**
+- `admin` can upgrade implementation and set new comptroller
+- `accessControlManager` controls reserve factor, interest rate models, and reserve withdrawals
 
 ## Incentives
 
 The `RewardFacet`, which is part of the `Comptroller` Diamond Proxy structure, is responsible for distributing rewards. Users can call the `claimVenus()` function to claim the `XVS` accrued from supplying and borrowing accross all markets. For each market, two parameters can be set that define the reward per block for borrowing and supplying activities, respectively. 
 Furthermore, users can stake their `XVS` in the `XVSVault` for additional `XVS` yield.
 
+### Key Permissions in Incentives
+
+**RewardFacet Permissions:**
+- `admin` can set XVS emission speeds and grant XVS directly
+- `accessControlManager` can seize XVS from addresses
+
+**XVSVault Permissions:**
+- `accessControlManager` can pause/resume operations, add/modify staking pools, and set reward rates
+
 ## Treasury
 
 A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the venus protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
 The reserves are collected to the treasury through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the treasury, governance can vote on proposals to spend the treasury.
+
+### Key Permissions in Treasury
+
+- `admin` and `treasuryGuardian` can set treasury address and parameters
+- `accessControlManager` controls reserve factor changes and reserve withdrawals
 
 # Dependencies
 
@@ -143,6 +168,11 @@ Venus integrates the following oracle types:
 
 All oracle configurations and boundaries can only be modified through governance proposals with a 48-hour timelock delay.
 
+### Key Permissions in Oracle System
+
+**ResilientOracle Permissions:**
+- `accessControlManager` can pause/unpause oracle, set token configurations, change oracle feeds, and enable/disable specific oracles
+
 # Governance
 
 Venus protocol utilized Compound's `Governor Bravo` framework to implement their governance structure. 
@@ -170,9 +200,20 @@ The governance process is as follows:
 3. *Timelock Queuing*: The passed proposal is sent to the respective timelock contract.
 4. *Execution*: Anyone can execute the set of transactions after the respective `timelock delay` has passed.
 
-In the following diagram, the governance structure is outlined while abstracting the specific permissioned contract. Specific functions, as outlined in the Permissions section, will query the `accessControlManager` to authorize transactions.
+In the following diagram, the governance structure is outlined while abstracting the specific permissioned contract. Specific functions will query the `accessControlManager` to authorize transactions.
 
 ![Venus Governance](./diagrams/venus_governance.png)
+
+### Key Permissions in Governance
+
+**Timelock Permissions:**
+- Normal Timelock (48-hour delay): Controls all critical upgrades and parameter changes
+- Fast Track Timelock (1-hour delay): Limited to operational parameters like VAI rates and reward speeds
+- Critical Timelock (1-hour delay, currently unused): Intended for emergency proposals
+
+**AccessControlManager:**
+- Grants specific permissions to timelocks and multisigs
+- Can be updated only by `admin` (Normal Timelock)
 
 ## Security Council
 
