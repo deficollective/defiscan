@@ -2,7 +2,7 @@
 protocol: "venus-core"
 website: "https://venus.io/"
 x: "https://x.com/VenusProtocol"
-github: [https://github.com/VenusProtocol/venus-protocol#]
+github: ["https://github.com/VenusProtocol/venus-protocol#"]
 defillama_slug: ["venus-core-pool"]
 chain: "Binance"
 stage: 0
@@ -18,7 +18,7 @@ update_date: "1970-01-01"
 
 The Venus Protocol is a lending protocol deployed on Binance Smart Chain. Users can create lending positions by depositing BEP20 tokens or BNB in the respective lending pools. This allows them to create borrow positions for supported BEP20 tokens or BNB against their collateral. If a position becomes liquidatable, anyone can execute the liquidation for an incentive. 
 
-The upgrades and parameter changes are protected by on-chain governance of XVS holders. Any XVS holder posessing a minimum amount can create a proposal voted on by the community. If the proposal passes, it can be executed after 2 days in most cases, and 1 hour for fast track proposals accepted for certain functionalities.
+The upgrades and parameter changes are protected by onchain governance of XVS holders. Any XVS holder posessing a minimum amount can create a proposal voted on by the community. If the proposal passes, it can be executed after 2 days in most cases, and 1 hour for fast track proposals accepted for certain functionalities.
 
 # Ratings
 
@@ -213,7 +213,7 @@ The security councils can be given access rights to specific functions by the pr
 
 ## Upgrade Process
 
-The upgrade process for the Venus Protocol is comprehensive and managed entirely by on-chain governance. The upgrade process can be split into two distinct categories: parameter changes and contract logic upgrades.
+The upgrade process for the Venus Protocol is comprehensive and managed entirely by onchain governance. The upgrade process can be split into two distinct categories: parameter changes and contract logic upgrades.
 
 ### Parameter Changes
 Parameter changes are executed by calling privileged functions on various protocol contracts. Control over these functions is managed through a multi-layered permissions structure:
