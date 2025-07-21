@@ -16,9 +16,9 @@ update_date: "1970-01-01"
 
 # Summary
 
-The Venus Protocol is a lending protocol deployed on Binance Smart Chain. Users can create lending positions by depositing BEP20 tokens or BNB in the respective lending pools. This allows them to create borrow positions for supported BEP20 tokens or BNB against their collateral. If a position becomes liquidatable, anyone can execute the liquidation for an incentive. 
+The Venus Protocol is a lending protocol deployed on Binance Smart Chain. Users can create lending positions by depositing `BEP20` tokens or `BNB` in the respective lending pools. This allows them to create borrow positions for supported `BEP20` tokens or `BNB` against their collateral. If a position becomes liquidatable, anyone can execute the liquidation for an incentive. 
 
-The upgrades and parameter changes are protected by onchain governance of XVS holders. Any XVS holder posessing a minimum amount can create a proposal voted on by the community. If the proposal passes, it can be executed after 2 days in most cases, and 1 hour for fast track proposals accepted for certain functionalities.
+The upgrades and parameter changes are protected by onchain governance of XVS holders. Any `XVS` holder posessing a minimum amount can create a proposal voted on by the community. If the proposal passes, it can be executed after 2 days in most cases, and 1 hour for fast track proposals accepted for certain functionalities.
 
 # Ratings
 
@@ -76,9 +76,9 @@ In the tables blow, the `admin` refers to the Normal Timelock contract, while th
 | Function | Impact | Owner |
 | --- | --- | --- |
 | `_setVenusSpeeds()` | Sets emission rates for XVS rewards. Manipulating these rates could unfairly distribute incentives or suddenly reduce expected yields for users. | `admin` |
-| `_grantXVS()` | Directly grants XVS tokens to recipients. Could be used to mint rewards to insiders or malicious addresses, diluting token value. | `admin` |
-| `seizeVenus()` | Allows seizing XVS from any address. This function could be used to confiscate user tokens without justification. | `accessControlManager` |
-| `setRewardAmountPerBlockOrSecond()` | Changes reward distribution rates in the XVS Vault. Sudden changes could significantly impact expected yields for stakers. | `accessControlManager` |
+| `_grantXVS()` | Directly grants `XVS` tokens to recipients. Could be used to mint rewards to insiders or malicious addresses, diluting token value. | `admin` |
+| `seizeVenus()` | Allows seizing `XVS` from any address. This function could be used to confiscate user tokens without justification. | `accessControlManager` |
+| `setRewardAmountPerBlockOrSecond()` | Changes reward distribution rates in the `XVS` Vault. Sudden changes could significantly impact expected yields for stakers. | `accessControlManager` |
 
 ### Liquidation Controls
 
@@ -87,16 +87,16 @@ In the tables blow, the `admin` refers to the Normal Timelock contract, while th
 | `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. This could centralize liquidations to preferred parties, preventing fair market access. | `accessControlManager` |
 | `addToAllowlist()` | Adds addresses to the liquidator allowlist. Selective allowlisting could give unfair advantages to certain liquidators. | `accessControlManager` |
 | `setTreasuryPercent()` | Sets percentage of liquidation proceeds going to treasury. High percentages reduce liquidator incentives, potentially slowing necessary liquidations. | `accessControlManager` |
-| `setMinLiquidatableVAI()` | Sets minimum VAI debt that can be liquidated. Setting this too high could prevent small position liquidations, increasing protocol risk. | `accessControlManager` |
+| `setMinLiquidatableVAI()` | Sets minimum `VAI` debt that can be liquidated. Setting this too high could prevent small position liquidations, increasing protocol risk. | `accessControlManager` |
 
-### VAI Stablecoin Parameters
+### `VAI` Stablecoin Parameters
 
 | Function | Impact | Owner |
 | --- | --- | --- |
-| `setBaseRate()` | Sets base interest rate for VAI minting. High rates could make VAI uncompetitive, while low rates might not adequately compensate for risk. | `admin`, `Fast Track Timelock` |
-| `setFloatRate()` | Sets floating interest rate for VAI. Improper rates could destabilize the peg or discourage VAI usage. | `admin`, `Fast Track Timelock` |
-| `setMintCap()` | Sets maximum total supply for VAI. Setting this to zero would halt all new VAI minting, while excessive caps could lead to oversupply. | `admin`, `Fast Track Timelock` |
-| `toggleOnlyPrimeHolderMint()` | Restricts VAI minting to only Prime token holders. This could suddenly prevent most users from minting VAI, centralizing control. | `accessControlManager` |
+| `setBaseRate()` | Sets base interest rate for `VAI` minting. High rates could make `VAI` uncompetitive, while low rates might not adequately compensate for risk. | `admin`, `Fast Track Timelock` |
+| `setFloatRate()` | Sets floating interest rate for `VAI`. Improper rates could destabilize the peg or discourage `VAI` usage. | `admin`, `Fast Track Timelock` |
+| `setMintCap()` | Sets maximum total supply for `VAI`. Setting this to zero would halt all new `VAI` minting, while excessive caps could lead to oversupply. | `admin`, `Fast Track Timelock` |
+| `toggleOnlyPrimeHolderMint()` | Restricts `VAI` minting to only Prime token holders. This could suddenly prevent most users from minting `VAI`, centralizing control. | `accessControlManager` |
 
 All these parameter changes can be executed without changing contract bytecode but still significantly impact protocol behavior and user funds. The most critical parameters are controlled by the Normal Timelock (admin) with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock or security multisigs. This creates a centralized control structure where governance has extensive power to alter protocol behavior in ways that could potentially harm users.
 
@@ -176,17 +176,17 @@ While their configuration can change, these timelock contracts are currently con
 * `Normal Timelock`:
    * `votingDelay`: 1 block
    * `votingPeriod`: 57600 blocks
-   * `proposalThreshold` : 300,000 XVS
+   * `proposalThreshold` : 300,000 `XVS`
    * `timelock delay`: 48 hours
 * `Fast Timelock`:
    * `votingDelay`: 1 block
    * `votingPeriod`: 57600 blocks
-   * `proposalThreshold` : 300,000 XVS
+   * `proposalThreshold` : 300,000 `XVS`
    * `timelock delay`: 1 hour
 * `Critical Timelock` (currently unused):
    * `votingDelay`: 1 block
    * `votingPeriod`: 14400 blocks
-   * `proposalThreshold` : 300,000 XVS
+   * `proposalThreshold` : 300,000 `XVS`
    * `timelock delay`: 1 hour
 
 The governance process is as follows:
@@ -220,7 +220,7 @@ Parameter changes are executed by calling privileged functions on various protoc
 1.  **Direct `admin` Control**: The most critical parameters are directly alterable by the `admin` role, which is the `Normal Timelock` contract (48-hour delay).
 2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract. This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
     *   The `Normal Timelock` is granted permission for significant but non-emergency changes.
-    *   The `Fast Track Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., VAI interest rates).
+    *   The `Fast Track Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
     *   Emergency multisigs like `Pause Guardian` and `Multisig Critical` are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard governance process.
 
 ### Contract Upgrades (Code Changes)
@@ -398,11 +398,11 @@ In the following table, the privileged roles are listed for each function with a
 | SetterFacet | `_setAccessControl()` | Sets a new `AccessControlManager` address  | `admin` |
 | SetterFacet | `_setLiquidatorContract()` | Sets a new liquidation contract  | `admin` |
 | SetterFacet | `_setCloseFactor()` | Sets maximum percentage that can be repaid in single liquidation  | `admin` |
-| SetterFacet | `_setVAIController()` | Sets a new VAI controller | `admin` |
-| SetterFacet | `_setVAIMintRate()` | Sets the mint rate for VAI | `admin` |
-| SetterFacet | `_setVenusVAIVaultRate()` | Sets the vault rate for the Venus VAI vault | `admin` |
-| SetterFacet | `_setXVSToken()` | Sets a new XVS token | `admin` |
-| SetterFacet | `_setXVSVToken()` | Sets a new XVS vToken | `admin` |
+| SetterFacet | `_setVAIController()` | Sets a new `VAI` controller | `admin` |
+| SetterFacet | `_setVAIMintRate()` | Sets the mint rate for `VAI` | `admin` |
+| SetterFacet | `_setVenusVAIVaultRate()` | Sets the vault rate for the Venus `VAI` vault | `admin` |
+| SetterFacet | `_setXVSToken()` | Sets a new `XVS` token | `admin` |
+| SetterFacet | `_setXVSVToken()` | Sets a new `XVS` vToken | `admin` |
 | SetterFacet | `_setTreasuryData()` | Sets a new treasury address, guardian, and percentage | `admin`, `treasuryGuardian` |
 | SetterFacet | `_setComptrollerLens()` | Sets a new comptroller lens | `admin` |
 | SetterFacet | `_setCollateralFactor()` | Set the collateral factor across all markets   | `accessControlManager` (`admin`, `Multisig Critical`) |
@@ -415,9 +415,9 @@ In the following table, the privileged roles are listed for each function with a
 | SetterFacet | `_setForcedLiquidationForUser()` | Enable or disable forced liquidations for a user |  `accessControlManager` |
 | MarketFacet | `_supportMarket()` | Add new market to the protocol | `accessControlManager` (`admin`) |
 | MarketFacet | `unlistMarket()` | Remove existing market from the protocol | `accessControlManager` |
-| RewardFacet | `_grantXVS()` | Directly grants a specified amount of XVS to a recipient, bypassing the normal reward accrual process. | `admin` |
-| RewardFacet | `seizeVenus()` | Seize XVS from any addresses | `accessControlManager` |
-| PolicyFacet | `_setVenusSpeeds()` | Sets emission rate of XVS tokens for supplying/borrowing | `admin` |
+| RewardFacet | `_grantXVS()` | Directly grants a specified amount of `XVS` to a recipient, bypassing the normal reward accrual process. | `admin` |
+| RewardFacet | `seizeVenus()` | Seize `XVS` from any addresses | `accessControlManager` |
+| PolicyFacet | `_setVenusSpeeds()` | Sets emission rate of `XVS` tokens for supplying/borrowing | `admin` |
 | VToken Delegator | `_setImplementation()` | Upgrades the logic contract for a specific market, allowing arbitrary code execution. Can lead to rug pull. | `admin` |
 | VToken Delegator | `_setComptroller()` | Sets a new Comptroller for the market. A malicious comptroller could disable liquidations or change parameters to steal funds. | `admin` |
 | VToken | `_setReserveFactor()` | Changes the percentage of interest collected as protocol reserves. | `accessControlManager` |
@@ -427,20 +427,20 @@ In the following table, the privileged roles are listed for each function with a
 | ResilientOracle | `setTokenConfig()` | Sets the full [main, pivot, fallback] oracle configuration for an asset. A malicious config could point to controlled oracles to manipulate prices. | `accessControlManager` |
 | ResilientOracle | `setOracle()` | Changes a single oracle (e.g., the Chainlink feed) for an asset, enabling price manipulation. | `accessControlManager` |
 | ResilientOracle | `enableOracle()` | Enables or disables a specific oracle for an asset. Disabling valid oracles can force a fallback to a malicious one. | `accessControlManager` |
-| VAIController | `setPrimeToken()` | Sets the Prime token contract. Can be used to replace with a malicious contract. | `admin` |
-| VAIController | `setVAIToken()` | Sets the VAI token contract. Can be used to replace with a malicious contract. | `admin` |
-| VAIController | `toggleOnlyPrimeHolderMint()` | Restricts VAI minting to only Prime token holders. Can enable/disable minting for majority of users. | `accessControlManager` |
-| VAIController | `setBaseRate()` | Sets the base interest rate for VAI. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
-| VAIController | `setFloatRate()` | Sets the floating interest rate for VAI. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
-| VAIController | `setMintCap()` | Sets the maximum total supply for VAI. Can be set to 0 to halt all new VAI mints. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
-| XVSVault | `pause()` / `resume()` | Pauses or resumes all staking and withdrawal operations in the XVS Vault. | `accessControlManager` |
+| VAIController | `setPrimeToken()` | Sets the `Prime` token contract. Can be used to replace with a malicious contract. | `admin` |
+| VAIController | `setVAIToken()` | Sets the `VAI` token contract. Can be used to replace with a malicious contract. | `admin` |
+| VAIController | `toggleOnlyPrimeHolderMint()` | Restricts `VAI` minting to only Prime token holders. Can enable/disable minting for majority of users. | `accessControlManager` |
+| VAIController | `setBaseRate()` | Sets the base interest rate for `VAI`. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
+| VAIController | `setFloatRate()` | Sets the floating interest rate for `VAI`. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
+| VAIController | `setMintCap()` | Sets the maximum total supply for `VAI`. Can be set to 0 to halt all new `VAI` mints. | `accessControlManager` (`admin`, `Fast Track Timelock`) |
+| XVSVault | `pause()` / `resume()` | Pauses or resumes all staking and withdrawal operations in the `XVS` Vault. | `accessControlManager` |
 | XVSVault | `add()` | Adds a new staking pool to the vault, controlling where rewards can be directed. | `accessControlManager` |
 | XVSVault | `set()` | Modifies the allocation points for an existing staking pool, changing reward distribution. | `accessControlManager` |
 | XVSVault | `setRewardAmountPerBlockOrSecond()`| Changes the rate of rewards distributed. Can be set to 0. | `accessControlManager` |
 | Liquidator | `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. Can centralize liquidations. | `accessControlManager` |
 | Liquidator | `addToAllowlist()` | Adds a specific address to the liquidator allowlist. | `accessControlManager` |
 | Liquidator | `setTreasuryPercent()` | Sets the percentage of liquidation proceeds that go to the treasury. | `accessControlManager` |
-| Liquidator | `setMinLiquidatableVAI()` | Sets the minimum amount of VAI debt that can be liquidated. Can prevent small liquidations. | `accessControlManager` |
+| Liquidator | `setMinLiquidatableVAI()` | Sets the minimum amount of `VAI` debt that can be liquidated. Can prevent small liquidations. | `accessControlManager` |
 | Prime | `addMarket()` | Adds a new market to the Prime program, changing reward eligibility. | `accessControlManager` |
 | Prime | `issue()` | Triggers the issuance of Prime rewards. | `accessControlManager` |
 | Prime | `togglePause()` | Pauses or unpauses the Prime rewards program. | `accessControlManager` |
