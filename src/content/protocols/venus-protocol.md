@@ -30,75 +30,17 @@ This report is concerned with Venus Core Protocol deployed on Binance Smart Chai
 
 ## Upgradeability
 
-All upgradeable contracts can currently be upgraded by governance through the normal timelock which implements a delay of 2 days. 
+The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the loss of user funds through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. These upgrades can only be performed through a governance proposal with the Normal Timelock, which implements a 48-hour delay.
 
-> Upgradeability score: High 
+The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. This could allow manipulation of asset prices leading to unfair liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. Oracle upgrades can only be executed through governance proposals with the Normal Timelock's 48-hour delay.
 
-## Parameter Changes
+The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in loss of unclaimed yield if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses. These upgrades require governance approval through the Normal Timelock with a 48-hour delay.
 
-Venus Protocol has numerous permissioned functions that allow for parameter changes without requiring contract upgrades. These parameters can significantly impact protocol behavior and user funds.
-In the tables blow, the `admin` refers to the Normal Timelock contract, while the `accessControlManager` is a granular permission contract that delegates specific rights to various roles, as detailed in the Permissions table.
+The `VAIController` and related stablecoin contracts are upgradeable. This could change the minting logic, interest rate calculations, or collateral requirements, potentially leading to bad debt that impacts all protocol users. Upgrades to these contracts can only be done through governance with the Normal Timelock's 48-hour delay.
 
-### Market Parameters
+Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock (1-hour delay) or emergency multisigs.
 
-| Function | Impact | Owner |
-| --- | --- | --- |
-| `_setCollateralFactor()` | Sets the percentage of an asset's value that can be borrowed against. Higher collateral factors increase liquidation risk for users. A malicious actor could set factors too high, causing mass liquidations, or too low, preventing efficient capital usage. | `admin`, `Multisig Critical` |
-| `_setLiquidationIncentive()` | Sets the bonus liquidators receive when liquidating positions. High incentives can lead to predatory liquidations, while low incentives may prevent necessary liquidations during market stress. | `admin` |
-| `_setMarketBorrowCaps()` | Limits how much can be borrowed from a market. Setting caps too low could prevent legitimate borrowing, while removing caps could allow excessive borrowing that threatens protocol solvency. | `admin`, `Multisig Critical` |
-| `_setMarketSupplyCaps()` | Limits how much can be supplied to a market. Low caps restrict capital inflows, while removing caps on risky assets could concentrate too much risk in the protocol. | `admin`, `Multisig Critical` |
-| `_setReserveFactor()` | Determines what percentage of interest goes to protocol reserves. High reserve factors reduce user yield, while low factors may not build sufficient protocol reserves for emergencies. | `accessControlManager` |
-| `_setInterestRateModel()` | Changes how interest rates respond to utilization. An exploitative model could set rates unfavorably for borrowers or lenders, redirecting value unfairly. | `accessControlManager` |
-
-### Protocol Control
-
-| Function | Impact | Owner |
-| --- | --- | --- |
-| `_setActionsPaused()` | Pauses specific actions (supply, borrow, etc.) for individual markets. This can prevent users from accessing their funds or managing positions during critical market events. | `admin`, `Pause Guardian` |
-| `_setProtocolPaused()` | Pauses all protocol operations. While useful in emergencies, it completely blocks user access to their funds until unpaused. | `admin`, `Pause Guardian` |
-| `_setForcedLiquidation()` | Enables forced liquidations for a market regardless of health factor. This could be used to liquidate healthy positions, stealing user collateral through forced liquidations. | `accessControlManager` |
-| `_setForcedLiquidationForUser()` | Enables forced liquidations for a specific user. This could be used to target and liquidate specific users even if their positions are healthy. | `accessControlManager` |
-| `_supportMarket()` | Adds new markets to the protocol. Adding unsafe or malicious tokens could introduce systemic risk to the entire protocol. | `admin` |
-| `unlistMarket()` | Removes markets from the protocol. This could force users to repay loans or withdraw funds from deprecated markets, potentially at unfavorable times. | `accessControlManager` |
-
-### Oracle and Price Feed Control
-
-| Function | Impact | Owner |
-| --- | --- | --- |
-| `_setPriceOracle()` | Changes the oracle contract used for asset pricing. A malicious oracle could manipulate prices to force unfair liquidations or enable exploitative borrowing. | `admin` |
-| `setTokenConfig()` | Sets oracle configuration for assets. Misconfigured oracles could lead to incorrect pricing, enabling exploits or causing unfair liquidations. | `accessControlManager` |
-| `setOracle()` | Changes individual oracle feeds. Replacing reliable oracles with manipulated ones could enable price exploitation. | `accessControlManager` |
-| `enableOracle()` | Enables/disables specific oracle feeds. Disabling reliable oracles could force fallback to less secure price sources. | `accessControlManager` |
-| `pause()/unpause()` | Pauses the entire oracle system. This would freeze all protocol operations requiring price data, effectively locking user funds. | `accessControlManager` |
-
-### Reward and Token Management
-
-| Function | Impact | Owner |
-| --- | --- | --- |
-| `_setVenusSpeeds()` | Sets emission rates for XVS rewards. Manipulating these rates could unfairly distribute incentives or suddenly reduce expected yields for users. | `admin` |
-| `_grantXVS()` | Directly grants `XVS` tokens to recipients. Could be used to mint rewards to insiders or malicious addresses, diluting token value. | `admin` |
-| `seizeVenus()` | Allows seizing `XVS` from any address. This function could be used to confiscate user tokens without justification. | `accessControlManager` |
-| `setRewardAmountPerBlockOrSecond()` | Changes reward distribution rates in the `XVS` Vault. Sudden changes could significantly impact expected yields for stakers. | `accessControlManager` |
-
-### Liquidation Controls
-
-| Function | Impact | Owner |
-| --- | --- | --- |
-| `restrictLiquidation()` | Toggles whether liquidations are restricted to an allowlist. This could centralize liquidations to preferred parties, preventing fair market access. | `accessControlManager` |
-| `addToAllowlist()` | Adds addresses to the liquidator allowlist. Selective allowlisting could give unfair advantages to certain liquidators. | `accessControlManager` |
-| `setTreasuryPercent()` | Sets percentage of liquidation proceeds going to treasury. High percentages reduce liquidator incentives, potentially slowing necessary liquidations. | `accessControlManager` |
-| `setMinLiquidatableVAI()` | Sets minimum `VAI` debt that can be liquidated. Setting this too high could prevent small position liquidations, increasing protocol risk. | `accessControlManager` |
-
-### `VAI` Stablecoin Parameters
-
-| Function | Impact | Owner |
-| --- | --- | --- |
-| `setBaseRate()` | Sets base interest rate for `VAI` minting. High rates could make `VAI` uncompetitive, while low rates might not adequately compensate for risk. | `admin`, `Fast Track Timelock` |
-| `setFloatRate()` | Sets floating interest rate for `VAI`. Improper rates could destabilize the peg or discourage `VAI` usage. | `admin`, `Fast Track Timelock` |
-| `setMintCap()` | Sets maximum total supply for `VAI`. Setting this to zero would halt all new `VAI` minting, while excessive caps could lead to oversupply. | `admin`, `Fast Track Timelock` |
-| `toggleOnlyPrimeHolderMint()` | Restricts `VAI` minting to only Prime token holders. This could suddenly prevent most users from minting `VAI`, centralizing control. | `accessControlManager` |
-
-All these parameter changes can be executed without changing contract bytecode but still significantly impact protocol behavior and user funds. The most critical parameters are controlled by the Normal Timelock (admin) with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock or security multisigs. This creates a centralized control structure where governance has extensive power to alter protocol behavior in ways that could potentially harm users.
+> Upgradeability score: High
 
 ## Autonomy
 
