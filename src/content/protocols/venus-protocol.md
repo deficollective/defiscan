@@ -177,8 +177,8 @@ In the following diagram, the governance structure is outlined while abstracting
 ## Security Council
 
 The Venus Protocol has deployed three Gnosis Safe contracts, which are currently 3/6 multisigs. None of these contracts currently adhere to the minimum requirements for a security council.
-The security council contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by the governance structure. 
-The security councils can be given access rights to specific functions by the protocol governance through the `accessControlManager` contract. 
+The multisig contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by the governance structure. 
+The multisigs can be given access rights to specific functions by the protocol governance through the `accessControlManager` contract. 
 
 | Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
