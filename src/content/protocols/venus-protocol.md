@@ -119,7 +119,7 @@ The Venus Protocol frontend is open source and can be self-hosted. The repo can 
 > Accessibility score: Medium
 
 ## Conclusion
-The Venus protocol achieves High centralization risk scores for its Upgradeability, Chain and Exit Window dimensions. Due to the High centralization risk of the Binance Smart Chain, it ranks Stage 0.
+The Venus protocol achieves High centralization risk scores for its *Upgradeability*, *Chain* and *Exit Window* dimensions. Due to the High centralization risk of the Binance Smart Chain, it ranks Stage 0.
 
 The protocol could reach Stage 1 by deploying on a more decentralized chain of stage 1.
 
