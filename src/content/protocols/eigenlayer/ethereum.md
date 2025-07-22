@@ -45,72 +45,41 @@ stage_requirements:
 
 # Summary
 
-Add a summary of the protocols. What is it? What does it do? etc.
+Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_.
 
 # Ratings
 
 ## Chain
 
-See http://defiscan.info/learn-more#chain for more guidance.
+The report is concerned with the Eigenlayer protocol deployed on Ethereum mainnet. Ethereum mainnet achieves a _Low_ centralization risk score.
 
-> Chain score: Low/Medium/High
+> Chain score: Low
 
 ## Upgradeability
 
-In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+Contracts which control user funds and the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
 
-We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
-
-For some practical guidance follow this steps. It will help you in writing a nice report:
-
-1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
-2. Fill in all the permissioned functions in the table (`## Permissions`)
-   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
-3. Get a mechanistic and precise understanding of each permissioned function
-4. Assess impact for each function, look out for
-   - loss/blocking of user funds
-   - loss of unclaimed yield
-   - change expected behavior significantly (blacklisting/kyc/fees/...)
-5. Write the impact column based on your understanding
-   - A good tipp when writing the impact column below, think of least 2,3 sentences:
-   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
-   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
-   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
-6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
+Single strategy contracts that hold the _Staker_ funds can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-Eigenlayer is a marketplace that matches compute (by operators) with tasks (by AVSs). In order that _AVSs_ trust _Operators_, they need economic security (stake), which is provided by _(Re)Stakers_, _(Re)Stakers_ have to trust _Operators_ to do their tasks accordingly to the requirements of the _AVSs_. _(Re)Stakers_ funds and the protocol do not rely on a single _Operator_, nor on a single _AVS_ to work, thus the _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks for _(Re)Stakers_.
+The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work, thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks for the respective counterparties.
 
-The following subsections highlight risks potentially coming from _AVSs_ and _Operators_.
-
-### Slashing Operators
-
-When slashing is not paused, the _AVSs_ can slash _Operators_ by specifying which _Strategies_ should be slashed and by which amount. This leads to _loss of funds_ for _Stakers_ and loss of reputation for _Operators_. The slashing can be fair (according to published terms by the _AVSs_) or unfair (not according to published terms by the _AVSs_). Slashing can be paused by pausers registered in the `PauserRegistry` contract.
-
-### Deregistering Operators from Operator Sets
-
-When deregistration of _Operators_ from _operator sets_ is prevented, it can lead to operators being locked inside AVS and being slashable. This could lead to _loss of funds_ for _Stakers_ and loss of reputation for _Operators_. Deregistration of _Operators_ from _operator sets_ can be prevented by _AVSs_ by reverting `deregisterOperator` on the registered `AVSRegistrar` contract, a contract specific to each _AVS_ that is controlled by each _AVSs_.
+The [Dependencies](#dependencies) section goes into more detail about risks potentially coming from _AVSs_ and _Operators_.
 
 ## Exit Window
 
 ### Upgrading contracts
 
-Contracts which control user funds and accounting of slashing are fully _upgradeable_ and this can lead to _loss of user funds_. However, the upgrading can be executed either by the `TimelockController` with sufficient _Exit Window_ of 10 days or immediately through the [Community Council](#security-council) which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
+The upgrading of smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council). The upgrading can be executed either by the `TimelockController` with sufficient _Exit Window_ of 10 days or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
 
 ### Pausing Strategy Contracts
 
-Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/2)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming (Unpausing) can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements). Thus the pausing and freezing of funds does not affect the _Exit Window_ score, as a _Security Council_ compliant multisig account can set the funds free immediately.
+Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/2)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds,after their withdrawal queue period is over. Resuming (Unpausing) can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
 
-### Pausing Deregistration from Operator Sets
-
-depends on the allocation delay, if the allocation delay (and being slashable) is anyway longer than the duration in which a malicious/faulty pause deregistering was instantiated, then has the pause no effect, if the pause was longer than the allocation delay, it woud extend the period in which the operator is locked inside the AVS and being slashable.
-
--> most probably the same implications as Pausing Strategy Contracts
-
-find out who can set allocation delay, permission table says the operator itself, doesnt make any sense (imo)
+Upgrading contracts, pausing and locking funds in Strategy contract can both be executed immediately, _Exit Window_ score is _High_. However, the impact on the total score is _Medium_ (_Stage 1_), as both upgrading and pausing are protected by a Security Council ([Community Council (9/13)](#security-council)).
 
 > Exit Window score: High
 
@@ -121,6 +90,8 @@ See http://defiscan.info/learn-more#accessibility for more guidance.
 - Restaking only one interface? managing positions through other frontends?
 - Operator and AVS through CLI, but basically pure on-chain actions
 - AVS manages own contracts
+
+CLI like self hosting (medium), because it's local, but not low risk, because if the CLI has a bug/vulnerability, there is no immediate backup
 
 > Accessibility score: Low/Medium/High
 
@@ -142,17 +113,6 @@ The project additionally could advance to Stage 2 if ...
 
 # Protocol Analysis
 
-- EIGEN token is upgradeable, impact on user funds, and on AVS secured by EIGENStrategy stake
-- BackingEigen (bEIGEN) is the staked form of EIGEN
-  - New minters of `bEIGEN` can be appointed with this function. Malicious minters can mis-use this minting right to acquire `EIGEN` tokens
-- PermissionController is a contract that allows AVS and Operators to appoint admins and appointees for certain targets and calls
-- PermissionController is upgradeable, meaning permissions to slash operators on behalf of AVS can be hijacked by a permission owner going rogue
-- Strategy contract hold funds and are upgradeable and pausable, thus can lead to complete loss of funds for restakers, loss of economic security for AVS and backing of Operators
-- DelegationManager, StrategyManager, AllocationManager and RewardsCoordinator are all upgradeable
-- RewardsCoordinator holds funds sent there by the AVSs to be distributed to Operators and Stakers
-- AVS Registrar deregisterOperator call needs to succeed for an operator to opt out of an operator set. Can lead to operator being locked inside AVS and being slashable. (setAVSRegistrar)
-- Operators are trapped and can be slashed, if deregistration of operators from operatorsets is paused, but AVSs still slash.
-- PauserRegistry informs all pausable contracts, who can pause, and who can unpause (restricted privilege)
 - havent found usage of Timelock **so far** (admin is Operations Multisig) inside eigenlayer contracts, last call >180d ago
 - SignedDistributor was used for the EIGEN airdrop
 - The AllocationManager assumed all responsibilities previously held by AVSDirectory (0x135DDa560e946695d6f155dACaFC6f1F25C1F5AF) including operator registration, stake allocation, slashable stake commitment, and slashing authority
@@ -166,41 +126,59 @@ Open questions regarding reward distribution
 
 ## Strategies
 
-Each ERC20 token that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract. The `StrategyFactory` creates new strategies, with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised. Additionally, the `StrategyFactory` is _upgradeable_ through the `ProxyAdmin`, which could modify strategy behavior and potentially lead to _loss of funds_ if compromised. To prevent delegation of the token/strategy, _AVSs_ need to delist _Strategies_ from their _Operatorsets_.
+Each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract. These contracts are also called Strategy contracts.
+
+The EigenLayer protocol deploys different types of strategy contracts. The three types of strategy contracts are:
+
+1. **Beacon Chain Deposit Strategy**: This strategy contract is directly connected to the beacon chain and is responsible for managing the deposit/withdrawal of beacon chain deposits. The strategy contract is called `EigenPod` and each restaker has its own `EigenPod` contract.
+2. **Legacy Strategy Contracts**: These are a set of transparent upgradeable proxy contracts that each hold liquid staking ETH tokens. Each contract needs to be upgraded separately by the `ProxyAdmin` contract.
+3. **Beacon Proxy Strategy Contracts**: These are beacon proxy contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the implementation contract.
+
+The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 tokens as security), with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
 
 ## `DelegationManager`
 
-The `DelegationManager` is the contract that allows _Stakers_ to delegate their shares to _Operators_. It also allows _Operators_ to register as _Operator_ in the Eigenlayer system. The `DelegationManager` allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_.
+The `DelegationManager` is the contract that allows _Stakers_ to delegate their stake to _Operators_. The contract also allows _Operators_ to register as _Operator_ in the Eigenlayer system, which is required for them to register in _Operator Sets_ created by _AVSs_.
 
-The `DelegationManager` calls `removeDepositShares` and `addShares` on the `StrategyManager` contract to update delegated shares and link them to deposits. These functions are essential for maintaining accurate accounting of staked assets.
+The `DelegationManager` calls `addShares` and `removeDepositShares` on the `StrategyManager` contract to update delegated shares and link them to deposits. These functions are essential for maintaining accurate accounting of staked assets. Also, the `DelegationManager` keeps the accounting of the suffered slashes.
 
-_Operators_ can configure a _Delegation Approver_, that requires _Stakers_ to first get an approval before they may delegate to the _Operator_ through the `DelegationManager` contract.
+Furthermore, _Operators_ can configure a _Delegation Approver_, that requires _Stakers_ to first get an approval before they may delegate to the _Operator_ through the `DelegationManager` contract. This way, _Operators_ can prevent _Stakers_ from delegating their funds to them, if they do not want to.
 
-The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an upgradeability risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty.
+The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an upgradeability risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and thus lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty, as _(Re)Stakers_ initiate withdrawals of funds through this contract.
 
 ## `AllocationManager`
 
-The `AllocationManager` forwards the slashing request to the `DelegationManager` which keeps track of the shares and the suffered slashes. This functionality requires precise accounting to prevent incorrect slashing that could lead to _loss of funds_ of _Stakers_.
+The `AllocationManager` contract allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_. The `AllocationManager` forwards the slashing request by the _AVSs_ to the `DelegationManager` which keeps the accounting of the suffered slashes.
 
 Through the `AllocationManager` the `AVSs` can manage operator sets (creation and changes) and AVS configurations. The `AllocationManager` allows _Operators_ to register and deregister from _Operator Sets_ and _AVSs_.
 
+The _AVSs_ can setup an `AVSRegistrar` contract, which is called by the `AllocationManager` when _Operators_ register to and deregister from _operator sets_. If the _AVS_ does not have an `AVSRegistrar` set, the `AllocationManager` will forward the call to the registered _AVS_ contract. If the `AVSRegistrar` reverts the transaction, the `AllocationManager` will revert the transaction as well, and _Operators_ will not be able to register to or deregister from operator sets. This can create unfair scenarios, where _AVSs_ allow opt-in, but disallow opt-out.
+
 ## `RewardsCoordinator`
 
-The 7-day delay mechanism for new reward splits provides a safety buffer against rapid, potentially malicious changes to reward structures. The contract's reliance on a trusted Merkle root poster for reward distribution introduces a trusted component.
+The `RewardsCoordinator` contract holds funds sent by the AVSs which will be distributed to _Operators_ and _Stakers_.
 
-The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that the economic parameters governing reward distribution could be modified. This includes the 90/10 default split between _Stakers_ and _Operators_, which represents a significant economic lever. The contract's ability to manage reward claims and distribution schedules makes it a critical component of EigenLayer's incentive system.
+The `RewardsCoordinator` contract implements a reward distribution mechanism between _Operators_ and _Stakers_. By default, _Operators_ receive 10% and _Stakers_ 90% of the rewards distributed by the _AVSs_. Rewards are distributed periodically, with a delay period of 7 days before new splits are applied. The distribution mechanism relies on a trusted Merkle root poster, which is responsible for posting the correct distribution.
+
+The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that the economic parameters governing reward distribution could be modified. This includes the 90/10 default split between _Stakers_ and _Operators_.
+
+## `PermissionController`
+
+The `PermissionController` is a contract that allows AVS and Operators to appoint general admins (can call any function on any address) or appointees (can call only selected addresses and functions).
+
+The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmin`, means that permissions to slash operators on behalf of AVS can be hijacked by a permission owner going rogue, leading to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_.
+
+## `PauserRegistry`
+
+The `PauserRegistry` contract informs all pausable contracts, who can pause, and who can unpause.
+
+## `EIGEN` and `bEIGEN`
+
+The BackingEigen (bEIGEN) token is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of bEIGEN can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into EIGEN tokens.
 
 ## AVSs
 
-(rewrite in own words)
-An AVS can use onchain or offchain data in rewards logic to determine the reward amount per Operator. The rewards can be calculated based on the work performed by Operators during a certain period of time, can be a flat reward rate, or another structure based on the AVS’s economic model. An AVS can distribute rewards in any ERC20 token. For more flexibility, an AVS can submit multiple performance-based Operator rewards denominated in different tokens.
-
-## Rewards
-
-- Operators receive by default 10%, stakers 90% of rewards distributed by the AVS.
-- a delay period is applied (7 days), before new splits are applied
-- splits that are active (7 days waited) before the calculation phase begins, are used to compute distribution
-- merkle tree, merkle root poster is trusted to act honestly and post the correct distribution
+AVSs are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an AVS can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by Operators within a certain time period. Additionally, an AVS can submit multiple reward submissions, denominated in different tokens, to offer more flexibility in the distribution of rewards.
 
 ## Programmatic Incentives
 
@@ -208,19 +186,27 @@ Are distributed in `EIGEN` tokens minted by the Eigenlayer protocol and handed t
 
 # Dependencies
 
-AVS is like a yield source of the protocol, like a yield bearing token is on pendle, ie. a third party, if stakers opt in to operators that are spread across, many _AVSs_, the "portfolio" is diversified, and the dependency risk is reduced. The Eigenlayer protocol is not dependent on any single AVS.
+The Eigenlayer protocol is not dependent on any single AVS or Operator. However, _AVSs_, _Stakers_ and _Operators_ dependend on each other, and it is recommended to be well diversified with their counterparties to mitigate dependency risks.
 
-Particular Dependency Risks with AVSs
+The following subsections highlight risks potentially coming from _AVSs_ and _Operators_.
 
-- AVSRegistrar.deregisterOperator call needs to succeed for an operator to opt out of an operator set. Can lead to operator being locked inside AVS and being slashable. (setAVSRegistrar)
+## Slashing Operators
+
+When slashing is not paused, the _AVSs_ can slash _Operators_ by specifying which _Strategies_ should be slashed and by which amount. This leads to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_. The slashing can be fair (according to published terms by the _AVSs_) or unfair (not according to published terms by the _AVSs_). Slashing can be paused by pausers registered in the `PauserRegistry` contract.
+
+## Deregistering Operators from Operator Sets
+
+Deregistration of _Operators_ from _operator sets_ can be prevented by _AVSs_ by reverting `deregisterOperator` on the registered `AVSRegistrar` contract, a contract specific to each _AVS_ that is controlled by each _AVSs_. This could open a greater time window for an _AVS_ to slash _Operators_, leading to _loss of funds_ for _(Re)Stakers_ and loss of delegated stake for _Operators_.
+
+## Slacking Operators
+
+_Operators_ could technically, provoke slashing and _loss of funds_ for restakers, but it is not in their interest to do so, as it would lead to a loss of reputation.
 
 # Governance
 
-The [Executor Multisig (1/2)](#security-council) holds all upgrade permissions of the protocol through the `ProxyAdmin` contract or directly on the contract itself. The [Executor Multisig (1/2)](#security-council)'s signers are the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has two admins, the [Community Multisig (9/13)](#security-council) and the contract itself. Additionally three roles exist; proposer, canceler and executor. The proposers are the [Operations Multisig (3/6)](#security-council) and the [Protocol Council (3/5)](#security-council), the canceler is the [Operations Multisig (3/6)](#security-council) and the executor is the [Protocol Council (3/5)](#security-council).
+The [Executor Multisig (1/2)](#security-council) holds all upgrade permissions of the protocol through the `ProxyAdmin` contract or directly on the contracts themselves. The [Executor Multisig (1/2)](#security-council)'s signers are the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council).
 
-## Relevant Subsection
-
-Here anything relevant to the governance, in this case it could be what you highlighted in "Upgrade Process"
+The [Protocol TimelockController](#security-council) has two admins, the [Community Multisig (9/13)](#security-council) and the contract itself. Additionally three roles exist; proposer, canceler and executor. The proposers are the [Operations Multisig (3/6)](#security-council) and the [Protocol Council (3/5)](#security-council), the canceler is the [Operations Multisig (3/6)](#security-council) and the executor is the [Protocol Council (3/5)](#security-council).
 
 ## Security Council
 
