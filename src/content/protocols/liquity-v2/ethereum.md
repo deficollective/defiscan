@@ -84,7 +84,7 @@ The Liquity v2 deployment on Ethereum mainnet achieves _Low_ centralization risk
 
 The system has the following external dependencies:
 
-- LST ERC20 tokens: RocketPool ETH (RETH) and Lido Wrapped Staked ETH (WSTETH)
+- LST ERC20 tokens: RocketPool ETH (`RETH`) and Lido Wrapped Staked ETH (`WSTETH`)
 
 - Chainlink market oracles: ETH-USD, RETH-ETH and STETH-USD
 
