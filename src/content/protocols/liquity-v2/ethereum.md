@@ -76,7 +76,7 @@ A list of third-party frontends can be found here: https://www.liquity.org/front
 
 ## Conclusion
 
-The Liquity v2 deployment on Ethereum Mainnet achieves Low centralization risk score for its Upgradeability, Autonomy, Exit Window and Accessibility dimensions. It thus ranks Stage 2.
+The Liquity v2 deployment on Ethereum mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. It thus ranks **Stage 2**.
 
 # Protocol Analysis
 
