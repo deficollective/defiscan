@@ -29,9 +29,9 @@ stage_requirements: [
 
 Liquity v2 is a borrowing protocol that lets users deposit ETH or Liquid Staking Tokens (LSTs) as collateral and mint the stablecoin `BOLD`. 
 
-BOLD loans need to maintain a minimum collateral ratio of 110% for ETH and 120% for RETH and WSTETH collaterals respectively.
+`BOLD` loans need to maintain a minimum collateral ratio of 110% for `ETH` and 120% for `RETH` and `WSTETH` collaterals, respectively.
 
-In addition to the collateral, the loans on each collateral branch are secured by a Stability Pool containing BOLD and by fellow borrowers collectively acting as guarantors of last resort.
+In addition to the collateral, the loans on each collateral branch are secured by a _Stability Pool_ containing `BOLD` and by fellow borrowers collectively acting as guarantors of last resort.
 
 # Ratings
 
