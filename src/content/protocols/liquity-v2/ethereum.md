@@ -96,11 +96,11 @@ In either case of LST exchange rate or market oracle failure, the branch blocks 
 
 # Governance
 
-Liquity v2 incorporates a governance module which gives LQTY stakers voting rights over a fixed portion of the total interest generated from loans. This is termed the “PIL” - Protocol Incentivized Liquidity.
+Liquity v2 incorporates a governance module which gives LQTY stakers voting rights over a fixed portion of the total interest generated from loans. This is termed the “PIL” - _Protocol Incentivized Liquidity_.
 
-LQTY stakers vote weekly on initiatives, deciding where to direct that week’s PIL rewards. The intent is to incentivize BOLD liquidity on external markets as per the protocol’s needs.
+`LQTY` stakers vote weekly on initiatives, deciding where to direct that week’s PIL rewards. The intent is to incentivize `BOLD` liquidity on external markets as per the protocol’s needs.
 
-LQTY stakers have no control over any other system logic or parameters. Proposing initiatives and claiming an initiative's accrued rewards are completely permissionless.
+`LQTY` stakers have no control over any other system logic or parameters. Proposing initiatives and claiming an initiative's accrued rewards are completely permissionless.
 
 
 ## External Permission Owners and Security Council
