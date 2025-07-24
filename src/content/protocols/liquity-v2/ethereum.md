@@ -27,7 +27,7 @@ stage_requirements: [
 
 # Summary
 
-Liquity v2 is a decentralized borrowing protocol that lets users deposit ETH or LSTs as collateral and mint the stablecoin BOLD. 
+Liquity v2 is a borrowing protocol that lets users deposit ETH or Liquid Staking Tokens (LSTs) as collateral and mint the stablecoin `BOLD`. 
 
 BOLD loans need to maintain a minimum collateral ratio of 110% for ETH and 120% for RETH and WSTETH collaterals respectively.
 
