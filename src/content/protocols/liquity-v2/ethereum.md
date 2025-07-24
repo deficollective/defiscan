@@ -158,5 +158,7 @@ All external permissions are revoked, the protocol is immutable.
 | Contract   | Function                    | Impact                                                                                                                                                                                                                                                               | Owner |
 | ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | Governance | registerInitialInitiatives  | The permissioned function allows the owner of the permission to register the first initiatives for LQTY stakers to vote on. It registers these initiatives in the earliest possible epoch, which allows the owner to make them votable on immediately post-deployment. | 0x0   |
+| BOLDToken | setBranchAddresses  | The permissioned allows owner of the permission to record core contract addresses for a given branch in the BOLDToken contract. It is used once, purely for contract initialization upon deployment. | 0x0   |
+| BOLDToken | setCollateralRegistry  | The permissioned allows owner of the permission to record the CollateralRegistry core contract address in the BOLDToken contract. It is used once, purely for contract initialization upon deployment, and it renounces ownership after recording the address. | 0x0   |
 
 
