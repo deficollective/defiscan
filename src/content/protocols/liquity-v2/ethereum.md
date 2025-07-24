@@ -64,6 +64,8 @@ Finally, each collateral branch uses the "last good price" as a last resort if a
 
 Liquity v2’s contracts are fully immutable - no upgrades or changes can be made, removing the need for an exit window.
 
+> Exit Window score: Low
+
 ## Accessibility
 
 Multiple user interfaces exist and are operated by independent actors ensuring access to the protocol and user funds even if an interface is shutdown or censors a user's transactions.
