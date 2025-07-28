@@ -183,7 +183,7 @@ All oracle configurations and boundaries can only be modified through _Governanc
 # Governance
 
 Venus Protocol utilized Compound's `Governor Bravo` framework to implement their _Governance Structure_. 
-Any privileged access roles in the entire protocol are either directly or indirectly controlled by the _Governance_. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` has specific access rights through the `accessControlManager`.
+Any privileged access role in the entire protocol is either directly or indirectly controlled by the _Governance_. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` has specific access rights through the `accessControlManager`.
 While their configuration can change, these timelock contracts are currently configured as follows:
 * `Normal Timelock`:
    * `votingDelay`: 1 block
