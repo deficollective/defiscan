@@ -1,5 +1,6 @@
 ---
 chain: "Ethereum"
+instance: "USDe Stablecoin"
 stage: "O"
 reasons: ["Central Custody"]
 risks: ["L", "H", "H", "H", "H"]
