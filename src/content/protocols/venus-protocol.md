@@ -16,7 +16,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-Venus Protocol is a lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by XVS token holders who vote on upgrades and parameter changes through an on-chain _Governance_ system with built-in timelocks.
+Venus Protocol is a lending platform on Binance Smart Chain. Users can supply assets to earn yield and borrow against their collateral. The protocol is governed by `XVS` token holders who vote on upgrades and parameter changes through an onchain _Governance_ system with built-in timelocks.
 
 # Ratings
 
