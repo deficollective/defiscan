@@ -57,7 +57,33 @@ The project additionally could advance to Stage 2 if ...
 
 # Protocol Analysis
 
-Here include the diagram. Please explain what the main contracts are doing within the diagram.
+## Minting and Redeeming USDe
+
+The Ethena stablecoin protocol allows users to mint and redeem `USDe` through a flow that combines off-chain quoting and order submission with on-chain execution by Ethena servers using EOAs with roles `MINTER_ROLE` and `REDEEMER_ROLE` (see [table](#role-permission-inside-ethenaminting)). The process begins off-chain, where a whitelisted user interacts with an Ethena-hosted pricing server to request a quote. This quote reflects the amount of collateral to be deposited and the expected `USDe` to be received. Using this information, the user constructs and signs an EIP-712 order. The signed order includes the benefactor address, collateral asset and amount of `USDe` minted.
+
+A central server operated by the Ethena team validates this order. It ensures the collateral is eligible, and that the minting or redemption action complies with both global and per-asset block-level caps. These caps are enforced to prevent drastic changes in `USDe` supply, which could destabilize the system.
+
+If all internal checks pass, the Ethena server submits the signed order on-chain by calling the `mint` or `redeem` function on the `EthenaMinting` contract. The EOA used by the server must hold the `MINTER_ROLE` to call `mint`, or the `REDEEMER_ROLE` to call `redeem`. On `mint`, the collateral is transferred into the `EthenaMinting` contract and `USDe` is minted into the users address by calling `mint` on the `USDe` contract. The `EthenaMinting` contract is assigned as the minter in `USDe` and is therefore the sole entity able to issue new tokens. On `redeem`, `USDe` is burned and the corresponding collateral is released to the user.
+
+Multiple administrative permissions exist to modify this flow. The `DEFAULT_ADMIN_ROLE` in `EthenaMinting` can set or change the global mint and redeem caps using `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock`. The `GATEKEEPER_ROLE` may call `disableMintRedeem`, which pauses all minting and redeeming operations or revoke `MINTER_ROLE` and `REDEEMER_ROLE` from current role owner addresses. This function is designed to prevent further minting or redeeming in the case of a vulnerability or misuse. The [Dev Multisig](#security-council) owns the `DEFAULT_ADMIN_ROLE` and can call replace the `GATEKEEPER_ROLE` with another address and stays the ultimate on-chain authority over the `USDe` supply. And in case of `USDe` depegging, this could lead to _loss of funds_ for users that have collateral deposited. Restoring functionality requires setting non-zero limits via the respective `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock` functions.
+
+`removeWhitelistedBenefactor` allows the `GATEKEEPER_ROLE` to remove an address from the whitelist. Only whitelisted addresses are allowed to supply valid orders. Ethena will not accept orders from addresses that are not whitelisted, to comply with AML laws and KYC requirements, as well as anti-terrorist financing laws. If an address created a position with collateral, but got removed from the whitelist, the address has to sell the `USDe` on the open market and has no access to its deposited collateral. This could lead to _loss of funds_ for users that have collateral deposited and are removed from the whitelist if the `USDe` price drops below the collateral value.
+
+Collateral flows are managed through the `transferToCustody` function, callable only by addresses with the `COLLATERAL_MANAGER_ROLE`. The destination addresses for this function are addresses that can only be added or removed by holding the `DEFAULT_ADMIN_ROLE`. Maliciously set addresses can lead to stealing collateral from users and the protocol.
+
+All core permissions for minting, redeeming, managing roles, and custodial flows are ultimately under the control of [Dev Multisig](#security-council), either directly or indirectly via its ability to control `DEFAULT_ADMIN_ROLE` holders.
+
+## Staking USDe
+
+Ethena enables _Stakers_ to earn yield by locking their `USDe` in the `StakedUSDeV2` contract, which issues `sUSDe` in return. This contract inherits the ERC-4626 vault standard but breaks with the standard by implementing a cooldown period to complete a withdrawal. Users deposit `USDe` and receive `sUSDe` at a ratio determined by total vault assets and total shares. Yield earned by the vault is reflected as an increase in the value of each `sUSDe` share.
+
+The `StakedUSDeV2` contract implements a cooldown period, users must wait 7 days to complete a withdrawal. After the cooldown period—configured in `setCooldownDuration` and capped at 90 days—the `USDe` can be withdrawn by calling `withdraw` which transfers `USDe` from the `USDeSilo` contract to the _Staker_.
+
+The `StakedUSDeV2` contract includes a blacklist mechanism managed by addresses holding the `BLACKLIST_MANAGER_ROLE`. If a user is blacklisted, they are prevented from staking or unstaking `USDe`. This could result in _loss of funds_ if users are unable to retrieve their staked assets and have to sell `sUSDe` on the open market at a discount. It can lead to a complete _loss of funds_ if their `sUSDe` is burned from their wallet and redistributed to other _Stakers_ via the `redistributeLockedAmount` function, which is controlled by the `DEFAULT_ADMIN_ROLE`.
+
+Protocol yield is transferred into the system via the `StakingRewardsDistributor` contract. This contract holds `USDe` rewards and regularly calls `transferInRewards` to transfer them into `StakedUSDeV2`. The `StakingRewardsDistributor` is operated by an address labeled [Operator](#security-council), which is itself appointed by the [Dev Multisig](#security-council). While the [Operator](#security-council) can delay transfers, they cannot redirect funds or change the recipient. This minimizes the risk of _loss of unclaimed yield_, though misconfiguration or inaction may still delay yield distribution. The [Dev Multisig](#security-council) can replace the [Operator](#security-council) to prevent _loss of unclaimed yield_.
+
+The ability to rescue tokens from the vault, handled by `rescueTokens`, is restricted to addresses with the `DEFAULT_ADMIN_ROLE`. Although this function cannot extract `USDe`, it can affect other tokens accidentally sent to the vault.
 
 # Dependencies
 
@@ -65,9 +91,13 @@ Go into more detail of the oracle, bridge, or other dependency the defi protocol
 
 # Governance
 
-## Relevant Subsection
+Ethena governance using the ENA token is purely signalling. Holders of ENA participate in off-chain voting via Snapshot, where they may submit and vote on proposals related to risk parameters, vault configurations, supported collateral, and other protocol adjustments.
 
-Here anything relevant to the governance, in this case it could be what you highlighted in "Upgrade Process"
+Votes cast on Snapshot are non-binding. Their outcomes inform the Ethena Labs Team and the Risk Committee, who are responsible for executing changes on-chain through controlled permission owners like the [Dev Multisig](#security-council). The Risk Committee consists of selected individuals or entities elected by the Ethena Labs Team.
+
+The ENA token itself is governed by the [Dev Multisig](#security-council), which holds exclusive access to the mint function. Token minting is constrained to a maximum of 10% annually and can only occur once per year. The ownership of ENA is non-renounceable, but transferable via `transferOwnership`.
+
+Ultimately _Governance_ execution remains under centralized control.
 
 ## Security Council
 
