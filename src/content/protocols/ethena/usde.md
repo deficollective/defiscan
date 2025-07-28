@@ -22,8 +22,6 @@ Add a summary of the protocols. What is it? What does it do? etc.
 
 ## Upgradeability
 
-what is the role of USDt?
-
 > Upgradeability score: Low/Medium/High
 
 ## Autonomy
@@ -58,19 +56,29 @@ The project additionally could advance to Stage 2 if ...
 
 # Protocol Analysis
 
+## USDe Token
+
+The owner of the `USDe` contract is the [Dev Multisig](#security-council). The [Dev Multisig](#security-council) can set any minter address, which can increase the `USDe` supply and mint `USDe` tokens to any address. The multisig is trusted to not abuse this power. The minter address is set to the `EthenaMinting` contract, which requires a transfer of accepted collateral, before minting `USDe`.
+
 ## Minting and Redeeming USDe
 
-The Ethena stablecoin protocol allows users to mint and redeem `USDe` through a flow that combines off-chain quoting and order submission with on-chain execution by Ethena servers using EOAs with roles `MINTER_ROLE` and `REDEEMER_ROLE` (see [table](#role-permission-inside-ethenaminting)). The process begins off-chain, where a whitelisted user interacts with an Ethena-hosted pricing server to request a quote. This quote reflects the amount of collateral to be deposited and the expected `USDe` to be received. Using this information, the user constructs and signs an EIP-712 order. The signed order includes the benefactor address, collateral asset and amount of `USDe` minted.
+The Ethena stablecoin protocol allows whitelisted users to mint and redeem `USDe` through a flow that combines off-chain quoting and on-chain order submission with final execution by Ethena servers using EOAs with roles `MINTER_ROLE` and `REDEEMER_ROLE` (see [table](#role-permission-inside-ethenaminting)).
 
-A central server operated by the Ethena team validates this order. It ensures the collateral is eligible, and that the minting or redemption action complies with both global and per-asset block-level caps. These caps are enforced to prevent drastic changes in `USDe` supply, which could destabilize the system.
+The process begins off-chain, where a whitelisted user interacts with an Ethena-hosted pricing server to request a quote. This quote reflects the amount of collateral to be deposited and the expected `USDe` to be received. Using this information, the user constructs and signs an EIP-712 order. The signed order includes the benefactor address, collateral asset and amount of `USDe` minted.
 
-If all internal checks pass, the Ethena server submits the signed order on-chain by calling the `mint` or `redeem` function on the `EthenaMinting` contract. The EOA used by the server must hold the `MINTER_ROLE` to call `mint`, or the `REDEEMER_ROLE` to call `redeem`. On `mint`, the collateral is transferred into the `EthenaMinting` contract and `USDe` is minted into the users address by calling `mint` on the `USDe` contract. The `EthenaMinting` contract is assigned as the minter in `USDe` and is therefore the sole entity able to issue new tokens. On `redeem`, `USDe` is burned and the corresponding collateral is released to the user.
+A central server operated by the Ethena team validates this order. It ensures the collateral is eligible, that the order does not destabilize the system, and that the minting or redemption action complies with both global and per-asset block-level caps. These caps are enforced to prevent drastic changes in `USDe` supply, which could also destabilize the system.
 
-Multiple administrative permissions exist to modify this flow. The `DEFAULT_ADMIN_ROLE` in `EthenaMinting` can set or change the global mint and redeem caps using `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock`. The `GATEKEEPER_ROLE` may call `disableMintRedeem`, which pauses all minting and redeeming operations or revoke `MINTER_ROLE` and `REDEEMER_ROLE` from current role owner addresses. This function is designed to prevent further minting or redeeming in the case of a vulnerability or misuse. The [Dev Multisig](#security-council) owns the `DEFAULT_ADMIN_ROLE` and can call replace the `GATEKEEPER_ROLE` with another address and stays the ultimate on-chain authority over the `USDe` supply. And in case of `USDe` depegging, this could lead to _loss of funds_ for users that have collateral deposited. Restoring functionality requires setting non-zero limits via the respective `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock` functions.
+If all internal checks pass, the Ethena server submits the signed order on-chain by calling the `mint` or `redeem` function on the `EthenaMinting` contract. The EOA used by the server must hold the `MINTER_ROLE` to call `mint`, or the `REDEEMER_ROLE` to call `redeem`. On `mint`, the collateral is transferred from the whitelisted user to the `EthenaMinting` contract and `USDe` is minted into the users address by calling `mint` on the `USDe` contract. The `EthenaMinting` contract is assigned as the minter in `USDe` and is therefore the sole entity able to issue new tokens. On `redeem`, `USDe` is burned and the corresponding collateral is released to the user. No cooldown period exists for redeeming.
 
-`removeWhitelistedBenefactor` allows the `GATEKEEPER_ROLE` to remove an address from the whitelist. Only whitelisted addresses are allowed to supply valid orders. Ethena will not accept orders from addresses that are not whitelisted, to comply with AML laws and KYC requirements, as well as anti-terrorist financing laws. If an address created a position with collateral, but got removed from the whitelist, the address has to sell the `USDe` on the open market and has no access to its deposited collateral. This could lead to _loss of funds_ for users that have collateral deposited and are removed from the whitelist if the `USDe` price drops below the collateral value.
+Multiple administrative permissions exist to modify this flow. The `DEFAULT_ADMIN_ROLE` in `EthenaMinting` can set or change the global mint and redeem caps using `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock`. Furthermore, the `GATEKEEPER_ROLE` may call `disableMintRedeem`, which pauses all minting and redeeming operations. This function is designed to temporary preventing further minting or redeeming in the case of a vulnerability or instability. Users that have collateral deposited and are prohibited to access their collateral can lose funds if they have to sell it in the open market if the `USDe` trades below the collateral value. Restoring minting and redeeming functionality requires setting non-zero limits via the respective `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock` functions which only can be executed by the `DEFAULT_ADMIN_ROLE`.
 
-Collateral flows are managed through the `transferToCustody` function, callable only by addresses with the `COLLATERAL_MANAGER_ROLE`. The destination addresses for this function are addresses that can only be added or removed by holding the `DEFAULT_ADMIN_ROLE`. Maliciously set addresses can lead to stealing collateral from users and the protocol.
+The `GATEKEEPER_ROLE` may also revoke `MINTER_ROLE` and `REDEEMER_ROLE` from addresses that currently own the respective roles by calling `removeMinterRole`, `removeRedeemerRole` or `removeCollateralManagerRole`. Which is a designed security measure in case of compromised addresses.
+
+Additionally, `removeWhitelistedBenefactor` allows the `GATEKEEPER_ROLE` to remove an address from the whitelist. Only whitelisted addresses are allowed to supply valid orders. Ethena will not accept orders from addresses that are not whitelisted, to comply with AML laws and KYC requirements, as well as anti-terrorist financing laws. If an address created a position with collateral, but got removed from the whitelist, the address has to sell the `USDe` on the open market and has no access to its deposited collateral. This could lead to _loss of funds_ for users that have collateral deposited and are removed from the whitelist if the `USDe` price drops below the collateral value.
+
+The [Dev Multisig](#security-council) owns the `DEFAULT_ADMIN_ROLE` and can replace the `GATEKEEPER_ROLE` with another address and stays the ultimate on-chain authority over the `USDe` supply.
+
+Collateral flows to custodian addresses are executed through the `transferToCustody` function, callable only by addresses with the `COLLATERAL_MANAGER_ROLE`. The destination addresses for this function can only be added or removed by holding the `DEFAULT_ADMIN_ROLE`. Maliciously set addresses can lead to stealing collateral from users and the protocol.
 
 All core permissions for minting, redeeming, managing roles, and custodial flows are ultimately under the control of [Dev Multisig](#security-council), either directly or indirectly via its ability to control `DEFAULT_ADMIN_ROLE` holders.
 
