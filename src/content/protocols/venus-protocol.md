@@ -444,3 +444,19 @@ In the following table, the privileged roles are listed for each function with a
 | Prime | `togglePause()` | Pauses or unpauses the Prime rewards program. | accessControlManager |
 | PrimeLiquidityProvider | `pauseFundsTransfer()` | Pauses the distribution of rewards from the provider contract. | accessControlManager |
 | PrimeLiquidityProvider | `setTokensDistributionSpeed()` | Sets the speed at which reward tokens are distributed. | accessControlManager |
+| GovernorBravoDelegator | `_setImplementation()` | Upgrades the governance implementation contract | Normal Timelock |
+| GovernorBravoDelegator | `_setPendingAdmin()` | Sets a new pending admin for governance | Normal Timelock |
+| GovernorBravoDelegate | `_setVotingDelay()` | Changes the delay before voting begins on new proposals | Normal Timelock |
+| GovernorBravoDelegate | `_setVotingPeriod()` | Changes the duration of the voting period | Normal Timelock |
+| GovernorBravoDelegate | `_setProposalThreshold()` | Changes the amount of XVS required to create proposals | Normal Timelock |
+| GovernorBravoDelegate | `_setProposalMaxOperations()` | Sets the maximum number of actions in a proposal | Normal Timelock |
+| GovernorBravoDelegate | `cancel()` | Cancels a proposal (can be done by proposer or if proposer's XVS falls below threshold) | Proposer or any address |
+| Timelock | `setPendingAdmin()` | Sets a new pending admin for the timelock | Current Admin (self) |
+| Timelock | `setDelay()` | Changes the timelock delay period | Current Admin (self) |
+| XVS | `mint()` | Mints new XVS tokens | accessControlManager |
+| XVS | `burn()` | Burns XVS tokens | Token holder (self) |
+| XVS | `pause()` / `unpause()` | Pauses or unpauses XVS transfers | accessControlManager |
+| Venus Treasury | `withdrawTreasuryBEP20()` | Withdraws BEP20 tokens from treasury | Normal Timelock |
+| Venus Treasury | `withdrawTreasuryBNB()` | Withdraws BNB from treasury | Normal Timelock |
+| XVSVaultTreasury | `withdrawTreasuryToken()` | Withdraws tokens from XVS vault treasury | accessControlManager |
+| XVSVaultTreasury | `setWithdrawLimit()` | Sets withdrawal limits for the vault treasury | accessControlManager |
