@@ -105,16 +105,7 @@ For each market, one `VToken` contract is deployed which contains all the functi
 
 ![Venus Core Lending](./diagrams/venus_lending_core.png)
 
-### Key Permissions in Core Lending
-
-**Comptroller Permissions:**
-- `admin` can upgrade facets, set oracle, pause guardian, and core parameters
-- `accessControlManager` controls collateral factors, liquidation incentives, market caps, and pause functions
-- Emergency multisigs (Pause Guardian) can pause/unpause protocol actions
-
-**VToken Permissions:**
-- `admin` can upgrade implementation and set new comptroller
-- `accessControlManager` controls reserve factor, interest rate models, and reserve withdrawals
+All privileged functions in the core lending system are controlled by the `admin` role (Normal Timelock) and the `accessControlManager`, which grants specific permissions to timelocks and emergency multisigs as shown in the diagram above.
 
 ## Incentives
 
