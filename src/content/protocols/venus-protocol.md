@@ -7,7 +7,7 @@ defillama_slug: ["venus-core-pool"]
 chain: "Binance"
 stage: 0
 reasons: []
-risks: ["H", "H", "L", "H", "M"]
+risks: ["H", "H", "M", "H", "M"]
 author: ["GiantDole"]
 submission_date: "2025-07-02"
 publish_date: "1970-01-01"
