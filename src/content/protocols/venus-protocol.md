@@ -116,10 +116,9 @@ The `admin` (Normal Timelock) controls XVS emission parameters and direct grants
 
 ## Treasury
 
-A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
-The reserves are collected to the _Treasury_ through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the _Treasury_, _Governance_ can vote on proposals to spend the _Treasury_.
+A fraction (`reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol reserves in each `vToken` contract. The `accessControlManager` controls who can withdraw these reserves via `_reduceReserves()` and who can set the `reserveFactor`. The destination address for reserves is set by the `admin` role (Normal Timelock) through `setProtocolShareReserve()`.
 
-Treasury management is controlled by the Normal Timelock and [Treasury Guardian](#security-council) for setting treasury parameters, while the `accessControlManager` handles reserve factors and withdrawals.
+The Venus Treasury contract is owned by the Normal Timelock, which can withdraw any token or native currency to any arbitrary address through governance proposals (48-hour delay). This gives governance complete control over all treasury funds.
 
 # Dependencies
 
