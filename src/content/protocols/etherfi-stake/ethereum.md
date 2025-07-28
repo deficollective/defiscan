@@ -191,7 +191,7 @@ AuctionManager LiquidityPool
 | NodeOperatorManager | setAuctionContractAddress | Sets the address of the `AuctionContract`. The `AuctionContract` is the only one able to fetch keys. Each fetch consumes the key, if this address is set to a malicious contract is could exausth valid keys of Node Operators to prevent further deposits on the beacon chain. | EtherFiTimelock |
 | NodeOperatorManager | updateAdmin | Grants or revokes admin privileges over the contract to a specific address. | EtherFiTimelock |
 | NodeOperatorManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators. | EtherFiTimelock |
-| NodeOperatorManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant or admin privileges to other addresses. | EtherFiTimelock |
+| NodeOperatorManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock |
 | NodeOperatorManager | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how Node Operators are added and allocated funds. | EtherFiTimelock |
 | NodeOperatorManager | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock |
 
@@ -210,11 +210,10 @@ AuctionManager LiquidityPool
 | StakingManager | unPauseContract | ... | ['onlyAdmin', 'whenPaused'] |
 | StakingManager | updateAdmin | Grants or revokes the admin role to a given address. Admins can change contract parameters such as the max deposit batches and pausing the contract. Those actions could prevent the deposit of further validators in the system and impact its performance. | EtherFiTimelock |
 | StakingManager | setNodeOperatorManager | Sets the address of the `NodeOperatorManager` contract used. The contract is used to validate node operators upon deposits, a malicious contract could prevent further deposits. | ['onlyAdmin'] |
-| StakingManager | upgradeTo | Upgrades | EtherFiTimelock |
-| StakingManager | upgradeToAndCall | ... | EtherFiTimelock |
-| StakingManager | renounceOwnership | ... | EtherFiTimelock |
-| StakingManager | transferOwnership | ... | EtherFiTimelock |
-| StakingManager | initializeOnUpgrade | ... | EtherFiTimelock |
+| StakingManager | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how deposits happen. | EtherFiTimelock |
+| StakingManager | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock | EtherFiTimelock |
+| StakingManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators upgrading the `EtherFiNode` contract. | EtherFiTimelock |
+| StakingManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock |
 
 | AuctionManager | createBid | Create bids to run a given amount of validators. The Node Operator has to be whitelisted but the whitelist may be disabled. The Node Operator needs to pay the entire bid amount upfront, this amount will be collected if the validator is assigned to the bid ot the Node Operator can cancel an active bid to get a full refund. | NodeOperatorManager(Whitelisted Node Operator) |
 | AuctionManager | updateSelectedBidInformation | Marks a bid as selected. This is called by the `StakingManager` when a bid is chosen. It can then no longer be cancelled. | StakingManager |
