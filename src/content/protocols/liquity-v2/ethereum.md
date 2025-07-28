@@ -4,8 +4,9 @@ stage: 2
 reasons: []
 risks: ["L", "L", "L", "L", "L"]
 author: ["Rick Pardoe"]
-submission_date: "2025-06-07"
-publish_date: ""
+submission_date: "2025-07-28"
+publish_date: "2025-07-28"
+update_date: "2025-07-28"
 stage_requirements: [
       [
             { text: "Assets are not in custody by a centralized entity", status: "fixed" },
