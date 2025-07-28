@@ -38,7 +38,7 @@ The `VAIController` and related stablecoin contracts are upgradeable. This could
 
 All the upgrades above can only be executed through a governance proposal and are associated with the _Normal Timelock_ (see [exit window](#exit-window).
 
-Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock (1-hour delay) or emergency multisigs.
+Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock (1-hour delay) or emergency [multisigs](#security-council).
 
 > Upgradeability score: High
 
@@ -55,11 +55,11 @@ Not all markets integrate those mitigations, but they are present for markets re
 
 The upgradeability score is High and most permissions are protected with an exit window of 2 days, while some can be changed within 1 hour.
 
-**48-hour delay (Normal Timelock):** Controls critical functions including contract upgrades, oracle configurations, collateral factors, and liquidation parameters. This covers the majority of high-risk permissions.
+**48-hour delay (Normal Timelock):** Executed through governance proposals by XVS token holders. Controls critical functions including contract upgrades, oracle configurations, collateral factors, and liquidation parameters. This covers the majority of high-risk permissions.
 
-**1-hour delay (Fast Track):** Limited to operational parameters like VAI interest rates and specific reward distribution speeds that have restricted impact.
+**1-hour delay (Fast Track):** Executed through governance proposals by XVS token holders. Limited to operational parameters like VAI interest rates and specific reward distribution speeds that have restricted impact.
 
-**No delay:** Emergency pause functions allow immediate response to threats but can only halt operations, not modify parameters or access funds.
+**No delay:** Executed by emergency [multisigs](#security-council) (Pause Guardian and Multisig Critical). Emergency pause functions allow immediate response to threats but can only halt operations, not modify parameters or access funds.
 
 > Exit Window score: High
 
@@ -105,7 +105,7 @@ For each market, one `VToken` contract is deployed which contains all the functi
 
 ![Venus Core Lending](./diagrams/venus_lending_core.png)
 
-All privileged functions in the core lending system are controlled by the `admin` role (Normal Timelock) and the `accessControlManager`, which grants specific permissions to timelocks and emergency multisigs as shown in the diagram above.
+All privileged functions in the core lending system are controlled by the `admin` role (Normal Timelock) and the `accessControlManager`, which grants specific permissions to timelocks and emergency [multisigs](#security-council) as shown in the diagram above.
 
 ## Incentives
 
@@ -119,7 +119,7 @@ The `admin` (Normal Timelock) controls XVS emission parameters and direct grants
 A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
 The reserves are collected to the _Treasury_ through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the _Treasury_, _Governance_ can vote on proposals to spend the _Treasury_.
 
-Treasury management is controlled by the Normal Timelock and Treasury Guardian for setting treasury parameters, while the `accessControlManager` handles reserve factors and withdrawals.
+Treasury management is controlled by the Normal Timelock and [Treasury Guardian](#security-council) for setting treasury parameters, while the `accessControlManager` handles reserve factors and withdrawals.
 
 # Dependencies
 
@@ -189,7 +189,7 @@ In the following diagram, the _Governance Structure_ is outlined while abstracti
 
 ![Venus Governance](./diagrams/venus_governance.png)
 
-The governance structure employs three timelocks (Normal: 48-hour delay for critical changes, Fast Track: 1-hour for operational parameters, Critical: 1-hour but unused) with the `accessControlManager` granting specific permissions to these timelocks and emergency multisigs as detailed in the diagram above.
+The governance structure employs three timelocks (Normal: 48-hour delay for critical changes, Fast Track: 1-hour for operational parameters, Critical: 1-hour but unused) with the `accessControlManager` granting specific permissions to these timelocks and emergency [multisigs](#security-council) as detailed in the diagram above.
 
 ## Security Council
 
@@ -213,7 +213,7 @@ Parameter changes are executed by calling privileged functions on various protoc
 2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract. This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
     *   The `Normal Timelock` is granted permission for significant but non-emergency changes.
     *   The `Fast Track Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
-    *   Emergency multisigs like `Pause Guardian` and `Multisig Critical` are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard _Governance_ process.
+    *   Emergency multisigs like [`Pause Guardian` and `Multisig Critical`](#security-council) are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard _Governance_ process.
 
 ### Contract Upgrades (Code Changes)
 Upgrades to the smart contract logic itself also follow the _Governance_ process, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
@@ -401,14 +401,14 @@ In the following table, the privileged roles are listed for each function with a
 | SetterFacet | `_setVenusVAIVaultRate()` | Sets the vault rate for the Venus `VAI` vault | Normal Timelock |
 | SetterFacet | `_setXVSToken()` | Sets a new `XVS` token | Normal Timelock |
 | SetterFacet | `_setXVSVToken()` | Sets a new `XVS` vToken | Normal Timelock |
-| SetterFacet | `_setTreasuryData()` | Sets a new treasury address, guardian, and percentage | Normal Timelock, Treasury Guardian |
+| SetterFacet | `_setTreasuryData()` | Sets a new treasury address, guardian, and percentage | Normal Timelock, [Treasury Guardian](#security-council) |
 | SetterFacet | `_setComptrollerLens()` | Sets a new comptroller lens | Normal Timelock |
-| SetterFacet | `_setCollateralFactor()` | Set the collateral factor across all markets   | accessControlManager(Normal Timelock, Multisig Critical) |
+| SetterFacet | `_setCollateralFactor()` | Set the collateral factor across all markets   | accessControlManager(Normal Timelock, [Multisig Critical](#security-council)) |
 | SetterFacet | `_setLiquidationIncentive()` | Set the liquidation incentive across all markets   | accessControlManager(Normal Timelock) |
-| SetterFacet | `_setMarketBorrowCaps()` | Sets limit on total amount that can be borrowed from a market  | accessControlManager(Normal Timelock, Multisig Critical) |
-| SetterFacet | `_setMarketSupplyCaps()` | Sets limit on total amount that can be supplied to market   | accessControlManager(Normal Timelock, Multisig Critical) |
-| SetterFacet | `_setActionsPaused()` | Pause or unpause any specific protocol action (e.g. Supply, Borrow) for any market |  accessControlManager(Normal Timelock, Pause Guardian) |
-| SetterFacet | `_setProtocolPaused()` | Pause or unpause the entire protocol |  accessControlManager(Normal Timelock, Pause Guardian) |
+| SetterFacet | `_setMarketBorrowCaps()` | Sets limit on total amount that can be borrowed from a market  | accessControlManager(Normal Timelock, [Multisig Critical](#security-council)) |
+| SetterFacet | `_setMarketSupplyCaps()` | Sets limit on total amount that can be supplied to market   | accessControlManager(Normal Timelock, [Multisig Critical](#security-council)) |
+| SetterFacet | `_setActionsPaused()` | Pause or unpause any specific protocol action (e.g. Supply, Borrow) for any market |  accessControlManager(Normal Timelock, [Pause Guardian](#security-council)) |
+| SetterFacet | `_setProtocolPaused()` | Pause or unpause the entire protocol |  accessControlManager(Normal Timelock, [Pause Guardian](#security-council)) |
 | SetterFacet | `_setForcedLiquidation()` | Enable or disable forced liquidations for a market |  accessControlManager |
 | SetterFacet | `_setForcedLiquidationForUser()` | Enable or disable forced liquidations for a user |  accessControlManager |
 | MarketFacet | `_supportMarket()` | Add new market to the protocol | accessControlManager(Normal Timelock) |
