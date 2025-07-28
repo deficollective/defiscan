@@ -112,24 +112,14 @@ All privileged functions in the core lending system are controlled by the `admin
 The `RewardFacet`, which is part of the `Comptroller` Diamond Proxy structure, is responsible for distributing rewards. Users can call the `claimVenus()` function to claim the `XVS` accrued from supplying and borrowing accross all markets. For each market, two parameters can be set that define the reward per block for borrowing and supplying activities, respectively. 
 Furthermore, users can stake their `XVS` in the `XVSVault` for additional `XVS` yield.
 
-### Key Permissions in Incentives
-
-**RewardFacet Permissions:**
-- `admin` can set XVS emission speeds and grant XVS directly
-- `accessControlManager` can seize XVS from addresses
-
-**XVSVault Permissions:**
-- `accessControlManager` can pause/resume operations, add/modify staking pools, and set reward rates
+The `admin` (Normal Timelock) controls XVS emission parameters and direct grants, while the `accessControlManager` manages operational aspects like pausing, pool configuration, and reward rates.
 
 ## Treasury
 
 A fraction ( `reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol `reserve`. The reserves are stored in the individual `vToken` contracts and are managed by the `Comptroller`. 
 The reserves are collected to the _Treasury_ through the `_reduceReserves()` function of each `vToken` contract. Once the reserves are in the _Treasury_, _Governance_ can vote on proposals to spend the _Treasury_.
 
-### Key Permissions in Treasury
-
-- Normal Timelock and Treasury Guardian can set _Treasury_ address and parameters
-- `accessControlManager` controls reserve factor changes and reserve withdrawals
+Treasury management is controlled by the Normal Timelock and Treasury Guardian for setting treasury parameters, while the `accessControlManager` handles reserve factors and withdrawals.
 
 # Dependencies
 
@@ -166,10 +156,7 @@ Venus integrates the following oracle types:
 
 All oracle configurations and boundaries can only be modified through _Governance_ proposals with a 48-hour timelock delay.
 
-### Key Permissions in Oracle System
-
-**ResilientOracle                                                  Permissions:**
-- `accessControlManager` can pause/unpause oracle, set token configurations, change oracle feeds, and enable/disable specific oracles
+All oracle configurations, including price feed selection and boundary settings, are exclusively controlled by the `accessControlManager`.
 
 # Governance
 
@@ -202,16 +189,7 @@ In the following diagram, the _Governance Structure_ is outlined while abstracti
 
 ![Venus Governance](./diagrams/venus_governance.png)
 
-### Key Permissions in Governance
-
-**Timelock Permissions:**
-- Normal Timelock (48-hour delay): Controls all critical upgrades and parameter changes
-- Fast Track Timelock (1-hour delay): Limited to operational parameters like VAI rates and reward speeds
-- Critical Timelock (1-hour delay, currently unused): Intended for emergency proposals
-
-**AccessControlManager:**
-- Grants specific permissions to timelocks and multisigs
-- Can be updated only by Normal Timelock
+The governance structure employs three timelocks (Normal: 48-hour delay for critical changes, Fast Track: 1-hour for operational parameters, Critical: 1-hour but unused) with the `accessControlManager` granting specific permissions to these timelocks and emergency multisigs as detailed in the diagram above.
 
 ## Security Council
 
