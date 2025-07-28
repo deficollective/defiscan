@@ -1,7 +1,7 @@
 ---
 title: Yves
 email: yves@defiscan.info
-image: "/images/authors/yves.jpg"
+image: "/images/authors/yves.png"
 description: DeFi and Decentralization Researcher
 teamMember: true
 social:
