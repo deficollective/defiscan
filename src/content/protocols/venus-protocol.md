@@ -38,7 +38,7 @@ The `VAIController` and related stablecoin contracts are upgradeable. This could
 
 All the upgrades above can only be executed through a governance proposal and are associated with the _Normal Timelock_ (see [exit window](#exit-window).
 
-Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Track Timelock (1-hour delay) or emergency [multisigs](#security-council).
+Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Timelock (1-hour delay) or emergency [multisigs](#security-council).
 
 > Upgradeability score: High
 
@@ -211,7 +211,7 @@ Parameter changes are executed by calling privileged functions on various protoc
 1.  **Direct `admin` Control**: The most critical parameters are directly alterable by the `admin` role, which is the `Normal Timelock` contract (48-hour delay).
 2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract. This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
     *   The `Normal Timelock` is granted permission for significant but non-emergency changes.
-    *   The `Fast Track Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
+    *   The `Fast Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
     *   Emergency multisigs like [`Pause Guardian` and `Multisig Critical`](#security-council) are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard _Governance_ process.
 
 ### Contract Upgrades (Code Changes)
@@ -427,9 +427,9 @@ In the following table, the privileged roles are listed for each function with a
 | VAIController | `setPrimeToken()` | Sets the `Prime` token contract. Can be used to replace with a malicious contract. | Normal Timelock |
 | VAIController | `setVAIToken()` | Sets the `VAI` token contract. Can be used to replace with a malicious contract. | Normal Timelock |
 | VAIController | `toggleOnlyPrimeHolderMint()` | Restricts `VAI` minting to only Prime token holders. Can enable/disable minting for majority of users. | accessControlManager |
-| VAIController | `setBaseRate()` | Sets the base interest rate for `VAI`. | accessControlManager(Normal Timelock, Fast Track Timelock) |
-| VAIController | `setFloatRate()` | Sets the floating interest rate for `VAI`. | accessControlManager(Normal Timelock, Fast Track Timelock) |
-| VAIController | `setMintCap()` | Sets the maximum total supply for `VAI`. Can be set to 0 to halt all new `VAI` mints. | accessControlManager(Normal Timelock, Fast Track Timelock) |
+| VAIController | `setBaseRate()` | Sets the base interest rate for `VAI`. | accessControlManager(Normal Timelock, Fast Timelock) |
+| VAIController | `setFloatRate()` | Sets the floating interest rate for `VAI`. | accessControlManager(Normal Timelock, Fast Timelock) |
+| VAIController | `setMintCap()` | Sets the maximum total supply for `VAI`. Can be set to 0 to halt all new `VAI` mints. | accessControlManager(Normal Timelock, Fast Timelock) |
 | XVSVault | `pause()` / `resume()` | Pauses or resumes all staking and withdrawal operations in the `XVS` Vault. | accessControlManager |
 | XVSVault | `add()` | Adds a new staking pool to the vault, controlling where rewards can be directed. | accessControlManager |
 | XVSVault | `set()` | Modifies the allocation points for an existing staking pool, changing reward distribution. | accessControlManager |
