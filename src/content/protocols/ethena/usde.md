@@ -83,9 +83,13 @@ The actions of changing the minter role, blacklisting `USDe` stakers and seizing
 
 ## Accessibility
 
-https://github.com/ethena-labs/ethena-minting-client
+The user interactions with the protocol can be divided into two parts: the minting and redeeming of `USDe` and the staking of `USDe`.
 
-> Accessibility score: Low/Medium/High
+A frontend to self host exists under https://github.com/ethena-labs/ethena-minting-client. This frontend can be used to mint and redeem `USDe`. For this action the accessibility risk is _Medium_.
+
+For staking `USDe` the protocol does not provide a frontend to self host. The staking is only possible through the Ethena frontend. For this action the accessibility risk is _High_.
+
+> Accessibility score: High
 
 ## Conclusion
 
