@@ -97,8 +97,6 @@ The project additionally could advance to Stage 2 if ...
 
 # Reviewer's Notes
 
-(Here, anything worth mentioning about what critical permissions you excluded from the scope or some elements that xyz protocol does in a unique way. If nothing seems relevant, just say that :)
-
 ⚠️ During our analysis, we identified ...
 
 # Protocol Analysis
@@ -143,11 +141,13 @@ The ability to rescue tokens from the vault, handled by `rescueTokens`, is restr
 
 # Dependencies
 
+`USDe` is only slightly overcollateralized and relies on various strategies to maintain stability. The strategies rely on various counterparties to function correctly. If any of the counterparties fail, the solvency of the protocol is at risk. Ethena has a reserve fund to provide a buffer in case of negative performance of the diversified yield strategy. Additionally, Ethena employs diversification within each strategy by relying on various counterparties (various CEXs, different Custodians, diverse centralized Stablecoins, LSTs), as well as diversify in different strategies (short futures, staking yield, long spot).
+
 ## CEXs
 
-The Ethena USDe Stablecoin protocol relies on centralized exchanges (CEXs) for maintaining short perpetual positions to create a delta neutral strategy.
+The Ethena `USDe` Stablecoin protocol relies on centralized exchanges (CEXs) for maintaining short perpetual positions to create a delta neutral strategy.
 
-The CEXs that are used by Ethena USDe protocol include Binance, OKX, Deribit and Bybit. By splitting the strategy into multiple CEXs, Ethena can reduce the risk of a single exchange failure.
+The CEXs that are used by Ethena `USDe` protocol include Binance, OKX, Deribit and Bybit. By splitting the strategy into multiple CEXs, Ethena can reduce the risk of a single exchange failure.
 
 ## Custodians (Off-Exchange Settlement)
 
@@ -157,7 +157,19 @@ OES providers that Ethena uses include Copper, Ceffu and Fireblocks.
 
 ## Centralized Stablecoins
 
-Ethena allocates parts of their funds during market downturn in USDC and USDT to earn yield via
+Ethena allocates parts of their collateral funds into USDC to earn yield distributed by Coinbase. Ethena therefore relies on Circle as Stablecoin issuer and coinbase custody.
+
+## Backing Assets
+
+Ethena holds BTC, ETH, SOL and ETH LSTs as collateral for the USDe stablecoin. To reduce dependency risk on a single LST, Ethena diversifies their collateral assets into Binance Staked ETH (WBETH), Lido stETH and Mantle's mETH.
+
+## Margin Collateral
+
+Most of the margin in perpetual futures positions are denominated in USDT. By this, Ethena is unidirectionally LONG exposed to the USDT price without offsetting short exposure. In case of USDT solvency risk, custodial risk, regulatory risk, Ethena would aim to open inverse perpetuals contracts, margined with BTC or ETH.
+
+## USDtb
+
+As asset in the reserve fund to provide a buffer in case of negative performance of the diversified yield strategy.
 
 # Governance
 
