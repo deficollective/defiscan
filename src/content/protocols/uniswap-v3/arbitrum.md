@@ -9,7 +9,7 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Arbitrum"
-stage: 2
+stage: 1
 reasons: ["Unverified Contracts"]
 risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
@@ -99,11 +99,9 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Conclusion
 
-The Uniswap V3 deployment on Arbitrum falls into the _others_ category and not Stage 1 due to the unverified contracts which are not verified on public block explorers.
+The Uniswap V3 deployment on Arbitrum receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. Since the protocol is deployed on an L2 chain in _Stage 1_, the deployment scores _Stage 1_.
 
-Despite this classification, our analysis shows that the Uniswap V3 deployment on Arbitrum receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
-
-> Overall score: Others
+> Overall score: Stage 1
 
 # Reviewer Notes
 
