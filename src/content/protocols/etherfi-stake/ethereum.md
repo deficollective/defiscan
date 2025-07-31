@@ -112,7 +112,11 @@ UUPSProxy LiquidityPool "0x308861A430be4cce5502d0A12724771Fc6DaF216", (impl 0xa6
 UUPSProxy EtherFiAdmin "0x0EF8fa4760Db8f5Cd4d993f3e3416f30f942D705", (impl 0x683583979c8be7bcfa41e788ab38857dff792f49)
 UUPSProxy WithdrawRequestNFT "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c",
 
-"0xdadef1ffbfeaab4f68a9fd181395f68b4e4e7ae0", , "0x73f7b1184B5cD361cC0f7654998953E2a251dd58"
+UUPSProxy RedemptionManager "0xdadef1ffbfeaab4f68a9fd181395f68b4e4e7ae0",
+
+UUPSProxy EtherFiRestaker 0x1B7a4C3797236A1C37f8741c0Be35c2c72736fFf
+
+, "0x73f7b1184B5cD361cC0f7654998953E2a251dd58"
 
 UUPSPRoxy "DepositAdapter" 0xcfC6d9Bd7411962Bfe7145451A7EF71A24b6A7A2 (impl 0xe87797a1afb329216811dfa22c87380128ca17d8)
 
@@ -237,7 +241,7 @@ AuctionManager LiquidityPool
 | AuctionManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant or admin privileges to other addresses. | EtherFiTimelock |
 
 | LiquidityPool | depositToRecipient | Deposits `ETH` on behalf of another user. Can mint `eETH` tokens to arbitrary recipients. Malicious use could drain protocol by minting unlimited `eETH`. | Liquifier OR EtherFiAdmin |
-| LiquidityPool | withdraw | Burns `eETH` shares and sends `ETH` to the recipient. Directly reduces pool liquidity and burns user shares. Withdrawals using a withdrawRequestNFT are taken direcly out of the dedicated `ETH` amount locked for withdrawal. | withdrawRequestNFT, membershipManager, etherFiRedemptionManager |
+| LiquidityPool | withdraw | Burns `eETH` shares and sends `ETH` to the recipient. Directly reduces pool liquidity and burns user shares. Withdrawals using a withdrawRequestNFT are taken directly out of the dedicated `ETH` amount locked for withdrawal. | withdrawRequestNFT, membershipManager, etherFiRedemptionManager |
 
 | LiquidityPool | batchDeposit | Initiates validator creation by matching bid IDs with node operators. Allocates 32 `ETH` per validator from pool funds. Malicious spawner could drain pool by creating excessive validators or colluding with malicious operators. | Registered Validator Spawners (LIQUIDITY_POOL_ADMIN_ROLE controlled) |
 | LiquidityPool | batchRegister | Registers validator keys and sends 1 `ETH` to beacon chain per validator. Critical step in validator lifecycle that commits pool `ETH`. Malicious use could register invalid keys, waste pool `ETH`, or front-run with malicious withdrawal credentials. | Registered Validator Spawners (LIQUIDITY_POOL_ADMIN_ROLE controlled) |
@@ -253,18 +257,20 @@ AuctionManager LiquidityPool
 | LiquidityPool | unPauseContract | Resumes protocol operations after pause. Restores user access to funds and protocol functionality. Malicious use could unpause during ongoing attacks or before fixes are implemented, exposing users to continued risks. | PROTOCOL_UNPAUSER role holders |
 | LiquidityPool | addEthAmountLockedForWithdrawal | Updates amount reserved for withdrawal requests. Critical for withdrawal liquidity management. Malicious admin contract could manipulate withdrawal availability, potentially blocking user access to funds or causing liquidity issues. | etherFiAdminContract |
 | LiquidityPool | burnEEthShares | Destroys user shares during withdrawal process. Permanently reduces user token balance and total token supply. Malicious use could burn shares without corresponding `ETH` withdrawal, effectively stealing user funds through token destruction. | etherFiRedemptionManager OR withdrawRequestNFT contracts |
-| LiquidityPool | grantRole (RoleRegistry) | Grants administrative roles to addresses. Controls who can perform critical protocol functions. Malicious owner could grant roles to compromised addresses, creating multiple attack vectors and permanent backdoors in the protocol. | RoleRegistry Owner |
-| LiquidityPool | revokeRole (RoleRegistry) | Removes administrative roles from addresses. Controls access to protocol administrative functions. Malicious use could remove legitimate admins during emergencies, preventing crisis response, or be used to consolidate power before an attack. | RoleRegistry Owner |
-| LiquidityPool | onlyProtocolUpgrader (RoleRegistry) | Validates upgrade permissions before protocol updates. Gate-keeps all protocol upgrades and changes. Malicious use in conjunction with compromised owner could bypass normal upgrade safeguards and install malicious implementations. | RoleRegistry Owner |
-| LiquidityPool | setCapacity (EtherFiRedemptionManager) | Sets maximum instant redemption capacity per time period. Controls liquidity available for instant withdrawals. Malicious admin could set to zero to DoS instant redemptions, or to maximum to allow bank-run scenarios that could destabilize the protocol. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
-| LiquidityPool | setRefillRatePerSecond (EtherFiRedemptionManager) | Controls how fast redemption capacity refills. Affects user withdrawal experience and protocol stability. Malicious use could set to zero preventing redemptions, or extremely high allowing rapid pool drainage through instant redemptions. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
-| LiquidityPool | setExitFeeBasisPoints (EtherFiRedemptionManager) | Sets fee charged for instant redemptions. Directly affects user costs and protocol revenue. Malicious admin could set to 100% (maximum) making redemptions prohibitively expensive, or to 0% reducing protocol sustainability and value capture. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
-| LiquidityPool | setLowWatermarkInBpsOfTvl (EtherFiRedemptionManager) | Sets minimum liquidity threshold for instant redemptions. Controls when instant redemptions are disabled. Malicious use could set to 100% permanently disabling instant redemptions, or to 0% allowing redemptions even with no liquidity causing protocol instability. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
-| LiquidityPool | setExitFeeSplitToTreasuryInBps (EtherFiRedemptionManager) | Controls how redemption fees are split between treasury and stakers. Affects protocol revenue distribution. Malicious admin could set to 100% redirecting all fees to treasury away from stakers, or 0% eliminating protocol fee revenue. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
-| LiquidityPool | pauseContract (EtherFiRedemptionManager) | Halts instant redemption functionality. Stops users from instant ETH withdrawals. Malicious pauser could block all instant redemptions forcing users into longer withdrawal queues, potentially causing liquidity crisis and user dissatisfaction. | PROTOCOL_PAUSER role holders |
-| LiquidityPool | unPauseContract (EtherFiRedemptionManager) | Resumes instant redemption functionality. Restores user access to instant withdrawals. Malicious use could resume redemptions during attacks or before fixes are implemented, allowing continued exploitation of redemption-related vulnerabilities. | PROTOCOL_UNPAUSER role holders |
 | LiquidityPool | upgradeTo | ... | EtherFiTimelock |
 | LiquidityPool | upgradeToAndCall | ... | EtherFiTimelock |
+| LiquidityPool | renounceOwnership | ... | EtherFiTimelock |
+| LiquidityPool | transferOwnership | ... | EtherFiTimelock |
+
+| EtherFiRedemptionManager | setCapacity (EtherFiRedemptionManager) | Sets maximum instant redemption capacity per time period. Controls liquidity available for instant withdrawals. Malicious admin could set to zero to DoS instant redemptions, or to maximum to allow bank-run scenarios that could destabilize the protocol. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
+| EtherFiRedemptionManager | setRefillRatePerSecond (EtherFiRedemptionManager) | Controls how fast redemption capacity refills. Affects user withdrawal experience and protocol stability. Malicious use could set to zero preventing redemptions, or extremely high allowing rapid pool drainage through instant redemptions. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
+| EtherFiRedemptionManager | setExitFeeBasisPoints (EtherFiRedemptionManager) | Sets fee charged for instant redemptions. Directly affects user costs and protocol revenue. Malicious admin could set to 100% (maximum) making redemptions prohibitively expensive, or to 0% reducing protocol sustainability and value capture. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
+| EtherFiRedemptionManager | setLowWatermarkInBpsOfTvl (EtherFiRedemptionManager) | Sets minimum liquidity threshold for instant redemptions. Controls when instant redemptions are disabled. Malicious use could set to 100% permanently disabling instant redemptions, or to 0% allowing redemptions even with no liquidity causing protocol instability. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
+| EtherFiRedemptionManager | setExitFeeSplitToTreasuryInBps (EtherFiRedemptionManager) | Controls how redemption fees are split between treasury and stakers. Affects protocol revenue distribution. Malicious admin could set to 100% redirecting all fees to treasury away from stakers, or 0% eliminating protocol fee revenue. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
+| EtherFiRedemptionManager | pauseContract (EtherFiRedemptionManager) | Halts instant redemption functionality. Stops users from instant ETH withdrawals. Malicious pauser could block all instant redemptions forcing users into longer withdrawal queues, potentially causing liquidity crisis and user dissatisfaction. | PROTOCOL_PAUSER role holders |
+| EtherFiRedemptionManager | unPauseContract (EtherFiRedemptionManager) | Resumes instant redemption functionality. Restores user access to instant withdrawals. Malicious use could resume redemptions during attacks or before fixes are implemented, allowing continued exploitation of redemption-related vulnerabilities. | PROTOCOL_UNPAUSER role holders |
+| EtherFiRedemptionManager | upgradeTo | ... | EtherFiTimelock |
+| EtherFiRedemptionManager | upgradeToAndCall | ... | EtherFiTimelock |
 
 | AddressProvider | addContract | Adds a contract and an associated name to the `AddressProvider`. This serves as a registry for contract addresses in the protocol. | EtherFiTimelock |
 | AddressProvider | removeContract | Removes a contract from the provider. | EtherFiTimelock |
@@ -302,26 +308,22 @@ AuctionManager LiquidityPool
 | EtherFiNodesManager | renounceOwnership | ... | EtherFiTimelock |
 | EtherFiNodesManager | transferOwnership | ... | EtherFiTimelock |
 
-| BNFT | mint | ... | ['onlyStakingManager'] |
+| BNFT | mint | ... | StakingManager |
 | BNFT | burnFromWithdrawal | ... | ['onlyEtherFiNodesManager'] |
-| BNFT | burnFromCancelBNftFlow | ... | ['onlyStakingManager'] |
-| BNFT | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| BNFT | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| BNFT | upgradeTo | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| BNFT | upgradeToAndCall | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| BNFT | burnFromCancelBNftFlow | ... | StakingManager |
+| BNFT | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). | EtherFiTimelock |
+| BNFT | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic. | EtherFiTimelock |
+| BNFT | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all `BNFT`s already minted. | EtherFiTimelock |
+| BNFT | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock |
 
-| TNFT | mint | ... | ['onlyStakingManager'] |
+| TNFT | mint | ... | StakingManager |
 | TNFT | burnFromWithdrawal | ... | ['onlyEtherFiNodesManager'] |
-| TNFT | burnFromCancelBNftFlow | ... | ['onlyStakingManager'] |
-| TNFT | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| TNFT | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| TNFT | upgradeTo | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| TNFT | upgradeToAndCall | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| TNFT | burnFromCancelBNftFlow | ... | StakingManager|
+| TNFT | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). | EtherFiTimelock |
+| TNFT | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic. | EtherFiTimelock |
+| TNFT | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all `TNFT`s already minted. | EtherFiTimelock |
+| TNFT | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock |
 
-| MembershipManager | upgradeTo | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipManager | upgradeToAndCall | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipManager | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipManager | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
 | MembershipManager | wrapEthForEap | ... | ['whenNotPaused'] |
 | MembershipManager | wrapEth | ... | ['whenNotPaused'] |
 | MembershipManager | wrapEth | ... | ['whenNotPaused'] |
@@ -341,54 +343,75 @@ AuctionManager LiquidityPool
 | MembershipManager | setTopUpCooltimePeriod | ... | [] |
 | MembershipManager | setFeeAmounts | ... | [] |
 | MembershipManager | setFanBoostThresholdEthAmount | ... | [] |
-| MembershipManager | updateAdmin | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| MembershipManager | updateAdmin | ... | EtherFiTimelock |
 | MembershipManager | pauseContract | ... | ['whenNotPaused'] |
 | MembershipManager | unPauseContract | ... | ['whenPaused'] |
-| MembershipManager | migrateFromV0ToV1 | ... | ['whenNotPaused'] |
-| MembershipNFT | upgradeTo | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipNFT | upgradeToAndCall | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipNFT | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipNFT | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipNFT | initialize | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| MembershipNFT | initializeOnUpgrade | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| MembershipManager | upgradeTo | ... | EtherFiTimelock |
+| MembershipManager | upgradeToAndCall | ... | EtherFiTimelock |
+| MembershipManager | renounceOwnership | ... | EtherFiTimelock |
+| MembershipManager | transferOwnership | ... | EtherFiTimelock |
+
 | MembershipNFT | mint | ... | ['onlyMembershipManagerContract'] |
 | MembershipNFT | burn | ... | ['onlyMembershipManagerContract'] |
 | MembershipNFT | incrementLock | ... | ['onlyMembershipManagerContract'] |
 | MembershipNFT | processDepositFromEapUser | ... | ['onlyMembershipManagerContract'] |
 | MembershipNFT | setMaxTokenId | ... | ['onlyAdmin'] |
 | MembershipNFT | setUpForEap | ... | ['onlyAdmin'] |
-| MembershipNFT | updateAdmin | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| MembershipNFT | updateAdmin | ... | EtherFiTimelock |
 | MembershipNFT | setMintingPaused | ... | ['onlyAdmin'] |
 | MembershipNFT | setContractMetadataURI | ... | ['onlyAdmin'] |
 | MembershipNFT | setMetadataURI | ... | ['onlyAdmin'] |
 | MembershipNFT | alertMetadataUpdate | ... | ['onlyAdmin'] |
 | MembershipNFT | alertBatchMetadataUpdate | ... | ['onlyAdmin'] |
+| MembershipNFT | upgradeTo | ... | EtherFiTimelock |
+| MembershipNFT | upgradeToAndCall | ... | EtherFiTimelock |
+| MembershipNFT | renounceOwnership | ... | EtherFiTimelock |
+| MembershipNFT | transferOwnership | ... | EtherFiTimelock |
 
-| Treasury | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Treasury | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Treasury | withdraw | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | upgradeTo | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | upgradeToAndCall | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | initialize | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | initializeOnUpgrade | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| Treasury | renounceOwnership | Transfers the ownership of the contract to the zero address. This would lock the funds in the treasury irreversibly. There are no protection against this action built in the contract. | EtherFiTimelock |
+| Treasury | transferOwnership | Transfers the ownership of the contract. The new owner has full access to the `ETH` in the treasury and could send it to any address. | EtherFiTimelock |
+| Treasury | withdraw | Withdraws an amount of `ETH` to a given, arbitrary address. | EtherFiTimelock |
+
 | Liquifier | depositWithERC20 | ... | ['nonReentrant', 'whenNotPaused'] |
 | Liquifier | depositWithERC20WithPermit | ... | ['nonReentrant', 'whenNotPaused'] |
-| Liquifier | withdrawEther | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | sendToEtherFiRestaker | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updateWhitelistedToken | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updateDepositCap | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | registerToken | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updateTimeBoundCapRefreshInterval | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | pauseDeposits | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updateAdmin | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updatePauser | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updateDiscountInBasisPoints | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | updateQuoteStEthWithCurve | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | pauseContract | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| Liquifier | unPauseContract | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| Liquifier | withdrawEther | ... | EtherFiTimelock |
+| Liquifier | sendToEtherFiRestaker | ... | EtherFiTimelock |
+| Liquifier | updateWhitelistedToken | ... | EtherFiTimelock |
+| Liquifier | updateDepositCap | ... | EtherFiTimelock |
+| Liquifier | registerToken | ... | EtherFiTimelock |
+| Liquifier | updateTimeBoundCapRefreshInterval | ... | EtherFiTimelock |
+| Liquifier | pauseDeposits | ... | EtherFiTimelock |
+| Liquifier | updateAdmin | ... | EtherFiTimelock |
+| Liquifier | updatePauser | ... | EtherFiTimelock |
+| Liquifier | updateDiscountInBasisPoints | ... | EtherFiTimelock |
+| Liquifier | updateQuoteStEthWithCurve | ... | EtherFiTimelock |
+| Liquifier | pauseContract | ... | EtherFiTimelock |
+| Liquifier | unPauseContract | ... | EtherFiTimelock |
 | Liquifier | unwrapL2Eth | ... | ['nonReentrant'] |
+| Liquifier | renounceOwnership | ... | EtherFiTimelock |
+| Liquifier | transferOwnership | ... | EtherFiTimelock |
+| Liquifier | upgradeTo | ... | EtherFiTimelock |
+| Liquifier | upgradeToAndCall | ... | EtherFiTimelock |
+
+| EtherFiRestaking | stEthRequestWithdrawal | Starts a request to withdraw `stETH` held by this contract into `ETH` using Lido's withdrawal queue. | [ admins ] |
+| EtherFiRestaking | stEthClaimWithdrawals | Claims the specified withdrawals from Lido's withdrawal queue. This is meant to be called once the withdrawals reached the end of the queue and the `ETH` can be claimed by this contract. | [ admins ] |
+| EtherFiRestaking | withdrawEther | Send this contract's entire `ETH` balance to the `LiquidityPool` contract. | [ admins ] |
+| EtherFiRestaking | setRewardsClaimer | Sets the claimer of the restaking rewards throught Eigenlayer's `RewardsCoordinator`. | [] |
+| EtherFiRestaking | delegateTo | Delegates this contract's Eigenlayer stake to an AVS operator. In current Eigenlayer implementation the stake can only be delegated to one operator at a time. **TODO** what are the implications | [] |
+| EtherFiRestaking | undelegate | Undelegates the current Eigenlayer stake from the AVS operator it was previously delegated to. | [] |
+| EtherFiRestaking | depositIntoStrategy | Deposits `stETH` (or the contract's token) into an Eigenlayer strategy defined at the time of contract deployment. The caller only specifies the token and amount to deposit. **TODO** what are the implications | [] |
+| EtherFiRestaking | queueWithdrawals | Queues a withdrawal of a given amount of a token from the Eigenlayer restaking strategy. | [] |
+| EtherFiRestaking | queueWithdrawalsParams | Alternative function to queue a withdrawal from the Eigenlayer restaking strategy. | [] |
+| EtherFiRestaking | completeQueuedWithdrawals | Completes the given list of withdrawals such that the current contract receives the withdrawn tokens. The caller must match the enacter of the withdrawals. | [] |
+| EtherFiRestaking | updateAdmin | ... | [] |
+| EtherFiRestaking | updatePauser | Updates the list of users allowed to pause the contract. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
+| EtherFiRestaking | pauseContract | Pauses the contract by setting the pause flag to true. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
+| EtherFiRestaking | unPauseContract | Unpauses the contract. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
+| EtherFiRestaking | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators. Admin functions would remain accessible to the current admins. | EtherFiTimelock |
+| EtherFiRestaking | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock |
+| EtherFiRestaking | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how it interacts with the Eigenlayer restaking services. This could also reassign the ownership of all funds in the contract, including its Eigenlayer stake. | EtherFiTimelock |
+| EtherFiRestaking | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock |
+
 | EtherFiTimelock | schedule | ... | ['onlyRole'] |
 | EtherFiTimelock | scheduleBatch | ... | ['onlyRole'] |
 | EtherFiTimelock | cancel | ... | ['onlyRole'] |
@@ -397,25 +420,26 @@ AuctionManager LiquidityPool
 | EtherFiTimelock | updateDelay | ... | [] |
 | EtherFiTimelock | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | EtherFiTimelock | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| EtherFiOracle | upgradeTo | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | upgradeToAndCall | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | renounceOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | transferOwnership | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | initialize | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+
 | EtherFiOracle | submitReport | ... | ['whenNotPaused'] |
-| EtherFiOracle | addCommitteeMember | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | removeCommitteeMember | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | manageCommitteeMember | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | setReportStartSlot | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | setQuorumSize | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | setOracleReportPeriod | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | setConsensusVersion | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | setEtherFiAdmin | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | unpublishReport | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | updateLastPublishedBlockStamps | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | updateAdmin | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | pauseContract | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
-| EtherFiOracle | unPauseContract | ... | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| EtherFiOracle | addCommitteeMember | ... | EtherFiTimelock |
+| EtherFiOracle | removeCommitteeMember | ... | EtherFiTimelock |
+| EtherFiOracle | manageCommitteeMember | ... | EtherFiTimelock |
+| EtherFiOracle | setReportStartSlot | ... | EtherFiTimelock |
+| EtherFiOracle | setQuorumSize | ... | EtherFiTimelock |
+| EtherFiOracle | setOracleReportPeriod | ... | EtherFiTimelock |
+| EtherFiOracle | setConsensusVersion | ... | EtherFiTimelock |
+| EtherFiOracle | setEtherFiAdmin | ... | EtherFiTimelock |
+| EtherFiOracle | unpublishReport | ... | EtherFiTimelock |
+| EtherFiOracle | updateLastPublishedBlockStamps | ... | EtherFiTimelock |
+| EtherFiOracle | updateAdmin | ... | EtherFiTimelock |
+| EtherFiOracle | pauseContract | ... | EtherFiTimelock |
+| EtherFiOracle | unPauseContract | ... | EtherFiTimelock |
+| EtherFiOracle | upgradeTo | ... | EtherFiTimelock |
+| EtherFiOracle | upgradeToAndCall | ... | EtherFiTimelock |
+| EtherFiOracle | renounceOwnership | ... | EtherFiTimelock |
+| EtherFiOracle | transferOwnership | ... | EtherFiTimelock |
+
 | CumulativeMerkleDrop | lzReceive | ... | [] |
 | CumulativeMerkleDrop | setPeer | ... | ['onlyOwner'] |
 | CumulativeMerkleDrop | setDelegate | ... | ['onlyOwner'] |
@@ -430,7 +454,6 @@ AuctionManager LiquidityPool
 | CumulativeMerkleDrop | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | CumulativeMerkleDrop | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | CumulativeMerkleDrop | upgradeToAndCall | ... | ['onlyProxy', 'onlyRole'] |
-| CumulativeMerkleDrop | initialize | ... | ['initializer', 'onlyInitializing'] |
 | CumulativeMerkleDrop | initializeLayerZero | ... | ['onlyInitializing', 'onlyRole', 'reinitializer'] |
 | CumulativeMerkleDrop | setMerkleRoot | ... | ['onlyRole'] |
 | CumulativeMerkleDrop | claim | ... | ['nonReentrant', 'whenNotPaused'] |
@@ -456,7 +479,6 @@ AuctionManager LiquidityPool
 | RoleRegistry | upgradeToAndCall | ... | ['onlyProxy', 'onlyRole'] |
 | RoleRegistry | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | RoleRegistry | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| RoleRegistry | initialize | ... | 0x2aCA71020De61bb532008049e1Bd41E451aE8AdC |
 | RoleRegistry | setRoleAdmin | ... | ['onlyRole'] |
 | EarlyAdopterPool | renounceOwnership | ... | 0xF155a2632Ef263a6A382028B3B33feb29175b8A5 |
 | EarlyAdopterPool | transferOwnership | ... | 0xF155a2632Ef263a6A382028B3B33feb29175b8A5 |
