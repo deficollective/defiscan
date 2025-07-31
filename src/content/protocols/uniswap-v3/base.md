@@ -9,7 +9,7 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Base"
-stage: "O"
+stage: 2
 reasons: ["Unverified Contracts"]
 risks: ["H", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
@@ -19,19 +19,34 @@ update_date: "2025-01-31"
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
-      { text: "Source-available codebase", status: "unfixed" },
-      { text: "Public documentation exists", status: "unfixed" },
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
-      { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+      {
+        text: "Upgrades have no potential of “loss of funds“ ",
+        status: "fixed",
+      },
+      {
+        text: "Dependency with a High centralization score is mitigated",
+        status: "fixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "fixed",
+      },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
+      {
+        text: "Upgrades have no potential of “loss of funds or unclaimed yield“",
+        status: "fixed",
+      },
       { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }  
+      { text: "Alternative third-party frontends exist", status: "fixed" },
     ],
   ]
 ---
