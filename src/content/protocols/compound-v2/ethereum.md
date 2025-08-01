@@ -14,7 +14,7 @@ stage_requirements:
         text: "Assets are not in custody by a centralized entity",
         status: "fixed",
       },
-      { text: "All contracts are verified", status: "fixed" },
+      { text: "Critical contracts are verified", status: "fixed" },
       { text: "Source-available codebase", status: "fixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
@@ -34,11 +34,11 @@ stage_requirements:
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days",
         status: "unfixed",
       },
       {
-        text: "Dependencies with High or Medium centralization score and no mitigations.",
+        text: "Dependencies with High or Medium centralization and are mitigated",
         status: "unfixed",
       },
       { text: "Alternative third-party frontends exist", status: "fixed" },
@@ -60,7 +60,7 @@ Compound V2 is deployed on various chains. This review is based on the Ethereum 
 
 ## Upgradeability
 
-The Compound V2 protocol can be analysed in two core modules; 1) the Markets that holds the funds and 2) the Governance module that governances the markets. The Compound-v2 protocol is almost fully upgradeable allowing for the update of _Governance_ and _Markets_ logic. This can result in the _loss of funds or unclaimed yield_ as well as lead to other changes in the expected performance of the protocol.
+The Compound V2 protocol can be analysed in two core modules; 1) the _Markets_ that holds the funds and 2) the _Governance_ module that governs the markets. The Compound V2 protocol is almost fully upgradeable allowing for the update of _Governance_ and _Markets_ logic. This can result in the _loss of funds or unclaimed yield_ as well as lead to other changes in the expected performance of the protocol.
 
 The [Timelock contract](#all-permission-owners), controlled by the _Governance_'s contract ([GovernorBravoDelegator](#all-permission-owners)), can update most markets' implementation. There are a few notable exceptions with non-upgradeable markets using `CErc20` instead of for `BAT`, `SAI`, `REP`, `USDC`, `WBTC`, `ZRX` or `CEther` which is used for native `ETH`. Moreover, in all market contracts there is the option to withdraw accumulated reserves deposited by users, calling this function without transferring to a new legit market with user claims could result in a _loss of funds amd unclaimed yield_.
 
@@ -72,9 +72,9 @@ Compound V2 currently relies on a non-upgradeable oracle contract to deliver pri
 
 ## Autonomy
 
-Compound v2 relies on Chainlink price feeds to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink. The only fallback in place is the possibility for the _Governance_ to define default fixed prices for assets that will be used in case the oracle fails.
+Compound V2 relies on Chainlink price feeds to price collateral and base assets in the system. The protocol does not validate asset prices returned by Chainlink. The only fallback in place is the possibility for the _Governance_ to define default fixed prices for assets that will be used in case the oracle fails.
 
-The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions as we analyzed in a dedicated review [here](/protocols/chainlink-oracles/ethereum). This dependency thus introduces _High_ centralization risk in the Compound v2 protocol.
+The Chainlink oracle system itself is upgradeable without decentralized ownership over those permissions as we analyzed in a dedicated review [here](/protocols/chainlink-oracles/ethereum). This dependency thus introduces _High_ centralization risk in the Compound V2 protocol.
 
 > Autonomy score: High
 
@@ -90,9 +90,9 @@ However, the [Proposal Guardian](#security-council) multisig do not meet the [Se
 
 ## Accessibility
 
-The original Compound V2 interface [app.compound.finance](https://app.compound.finance/?market=usdc-mainnet) is fully open-source; anyone can clone the repo, swap the public Graph endpoint (or run their own sub-graph) and launch a local or IPFS-hosted copy in a few minutes.
+The original Compound V2 interface [app.compound.finance](https://app.compound.finance/?market=usdc-mainnet) is fully open-source; anyone can clone the repo, swap the public Graph endpoint (or run their own sub-graph) and launch a local or IPFS-hosted copy in a few minutes. The public repository can be found [here](https://github.com/compound-finance/palisade).
 
-In practice, users are not limited to this front-end: Compound V2 positions can be opened, closed, or managed from a wide list of third-party dashboards and wallets (DeFi Saver, Instadapp, Zapper, Zerion, Debank, and more).
+In practice, users are not limited to this front-end: Compound V2 positions can be opened, closed, or managed from third-party dashboards and wallets (eg. DeFiSaver). Compound offers an open-source set of [integration components](https://github.com/compound-finance/compound-components) to facilitate this.
 
 Since there are multiple independent ways to reach the contracts even if the official website goes offline, user funds remain accessible.
 
@@ -116,13 +116,13 @@ Below is an overview of the contracts from the Compound V2 protocol.
 
 ![Overview of the compound protocol](../diagrams/compound-v2-overview.png)
 
-The `CErc20Delegator` is the proxy layer for ERC20 markets in Compound v2. Each market is defined by it's own proxy contract. It holds all the market’s storage (balances, allowances, reserves, etc.), holds the tokens and forwards calls to a shared `CErc20Delegate` implementation for its logic. Its admin (the [Timelock contract](#all-permission-owners)) can swap out that implementation to upgrade market logic without redeploying each market or migrating user funds. A malicious upgrade could hijack all funds in a market leading to a complete _loss of user funds_.
+The `CErc20Delegator` is the proxy layer for ERC20 markets in Compound V2. Each market is defined by it's own proxy contract. It holds all the market’s storage (balances, allowances, reserves, etc.), holds the tokens and forwards calls to a shared `CErc20Delegate` implementation for its logic. Its admin (the [Timelock contract](#all-permission-owners)) can swap out that implementation to upgrade market logic without redeploying each market or migrating user funds. A malicious upgrade could hijack all funds in a market leading to a complete _loss of user funds_.
 
-The `Comptroller` is the risk management layer of the Compound protocol; it determines how much collateral a user is required to maintain, and whether (and by how much) a user can be liquidated. Each time a user interacts with a `cToken`, the `Comptroller` is asked to approve or deny the transaction. The `Comptroller` maps user balances to prices (via the `PriceOracle`) to risk weights (called _Collateral Factors_) to make its determinations.
+The `Comptroller` is the risk management layer of the Compound protocol; it determines how much collateral a user is required to maintain, and whether (and by how much) a user can be liquidated. Each time a user interacts with a `cToken`, the `Comptroller` is asked to approve or deny the transaction. The `Comptroller` maps user balances to prices (via the `PriceOracle`) and to risk weights (called _Collateral Factors_) to make its decisions.
 
 # Dependencies
 
-Compound V2 relies on Chainlink oracle feeds to price collateral and base assets in the system. It doesn’t have a secondary oracle feed or liveness checks, but its `PriceOracle` contract does include a minimal “fallback” feature: if an administrator has set a _fixedPrice_ for a given asset, then _getUnderlyingPrice_ will return this hard-coded price in case of error on the primary price source. This allows the protocol to continue operating with a sane collateral price if the configured price feed is down or misbehaving, preventing total system paralysis.
+Compound V2 relies on Chainlink oracle feeds to price collateral and base assets in the system. It doesn’t have a secondary oracle feed or liveness checks, but its `PriceOracle` contract does include a minimal “fallback” feature: if an administrator has set a _fixedPrice_ for a given asset, then _getUnderlyingPrice_ will return this hard-coded price in case of error on the primary price source (ie. it received a zero price). This allows the protocol to continue operating with a sane collateral price if the configured price feed is down or misbehaving, preventing total system paralysis.
 
 While this mitigates some possible oracle failures, it does not constitute a satisfying fallback solution for a centralized oracle such as Chainlink. The oracle can still push false price data, which would not be covered by the current solution.
 
