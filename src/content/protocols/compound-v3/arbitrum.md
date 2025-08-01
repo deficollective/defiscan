@@ -122,16 +122,20 @@ Chainlink achieves a _High_ centralization risk score as discussed in a separate
 
 # Governance
 
-A security council called `Pause Guardian` has the power to pause all deposits, withdrawals, and transfers
-in the Arbitrum `Comet` contracts. The guardian is currently a 4/7 multisig made of a diverse set of signers including more than 50% outsiders (community members, non-affiliated entities). The signers are announced [here](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18).
-A `Proposal Guardian` on Ethereum Mainnet has the power to cancel Governance Proposals before their executions. It is composed of a 4/8 multisig made of the same entities announced for the `Pause Guardian`, with one additional signer that prevents the `Proposal Guardian` to qualify as a security council according to our requirements. Its signers set however does not match the announced signers.
+The Compound protocol is governed and upgraded by `COMP` token-holders on Ethereum Mainnet. The details of the governance process can be read in the Ethereum mainnet review of Compound V3 [here](/protocols/compound-v3).
 
 ## Security Council
+
+A security council called `Pause Guardian` has the power to pause all deposits, withdrawals, and transfers
+in the Arbitrum `Comet` contracts. The guardian is currently a 4/7 multisig made of a diverse set of signers including more than 50% outsiders (community members, non-affiliated entities). The signers are announced [here](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18) but do not match the current set.
+A `Proposal Guardian` on Ethereum Mainnet has the power to cancel Governance Proposals before their executions. It is composed of a 4/8 multisig made of the same entities announced for the `Pause Guardian`, with one additional signer that prevents the `Proposal Guardian` to qualify as a security council according to our requirements.
+
+&nbsp;
 
 | Name              | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | Pause Guardian    | [0x78E6317DD6D43DdbDa00Dce32C2CbaFc99361a9d](https://arbiscan.io/address/0x78E6317DD6D43DdbDa00Dce32C2CbaFc99361a9d)  | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
-| Proposal Guardian | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c) | Multisig 4/8 | ✅          | ❌              | ❌                | ❌             |
+| Proposal Guardian | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c) | Multisig 4/8 | ✅          | ❌              | ✅                | ✅             |
 
 # Contracts & Permissions
 
