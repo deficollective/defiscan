@@ -57,9 +57,9 @@ The report is concerned with the Eigenlayer protocol deployed on Ethereum mainne
 
 ## Upgradeability
 
-Contracts which control user funds and the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
+Contracts which control user funds, the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
 
-Single strategy contracts that hold the _Staker_ funds can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds.
+Single strategy contracts that hold the _Staker_ funds can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds, the [Community Council (9/13)](#security-council) can remove the pause immediately if misused.
 
 Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by the `RewardsUpdater` role owner, which computes eligibility for each restaker and operator based on their stake and AVS rewards specification. If the `RewardsUpdater` is compromised, the rewards can be distributed to the wrong accounts, which leads to _loss of unclaimed yield_.
 
@@ -138,7 +138,7 @@ The EigenLayer protocol deploys different types of strategy contracts. The three
 
 The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 tokens as security), with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
 
-## `DelegationManager`
+## DelegationManager
 
 The `DelegationManager` is the contract that allows _Stakers_ to delegate their stake to _Operators_. The contract also allows _Operators_ to register as _Operator_ in the Eigenlayer system, which is required for them to register in _Operator Sets_ created by _AVSs_.
 
@@ -148,7 +148,7 @@ Furthermore, _Operators_ can configure a _Delegation Approver_, that requires _S
 
 The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an upgradeability risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and thus lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty, as _(Re)Stakers_ initiate withdrawals of funds through this contract.
 
-## `AllocationManager`
+## AllocationManager
 
 The `AllocationManager` contract allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_. The `AllocationManager` forwards the slashing request by the _AVSs_ to the `DelegationManager` which keeps the accounting of the suffered slashes.
 
@@ -156,7 +156,7 @@ Through the `AllocationManager` the `AVSs` can manage operator sets (creation an
 
 The _AVSs_ can setup an `AVSRegistrar` contract, which is called by the `AllocationManager` when _Operators_ register to and deregister from _operator sets_. If the _AVS_ does not have an `AVSRegistrar` set, the `AllocationManager` will forward the call to the registered _AVS_ contract. If the `AVSRegistrar` reverts the transaction, the `AllocationManager` will revert the transaction as well, and _Operators_ will not be able to register to or deregister from operator sets. This can create unfair scenarios, where _AVSs_ allow opt-in, but disallow opt-out.
 
-## `RewardsCoordinator`
+## RewardsCoordinator
 
 The `RewardsCoordinator` contract holds funds sent by the AVSs which will be distributed to _Operators_ and _Stakers_. By default, _Operators_ receive 10% and _Stakers_ 90% of the rewards distributed by the _AVSs_.
 
@@ -170,17 +170,17 @@ Rewards are distributed periodically, with a delay period of 7 days before new s
 
 The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that the economic parameters governing reward distribution could be modified. This includes the 90/10 default split between _Stakers_ and _Operators_.
 
-## `PermissionController`
+## PermissionController
 
 The `PermissionController` is a contract that allows AVS and Operators to appoint general admins (can call any function on any address) or appointees (can call only selected addresses and functions).
 
 The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmin`, means that permissions to slash operators on behalf of AVS can be hijacked by a permission owner going rogue, leading to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_.
 
-## `PauserRegistry`
+## PauserRegistry
 
 The `PauserRegistry` contract informs all pausable contracts, who can pause, and who can unpause.
 
-## `EIGEN` and `bEIGEN`
+## EIGEN and bEIGEN
 
 The BackingEigen (bEIGEN) token is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of bEIGEN can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into EIGEN tokens.
 
