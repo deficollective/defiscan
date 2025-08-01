@@ -59,15 +59,15 @@ The report is concerned with the Eigenlayer protocol deployed on Ethereum mainne
 
 Contracts which control user funds, the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
 
-Single strategy contracts that hold the _Staker_ funds can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds, the [Community Council (9/13)](#security-council) can remove the pause immediately if misused.
+Single strategy contracts that hold the _Staker's_ funds can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds, the [Community Council (9/13)](#security-council) however can resume the pause immediately if misused.
 
-Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by the `RewardsUpdater` role owner, which computes eligibility for each restaker and operator based on their stake and AVS rewards specification. If the `RewardsUpdater` is compromised, the rewards can be distributed to the wrong accounts, which leads to _loss of unclaimed yield_.
+Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by the `RewardsUpdater` role owner, which computes eligibility for each restaker and operator based on their stake and AVS rewards specification. If the account that holds the `RewardsUpdater` role is compromised, the rewards can be distributed to the wrong accounts, which leads to _loss of unclaimed yield_.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work, thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks for the respective counterparties.
+The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings those parties together. Thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks to the respective counterparties.
 
 The [Dependencies](#dependencies) section goes into more detail about risks potentially coming from _AVSs_ and _Operators_.
 
@@ -79,7 +79,7 @@ The upgrading of smart contracts can be executed through the [Executor Multisig 
 
 ### Pausing Strategy Contracts
 
-Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/2)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds,after their withdrawal queue period is over. Resuming (Unpausing) can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
+Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/2)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds, after their withdrawal queue period is over. Resuming (Unpausing) can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
 
 Upgrading contracts, pausing and locking funds in Strategy contract can both be executed immediately, _Exit Window_ score is _High_. However, the impact on the total score is _Medium_ (_Stage 1_), as both upgrading and pausing are protected by a Security Council ([Community Council (9/13)](#security-council)).
 
@@ -134,17 +134,19 @@ The EigenLayer protocol deploys different types of strategy contracts. The three
 
 1. **Beacon Chain Deposit Strategy**: This strategy contract is directly connected to the beacon chain and is responsible for managing the deposit/withdrawal of beacon chain deposits. The strategy contract is called `EigenPod` and each restaker has its own `EigenPod` contract.
 2. **Legacy Strategy Contracts**: These are a set of transparent upgradeable proxy contracts that each hold liquid staking ETH tokens. Each contract needs to be upgraded separately by the `ProxyAdmin` contract.
-3. **Beacon Proxy Strategy Contracts**: These are beacon proxy contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the implementation contract.
+3. **Beacon Proxy Strategy Contracts**: These are beacon proxy contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the same implementation contract.
 
-The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 tokens as security), with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
+Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
+
+The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 tokens as security), with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. By default, new strategies created by the factory are whitelisted.
 
 ## DelegationManager
 
-The `DelegationManager` is the contract that allows _Stakers_ to delegate their stake to _Operators_. The contract also allows _Operators_ to register as _Operator_ in the Eigenlayer system, which is required for them to register in _Operator Sets_ created by _AVSs_.
+The `DelegationManager` is the contract that allows _Stakers_ to delegate their stake to _Operators_. The contract also allows _Operators_ to register as _Operator_ in the Eigenlayer system, which is a requirement for _Operators_ to register in _Operator Sets_ created by _AVSs_.
 
 The `DelegationManager` calls `addShares` and `removeDepositShares` on the `StrategyManager` contract to update delegated shares and link them to deposits. These functions are essential for maintaining accurate accounting of staked assets. Also, the `DelegationManager` keeps the accounting of the suffered slashes.
 
-Furthermore, _Operators_ can configure a _Delegation Approver_, that requires _Stakers_ to first get an approval before they may delegate to the _Operator_ through the `DelegationManager` contract. This way, _Operators_ can prevent _Stakers_ from delegating their funds to them, if they do not want to.
+Furthermore, _Operators_ can configure a _Delegation Approver_, that requires _Stakers_ to first get an approval before they may delegate to the _Operator_ through the `DelegationManager` contract. This way, _Operators_ can prevent _Stakers_ from delegating their funds to them and keep a privileged set of _Stakers_. If the _Delegation Approver_ is set to the 0-address, any _Staker_ can delegate their stake to the respective _Operator_.
 
 The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an upgradeability risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and thus lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty, as _(Re)Stakers_ initiate withdrawals of funds through this contract.
 
