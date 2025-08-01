@@ -10,19 +10,37 @@ update_date: "1970-01-01"
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "unfixed",
+      },
       { text: "All contracts are verified", status: "fixed" },
       { text: "Source-available codebase", status: "unfixed" },
       { text: "Public documentation exists", status: "fixed" },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
-      { text: "Dependencies with High centralization score and no mitigations.", status: "unfixed" },
-      { text: "No Frontend backup or self-hosting option exists", status: "unfixed" },
+      {
+        text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
+        status: "unfixed",
+      },
+      {
+        text: "Dependencies with High centralization score and no mitigations.",
+        status: "unfixed",
+      },
+      {
+        text: "No Frontend backup or self-hosting option exists",
+        status: "unfixed",
+      },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
-      { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
+      {
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+        status: "unfixed",
+      },
+      {
+        text: "Dependencies with High or Medium centralization score and no mitigations.",
+        status: "unfixed",
+      },
       { text: "No alternative third-party frontends exist", status: "unfixed" },
     ],
   ]
@@ -30,7 +48,7 @@ stage_requirements:
 
 # Summary
 
-_Binance's Staked ETH_ is represented by the token `wBETH` (_Wrapped Beacon ETH_) and is a liquid version of staked ETH, in a tradable and transferable form. `wBETH` accumulates ETH staking rewards by growing in value in relation to ETH and can be used in other DeFi products, for example, as collateral.
+Binance Staked ETH is a liquid ETH staking protocol operated by Binance. It allows users to supply ETH in exchange for the liquid staking token `wBETH`, Wrapped Beacon ETH, which accumulates ETH staking yield for holders. Binance custodies the supplied ETH and operates Ethereum validators on behalf of users. `wBETH` can be used in other DeFi products, for example, as collateral.
 
 # Ratings
 
@@ -42,20 +60,21 @@ _Binance's Staked ETH_ is represented by the token `wBETH` (_Wrapped Beacon ETH_
 
 ## Upgradeability
 
-All the critical contracts in the protocol are upgradeable, including its minting operator, the `wBETH` token, and the contract used to convert the token back to `ETH`. Those updates can be performed by Externally Owned Accounts (EOAs) and could lead to the _loss of user funds_. Furthermore, the contracts can be paused at any time and a blacklist can be used to freeze the funds of specific users in the system.
+All the critical contracts in the protocol are upgradeable, including the `wBETH` token and the contracts used to deposit ETH (mint `wBETH`) and withdraw ETH (burn `wBETH`). Those updates can be performed by Binance itself through a set of Externally Owned Accounts (EOAs), and could lead to the _loss of user funds_. Furthermore, Binance has the ability to pause the protocol and blacklist specific users with a potential impact of temporarily or permanently freezing user funds.
+
+In order to withdraw funds (and burn `wBETH`), a redemption delay of 7 days is currently enforced. This delay can be increased arbitrarily by Binance immediately (see [Exit Window](#exit-window)).
 
 > Upgradeability score: High
 
 ## Autonomy
 
-As mentioned in the [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking#:~:text=Binance%20Group%20Entities%20may%2C%20in,their%20sole%20and%20absolute%20discretion), Binance Staked ETH relies on the _Binance Group_ as the sole operator of Ethereum validators. Users' `ETH` is
-in total custody of Externally Owned Accounts (EOAs) who handle privately the creation of new validators.
+As mentioned in the [Terms of services](https://www.binance.com/en/terms-ETH-2-0-staking#:~:text=Binance%20Group%20Entities%20may%2C%20in,their%20sole%20and%20absolute%20discretion), Binance is the sole operator of Ethereum validators in the Binance Staked ETH protocol. Binance has full custody of and control over user funds throughout the staking process. The creation of new Ethereum validators and withdrawal of ETH is handled privately by Binance through its EOAs.
 
 > Autonomy score: High
 
 ## Exit Window
 
-All changes and upgrades can be made without delay. There is a delay when users convert `wBETH` back to `ETH` which can be increased arbitrarily and is currently 7 days. Users may be blacklisted or the contracts frozen without delay, preventing any further actions such as transfers or withdrawals.
+No Exit Window is enforced, all changes and upgrades can be made without delay.
 
 > Exit Window score: High
 
