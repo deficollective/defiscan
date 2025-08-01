@@ -9,9 +9,9 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Base"
-stage: "O"
+stage: 1
 reasons: ["Unverified Contracts"]
-risks: ["H", "L", "L", "L", "L"]
+risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
 submission_date: "2025-01-16"
 publish_date: "2025-01-22"
@@ -19,19 +19,34 @@ update_date: "2025-01-31"
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
-      { text: "Source-available codebase", status: "unfixed" },
-      { text: "Public documentation exists", status: "unfixed" },
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
-      { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+      {
+        text: "Upgrades have no potential of “loss of funds“ ",
+        status: "fixed",
+      },
+      {
+        text: "Dependency with a High centralization score is mitigated",
+        status: "fixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "fixed",
+      },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
+      {
+        text: "Upgrades have no potential of “loss of funds or unclaimed yield“",
+        status: "fixed",
+      },
       { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }  
+      { text: "Alternative third-party frontends exist", status: "fixed" },
     ],
   ]
 ---
@@ -84,15 +99,13 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Conclusion
 
-The Uniswap V3 deployment on Base falls into the _others_ category and not Stage 1 due to the unverified contracts which are not verified on public block explorers.
+The Uniswap V3 deployment on Base receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. Since the protocol is deployed on an L2 chain in _Stage 1_, the deployment scores _Stage 1_.
 
-Despite this classification, our analysis shows that the Uniswap V3 deployment on Base receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
-
-> Overall score: Others
+> Overall score: Stage 1
 
 # Reviewer notes
 
-⚠️ During our analysis, we identified two unverified contracts, [ProxyAdmin](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9#code) and [TransparentUpgradeableProxy](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463#code), on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
+⚠️ During our analysis, we identified two unverified contracts, [ProxyAdmin](https://basescan.org/address/0x3334d83e224aF5ef9C2E7DDA7c7C98Efd9621fA9#code) and [TransparentUpgradeableProxy](https://basescan.org/address/0x4615C383F85D0a2BbED973d83ccecf5CB7121463#code), on Base. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards. Since those contracts are non-essential to the functioning of the protocol, this does not impact the score.
 
 # Protocol Analysis
 
