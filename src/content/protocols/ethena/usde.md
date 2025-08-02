@@ -73,6 +73,10 @@ The `USDe` staking contract which allows users to stake `USDe` includes a blackl
 
 ## Autonomy
 
+Ethena Stablecoin Protocol diversifies into many strategies to stabilise the `USDe` price and enabling yield for stakers of `USDe`. Furthermore they diversify each strategy with; 1) different custody providers, 2) different CEXs for opening hedging positions, 3) different assets holding spot, 4) different ETH staking yield source through multiple LSTs.
+
+We acknowledge that the Ethena Stablecoin Protocol interstrategically (different strategies) and intrastrategically (different assets, CEXs, custody providers, yield sources). However each strategy is carried out in a centralized manner, assets held in custody or trading positions on centralized exchanges. Diversification of exclusively centralized strategies has still high centrlization risk.
+
 > Autonomy score: High
 
 ## Exit Window
