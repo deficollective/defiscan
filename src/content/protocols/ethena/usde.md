@@ -61,9 +61,9 @@ The report is concerned with the USDe stablecoin protocol deployed on Ethereum m
 
 ## Upgradeability
 
-The minter role on the `USDe` contract is transferrable and the minting mechanism on the `USDe` contract itself is not protected by minting caps. By transferring the role to a malicious or compromised address, `USDe` holders would suffer losses through dilution and unbacked emission.
+The minter role on the `USDe` contract is transferrable and the minting mechanism on the `USDe` contract itself is not protected by minting caps. By transferring the role to a malicious or compromised address, existing `USDe` holders would suffer losses through dilution and unbacked emission of `USDe`.
 
-Collateral funds transferred from the user into the Ethena protocol are sent to addresses labelled as custodian addresses. These addresses are EOAs. If the addresses are not set correctly or compromised, collateral deposited by users could be lost, which would lead to _loss of funds_.
+Collateral funds transferred from the user into the Ethena protocol are sent to addresses labelled as custodian addresses. These addresses are EOAs. If the addresses are not set correctly or compromised, collateral deposited by users could be lost immediately and would lead to _loss of funds_.
 
 Users can be removed from the whitelist for minting and redeeming. If they are removed from the whitelist, they have to sell their `USDe` on the open market since they have no access to their deposited collateral which could result in the _loss of funds_ if the `USDe` price drops below the collateral value.
 
@@ -97,15 +97,11 @@ For staking `USDe` the protocol does not provide a frontend to self host. The st
 
 ## Conclusion
 
-The USDe stablecoin protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks Stage 0.
-
-The protocol could reach Stage 1 by ...
-
-The project additionally could advance to Stage 2 if ...
+The USDe stablecoin protocol achieves High centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. This would mean that the protocol ranks Stage 0, however the funds are stored in centralzed custody and thus is classified as _Others_.
 
 # Reviewer's Notes
 
-⚠️ During our analysis, we identified ...
+No additional notes.
 
 # Protocol Analysis
 
@@ -193,9 +189,11 @@ Ultimately _Governance_ execution remains under centralized control.
 
 New table with all the multisigs
 
-| Name                     | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| sUSDe Yield Distribution | [0x71e4f98e8f20c88112489de3dded4489802a3a87](https://etherscan.io/address/0x71e4f98e8f20c88112489de3dded4489802a3a87) | Multisig | ✅          | ❌              | ❌                | ✅             |
+| Name                     | Account                                                                                                               | Type          | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- | --------------- | ----------------- | -------------- |
+| Dev Multisig             | [0x3B0AAf6e6fCd4a7cEEf8c92C32DFeA9E64dC1862](https://etherscan.io/address/0x3B0AAf6e6fCd4a7cEEf8c92C32DFeA9E64dC1862) | Multisig 5/11 | ✅          | ❌              | ❌                | ❌             |
+| sUSDe Yield Distribution | [0x71e4f98e8f20c88112489de3dded4489802a3a87](https://etherscan.io/address/0x71e4f98e8f20c88112489de3dded4489802a3a87) | Multisig 4/11 | ✅          | ❌              | ❌                | ❌             |
+| Reserve Fund             | [0x2b5ab59163a6e93b4486f6055d33ca4a115dd4d5](https://etherscan.io/address/0x2b5ab59163a6e93b4486f6055d33ca4a115dd4d5) | Multisig 4/10 | ✅          | ❌              | ❌                | ❌             |
 
 # Contracts & Permissions
 
@@ -218,7 +216,7 @@ New table with all the multisigs
 
 | Name                                 | Account                                                                                                               | Type          |
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------- |
-| Dev Multisig                         | [0x3B0AAf6e6fCd4a7cEEf8c92C32DFeA9E64dC1862](https://etherscan.io/address/0x3B0AAf6e6fCd4a7cEEf8c92C32DFeA9E64dC1862) | Multisig 4/8  |
+| Dev Multisig                         | [0x3B0AAf6e6fCd4a7cEEf8c92C32DFeA9E64dC1862](https://etherscan.io/address/0x3B0AAf6e6fCd4a7cEEf8c92C32DFeA9E64dC1862) | Multisig 5/11 |
 | sUSDe Yield Distribution             | [0x71e4f98e8f20c88112489de3dded4489802a3a87](https://etherscan.io/address/0x71e4f98e8f20c88112489de3dded4489802a3a87) | Multisig 4/11 |
 | Operator (StakingRewardsDistributor) | [0xe3880B792F6F0f8795CbAACd92E7Ca78F5d3646e](https://etherscan.io/address/0xe3880B792F6F0f8795CbAACd92E7Ca78F5d3646e) | EOA           |
 | ProxyAdmin                           | [0xf849D7792Ff9b30A57656ee10a2776bCb49F4Fe4](https://etherscan.io/address/0xf849D7792Ff9b30A57656ee10a2776bCb49F4Fe4) | Contract      |
