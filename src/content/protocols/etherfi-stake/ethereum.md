@@ -372,26 +372,24 @@ AuctionManager LiquidityPool
 | Treasury | transferOwnership | Transfers the ownership of the contract. The new owner has full access to the `ETH` in the treasury and could send it to any address. | EtherFiTimelock |
 | Treasury | withdraw | Withdraws an amount of `ETH` to a given, arbitrary address. | EtherFiTimelock |
 
-| Liquifier | depositWithERC20 | ... | ['nonReentrant', 'whenNotPaused'] |
-| Liquifier | depositWithERC20WithPermit | ... | ['nonReentrant', 'whenNotPaused'] |
-| Liquifier | withdrawEther | ... | EtherFiTimelock |
-| Liquifier | sendToEtherFiRestaker | ... | EtherFiTimelock |
-| Liquifier | updateWhitelistedToken | ... | EtherFiTimelock |
-| Liquifier | updateDepositCap | ... | EtherFiTimelock |
-| Liquifier | registerToken | ... | EtherFiTimelock |
-| Liquifier | updateTimeBoundCapRefreshInterval | ... | EtherFiTimelock |
-| Liquifier | pauseDeposits | ... | EtherFiTimelock |
-| Liquifier | updateAdmin | ... | EtherFiTimelock |
-| Liquifier | updatePauser | ... | EtherFiTimelock |
-| Liquifier | updateDiscountInBasisPoints | ... | EtherFiTimelock |
-| Liquifier | updateQuoteStEthWithCurve | ... | EtherFiTimelock |
-| Liquifier | pauseContract | ... | EtherFiTimelock |
-| Liquifier | unPauseContract | ... | EtherFiTimelock |
-| Liquifier | unwrapL2Eth | ... | ['nonReentrant'] |
-| Liquifier | renounceOwnership | ... | EtherFiTimelock |
-| Liquifier | transferOwnership | ... | EtherFiTimelock |
-| Liquifier | upgradeTo | ... | EtherFiTimelock |
-| Liquifier | upgradeToAndCall | ... | EtherFiTimelock |
+| Liquifier | withdrawEther | Sends all the `ETH` in this contract to the `LiquidityPool` contract. | ADMIN or EtherFiTimelock |
+| Liquifier | sendToEtherFiRestaker | Sends a given amount of a specified token to the `EtherFiRestaker` contract. | ADMIN or EtherFiTimelock |
+| Liquifier | updateWhitelistedToken | Update the whitelist to specify if a given token is accepted or not. Whitelisted tokens can be deposited and are sent to the `EtherFiRestaker` contract upon deposits. Whitelisted tokens are collateral used to mint new `eETH`, whitelisting arbitrary tokens could put the system at risk. | EtherFiTimelock |
+| Liquifier | updateDepositCap | Updates the deposit cap of a given token. This cap is shared by all users to limit the amount of `eETH` that can be minted per whitelisted liquid staking `ETH` over time. | ADMIN or EtherFiTimelock |
+| Liquifier | registerToken | Register a new liquid staking token. The caller specifies whether or not the token can already be accepted (ie. is whitelisted), its caps, Eigenlayer restaking strategy, and exchange rate reference contracts. | EtherFiTimelock |
+| Liquifier | updateTimeBoundCapRefreshInterval | Updates the interval at which the deposit cap is reset. | EtherFiTimelock |
+| Liquifier | pauseDeposits | Pauses deposits for a given liquid staking token by setting its cap to 0. This action to be manually cancelled by setting a new cap. | ONLYPAUSER |
+| Liquifier | updateAdmin | Grants or revokes admin privileges to an address. Admins can trigger transfers to EtherFi contracts, pause and resume deposits, and change deposit caps. | EtherFiTimelock |
+| Liquifier | updatePauser | Grants or revokes pauser privileges to an address. Pausers can | ADMIN or EtherFiTimelock |
+| Liquifier | updateDiscountInBasisPoints | Updates the value of a staking's token "discounted rate". If nonzero users will receive less `eETH` than the value of their deposit. | ADMIN or EtherFiTimelock |
+| Liquifier | updateQuoteStEthWithCurve | Enables or disables the use of a Curve pool to quote the value of Lido's `stETH`. | ADMIN or EtherFiTimelock |
+| Liquifier | pauseContract | Pauses all further deposits in the contract, the remaining functionalities remain unpaused. | ADMIN or EtherFiTimelock |
+| Liquifier | unPauseContract | Resumes deposits. | EtherFiTimelock |
+| Liquifier | unwrapL2Eth | Sends the dummy L2ETH token to the `L1SyncPool` to be burnt in exchange for the same amount of `ETH` received by the `Liquifier`. | ['nonReentrant'] |
+| Liquifier | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators. Admin functions would remain accessible to the current admins. | EtherFiTimelock |
+| Liquifier | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. This could be used to mint unlimited amounts of `eETH`. | EtherFiTimelock |
+| Liquifier | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how it hange liquid staking tokens. This could be used to mint unlimited amounts of `eETH`, through the `LiquidityPool`. | EtherFiTimelock |
+| Liquifier | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock |
 
 | EtherFiRestaking | stEthRequestWithdrawal | Starts a request to withdraw `stETH` held by this contract into `ETH` using Lido's withdrawal queue. | [ admins ] |
 | EtherFiRestaking | stEthClaimWithdrawals | Claims the specified withdrawals from Lido's withdrawal queue. This is meant to be called once the withdrawals reached the end of the queue and the `ETH` can be claimed by this contract. | [ admins ] |
