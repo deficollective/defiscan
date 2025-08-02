@@ -17,6 +17,7 @@ export default function App({ children }: PropsWithChildren) {
             🎉 Support us in the upcoming Gitcoin funding round
             <a
               href="https://octant.app/projects"
+              target="_blank"
               className="underline hover:no-underline ml-1"
             >
               here!
