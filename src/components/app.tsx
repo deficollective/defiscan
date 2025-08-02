@@ -8,22 +8,25 @@ export default function App({ children }: PropsWithChildren) {
     <div className="flex min-h-dvh flex-col">
       <Navbar />
       <main className="container flex-1 space-y-6 pt-6 pb-16">{children}</main>
-      
+
       {/* Configuration for the announcement banner */}
       <AnnouncementBanner
-        show={false} // Set to true to show the banner
+        show={true} // Set to true to show the banner
         text={
           <>
-            🎉 New feature: This banner shows cool information! 
-            <a href="/learn-more" className="underline hover:no-underline ml-1">
-              Learn more
+            🎉 Support us in the upcoming Gitcoin funding round
+            <a
+              href="https://octant.app/projects"
+              className="underline hover:no-underline ml-1"
+            >
+              here!
             </a>
           </>
         }
-        backgroundColor="#ffd31b" // Yellow background
+        backgroundColor="#ffd34eff" // colored background
         textColor="black"
       />
-      
+
       <Footer />
     </div>
   );
