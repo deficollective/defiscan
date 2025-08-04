@@ -116,7 +116,7 @@ UUPSProxy RedemptionManager "0xdadef1ffbfeaab4f68a9fd181395f68b4e4e7ae0",
 
 UUPSProxy EtherFiRestaker 0x1B7a4C3797236A1C37f8741c0Be35c2c72736fFf
 
-, "0x73f7b1184B5cD361cC0f7654998953E2a251dd58"
+UUPSProxy EtherFiRewardsRouter (ENS = "Fee Recipient"), "0x73f7b1184B5cD361cC0f7654998953E2a251dd58"
 
 UUPSPRoxy "DepositAdapter" 0xcfC6d9Bd7411962Bfe7145451A7EF71A24b6A7A2 (impl 0xe87797a1afb329216811dfa22c87380128ca17d8)
 
@@ -276,8 +276,8 @@ AuctionManager LiquidityPool
 | AddressProvider | removeContract | Removes a contract from the provider. | EtherFiTimelock |
 | AddressProvider | setOwner | Changes the owner of the contract. The owner has the right to add and remove contracts. | EtherFiTimelock |
 
-| EtherFiNodesManager | batchSendExitRequest | ... | ['whenNotPaused'] |
-| EtherFiNodesManager | startCheckpoint | ... | EtherFiTimelock |
+| EtherFiNodesManager | batchSendExitRequest | Sends a request from the T-NFT owner to exit the corresponding validators. The B-NFT owner must serve the request or their bond will get penalized. | Validators' `TNFT` owner |
+| EtherFiNodesManager | startCheckpoint | Start a PEPE pod checkpoint balance proof. A new proof cannot be started until the previous proof is completed. [TODO] | EtherFiTimelock |
 | EtherFiNodesManager | setProofSubmitter | ... | EtherFiTimelock |
 | EtherFiNodesManager | processNodeExit | ... | EtherFiTimelock |
 | EtherFiNodesManager | batchQueueRestakedWithdrawal | ... | EtherFiTimelock |
