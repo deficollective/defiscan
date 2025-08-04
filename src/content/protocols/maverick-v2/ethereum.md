@@ -16,7 +16,7 @@ stage_requirements:
       },
       { text: "All contracts are verified", status: "unfixed" },
       { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "unfixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [
       {
@@ -106,7 +106,7 @@ Despite this classification, our analysis shows that the Maverick V2 Protocol on
 
 # Reviewer Notes
 
-⚠️ MaverickV2Factory is NOT verified on a public block explorer. For the MaverickV2Factory we currently rely on the technical documentation provided by the Maverick Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
+⚠️ The `MaverickV2Factory` is NOT verified on a public block explorer. For the `MaverickV2Factory` we currently rely on the technical documentation provided by the Maverick Team. As a consequence the full scope of permissions and their definitive impact cannot be assessed.
 
 # Protocol Analysis
 
