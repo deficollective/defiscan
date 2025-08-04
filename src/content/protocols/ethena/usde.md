@@ -49,7 +49,7 @@ stage_requirements:
 
 # Summary
 
-Ethena is a synthetic dollar protocol built on Ethereum that provides a crypto-native solution for money not reliant on traditional banking system infrastructure. It introduces the 'Internet Bond', a globally accessible dollar-denominated rewards instrument. Ethena's synthetic dollar, USDe, is fully backed by staked crypto assets (Ethereum and Bitcoin) and its corresponding short futures positions. Ethena employs delta-hedging strategies to maintain stability and generate yields for users.
+Ethena is a synthetic dollar protocol built on Ethereum. Ethena's synthetic dollar, `USDe`, is fully backed by crypto assets (Bitcoin, Ethereum, Solana), yield from staked ETH through LSTs and earnings from funding rates from short futures positions on CEXs. `USDe` is minted and redeemed by whitelisted KYCed users. Any user can acquire `USDe` on the open market and stake it to get access on yield sourced from the strategies and passed onto the users of the `USDe` stablecoin. `ENA` the governance token is freely tradeable and can be used to signal the direction of the protocol through off-chain governance on Snapshot.
 
 # Ratings
 
@@ -61,11 +61,11 @@ The report is concerned with the USDe stablecoin protocol deployed on Ethereum m
 
 ## Upgradeability
 
-The minter role on the `USDe` contract is transferrable and the minting mechanism on the `USDe` contract itself is not protected by minting caps. By transferring the role to a malicious or compromised address, existing `USDe` holders would suffer losses through dilution and unbacked emission of `USDe`.
+The right to mint new `USDe` can be transferred to any address, and there are no safeguards to limit how much can be issued. If the minter role is transferred to a malicious or compromised address, they could create unbacked `USDe`, `USDe` holders would suffer losses through dilution and unbacked emission of `USDe` (_loss of funds_).
 
 Collateral funds transferred from the user into the Ethena protocol are sent to addresses labelled as custodian addresses. These addresses are EOAs. If the addresses are not set correctly or compromised, collateral deposited by users could be lost immediately and would lead to _loss of funds_.
 
-Users can be removed from the whitelist for minting and redeeming. If they are removed from the whitelist, they have to sell their `USDe` on the open market since they have no access to their deposited collateral which could result in the _loss of funds_ if the `USDe` price drops below the collateral value.
+Users can be removed from the whitelist for minting and redeeming. If users ,that already minted `USDe`, are removed from the whitelist, they have to sell their `USDe` on the open market since they have no access to their deposited collateral which could result in the _loss of funds_ if the `USDe` price drops below the collateral value.
 
 The `USDe` staking contract which allows users to stake `USDe` includes a blacklist feature. If a _Staker_ is blacklisted, they are prevented from staking or unstaking `USDe`. This could result in _loss of funds_ if users are unable to retrieve their staked `USDe` and and if they have to sell `sUSDe` on the open market at a discount. Blacklisting can lead to a complete _loss of funds_ for a blacklisted user if their `sUSDe` is burned from their wallet and redistributed to another address or equally to all _Stakers_. Blacklisting and seizing staker funds are two steps that are carried out by two permission owners.
 
@@ -73,9 +73,9 @@ The `USDe` staking contract which allows users to stake `USDe` includes a blackl
 
 ## Autonomy
 
-Ethena Stablecoin Protocol diversifies into many strategies to stabilise the `USDe` price and enabling yield for stakers of `USDe`. Furthermore they diversify each strategy with; 1) different custody providers, 2) different CEXs for opening hedging positions, 3) different assets holding spot, 4) different ETH staking yield source through multiple LSTs.
+Ethena Stablecoin Protocol diversifies into many strategies to stabilise the `USDe` price and enabling yield for stakers of `USDe`. They diversify each strategy with; 1) different custody providers, 2) different CEXs for opening hedging positions, 3) different assets holding spot, 4) different ETH staking yield source through multiple LSTs.
 
-We acknowledge that the Ethena Stablecoin Protocol interstrategically (different strategies) and intrastrategically (different assets, CEXs, custody providers, yield sources). However each strategy is carried out in a centralized manner, assets held in custody or trading positions on centralized exchanges. Diversification of exclusively centralized strategies has still high centrlization risk.
+We acknowledge that the Ethena Stablecoin Protocol diversifies interstrategically (different strategies) and intrastrategically (different assets, CEXs, custody providers, yield sources). However each strategy is carried out in a centralized manner, assets are held in custody and trading positions are openedon centralized exchanges. Diversification of exclusively centralized strategies has still high centrlization risk.
 
 > Autonomy score: High
 
@@ -89,9 +89,9 @@ The actions of changing the minter role, blacklisting `USDe` stakers and seizing
 
 The user interactions with the protocol can be divided into two parts: the minting and redeeming of `USDe` and the staking of `USDe`.
 
-A frontend to self host exists under https://github.com/ethena-labs/ethena-minting-client. This frontend can be used to mint and redeem `USDe`. For this action the accessibility risk is _Medium_.
+Users can host a frontend to mint and redeem `USDe` from https://github.com/ethena-labs/ethena-minting-client. For this action the _Accessibility_ risk is _Medium_.
 
-For staking `USDe` the protocol does not provide a frontend to self host. The staking is only possible through the Ethena frontend. For this action the accessibility risk is _High_.
+For staking `USDe` the protocol does not provide a frontend to self host. The staking is only possible through the Ethena frontend. For this action the _Accessibility_ risk is _High_.
 
 > Accessibility score: High
 
@@ -115,9 +115,9 @@ The Ethena stablecoin protocol allows whitelisted users to mint and redeem `USDe
 
 The process begins off-chain, where a whitelisted user interacts with an Ethena-hosted pricing server to request a quote. This quote reflects the amount of collateral to be deposited and the expected `USDe` to be received. Using this information, the user constructs and signs an EIP-712 order. The signed order includes the benefactor address, collateral asset and amount of `USDe` minted.
 
-A central server operated by the Ethena team validates this order. It ensures the collateral is eligible, that the order does not destabilize the system, and that the minting or redemption action complies with both global and per-asset block-level caps. These caps are enforced to prevent drastic changes in `USDe` supply, which could also destabilize the system.
+A central server operated by the Ethena team validates this order. It ensures the collateral is eligible, that the order does not destabilize the system, and that the minting or redemption action complies with both global and per-asset block-level caps. These caps are enforced to prevent drastic changes in `USDe` supply and drastic collateral exposures, which could also destabilize the system.
 
-If all internal checks pass, the Ethena server submits the signed order on-chain by calling the `mint` or `redeem` function on the `EthenaMinting` contract. The EOA used by the server must hold the `MINTER_ROLE` to call `mint`, or the `REDEEMER_ROLE` to call `redeem`. On `mint`, the collateral is transferred from the whitelisted user to the `EthenaMinting` contract and `USDe` is minted into the users address by calling `mint` on the `USDe` contract. The `EthenaMinting` contract is assigned as the minter in `USDe` and is therefore the sole entity able to issue new tokens. On `redeem`, `USDe` is burned and the corresponding collateral is released to the user. No cooldown period exists for redeeming.
+If all internal checks pass, the Ethena server submits the signed order on-chain by calling the `mint` or `redeem` function on the `EthenaMinting` contract. The EOAs used by the server must hold the `MINTER_ROLE` to call `mint`, or the `REDEEMER_ROLE` to call `redeem` (see [table](#role-permission-inside-ethenaminting)). On `mint`, the collateral is transferred from the whitelisted user to the `EthenaMinting` contract and `USDe` is minted into the users address by calling `mint` on the `USDe` contract. The `EthenaMinting` contract is assigned as the minter in `USDe` and is therefore the sole entity able to issue new tokens. On `redeem`, `USDe` is burned and the corresponding collateral is released to the user. No cooldown period exists for redeeming.
 
 Multiple administrative permissions exist to modify this flow. The `DEFAULT_ADMIN_ROLE` in `EthenaMinting` can set or change the global mint and redeem caps using `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock`. Furthermore, the `GATEKEEPER_ROLE` may call `disableMintRedeem`, which pauses all minting and redeeming operations. This function is designed to temporary preventing further minting or redeeming in the case of a vulnerability or instability. Users that have collateral deposited and are prohibited to access their collateral can lose funds if they have to sell it in the open market if the `USDe` trades below the collateral value. Restoring minting and redeeming functionality requires setting non-zero limits via the respective `setGlobalMaxMintPerBlock` and `setGlobalMaxRedeemPerBlock` functions which only can be executed by the `DEFAULT_ADMIN_ROLE`.
 
@@ -135,23 +135,23 @@ All core permissions for minting, redeeming, managing roles, and custodial flows
 
 Ethena enables _Stakers_ to earn yield by locking their `USDe` in the `StakedUSDeV2` contract, which issues `sUSDe` in return. This contract inherits the ERC-4626 vault standard and adds a cooldown period to complete a withdrawal. Users deposit `USDe` and receive `sUSDe` at a ratio determined by total vault assets and total shares. Yield earned by the vault is reflected as an increase in the value of each `sUSDe` share.
 
-The `StakedUSDeV2` contract implements a cooldown period, users must wait 7 days to complete a withdrawal. After the cooldown period—configured in `setCooldownDuration` and capped at 90 days—the `USDe` can be withdrawn by calling `withdraw` which transfers `USDe` from the `USDeSilo` contract to the _Staker_.
+The `StakedUSDeV2` contract implements a cooldown period, _Stakers_ must wait 7 days to complete a withdrawal. After the cooldown the `USDe` can be withdrawn by calling `withdraw` which transfers `USDe` from the `USDeSilo` contract to the _Staker_. The cooldown period is configurable by calling `setCooldownDuration` and is capped at 90 days max.
 
-The `StakedUSDeV2` contract includes a blacklist mechanism managed by addresses holding the `BLACKLIST_MANAGER_ROLE`. If a user is blacklisted, they are prevented from staking or unstaking `USDe`. This could result in _loss of funds_ if users are unable to retrieve their staked assets and and if they have to sell `sUSDe` on the open market at a discount. It can lead to a complete _loss of funds_ if their `sUSDe` is burned from their wallet and redistributed to other _Stakers_ via the `redistributeLockedAmount` function, which is controlled by the `DEFAULT_ADMIN_ROLE`.
+The `StakedUSDeV2` contract also includes a blacklist mechanism managed by addresses holding the `BLACKLIST_MANAGER_ROLE`. If a user is blacklisted, they are prevented from staking or unstaking `USDe`. This could result in _loss of funds_ if users are unable to retrieve their staked assets and and if they have to sell `sUSDe` on the open market at a discount. It can lead to a complete _loss of funds_ if their `sUSDe` is burned from their wallet and redistributed to other _Stakers_ via the `redistributeLockedAmount` function, which is controlled by the `DEFAULT_ADMIN_ROLE`.
 
-Protocol yield is transferred into the system via the `StakingRewardsDistributor` contract. This contract holds `USDe` rewards and regularly calls `transferInRewards` to transfer them into `StakedUSDeV2`. The `StakingRewardsDistributor` is operated by an address labeled [Operator](#security-council), which is itself appointed by the [Dev Multisig](#security-council). While the [Operator](#security-council) can delay transfers, they cannot redirect funds or change the recipient. This minimizes the risk of _loss of unclaimed yield_, though misconfiguration or inaction may still delay yield distribution. The [Dev Multisig](#security-council) can replace the [Operator](#security-council) to prevent _loss of unclaimed yield_.
+Yield from the various strategies is transferred into the system via the `StakingRewardsDistributor` contract. The `StakingRewardsDistributor` contract holds `USDe` rewards and regularly calls `transferInRewards` to transfer them into `StakedUSDeV2`. The `StakingRewardsDistributor` is operated by an address labeled [Operator](#security-council), which is itself appointed by the [Dev Multisig](#security-council). While the [Operator](#security-council) can delay transfers, they cannot redirect funds or change the recipient. This minimizes the risk of _loss of unclaimed yield_, though misconfiguration or inaction may still delay yield distribution. The [Dev Multisig](#security-council) can replace the [Operator](#security-council) to prevent _loss of unclaimed yield_ at any time.
 
 The ability to rescue tokens from the vault, handled by `rescueTokens`, is restricted to addresses with the `DEFAULT_ADMIN_ROLE`. Although this function cannot extract `USDe`, it can affect other tokens accidentally sent to the vault.
 
 # Dependencies
 
-`USDe` is only slightly overcollateralized and relies on various strategies to maintain stability. The strategies rely on various counterparties to function correctly. If any of the counterparties fail, the solvency of the protocol is at risk. Ethena has a reserve fund to provide a buffer in case of negative performance of the diversified yield strategy. Additionally, Ethena employs diversification within each strategy by relying on various counterparties (various CEXs, different Custodians, diverse centralized Stablecoins, LSTs), as well as diversify in different strategies (short futures, staking yield, long spot).
+`USDe` is only slightly overcollateralized and relies on various strategies to maintain stability and peg to the US-Dollar. The strategies rely on various counterparties to function correctly. If any of the counterparties fail, the solvency of the protocol is at risk. Ethena has a [Reserve Fund](#security-council) to provide a buffer in case of negative performance of the diversified yield strategy. Ethena employs diversification within each strategy by relying on various counterparties (various CEXs, different Custodians, diverse centralized Stablecoins and LSTs), as well as diversify in different strategies (short futures, staking yield, long spot).
 
 ## CEXs
 
 The Ethena `USDe` Stablecoin protocol relies on centralized exchanges (CEXs) for maintaining short perpetual positions to create a delta neutral strategy.
 
-The CEXs that are used by Ethena `USDe` protocol include Binance, OKX, Deribit and Bybit. By splitting the strategy into multiple CEXs, Ethena can reduce the risk of a single exchange failure.
+The CEXs that are used by Ethena `USDe` protocol include Binance, OKX, Deribit and Bybit. By splitting opening short perpetuals on multiple CEXs, Ethena can reduce the risk of a single exchange failure.
 
 ## Custodians (Off-Exchange Settlement)
 
@@ -161,23 +161,23 @@ OES providers that Ethena uses include Copper, Ceffu and Fireblocks.
 
 ## Centralized Stablecoins
 
-Ethena allocates parts of their collateral funds into USDC to earn yield distributed by Coinbase. Ethena therefore relies on Circle as Stablecoin issuer and coinbase custody.
+Ethena allocates parts of their collateral funds into `USDC` to earn yield distributed by Coinbase. Ethena therefore relies on Circle as Stablecoin issuer and on Coinbase custody.
 
 ## Backing Assets
 
-Ethena holds BTC, ETH, SOL and ETH LSTs as collateral for the USDe stablecoin. To reduce dependency risk on a single LST, Ethena diversifies their collateral assets into Binance Staked ETH (WBETH), Lido stETH and Mantle's mETH.
+Ethena holds `BTC`, `ETH`, `SOL` and ETH `LSTs` as collateral for the `USDe` stablecoin. To reduce dependency risk on a single `LST`, Ethena diversifies their collateral assets into Binance Staked ETH (WBETH), Lido stETH and Mantle's mETH.
 
 ## Margin Collateral
 
-Most of the margin in perpetual futures positions are denominated in USDT. By this, Ethena is unidirectionally LONG exposed to the USDT price without offsetting short exposure. In case of USDT solvency risk, custodial risk, regulatory risk, Ethena would aim to open inverse perpetuals contracts, margined with BTC or ETH.
+Most of the margin in perpetual futures positions are denominated in `USDT`. By this, Ethena is unidirectionally LONG exposed to the `USDT` price without offsetting short exposure. In case of `USDT` solvency risk, custodial risk, regulatory risk, Ethena would aim to open inverse perpetuals contracts, margined with `BTC` or `ETH`.
 
 ## USDtb
 
-As asset in the reserve fund to provide a buffer in case of negative performance of the diversified yield strategy.
+`USDtb` is an asset in the [Reserve Fund](#security-council) to provide a buffer in case of negative performance of the diversified yield strategy.
 
 # Governance
 
-Ethena governance using the `ENA` token is purely used for signalling. Holders of `ENA` participate in off-chain voting via Snapshot, where they may submit and vote on proposals related to risk parameters, vault configurations, supported collateral, and other protocol adjustments.
+Ethena governance using the `ENA` token is purely used for signalling and unlike on-chain governance contracts is not technically enforcing. Holders of `ENA` participate in off-chain voting via Snapshot, where they may submit and vote on proposals related to risk parameters, vault configurations, supported collateral, and other protocol adjustments.
 
 Votes cast on Snapshot are technically not binding. Their outcomes inform the Ethena Labs Team and the Risk Committee, who are responsible for executing changes on-chain through controlled permission owners like the [Dev Multisig](#security-council). The Risk Committee consists of selected individuals or entities elected by the Ethena Labs Team.
 
@@ -221,6 +221,7 @@ New table with all the multisigs
 | Operator (StakingRewardsDistributor) | [0xe3880B792F6F0f8795CbAACd92E7Ca78F5d3646e](https://etherscan.io/address/0xe3880B792F6F0f8795CbAACd92E7Ca78F5d3646e) | EOA           |
 | ProxyAdmin                           | [0xf849D7792Ff9b30A57656ee10a2776bCb49F4Fe4](https://etherscan.io/address/0xf849D7792Ff9b30A57656ee10a2776bCb49F4Fe4) | Contract      |
 | Reserve Fund                         | [0x2b5ab59163a6e93b4486f6055d33ca4a115dd4d5](https://etherscan.io/address/0x2b5ab59163a6e93b4486f6055d33ca4a115dd4d5) | Multisig 4/10 |
+| Protocol Treasury                    | [0xa2af0b03aaf167cfc9624c6ef587581b6fcced92](https://etherscan.io/address/0xa2af0b03aaf167cfc9624c6ef587581b6fcced92) | Multisig 5/11 |
 | ethenagovernance.eth                 | [0xC5ceB655E63c1B990150FeeFf4f63d8A43BbD6cb](https://etherscan.io/address/0xC5ceB655E63c1B990150FeeFf4f63d8A43BbD6cb) | EOA           |
 
 ## Permissions
