@@ -1,7 +1,7 @@
 ---
 chain: "Ethereum"
 stage: "O"
-reasons: ["Unverified Contracts", "Missing Docs"]
+reasons: ["Unverified Contracts"]
 risks: ["L", "H", "M", "H", "H"]
 author: ["CookingCryptos", "sagaciousyves"]
 submission_date: "2024-10-23"
