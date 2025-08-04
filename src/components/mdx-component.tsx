@@ -129,7 +129,7 @@ const components = {
   ),
   hr: ({ ...props }) => <hr className="my-4 md:my-8" {...props} />,
   table: ({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <ResponsiveTable className={cn(className, "w-full table-auto")}>
+    <ResponsiveTable className={cn(className, "w-full table-fixed")}>
       {props.children}
     </ResponsiveTable>
   ),
@@ -156,6 +156,7 @@ const components = {
         "border border-secondary px-4 py-2 text-left break-words break-all lg:break-normal whitespace-normal [text-align:left!important]",
         className
       )}
+      style={style}
       {...props}
     />
   ),
