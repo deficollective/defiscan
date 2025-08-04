@@ -180,7 +180,7 @@ The `PauserRegistry` contract informs all pausable contracts, who can pause, and
 
 ## EIGEN and bEIGEN
 
-The BackingEigen (bEIGEN) token is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of bEIGEN can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into EIGEN tokens.
+The BackingEigen (`bEIGEN`) token contract is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of `bEIGEN` can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into EIGEN tokens.
 
 ## AVSs
 
