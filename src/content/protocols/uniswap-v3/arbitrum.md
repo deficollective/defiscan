@@ -9,7 +9,7 @@ github:
   ]
 defillama_slug: ["uniswap-v3"]
 chain: "Arbitrum"
-stage: "O"
+stage: 1
 reasons: ["Unverified Contracts"]
 risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
@@ -19,20 +19,34 @@ update_date: "2025-01-31"
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "unfixed" },
-      { text: "Source-available codebase", status: "unfixed" },
-      { text: "Public documentation exists", status: "unfixed" },
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
-      { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+      {
+        text: "Upgrades have no potential of “loss of funds“ ",
+        status: "fixed",
+      },
+      {
+        text: "Dependency with a High centralization score is mitigated",
+        status: "fixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "fixed",
+      },
     ],
     [
-      
-      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
+      {
+        text: "Upgrades have no potential of “loss of funds or unclaimed yield“",
+        status: "fixed",
+      },
       { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }  
+      { text: "Alternative third-party frontends exist", status: "fixed" },
     ],
   ]
 ---
@@ -85,15 +99,13 @@ the frontend app is also hosted on IPFS see here https://github.com/Uniswap/inte
 
 ## Conclusion
 
-The Uniswap V3 deployment on Arbitrum falls into the _others_ category and not Stage 1 due to the unverified contracts which are not verified on public block explorers.
+The Uniswap V3 deployment on Arbitrum receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions. Since the protocol is deployed on an L2 chain in _Stage 1_, the deployment scores _Stage 1_.
 
-Despite this classification, our analysis shows that the Uniswap V3 deployment on Arbitrum receives _Low_ centralization risk scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
-
-> Overall score: Others
+> Overall score: Stage 1
 
 # Reviewer Notes
 
-⚠️ During our analysis, we identified three unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code), [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code) and [Multicall](https://arbiscan.io/address/0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards.
+⚠️ During our analysis, we identified three unverified contracts, [NFTDescriptor](https://arbiscan.io/address/0x42B24A95702b9986e82d421cC3568932790A48Ec#code), [NonfungibleTokenPositionDescriptor](https://arbiscan.io/address/0x91ae842A5Ffd8d12023116943e72A606179294f3#code) and [Multicall](https://arbiscan.io/address/0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB#code), on Arbitrum. While these contracts remain unverified, if they match the deployed code on Ethereum mainnet, we can confirm the upgradability risk remains low. We strongly recommend that Uniswap verifies these contracts to ensure transparency and alignment with their security standards. Since those contracts are non-essential to the functioning of the protocol, this does not impact the score.
 
 # Protocol Analysis
 

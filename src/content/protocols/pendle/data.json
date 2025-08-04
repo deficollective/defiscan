@@ -1,0 +1,10 @@
+{
+  "id": "pendle",
+  "protocol": "Pendle V2",
+  "website": "https://www.pendle.finance/",
+  "defillama_slug": ["pendle"],
+  "socials": {
+    "x": "https://x.com/pendle_fi"
+  },
+  "github": ["https://github.com/pendle-finance"]
+}
