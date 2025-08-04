@@ -105,6 +105,8 @@ No additional notes.
 
 # Protocol Analysis
 
+![Architecture](../diagrams/Ethena.png)
+
 ## USDe Token
 
 The owner of the `USDe` contract is the [Dev Multisig](#security-council). The [Dev Multisig](#security-council) can set any minter address, which can increase the `USDe` supply and mint `USDe` tokens to any address. The multisig is trusted to not abuse this power. The minter address is set to the `EthenaMinting` contract, which requires a transfer of accepted collateral, before minting `USDe`.
