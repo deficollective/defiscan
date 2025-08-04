@@ -103,6 +103,23 @@ const reviews = defineCollection({
     .transform(computedFields),
 });
 
+const posts = defineCollection({
+  name: "posts",
+  pattern: "blog/**/*.md",
+  schema: s
+    .object({
+      slug: s.path(),
+      title: s.string().max(99),
+      description: s.string().max(999),
+      date: s.isodate(),
+      published: s.boolean().default(true),
+      authors: s.array(s.string()),
+      tags: s.array(s.string()).optional(),
+      body: s.mdx(),
+    })
+    .transform(computedFields),
+});
+
 export default defineConfig({
   root: "./src/content",
   output: {
@@ -112,7 +129,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[text]",
     clean: true,
   },
-  collections: { protocols, reviews },
+  collections: { protocols, reviews, posts },
   mdx: {
     rehypePlugins: [
       rehypeSlug as any,

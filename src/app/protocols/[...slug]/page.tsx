@@ -39,6 +39,14 @@ async function getProtocolFromParams(slug: string[]) {
   return { ...protocol, ...review, chains };
 }
 
+export async function generateStaticParams(): Promise<
+  ProtocolPageItemProps["params"][]
+> {
+  return allReviews.map((review) => ({
+    slug: review.slugAsParams.split("/"),
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -120,7 +128,7 @@ export default async function ProtocolPageItem({
   }
 
   return (
-    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl">
+    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl 2xl:max-w-none">
       <div>
         <div className="grid gap-2 grid-cols-4 lg:grid-rows-1">
           <div className="flex flex-col col-span-full sm:col-span-2 lg:col-span-1">
@@ -151,11 +159,11 @@ export default async function ProtocolPageItem({
                     stage_requirements={protocol.stage_requirements}
                     className="mb-4"
                   />
-                  <StageRequirements 
+                  {!protocol.stage!.toString().startsWith("I") && <StageRequirements 
                     stage={protocol.stage! as Stage}
                     stage_requirements={protocol.stage_requirements}
                     className="mt-4 text-left"
-                  />
+                  />}
                 </div>
               </CardContent>
             </Card>
