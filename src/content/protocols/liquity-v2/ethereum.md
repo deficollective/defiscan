@@ -161,5 +161,35 @@ All external permissions are revoked, the protocol is immutable.
 | Governance | registerInitialInitiatives  | The permissioned function allows the owner of the permission to register the first initiatives for LQTY stakers to vote on. It registers these initiatives in the earliest possible epoch, which allows the owner to make them votable on immediately post-deployment. | 0x0   |
 | BOLDToken | setBranchAddresses  | The permissioned allows owner of the permission to record core contract addresses for a given branch in the BOLDToken contract. It is used once, purely for contract initialization upon deployment. | 0x0   |
 | BOLDToken | setCollateralRegistry  | The permissioned allows owner of the permission to record the CollateralRegistry core contract address in the BOLDToken contract. It is used once, purely for contract initialization upon deployment, and it renounces ownership after recording the address. | 0x0   |
+| BoldToken | mint | Mints tokens to the specified account. Used in borrowing and interest operations. | BorrowerOperations, ActivePool |
+| BoldToken | burn | Burns tokens from the specified account. Used in borrowing, liquidation and redemptions. | BorrowerOperations, CollateralRegistry, TroveManager, StabilityPool |
+| BoldToken | sendToPool | Transfers the specified amount of BOLD tokens to the specified pool | StabilityPool |
+| BoldToken | returnFromPool | Transfers the specified amount of BOLD tokens from the specified pool to the specified receiver | StabilityPool |
+| BorrowerOperations | onLiquidateTrove | Hook which clears a Trove's delegate / manager permissions upon liquidation | TroveManager |
+| BorrowerOperations | shutdownFromOracleFailure | Triggers branch shutdown if the branch is active | PriceFeed |
+| TroveManager | redeemCollateral | Redeems the branch's share of a redemption from the Troves in that branch | CollateralRegistry |
+| TroveManager | shutdown | Sets the shutdown flag and timestamp | BorrowerOperations |
+| TroveNFT | mint | Mints a Trove NFT to the specified borrower when a Trove is opened | TroveManager |
+| TroveNFT | burn | Burns the specified Trove NFT from the specified borrower when the corresponding Trove is closed or liquidated | TroveManager |
+| SortedTroves | remove | Removes a non-batched Trove from the sorted list | TroveManager, BorrowerOperations |
+| SortedTroves | removeFromBatch | Remove a batched Trove from the sorted list | TroveManager, BorrowerOperations |
+| SortedTroves | insert | Adds a Trove to the sorted list | BorrowerOperations |
+| SortedTroves | reinsert | Re-inserts a non-batched Trove at a new position, based on its new annual interest rate | BorrowerOperations |
+| SortedTroves | insertIntoBatch | Adds a Trove to a Batch within the list | BorrowerOperations |
+| SortedTroves | reinsertBatch | Re-insert an entire Batch of Troves at a new position, based on their new annual interest rate | BorrowerOperations |
+| ActivePool | sendColl | Transfers collateral to the specified address | BorrowerOperations, TroveManager, StabilityPool |
+| ActivePool | sendCollToDefaultPool | Transfers the collateral from a redistribution liquidation to the DefaultPool | TroveManager |
+| ActivePool | mintAggInterestAndAccountForTroveChange | Upon a Trove debt change it mints the aggregate pending interest since the last minting operation and updates the interest accounting, incorporating the Trove debt change. | BorrowerOperations, TroveManager |
+| ActivePool | mintAggInterest | Mints the aggregate pending interest since the last minting operation and updates the interest accounting | BorrowerOperations, StabilityPool |
+| ActivePool | mintBatchManagermentFeeAndAccountForChange | Upon a batch fee operation it mints the aggregate pending interest since the last minting operation and updates the interest accounting, incorporating the batch fee charged. | TroveManager |
+| ActivePool | setShutdownFlag | Raises the shutdown flag, i.e. sets the recorded shutdown time to current time | TroveManager |
+| DefaultPool | sendCollToActivePool | Transfers collateral to the ActivePool | TroveManager |
+| DefaultPool | receiveColl | Hook used to transfer the collateral from a redistribution liquidation to the DefaultPool | ActivePool |
+| DefaultPool | increaseBoldDebt | Increases the recorded BOLD debt of the Pool by the specified amount | TroveManager |
+| DefaultPool | decreaseBoldDebt | Decreases the recorded BOLD debt of the Pool by the specified amount | TroveManager |
+| CollSurplusPool | accountSurplus | Increases the surplus collateral balance of the specified address by the specified amount | TroveManager |
+| CollSurplusPool | claimColl | Transfers the specified collateral surplus to the specified address and decreases balances | BorrowerOperations |
+| StabilityPool | triggerBoldRewards | Upon interest minting, updates the pool's reward accounting for depositors with the interest portion assigned to the SP | ActivePool |
+| StabilityPool | offset | Cancels the specified amount of liquidated BOLD debt against BOLD tokens held in the pool, transfers liquidated collateral to the pool, and updates collateral rewards accounting for depositors | TroveManager |
 
 
