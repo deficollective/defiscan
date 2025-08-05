@@ -192,4 +192,25 @@ All external permissions are revoked, the protocol is immutable.
 | StabilityPool | triggerBoldRewards | Upon interest minting, updates the pool's reward accounting for depositors with the interest portion assigned to the SP | ActivePool |
 | StabilityPool | offset | Cancels the specified amount of liquidated BOLD debt against BOLD tokens held in the pool, transfers liquidated collateral to the pool, and updates collateral rewards accounting for depositors | TroveManager |
 
+## System architecture
+
+The core Liquity contracts are organized in this manner:
+
+There is a single `CollateralRegistry`, a single `BoldToken`, and a set of core system contracts deployed for each collateral “branch”. The `CollateralRegistry` maps external collateral ERC20 tokens to a TroveManager address. 
+An entire collateral branch is deployed for each LST collateral. A collateral branch contains all the logic necessary for opening and managing Troves, liquidating Troves, Stability Pool deposits, and redemptions (from that branch).  There is one instance of each of the following contracts per branch:
+
+- BorrowerOperations
+- TroveManager
+- StabilityPool
+- ActivePool
+- DefaultPool
+- SortedTroves
+- CollSurplusPool
+- PriceFeed
+
+## System diagram
+
+![Liquity V2 diagram](./diagram.png)
+
+BOLD holders deposit and withdraw BOLD to/from the `StabilityPool`. Primary liquidations offset debt against BOLD funds in the `StabilityPool` and distribute collateral gains to depositors. Borrowers interact with the system via `BorrowerOperations` - opening, adjusting and closing their Troves. Borrower collateral and debt is recorded on the `ActivePool`, and some is moved to the `DefaultPool` when secondary liquidations occur. Interest from borrowing positions is continuously minted and a portion of it directed as yield to the `StabilityPool`. The branch `PriceFeed` prices collateral via an external market oracle and LST exchange rate. The `CollateralRegistry` routes redemptions across the different collateral branches.
 
