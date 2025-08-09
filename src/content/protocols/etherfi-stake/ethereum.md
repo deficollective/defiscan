@@ -187,6 +187,7 @@ NEW RoleRegistry: 0x62247D29B4B9BECf4BB73E0c722cf6445cfC7cE9
 | EtherFi Undeclared Multisig #1 | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 |
 | Underclared EOA                | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          |
 | EtherFi Deployer               | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          |
+| Beacon Depositor               | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          |
 | EtherFiTimelock (3 Days)       | [0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761](https://etherscan.io/address/0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761) | Contract     |
 
 AuctionManager LiquidityPool
@@ -194,6 +195,8 @@ AuctionManager LiquidityPool
 0x9af1298993dc1f397973c62a5d47a284cf76844d EOA Protocol Pauser (Liquidity Pool)
 0x2aCA71020De61bb532008049e1Bd41E451aE8AdC 3/5 multisig admin in the NodeOperatorsManager, owner of RoleRegistry
 0xf8a86ea1Ac39EC529814c377Bd484387D395421e etherfi.deployer still admin in the NodeOperatorsManager (can whitelist node operators)
+
+0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f Beacon Depositor EOA
 
 ## Permissions
 
@@ -268,28 +271,42 @@ AuctionManager LiquidityPool
 | LiquidityPool | depositToRecipient | Deposits `ETH` on behalf of another user. Can mint `eETH` tokens to arbitrary recipients. Malicious use could drain protocol by minting unlimited `eETH`. | Liquifier, EtherFiAdmin |
 | LiquidityPool | withdraw | Burns `eETH` shares and sends `ETH` to the recipient. Directly reduces pool liquidity and burns user shares. Withdrawals using a withdrawRequestNFT are taken directly out of the dedicated `ETH` amount locked for withdrawal. | withdrawRequestNFT, membershipManager, etherFiRedemptionManager |
 
-| LiquidityPool | batchDeposit | Initiates validator creation by matching bid IDs with node operators. Allocates 32 `ETH` per validator from pool funds. | ValidatorSpawners (Controlled by [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles)) |
-| LiquidityPool | batchRegister | Registers validator keys and sends 1 `ETH` to beacon chain per validator. Critical step in validator lifecycle that commits pool `ETH`. Malicious use could register invalid keys, waste pool `ETH`, or front-run with malicious withdrawal credentials. | ValidatorSpawners (Controlled by [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles)) |
+| LiquidityPool | batchDeposit | Initiates validator creation by matching bid IDs with node operators. Allocates 32 `ETH` per validator from pool funds. | ValidatorSpawners (Controlled by [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2)) |
+| LiquidityPool | batchRegister | Registers validator keys and sends 1 `ETH` to beacon chain per validator. Critical step in validator lifecycle that commits pool `ETH`. Malicious use could register invalid keys, waste pool `ETH`, or front-run with malicious withdrawal credentials. | ValidatorSpawners (Controlled by [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2)) |
 
-| LiquidityPool | batchApproveRegistration | Approves validators and triggers the 31 ETH deposit to the beacon chain. Completes validator activation. This is meant to be called by the oracle once it has confirmed that the 1 ETH registered were deposited on validators with the right withdrawal credentials. Malicious oracle could approve invalid validators, drain pool `ETH` to wrong validators. | [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles) |
-| LiquidityPool | registerValidatorSpawner | Grants permission to spawn validators, critical gatekeeper function. Allows addresses to initiate validator creation and use pool funds. Malicious admin could register compromised spawners. **TODO**: it's not currently used. | [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles) |
-| LiquidityPool | unregisterValidatorSpawner | Removes validator spawning permissions from addresses. Prevents spawners from creating new validators using pool funds. | [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles) |
-| LiquidityPool | sendExitRequests | Forwards an exit request to the `NodesManage`, for validators owned by the `LiquidityPool`. Critical for pool liquidity management and validator lifecycle. Malicious use could force premature exits, or disrupt staking operations. | [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles) |
+| LiquidityPool | batchApproveRegistration | Approves validators and triggers the 31 ETH deposit to the beacon chain. Completes validator activation. This is meant to be called by the oracle once it has confirmed that the 1 ETH registered were deposited on validators with the right withdrawal credentials. Malicious oracle could approve invalid validators, drain pool `ETH` to wrong validators. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | registerValidatorSpawner | Grants permission to spawn validators, critical gatekeeper function. Allows addresses to initiate validator creation and use pool funds. Malicious admin could register compromised spawners. **TODO**: it's not currently used. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | unregisterValidatorSpawner | Removes validator spawning permissions from addresses. Prevents spawners from creating new validators using pool funds. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | sendExitRequests | Forwards an exit request to the `NodesManage`, for validators owned by the `LiquidityPool`. Critical for pool liquidity management and validator lifecycle. Malicious use could force premature exits, or disrupt staking operations. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
 
 | LiquidityPool | rebase | Updates pool's staking rewards balance, core mechanism for distributing validator earnings. Adjusts totalValueOutOfLp affecting all user balances. Malicious use could artificially inflate/deflate all user holdings by manipulating reward calculations. | MembershipManager |
 | LiquidityPool | payProtocolFees | Distributes protocol fees by minting `eETH` to fee recipient. Directly affects protocol revenue and token supply. The fee recipient receives the entire amount and is trusted to further split it to the right beneficiaries. A malicious use could mint arbitrary amounts of `eETH` and disrupt the protocol's economic viability. | EtherFiAdmin |
-| LiquidityPool | setFeeRecipient | Changes where protocol fees are sent. Determines destination of protocol revenue streams. Malicious admin could redirect all future protocol fees to arbitrary addresses. Also see _payProtocolFees_ for details. | [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles) |
-| LiquidityPool | setRestakeBnftDeposits | Controls whether new validators are restaked on EigenLayer. Affects protocol's restaking strategy and additional yield generation. | [LIQUIDITY_POOL_ADMIN_ROLE](#liquidity-pool-roles) |
+| LiquidityPool | setFeeRecipient | Changes where protocol fees are sent. Determines destination of protocol revenue streams. Malicious admin could redirect all future protocol fees to arbitrary addresses. Also see _payProtocolFees_ for details. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | setRestakeBnftDeposits | Controls whether new validators are restaked on EigenLayer. Affects protocol's restaking strategy and additional yield generation. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
 
-| LiquidityPool | pauseContract | Emergency function that halts all protocol operations. Stops deposits, withdrawals, and validator operations. Malicious pauser could permanently DoS the protocol, preventing users from accessing funds or new deposits. | PROTOCOL_PAUSER role holders |
-| LiquidityPool | unPauseContract | Resumes protocol operations after pause. Restores user access to funds and protocol functionality. Malicious use could unpause during ongoing attacks or before fixes are implemented, exposing users to continued risks. | PROTOCOL_UNPAUSER role holders |
-| LiquidityPool | addEthAmountLockedForWithdrawal | Updates amount reserved for withdrawal requests. Critical for withdrawal liquidity management. Malicious admin contract could manipulate withdrawal availability, potentially blocking user access to funds or causing liquidity issues. | etherFiAdminContract |
+| LiquidityPool | pauseContract | Emergency function that halts all protocol operations. Stops deposits, withdrawals, and validator operations. Malicious pauser could permanently DoS the protocol, preventing users from accessing funds or new deposits. | [PROTOCOL_PAUSER](#roleregistry-2) |
+| LiquidityPool | unPauseContract | Resumes protocol operations after pause. Restores user access to funds and protocol functionality. Malicious use could unpause during ongoing attacks or before fixes are implemented, exposing users to continued risks. | [PROTOCOL_UNPAUSER](#roleregistry-2) |
+| LiquidityPool | addEthAmountLockedForWithdrawal | Updates amount reserved for withdrawal requests. Critical for withdrawal liquidity management. Malicious admin contract could manipulate withdrawal availability, potentially blocking user access to funds or causing liquidity issues. | EtherFiAdmin |
 | LiquidityPool | burnEEthShares | Destroys user shares during withdrawal process. Permanently reduces user token balance and total token supply. Malicious use could burn shares without corresponding `ETH` withdrawal, effectively stealing user funds through token destruction. | etherFiRedemptionManager OR withdrawRequestNFT contracts |
 
 | LiquidityPool | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how users deposit and withdraw funds. This could also reassign the ownership of all `eETH` tokens. | EtherFiTimelock (3 Days) |
 | LiquidityPool | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
 | LiquidityPool | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. Permissions and roles for specific functions could still be changed through the `RoleRegistry` contract, which handles the access control. | EtherFiTimelock (3 Days) |
 | LiquidityPool | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and bypassing access controls that are delegated to the `RoleRegistry`. | EtherFiTimelock (3 Days) |
+
+| EtherFiAdmin | setValidatorTaskBatchSize | Sets how many validators are processed together in a
+single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiAdmin | executeTasks | Executes management tasks related to the report generated by the oracle. The consensus must have been reached on the report. Tasks include accruying rewards, managing validator states, collecting fees, and withdrawals. Processing a report containing false data could be critical for user funds. | [ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE](#roleregistry-2) |
+| EtherFiAdmin | executeValidatorManagementTask | Executes management tasks specifically for validators, based on a report by the oracle. The consensus must have been reached on the report. Tasks include approving registrations or sending exit requests by calling `LiquidityPool`, as well as processing exit requests or reporting slashes by calling the `EtherFiNodesManager`. Processing a report containing false data could be critical for user funds. | [ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE](#roleregistry-2) |
+| EtherFiAdmin | invalidateValidatorManagementTask | Invalidates a pending validator management task. | [ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiAdmin | updateAcceptableRebaseApr | Updates the acceptable rebase APR variable. This sets a maximum by which the APR can change in one report. If the APR changes above the maximum, the execution will revert and the report cannot be processed. The current limit is 500 BPS. | [ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE](#roleregistry-2) |
+| EtherFiAdmin | updatePostReportWaitTimeInSlots | Sets the mandatory delay between oracle report submission and execution (to allow for invalidation). The current delay is 50 slots (10 minutes). | [ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE](#roleregistry-2) |
+| EtherFiAdmin | Pause | Can pause all or some contracts simultaneously among the `LiquidityPool`, `MembershipManager`, `EtherFiOracle`, `StakingManager`, `AuctionManager`, and `EtherFiNodesManager`. See their respective _pause_ function for details. | [PROTOCOL_PAUSER](#roleregistry-2) |
+| EtherFiAdmin | Unpause | Unpause all or some contracts simultaneously among the contracts cited above. | [PROTOCOL_UNPAUSER](#roleregistry-2) |
+| EtherFiAdmin | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how oracle reports are processed. This could also change the pausing logic of the entire protocol. | EtherFiTimelock (3 Days) |
+| EtherFiAdmin | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
+| EtherFiAdmin | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. Permissions and roles for specific functions could still be changed through the `RoleRegistry` contract, which handles the access control. | EtherFiTimelock (3 Days) |
+| EtherFiAdmin | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and bypassing access controls that are delegated to the `RoleRegistry`. | EtherFiTimelock (3 Days) |
 
 | EtherFiRedemptionManager | setCapacity (EtherFiRedemptionManager) | Sets maximum instant redemption capacity per time period. Controls liquidity available for instant withdrawals. Malicious admin could set to zero to DoS instant redemptions, or to maximum to allow bank-run scenarios that could destabilize the protocol. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
 | EtherFiRedemptionManager | setRefillRatePerSecond (EtherFiRedemptionManager) | Controls how fast redemption capacity refills. Affects user withdrawal experience and protocol stability. Malicious use could set to zero preventing redemptions, or extremely high allowing rapid pool drainage through instant redemptions. | ETHERFI_REDEMPTION_MANAGER_ADMIN_ROLE holders |
@@ -528,10 +545,12 @@ AuctionManager LiquidityPool
 
 ## Access Control
 
-### LiquidityPool Access Control
+### RoleRegistry 2
 
-| Role name                 | ID                                                                 | Role Owners                                                       | Role Admin                        |
-| ------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| LIQUIDITY_POOL_ADMIN_ROLE | 0x0e8d94121b3383f03d9ae60b39295aa793469d7230d51a3f62cbf47cd45481d9 | EtherFiAdmin, Timelock (8 Hours)                                  | EtherFiTimelock (3 Days) (3 Days) |
-| PROTOCOL_PAUSER           | 0xe6ff4398839854a2087720a46165c7be195bc9de6f7a3c5a977d3b6917b76af2 |                                                                   | EtherFiTimelock (3 Days)          | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council), [Underclared EOA](#security-council) |
-| PROTOCOL_UNPAUSER         | 0xb72d40a29b0ca5ab6e0b32830618dfdcae56fae676396ff1f7c3fede659935c8 | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council) | EtherFiTimelock (3 Days)          |
+| Role name                                 | ID                                                                 | Role Owners                                                       | Role Admin                        |
+| ----------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| LIQUIDITY_POOL_ADMIN_ROLE                 | 0x0e8d94121b3383f03d9ae60b39295aa793469d7230d51a3f62cbf47cd45481d9 | EtherFiAdmin, Timelock (8 Hours)                                  | EtherFiTimelock (3 Days) (3 Days) |
+| PROTOCOL_PAUSER                           | 0xe6ff4398839854a2087720a46165c7be195bc9de6f7a3c5a977d3b6917b76af2 |                                                                   | EtherFiTimelock (3 Days)          | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council), [Underclared EOA](#security-council) |
+| PROTOCOL_UNPAUSER                         | 0xb72d40a29b0ca5ab6e0b32830618dfdcae56fae676396ff1f7c3fede659935c8 | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council) | EtherFiTimelock (3 Days)          |
+| ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE        | 0xf63b1ce674d2cec0dbfcdcc7e504ce31a335c457c363b9fafb6ca524addf1775 | EtherFiTimelock (8 Hours)                                         | EtherFiTimelock (3 Days)          |
+| ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE | 0xe9d356a03911100a5418b1829f363128136c30112754cb3dbe73b1674abe2ac8 | [Beacon Depositor EOA](#security-council)                         | EtherFiTimelock (3 Days)          |
