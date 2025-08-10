@@ -45,7 +45,7 @@ stage_requirements:
 
 # Summary
 
-Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_.
+Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. As economic stake _Stakers_ can use arbitrary ERC20 tokens, which also includes LSTs or Beacon Chain deposits to increase capital efficiency of staked ETH.
 
 # Ratings
 
@@ -67,9 +67,11 @@ Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed
 
 ## Autonomy
 
-The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings those parties together. Thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks to the respective counterparties.
+The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings _AVSs_ and _Operators_ together. Thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks to each other as the respective counterparties.
 
-The [Dependencies](#dependencies) section goes into more detail about risks potentially coming from _AVSs_ and _Operators_.
+The [Dependencies](#dependencies) section goes into more detail about risks potentially originating from _AVSs_ and _Operators_.
+
+> Autonomy score: Low
 
 ## Exit Window
 
@@ -87,31 +89,34 @@ Upgrading contracts, pausing and locking funds in Strategy contract can both be 
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+There are no other frontends available for _Stakers_ and _Restakers_ to delegate and initiate withdrawal. The Eigenlayer protocol does not provide a frontend for _AVSs_ to manage their contracts as they can be highly customizable.
 
-- Restaking only one interface? managing positions through other frontends?
-- Operator and AVS through CLI, but basically pure on-chain actions
-- AVS manages own contracts
+For _Operators_ a CLI is available to interact with the Eigenlayer protocol, for configuration allocations, registering to _Operator Sets_ and to configure rewards. We argue that the option of a CLI is like self hosting (_Medium_), because it's local, but not low risk, because if the CLI has a bug/vulnerability, as there is no diversity in terms of execution of the _Operator_ actions.
 
-CLI like self hosting (medium), because it's local, but not low risk, because if the CLI has a bug/vulnerability, there is no immediate backup
-
-> Accessibility score: Low/Medium/High
+> Accessibility score: High
 
 ## Conclusion
 
-Some text in form of:
+The Eigenlayer protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Exit Window_ and _Accessibility_ dimensions. It achieves _Low_ centralization risk scores for its _Autonomy_ dimension. Eigenlayer overall ranks _Stage 0_. The impact of the _Upgradeability_ and _Exit Window_ on the overall score is _Medium_ (_Stage 1_), because the permission owners satisfy the _Security Council Requirements_.
 
-The xyz protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks Stage 0.
-
-The protocol could reach Stage 1 by ...
+The protocol could reach Stage 1 by offering an alternative frontend or self-hosting option for _Stakers_ and _Restakers_ to manage their delegation and withdrawal.
 
 The project additionally could advance to Stage 2 if ...
 
 # Reviewer's Notes
 
-_Stakers_ denote users that deposit general ERC20 tokens in Eigenlayer to secure AVSs. _Restakers_ denote users that deposit beacon chain deposits or `LSTs` in Eigenlayer to secure AVSs.
+- _Stakers_ denote users that deposit general ERC20 tokens in Eigenlayer to secure AVSs. _Restakers_ denote users that deposit beacon chain deposits or `LSTs` in Eigenlayer to secure AVSs.
+- _AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts. These smart contracts are not part of the Eigenlayer protocol and thus are not part of this review.
 
 # Protocol Analysis
+
+open todos:
+
+- add more details to dependencies
+  - set of contracts AVSs need
+  - how operators interact with AVSs
+- write up description to Eigenpods
+- clean up diagram
 
 - havent found usage of Timelock **so far** (admin is Operations Multisig) inside eigenlayer contracts, last call >180d ago
 - SignedDistributor was used for the EIGEN airdrop
@@ -119,12 +124,49 @@ _Stakers_ denote users that deposit general ERC20 tokens in Eigenlayer to secure
 - AVSDirectory remains in the system only for backward compatibility, but will be deprecated after all AVSs migrate to the new operator‑set framework
 - Slasher contract is inactive (legacy), from old M1 release
 
-Open questions regarding reward distribution
+Open questions:
 
+- if Signer of multisig is internal, does it count as publicly announced?
 - what's the wind down phase for a staker to change operators, in consideration that the operator redirects future rewards 100% to itself.
 - is the merkle proof at some point invalid, ie a claimer cannot claim after a certain time period?
 
-## Strategies
+## Roles
+
+### Stakers and Restakers
+
+A _Staker_ or _Restaker_ is any user who has assets deposited (or "restaked") into EigenLayer. They can stake or restake multiple assets that are accepted as _Economic Security_ to secure _AVSs_.
+
+The _Staker_ or _Restaker_ has the following actions available; 1) deposit assets into EigenLayer via either the `StrategyManager` (for ERC20s) or the `EigenPodManager` (for beacon chain ETH), 2) withdraw assets via the `DelegationManager`, no matter what assets they're withdrawing, 3) and delegate to an _Operator_ via the `DelegationManager`.
+
+### Operators
+
+_Operators_ are entities that opt-in to _Operator Sets_ created by _AVSs_ to execute tasks for the _AVS_. _Operators_ receive economic stake delegated by the _Stakers_ and _Restakers_ and take a cut from the weekly rewards issued by the _AVSs_ (default: 10% _Operator_, 90% _Stakers_ and _Restakers_). _Operators_ can also stake themselves.
+
+### AVSs
+
+_AVSs_ are entities that offer services to their end users. These services require task execution by a economically secured and distributed set of nodes, such as a PoS system. This task is required to be objective and verifiable such that _Operators_ from the Eigenlayer marketplace opt-in to execute this task such that the _AVS_ can offer its service. Eigenlayer helps thus to make Beacon-Chain deposits more economically efficient by allowing _Stakers_ to restake this economic stake to secure also other services, such as _AVSs_. Additionally, _Stakers_ can also use arbitrary ERC20 tokens, which also includes LSTs.
+
+_AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts. The details of the implementation are free to choose by the _AVS_, but they need at least to implement the following functions:
+
+- slash operators (calling `slashOperator` on the `AllocationManager` contract)
+- create operator sets (calling `createOperatorSets` or `createRedistributingOperatorSet` on the `AllocationManager` contract)
+- supply and register rewards for _Operators_ and _Stakers_ (calling `createOperatorDirectedOperatorSetRewardsSubmission` on the `RewardsCoordinator` contract)
+- to allow registered operators to post results
+
+among other functions to update and configure operator sets.
+
+Additionally, _AVSs_ can increase fairness and transparency guarantees by; 1) allowing the Operators to veto a slash, 2) create protocols to eject _Operators_, 3) to create quorums for submission or veto and 4) to compute rewards on-chain instead of off-chain.
+
+Regarding rewards,_AVSs_ are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an _AVS_ can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by _Operators_ within a certain time period. Additionally, an AVS can submit multiple reward submissions, denominated in different tokens, to offer more flexibility in the distribution of rewards.
+
+Repositories that help _AVSs_ to implement their contracts are:
+
+- https://github.com/Layr-Labs/eigenlayer-middleware/tree/dev
+- https://github.com/Layr-Labs/devkit-cli
+
+## Important Eigenlayer Contracts and Concepts
+
+### Strategies
 
 Deposits by _Stakers_ for each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract. These contracts are also called Strategy contracts.
 
@@ -132,15 +174,15 @@ The EigenLayer protocol deploys different types of strategy contracts. The three
 
 1. **Beacon Chain Deposit Strategy**: This strategy contract is directly connected to the beacon chain and is responsible for managing the deposit/withdrawal of beacon chain deposits. The strategy contract is called `EigenPod` and each _Restaker_ has its own `EigenPod` contract.
 2. **Legacy Strategy Contracts**: These are a set of transparent upgradeable proxy contracts that each hold liquid staking ETH tokens. Each contract needs to be upgraded separately by the `ProxyAdmin` contract.
-3. **Beacon Proxy Strategy Contracts**: These are beacon proxy contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the same implementation contract, which allows to update the strategy contract for all strategies created by the factory.
+3. **Factory based Strategy Contracts**: These are beacon proxy contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the same implementation contract, which allows to update the strategy contract for all strategies created by the factory.
 
 Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
 
 The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 tokens as security), with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. By default, new strategies created by the factory are whitelisted.
 
-## DelegationManager
+### DelegationManager
 
-The `DelegationManager` is the contract that allows _Stakers_ to delegate their stake to _Operators_. The contract also allows _Operators_ to register as _Operator_ in the Eigenlayer system, which is a requirement for _Operators_ to register in _Operator Sets_ created by _AVSs_.
+The `DelegationManager` is the contract that allows _Stakers_ to delegate their stake to _Operators_. The contract also allows users to register as _Operators_ in the Eigenlayer system, which is a requirement for _Operators_ to register in _Operator Sets_ created by _AVSs_.
 
 The `DelegationManager` calls `addShares` and `removeDepositShares` on the `StrategyManager` contract to update delegated shares and link them to deposits. These functions are essential for maintaining accurate accounting of staked assets. Also, the `DelegationManager` keeps the accounting of the suffered slashes.
 
@@ -148,7 +190,7 @@ Furthermore, _Operators_ can configure a _Delegation Approver_, that requires _S
 
 The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an _Upgradeability_ risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and thus lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty, as _(Re)Stakers_ initiate withdrawals of funds through this contract.
 
-## AllocationManager
+### AllocationManager
 
 The `AllocationManager` contract allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_. The `AllocationManager` contract forwards the slashing request by the _AVSs_ to the `DelegationManager` contract, which keeps the accounting of the suffered slashes.
 
@@ -156,7 +198,7 @@ Through the `AllocationManager` the `AVSs` can manage operator sets (creation an
 
 The _AVSs_ can setup an `AVSRegistrar` contract, which is called by the `AllocationManager` when _Operators_ register to and deregister from _operator sets_. If the _AVS_ does not have an `AVSRegistrar` set, the `AllocationManager` will forward the call to the registered _AVS_ contract. If the `AVSRegistrar` or the registered _AVS_ contract reverts the transaction, the `AllocationManager` will revert the transaction as well, and _Operators_ will not be able to register to or deregister from operator sets. This can create unfair scenarios, where _AVSs_ allow opt-in, but disallow opt-out.
 
-## RewardsCoordinator
+### RewardsCoordinator
 
 The `RewardsCoordinator` contract holds funds sent by the AVSs which will be distributed to _Operators_ and _Stakers_ as rewards. By default, _Operators_ receive 10% and _Stakers_ 90% of the rewards distributed by the _AVSs_. The _Operators_ can change the reward split by calling `setOperatorAVSSplit`.
 
@@ -168,45 +210,41 @@ Rewards are distributed periodically, with a delay period of 7 days before new s
 
 The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that the economic parameters governing reward distribution could be modified. This includes the 90/10 default split between _Stakers_ and _Operators_.
 
-## PermissionController
+### PermissionController
 
-The `PermissionController` is a contract that allows AVS and Operators to appoint general admins (can call any function in Eigenlayer on any address) or appointees (can call only selected addresses and functions).
+The `PermissionController` is a contract that allows AVS and Operators to appoint general admins (can call many functions in Eigenlayer) or appointees (can call only selected addresses and functions).
 
 The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmin`, means that permissions to slash operators on behalf of AVS can be hijacked by a permission owner going rogue, leading to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_.
 
-## PauserRegistry
+### PauserRegistry
 
 The `PauserRegistry` contract informs all pausable contracts, who can pause, and who can unpause.
 
-## EIGEN and bEIGEN
+### EIGEN and bEIGEN
 
 The BackingEigen (`bEIGEN`) token contract is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of `bEIGEN` can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into EIGEN tokens.
 
-## AVSs
+### Programmatic Incentives
 
-AVSs are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an AVS can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by Operators within a certain time period. Additionally, an AVS can submit multiple reward submissions, denominated in different tokens, to offer more flexibility in the distribution of rewards.
-
-## Programmatic Incentives
-
-Programmatic Incentives are distributed in `EIGEN` tokens minted by the Eigenlayer protocol and handed to stakers and operators through the `RewardsController` contract.
+Programmatic Incentives (PI) are distributed in `EIGEN` tokens minted by the Eigenlayer protocol and offered to _Stakers_ and _Operators_ through the `RewardsController` contract.
 
 # Dependencies
 
-The Eigenlayer protocol is not dependent on any single AVS or Operator. However, _AVSs_, _Stakers_ and _Operators_ dependend on each other, and it is recommended to be well diversified with their counterparties to mitigate dependency risks.
+The Eigenlayer protocol does not depend on single _AVSs_ or _Operators_. However, _AVSs_, _Stakers_ and _Operators_ depend on each other, and it is recommended to be well diversified with their counterparties to mitigate dependency risks.
 
 The following subsections highlight risks potentially coming from _AVSs_ and _Operators_.
 
 ## Slashing Operators
 
-When slashing is not paused, the _AVSs_ can slash _Operators_ by specifying which _Strategies_ should be slashed and by which amount. This leads to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_. The slashing can be fair (according to published terms by the _AVSs_) or unfair (not according to published terms by the _AVSs_). Slashing can be paused by pausers registered in the `PauserRegistry` contract.
+During normal operation, when slashing is not paused, the _AVSs_ can slash _Operators_ by specifying which _Strategies_ should be slashed and by which amount. This leads to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_. The slashing can be fair (according to published terms by the _AVSs_) or unfair (not according to published terms by the _AVSs_). Slashing can be paused by pausers registered in the `PauserRegistry` contract.
 
 ## Deregistering Operators from Operator Sets
 
-Deregistration of _Operators_ from _operator sets_ can be prevented by _AVSs_ by reverting `deregisterOperator` on the registered `AVSRegistrar` contract, a contract specific to each _AVS_ that is controlled by each _AVSs_. This could open a greater time window for an _AVS_ to slash _Operators_, leading to _loss of funds_ for _(Re)Stakers_ and loss of delegated stake for _Operators_.
+Deregistration of _Operators_ from _Operator Sets_ can be prevented by _AVSs_ by reverting `deregisterOperator` on the registered `AVSRegistrar` contract, a contract specific to each _AVS_ that is controlled by each _AVSs_. This could open a greater time window for an _AVS_ to slash _Operators_, leading to _loss of funds_ for _(Re)Stakers_ and loss of delegated stake for _Operators_.
 
 ## Slacking Operators
 
-_Operators_ could technically, provoke slashing and _loss of funds_ for restakers, but it is not in their interest to do so, as it would lead to a loss of reputation.
+_Operators_ could technically provoke slashing and _loss of funds_ for restakers, but it is not in their interest to do so, as it would damage their reputation.
 
 # Governance
 
@@ -218,9 +256,15 @@ The [Protocol TimelockController](#security-council) has two admins, the [Commun
 
 New table with all the multisigs
 
-| Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| Team Multisig | [0x123](https://etherscan.io/address/0x123) | Multisig | ✅          | ❌              | ❌                | ✅             |
+| Name                     | Account                                                                                                               | Type          | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public                                                                                                |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| bEIGEN Executor Multisig | [0x942eaF324971440384e4cA0ffA39fC3bb369D67d](https://etherscan.io/address/0x942eaF324971440384e4cA0ffA39fC3bb369D67d) | Multisig 1/2  | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Pauser Multisig          | [0x5050389572f2d220ad927CcbeA0D406831012390](https://etherscan.io/address/0x5050389572f2d220ad927CcbeA0D406831012390) | Multisig 1/6  | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Community Multisig       | [0xFEA47018D632A77bA579846c840d5706705Dc598](https://etherscan.io/address/0xFEA47018D632A77bA579846c840d5706705Dc598) | Multisig 9/13 | ✅          | ✅              | ✅                | ✅ ([source](https://docs.eigenfoundation.org/protocol-governance/technical-architecture#community-multisig)) |
+| Executor Multisig        | [0x369e6F597e22EaB55fFb173C6d9cD234BD699111](https://etherscan.io/address/0x369e6F597e22EaB55fFb173C6d9cD234BD699111) | Multisig 1/2  | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Operations Multisig      | [0xBE1685C81aA44FF9FB319dD389addd9374383e90](https://etherscan.io/address/0xBE1685C81aA44FF9FB319dD389addd9374383e90) | Multisig 3/6  | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Protocol Council         | [0x461854d84ee845f905e0ecf6c288ddeeb4a9533f](https://etherscan.io/address/0x461854d84ee845f905e0ecf6c288ddeeb4a9533f) | Multisig 3/5  | ❌          | ✅              | ✅                | ✅ ([source](https://docs.eigenfoundation.org/protocol-governance/technical-architecture#protocol-council))   |
+| rewardsUpdater           | [0x8f94F55fD8c9E090296283137C303fE97d32A9e2](https://etherscan.io/address/0x8f94F55fD8c9E090296283137C303fE97d32A9e2) | EOA           | ❌          | ❌              | ❌                | ❌                                                                                                            |
 
 # Contracts & Permissions
 
@@ -294,7 +338,7 @@ New table with all the multisigs
 | bEigen Protocol TimelockController | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) | Contract      |
 | ProxyAdmin                         | [0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444](https://etherscan.io/address/0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444) | Contract      |
 | ProxyAdmin (bEIGEN)                | [0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9](https://etherscan.io/address/0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9) | Contract      |
-| ProxyAdmin (bEIGEN) Multisig       | [0x942eaF324971440384e4cA0ffA39fC3bb369D67d](https://etherscan.io/address/0x942eaF324971440384e4cA0ffA39fC3bb369D67d) | Multisig ?/?  |
+| bEIGEN Executor Multisig           | [0x942eaF324971440384e4cA0ffA39fC3bb369D67d](https://etherscan.io/address/0x942eaF324971440384e4cA0ffA39fC3bb369D67d) | Multisig 1/2  |
 | Pauser Multisig                    | [0x5050389572f2d220ad927CcbeA0D406831012390](https://etherscan.io/address/0x5050389572f2d220ad927CcbeA0D406831012390) | Multisig 1/6  |
 | Community Multisig                 | [0xFEA47018D632A77bA579846c840d5706705Dc598](https://etherscan.io/address/0xFEA47018D632A77bA579846c840d5706705Dc598) | Multisig 9/13 |
 | Executor Multisig                  | [0x369e6F597e22EaB55fFb173C6d9cD234BD699111](https://etherscan.io/address/0x369e6F597e22EaB55fFb173C6d9cD234BD699111) | Multisig 1/2  |
