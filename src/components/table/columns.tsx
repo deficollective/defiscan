@@ -11,29 +11,32 @@ import { Project, Reason, Reasons, RiskArray, Stage } from "@/lib/types";
 import { Chain, ChainNames } from "../chain";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { StageBadge, StackedStageBadge } from "../stage";
-import { infraScoreToText } from "@/app/protocols/stageToRequisites";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 // Stage priority mapping - higher numbers = higher priority in sorting
 const STAGE_PRIORITY: Record<string, number> = {
   "2": 5,
-  "1": 4, 
+  "1": 4,
   "0": 3,
-  "R": 2,
-  "O": 1,
-  "V": 0,
-  "I0": 1,
-  "I1": 2,
-  "I2": 3
+  R: 2,
+  O: 1,
+  V: 0,
+  I0: 1,
+  I1: 2,
+  I2: 3,
 };
 
 // Helper function to get the highest stage from multiple reviews
 const getHighestStage = (stages: Stage[]): Stage => {
   if (stages.length === 0) return "V";
-  
+
   let highest: Stage = "V";
   let highestPriority = 0;
-  
+
   for (const stage of stages) {
     const priority = STAGE_PRIORITY[String(stage)] || 0;
     if (priority > highestPriority) {
@@ -41,7 +44,7 @@ const getHighestStage = (stages: Stage[]): Stage => {
       highestPriority = priority;
     }
   }
-  
+
   return highest;
 };
 
@@ -74,7 +77,9 @@ export const createColumns = (
               alt={protocol as string}
             />
           </Avatar>
-          <span className="ml-2 whitespace-nowrap overflow-visible">{protocol as string}</span>
+          <span className="ml-2 whitespace-nowrap overflow-visible">
+            {protocol as string}
+          </span>
         </div>
       );
     },
@@ -144,7 +149,7 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const stage = row.getValue("stage") as Stage;
-      
+
       if (!stage?.toString().startsWith("I")) {
         return null;
       }
@@ -152,11 +157,7 @@ export const createColumns = (
       return (
         <div className="w-full flex justify-center">
           <div className="scale-75 md:scale-100">
-            <StageBadge 
-              stage={stage} 
-              reasons={[]} 
-              subStages={[]}
-            />
+            <StageBadge stage={stage} reasons={[]} subStages={[]} />
           </div>
         </div>
       );
@@ -211,33 +212,33 @@ export const createColumns = (
         })) || [];
 
       if (stage === undefined) {
-        const stages = subStages.map(s => s.stage);
+        const stages = subStages.map((s) => s.stage);
         const highestStage = getHighestStage(stages);
-        const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
-        const qualifiedStages = uniqueStages.filter(stage => stage !== "O");
-        
+        const uniqueStages = Array.from(new Set(subStages.map((s) => s.stage)));
+        const qualifiedStages = uniqueStages.filter((stage) => stage !== "O");
+
         // If multiple unique qualified stages, use stacked badges
         if (qualifiedStages.length > 1) {
           return (
             <div className="flex justify-start md:justify-center">
-              <StackedStageBadge 
+              <StackedStageBadge
                 stages={qualifiedStages}
-                reasons={reasons} 
+                reasons={reasons}
                 subStages={subStages}
                 className="scale-75 md:scale-100"
               />
             </div>
           );
         }
-        
+
         // Single stage or use traditional variable badge
         stage = uniqueStages.length === 1 ? highestStage : "V";
-        
+
         return (
           <div className="flex justify-start md:justify-center">
-            <StageBadge 
-              stage={stage} 
-              reasons={reasons} 
+            <StageBadge
+              stage={stage}
+              reasons={reasons}
               subStages={subStages}
               highestStage={highestStage}
               className="scale-75 md:scale-100"
@@ -248,9 +249,9 @@ export const createColumns = (
 
       return (
         <div className="flex justify-start md:justify-center">
-          <StageBadge 
-            stage={stage} 
-            reasons={reasons} 
+          <StageBadge
+            stage={stage}
+            reasons={reasons}
             subStages={subStages}
             className="scale-75 md:scale-100"
           />
@@ -262,13 +263,13 @@ export const createColumns = (
       if (rowA.depth > 0 || rowB.depth > 0) {
         return 0;
       }
-      
+
       const stageA = rowA.getValue("stage") as Stage;
       const stageB = rowB.getValue("stage") as Stage;
-      
+
       const priorityA = STAGE_PRIORITY[String(stageA)] || 0;
       const priorityB = STAGE_PRIORITY[String(stageB)] || 0;
-      
+
       // Sort in descending order (highest stage first)
       return priorityB - priorityA;
     },
@@ -279,7 +280,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm"
+          className="p-0 text-xs md:text-sm justify-start md:w-full"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -290,33 +291,30 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       let reasons = row.getValue("reasons") as Reasons;
-      
+
       // For aggregated rows (parent rows with children), collect reasons from all children
       if (row.original.children && row.original.children.length > 0) {
         const childReasons = row.original.children
           .flatMap((child: any) => child.reasons || [])
-          .filter((reason: string, index: number, arr: string[]) => 
-            arr.indexOf(reason) === index // Remove duplicates
+          .filter(
+            (reason: string, index: number, arr: string[]) =>
+              arr.indexOf(reason) === index // Remove duplicates
           );
         reasons = [...(reasons || []), ...childReasons];
       }
-      
+
       if (!reasons || reasons.length === 0) return null;
-      
+
       return (
         <div>
           {reasons.map((el, index) => (
             <HoverCard key={index}>
               <HoverCardTrigger>
                 <div className="scale-75 md:scale-100">
-                  <Badge className="my-1 bg-red-500 text-white">
-                    {el}
-                  </Badge>
+                  <Badge className="my-1 bg-red-500 text-white">{el}</Badge>
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent>
-                Reason for unqualified status
-              </HoverCardContent>
+              <HoverCardContent>Reason for unqualified status</HoverCardContent>
             </HoverCard>
           ))}
         </div>
@@ -370,7 +368,9 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const type = row.getValue("type");
-      return <div className="hidden md:block text-center">{type as string}</div>;
+      return (
+        <div className="hidden md:block text-center">{type as string}</div>
+      );
     },
     sortingFn: "alphanumeric",
     meta: {
@@ -439,32 +439,37 @@ export const createColumns = (
     },
     cell: ({ row, table }) => {
       let tvl = row.getValue("tvl");
-      
-      // For aggregated rows (parent rows with children), calculate TVL only from children 
+
+      // For aggregated rows (parent rows with children), calculate TVL only from children
       // that match the current tab's stage filter
       if (row.original.children && row.original.children.length > 0) {
         // Get the current stage filter from the table's column filters
-        const stageFilter = table.getColumn("stage")?.getFilterValue() as string[];
-        
+        const stageFilter = table
+          .getColumn("stage")
+          ?.getFilterValue() as string[];
+
         if (stageFilter && stageFilter.length > 0) {
           // Sum TVL only from children that match the stage filter
           const filteredTvl = row.original.children
             .filter((child: any) => stageFilter.includes(child.stage))
             .reduce((sum: number, child: any) => {
               const childTvl = child.tvl;
-              if (childTvl === "n/a" || childTvl === null || childTvl === undefined) return sum;
+              if (
+                childTvl === "n/a" ||
+                childTvl === null ||
+                childTvl === undefined
+              )
+                return sum;
               return sum + (typeof childTvl === "number" ? childTvl : 0);
             }, 0);
-          
+
           tvl = filteredTvl > 0 ? filteredTvl : "n/a";
         }
       }
-      
+
       return (
         <div className="hidden md:block w-auto overflow-hidden whitespace-nowrap">
-          <span>
-            {tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}
-          </span>
+          <span>{tvl === "n/a" ? "n/a" : formatUsd(tvl as number)}</span>
         </div>
       );
     },
