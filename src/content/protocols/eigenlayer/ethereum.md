@@ -45,7 +45,7 @@ stage_requirements:
 
 # Summary
 
-Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. As economic stake _Stakers_ can use arbitrary ERC20 tokens, which also includes LSTs or Beacon Chain deposits to increase capital efficiency of staked ETH.
+Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. For economic stake, _(Re)Stakers_ can use arbitrary ERC20 tokens, which also includes LSTs, or Beacon Chain deposits to increase capital efficiency of staked ETH.
 
 # Ratings
 
@@ -77,19 +77,27 @@ The [Dependencies](#dependencies) section goes into more detail about risks pote
 
 ### Upgrading contracts
 
-The upgrading of smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council). The upgrading can be executed either by the `TimelockController` with sufficient _Exit Window_ of 10 days or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
+The upgrading of all smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has a sufficient _Exit Window_ of 10 days or the upgrade can also be executed immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
+
+For the `bEIGEN` token there is a dedicated parallel upgrade process, which is also controlled by the [Community Council (9/13)](#security-council) signer and a dedicated [bEIGEN TimelockController](#security-council) with a sufficient _Exit Window_ of 24 days.
 
 ### Pausing Strategy Contracts
 
 Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/2)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds, after their withdrawal queue period is over. Resuming (Unpausing) can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
 
-Upgrading contracts, pausing and locking funds in Strategy contract can both be executed immediately, _Exit Window_ score is _High_. However, the impact on the total score is _Medium_ (_Stage 1_), as both upgrading and pausing are protected by a Security Council ([Community Council (9/13)](#security-council)).
+Immediate upgrade of contracts can only be executed by the [Community Council (9/13)](#security-council) signer, thus the _Exit Window_ score is _High_. However, the impact on the total score is _Medium_ (_Stage 1_), as the [Community Council (9/13)](#security-council) satisfies the [Security Council Requirements](/learn-more#security-council-requirements). Multisigs that are not compliant with the [Security Council Requirements](/learn-more#security-council-requirements) can initiate upgrades as well, but are protected by an _Exit Window_ of more than 7 days and can be overruled by the [Community Council (9/13)](#security-council).
+
+## Rewards
+
+The `RewardsUpdater` can immediately remove a root and post a new root, claiming all deposited funds by AVSs instead of distributing them to _Operators_ and _Stakers_. Immediate*loss of unclaimed yield* leads to _Medium_ _Exit Window_ score.
+
+The worst _Exit Window_ score of the different vectors is _High_.
 
 > Exit Window score: High
 
 ## Accessibility
 
-There are no other frontends available for _Stakers_ and _Restakers_ to delegate and initiate withdrawal. The Eigenlayer protocol does not provide a frontend for _AVSs_ to manage their contracts as they can be highly customizable.
+There are no other frontends available for _Stakers_ and _Restakers_ to delegate and initiate withdrawal. The Eigenlayer protocol does not provide a frontend for _AVSs_ to manage their contracts as they can be very different.
 
 For _Operators_ a CLI is available to interact with the Eigenlayer protocol, for configuration allocations, registering to _Operator Sets_ and to configure rewards. We argue that the option of a CLI is like self hosting (_Medium_), because it's local, but not low risk, because if the CLI has a bug/vulnerability, as there is no diversity in terms of execution of the _Operator_ actions.
 
@@ -99,9 +107,9 @@ For _Operators_ a CLI is available to interact with the Eigenlayer protocol, for
 
 The Eigenlayer protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Exit Window_ and _Accessibility_ dimensions. It achieves _Low_ centralization risk scores for its _Autonomy_ dimension. Eigenlayer overall ranks _Stage 0_. The impact of the _Upgradeability_ and _Exit Window_ on the overall score is _Medium_ (_Stage 1_), because the permission owners satisfy the _Security Council Requirements_.
 
-The protocol could reach Stage 1 by offering an alternative frontend or self-hosting option for _Stakers_ and _Restakers_ to manage their delegation and withdrawal.
+The protocol could reach _Stage 1_ by offering a self-hosting option for _Stakers_ and _Restakers_ to manage their delegation and withdrawal.
 
-The project additionally could advance to Stage 2 if ...
+The project additionally could advance to _Stage 2_ if alternative frontends are available for _Stakers_ and _Restakers_ to manage their delegation and withdrawal and the _Upgradeability_ is protected by 30 days _Exit Window_.
 
 # Reviewer's Notes
 
@@ -118,17 +126,10 @@ open todos:
 - write up description to Eigenpods
 - clean up diagram
 
-- havent found usage of Timelock **so far** (admin is Operations Multisig) inside eigenlayer contracts, last call >180d ago
-- SignedDistributor was used for the EIGEN airdrop
-- The AllocationManager assumed all responsibilities previously held by AVSDirectory (0x135DDa560e946695d6f155dACaFC6f1F25C1F5AF) including operator registration, stake allocation, slashable stake commitment, and slashing authority
-- AVSDirectory remains in the system only for backward compatibility, but will be deprecated after all AVSs migrate to the new operator‑set framework
-- Slasher contract is inactive (legacy), from old M1 release
-
 Open questions:
 
 - if Signer of multisig is internal, does it count as publicly announced?
 - what's the wind down phase for a staker to change operators, in consideration that the operator redirects future rewards 100% to itself.
-- is the merkle proof at some point invalid, ie a claimer cannot claim after a certain time period?
 
 ## Roles
 
@@ -140,13 +141,13 @@ The _Staker_ or _Restaker_ has the following actions available; 1) deposit asset
 
 ### Operators
 
-_Operators_ are entities that opt-in to _Operator Sets_ created by _AVSs_ to execute tasks for the _AVS_. _Operators_ receive economic stake delegated by the _Stakers_ and _Restakers_ and take a cut from the weekly rewards issued by the _AVSs_ (default: 10% _Operator_, 90% _Stakers_ and _Restakers_). _Operators_ can also stake themselves.
+_Operators_ are entities that opt-in to _Operator Sets_ created by _AVSs_ to execute tasks for the _AVS_. _Operators_ receive economic stake delegated by the _Stakers_ and _Restakers_ and take a cut from the weekly rewards issued by the _AVSs_ (default: 10% _Operator_, 90% _Stakers_ and _Restakers_). _Operators_ can also stake themselves, the roles are not mutually exclusive.
 
 ### AVSs
 
-_AVSs_ are entities that offer services to their end users. These services require task execution by a economically secured and distributed set of nodes, such as a PoS system. This task is required to be objective and verifiable such that _Operators_ from the Eigenlayer marketplace opt-in to execute this task such that the _AVS_ can offer its service. Eigenlayer helps thus to make Beacon-Chain deposits more economically efficient by allowing _Stakers_ to restake this economic stake to secure also other services, such as _AVSs_. Additionally, _Stakers_ can also use arbitrary ERC20 tokens, which also includes LSTs.
+_AVSs_ are entities that offer services to their own end users (e.g. Cryptographic Services, Data Availability, Bridging, Oracles, etc.). These services require task execution by a economically secured and distributed set of nodes, such as a PoS system. This task is required to be objective and verifiable such that _Operators_ from the Eigenlayer marketplace opt-in to execute this task such that the _AVS_ can offer its service. Eigenlayer helps thus to make Beacon-Chain deposits more economically efficient by allowing _ETH Stakers_ to restake this economic stake to secure also other services, such as _AVSs_. Additionally, _Stakers_ can also use arbitrary ERC20 tokens, which also includes LSTs.
 
-_AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts. The details of the implementation are free to choose by the _AVS_, but they need at least to implement the following functions:
+_AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts. The details of the implementation are free to choose by the _AVS_, but they to implement the following functions:
 
 - slash operators (calling `slashOperator` on the `AllocationManager` contract)
 - create operator sets (calling `createOperatorSets` or `createRedistributingOperatorSet` on the `AllocationManager` contract)
@@ -157,7 +158,7 @@ among other functions to update and configure operator sets.
 
 Additionally, _AVSs_ can increase fairness and transparency guarantees by; 1) allowing the Operators to veto a slash, 2) create protocols to eject _Operators_, 3) to create quorums for submission or veto and 4) to compute rewards on-chain instead of off-chain.
 
-Regarding rewards,_AVSs_ are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an _AVS_ can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by _Operators_ within a certain time period. Additionally, an AVS can submit multiple reward submissions, denominated in different tokens, to offer more flexibility in the distribution of rewards.
+Regarding rewards, _AVSs_ are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an _AVS_ can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by _Operators_ within a certain time period. Additionally, an AVS can submit multiple reward submissions, denominated in different tokens, to offer more flexibility in the distribution of rewards.
 
 Repositories that help _AVSs_ to implement their contracts are:
 
@@ -168,13 +169,13 @@ Repositories that help _AVSs_ to implement their contracts are:
 
 ### Strategies
 
-Deposits by _Stakers_ for each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract. These contracts are also called Strategy contracts.
+Each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract. These contracts are also called Strategy contracts.
 
 The EigenLayer protocol deploys different types of strategy contracts. The three types of strategy contracts are:
 
-1. **Beacon Chain Deposit Strategy**: This strategy contract is directly connected to the beacon chain and is responsible for managing the deposit/withdrawal of beacon chain deposits. The strategy contract is called `EigenPod` and each _Restaker_ has its own `EigenPod` contract.
+1. **Beacon Chain Deposit Strategy**: This strategy contract is directly connected to the beacon chain and is responsible for managing the deposit/withdrawal of beacon chain deposits. The strategy contract is called `EigenPod` and each _Restaker_ has its own `EigenPod` contract, which validates a proof that the withdrawal credentials point to this contract, such that the Eigenlayer protocol can use the funds to slash operators.
 2. **Legacy Strategy Contracts**: These are a set of transparent upgradeable proxy contracts that each hold liquid staking ETH tokens. Each contract needs to be upgraded separately by the `ProxyAdmin` contract.
-3. **Factory based Strategy Contracts**: These are beacon proxy contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the same implementation contract, which allows to update the strategy contract for all strategies created by the factory.
+3. **Factory based Strategy Contracts**: These are contracts that are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the same implementation contract (beacon proxy), which allows to update the contracts all at once.
 
 Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
 
@@ -192,7 +193,7 @@ The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an 
 
 ### AllocationManager
 
-The `AllocationManager` contract allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_. The `AllocationManager` contract forwards the slashing request by the _AVSs_ to the `DelegationManager` contract, which keeps the accounting of the suffered slashes.
+The `AllocationManager` contract allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_. The `AllocationManager` contract forwards the slashing request by the _AVSs_ to the `DelegationManager` contract, which keeps the accounting of the suffered slashes and updates the claim for each _Staker_.
 
 Through the `AllocationManager` the `AVSs` can manage operator sets (creation and changes) and AVS configurations. The `AllocationManager` allows _Operators_ to register and deregister from _Operator Sets_ and _AVSs_.
 
@@ -204,7 +205,7 @@ The `RewardsCoordinator` contract holds funds sent by the AVSs which will be dis
 
 The `RewardsUpdater` calculates rewards offchain and consolidates these into a merkle root posted onchain by calling the `submitRoot` function. The `disableRoot` function can be called by the `RewardsUpdater` to disable the current root and prevent further distributions. If the `disableRoot` function is called, _Operators_ and _Stakers_ cannot further claim their rewards and rely on the Eigenlayer protocol to re-enable the reward distribution mechanism, by posting a new root.
 
-This means the Eigenlayer protocol with the `RewardsUpdater` role must be completely trusted in the distribution of rewards. Malicious behavior by the Eigenlayer protocol could lead to _loss of unclaimed yield_.
+This means the `RewardsUpdater` role must be completely trusted in the distribution of rewards. Malicious behavior by the Eigenlayer protocol could lead to _loss of unclaimed yield_. The [Operator Multisig](#security-council) can appoint a new `RewardsUpdater` in case of compromised or malicious behavior.
 
 Rewards are distributed periodically, with a delay period of 7 days before new splits are applied.
 
@@ -212,9 +213,9 @@ The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`
 
 ### PermissionController
 
-The `PermissionController` is a contract that allows AVS and Operators to appoint general admins (can call many functions in Eigenlayer) or appointees (can call only selected addresses and functions).
+The `PermissionController` is a contract that allows AVS and Operators to appoint general admins or appointees (can call only selected addresses and functions).
 
-The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmin`, means that permissions to slash operators on behalf of AVS can be hijacked by a permission owner going rogue, leading to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_.
+The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmin`, means that permissions to slash operators on behalf of AVS (as an appointee) can be hijacked by a permission owner going rogue, leading to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_.
 
 ### PauserRegistry
 
