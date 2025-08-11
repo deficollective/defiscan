@@ -63,17 +63,15 @@ The _Curve DAO_ operates exclusively on Ethereum mainnet. Although Curve product
 
 ## Upgradeability
 
-The _Curve DAO_ can mint arbitrarily `crvUSD` tokens and manages the `scrvUSD` vault. It can assign the funds to different strategies. Assigning funds to a malicious strategy could lead to the _loss of user funds_.
+The _Curve DAO_ can mint arbitrarily `crvUSD` tokens and manages the `scrvUSD` vault by assigning the funds to different strategies. Assigning funds to a malicious strategy could lead to the _loss of user funds_.
 
 Governance contracts are upgradeable and its permissions can also be delegated to other entities. Upgrading the contracts could also lead to the _loss of user funds_ by granting access to critical functions to malicious actors.
 
 The _Curve DAO_ manages all upgrades, primarily through the `OwnershipAgentProxy`, which executes successful governance votes.
 
-The _Curve DAO_ controls key parameters, such as interest rate policies in `crvUSD` and lending markets, and can change fee settings and liquidity concentration in DEX pools, which only impact future performances.
+The _Curve DAO_ controls key parameters, such as interest rate policies in `crvUSD` and lending markets, and can change fee settings and liquidity concentration in DEX pools, which only impact future performances. The implementation contracts of the DEX's pools can be updated for future pools only, which does not impact users' funds nor unclaimed yield.
 
 The [EmergencyDAO](#security-council), a multisig, can stop gauges (`CRV` emission), fee distributors, or pegkeepers, in case of emergency. Stopping gauges will only affect future performances and `CRV` emission in the specific gauge. Furthermore, the [EmergencyDAO](#security-council) meets the security council requirements.
-
-The implementation contracts of the DEX's pools can be updated for future pools only, which does not impact users' funds nor unclaimed yield.
 
 > Upgradeability score: High
 
@@ -93,7 +91,7 @@ All governance votes occur over a 7-day period, with voting frontloaded in the f
 
 Curve's primary user interface is hosted at [curve.finance](https://curve.finance/). Other interfaces, including [crvhub.com](https://crvhub.com), [curvemonitor.com](https://curvemonitor.com), and [DeFi Saver](https://app.defisaver.com/), provide access to several features of Curve such as `crvUSD`, `scrvUSD`, locking `veCRV`, and claiming rewards. Those frontends offer complete data access but redirect to [curve.finance](https://curve.finance/) for some critical actions such as withdrawing liquidty from pools. For this reason they do not represent sufficiently decentralized alternative frontends.
 
-The full frontend code is open source and available at the [Curve Frontend GitHub repository](https://github.com/curvefi/curve-frontend), with instructions to launch it. The latest and previous production deployments are accessible from the repository.
+The frontend code is open source and available at the [Curve Frontend GitHub repository](https://github.com/curvefi/curve-frontend), with instructions to launch it. The latest and previous production deployments are accessible from the repository.
 
 > Accessibility score: Medium
 
