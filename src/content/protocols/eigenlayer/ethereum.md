@@ -118,6 +118,8 @@ The project additionally could advance to _Stage 2_ if alternative frontends are
 
 # Protocol Analysis
 
+![Eigenlayer](../diagrams/Eigenlayer.png)
+
 open todos:
 
 - add more details to dependencies
