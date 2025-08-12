@@ -1,16 +1,26 @@
-import React from "react";
-import { Metadata } from "next";
+import React from 'react';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Submit Protocol Review | DeFiScan",
-  description: "Submit a DeFi protocol review to DeFiScan. Learn how to contribute and increase our coverage of DeFi protocols.",
-  keywords: ["submit review", "protocol analysis", "DeFi review", "contribute", "protocol assessment", "decentralization analysis", "bounty program"],
+  title: 'Submit Protocol Review | DeFiScan',
+  description:
+    'Submit a DeFi protocol review to DeFiScan. Learn how to contribute and increase our coverage of DeFi protocols.',
+  keywords: [
+    'submit review',
+    'protocol analysis',
+    'DeFi review',
+    'contribute',
+    'protocol assessment',
+    'decentralization analysis',
+    'bounty program',
+  ],
   openGraph: {
-    title: "Submit Protocol Review | DeFiScan",
-    description: "Contribute to DeFiScan by submitting DeFi protocol reviews. Help analyze decentralization stages and security assessments.",
-    url: "https://defiscan.info/submit-review",
-    siteName: "DeFiScan",
-    type: "website",
+    title: 'Submit Protocol Review | DeFiScan',
+    description:
+      'Contribute to DeFiScan by submitting DeFi protocol reviews. Help analyze decentralization stages and security assessments.',
+    url: 'https://defiscan.info/submit-review',
+    siteName: 'DeFiScan',
+    type: 'website',
   },
   robots: {
     index: true,
@@ -25,12 +35,12 @@ export default function SubmitReviewPage() {
 
       <h2>Who Can Submit Reviews?</h2>
       <p>
-        DeFiScan is an open-source project and everyone can create and submit
-        new protocol reviews. We further run initiatives to involve the
-        community more closely in this process and increase coverage of the DeFi
-        sector. Follow us on <a href="https://x.com/defiscan_info">X</a> or join
-        our <a href="https://discord.gg/Z467Ehv6VU">Discord</a> to stay
-        up-to-date on any such initiatives.
+        DeFiScan is an open-source project and everyone can create and submit new protocol reviews.
+        We further run initiatives to involve the community more closely in this process and
+        increase coverage of the DeFi sector. Follow us on{' '}
+        <a href="https://x.com/defiscan_info">X</a> or join our{' '}
+        <a href="https://discord.gg/Z467Ehv6VU">Discord</a> to stay up-to-date on any such
+        initiatives.
       </p>
 
       <h2>Getting Started</h2>
@@ -39,24 +49,23 @@ export default function SubmitReviewPage() {
       <div>
         <ol>
           <li>
-            Fork the DeFiScan GitHub{" "}
+            Fork the DeFiScan GitHub{' '}
             <a href="https://github.com/deficollective/defiscan">repository</a>
           </li>
           <li>
             If you are adding a new protocol:
             <ol>
               <li>
-                Copy the{" "}
+                Copy the{' '}
                 <a href="https://github.com/deficollective/defiscan/blob/main/src/content/_protocol_template">
                   template directory
-                </a>{" "}
-                to create a new protocol directory (see{" "}
+                </a>{' '}
+                to create a new protocol directory (see{' '}
                 <a href="#repository-structure">Repository Structure</a>)
               </li>
               <li>Fill out `data.json` with protocol information</li>
               <li>
-                Rename the review file to match your target chain (e.g.,
-                ethereum.md, polygon.md)
+                Rename the review file to match your target chain (e.g., ethereum.md, polygon.md)
               </li>
             </ol>
           </li>
@@ -64,37 +73,30 @@ export default function SubmitReviewPage() {
             If you are adding a review for an existing protocol on a new chain:
             <ol>
               <li>
-                Copy the{" "}
+                Copy the{' '}
                 <a href="https://github.com/deficollective/defiscan/blob/main/src/content/_protocol_template/<chain>.md">
                   template review file
-                </a>{" "}
+                </a>{' '}
                 to the protocol's directory with the appropriate chain name
               </li>
             </ol>
           </li>
           <li>
-            Install the{" "}
-            <a href="https://github.com/deficollective/permission-scanner">
-              Permission Scanner
-            </a>{" "}
+            Install the{' '}
+            <a href="https://github.com/deficollective/permission-scanner">Permission Scanner</a>{' '}
             tool
           </li>
+          <li>Generate a report of all permissioned functions in the protocol</li>
           <li>
-            Generate a report of all permissioned functions in the protocol
+            Complete the protocol review following our{' '}
+            <a href="https://deficollective.org/blog/introducing-defiscan">methodology</a>
           </li>
           <li>
-            Complete the protocol review following our{" "}
-            <a href="https://deficollective.org/blog/introducing-defiscan">
-              methodology
-            </a>
-          </li>
-          <li>
-            Submit a PR to the main{" "}
+            Submit a PR to the main{' '}
             <a href="https://github.com/deficollective/defiscan">repository</a>
           </li>
           <li>
-            Notify the team in our{" "}
-            <a href="https://discord.gg/Z467Ehv6VU">Discord</a> for review
+            Notify the team in our <a href="https://discord.gg/Z467Ehv6VU">Discord</a> for review
           </li>
         </ol>
       </div>
@@ -102,8 +104,7 @@ export default function SubmitReviewPage() {
       <h2>Review Guidelines</h2>
       <ul className="list-disc pl-6 mb-6">
         <li>
-          Each chain-specific review should focus on the unique aspects and
-          risks of that deployment
+          Each chain-specific review should focus on the unique aspects and risks of that deployment
         </li>
         <li>Include all relevant contract addresses and deployment dates</li>
         <li>Document all privileged functions and admin capabilities</li>
@@ -148,9 +149,8 @@ export default function SubmitReviewPage() {
       </ul>
 
       <p className="mt-10">
-        <strong>Note:</strong> By submitting a PR with a protocol review, you
-        agree that the DeFi Collective may freely use the submitted content.
-        Please see our <a href="/terms">Terms</a>.
+        <strong>Note:</strong> By submitting a PR with a protocol review, you agree that the DeFi
+        Collective may freely use the submitted content. Please see our <a href="/terms">Terms</a>.
       </p>
     </div>
   );

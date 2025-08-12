@@ -6,7 +6,5 @@
   "socials": {
     "x": "https://x.com/chainlink"
   },
-  "github": [
-    "https://github.com/smartcontractkit"
-  ]
+  "github": ["https://github.com/smartcontractkit"]
 }

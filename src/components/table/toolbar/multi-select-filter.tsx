@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Check, ChevronDown, ChevronsUpDown, PlusCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Column } from "@tanstack/react-table";
-import { Separator } from "@/components/ui/separator";
-import * as React from "react";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Check, ChevronDown, ChevronsUpDown, PlusCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Column } from '@tanstack/react-table';
+import { Separator } from '@/components/ui/separator';
+import * as React from 'react';
 
 import {
   Command,
@@ -16,13 +16,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export interface FilterOption {
   label: string;
@@ -60,17 +56,15 @@ const Option = ({ option, selected, onSelect, count }: OptionProps) => {
     <CommandItem key={option.value} onSelect={onSelect}>
       <div
         className={cn(
-          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-          selected && "bg-primary text-primary-foreground",
-          !selected && "opacity-50 [&_svg]:invisible"
+          'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+          selected && 'bg-primary text-primary-foreground',
+          !selected && 'opacity-50 [&_svg]:invisible'
         )}
       >
         <Check />
       </div>
 
-      {option.icon && (
-        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-      )}
+      {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
 
       <span>{option.label}</span>
 
@@ -90,9 +84,7 @@ export function MultiSelectFilter<TData, TValue>({
   className,
 }: DataTableMultiSelectFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
-  const selectedValues = new Set(
-    column?.getFilterValue() as (string | number)[]
-  );
+  const selectedValues = new Set(column?.getFilterValue() as (string | number)[]);
 
   const handleOptionSelect = (option: FilterOption) => {
     const selected = selectedValues.has(option.value);
@@ -114,7 +106,7 @@ export function MultiSelectFilter<TData, TValue>({
           variant="outline"
           size="sm"
           className={cn(
-            "uppercase text-xs font-bold font-mono border-dashed border-border",
+            'uppercase text-xs font-bold font-mono border-dashed border-border',
             className
           )}
         >
@@ -123,18 +115,12 @@ export function MultiSelectFilter<TData, TValue>({
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge
-                variant="secondary"
-                className="rounded-sm px-1 font-normal lg:hidden"
-              >
+              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
                 {selectedValues.size}
               </Badge>
               <div className="hidden space-x-1 lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge
-                    variant="secondary"
-                    className="rounded-sm px-1 font-normal"
-                  >
+                  <Badge variant="secondary" className="rounded-sm px-1 font-normal">
                     {selectedValues.size} selected
                   </Badge>
                 ) : (

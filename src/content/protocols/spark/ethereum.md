@@ -1,29 +1,38 @@
 ---
-chain: "Ethereum"
+chain: 'Ethereum'
 stage: 0
 reasons: []
-risks: ["L", "H", "H", "H", "L"]
-author: ["mmilien_"]
-submission_date: "2025-04-09"
-publish_date: "2025-06-05"
-update_date: "1970-01-01"
+risks: ['L', 'H', 'H', 'H', 'L']
+author: ['mmilien_']
+submission_date: '2025-04-09'
+publish_date: '2025-06-05'
+update_date: '1970-01-01'
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
-      { text: "All contracts are verified", status: "fixed" },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'All contracts are verified', status: 'fixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council", status: "unfixed" },
-      { text: "Dependency with a High centralization score without mitigation", status: "unfixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"}
+      {
+        text: 'Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council',
+        status: 'unfixed',
+      },
+      { text: 'Dependency with a High centralization score without mitigation', status: 'unfixed' },
+      { text: 'Frontend backups or self-hosting option exists', status: 'fixed' },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
-      { text: "Dependencies with High or Medium centralization score and no mitigations.", status: "unfixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }
+      {
+        text: 'Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days',
+        status: 'unfixed',
+      },
+      {
+        text: 'Dependencies with High or Medium centralization score and no mitigations.',
+        status: 'unfixed',
+      },
+      { text: 'Alternative third-party frontends exist', status: 'fixed' },
     ],
   ]
 ---
@@ -249,7 +258,7 @@ The list of deployed contracts and their addresses is available in spark's [addr
 
 ## Permissions
 
-| Contract                                                           | Function                         | Impact                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Owner                                                                                 |
+| Contract                                                                | Function                              | Impact                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Owner                                                                                 |
 | ----------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
 | SubProxy ("Spark Proxy")                                                | rely                                  | Grants admin privileges over the contract to a specific address. Admins can execute any code in the name of the contract (delegateCall to any address).                                                                                                                                                                                                                                                                                                                                          | DSPauseProxy (Sky DAO), ESM (Sky Shutdown)                                            |
 | SubProxy ("Spark Proxy")                                                | deny                                  | Revokes admin privileges over the contract to an address.                                                                                                                                                                                                                                                                                                                                                                                                                                        | DSPauseProxy (Sky DAO), ESM (Sky Shutdown)                                            |

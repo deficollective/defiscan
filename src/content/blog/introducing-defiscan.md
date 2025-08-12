@@ -1,11 +1,11 @@
 ---
-title: "DeFiScan: Verifiable insights into the maturity and risks of DeFi infrastructure"
-description: "DeFiScan is a framework for the assessment and monitoring of the maturity and risks of DeFi infrastructure in a verifiable manner"
+title: 'DeFiScan: Verifiable insights into the maturity and risks of DeFi infrastructure'
+description: 'DeFiScan is a framework for the assessment and monitoring of the maturity and risks of DeFi infrastructure in a verifiable manner'
 date: 2024-10-23T14:00:00Z
 published: true
-categories: ["Policy"]
-authors: ["nilsbundi"]
-tags: ["DeFi Maturity", "Decentralization"]
+categories: ['Policy']
+authors: ['nilsbundi']
+tags: ['DeFi Maturity', 'Decentralization']
 ---
 
 > 🚨The DeFiScan framework presented here has been updated on 2024-12-13 (read more [here](https://deficollective.org/blog/defiscan-update-methodology/)) and on 2025-03-12 (read more [here](https://deficollective.org/blog/defiscan-update-methodology-batch-2/)).
@@ -210,9 +210,9 @@ To enter Stage 2, a DeFi protocol has to satisfy the following requirements:
 
 ### Others category
 
-The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a DeFi protocol. 
+The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a DeFi protocol.
 
-The *Others* protocol category captures "financial" protocols which are built using blockchain technology but which do not meet the Stage 0 requirements:
+The _Others_ protocol category captures "financial" protocols which are built using blockchain technology but which do not meet the Stage 0 requirements:
 
 ✅ Blockchain-based, financial technology
 ❌ Assets are not in custody by centralized entity

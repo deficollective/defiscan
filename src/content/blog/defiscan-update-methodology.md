@@ -1,13 +1,12 @@
 ---
-title: "DeFiScan: Updates to the methodology"
-description: "We discuss updates and clarifications on the DeFiScan methodology."
+title: 'DeFiScan: Updates to the methodology'
+description: 'We discuss updates and clarifications on the DeFiScan methodology.'
 date: 2024-12-12T12:00:00Z
 published: true
-categories: ["Policy"]
-authors: ["nilsbundi"]
-tags: ["DeFi Maturity", "Decentralization"]
+categories: ['Policy']
+authors: ['nilsbundi']
+tags: ['DeFi Maturity', 'Decentralization']
 ---
-
 
 > 🚨Update (2024-12-27): We align the terminology on protocols not meeting (all of) the Stage 0 requirements with L2Beat's "Others" category that was recently [introduced](https://medium.com/l2beat/framework-update-l2-projects-recategorization-5d43b0d1fe50). All other changes in the methodology remain unaffected by this update.
 
@@ -23,26 +22,25 @@ The Stage 0 requirements set some fundamental properties common to all DeFi prot
 
 We find two challenges with this:
 
-1) In a number of cases, we found that protocols fail to meet a subset of the requirements simply because of an oversight or not being aware of the significance of it. As an example, we found reputed projects which are clearly built and operated following the outlined principles but e.g. missed verification of a smart contract. While the analysis cannot be completed in this case, the existing results can still add value to users.
+1. In a number of cases, we found that protocols fail to meet a subset of the requirements simply because of an oversight or not being aware of the significance of it. As an example, we found reputed projects which are clearly built and operated following the outlined principles but e.g. missed verification of a smart contract. While the analysis cannot be completed in this case, the existing results can still add value to users.
 
-2) The classification of non-DeFi protocols is implicit rather then explicit. Because DeFiScan only analyzes protocols that fulfill the Stage 0 requirements, users have no information on "Other" protocols and the reason why they fail the Stage 0 "test". Listing "Other" protocols and the requirements they fail to meet makes this classification explicit and adds further transparency.
+2. The classification of non-DeFi protocols is implicit rather then explicit. Because DeFiScan only analyzes protocols that fulfill the Stage 0 requirements, users have no information on "Other" protocols and the reason why they fail the Stage 0 "test". Listing "Other" protocols and the requirements they fail to meet makes this classification explicit and adds further transparency.
 
 **Updates to the methodology**
 
 In order to address these challenges, we introduce a new protocol category, "Others", which is assigned to protocols meeting only a subset of the Stage 0 requirements:
 
-* ✅ Blockchain-based, financial technology
-* ❌ Assets are not in custody by centralized entity
-* ❌ Public documentation exists that outlines the protocol and its expected performance
-* ❌ Source-available codebase
-* ❌ Verified contracts
+- ✅ Blockchain-based, financial technology
+- ❌ Assets are not in custody by centralized entity
+- ❌ Public documentation exists that outlines the protocol and its expected performance
+- ❌ Source-available codebase
+- ❌ Verified contracts
 
 In other words, protocols characterized as a "Blockchain-based, financial technology" but NOT meeting any of the other Stage 0 requirements are now categorized as "Others". Protocols in the "Others" category thus either miss an adequate technological basis on which further decentralization is possible or their decentralization stage cannot be evaulated due to a lack of public information.
 
-
 ## Defining the protocol scope
 
-Often times DeFi protocols consist of different "components" representing different abstraction layers. It is commont to separate these into two main groups, the "core" and "peripheral" contracts. The core contracts implement the main state and business logic of the DeFi protocol while the peripheral contracts add additional functionality that simplifies users interactions and overall UX. 
+Often times DeFi protocols consist of different "components" representing different abstraction layers. It is commont to separate these into two main groups, the "core" and "peripheral" contracts. The core contracts implement the main state and business logic of the DeFi protocol while the peripheral contracts add additional functionality that simplifies users interactions and overall UX.
 
 We have thus engaged in many constructive conversations around which parts of a DeFi protocol are to be considered "in scope" for the analysis vs which are "out of scope". While we were not able to identify a "one-size-fits-all" answer to this question, we here provide a definition of the protocol scope that we found very usefull in most cases.
 
@@ -50,7 +48,8 @@ We have thus engaged in many constructive conversations around which parts of a 
 
 The scope of a DeFi protocol relevant to analyze its stage of decentralization is defined as
 
-*A set of smart contracts that:* 
+_A set of smart contracts that:_
+
 - Is tightly integrated, or interacts through various cross-contract calls
 - Forms a cohesive UX where all contracts combined effectively give access to the underlying financial service
 - Is developed, maintained and marketed by the same team
@@ -59,13 +58,13 @@ This definition implies that the protocol scope does not only include the core c
 
 ## Impact of missing Exit Window
 
-An important dimension of the DeFiScan framework is the *Exit Window*. It ensures that protocol upgrades and parameter updates are delayed by a certain period within which users are able to safely withdraw funds or otherwise exit their positions in case of an unwanted change.
+An important dimension of the DeFiScan framework is the _Exit Window_. It ensures that protocol upgrades and parameter updates are delayed by a certain period within which users are able to safely withdraw funds or otherwise exit their positions in case of an unwanted change.
 
-Currently, the framework applies scores in this category in isolation from the underlying changes, that can be made to the protocol and should be delayed by the Exit Window. That means, an Exit Window score of "High" risk is assigned irrespective of the potential impact of a protocol update. This can result in an unproportional overall risk score compared to the effective impact of existing protocol permissions. 
+Currently, the framework applies scores in this category in isolation from the underlying changes, that can be made to the protocol and should be delayed by the Exit Window. That means, an Exit Window score of "High" risk is assigned irrespective of the potential impact of a protocol update. This can result in an unproportional overall risk score compared to the effective impact of existing protocol permissions.
 
 **Updates to the methodology**
 
-Instead of assigning the Exit Window risk score in isolation, the methodology now couples the remaining risks, due to the existence or absence of an Exit Window, to the achieved Upgradeability score of a protocol. 
+Instead of assigning the Exit Window risk score in isolation, the methodology now couples the remaining risks, due to the existence or absence of an Exit Window, to the achieved Upgradeability score of a protocol.
 
 Specifically, the Exit Window risk score is applied as follows:
 

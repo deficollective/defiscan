@@ -1,8 +1,8 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+'use client';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface NavItem {
   href: string;
@@ -10,15 +10,9 @@ interface NavItem {
   external?: boolean;
 }
 
-const MainNav = ({
-  className,
-  items,
-}: {
-  className: string;
-  items: NavItem[];
-}) => {
+const MainNav = ({ className, items }: { className: string; items: NavItem[] }) => {
   return (
-    <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
+    <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)}>
       {items.map((item, i) => (
         <Link
           key={`main-nav-item-${i}`}
@@ -36,9 +30,9 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/blog", label: "Blog" },
-    { href: "/learn-more", label: "Learn more" },
-    { href: "/submit-review", label: "Submit review" },
+    { href: '/blog', label: 'Blog' },
+    { href: '/learn-more', label: 'Learn more' },
+    { href: '/submit-review', label: 'Submit review' },
   ];
 
   return (
@@ -65,11 +59,7 @@ export default function Navbar() {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 

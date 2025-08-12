@@ -1,10 +1,10 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { posts } from "#site/content";
-import { Mdx } from "@/components/mdx-component";
-import { Badge } from "@/components/ui/badge";
-import { ChevronLeft } from "lucide-react";
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { posts } from '#site/content';
+import { Mdx } from '@/components/mdx-component';
+import { Badge } from '@/components/ui/badge';
+import { ChevronLeft } from 'lucide-react';
 
 interface BlogPostPageProps {
   params: {
@@ -12,14 +12,12 @@ interface BlogPostPageProps {
   };
 }
 
-async function getPostFromParams(params: BlogPostPageProps["params"]) {
+async function getPostFromParams(params: BlogPostPageProps['params']) {
   const post = posts.find((post) => post.slugAsParams === params.slug);
   return post || null;
 }
 
-export async function generateMetadata({
-  params,
-}: BlogPostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const post = await getPostFromParams(params);
 
   if (!post) {
@@ -32,9 +30,7 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams(): Promise<
-  BlogPostPageProps["params"][]
-> {
+export async function generateStaticParams(): Promise<BlogPostPageProps['params'][]> {
   return posts.map((post) => ({ slug: post.slugAsParams }));
 }
 
@@ -55,21 +51,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <ChevronLeft className="mr-2 h-4 w-4" />
           Back to Blog
         </Link>
-        
+
         <div className="space-y-2">
-          <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl tracking-tight">{post.title}</h1>
+          <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl tracking-tight">
+            {post.title}
+          </h1>
           <p className="text-muted-foreground">{post.description}</p>
         </div>
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <div>By {post.authors.join(', ')}</div>
           <div>
-            By {post.authors.join(", ")}
-          </div>
-          <div>
-            {new Date(post.date).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
+            {new Date(post.date).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
             })}
           </div>
         </div>

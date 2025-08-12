@@ -1,60 +1,58 @@
-import { defineCollection, defineConfig, s } from "velite";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypePrettyCode from "rehype-pretty-code";
-import rehypeSlug from "rehype-slug";
-import { Reasons } from "./src/lib/types";
+import { defineCollection, defineConfig, s } from 'velite';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import { Reasons } from './src/lib/types';
 
 const computedFields = <T extends { slug: string }>(data: T) => ({
   ...data,
-  slugAsParams: data.slug.split("/").slice(1).join("/"),
+  slugAsParams: data.slug.split('/').slice(1).join('/'),
 });
 
 // Define valid reasons
 const ReasonSchema = s
-  .literal("Central Custody")
-  .or(s.literal("Missing Docs"))
-  .or(s.literal("Closed-Source"))
-  .or(s.literal("Unverified Contracts"))
-  .or(s.literal("Incorrect Docs"));
+  .literal('Central Custody')
+  .or(s.literal('Missing Docs'))
+  .or(s.literal('Closed-Source'))
+  .or(s.literal('Unverified Contracts'))
+  .or(s.literal('Incorrect Docs'));
 
-const ReasonSetSchema = s
-  .array(ReasonSchema)
-  .transform((reasons) => Array.from(new Set(reasons))); // Remove duplicates
-
-
+const ReasonSetSchema = s.array(ReasonSchema).transform((reasons) => Array.from(new Set(reasons))); // Remove duplicates
 
 const protocols = defineCollection({
-  name: "protocols",
-  pattern: "protocols/**/data.json",
-  schema: s.object({
-    id: s.string(),
-    slug: s.path(),
-    protocol: s.string().max(99),
-    website: s.string().url(),
-    defillama_slug: s.array(s.string()),
-    socials: s.object({
-      x: s.string()
+  name: 'protocols',
+  pattern: 'protocols/**/data.json',
+  schema: s
+    .object({
+      id: s.string(),
+      slug: s.path(),
+      protocol: s.string().max(99),
+      website: s.string().url(),
+      defillama_slug: s.array(s.string()),
+      socials: s.object({
+        x: s.string(),
+      }),
+      github: s.array(s.string().url()),
+    })
+    .transform((data, context) => {
+      // Extract folder name from the file path
+      const filePath = context.meta.path;
+      const folderName = filePath.split('/').slice(-2, -1)[0]; // Get folder name from path like "protocols/uniswap-v3/data.json"
+
+      // Check if id matches folder name
+      if (data.id !== folderName) {
+        throw new Error(
+          `Protocol ID "${data.id}" does not match folder name "${folderName}" in ${filePath}`
+        );
+      }
+
+      return data;
     }),
-    github: s.array(s.string().url())
-  }).transform((data, context) => {
-    // Extract folder name from the file path
-    const filePath = context.meta.path;
-    const folderName = filePath.split('/').slice(-2, -1)[0]; // Get folder name from path like "protocols/uniswap-v3/data.json"
-    
-    // Check if id matches folder name
-    if (data.id !== folderName) {
-      throw new Error(`Protocol ID "${data.id}" does not match folder name "${folderName}" in ${filePath}`);
-    }
-    
-    return data;
-  })
-})
-
-
+});
 
 const reviews = defineCollection({
-  name: "reviews",
-  pattern: "protocols/**/*.md",
+  name: 'reviews',
+  pattern: 'protocols/**/*.md',
   schema: s
     .object({
       slug: s.path(),
@@ -67,33 +65,47 @@ const reviews = defineCollection({
         .number()
         .gte(0)
         .lte(2)
-        .or(s.literal("R"))
-        .or(s.literal("O"))
-        .or(s.literal("I0"))
-        .or(s.literal("I1"))
-        .or(s.literal("I2")),
+        .or(s.literal('R'))
+        .or(s.literal('O'))
+        .or(s.literal('I0'))
+        .or(s.literal('I1'))
+        .or(s.literal('I2')),
       risks: s.tuple([
-        s.literal("L").or(s.literal("M")).or(s.literal("H")),
-        s.literal("L").or(s.literal("M")).or(s.literal("H")),
-        s.literal("L").or(s.literal("M")).or(s.literal("H")),
-        s.literal("L").or(s.literal("M")).or(s.literal("H")),
-        s.literal("L").or(s.literal("M")).or(s.literal("H")),
+        s.literal('L').or(s.literal('M')).or(s.literal('H')),
+        s.literal('L').or(s.literal('M')).or(s.literal('H')),
+        s.literal('L').or(s.literal('M')).or(s.literal('H')),
+        s.literal('L').or(s.literal('M')).or(s.literal('H')),
+        s.literal('L').or(s.literal('M')).or(s.literal('H')),
       ]),
       reasons: ReasonSetSchema,
-      stage_requirements: s.tuple([
-        s.array(s.string().or(s.object({
-          text: s.string(),
-          status: s.literal("fixed").or(s.literal("unfixed"))
-        }))),
-        s.array(s.string().or(s.object({
-          text: s.string(),
-          status: s.literal("fixed").or(s.literal("unfixed"))
-        }))),
-        s.array(s.string().or(s.object({
-          text: s.string(),
-          status: s.literal("fixed").or(s.literal("unfixed"))
-        })))
-      ]).optional(),
+      stage_requirements: s
+        .tuple([
+          s.array(
+            s.string().or(
+              s.object({
+                text: s.string(),
+                status: s.literal('fixed').or(s.literal('unfixed')),
+              })
+            )
+          ),
+          s.array(
+            s.string().or(
+              s.object({
+                text: s.string(),
+                status: s.literal('fixed').or(s.literal('unfixed')),
+              })
+            )
+          ),
+          s.array(
+            s.string().or(
+              s.object({
+                text: s.string(),
+                status: s.literal('fixed').or(s.literal('unfixed')),
+              })
+            )
+          ),
+        ])
+        .optional(),
       author: s.array(s.string()),
       submission_date: s.isodate(),
       publish_date: s.isodate(),
@@ -104,8 +116,8 @@ const reviews = defineCollection({
 });
 
 const posts = defineCollection({
-  name: "posts",
-  pattern: "blog/**/*.md",
+  name: 'posts',
+  pattern: 'blog/**/*.md',
   schema: s
     .object({
       slug: s.path(),
@@ -121,26 +133,26 @@ const posts = defineCollection({
 });
 
 export default defineConfig({
-  root: "./src/content",
+  root: './src/content',
   output: {
-    data: ".velite",
-    assets: "public/static",
-    base: "/static/",
-    name: "[name]-[hash:6].[text]",
+    data: '.velite',
+    assets: 'public/static',
+    base: '/static/',
+    name: '[name]-[hash:6].[text]',
     clean: true,
   },
   collections: { protocols, reviews, posts },
   mdx: {
     rehypePlugins: [
       rehypeSlug as any,
-      [rehypePrettyCode, { theme: "dracula" }],
+      [rehypePrettyCode, { theme: 'dracula' }],
       [
         rehypeAutolinkHeadings,
         {
-          behavior: "wrap",
+          behavior: 'wrap',
           properties: {
-            className: ["subheading-anchor"],
-            ariaLabel: "Link to section",
+            className: ['subheading-anchor'],
+            ariaLabel: 'Link to section',
           },
         },
       ],

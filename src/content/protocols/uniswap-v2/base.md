@@ -1,29 +1,29 @@
 ---
-chain: "Base"
+chain: 'Base'
 stage: 1
 reasons: []
-risks: ["M", "L", "L", "L", "L"]
-author: ["CookingCryptos"]
-submission_date: "2025-01-14"
-publish_date: "2025-01-29"
-update_date: "1970-01-01"
+risks: ['M', 'L', 'L', 'L', 'L']
+author: ['CookingCryptos']
+submission_date: '2025-01-14'
+publish_date: '2025-01-29'
+update_date: '1970-01-01'
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
-      { text: "All contracts are verified", status: "fixed" },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'All contracts are verified', status: 'fixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
-      { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+      { text: 'Upgrades have no potential of “loss of funds“ ', status: 'fixed' },
+      { text: 'Dependency with a High centralization score is mitigated', status: 'fixed' },
+      { text: 'Frontend backups or self-hosting option exists', status: 'fixed' },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds or unclaimed yield“", status: "fixed" },
-      { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }  
+      { text: 'Upgrades have no potential of “loss of funds or unclaimed yield“', status: 'fixed' },
+      { text: 'There are no external dependencies', status: 'fixed' },
+      { text: 'Alternative third-party frontends exist', status: 'fixed' },
     ],
   ]
 ---

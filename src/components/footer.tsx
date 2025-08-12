@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { FaLinkedinIn, FaDiscord, FaGithub } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
-import { Button } from "./ui/button";
+import React, { useState, useEffect } from 'react';
+import { FaLinkedinIn, FaDiscord, FaGithub } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
+import { Button } from './ui/button';
 
 const Footer: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -23,21 +23,21 @@ const Footer: React.FC = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
     <footer
       className={`fixed bottom-0 left-0 right-0 p-2 backdrop-filter backdrop-blur-lg bg-white/30 transition-opacity duration-500 ${
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
       <div className="container mx-auto flex flex-col-reverse gap-2 sm:flex-row justify-between items-center">
         <div className="text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()}{" "}
+          &copy; {new Date().getFullYear()}{' '}
           <a
             href="https://deficollective.org"
             target="_blank"
@@ -83,11 +83,7 @@ const Footer: React.FC = () => {
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a
-              href="https://discord.gg/Z467Ehv6VU"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://discord.gg/Z467Ehv6VU" target="_blank" rel="noopener noreferrer">
               <FaDiscord className="w-4 h-4" />
             </a>
           </Button>

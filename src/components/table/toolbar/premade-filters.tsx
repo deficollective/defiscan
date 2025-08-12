@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,16 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Filter } from "lucide-react";
-import { Table as TableType } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import {
-  defi_stages,
-  stage_filter_options,
-  unqualified_stages,
-} from "@/lib/consts";
-import { MultiSelectFilter } from "./multi-select-filter";
+} from '@/components/ui/dropdown-menu';
+import { Filter } from 'lucide-react';
+import { Table as TableType } from '@tanstack/react-table';
+import { useEffect, useState } from 'react';
+import { defi_stages, stage_filter_options, unqualified_stages } from '@/lib/consts';
+import { MultiSelectFilter } from './multi-select-filter';
 
 export interface PremadeFilter {
   label: string;
@@ -29,19 +25,19 @@ export interface PremadeFilter {
 
 const premade_filters: PremadeFilter[] = [
   {
-    label: "DeFi Projects",
-    shortcut: "1",
+    label: 'DeFi Projects',
+    shortcut: '1',
     onClick: (table) => {
       table.resetColumnFilters();
-      table.getColumn("stage")?.setFilterValue(defi_stages);
+      table.getColumn('stage')?.setFilterValue(defi_stages);
     },
   },
   {
-    label: "Unqualified Projects",
-    shortcut: "2",
+    label: 'Unqualified Projects',
+    shortcut: '2',
     onClick: (table) => {
       table.resetColumnFilters();
-      table.getColumn("stage")?.setFilterValue(unqualified_stages);
+      table.getColumn('stage')?.setFilterValue(unqualified_stages);
     },
   },
 ];
@@ -51,15 +47,12 @@ interface PremadeFiltersProps {
   filters: PremadeFilter[];
 }
 
-export function PremadeFilters({
-  table,
-  filters = premade_filters,
-}: PremadeFiltersProps) {
+export function PremadeFilters({ table, filters = premade_filters }: PremadeFiltersProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || e.key === "/") {
+      if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || e.key === '/') {
         if (
           (e.target instanceof HTMLElement && e.target.isContentEditable) ||
           e.target instanceof HTMLInputElement ||
@@ -93,8 +86,8 @@ export function PremadeFilters({
       }
     };
 
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
   }, []);
 
   return (
@@ -109,10 +102,7 @@ export function PremadeFilters({
         <DropdownMenuSeparator className="bg-border" />
         <DropdownMenuGroup>
           {filters.map((filter) => (
-            <DropdownMenuItem
-              key={filter.label}
-              onClick={() => filter.onClick(table)}
-            >
+            <DropdownMenuItem key={filter.label} onClick={() => filter.onClick(table)}>
               {filter.label}
               <DropdownMenuShortcut>⌘{filter.shortcut}</DropdownMenuShortcut>
             </DropdownMenuItem>

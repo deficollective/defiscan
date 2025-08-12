@@ -1,25 +1,20 @@
-import { UnderReviewBadge } from "./badge/under-review-badge";
-import { type PizzaRosetteCellProps } from "./rosette-cell";
-import { PizzaRosetteIcon } from "./rosette-icon";
-import { PizzaRosetteLabels } from "./rosette-labels";
+import { UnderReviewBadge } from './badge/under-review-badge';
+import { type PizzaRosetteCellProps } from './rosette-cell';
+import { PizzaRosetteIcon } from './rosette-icon';
+import { PizzaRosetteLabels } from './rosette-labels';
 
-export function PizzaRosetteTooltip({
-  values,
-  isUnderReview,
-}: PizzaRosetteCellProps) {
+export function PizzaRosetteTooltip({ values, isUnderReview }: PizzaRosetteCellProps) {
   if (isUnderReview) {
     return (
       <div className="w-[300px]">
         <div className="mb-4">
-          <span className="text-base font-bold">Risk analysis</span> is{" "}
-          <UnderReviewBadge />
+          <span className="text-base font-bold">Risk analysis</span> is <UnderReviewBadge />
         </div>
 
         <p className="text-wrap">
           Projects under review might present uncompleted information & data.
           <br />
-          DeFi Collective Team is working to research & validate content before
-          publishing.
+          DeFi Collective Team is working to research & validate content before publishing.
         </p>
       </div>
     );
@@ -32,17 +27,8 @@ export function PizzaRosetteTooltip({
       </span>
       <div className="flex items-center gap-6">
         <div className="relative flex size-[200px] items-center justify-center">
-          <PizzaRosetteIcon
-            values={values}
-            className="scale-75"
-            isUnderReview={isUnderReview}
-          />
-          <PizzaRosetteLabels
-            values={values}
-            containerSize={200}
-            textRadius={76}
-            size="small"
-          />
+          <PizzaRosetteIcon values={values} className="scale-75" isUnderReview={isUnderReview} />
+          <PizzaRosetteLabels values={values} containerSize={200} textRadius={76} size="small" />
         </div>
         {/* <div className="flex flex-col gap-4">
           {values.map((value) => (

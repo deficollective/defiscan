@@ -1,30 +1,32 @@
 ---
-chain: "Optimism"
+chain: 'Optimism'
 stage: 1
 reasons: []
-risks: ["M", "M", "L", "M", "L"]
-author: ["CookingCryptos", "sagaciousyves"]
-submission_date: "2024-10-23"
-publish_date: "2024-10-23"
-update_date: "2024-12-12"
+risks: ['M', 'M', 'L', 'M', 'L']
+author: ['CookingCryptos', 'sagaciousyves']
+submission_date: '2024-10-23'
+publish_date: '2024-10-23'
+update_date: '2024-12-12'
 stage_requirements:
   [
     [
-      { text: "Assets are not in custody by a centralized entity", status: "fixed" },
-      { text: "All contracts are verified", status: "fixed" },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'All contracts are verified', status: 'fixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
-      { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
-      { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
-      { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+      { text: 'Upgrades have no potential of “loss of funds“ ', status: 'fixed' },
+      { text: 'Dependency with a High centralization score is mitigated', status: 'fixed' },
+      { text: 'Frontend backups or self-hosting option exists', status: 'fixed' },
     ],
     [
-      { text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days", status: "unfixed" },
-      { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" }  
-
+      {
+        text: 'Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days',
+        status: 'unfixed',
+      },
+      { text: 'There are no external dependencies', status: 'fixed' },
+      { text: 'Alternative third-party frontends exist', status: 'fixed' },
     ],
   ]
 ---

@@ -1,47 +1,35 @@
 ---
-chain: "Ethereum"
+chain: 'Ethereum'
 stage: 0
 reasons: []
-risks: ["L", "H", "L", "H", "H"]
-author: ["CookingCryptos, PaulDeFi"]
-submission_date: "2025-05-25"
-publish_date: "1970-01-01"
-update_date: "1970-01-01"
+risks: ['L', 'H', 'L', 'H', 'H']
+author: ['CookingCryptos, PaulDeFi']
+submission_date: '2025-05-25'
+publish_date: '1970-01-01'
+update_date: '1970-01-01'
 stage_requirements:
   [
     [
-      {
-        text: "Assets are not in custody by a centralized entity",
-        status: "fixed",
-      },
-      { text: "Critical contracts are verified", status: "fixed" },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'Critical contracts are verified', status: 'fixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds” are protected with Exit Window >= 7 days OR a sufficient Security Council",
-        status: "unfixed",
+        text: 'Upgrades with potential of “loss of funds” are protected with Exit Window >= 7 days OR a sufficient Security Council',
+        status: 'unfixed',
       },
-      {
-        text: "Dependency with High centralization are mitigated",
-        status: "fixed",
-      },
-      {
-        text: "Frontend backups or self-hosting option exists",
-        status: "unfixed",
-      },
+      { text: 'Dependency with High centralization are mitigated', status: 'fixed' },
+      { text: 'Frontend backups or self-hosting option exists', status: 'unfixed' },
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days",
-        status: "unfixed",
+        text: 'Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days',
+        status: 'unfixed',
       },
-      {
-        text: "Dependencies with High or Medium centralization are mitigated.",
-        status: "fixed",
-      },
-      { text: "Alternative third-party frontends exist", status: "unfixed" },
+      { text: 'Dependencies with High or Medium centralization are mitigated.', status: 'fixed' },
+      { text: 'Alternative third-party frontends exist', status: 'unfixed' },
     ],
   ]
 ---

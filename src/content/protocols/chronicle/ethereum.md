@@ -1,15 +1,15 @@
 ---
-chain: "Ethereum"
-type: "Oracles"
-logo: "/images/infrastructure-logos/chronicle-logo.png"
-stage: "I1"
-protocols: ["Sky", "Spark"]
+chain: 'Ethereum'
+type: 'Oracles'
+logo: '/images/infrastructure-logos/chronicle-logo.png'
+stage: 'I1'
+protocols: ['Sky', 'Spark']
 reasons: []
-risks: ["L", "H", "L", "M", "L"]
-author: ["mmilien_"]
-submission_date: "2025-05-07"
-publish_date: "2025-05-15"
-update_date: "2025-06-18"
+risks: ['L', 'H', 'L', 'M', 'L']
+author: ['mmilien_']
+submission_date: '2025-05-07'
+publish_date: '2025-05-15'
+update_date: '2025-06-18'
 ---
 
 # Summary

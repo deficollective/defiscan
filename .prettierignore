@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+.next
+out
+build
+dist
+
+# Build files
+*.min.js
+*.min.css
+
+# Environment files
+.env*.local
+.env
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

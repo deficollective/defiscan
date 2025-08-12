@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { Label, Pie, PieChart } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState } from 'react';
+import { Label, Pie, PieChart } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { defiLlama } from "@/services/defillama";
-import { protocols, reviews } from "#site/content";
-import { Project, Review, Stage } from "@/lib/types";
-import { loadReviews } from "@/lib/data/utils";
+} from '@/components/ui/chart';
+import { defiLlama } from '@/services/defillama';
+import { protocols, reviews } from '#site/content';
+import { Project, Review, Stage } from '@/lib/types';
+import { loadReviews } from '@/lib/data/utils';
 
 type ProjectWithReview = Omit<Project, 'tvl'> & Review;
 
@@ -24,7 +24,7 @@ interface VisualisedData {
 
 export interface PieChartProps {
   groupByKey: keyof Review;
-  operation: "sum" | "count";
+  operation: 'sum' | 'count';
   baseColor: string;
   chartTitle: string;
   labelValueDescription: string;
@@ -54,16 +54,16 @@ const groupBy = (
 };
 
 const keyToWord = (key: string) => {
-  if (key === "R") {
-    return "Review";
-  } else if (key === "O") {
-    return "Others";
-  } else if (key === "1") {
-    return "Stage 1";
-  } else if (key === "2") {
-    return "Stage 2";
-  } else if (key === "0") {
-    return "Stage 0";
+  if (key === 'R') {
+    return 'Review';
+  } else if (key === 'O') {
+    return 'Others';
+  } else if (key === '1') {
+    return 'Stage 1';
+  } else if (key === '2') {
+    return 'Stage 2';
+  } else if (key === '0') {
+    return 'Stage 0';
   } else {
     return `${key}`;
   }
@@ -71,12 +71,12 @@ const keyToWord = (key: string) => {
 
 const aggregateByKey = (
   groupedData: Record<string, ProjectWithReview[]>,
-  operation: "sum" | "count"
+  operation: 'sum' | 'count'
 ): { key: string; value: number }[] => {
   return Object.entries(groupedData).map(([key, projects]) => {
-    if (operation === "sum") {
+    if (operation === 'sum') {
       const totalTvl = projects.reduce(
-        (sum, project) => sum + (project.tvl === "n/a" ? 0 : project.tvl),
+        (sum, project) => sum + (project.tvl === 'n/a' ? 0 : project.tvl),
         0
       );
       key = keyToWord(key);
@@ -88,10 +88,7 @@ const aggregateByKey = (
   });
 };
 
-const generateColorPalette = (
-  baseColor: string,
-  numColors: number
-): string[] => {
+const generateColorPalette = (baseColor: string, numColors: number): string[] => {
   const colors = [];
   const shadeColor = (color: string, percent: number): string => {
     const num = parseInt(color.slice(1), 16);
@@ -134,55 +131,48 @@ const extendWithColor = (
 
 const defaultLabelFormatters = {
   count: (data: VisualisedData[]) => ({
-    value: data.find((el) => el.key === "Stage 2")?.value.toString() || "0",
-    description: "Stage-2",
+    value: data.find((el) => el.key === 'Stage 2')?.value.toString() || '0',
+    description: 'Stage-2',
   }),
   tvl: (data: VisualisedData[]) => ({
     value: `${(data.reduce((sum, el) => sum + el.value, 0) / 1e9).toFixed(2)}B`,
-    description: "Total TVL",
+    description: 'Total TVL',
   }),
   chain: (data: VisualisedData[]) => ({
-    value: data.reduce(
-      (max, current) => (current.value > max.value ? current : max),
-      data[0]
-    ).key,
-    description: "Most Covered",
+    value: data.reduce((max, current) => (current.value > max.value ? current : max), data[0]).key,
+    description: 'Most Covered',
   }),
   chainTvl: (data: VisualisedData[]) => ({
-    value: data.reduce(
-      (max, current) => (current.value > max.value ? current : max),
-      data[0]
-    ).key,
-    description: "Most TVL",
+    value: data.reduce((max, current) => (current.value > max.value ? current : max), data[0]).key,
+    description: 'Most TVL',
   }),
 };
 
 type FormatterKey = keyof typeof defaultLabelFormatters;
 
 const getDefaultFormatter = (
-  operation: "sum" | "count",
+  operation: 'sum' | 'count',
   groupByKey: keyof Review
 ): FormatterKey => {
   // Create a mapping of conditions to formatter keys
   const formatterMapping = {
     stage: {
-      count: "count" as const,
-      sum: "tvl" as const,
+      count: 'count' as const,
+      sum: 'tvl' as const,
     },
     chain: {
-      count: "chain" as const,
-      sum: "chainTvl" as const,
+      count: 'chain' as const,
+      sum: 'chainTvl' as const,
     },
     // Add more mappings for other groupByKey values as needed
     default: {
-      count: "count" as const,
-      sum: "tvl" as const,
+      count: 'count' as const,
+      sum: 'tvl' as const,
     },
   };
 
   // Get the appropriate mapping based on groupByKey or use default
-  const mapping =
-    (formatterMapping as any)[groupByKey] || formatterMapping.default;
+  const mapping = (formatterMapping as any)[groupByKey] || formatterMapping.default;
   return mapping[operation];
 };
 
@@ -208,9 +198,10 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
         .flat();
 
       // Filter out infrastructure stages (I0, I1, I2) when grouping by stage
-      const filteredMerged = groupByKey === "stage" 
-        ? merged.filter((item) => !item.stage?.toString().startsWith("I"))
-        : merged;
+      const filteredMerged =
+        groupByKey === 'stage'
+          ? merged.filter((item) => !item.stage?.toString().startsWith('I'))
+          : merged;
 
       const groupedBy = groupBy(filteredMerged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
@@ -231,36 +222,19 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
           <CardTitle className="text-sm md:text-md">{chartTitle}</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square h-[120px]"
-          >
+          <ChartContainer config={chartConfig} className="mx-auto aspect-square h-[120px]">
             <PieChart>
               <ChartTooltip
                 cursor={false}
-                content={
-                  <ChartTooltipContent hideLabel className="min-w-[8rem]" />
-                }
+                content={<ChartTooltipContent hideLabel className="min-w-[8rem]" />}
               />
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="key"
-                innerRadius={35}
-                strokeWidth={5}
-              >
+              <Pie data={data} dataKey="value" nameKey="key" innerRadius={35} strokeWidth={5}>
                 <Label
                   content={({ viewBox }) => {
-                    if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox))
-                      return null;
+                    if (!viewBox || !('cx' in viewBox) || !('cy' in viewBox)) return null;
 
-                    const formatterKey = getDefaultFormatter(
-                      operation,
-                      groupByKey
-                    );
-                    const formatter =
-                      customLabelFormatter ||
-                      defaultLabelFormatters[formatterKey];
+                    const formatterKey = getDefaultFormatter(operation, groupByKey);
+                    const formatter = customLabelFormatter || defaultLabelFormatters[formatterKey];
                     const { value, description } = formatter(data);
 
                     return (

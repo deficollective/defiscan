@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import React, { useEffect, useState, ReactElement } from "react";
+import { cn } from '@/lib/utils';
+import React, { useEffect, useState, ReactElement } from 'react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import ReactDOMServer from "react-dom/server";
+} from '@/components/ui/accordion';
+import ReactDOMServer from 'react-dom/server';
 
 // Helper function to safely get text content from a React node
 function getTextContent(node: React.ReactNode): string {
-  if (typeof node === "string") return node;
-  if (Array.isArray(node)) return node.map(getTextContent).join(" ");
+  if (typeof node === 'string') return node;
+  if (Array.isArray(node)) return node.map(getTextContent).join(' ');
   if (React.isValidElement(node)) {
     return getTextContent(node.props.children);
   }
-  return "";
+  return '';
 }
 
 // Helper function to parse table data with proper typing
@@ -34,7 +34,7 @@ function parseTableData(children: React.ReactNode): {
 
     const childElement = child as ReactElement;
 
-    if (childElement.type === "thead") {
+    if (childElement.type === 'thead') {
       React.Children.forEach(childElement.props.children, (tr) => {
         if (!React.isValidElement(tr)) return;
         const trElement = tr as ReactElement;
@@ -45,7 +45,7 @@ function parseTableData(children: React.ReactNode): {
           headers.push(getTextContent(thElement.props.children));
         });
       });
-    } else if (childElement.type === "tbody") {
+    } else if (childElement.type === 'tbody') {
       React.Children.forEach(childElement.props.children, (tr) => {
         if (!React.isValidElement(tr)) return;
         const trElement = tr as ReactElement;
@@ -76,23 +76,20 @@ interface ResponsiveTableProps {
   className?: string;
 }
 
-export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
-  children,
-  className,
-}) => {
+export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({ children, className }) => {
   const [isMobile, setIsMobile] = useState(false);
   const { headers, rows } = parseTableData(children);
-  
+
   // Check if this is a permissions table
-  const isPermissionsTable = headers.includes("Function") && headers.includes("Impact");
+  const isPermissionsTable = headers.includes('Function') && headers.includes('Impact');
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   if (isMobile) {
@@ -127,13 +124,8 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                   {/* Skip columns that are already in title */}
                   {row.slice(1).map((cell, cellIndex) => (
                     <div key={cellIndex}>
-                      <span className="font-semibold block mb-2">
-                        {headers[cellIndex + 1]}
-                      </span>
-                      <div
-                        className="text-sm"
-                        dangerouslySetInnerHTML={{ __html: cell }}
-                      />
+                      <span className="font-semibold block mb-2">{headers[cellIndex + 1]}</span>
+                      <div className="text-sm" dangerouslySetInnerHTML={{ __html: cell }} />
                     </div>
                   ))}
                 </div>
@@ -146,14 +138,18 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
   }
 
   return (
-    <div className={cn(
-      isPermissionsTable ? "overflow-x-auto 2xl:overflow-x-visible" : "overflow-x-auto", 
-      className
-    )}>
-      <table className={cn(
-        "w-full border-collapse border",
-        isPermissionsTable ? "table-fixed permissions-table" : "table-auto"
-      )}>
+    <div
+      className={cn(
+        isPermissionsTable ? 'overflow-x-auto 2xl:overflow-x-visible' : 'overflow-x-auto',
+        className
+      )}
+    >
+      <table
+        className={cn(
+          'w-full border-collapse border',
+          isPermissionsTable ? 'table-fixed permissions-table' : 'table-auto'
+        )}
+      >
         {children}
       </table>
     </div>

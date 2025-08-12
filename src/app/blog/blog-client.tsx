@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { posts } from "#site/content";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import Link from 'next/link';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { posts } from '#site/content';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export default function BlogClient() {
   const router = useRouter();
@@ -13,9 +13,9 @@ export default function BlogClient() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
-    const tagsFromUrl = searchParams.get("tags");
+    const tagsFromUrl = searchParams.get('tags');
     if (tagsFromUrl) {
-      setSelectedTags(tagsFromUrl.split(","));
+      setSelectedTags(tagsFromUrl.split(','));
     }
   }, [searchParams]);
 
@@ -33,17 +33,15 @@ export default function BlogClient() {
 
   const filteredPosts = useMemo(() => {
     if (selectedTags.length === 0) return publishedPosts;
-    return publishedPosts.filter((post) =>
-      selectedTags.every((tag) => post.tags?.includes(tag))
-    );
+    return publishedPosts.filter((post) => selectedTags.every((tag) => post.tags?.includes(tag)));
   }, [publishedPosts, selectedTags]);
 
   const updateUrl = (tags: string[]) => {
     const params = new URLSearchParams(searchParams);
     if (tags.length > 0) {
-      params.set("tags", tags.join(","));
+      params.set('tags', tags.join(','));
     } else {
-      params.delete("tags");
+      params.delete('tags');
     }
     router.push(`/blog?${params.toString()}`, { scroll: false });
   };
@@ -52,7 +50,7 @@ export default function BlogClient() {
     const newTags = selectedTags.includes(tag)
       ? selectedTags.filter((t) => t !== tag)
       : [...selectedTags, tag];
-    
+
     setSelectedTags(newTags);
     updateUrl(newTags);
   };
@@ -65,10 +63,10 @@ export default function BlogClient() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl tracking-tight">Blog</h1>
-        <p className="text-muted-foreground">
-          Latest insights and analysis from the DeFiScan team
-        </p>
+        <h1 className="text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl tracking-tight">
+          Blog
+        </h1>
+        <p className="text-muted-foreground">Latest insights and analysis from the DeFiScan team</p>
       </div>
 
       {allTags.length > 0 && (
@@ -87,18 +85,14 @@ export default function BlogClient() {
           <div className="flex flex-wrap gap-2">
             {allTags.map((tag) => {
               const isSelected = selectedTags.includes(tag);
-              const postCount = publishedPosts.filter((post) =>
-                post.tags?.includes(tag)
-              ).length;
+              const postCount = publishedPosts.filter((post) => post.tags?.includes(tag)).length;
 
               return (
                 <Badge
                   key={tag}
-                  variant={isSelected ? "default" : "outline"}
+                  variant={isSelected ? 'default' : 'outline'}
                   className={`cursor-pointer transition-colors ${
-                    isSelected
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-secondary"
+                    isSelected ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
                   }`}
                   onClick={() => toggleTag(tag)}
                 >
@@ -127,9 +121,9 @@ export default function BlogClient() {
               {post.tags && post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
-                    <Badge 
-                      key={tag} 
-                      variant="secondary" 
+                    <Badge
+                      key={tag}
+                      variant="secondary"
                       className="text-xs cursor-pointer hover:bg-secondary/80"
                       onClick={() => toggleTag(tag)}
                     >
@@ -138,16 +132,14 @@ export default function BlogClient() {
                   ))}
                 </div>
               )}
-              
+
               <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div>By {post.authors.join(', ')}</div>
                 <div>
-                  By {post.authors.join(", ")}
-                </div>
-                <div>
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
+                  {new Date(post.date).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
                   })}
                 </div>
               </div>
@@ -159,9 +151,9 @@ export default function BlogClient() {
       {filteredPosts.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">
-            {selectedTags.length > 0 
-              ? "No blog posts found matching the selected tags." 
-              : "No blog posts found."}
+            {selectedTags.length > 0
+              ? 'No blog posts found matching the selected tags.'
+              : 'No blog posts found.'}
           </p>
         </div>
       )}

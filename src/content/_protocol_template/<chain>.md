@@ -1,12 +1,12 @@
 ---
-chain: "the name of the chain on which the protocol is deployed"
+chain: 'the name of the chain on which the protocol is deployed'
 stage: 0
-reasons: ["remove", "if none"]
-risks: ["x", "x", "x", "x", "x"]
-author: ["author-1", "author-2"]
-submission_date: "1970-01-01"
-publish_date: "1970-01-01"
-update_date: "1970-01-01"
+reasons: ['remove', 'if none']
+risks: ['x', 'x', 'x', 'x', 'x']
+author: ['author-1', 'author-2']
+submission_date: '1970-01-01'
+publish_date: '1970-01-01'
+update_date: '1970-01-01'
 ---
 
 # Summary

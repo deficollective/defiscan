@@ -1,47 +1,41 @@
 ---
-chain: "Ethereum"
-stage: "O"
-reasons: ["Unverified Contracts"]
-risks: ["L", "H", "M", "H", "H"]
-author: ["CookingCryptos", "sagaciousyves"]
-submission_date: "2024-10-23"
-publish_date: "2024-10-23"
-update_date: "1970-01-01"
+chain: 'Ethereum'
+stage: 'O'
+reasons: ['Unverified Contracts']
+risks: ['L', 'H', 'M', 'H', 'H']
+author: ['CookingCryptos', 'sagaciousyves']
+submission_date: '2024-10-23'
+publish_date: '2024-10-23'
+update_date: '1970-01-01'
 stage_requirements:
   [
     [
-      {
-        text: "Assets are not in custody by a centralized entity",
-        status: "fixed",
-      },
-      { text: "All contracts are verified", status: "unfixed" },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'All contracts are verified', status: 'unfixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
-        status: "unfixed",
+        text: 'Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council',
+        status: 'unfixed',
       },
       {
-        text: "Dependencies with High centralization score and no mitigations.",
-        status: "unfixed",
+        text: 'Dependencies with High centralization score and no mitigations.',
+        status: 'unfixed',
       },
-      {
-        text: "No Frontend backup or self-hosting option exists",
-        status: "unfixed",
-      },
+      { text: 'No Frontend backup or self-hosting option exists', status: 'unfixed' },
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
-        status: "unfixed",
+        text: 'Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days',
+        status: 'unfixed',
       },
       {
-        text: "Dependencies with High or Medium centralization score and no mitigations.",
-        status: "unfixed",
+        text: 'Dependencies with High or Medium centralization score and no mitigations.',
+        status: 'unfixed',
       },
-      { text: "No alternative third-party frontends exist", status: "unfixed" },
+      { text: 'No alternative third-party frontends exist', status: 'unfixed' },
     ],
   ]
 ---
