@@ -19,7 +19,7 @@ export interface ChainTvlData {
 }
 
 class DeFiLlamaService {
-  private readonly BASE_URL = "https://api.llama.fi";
+  private readonly BASE_URL = 'https://api.llama.fi';
 
   // Singleton pattern
   private static instance: DeFiLlamaService;
@@ -49,20 +49,20 @@ class DeFiLlamaService {
 
   // Get all protocols
   public async getProtocols(): Promise<Protocol[]> {
-    return this.fetch<Protocol[]>("/protocols");
+    return this.fetch<Protocol[]>('/protocols');
   }
 
   // Get historical TVL data
   public async getHistoricalChainTvl(
     startTimestamp: number = 1577833200 // Default to Jan 1, 2020
   ): Promise<ChainTvlData[]> {
-    const data = await this.fetch<ChainTvlData[]>("/v2/historicalChainTvl");
+    const data = await this.fetch<ChainTvlData[]>('/v2/historicalChainTvl');
     return data.filter((x) => x.date > startTimestamp);
   }
 
   // Get current total DeFi TVL
   public async getCurrentTotalTvl(): Promise<number> {
-    const data = await this.fetch<ChainTvlData[]>("/v2/historicalChainTvl");
+    const data = await this.fetch<ChainTvlData[]>('/v2/historicalChainTvl');
     // Return the most recent TVL value
     return data[data.length - 1].tvl;
   }
@@ -74,12 +74,11 @@ class DeFiLlamaService {
   }
 
   // Get protocol data with caching
-  private cache: Map<string, { data: Protocol[]; timestamp: number }> =
-    new Map();
+  private cache: Map<string, { data: Protocol[]; timestamp: number }> = new Map();
   private CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
   public async getProtocolsWithCache(): Promise<Protocol[]> {
-    const cached = this.cache.get("protocols");
+    const cached = this.cache.get('protocols');
     const now = Date.now();
 
     if (cached && now - cached.timestamp < this.CACHE_DURATION) {
@@ -87,7 +86,7 @@ class DeFiLlamaService {
     }
 
     const data = await this.getProtocols();
-    this.cache.set("protocols", { data, timestamp: now });
+    this.cache.set('protocols', { data, timestamp: now });
     return data;
   }
 }

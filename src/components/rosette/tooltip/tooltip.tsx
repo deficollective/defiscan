@@ -1,14 +1,11 @@
-"use client";
+'use client';
 
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import React, { useRef, useState } from "react";
-import { useBreakpoint } from "../hooks/use-is-mobile";
-import { cn } from "../helper/cn";
-import { mergeRefs } from "../helper/merge-refs";
-import {
-  TooltipTriggerContextProvider,
-  useTooltipTriggerContext,
-} from "./tooltip-trigger-context";
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import React, { useRef, useState } from 'react';
+import { useBreakpoint } from '../hooks/use-is-mobile';
+import { cn } from '../helper/cn';
+import { mergeRefs } from '../helper/merge-refs';
+import { TooltipTriggerContextProvider, useTooltipTriggerContext } from './tooltip-trigger-context';
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -35,7 +32,7 @@ const TooltipTrigger = React.forwardRef<
 >(({ disabledOnMobile, ...props }, ref) => {
   const localRef = useRef(null);
   const breakpoint = useBreakpoint();
-  const isMobile = breakpoint === "mobile";
+  const isMobile = breakpoint === 'mobile';
   const { setOpen } = useTooltipTriggerContext();
 
   // Tooltips do not work on mobile by default
@@ -71,8 +68,8 @@ const TooltipContent = React.forwardRef<
     ref={ref}
     sideOffset={sideOffset}
     className={cn(
-      "z-110 rounded-md bg-white px-4 py-3 text-left text-sm font-normal normal-case leading-tight text-gray-700 shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:bg-neutral-700 dark:text-white",
-      !fitContent && "max-w-[300px] text-wrap",
+      'z-110 rounded-md bg-white px-4 py-3 text-left text-sm font-normal normal-case leading-tight text-gray-700 shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:bg-neutral-700 dark:text-white',
+      !fitContent && 'max-w-[300px] text-wrap',
       className
     )}
     {...props}

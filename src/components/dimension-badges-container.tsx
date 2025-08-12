@@ -1,15 +1,15 @@
-import * as React from "react";
-import { DimensionBadge } from "./dimension-badge";
-import { type RosetteValue } from "./rosette/types";
+import * as React from 'react';
+import { DimensionBadge } from './dimension-badge';
+import { type RosetteValue } from './rosette/types';
 
 interface DimensionBadgesContainerProps {
   values: RosetteValue[];
   className?: string;
 }
 
-export function DimensionBadgesContainer({ 
+export function DimensionBadgesContainer({
   values,
-  className = "" 
+  className = '',
 }: DimensionBadgesContainerProps) {
   return (
     <div className={`flex flex-col w-full ${className}`} style={{ gap: '2px' }}>

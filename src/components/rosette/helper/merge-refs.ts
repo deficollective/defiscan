@@ -24,7 +24,7 @@ export function mergeRefs<T>(
 
   return function mergedRefs(ref) {
     for (const inputRef of filteredInputRefs) {
-      if (typeof inputRef === "function") {
+      if (typeof inputRef === 'function') {
         inputRef(ref);
       } else if (inputRef) {
         (inputRef as React.MutableRefObject<T | null>).current = ref;

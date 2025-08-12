@@ -1,52 +1,33 @@
 ---
-protocol: "Uniswap-V3"
-website: "https://uniswap.org/"
-x: "https://x.com/uniswap"
-github:
-  [
-    "https://github.com/Uniswap/v3-core",
-    "https://github.com/Uniswap/v3-periphery/",
-  ]
-defillama_slug: ["uniswap-v3"]
-chain: "Base"
+protocol: 'Uniswap-V3'
+website: 'https://uniswap.org/'
+x: 'https://x.com/uniswap'
+github: ['https://github.com/Uniswap/v3-core', 'https://github.com/Uniswap/v3-periphery/']
+defillama_slug: ['uniswap-v3']
+chain: 'Base'
 stage: 1
 reasons: []
-risks: ["M", "L", "L", "L", "L"]
-author: ["mmilien", "CookingCryptos"]
-submission_date: "2025-01-16"
-publish_date: "2025-01-22"
-update_date: "2025-01-31"
+risks: ['M', 'L', 'L', 'L', 'L']
+author: ['mmilien', 'CookingCryptos']
+submission_date: '2025-01-16'
+publish_date: '2025-01-22'
+update_date: '2025-01-31'
 stage_requirements:
   [
     [
-      {
-        text: "Assets are not in custody by a centralized entity",
-        status: "fixed",
-      },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
-      {
-        text: "Upgrades have no potential of “loss of funds“ ",
-        status: "fixed",
-      },
-      {
-        text: "Dependency with a High centralization score is mitigated",
-        status: "fixed",
-      },
-      {
-        text: "Frontend backups or self-hosting option exists",
-        status: "fixed",
-      },
+      { text: 'Upgrades have no potential of “loss of funds“ ', status: 'fixed' },
+      { text: 'Dependency with a High centralization score is mitigated', status: 'fixed' },
+      { text: 'Frontend backups or self-hosting option exists', status: 'fixed' },
     ],
     [
-      {
-        text: "Upgrades have no potential of “loss of funds or unclaimed yield“",
-        status: "fixed",
-      },
-      { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" },
+      { text: 'Upgrades have no potential of “loss of funds or unclaimed yield“', status: 'fixed' },
+      { text: 'There are no external dependencies', status: 'fixed' },
+      { text: 'Alternative third-party frontends exist', status: 'fixed' },
     ],
   ]
 ---

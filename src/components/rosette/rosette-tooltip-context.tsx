@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState } from "react";
-import { type RosetteValue } from "./types";
+import { createContext, useContext, useState } from 'react';
+import { type RosetteValue } from './types';
 
 interface ContentState {
   risk: RosetteValue;
-  side: "top" | "bottom";
+  side: 'top' | 'bottom';
   sideOffset: number;
 }
 
@@ -14,9 +14,7 @@ type RosetteTooltipContextValue = {
   setContent: React.Dispatch<React.SetStateAction<ContentState | undefined>>;
 };
 
-const RosetteTooltipContext = createContext<RosetteTooltipContextValue | null>(
-  null
-);
+const RosetteTooltipContext = createContext<RosetteTooltipContextValue | null>(null);
 
 interface Props {
   children: React.ReactNode;

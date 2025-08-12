@@ -1,47 +1,38 @@
 ---
-chain: "Ethereum"
+chain: 'Ethereum'
 stage: 0
 reasons: []
-risks: ["L", "H", "H", "H", "L"]
-author: ["eliasbourgon"]
-submission_date: "2025-05-13"
-publish_date: "1970-01-01"
-update_date: "1970-01-01"
+risks: ['L', 'H', 'H', 'H', 'L']
+author: ['eliasbourgon']
+submission_date: '2025-05-13'
+publish_date: '1970-01-01'
+update_date: '1970-01-01'
 stage_requirements:
   [
     [
-      {
-        text: "Assets are not in custody by a centralized entity",
-        status: "fixed",
-      },
-      { text: "Critical contracts are verified", status: "fixed" },
-      { text: "Source-available codebase", status: "fixed" },
-      { text: "Public documentation exists", status: "fixed" },
+      { text: 'Assets are not in custody by a centralized entity', status: 'fixed' },
+      { text: 'Critical contracts are verified', status: 'fixed' },
+      { text: 'Source-available codebase', status: 'fixed' },
+      { text: 'Public documentation exists', status: 'fixed' },
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
-        status: "unfixed",
+        text: 'Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council',
+        status: 'unfixed',
       },
-      {
-        text: "Dependency with a High centralization score without mitigation",
-        status: "unfixed",
-      },
-      {
-        text: "Frontend backups or self-hosting option exists",
-        status: "fixed",
-      },
+      { text: 'Dependency with a High centralization score without mitigation', status: 'unfixed' },
+      { text: 'Frontend backups or self-hosting option exists', status: 'fixed' },
     ],
     [
       {
-        text: "Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days",
-        status: "unfixed",
+        text: 'Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days',
+        status: 'unfixed',
       },
       {
-        text: "Dependencies with High or Medium centralization and are mitigated",
-        status: "unfixed",
+        text: 'Dependencies with High or Medium centralization and are mitigated',
+        status: 'unfixed',
       },
-      { text: "Alternative third-party frontends exist", status: "fixed" },
+      { text: 'Alternative third-party frontends exist', status: 'fixed' },
     ],
   ]
 ---

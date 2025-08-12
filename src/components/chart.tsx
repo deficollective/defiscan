@@ -1,26 +1,21 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import React, { useState, useEffect } from 'react';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { ChainTvlData, defiLlama } from "@/services/defillama";
+} from '@/components/ui/chart';
+import { ChainTvlData, defiLlama } from '@/services/defillama';
 
 const chartConfig = {
   tvl: {
-    label: "TVL",
-    color: "#7c22b2",
+    label: 'TVL',
+    color: '#7c22b2',
   },
 } satisfies ChartConfig;
 
@@ -40,17 +35,14 @@ const Chart: React.FC<ChartProps> = ({ className }) => {
   }, []);
 
   return (
-    <Card className={"w-2/3" + className}>
+    <Card className={'w-2/3' + className}>
       <CardHeader>
         <div className="-mt-4 -mb-">
           <CardDescription>Total Value Locked (TVL) in DeFi</CardDescription>
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[200px] w-full"
-        >
+        <ChartContainer config={chartConfig} className="aspect-auto h-[200px] w-full">
           <AreaChart
             accessibilityLayer
             data={data}
@@ -68,18 +60,11 @@ const Chart: React.FC<ChartProps> = ({ className }) => {
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value * 1000);
-                return date.toLocaleDateString("en-US");
+                return date.toLocaleDateString('en-US');
               }}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" />}
-            />
-            <Area
-              dataKey="tvl"
-              fill={`var(--color-tvl)`}
-              stroke={`var(--color-tvl)`}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
+            <Area dataKey="tvl" fill={`var(--color-tvl)`} stroke={`var(--color-tvl)`} />
           </AreaChart>
         </ChartContainer>
       </CardContent>

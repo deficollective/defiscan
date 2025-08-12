@@ -1,110 +1,110 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from '@/components/ui/accordion';
 
 // Data structures
 const introContent = {
-  title: "What is DeFiScan?",
+  title: 'What is DeFiScan?',
   paragraphs: [
-    "The maturity of DeFi technology progresses through several stages characterized by different degrees of decentralization. Upon deployment, DeFi protocols often expose critical risks from central dependencies and permissions controlled by centralized operators. As the protocol matures, these risks are eliminated e.g. through the introduction of fallback mechanisms, Security Councils and exit windows. To date, however, these stages have not been formalized resulting in a lack of transparency around the maturity and related risks of DeFi protocols.",
+    'The maturity of DeFi technology progresses through several stages characterized by different degrees of decentralization. Upon deployment, DeFi protocols often expose critical risks from central dependencies and permissions controlled by centralized operators. As the protocol matures, these risks are eliminated e.g. through the introduction of fallback mechanisms, Security Councils and exit windows. To date, however, these stages have not been formalized resulting in a lack of transparency around the maturity and related risks of DeFi protocols.',
     "DeFiScan offers a framework formalizing the decentralization stages of DeFi technology and allowing, for the first time, to assess and monitor the technology's maturity in a verifiable manner. This framework consists of two parts:",
   ],
   bulletPoints: [
     'A centralization risk scoring system based on a scale of "High", "Medium" and "Low" severity risks',
-    "A formalization of the decentralization stages which relates directly to the risk scores achieved by a DeFi protocol",
+    'A formalization of the decentralization stages which relates directly to the risk scores achieved by a DeFi protocol',
   ],
   blogLink: {
-    text: "blog post",
-    url: "https://deficollective.org/blog/introducing-defiscan/",
+    text: 'blog post',
+    url: 'https://deficollective.org/blog/introducing-defiscan/',
   },
 };
 
 const introContent2 = {
-  title: "What is DeFiScan NOT?",
+  title: 'What is DeFiScan NOT?',
   paragraphs: [
-    "DeFiScan strictly focuses on the analysis and monitoring of the decentralization stage of DeFi protocols. It does NOT assess or make any statement about other aspects like:",
+    'DeFiScan strictly focuses on the analysis and monitoring of the decentralization stage of DeFi protocols. It does NOT assess or make any statement about other aspects like:',
   ],
   bulletPoints: [
-    "Smart contract risks",
-    "Regulatory/compliance risks",
-    "UX",
-    "Financial performance",
-    "Any other risk associated with DeFi protocols",
+    'Smart contract risks',
+    'Regulatory/compliance risks',
+    'UX',
+    'Financial performance',
+    'Any other risk associated with DeFi protocols',
   ],
 };
 
 const riskData = [
   {
-    category: "Chain",
+    category: 'Chain',
     risks: {
-      high: "L2Beat Stage 0",
-      medium: "L2Beat Stage 1",
-      low: "Ethereum mainnet or a comparable L1, or L2Beat Stage 2",
+      high: 'L2Beat Stage 0',
+      medium: 'L2Beat Stage 1',
+      low: 'Ethereum mainnet or a comparable L1, or L2Beat Stage 2',
     },
-    anchor: "chain",
+    anchor: 'chain',
   },
   {
-    category: "Upgradeability",
+    category: 'Upgradeability',
     risks: {
-      high: "Possible upgrades may result in the theft or loss of user funds",
+      high: 'Possible upgrades may result in the theft or loss of user funds',
       medium:
-        "Possible upgrades may result in the theft or loss of unclaimed yield or may otherwise materially change the expected performance of the system (but user funds remain unaffected)",
-      low: "Possible upgrades do not materially change the expected performance of the system (or result in the theft or loss of user funds and unclaimed yield)",
+        'Possible upgrades may result in the theft or loss of unclaimed yield or may otherwise materially change the expected performance of the system (but user funds remain unaffected)',
+      low: 'Possible upgrades do not materially change the expected performance of the system (or result in the theft or loss of user funds and unclaimed yield)',
     },
-    anchor: "upgradability",
+    anchor: 'upgradability',
   },
   {
-    category: "Autonomy",
+    category: 'Autonomy',
     risks: {
-      high: "Dependencies may cause theft or loss of user funds and exhibit Stage 0, or equivalent, centralization",
+      high: 'Dependencies may cause theft or loss of user funds and exhibit Stage 0, or equivalent, centralization',
       medium:
-        "Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization", 
-      low: "Dependencies (if any) cannot materially change the expected protocol performance, OR dependencies exhibit Stage 2, or equivalent, decentralization",
+        'Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization',
+      low: 'Dependencies (if any) cannot materially change the expected protocol performance, OR dependencies exhibit Stage 2, or equivalent, decentralization',
     },
-    anchor: "autonomy",
+    anchor: 'autonomy',
   },
   {
-    category: "Exit Window",
+    category: 'Exit Window',
     risks: {
       high: "Upgradeability score is 'High' AND permissions are protected with an exit window of less than 7 days (or no Exit Window)",
       medium:
         "Upgradeability score is 'Medium' OR permissions are protected with an exit window of at least 7 days",
       low: "Upgradeability score is 'Low' OR permissions are transferred to an onchain governance process with an exit window of at least 30 days",
     },
-    anchor: "exit-window",
+    anchor: 'exit-window',
   },
   {
-    category: "Accessibility",
+    category: 'Accessibility',
     risks: {
-      high: "A single user interface exists without a backup solution resulting in the temporary freezing of user funds if the interface is shutdown",
+      high: 'A single user interface exists without a backup solution resulting in the temporary freezing of user funds if the interface is shutdown',
       medium:
-        "A single user interface exists with public access to a backup solution such as a self-hosting app",
-      low: "Multiple independent user interfaces exist, e.g. websites, in-wallet access, etc., guaranteeing access to user funds even if one interface is shutdown",
+        'A single user interface exists with public access to a backup solution such as a self-hosting app',
+      low: 'Multiple independent user interfaces exist, e.g. websites, in-wallet access, etc., guaranteeing access to user funds even if one interface is shutdown',
     },
-    anchor: "accessibility",
+    anchor: 'accessibility',
   },
 ];
 
 const stagesData = [
   {
-    stage: "Stage 0",
+    stage: 'Stage 0',
     description:
-      "This is the first stage of a DeFi protocol where basic requirements give the technology a decentralized foundation. Critical permissions are still controlled by centralized operators and external dependencies may expose critical risks to users. Yet, its foundation allows for the gradual decentralization and elimination of these risks.",
+      'This is the first stage of a DeFi protocol where basic requirements give the technology a decentralized foundation. Critical permissions are still controlled by centralized operators and external dependencies may expose critical risks to users. Yet, its foundation allows for the gradual decentralization and elimination of these risks.',
     qualifications: [
-      "✅ Blockchain-based, financial protocol",
-      "✅ Assets are not in custody by a centralized entity",
-      "✅ Public documentation exists that outlines the protocol components and expected performance",
-      "✅ Source-available codebase",
-      "✅ Verified contracts",
+      '✅ Blockchain-based, financial protocol',
+      '✅ Assets are not in custody by a centralized entity',
+      '✅ Public documentation exists that outlines the protocol components and expected performance',
+      '✅ Source-available codebase',
+      '✅ Verified contracts',
     ],
   },
   {
-    stage: "Stage 1",
+    stage: 'Stage 1',
     description:
       "In the second stage, risks from critical permissions and dependencies are significantly reduced by either revoking critical permissions, or establishing a Security Council to control such permissions, or enforcing an exit window of at least 7 days so users can withdraw funds in case of an unwanted protocol update. Critical risks from external dependencies are mitigated by the implementation of appropriate fallback mechanisms. Furthermore, the underlying chain cannot censor users' transactions and a backup user interface exists guaranteeing access to user funds.",
     qualifications: [
@@ -113,7 +113,7 @@ const stagesData = [
     ],
   },
   {
-    stage: "Stage 2",
+    stage: 'Stage 2',
     description:
       "The final stage is reached when critical permissions have either been revoked or delegated to an on-chain governance system with ample time for users to exit in case of an unwanted protocol update. Risks from external dependencies have been further reduced such that users' funds and unclaimed yield remain unaffected by a failure. In addition, different independent user interfaces and a fully decentralized underlying chain guarantee access to users' funds at any time.",
     qualifications: [
@@ -123,39 +123,39 @@ const stagesData = [
 ];
 
 const securityCouncilRequirements = [
-  "At least 7 signers",
-  "At least 51% threshold",
-  "At least 50% non-insider signers",
-  "Signers are publicly announced (with name or pseudonym)",
+  'At least 7 signers',
+  'At least 51% threshold',
+  'At least 50% non-insider signers',
+  'Signers are publicly announced (with name or pseudonym)',
 ];
 
 const othersData = {
   description:
-    "The system does not meet basic Stage 0 requirements, or critical information is missing for a complete assessment, and thus cannot be characterized as a DeFi technology.",
+    'The system does not meet basic Stage 0 requirements, or critical information is missing for a complete assessment, and thus cannot be characterized as a DeFi technology.',
   qualifications: [
-    "✅ Blockchain-based, financial protocol",
-    "❌ Assets are not in custody by a centralized entity",
-    "❌ Public documentation exists that outlines the protocol components and expected performance",
-    "❌ Source-available codebase",
-    "❌ Verified contracts",
-  ]
-}
+    '✅ Blockchain-based, financial protocol',
+    '❌ Assets are not in custody by a centralized entity',
+    '❌ Public documentation exists that outlines the protocol components and expected performance',
+    '❌ Source-available codebase',
+    '❌ Verified contracts',
+  ],
+};
 
 function createIdFromTitle(title: string) {
   return title
     .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "");
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '');
 }
 
 // Components
 const IntroSection = () => (
   <>
-    <a href={`#${createIdFromTitle("WTF is DeFiScan?")}`}>
+    <a href={`#${createIdFromTitle('WTF is DeFiScan?')}`}>
       <h1
-        id={createIdFromTitle("WTF is DeFiScan?")}
+        id={createIdFromTitle('WTF is DeFiScan?')}
         className="inline-block tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
-        style={{ scrollMarginTop: "100px" }}
+        style={{ scrollMarginTop: '100px' }}
       >
         {introContent.title}
       </h1>
@@ -163,7 +163,7 @@ const IntroSection = () => (
 
     <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
       {introContent.paragraphs.map((paragraph, index) => (
-        <p key={index} className={index > 0 ? "mt-4" : ""}>
+        <p key={index} className={index > 0 ? 'mt-4' : ''}>
           {paragraph}
         </p>
       ))}
@@ -177,7 +177,7 @@ const IntroSection = () => (
         {introContent2.title}
       </h1>
       {introContent2.paragraphs.map((paragraph, index) => (
-        <p key={index} className={index > 0 ? "mt-4" : ""}>
+        <p key={index} className={index > 0 ? 'mt-4' : ''}>
           {paragraph}
         </p>
       ))}
@@ -187,12 +187,9 @@ const IntroSection = () => (
         ))}
       </ul>
       <p className="mt-4">
-        Here we provide an overview of the framework. For a more detailed
-        discussion, please refer to the introduction{" "}
-        <a
-          href={introContent.blogLink.url}
-          className="font-medium text-primary hover:underline"
-        >
+        Here we provide an overview of the framework. For a more detailed discussion, please refer
+        to the introduction{' '}
+        <a href={introContent.blogLink.url} className="font-medium text-primary hover:underline">
           {introContent.blogLink.text}
         </a>
         .
@@ -203,11 +200,11 @@ const IntroSection = () => (
 
 const RisksSection = () => (
   <>
-    <a href={`#${createIdFromTitle("DeFi Centralization Risks")}`}>
+    <a href={`#${createIdFromTitle('DeFi Centralization Risks')}`}>
       <h1
-        id={createIdFromTitle("DeFi Centralization Risks")}
+        id={createIdFromTitle('DeFi Centralization Risks')}
         className="inline-block mt-10 tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
-        style={{ scrollMarginTop: "100px" }}
+        style={{ scrollMarginTop: '100px' }}
       >
         DeFi Centralization Risks
       </h1>
@@ -219,9 +216,7 @@ const RisksSection = () => (
         <Accordion type="single" collapsible className="w-full">
           {riskData.map((item, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-lg font-semibold">
-                {item.category}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-lg font-semibold">{item.category}</AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
                   <div>
@@ -254,9 +249,7 @@ const RisksSection = () => (
         <table className="table-auto w-full border-collapse border">
           <thead>
             <tr>
-              <td className="border px-4 py-2 text-left font-bold">
-                Risk / Scores
-              </td>
+              <td className="border px-4 py-2 text-left font-bold">Risk / Scores</td>
               <td className="border px-4 py-2 text-left font-bold">High</td>
               <td className="border px-4 py-2 text-left font-bold">Medium</td>
               <td className="border px-4 py-2 text-left font-bold">Low</td>
@@ -284,11 +277,11 @@ const RisksSection = () => (
 
 const StagesSection = () => (
   <>
-    <a href={`#${createIdFromTitle("DeFi Stages Framework")}`}>
+    <a href={`#${createIdFromTitle('DeFi Stages Framework')}`}>
       <h1
-        id={createIdFromTitle("DeFi Stages Framework")}
+        id={createIdFromTitle('DeFi Stages Framework')}
         className="inline-block mt-10 tracking-tight text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
-        style={{ scrollMarginTop: "100px" }}
+        style={{ scrollMarginTop: '100px' }}
       >
         DeFi Stages Framework
       </h1>
@@ -300,9 +293,7 @@ const StagesSection = () => (
         <Accordion type="single" collapsible className="w-full">
           {stagesData.map((stage, index) => (
             <AccordionItem key={index} value={`stage-${index}`}>
-              <AccordionTrigger className="text-lg font-semibold">
-                {stage.stage}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-lg font-semibold">{stage.stage}</AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
                   <div>
@@ -357,11 +348,11 @@ const StagesSection = () => (
 
 const SecurityCouncilSection = () => (
   <>
-    <a href={`#${createIdFromTitle("Security Council Requirements")}`}>
+    <a href={`#${createIdFromTitle('Security Council Requirements')}`}>
       <h1
-        id={createIdFromTitle("Security Council Requirements")}
+        id={createIdFromTitle('Security Council Requirements')}
         className="mt-10 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
-        style={{ scrollMarginTop: "100px" }}
+        style={{ scrollMarginTop: '100px' }}
       >
         Security Council Requirements
       </h1>
@@ -369,12 +360,14 @@ const SecurityCouncilSection = () => (
 
     <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
       <p className="mb-4">
-        A Security Council can represent an effective intermediate step of decentralized control over permissions that cannot be revoked or protected with an Exit Window.
-        In particular, a Security Council enables a protocol to mitigate risks of centralized control over such permissions and enter Stage 1.
+        A Security Council can represent an effective intermediate step of decentralized control
+        over permissions that cannot be revoked or protected with an Exit Window. In particular, a
+        Security Council enables a protocol to mitigate risks of centralized control over such
+        permissions and enter Stage 1.
       </p>
       <p className="mb-4">
-        Any multisig account with the following minimal requirements is an acceptable
-        Security Council setup:
+        Any multisig account with the following minimal requirements is an acceptable Security
+        Council setup:
       </p>
       <ul className="list-disc ml-6">
         {securityCouncilRequirements.map((requirement, index) => (
@@ -382,10 +375,14 @@ const SecurityCouncilSection = () => (
         ))}
       </ul>
       <p className="mb-4 mt-4">
-        Note that we refer to an "insider" as any party of the "inner circle" of individuals or entities developing, maintaining and operating the protocol, such as the "team members" or a company mandated to perform certain services.
+        Note that we refer to an "insider" as any party of the "inner circle" of individuals or
+        entities developing, maintaining and operating the protocol, such as the "team members" or a
+        company mandated to perform certain services.
       </p>
       <p className="mb-4">
-        These requirements translate to a set of at least 7 signers, identified through their name or pseudonym, and a threshold qualified by a majority of signers including at least one "outsider". 
+        These requirements translate to a set of at least 7 signers, identified through their name
+        or pseudonym, and a threshold qualified by a majority of signers including at least one
+        "outsider".
       </p>
     </div>
   </>
@@ -393,11 +390,11 @@ const SecurityCouncilSection = () => (
 
 const OthersSection = () => (
   <>
-    <a href={`#${createIdFromTitle("Others Protocol Category")}`}>
+    <a href={`#${createIdFromTitle('Others Protocol Category')}`}>
       <h1
-        id={createIdFromTitle("Others Protocol Category")}
+        id={createIdFromTitle('Others Protocol Category')}
         className="mt-10 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
-        style={{ scrollMarginTop: "100px" }}
+        style={{ scrollMarginTop: '100px' }}
       >
         Others Protocol Category
       </h1>
@@ -405,8 +402,10 @@ const OthersSection = () => (
 
     <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
       <p className="mb-4">
-        The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a DeFi protocol. 
-        The <i>Others</i> protocol category captures protocols which are built using blockchain technology and serve a financial use case but do not meet one or more of the Stage 0 requirements:
+        The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a
+        DeFi protocol. The <i>Others</i> protocol category captures protocols which are built using
+        blockchain technology and serve a financial use case but do not meet one or more of the
+        Stage 0 requirements:
       </p>
       <ul className="list-none space-y-2">
         {othersData.qualifications.map((requirement, index) => (
@@ -414,7 +413,10 @@ const OthersSection = () => (
         ))}
       </ul>
       <p className="mt-4">
-        The <i>Others</i> protocol category thus shines a light on protocols which either fail to disclose the required information publicly, such as documentation (aka a Whitepaper) or software source-code, or do not meet basic requirements to qualify as a <i>DeFi</i> protocol.
+        The <i>Others</i> protocol category thus shines a light on protocols which either fail to
+        disclose the required information publicly, such as documentation (aka a Whitepaper) or
+        software source-code, or do not meet basic requirements to qualify as a <i>DeFi</i>{' '}
+        protocol.
       </p>
     </div>
   </>

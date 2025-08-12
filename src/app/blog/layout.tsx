@@ -1,14 +1,10 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Latest insights and analysis from the DeFiScan team",
+  title: 'Blog',
+  description: 'Latest insights and analysis from the DeFiScan team',
 };
 
-export default function BlogLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

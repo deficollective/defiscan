@@ -1,8 +1,8 @@
-import { type Sentiment } from "./types";
+import { type Sentiment } from './types';
 
-import { cn } from "./helper/cn";
-import { sentimentToTextColor } from "./helper/sentiment";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip/tooltip";
+import { cn } from './helper/cn';
+import { sentimentToTextColor } from './helper/sentiment';
+import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip/tooltip';
 
 interface Props {
   sentiment: Sentiment;
@@ -29,7 +29,7 @@ export function SentimentText(props: Props) {
   return (
     <span
       className={cn(
-        "font-medium",
+        'font-medium',
         sentimentToTextColor(props.sentiment, { vibrant: props.vibrant }),
         props.className
       )}

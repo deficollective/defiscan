@@ -1,8 +1,8 @@
-import { assert } from "./helper/assert";
-import { type VariantProps, cva } from "class-variance-authority";
-import { cn } from "./helper/cn";
-import { useRosetteTooltipContext } from "./rosette-tooltip-context";
-import { type RosetteValue } from "./types";
+import { assert } from './helper/assert';
+import { type VariantProps, cva } from 'class-variance-authority';
+import { cn } from './helper/cn';
+import { useRosetteTooltipContext } from './rosette-tooltip-context';
+import { type RosetteValue } from './types';
 
 interface Props extends VariantProps<typeof rosetteVariants> {
   values: RosetteValue[];
@@ -12,16 +12,16 @@ interface Props extends VariantProps<typeof rosetteVariants> {
 }
 
 const rosetteVariants = cva(
-  "select-none whitespace-pre text-center font-medium uppercase leading-tight",
+  'select-none whitespace-pre text-center font-medium uppercase leading-tight',
   {
     variants: {
       size: {
-        small: "text-xs",
-        regular: "text-xs",
+        small: 'text-xs',
+        regular: 'text-xs',
       },
     },
     defaultVariants: {
-      size: "regular",
+      size: 'regular',
     },
   }
 );
@@ -38,10 +38,7 @@ export function PizzaRosetteLabels({
   const [first, second, third, fourth, fifth] = values;
   const content = context?.content;
 
-  assert(
-    first && second && third && fourth && fifth,
-    "Invalid number of risks"
-  );
+  assert(first && second && third && fourth && fifth, 'Invalid number of risks');
 
   const containerCenter = containerSize / 2;
 
@@ -53,12 +50,12 @@ export function PizzaRosetteLabels({
           left: containerCenter + Math.sin((-4 * Math.PI) / 5) * textRadius,
         }}
         className={cn(
-          "absolute origin-top -translate-x-1/2 rotate-[36deg]",
+          'absolute origin-top -translate-x-1/2 rotate-[36deg]',
           rosetteVariants({ size, className: textClassName }),
-          content && content.risk.name !== first.name && "opacity-20"
+          content && content.risk.name !== first.name && 'opacity-20'
         )}
       >
-        {first.name.split(" ").join("\n")}
+        {first.name.split(' ').join('\n')}
       </span>
       <span
         style={{
@@ -66,25 +63,25 @@ export function PizzaRosetteLabels({
           left: containerCenter + Math.sin((-2 * Math.PI) / 5) * textRadius,
         }}
         className={cn(
-          "absolute origin-bottom -translate-x-1/2 -translate-y-full rotate-[-72deg]",
+          'absolute origin-bottom -translate-x-1/2 -translate-y-full rotate-[-72deg]',
           rosetteVariants({ size, className: textClassName }),
-          content && content.risk.name !== second.name && "opacity-20"
+          content && content.risk.name !== second.name && 'opacity-20'
         )}
       >
-        {second.name.split(" ").join("\n")}
+        {second.name.split(' ').join('\n')}
       </span>
       <span
         style={{
           top: containerCenter - textRadius,
-          left: "50%",
+          left: '50%',
         }}
         className={cn(
-          "absolute -translate-x-1/2 -translate-y-full",
+          'absolute -translate-x-1/2 -translate-y-full',
           rosetteVariants({ size, className: textClassName }),
-          content && content.risk.name !== third.name && "opacity-20"
+          content && content.risk.name !== third.name && 'opacity-20'
         )}
       >
-        {third.name.split(" ").join("\n")}
+        {third.name.split(' ').join('\n')}
       </span>
       <span
         style={{
@@ -92,12 +89,12 @@ export function PizzaRosetteLabels({
           left: containerCenter + Math.sin((2 * Math.PI) / 5) * textRadius,
         }}
         className={cn(
-          "absolute origin-bottom -translate-x-1/2 -translate-y-full rotate-[72deg]",
+          'absolute origin-bottom -translate-x-1/2 -translate-y-full rotate-[72deg]',
           rosetteVariants({ size, className: textClassName }),
-          content && content.risk.name !== fourth.name && "opacity-20"
+          content && content.risk.name !== fourth.name && 'opacity-20'
         )}
       >
-        {fourth.name.split(" ").join("\n")}
+        {fourth.name.split(' ').join('\n')}
       </span>
       <span
         style={{
@@ -105,12 +102,12 @@ export function PizzaRosetteLabels({
           left: containerCenter + Math.sin((4 * Math.PI) / 5) * textRadius,
         }}
         className={cn(
-          "absolute origin-top -translate-x-1/2 rotate-[-36deg]",
+          'absolute origin-top -translate-x-1/2 rotate-[-36deg]',
           rosetteVariants({ size, className: textClassName }),
-          content && content.risk.name !== fifth.name && "opacity-20"
+          content && content.risk.name !== fifth.name && 'opacity-20'
         )}
       >
-        {fifth.name.split(" ").join("\n")}
+        {fifth.name.split(' ').join('\n')}
       </span>
     </>
   );

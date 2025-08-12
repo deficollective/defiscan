@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import type { RefObject } from "react";
+import type { RefObject } from 'react';
 
-import { useIsomorphicLayoutEffect } from "./use-isomorphic-layout-effect";
+import { useIsomorphicLayoutEffect } from './use-isomorphic-layout-effect';
 
 // MediaQueryList Event based useEventListener interface
 function useEventListener<K extends keyof MediaQueryListEventMap>(
@@ -23,14 +23,10 @@ function useEventListener<K extends keyof WindowEventMap>(
 // Element Event based useEventListener interface
 function useEventListener<
   K extends keyof HTMLElementEventMap & keyof SVGElementEventMap,
-  T extends Element = K extends keyof HTMLElementEventMap
-    ? HTMLDivElement
-    : SVGElement,
+  T extends Element = K extends keyof HTMLElementEventMap ? HTMLDivElement : SVGElement,
 >(
   eventName: K,
-  handler:
-    | ((event: HTMLElementEventMap[K]) => void)
-    | ((event: SVGElementEventMap[K]) => void),
+  handler: ((event: HTMLElementEventMap[K]) => void) | ((event: SVGElementEventMap[K]) => void),
   element: RefObject<T>,
   options?: boolean | AddEventListenerOptions
 ): void;

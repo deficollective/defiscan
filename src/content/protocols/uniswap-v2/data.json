@@ -6,8 +6,5 @@
   "socials": {
     "x": "https://x.com/uniswap"
   },
-  "github": [
-    "https://github.com/Uniswap/v2-core",
-    "https://github.com/Uniswap/v2-periphery"
-  ]
+  "github": ["https://github.com/Uniswap/v2-core", "https://github.com/Uniswap/v2-periphery"]
 }

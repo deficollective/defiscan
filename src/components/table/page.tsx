@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { createColumns } from "./columns";
-import { DataTable } from "./data-table";
-import { useEffect, useState } from "react";
-import { Project } from "@/lib/types";
-import { loadReviews } from "@/lib/data/utils";
-import { getProtocolDisplayName } from "@/lib/utils";
+import { createColumns } from './columns';
+import { DataTable } from './data-table';
+import { useEffect, useState } from 'react';
+import { Project } from '@/lib/types';
+import { loadReviews } from '@/lib/data/utils';
+import { getProtocolDisplayName } from '@/lib/utils';
 
 export const getData = async (): Promise<Project[]> => {
   const data_new = await loadReviews();
@@ -46,29 +46,30 @@ export default function Table() {
   }) as Project[];
 
   // Flatten all reviews for counting purposes only
-  const allReviews = data?.flatMap(project => 
-    project.reviews.map(review => ({
-      ...project,
-      ...review,
-      protocol: getProtocolDisplayName(project.protocol, review.instance),
-      baseProtocol: project.protocol
-    }))
-  ) || [];
+  const allReviews =
+    data?.flatMap((project) =>
+      project.reviews.map((review) => ({
+        ...project,
+        ...review,
+        protocol: getProtocolDisplayName(project.protocol, review.instance),
+        baseProtocol: project.protocol,
+      }))
+    ) || [];
 
   let othersCount = 0;
   let defiCount = 0;
   let infrastructureCount = 0;
-  
+
   allReviews.forEach((review) => {
-    if (review.stage === "O") othersCount++;
-    else if (review.stage === "I0" || review.stage === "I1" || review.stage === "I2")
+    if (review.stage === 'O') othersCount++;
+    else if (review.stage === 'I0' || review.stage === 'I1' || review.stage === 'I2')
       infrastructureCount++;
     else defiCount++;
   });
 
   const getProtocolLogo = (baseProtocolName: string): string => {
     const protocolData = data?.find((p) => p.protocol === baseProtocolName);
-    return protocolData?.logo || "/images/placeholder.png";
+    return protocolData?.logo || '/images/placeholder.png';
   };
 
   const tableColumns = createColumns(getProtocolLogo);

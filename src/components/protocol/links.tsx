@@ -1,22 +1,22 @@
-import { ChevronDown, ExternalLink, Globe, Waypoints, Clock, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronDown, ExternalLink, Globe, Waypoints, Clock, TrendingUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { FaXTwitter } from "react-icons/fa6";
-import { FaGithub } from "react-icons/fa";
-import Link from "next/link";
-import { ReviewTimeline } from "./timeline";
-import { getProtocolDisplayName } from "@/lib/utils";
-import { reviews as allReviews } from "#site/content";
+} from '@/components/ui/dropdown-menu';
+import { FaXTwitter } from 'react-icons/fa6';
+import { FaGithub } from 'react-icons/fa';
+import Link from 'next/link';
+import { ReviewTimeline } from './timeline';
+import { getProtocolDisplayName } from '@/lib/utils';
+import { reviews as allReviews } from '#site/content';
 
 export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
   // Get all reviews for this protocol to show proper instance names
   const protocolReviews = allReviews.filter((r) => r.slugAsParams.includes(protocol.id));
-  
+
   return (
     <div className="flex flex-col gap-1">
       <Button variant="outline" size="sm" asChild className="border-border">
@@ -34,10 +34,7 @@ export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-96">
-          <ReviewTimeline
-            className="border-0 shadow-none"
-            protocol={protocol}
-          />
+          <ReviewTimeline className="border-0 shadow-none" protocol={protocol} />
         </DropdownMenuContent>
       </DropdownMenu>
       <DropdownMenu>
@@ -56,7 +53,7 @@ export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
               className="flex items-center "
             >
               <FaXTwitter className="w-4 h-4 mr-2" /> @
-              {protocol.socials.x?.replace("https://x.com/", "")}
+              {protocol.socials.x?.replace('https://x.com/', '')}
               <ExternalLink className="w-3 h-3 ml-4" />
             </a>
           </DropdownMenuItem>
@@ -94,7 +91,6 @@ export const ProtocolLinks = ({ protocol }: { protocol: any }) => {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

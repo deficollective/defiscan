@@ -1,50 +1,50 @@
-import React from "react";
-import Table from "@/components/table/page";
-import { TVLCoverageComponent } from "@/components/tvl-coverage";
-import { CombinedStageChart } from "@/components/stage-distribution";
-import { ChainCoverageComponent } from "@/components/chain-coverage";
-import { Metadata } from "next";
+import React from 'react';
+import Table from '@/components/table/page';
+import { TVLCoverageComponent } from '@/components/tvl-coverage';
+import { CombinedStageChart } from '@/components/stage-distribution';
+import { ChainCoverageComponent } from '@/components/chain-coverage';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "DeFiScan - Transparency on Decentralization in DeFi",
+  title: 'DeFiScan - Transparency on Decentralization in DeFi',
   description:
-    "Comprehensive DeFi protocol analysis platform. Track decentralization stagesand transparency across DeFi protocols on Ethereum, Base, and other chains. Real-time DeFi transparency data.",
+    'Comprehensive DeFi protocol analysis platform. Track decentralization stagesand transparency across DeFi protocols on Ethereum, Base, and other chains. Real-time DeFi transparency data.',
   keywords: [
-    "DeFi",
-    "Scan",
-    "DeFiScan",
-    "decentralization",
-    "protocol analysis",
-    "TVL",
-    "blockchain",
-    "Ethereum",
-    "DeFi stages",
-    "DeFi transparency",
-    "DeFi protocols",
-    "Permissions",
+    'DeFi',
+    'Scan',
+    'DeFiScan',
+    'decentralization',
+    'protocol analysis',
+    'TVL',
+    'blockchain',
+    'Ethereum',
+    'DeFi stages',
+    'DeFi transparency',
+    'DeFi protocols',
+    'Permissions',
   ],
   openGraph: {
-    title: "DeFiScan - DeFi Protocol Decentralization Analysis",
+    title: 'DeFiScan - DeFi Protocol Decentralization Analysis',
     description:
-      "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis across multiple blockchains.",
-    url: "https://defiscan.info",
-    siteName: "DeFiScan",
-    type: "website",
+      'Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis across multiple blockchains.',
+    url: 'https://defiscan.info',
+    siteName: 'DeFiScan',
+    type: 'website',
     images: [
       {
-        url: "https://defiscan.info/images/logo.png",
+        url: 'https://defiscan.info/images/logo.png',
         width: 800,
         height: 600,
-        alt: "DeFiScan - DeFi Protocol Analysis Platform",
+        alt: 'DeFiScan - DeFi Protocol Analysis Platform',
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "DeFiScan - DeFi Protocol Decentralization Analysis",
+    card: 'summary_large_image',
+    title: 'DeFiScan - DeFi Protocol Decentralization Analysis',
     description:
-      "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis.",
-    images: ["https://defiscan.info/images/logo.png"],
+      'Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis.',
+    images: ['https://defiscan.info/images/logo.png'],
   },
   robots: {
     index: true,
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
 };
@@ -81,9 +81,7 @@ export default function Home() {
           <Table />
         </div>
 
-        <p className="text-sm text-gray-500 -mt-6">
-          TVL Data source: DefiLlama
-        </p>
+        <p className="text-sm text-gray-500 -mt-6">TVL Data source: DefiLlama</p>
       </div>
     </section>
   );

@@ -1,15 +1,15 @@
 ---
-chain: "Ethereum"
-type: "Oracles"
-logo: "/images/infrastructure-logos/chainlink-logo.png"
-stage: "I0"
-protocols: ["Morpho", "Aave v3", "Compound V3", "Compound V2", "Liquity"]
+chain: 'Ethereum'
+type: 'Oracles'
+logo: '/images/infrastructure-logos/chainlink-logo.png'
+stage: 'I0'
+protocols: ['Morpho', 'Aave v3', 'Compound V3', 'Liquity']
 reasons: []
-risks: ["L", "H", "L", "M", "L"]
-author: ["mmilien_"]
-submission_date: "2025-05-21"
-publish_date: "2025-05-21"
-update_date: "1970-01-01"
+risks: ['L', 'H', 'L', 'M', 'L']
+author: ['mmilien_']
+submission_date: '2025-05-21'
+publish_date: '2025-05-21'
+update_date: '1970-01-01'
 ---
 
 # Summary

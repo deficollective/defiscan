@@ -1,15 +1,15 @@
 ---
-chain: "Ethereum"
-type: "Oracles"
-logo: "/images/infrastructure-logos/Chaos-Labs.jpg"
-stage: "I0"
-protocols: ["Aave v3"]
+chain: 'Ethereum'
+type: 'Oracles'
+logo: '/images/infrastructure-logos/Chaos-Labs.jpg'
+stage: 'I0'
+protocols: ['Aave v3']
 reasons: []
-risks: ["L", "H", "L", "M", "L"]
-author: ["sagaciousyves"]
-submission_date: "2025-06-04"
-publish_date: "2025-06-10"
-update_date: "1970-01-01"
+risks: ['L', 'H', 'L', 'M', 'L']
+author: ['sagaciousyves']
+submission_date: '2025-06-04'
+publish_date: '2025-06-10'
+update_date: '1970-01-01'
 ---
 
 # Summary

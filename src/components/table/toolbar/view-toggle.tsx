@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { Table as TableType } from "@tanstack/react-table";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useState, useEffect } from "react";
-import { defi_stages, unqualified_stages } from "@/lib/consts";
-import { Stage } from "@/lib/types";
-import { Badge } from "@/components/ui/badge";
+import { Table as TableType } from '@tanstack/react-table';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { useState, useEffect } from 'react';
+import { defi_stages, unqualified_stages } from '@/lib/consts';
+import { Stage } from '@/lib/types';
+import { Badge } from '@/components/ui/badge';
 
 interface ViewToggleProps {
   table: TableType<any>;
 }
 
 enum VIEWS {
-  DEFI = "defi",
-  UNQUALIFIED = "unqualified",
+  DEFI = 'defi',
+  UNQUALIFIED = 'unqualified',
 }
 
 const filters = {
@@ -21,13 +21,8 @@ const filters = {
   [VIEWS.UNQUALIFIED]: unqualified_stages,
 };
 
-const getReviewCount = (
-  stages: Stage[],
-  facets: Map<Stage, number> | undefined
-) =>
-  stages
-    .map((s) => facets?.get(s) ?? 0)
-    .reduce((acc, curr) => (acc ?? 0) + (curr ?? 0), 0);
+const getReviewCount = (stages: Stage[], facets: Map<Stage, number> | undefined) =>
+  stages.map((s) => facets?.get(s) ?? 0).reduce((acc, curr) => (acc ?? 0) + (curr ?? 0), 0);
 
 export function ViewToggle({ table }: ViewToggleProps) {
   const [view, setView] = useState(VIEWS.DEFI);
@@ -35,18 +30,15 @@ export function ViewToggle({ table }: ViewToggleProps) {
   const handleViewChange = (value: string) => {
     const nextView = value as VIEWS;
     table.resetColumnFilters();
-    table.getColumn("stage")?.setFilterValue(filters[nextView]);
+    table.getColumn('stage')?.setFilterValue(filters[nextView]);
 
     setView(nextView);
   };
 
-  useEffect(
-    () => table.getColumn("stage")?.setFilterValue(filters[view]),
-    [table]
-  );
+  useEffect(() => table.getColumn('stage')?.setFilterValue(filters[view]), [table]);
 
   // Calculate the count reivews for each filter.
-  const facets = table.getColumn("stage")?.getFacetedUniqueValues();
+  const facets = table.getColumn('stage')?.getFacetedUniqueValues();
   const unqualified_count = getReviewCount(unqualified_stages, facets);
   const defi_count = getReviewCount(defi_stages, facets);
 

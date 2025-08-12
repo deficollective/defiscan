@@ -6,7 +6,7 @@ export interface RosetteValue {
   warning?: WarningValueWithSentiment;
 }
 
-export type Sentiment = "low" | "medium" | "high" | "neutral" | "UnderReview";
+export type Sentiment = 'low' | 'medium' | 'high' | 'neutral' | 'UnderReview';
 
 export type ValueWithSentiment<T, S extends string = Sentiment> = {
   sentiment: S;
@@ -19,8 +19,5 @@ export type ValueWithSentiment<T, S extends string = Sentiment> = {
       value: T;
     });
 
-type WarningSentiment = "low" | "medium" | "neutral";
-export type WarningValueWithSentiment = ValueWithSentiment<
-  string,
-  WarningSentiment
->;
+type WarningSentiment = 'low' | 'medium' | 'neutral';
+export type WarningValueWithSentiment = ValueWithSentiment<string, WarningSentiment>;

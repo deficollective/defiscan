@@ -1,16 +1,13 @@
-"use client";
-import { RoundedWarningIcon } from "./icons/rounded-warning";
-import { cn } from "./helper/cn";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip/tooltip";
-import { SentimentText } from "./sentiment-text";
+'use client';
+import { RoundedWarningIcon } from './icons/rounded-warning';
+import { cn } from './helper/cn';
+import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip/tooltip';
+import { SentimentText } from './sentiment-text';
 // import { WarningBar } from "../../warning-bar";
-import {
-  RosetteTooltipContextProvider,
-  useRosetteTooltipContext,
-} from "./rosette-tooltip-context";
-import { type RosetteValue } from "./types";
-import { PizzaRosetteIcon } from "./rosette-icon";
-import { PizzaRosetteLabels } from "./rosette-labels";
+import { RosetteTooltipContextProvider, useRosetteTooltipContext } from './rosette-tooltip-context';
+import { type RosetteValue } from './types';
+import { PizzaRosetteIcon } from './rosette-icon';
+import { PizzaRosetteLabels } from './rosette-labels';
 
 export interface BigPizzaRosetteProps {
   values: RosetteValue[];
@@ -21,35 +18,29 @@ export interface BigPizzaRosetteProps {
 
 export interface ContentState {
   risk: RosetteValue;
-  side: "top" | "bottom";
+  side: 'top' | 'bottom';
   sideOffset: number;
 }
 
 export function BigPizzaRosette(props: BigPizzaRosetteProps) {
   const isUnderReview =
     !!props.isUnderReview ||
-    Object.values(props.values).some(
-      ({ sentiment }) => sentiment === "UnderReview"
-    );
+    Object.values(props.values).some(({ sentiment }) => sentiment === 'UnderReview');
 
   if (isUnderReview || props.isUpcoming) {
     return (
       <div
         className={cn(
-          "relative h-[284px] w-[272px] whitespace-pre p-12 text-center text-xs font-medium uppercase leading-tight",
+          'relative h-[284px] w-[272px] whitespace-pre p-12 text-center text-xs font-medium uppercase leading-tight',
           props.className
         )}
       >
         <PizzaRosetteIcon
           values={props.values}
           isUnderReview={isUnderReview}
-          className={cn(props.isUpcoming && "opacity-30")}
+          className={cn(props.isUpcoming && 'opacity-30')}
         />
-        <PizzaRosetteLabels
-          values={props.values}
-          containerSize={272}
-          textRadius={102}
-        />
+        <PizzaRosetteLabels values={props.values} containerSize={272} textRadius={102} />
       </div>
     );
   }
@@ -58,20 +49,13 @@ export function BigPizzaRosette(props: BigPizzaRosetteProps) {
     <RosetteTooltipContextProvider>
       <Tooltip>
         <div
-          className={cn("relative w-[272px] p-12", props.className)}
+          className={cn('relative w-[272px] p-12', props.className)}
           data-rosette-hover-disabled={isUnderReview || props.isUpcoming}
         >
           <TooltipTrigger>
-            <PizzaRosetteIcon
-              values={props.values}
-              isUnderReview={isUnderReview}
-            />
+            <PizzaRosetteIcon values={props.values} isUnderReview={isUnderReview} />
           </TooltipTrigger>
-          <PizzaRosetteLabels
-            values={props.values}
-            containerSize={272}
-            textRadius={102}
-          />
+          <PizzaRosetteLabels values={props.values} containerSize={272} textRadius={102} />
         </div>
         <RosetteTooltipContent />
       </Tooltip>
@@ -97,7 +81,7 @@ function RosetteTooltipContent() {
         sentiment={content.risk.sentiment}
         className="flex items-center gap-1 font-medium"
       >
-        {content.risk.value || ""}
+        {content.risk.value || ''}
       </SentimentText>
       {/* {content.risk.warning && (
         <WarningBar
