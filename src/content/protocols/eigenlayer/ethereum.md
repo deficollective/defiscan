@@ -118,7 +118,7 @@ The project additionally could advance to _Stage 2_ if alternative frontends are
 
 # Protocol Analysis
 
-![Eigenlayer](../diagrams/Eigenlayer.png)
+![Eigenlayer](../diagrams/eigenlayer-overview.png)
 
 open todos:
 
@@ -182,6 +182,14 @@ The EigenLayer protocol deploys different types of strategy contracts. The three
 Each strategy contract is upgradeable, and since the funds are held in the strategy contract, an upgrade could lead to _loss of funds_ if compromised.
 
 The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 tokens as security), with the [Operations Multisig (3/6)](#security-council) controlling strategy whitelisting and blacklisting, which corresponds to whitelisting/blacklisting ERC20 tokens as _Economic Security_ for _AVSs_. When a _Strategy_ is removed from the whitelist or blacklisted, _Stakers_ can still withdraw or delegate existing funds, but new deposits are blocked. By default, new strategies created by the factory are whitelisted.
+
+### EigenPods
+
+Each `EigenPod` shares the same implementation contract, which allows to update the `EigenPods` contracts all at once by the [Executor Multisig (1/2)](#security-council) with the Beacon-Proxy `UpgradeableBeacon` contract. A malicious upgrade could be used to withdraw the ETH from the Beacon-Chain by using the EIP-7002 execution layer triggereable withdrawals, by adding a function that allows to withdraw the ETH from the Beacon-Chain to a malicious address. However, updates like this can be cancelled by the [Community Multisig (9/13)](#security-council).
+
+Under normal operations, a proof of the withdrawal credentials pointing to the `EigenPod` address supplied by the _Restaker_ and Owner of the `EigenPod` is required to create deposit shares in the `EigenPodManager` contract, which then can be used to delegate to _Operators_ and earn additional rewards from the _AVSs_.
+
+If a _Restaker_ wants to withdraw their funds from the Beacon Chain, they need to start a checkpoint and verify the checkpoint to update their shares in the `EigenPodManager` based on Rewards they received on the Beacon Chain. The checkpoint specifies the delta to be registered and the old Beacon Chain balance. This additional shares can be withdrawn or used to delegate to _Operators_. Reduced Beacon Chain deposits through slashing, lead to a reduction of the shares. To withdraw ETH from the Beacon Chain, _Restakers_ can use the EIP-7002 execution layer triggereable withdrawals, via calling `queueWithdrawal` on the `EigenPod` contract, or use the Consensus Layer primary key to initiate the withdrawal to the Execution Layer. To be able to withdraw the ETH deposited in the `EigenPod` contract through the previous step, _Restakers_ need to initiate the transfer via the `DelegationManager` by calling `queueWithdrawawal`, after the cooldown period is over, _Restakers_ need to call `completeQueuedWithdrawal` on the `DelegationManager` contract, which allows to send the ETH to the _Restaker_. During this two step process, sufferred slashes by _AVS_ are taken into account to calculate the final amount of ETH to be sent to the _Restaker_.
 
 ### DelegationManager
 
@@ -316,7 +324,7 @@ New table with all the multisigs
 | EigenStrategy (Proxy)                    | [0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7](https://etherscan.io/address/0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7) |
 | EigenStrategy (Implementation)           | [0x27e7a3a81741b9fcc5ad7edcbf9f8a72a5c00428](https://etherscan.io/address/0x27e7a3a81741b9fcc5ad7edcbf9f8a72a5c00428) |
 | EigenPod (Proxy)                         | [0x5a2a4F2F3C18f09179B6703e63D9eDD165909073](https://etherscan.io/address/0x5a2a4F2F3C18f09179B6703e63D9eDD165909073) |
-| EigenPod (Implementation)                | [0x6D225e974Fa404D25Ffb84eD6E242Ffa18eF6430](https://etherscan.io/address/0x6D225e974Fa404D25Ffb84eD6E242Ffa18eF6430) |
+| EigenPod (Implementation)                | [0xcb27A4819A64FBA93ABD4D480e4466aEc0503745](https://etherscan.io/address/0xcb27A4819A64FBA93ABD4D480e4466aEc0503745) |
 | DelayedWithdrawalRouter (Proxy)          | [0x7Fe7E9CC0F274d2435AD5d56D5fa73E47F6A23D8](https://etherscan.io/address/0x7Fe7E9CC0F274d2435AD5d56D5fa73E47F6A23D8) |
 | DelayedWithdrawalRouter (Implementation) | [0x4bb6731b02314d40abbffbc4540f508874014226](https://etherscan.io/address/0x4bb6731b02314d40abbffbc4540f508874014226) |
 | Eigen (Token) (Proxy)                    | [0xec53bf9167f50cdeb3ae105f56099aaab9061f83](https://etherscan.io/address/0xec53bf9167f50cdeb3ae105f56099aaab9061f83) |
