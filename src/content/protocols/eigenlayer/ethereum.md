@@ -120,14 +120,6 @@ The project additionally could advance to _Stage 2_ if alternative frontends are
 
 ![Eigenlayer](../diagrams/eigenlayer-overview.png)
 
-open todos:
-
-- add more details to dependencies
-  - set of contracts AVSs need
-  - how operators interact with AVSs
-- write up description to Eigenpods
-- clean up diagram
-
 Open questions:
 
 - if Signer of multisig is internal, does it count as publicly announced?
@@ -281,64 +273,62 @@ New table with all the multisigs
 
 ## Contracts
 
-| Contract Name                            | Address                                                                                                               |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| DelegationManager (Proxy)                | [0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A](https://etherscan.io/address/0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A) |
-| DelegationManager (Implementation)       | [0xa75112d1df37fa53a431525cd47a7d7facea7e73](https://etherscan.io/address/0xa75112d1df37fa53a431525cd47a7d7facea7e73) |
-| StrategyManager (Proxy)                  | [0x858646372CC42E1A627fcE94aa7A7033e7CF075A](https://etherscan.io/address/0x858646372CC42E1A627fcE94aa7A7033e7CF075A) |
-| StrategyManager (Implementation)         | [0xba4b2b8a076851a3044882493c2e36503d50b925](https://etherscan.io/address/0xba4b2b8a076851a3044882493c2e36503d50b925) |
-| EigenPodManager (Proxy)                  | [0x91E677b07F7AF907ec9a428aafA9fc14a0d3A338](https://etherscan.io/address/0x91E677b07F7AF907ec9a428aafA9fc14a0d3A338) |
-| EigenPodManager (Implementation)         | [0x731A0aD160e407393Ff662231Add6Dd145AD3FEa](https://etherscan.io/address/0x731A0aD160e407393Ff662231Add6Dd145AD3FEa) |
-| RewardsCoordinator (Proxy)               | [0x7750d328b314EfFa365A0402CcfD489B80B0adda](https://etherscan.io/address/0x7750d328b314EfFa365A0402CcfD489B80B0adda) |
-| RewardsCoordinator (Implementation)      | [0x5bf7c13D5FAdba224ECB3D5C0a67A231D1628785](https://etherscan.io/address/0x5bf7c13D5FAdba224ECB3D5C0a67A231D1628785) |
-| AllocationManager (Proxy)                | [0x948a420b8cc1d6bfd0b6087c2e7c344a2cd0bc39](https://etherscan.io/address/0x948a420b8cc1d6bfd0b6087c2e7c344a2cd0bc39) |
-| AllocationManager (Implementation)       | [0x740058839a1668af5700e5d7b062007275e77d25](https://etherscan.io/address/0x740058839a1668af5700e5d7b062007275e77d25) |
-| StrategyFactory (Proxy)                  | [0x5e4c39ad7a3e881585e383db9827eb4811f6f647](https://etherscan.io/address/0x5e4c39ad7a3e881585e383db9827eb4811f6f647) |
-| StrategyFactory (Implementation)         | [0x1b97d8f963179c0e17e5f3d85cdfd9a31a49bc66](https://etherscan.io/address/0x1b97d8f963179c0e17e5f3d85cdfd9a31a49bc66) |
-| UpgradeableBeacon (Proxy)                | [0x0ed6703c298d28ae0878d1b28e88ca87f9662fe9](https://etherscan.io/address/0x0ed6703c298d28ae0878d1b28e88ca87f9662fe9) |
-| StrategyBase (Implementation)            | [0x0EC17ef9c00F360DB28CA8008684a4796b11E456](https://etherscan.io/address/0x0EC17ef9c00F360DB28CA8008684a4796b11E456) |
-| StrategyBase cbETH (Proxy)               | [0x54945180dB7943c0ed0FEE7EdaB2Bd24620256bc](https://etherscan.io/address/0x54945180dB7943c0ed0FEE7EdaB2Bd24620256bc) |
-| StrategyBase cbETH (Implementation)      | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase stETH (Proxy)               | [0x93c4b944D05dfe6df7645A86cd2206016c51564D](https://etherscan.io/address/0x93c4b944D05dfe6df7645A86cd2206016c51564D) |
-| StrategyBase stETH (Implementation)      | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase rETH (Proxy)                | [0x1BeE69b7dFFfA4E2d53C2a2Df135C388AD25dCD2](https://etherscan.io/address/0x1BeE69b7dFFfA4E2d53C2a2Df135C388AD25dCD2) |
-| StrategyBase rETH (Implementation)       | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase ETHx (Proxy)                | [0x9d7eD45EE2E8FC5482fa2428f15C971e6369011d](https://etherscan.io/address/0x9d7eD45EE2E8FC5482fa2428f15C971e6369011d) |
-| StrategyBase ETHx (Implementation)       | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase ankrETH (Proxy)             | [0x13760F50a9d7377e4F20CB8CF9e4c26586c658ff](https://etherscan.io/address/0x13760F50a9d7377e4F20CB8CF9e4c26586c658ff) |
-| StrategyBase ankrETH (Implementation)    | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase OETH (Proxy)                | [0xa4C637e0F704745D182e4D38cAb7E7485321d059](https://etherscan.io/address/0xa4C637e0F704745D182e4D38cAb7E7485321d059) |
-| StrategyBase OETH (Implementation)       | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase osETH (Proxy)               | [0x57ba429517c3473B6d34CA9aCd56c0e735b94c02](https://etherscan.io/address/0x57ba429517c3473B6d34CA9aCd56c0e735b94c02) |
-| StrategyBase osETH (Implementation)      | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase swETH (Proxy)               | [0x0Fe4F44beE93503346A3Ac9EE5A26b130a5796d6](https://etherscan.io/address/0x0Fe4F44beE93503346A3Ac9EE5A26b130a5796d6) |
-| StrategyBase swETH (Implementation)      | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase wBETH (Proxy)               | [0x7CA911E83dabf90C90dD3De5411a10F1A6112184](https://etherscan.io/address/0x7CA911E83dabf90C90dD3De5411a10F1A6112184) |
-| StrategyBase wBETH (Implementation)      | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase sfrxETH (Proxy)             | [0x8CA7A5d6f3acd3A7A8bC468a8CD0FB14B6BD28b6](https://etherscan.io/address/0x8CA7A5d6f3acd3A7A8bC468a8CD0FB14B6BD28b6) |
-| StrategyBase sfrxETH (Implementation)    | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase lsETH (Proxy)               | [0xAe60d8180437b5C34bB956822ac2710972584473](https://etherscan.io/address/0xAe60d8180437b5C34bB956822ac2710972584473) |
-| StrategyBase lsETH (Implementation)      | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| StrategyBase mETH (Proxy)                | [0x298aFB19A105D59E74658C4C334Ff360BadE6dd2](https://etherscan.io/address/0x298aFB19A105D59E74658C4C334Ff360BadE6dd2) |
-| StrategyBase mETH (Implementation)       | [0xafda870d4a94b9444f9f22a0e61806178b6bf178](https://etherscan.io/address/0xafda870d4a94b9444f9f22a0e61806178b6bf178) |
-| EigenStrategy (Proxy)                    | [0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7](https://etherscan.io/address/0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7) |
-| EigenStrategy (Implementation)           | [0x27e7a3a81741b9fcc5ad7edcbf9f8a72a5c00428](https://etherscan.io/address/0x27e7a3a81741b9fcc5ad7edcbf9f8a72a5c00428) |
-| EigenPod (Proxy)                         | [0x5a2a4F2F3C18f09179B6703e63D9eDD165909073](https://etherscan.io/address/0x5a2a4F2F3C18f09179B6703e63D9eDD165909073) |
-| EigenPod (Implementation)                | [0xcb27A4819A64FBA93ABD4D480e4466aEc0503745](https://etherscan.io/address/0xcb27A4819A64FBA93ABD4D480e4466aEc0503745) |
-| DelayedWithdrawalRouter (Proxy)          | [0x7Fe7E9CC0F274d2435AD5d56D5fa73E47F6A23D8](https://etherscan.io/address/0x7Fe7E9CC0F274d2435AD5d56D5fa73E47F6A23D8) |
-| DelayedWithdrawalRouter (Implementation) | [0x4bb6731b02314d40abbffbc4540f508874014226](https://etherscan.io/address/0x4bb6731b02314d40abbffbc4540f508874014226) |
-| Eigen (Token) (Proxy)                    | [0xec53bf9167f50cdeb3ae105f56099aaab9061f83](https://etherscan.io/address/0xec53bf9167f50cdeb3ae105f56099aaab9061f83) |
-| Eigen (Token) (Implementation)           | [0x17f56E911C279bad67eDC08acbC9cf3DC4eF26A0](https://etherscan.io/address/0x17f56E911C279bad67eDC08acbC9cf3DC4eF26A0) |
-| BackingEigen (Proxy)                     | [0x83E9115d334D248Ce39a6f36144aEaB5b3456e75](https://etherscan.io/address/0x83E9115d334D248Ce39a6f36144aEaB5b3456e75) |
-| BackingEigen (Implementation)            | [0xF2b225815F70c9b327DC9db758A36c92A4279b17](https://etherscan.io/address/0xF2b225815F70c9b327DC9db758A36c92A4279b17) |
-| PauserRegistry                           | [0xB8765ed72235d279c3Fb53936E4606db0Ef12806](https://etherscan.io/address/0xB8765ed72235d279c3Fb53936E4606db0Ef12806) |
-| Timelock                                 | [0xA6Db1A8C5a981d1536266D2a393c5F8dDb210EAF](https://etherscan.io/address/0xA6Db1A8C5a981d1536266D2a393c5F8dDb210EAF) |
-| TimelockController                       | [0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d](https://etherscan.io/address/0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d) |
-| TimelockController (bEigen)              | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) |
-| ProxyAdmin                               | [0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444](https://etherscan.io/address/0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444) |
-| ProxyAdmin (bEIGEN)                      | [0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9](https://etherscan.io/address/0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9) |
-| PermissionController (Proxy)             | [0x25E5F8B1E7aDf44518d35D5B2271f114e081f0E5](https://etherscan.io/address/0x25E5F8B1E7aDf44518d35D5B2271f114e081f0E5) |
-| PermissionController (Implementation)    | [0xe7f3705c9addf2de14e03c345fa982cab2c1c6b1](https://etherscan.io/address/0xe7f3705c9addf2de14e03c345fa982cab2c1c6b1) |
+| Contract Name                         | Address                                                                                                               |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| DelegationManager (Proxy)             | [0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A](https://etherscan.io/address/0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A) |
+| DelegationManager (Implementation)    | [0x6eed6c2802df347e05884857cddb2d3e96d12f89](https://etherscan.io/address/0x6eed6c2802df347e05884857cddb2d3e96d12f89) |
+| StrategyManager (Proxy)               | [0x858646372CC42E1A627fcE94aa7A7033e7CF075A](https://etherscan.io/address/0x858646372CC42E1A627fcE94aa7A7033e7CF075A) |
+| StrategyManager (Implementation)      | [0x46aefd30415be99e20169ee7046f65784b46d123](https://etherscan.io/address/0x46aefd30415be99e20169ee7046f65784b46d123) |
+| EigenPodManager (Proxy)               | [0x91E677b07F7AF907ec9a428aafA9fc14a0d3A338](https://etherscan.io/address/0x91E677b07F7AF907ec9a428aafA9fc14a0d3A338) |
+| EigenPodManager (Implementation)      | [0xe48d7caec1790b293667e4bb2de1e00536f2babd](https://etherscan.io/address/0xe48d7caec1790b293667e4bb2de1e00536f2babd) |
+| RewardsCoordinator (Proxy)            | [0x7750d328b314EfFa365A0402CcfD489B80B0adda](https://etherscan.io/address/0x7750d328b314EfFa365A0402CcfD489B80B0adda) |
+| RewardsCoordinator (Implementation)   | [0xa505c0116ad65071f0130061f94745b7853220ab](https://etherscan.io/address/0xa505c0116ad65071f0130061f94745b7853220ab) |
+| AllocationManager (Proxy)             | [0x948a420b8cc1d6bfd0b6087c2e7c344a2cd0bc39](https://etherscan.io/address/0x948a420b8cc1d6bfd0b6087c2e7c344a2cd0bc39) |
+| AllocationManager (Implementation)    | [0xc97602648fa52f92b4ee2b0e5a54bd15b6cb0345](https://etherscan.io/address/0xc97602648fa52f92b4ee2b0e5a54bd15b6cb0345) |
+| StrategyFactory (Proxy)               | [0x5e4c39ad7a3e881585e383db9827eb4811f6f647](https://etherscan.io/address/0x5e4c39ad7a3e881585e383db9827eb4811f6f647) |
+| StrategyFactory (Implementation)      | [0x1b97d8f963179c0e17e5f3d85cdfd9a31a49bc66](https://etherscan.io/address/0x1b97d8f963179c0e17e5f3d85cdfd9a31a49bc66) |
+| UpgradeableBeacon (Proxy)             | [0x0ed6703c298d28ae0878d1b28e88ca87f9662fe9](https://etherscan.io/address/0x0ed6703c298d28ae0878d1b28e88ca87f9662fe9) |
+| StrategyBase (Implementation)         | [0xD4d1746142642Db4c1ab17b03B9c58baac913E5B](https://etherscan.io/address/0xD4d1746142642Db4c1ab17b03B9c58baac913E5B) |
+| StrategyBase cbETH (Proxy)            | [0x54945180dB7943c0ed0FEE7EdaB2Bd24620256bc](https://etherscan.io/address/0x54945180dB7943c0ed0FEE7EdaB2Bd24620256bc) |
+| StrategyBase cbETH (Implementation)   | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase stETH (Proxy)            | [0x93c4b944D05dfe6df7645A86cd2206016c51564D](https://etherscan.io/address/0x93c4b944D05dfe6df7645A86cd2206016c51564D) |
+| StrategyBase stETH (Implementation)   | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase rETH (Proxy)             | [0x1BeE69b7dFFfA4E2d53C2a2Df135C388AD25dCD2](https://etherscan.io/address/0x1BeE69b7dFFfA4E2d53C2a2Df135C388AD25dCD2) |
+| StrategyBase rETH (Implementation)    | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase ETHx (Proxy)             | [0x9d7eD45EE2E8FC5482fa2428f15C971e6369011d](https://etherscan.io/address/0x9d7eD45EE2E8FC5482fa2428f15C971e6369011d) |
+| StrategyBase ETHx (Implementation)    | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase ankrETH (Proxy)          | [0x13760F50a9d7377e4F20CB8CF9e4c26586c658ff](https://etherscan.io/address/0x13760F50a9d7377e4F20CB8CF9e4c26586c658ff) |
+| StrategyBase ankrETH (Implementation) | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase OETH (Proxy)             | [0xa4C637e0F704745D182e4D38cAb7E7485321d059](https://etherscan.io/address/0xa4C637e0F704745D182e4D38cAb7E7485321d059) |
+| StrategyBase OETH (Implementation)    | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase osETH (Proxy)            | [0x57ba429517c3473B6d34CA9aCd56c0e735b94c02](https://etherscan.io/address/0x57ba429517c3473B6d34CA9aCd56c0e735b94c02) |
+| StrategyBase osETH (Implementation)   | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase swETH (Proxy)            | [0x0Fe4F44beE93503346A3Ac9EE5A26b130a5796d6](https://etherscan.io/address/0x0Fe4F44beE93503346A3Ac9EE5A26b130a5796d6) |
+| StrategyBase swETH (Implementation)   | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase wBETH (Proxy)            | [0x7CA911E83dabf90C90dD3De5411a10F1A6112184](https://etherscan.io/address/0x7CA911E83dabf90C90dD3De5411a10F1A6112184) |
+| StrategyBase wBETH (Implementation)   | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase sfrxETH (Proxy)          | [0x8CA7A5d6f3acd3A7A8bC468a8CD0FB14B6BD28b6](https://etherscan.io/address/0x8CA7A5d6f3acd3A7A8bC468a8CD0FB14B6BD28b6) |
+| StrategyBase sfrxETH (Implementation) | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase lsETH (Proxy)            | [0xAe60d8180437b5C34bB956822ac2710972584473](https://etherscan.io/address/0xAe60d8180437b5C34bB956822ac2710972584473) |
+| StrategyBase lsETH (Implementation)   | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| StrategyBase mETH (Proxy)             | [0x298aFB19A105D59E74658C4C334Ff360BadE6dd2](https://etherscan.io/address/0x298aFB19A105D59E74658C4C334Ff360BadE6dd2) |
+| StrategyBase mETH (Implementation)    | [0x62f7226fb9d615590eadb539713b250fb2fdf4e0](https://etherscan.io/address/0x62f7226fb9d615590eadb539713b250fb2fdf4e0) |
+| EigenStrategy (Proxy)                 | [0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7](https://etherscan.io/address/0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7) |
+| EigenStrategy (Implementation)        | [0x530fdb7adf7d489df49c27e3d3512c0dd64886be](https://etherscan.io/address/0x530fdb7adf7d489df49c27e3d3512c0dd64886be) |
+| EigenPod (UpgradeableBeacon)          | [0x5a2a4F2F3C18f09179B6703e63D9eDD165909073](https://etherscan.io/address/0x5a2a4F2F3C18f09179B6703e63D9eDD165909073) |
+| EigenPod (Implementation)             | [0xcb27A4819A64FBA93ABD4D480e4466aEc0503745](https://etherscan.io/address/0xcb27A4819A64FBA93ABD4D480e4466aEc0503745) |
+| Eigen (Token) (Proxy)                 | [0xec53bf9167f50cdeb3ae105f56099aaab9061f83](https://etherscan.io/address/0xec53bf9167f50cdeb3ae105f56099aaab9061f83) |
+| Eigen (Token) (Implementation)        | [0x17f56E911C279bad67eDC08acbC9cf3DC4eF26A0](https://etherscan.io/address/0x17f56E911C279bad67eDC08acbC9cf3DC4eF26A0) |
+| BackingEigen (Proxy)                  | [0x83E9115d334D248Ce39a6f36144aEaB5b3456e75](https://etherscan.io/address/0x83E9115d334D248Ce39a6f36144aEaB5b3456e75) |
+| BackingEigen (Implementation)         | [0xF2b225815F70c9b327DC9db758A36c92A4279b17](https://etherscan.io/address/0xF2b225815F70c9b327DC9db758A36c92A4279b17) |
+| PauserRegistry                        | [0xB8765ed72235d279c3Fb53936E4606db0Ef12806](https://etherscan.io/address/0xB8765ed72235d279c3Fb53936E4606db0Ef12806) |
+| Timelock                              | [0xA6Db1A8C5a981d1536266D2a393c5F8dDb210EAF](https://etherscan.io/address/0xA6Db1A8C5a981d1536266D2a393c5F8dDb210EAF) |
+| TimelockController                    | [0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d](https://etherscan.io/address/0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d) |
+| TimelockController (bEigen)           | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) |
+| ProxyAdmin                            | [0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444](https://etherscan.io/address/0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444) |
+| ProxyAdmin (bEIGEN)                   | [0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9](https://etherscan.io/address/0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9) |
+| PermissionController (Proxy)          | [0x25E5F8B1E7aDf44518d35D5B2271f114e081f0E5](https://etherscan.io/address/0x25E5F8B1E7aDf44518d35D5B2271f114e081f0E5) |
+| PermissionController (Implementation) | [0xe7f3705c9addf2de14e03c345fa982cab2c1c6b1](https://etherscan.io/address/0xe7f3705c9addf2de14e03c345fa982cab2c1c6b1) |
 
 ## Permission owners
 
