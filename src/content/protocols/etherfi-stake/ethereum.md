@@ -11,7 +11,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-This review focuses on EtherFi's eETH/WeETH protocol. eETH is a liquid restaking token designed for yield optimization on top of native staking. eETH is backed by staked and restaked ETH through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications.
+This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed for yield optimization on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications.
 
 # Ratings
 
@@ -23,26 +23,13 @@ The protocol is deployed on several chains. This review focuses on the Ethereum 
 
 ## Upgradeability
 
-In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
+All contracts in the protocol can be upgraded by a 4-out-of-7 multisig with a delay of 3 days. This includes the `eETH` and `WeETH` tokens and the contracts handling validator withdrawals. Through an upgrade, the multisig could reattribute the ownership of all funds in the protocol, which would lead to the _loss of user funds_ and _loss of unclaimed yield_. As the signers are not announced, it does not qualify for the role of security council.
 
-We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
+**8 hours timelock actions**
 
-For some practical guidance follow this steps. It will help you in writing a nice report:
+**depositor EOA**
 
-1. Run the [permission scanner](https://github.com/deficollective/permission-scanner)
-2. Fill in all the permissioned functions in the table (`## Permissions`)
-   - Remember: Each function with a permission needs to be considered when determining the risk on Upgradability
-3. Get a mechanistic and precise understanding of each permissioned function
-4. Assess impact for each function, look out for
-   - loss/blocking of user funds
-   - loss of unclaimed yield
-   - change expected behavior significantly (blacklisting/kyc/fees/...)
-5. Write the impact column based on your understanding
-   - A good tipp when writing the impact column below, think of least 2,3 sentences:
-   1. First sentence: what it does technically, e.g "It assigns a new address to the owner variable"
-   2. Second: what is the impact within the system, e.g "The owner is permissioned to raise fees"
-   3. Third: Imagine faulty or malicious action, e.g "The malicious owner could raise fees to 100%, redirecting all future yield.
-6. Summarise and abstract away technical details in this section here (`## Upgradeability`)
+**EtherFiAdmin**
 
 > Upgradeability score: High
 
@@ -55,6 +42,7 @@ Can be Trusted (fixed bid), or Trustless (highest bidder wins).
 
 Liquid Staking Tokens: liquid staking tokens are supported and restaked also. + Curve pool or prices for those tokens
 QUESTION: which eigenpod do they use? Who's the staker?
+https://community.chaoslabs.xyz/etherfi/risk/avs
 
 Stakers who are bond holder
 
@@ -66,7 +54,9 @@ Eigenlayer for restaking
 
 ## Exit Window
 
-See http://defiscan.info/learn-more#exit-window for more guidance.
+All contract upgrades are currently subject to a delay of 3 days.
+
+**Repeat upgradeability stuff, with exit windows**
 
 > Exit Window score: High
 
@@ -116,9 +106,10 @@ Here anything relevant to the governance, in this case it could be what you high
 
 New table with all the multisigs
 
-| Name                           | Account                                                                                                               | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| EtherFi Undeclared Multisig #1 | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig | ❌          | ✅              | ❌                | ❌             |
+| Name                           | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| EtherFi Undeclared Multisig #1 | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
+| EtherFi Undeclared Multisig #2 | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
 
 # Contracts & Permissions
 
@@ -126,8 +117,8 @@ New table with all the multisigs
 
 Missing because of errors:
 
-UUPSProxy LiquidityPool "0x308861A430be4cce5502d0A12724771Fc6DaF216", (impl 0xa6099d83a67a2c653feb5e4e48ec24c5aee1c515)
-UUPSProxy EtherFiAdmin "0x0EF8fa4760Db8f5Cd4d993f3e3416f30f942D705", (impl 0x683583979c8be7bcfa41e788ab38857dff792f49)
+UUPSProxy LiquidityPool "0x308861A430be4cce5502d0A12724771Fc6DaF216", (impl 0x025911766aEF6fF0C294FD831a2b5c17dC299B3f)
+UUPSProxy EtherFiAdmin "0x0EF8fa4760Db8f5Cd4d993f3e3416f30f942D705", (impl 0xd50f28485A75A1FdE432BA7d012d0E2543D2f20d)
 UUPSProxy WithdrawRequestNFT "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c",
 
 UUPSProxy RedemptionManager "0xdadef1ffbfeaab4f68a9fd181395f68b4e4e7ae0",
@@ -143,20 +134,22 @@ TODO: Scan its access control
 
 NEW RoleRegistry: 0x62247D29B4B9BECf4BB73E0c722cf6445cfC7cE9
 
+EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
+
 | Contract Name                         | Address                                    |
 | ------------------------------------- | ------------------------------------------ |
 | EETH (Proxy)                          | 0x35fA164735182de50811E8e2E824cFb9B6118ac2 |
-| EETH (Implementation)                 | 0x46c51d2e6d5fef0400d26320bc96995176c369dd |
+| EETH (Implementation)                 | 0xCB3D917A965A70214f430a135154Cd5ADdA2ad84 |
 | WeETH (Proxy)                         | 0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee |
-| WeETH (Implementation)                | 0x353e98f34b6e5a8d9d1876bf6df01284d05837cb |
+| WeETH (Implementation)                | 0x2d10683E941275D502173053927AD6066e6aFd6B |
 | EtherFiGovernanceToken                | 0xFe0c30065B384F05761f15d0CC899D4F9F9Cc0eB |
 | AddressProvider                       | 0x8487c5F8550E3C3e7734Fe7DCF77DB2B72E4A848 |
 | AuctionManager (Proxy)                | 0x00C452aFFee3a17d9Cecc1Bcd2B8d5C7635C4CB9 |
 | AuctionManager (Implementation)       | 0x68fe80c6e97e0c8613e2fed344358c6635ba5366 |
 | StakingManager (Proxy)                | 0x25e821b7197B146F7713C3b89B6A4D83516B912d |
-| StakingManager (Implementation)       | 0xb27d4e7b8ff1ef21751b50f3821d99719ad5868f |
+| StakingManager (Implementation)       | 0x433d06fFc5EfE0e93daa22fcEF7eD60e65Bf70b4 |
 | EtherFiNodesManager (Proxy)           | 0x8B71140AD2e5d1E7018d2a7f8a288BD3CD38916F |
-| EtherFiNodesManager (Implementation)  | 0xe9ee6923d41cf5f964f11065436bd90d4577b5e4 |
+| EtherFiNodesManager (Implementation)  | 0x158B21148E86470E2075926EbD5528Af2D510cAF |
 | BNFT (Proxy)                          | 0x6599861e55abd28b91dd9d86A826eC0cC8D72c2c |
 | BNFT (Implementation)                 | 0x6a393848f5d1b8e7dab45f3a7e01f9f0dc687242 |
 | TNFT (Proxy)                          | 0x7B5ae07E2AF1C861BcC4736D23f5f66A61E0cA5e |
@@ -172,7 +165,7 @@ NEW RoleRegistry: 0x62247D29B4B9BECf4BB73E0c722cf6445cfC7cE9
 | Liquifier (Implementation)            | 0xa1a15fb15cbda9e6c480c5bca6e9aba9c5e2ff95 |
 | EtherFiTimelock (3 Days)              | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
 | EtherFiOracle (Proxy)                 | 0x57AaF0004C716388B21795431CD7D5f9D3Bb6a41 |
-| EtherFiOracle (Implementation)        | 0x99be559fadf311d2cedea6265f4d36dfa4377b70 |
+| EtherFiOracle (Implementation)        | 0x5eefE6f65a280A6f1Eb1FdFf36Ab9e2af6f38462 |
 | CumulativeMerkleDrop (Proxy)          | 0x6Db24Ee656843E3fE03eb8762a54D86186bA6B64 |
 | CumulativeMerkleDrop (Implementation) | 0x5e226b1de8b0f387d7c77f78cba2571d2a1be511 |
 | RoleRegistry (Proxy)                  | 0x1d3Af47C1607A2EF33033693A9989D1d1013BB50 |
@@ -180,11 +173,25 @@ NEW RoleRegistry: 0x62247D29B4B9BECf4BB73E0c722cf6445cfC7cE9
 | EarlyAdopterPool                      | 0x7623e9dc0da6ff821ddb9ebaba794054e078f8c4 |
 | BoringGovernance                      | 0x86B5780b606940Eb59A062aA85a07959518c0161 |
 
+New deployments on 31.07:
+EtherFiVIewer: 0xF99Cc758a6A42f9A9eDed4Ac86905F8eE3B0d73e
+EtherFiNode: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
+StakingManager: 0x433d06fFc5EfE0e93daa22fcEF7eD60e65Bf70b4
+EtherFiNodesManager: 0x158B21148E86470E2075926EbD5528Af2D510cAF
+LiquidityPool: 0x025911766aEF6fF0C294FD831a2b5c17dC299B3f
+WeETH: 0x2d10683E941275D502173053927AD6066e6aFd6B
+eETH: 0xCB3D917A965A70214f430a135154Cd5ADdA2ad84
+EtherFiOracle: 0x5eefE6f65a280A6f1Eb1FdFf36Ab9e2af6f38462
+EtherFiAdmin: 0xd50f28485A75A1FdE432BA7d012d0E2543D2f20d
+
+Multisig TIMELOCK 3 days: 0xcdd57D11476c22d265722F68390b036f3DA48c21
+
 ## All Permission Owners
 
 | Name                           | Account                                                                                                               | Type         |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------ |
 | EtherFi Undeclared Multisig #1 | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 |
+| EtherFi Undeclared Multisig #1 | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 |
 | Underclared EOA                | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          |
 | EtherFi Deployer               | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          |
 | Beacon Depositor               | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          |
@@ -323,32 +330,32 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | AddressProvider | setOwner | Changes the owner of the contract. The owner has the right to add and remove contracts. | EtherFiTimelock (3 Days) |
 
 | EtherFiNodesManager | batchSendExitRequest | Sends a request from the T-NFT owner to exit the corresponding validators. The B-NFT owner must serve the request or their bond will get penalized. | Validators' `TNFT` owner |
-| EtherFiNodesManager | startCheckpoint | Start a PEPE pod checkpoint balance proof. A new proof cannot be started until the previous proof is completed. [TODO] | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | setProofSubmitter | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | processNodeExit | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | batchQueueRestakedWithdrawal | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | startCheckpoint | Start a PEPE pod checkpoint balance proof. A new proof cannot be started until the previous proof is completed. [TODO] | Admins (TODO?) |
+| EtherFiNodesManager | setProofSubmitter | ... | Admins (TODO?) |
+| EtherFiNodesManager | processNodeExit | ... | Admins (TODO?) |
+| EtherFiNodesManager | batchQueueRestakedWithdrawal | ... | Admins (TODO?) |
 | EtherFiNodesManager | completeQueuedWithdrawals | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | partialWithdraw | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | batchPartialWithdraw | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | fullWithdraw | ... | ['nonReentrant', 'whenNotPaused'] |
 | EtherFiNodesManager | batchFullWithdraw | ... | ['nonReentrant', 'whenNotPaused'] |
-| EtherFiNodesManager | markBeingSlashed | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | markBeingSlashed | ... | Admins (TODO?) |
 | EtherFiNodesManager | allocateEtherFiNode | ... | StakingManager |
 | EtherFiNodesManager | registerValidator | ... | StakingManager |
 | EtherFiNodesManager | unregisterValidator | ... | StakingManager |
-| EtherFiNodesManager | updateAllowedForwardedExternalCalls | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | updateAllowedForwardedEigenpodCalls | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | updateAllowedForwardedExternalCalls | ... | Admins (TODO?) |
+| EtherFiNodesManager | updateAllowedForwardedEigenpodCalls | ... | Admins (TODO?) |
 | EtherFiNodesManager | forwardEigenpodCall | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | forwardExternalCall | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | setStakingRewardsSplit | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | setNonExitPenalty | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | setStakingRewardsSplit | ... | Admins (TODO?) |
+| EtherFiNodesManager | setNonExitPenalty | ... | Admins (TODO?) |
 | EtherFiNodesManager | setValidatorPhase | ... | StakingManager |
-| EtherFiNodesManager | setMaxEigenLayerWithdrawals | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | setMaxEigenLayerWithdrawals | ... | Admins (TODO?) |
 | EtherFiNodesManager | incrementNumberOfValidators | ... | StakingManager |
 | EtherFiNodesManager | updateAdmin | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | updateEigenLayerOperatingAdmin | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | pauseContract | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | unPauseContract | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | pauseContract | ... | Admins (TODO?) |
+| EtherFiNodesManager | unPauseContract | ... | Admins (TODO?) |
 | EtherFiNodesManager | upgradeTo | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | upgradeToAndCall | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | renounceOwnership | ... | EtherFiTimelock (3 Days) |
@@ -465,24 +472,24 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | EtherFiTimelock (3 Days) | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | EtherFiTimelock (3 Days) | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
 
-| EtherFiOracle | submitReport | ... | ['whenNotPaused'] |
-| EtherFiOracle | addCommitteeMember | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | removeCommitteeMember | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | manageCommitteeMember | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | setReportStartSlot | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | setQuorumSize | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | setOracleReportPeriod | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | setConsensusVersion | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | setEtherFiAdmin | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | unpublishReport | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | updateLastPublishedBlockStamps | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | updateAdmin | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | pauseContract | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | unPauseContract | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | upgradeTo | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | upgradeToAndCall | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | renounceOwnership | ... | EtherFiTimelock (3 Days) |
-| EtherFiOracle | transferOwnership | ... | EtherFiTimelock (3 Days) |
+| EtherFiOracle | submitReport | Called by each committee member to submit their report. The members need to submit the same report a quorum amount of time. Once the quorum is reached the report is considered published. The reports contain information on accrued rewards, validator exited, slashed, liquidity, and status of exit requests. Falsified information could lead to loss of user funds by devaluing `eETH`. | CommitteeMembers |
+| EtherFiOracle | addCommitteeMember | Adds a new committee member. The member can push reports and contribute to the consensus as much as any other member. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | removeCommitteeMember | Removes a committee member. The member can no longer push reports. There are no protections to ensure that the quorum can still be reached once the member is removed. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | manageCommitteeMember | This function can be used to enable or disabled registered committee members. If disabled the members can no longer push reports. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | setReportStartSlot | Sets the start slot to publish reports, this will be the reference starting slot for the next report published. | Admins (TODO?) |
+| EtherFiOracle | setQuorumSize | Sets the quorum size. The quorum is the number of submissions by committee members necessary in order to reach consensus and have a valid report. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | setOracleReportPeriod | Sets the oracle report period, the period covered by each report, in slots. | Admins (TODO?) |
+| EtherFiOracle | setConsensusVersion | Sets the consensus version. Committee members need to include the consensus version in their report, the report can only be valid if it is for the latest consensus version. | Admins (TODO?) |
+| EtherFiOracle | setEtherFiAdmin | Sets the address of the EtherFiAdmin contract. This contract is used to check that the previous report has been processed and that the new report is based on the correct blocks. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | unpublishReport | Cancels a report for which consensus has already been reached. Committee members need to submit a new report and reach consensus again from start. | Admins (TODO?) |
+| EtherFiOracle | updateLastPublishedBlockStamps | Updates the reference slots and blocks of the last published report. This can be used to rebase the oracle. It could cherry pick blocks or avoid certain blocks. It might be used in cases where reports cannot be processed, for example due to high changes in the reported data, which are refused by the contracts. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | updateAdmin | Grants or revokes admin privileges to a given address. Admins have the power to change the consensus version, unpublish reports, or pause the contract. This could deny the oracle from functioning effectively. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | pauseContract | Pauses further report submission. | Admins (TODO?) |
+| EtherFiOracle | unPauseContract | Resumes report submission. | Admins (TODO?) |
+| EtherFiOracle | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how reports are submitted. This could manipulate report data without any delay. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators, and adding or removing committee members. | EtherFiTimelock (3 Days) |
+| EtherFiOracle | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock (3 Days) |
 
 | CumulativeMerkleDrop | lzReceive | ... | [] |
 | CumulativeMerkleDrop | setPeer | ... | ['onlyOwner'] |
@@ -547,10 +554,10 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 
 ### RoleRegistry 2
 
-| Role name                                 | ID                                                                 | Role Owners                                                       | Role Admin                        |
-| ----------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| LIQUIDITY_POOL_ADMIN_ROLE                 | 0x0e8d94121b3383f03d9ae60b39295aa793469d7230d51a3f62cbf47cd45481d9 | EtherFiAdmin, Timelock (8 Hours)                                  | EtherFiTimelock (3 Days) (3 Days) |
-| PROTOCOL_PAUSER                           | 0xe6ff4398839854a2087720a46165c7be195bc9de6f7a3c5a977d3b6917b76af2 |                                                                   | EtherFiTimelock (3 Days)          | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council), [Underclared EOA](#security-council) |
-| PROTOCOL_UNPAUSER                         | 0xb72d40a29b0ca5ab6e0b32830618dfdcae56fae676396ff1f7c3fede659935c8 | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council) | EtherFiTimelock (3 Days)          |
-| ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE        | 0xf63b1ce674d2cec0dbfcdcc7e504ce31a335c457c363b9fafb6ca524addf1775 | EtherFiTimelock (8 Hours)                                         | EtherFiTimelock (3 Days)          |
-| ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE | 0xe9d356a03911100a5418b1829f363128136c30112754cb3dbe73b1674abe2ac8 | [Beacon Depositor EOA](#security-council)                         | EtherFiTimelock (3 Days)          |
+| Role name                                 | ID                                                                 | Role Owners                                                       | Role Admin               |
+| ----------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| LIQUIDITY_POOL_ADMIN_ROLE                 | 0x0e8d94121b3383f03d9ae60b39295aa793469d7230d51a3f62cbf47cd45481d9 | EtherFiAdmin, Timelock (8 Hours)                                  | EtherFiTimelock (3 Days) |
+| PROTOCOL_PAUSER                           | 0xe6ff4398839854a2087720a46165c7be195bc9de6f7a3c5a977d3b6917b76af2 |                                                                   | EtherFiTimelock (3 Days) | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council), [Underclared EOA](#security-council) |
+| PROTOCOL_UNPAUSER                         | 0xb72d40a29b0ca5ab6e0b32830618dfdcae56fae676396ff1f7c3fede659935c8 | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council) | EtherFiTimelock (3 Days) |
+| ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE        | 0xf63b1ce674d2cec0dbfcdcc7e504ce31a335c457c363b9fafb6ca524addf1775 | EtherFiTimelock (8 Hours)                                         | EtherFiTimelock (3 Days) |
+| ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE | 0xe9d356a03911100a5418b1829f363128136c30112754cb3dbe73b1674abe2ac8 | [Beacon Depositor EOA](#security-council)                         | EtherFiTimelock (3 Days) |
