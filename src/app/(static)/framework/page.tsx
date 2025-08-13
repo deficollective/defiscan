@@ -141,6 +141,37 @@ const othersData = {
   ],
 };
 
+const updateData = [
+  {
+    name: "Version 1.2",
+    description:
+      'Shifting security council requirements from "non-team" to "non-insiders". Clarifying security councils\' role in relation to governance. Specifying requirements on the decentralization of dependencies.',
+    date: "Mar. 2025",
+    link: "/blog/defiscan-update-methodology-batch-2",
+  },
+  {
+    name: "Version 1.1",
+    description:
+      'Introducing the "Others" category and different clarifications on the protocols\' scope and exit window.',
+    date: "Dec. 2024",
+    link: "/blog/defiscan-update-methodology",
+  },
+  {
+    name: "Framework Launch",
+    description:
+      "Initial release of the DeFiScan framework with centralization risk scoring and stage definitions.",
+    date: "Oct. 2024",
+    link: "/blog/introducing-defiscan/",
+  },
+  {
+    name: "Protocol Guidelines",
+    description:
+      "Initial release of the guidelines for the characterization of Genuine DeFi systems and the identification of On-chain CeFi services.",
+    date: "Apr. 2024",
+    link: "/blog/tdc-protocol-guidelines",
+  },
+];
+
 function createIdFromTitle(title: string) {
   return title
     .toLowerCase()
@@ -472,81 +503,25 @@ const FrameworkUpdatesSection = () => (
             </tr>
           </thead>
           <tbody>
-            <tr className="hover:bg-accent transition">
-              <td className="px-4 py-3 border">Version 1.2</td>
-              <td className="px-4 py-3 border">
-                Shifting security council requirements from "non-team" to
-                "non-insiders". Clarifying security councils' role in relation
-                to governance. Specifying requirements on the decentralization
-                of dependencies.
-              </td>
-              <td className="px-4 py-3 border whitespace-nowrap">Mar. 2025</td>
-              <td className="px-4 py-3 border">
-                <a
-                  href="/blog/defiscan-update-methodology"
-                  className="text-primary hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Details
-                </a>
-              </td>
-            </tr>
-            <tr className="hover:bg-accent transition">
-              <td className="px-4 py-3 border">Version 1.1</td>
-              <td className="px-4 py-3 border">
-                Introducing the "Others" category and different clarifications
-                on the protocols' scope and exit window.
-              </td>
-              <td className="px-4 py-3 border whitespace-nowrap">Dec. 2024</td>
-              <td className="px-4 py-3 border">
-                <a
-                  href="/blog/defiscan-update-methodology"
-                  className="text-primary hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Details
-                </a>
-              </td>
-            </tr>
-            <tr className="hover:bg-accent transition">
-              <td className="px-4 py-3 border">Framework Launch</td>
-              <td className="px-4 py-3 border">
-                Initial release of the DeFiScan framework with centralization
-                risk scoring and stage definitions.
-              </td>
-              <td className="px-4 py-3 border whitespace-nowrap">Oct. 2024</td>
-              <td className="px-4 py-3 border">
-                <a
-                  href="/blog/introducing-defiscan/"
-                  className="text-primary hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Details
-                </a>
-              </td>
-            </tr>
-            <tr className="hover:bg-accent transition">
-              <td className="px-4 py-3 border">Protocol Guidelines</td>
-              <td className="px-4 py-3 border">
-                Initial release of the guidelines for the characterization of
-                Genuine DeFi systems and the identification of On-chain CeFi
-                services.
-              </td>
-              <td className="px-4 py-3 border whitespace-nowrap">Apr. 2024</td>
-              <td className="px-4 py-3 border">
-                <a
-                  href="/blog/tdc-protocol-guidelines"
-                  className="text-primary hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Details
-                </a>
-              </td>
-            </tr>
+            {updateData.map((update, index) => (
+              <tr key={index} className="hover:bg-accent transition">
+                <td className="px-4 py-3 border">{update.name}</td>
+                <td className="px-4 py-3 border">{update.description}</td>
+                <td className="px-4 py-3 border whitespace-nowrap">
+                  {update.date}
+                </td>
+                <td className="px-4 py-3 border">
+                  <a
+                    href={update.link}
+                    className="text-primary hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Details
+                  </a>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
