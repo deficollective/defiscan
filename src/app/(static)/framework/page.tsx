@@ -434,6 +434,124 @@ const OthersSection = () => (
   </>
 );
 
+const FrameworkUpdatesSection = () => (
+  <>
+    <a href={`#${createIdFromTitle("Framework Updates")}`}>
+      <h1
+        id={createIdFromTitle("Framework Updates")}
+        className="mt-10 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
+        style={{ scrollMarginTop: "100px" }}
+      >
+        Framework Updates
+      </h1>
+    </a>
+
+    <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <p className="mb-6">
+        Our framework evolves over time based on community feedback and
+        learnings from protocol reviews. Here you can find a summary of major
+        updates and changes.
+      </p>
+
+      <div className="overflow-x-auto">
+        <table className="table-auto w-full border-collapse border">
+          <thead>
+            <tr>
+              <td className="border px-4 py-2 text-left font-bold">Update</td>
+              <td className="border px-4 py-2 text-left font-bold">
+                Description
+              </td>
+              <td className="border px-4 py-2 text-left font-bold whitespace-nowrap">
+                Date
+              </td>
+              <td className="border px-4 py-2 text-left font-bold whitespace-nowrap">
+                More Info
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="hover:bg-accent transition">
+              <td className="px-4 py-3 border">Version 1.2</td>
+              <td className="px-4 py-3 border">
+                Shifting security council requirements from "non-team" to
+                "non-insiders". Clarifying security councils' role in relation
+                to governance. Specifying requirements on the decentralization
+                of dependencies.
+              </td>
+              <td className="px-4 py-3 border whitespace-nowrap">Mar. 2025</td>
+              <td className="px-4 py-3 border">
+                <a
+                  href="/blog/defiscan-update-methodology"
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Details
+                </a>
+              </td>
+            </tr>
+            <tr className="hover:bg-accent transition">
+              <td className="px-4 py-3 border">Version 1.1</td>
+              <td className="px-4 py-3 border">
+                Introducing the "Others" category and different clarifications
+                on the protocols' scope and exit window.
+              </td>
+              <td className="px-4 py-3 border whitespace-nowrap">Dec. 2024</td>
+              <td className="px-4 py-3 border">
+                <a
+                  href="/blog/defiscan-update-methodology"
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Details
+                </a>
+              </td>
+            </tr>
+            <tr className="hover:bg-accent transition">
+              <td className="px-4 py-3 border">Framework Launch</td>
+              <td className="px-4 py-3 border">
+                Initial release of the DeFiScan framework with centralization
+                risk scoring and stage definitions.
+              </td>
+              <td className="px-4 py-3 border whitespace-nowrap">Oct. 2024</td>
+              <td className="px-4 py-3 border">
+                <a
+                  href="/blog/introducing-defiscan/"
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Details
+                </a>
+              </td>
+            </tr>
+            <tr className="hover:bg-accent transition">
+              <td className="px-4 py-3 border">Protocol Guidelines</td>
+              <td className="px-4 py-3 border">
+                Initial release of the guidelines for the characterization of
+                Genuine DeFi systems and the identification of On-chain CeFi
+                services.
+              </td>
+              <td className="px-4 py-3 border whitespace-nowrap">Apr. 2024</td>
+              <td className="px-4 py-3 border">
+                <a
+                  href="/blog/tdc-protocol-guidelines"
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Details
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </>
+);
+
 export default function LearnMorePage() {
   return (
     <div className="container relative mb-20 max-w-6xl py-6 lg:py-10">
@@ -442,6 +560,7 @@ export default function LearnMorePage() {
       <StagesSection />
       <SecurityCouncilSection />
       <OthersSection />
+      <FrameworkUpdatesSection />
     </div>
   );
 }
