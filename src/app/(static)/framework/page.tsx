@@ -337,7 +337,9 @@ const StagesSection = () => (
           <tbody>
             {stagesData.map((stage) => (
               <tr key={stage.stage} className="hover:bg-accent transition">
-                <td className="px-6 py-4 border">{stage.stage}</td>
+                <td className="px-6 py-4 border whitespace-nowrap">
+                  {stage.stage}
+                </td>
                 <td className="px-6 py-4 border">{stage.description}</td>
                 <td className="px-6 py-4 border">
                   <ul className="list-none list-inside">
