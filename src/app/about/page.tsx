@@ -84,7 +84,7 @@ export default function AboutPage() {
               Various organizations in the DeFi ecosystem support DeFiScan with
               grants, such as the{" "}
               <a
-                href="https://deficollective.org/blog/ef-grants/"
+                href="/blog/ef-grants/"
                 className="text-primary underline hover:text-primary/80"
                 target="_blank"
                 rel="noopener noreferrer"

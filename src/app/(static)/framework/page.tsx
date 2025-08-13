@@ -63,7 +63,7 @@ const riskData = [
     risks: {
       high: "Dependencies may cause theft or loss of user funds and exhibit Stage 0, or equivalent, centralization",
       medium:
-        "Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization", 
+        "Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization",
       low: "Dependencies (if any) cannot materially change the expected protocol performance, OR dependencies exhibit Stage 2, or equivalent, decentralization",
     },
     anchor: "autonomy",
@@ -138,8 +138,8 @@ const othersData = {
     "❌ Public documentation exists that outlines the protocol components and expected performance",
     "❌ Source-available codebase",
     "❌ Verified contracts",
-  ]
-}
+  ],
+};
 
 function createIdFromTitle(title: string) {
   return title
@@ -369,12 +369,15 @@ const SecurityCouncilSection = () => (
 
     <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
       <p className="mb-4">
-        A Security Council can represent an effective intermediate step of decentralized control over permissions that cannot be revoked or protected with an Exit Window.
-        In particular, a Security Council enables a protocol to mitigate risks of centralized control over such permissions and enter Stage 1.
+        A Security Council can represent an effective intermediate step of
+        decentralized control over permissions that cannot be revoked or
+        protected with an Exit Window. In particular, a Security Council enables
+        a protocol to mitigate risks of centralized control over such
+        permissions and enter Stage 1.
       </p>
       <p className="mb-4">
-        Any multisig account with the following minimal requirements is an acceptable
-        Security Council setup:
+        Any multisig account with the following minimal requirements is an
+        acceptable Security Council setup:
       </p>
       <ul className="list-disc ml-6">
         {securityCouncilRequirements.map((requirement, index) => (
@@ -382,10 +385,15 @@ const SecurityCouncilSection = () => (
         ))}
       </ul>
       <p className="mb-4 mt-4">
-        Note that we refer to an "insider" as any party of the "inner circle" of individuals or entities developing, maintaining and operating the protocol, such as the "team members" or a company mandated to perform certain services.
+        Note that we refer to an "insider" as any party of the "inner circle" of
+        individuals or entities developing, maintaining and operating the
+        protocol, such as the "team members" or a company mandated to perform
+        certain services.
       </p>
       <p className="mb-4">
-        These requirements translate to a set of at least 7 signers, identified through their name or pseudonym, and a threshold qualified by a majority of signers including at least one "outsider". 
+        These requirements translate to a set of at least 7 signers, identified
+        through their name or pseudonym, and a threshold qualified by a majority
+        of signers including at least one "outsider".
       </p>
     </div>
   </>
@@ -405,8 +413,11 @@ const OthersSection = () => (
 
     <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
       <p className="mb-4">
-        The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a DeFi protocol. 
-        The <i>Others</i> protocol category captures protocols which are built using blockchain technology and serve a financial use case but do not meet one or more of the Stage 0 requirements:
+        The stages framework considers a set of basic requirements to enter
+        Stage 0 and qualify as a DeFi protocol. The <i>Others</i> protocol
+        category captures protocols which are built using blockchain technology
+        and serve a financial use case but do not meet one or more of the Stage
+        0 requirements:
       </p>
       <ul className="list-none space-y-2">
         {othersData.qualifications.map((requirement, index) => (
@@ -414,7 +425,10 @@ const OthersSection = () => (
         ))}
       </ul>
       <p className="mt-4">
-        The <i>Others</i> protocol category thus shines a light on protocols which either fail to disclose the required information publicly, such as documentation (aka a Whitepaper) or software source-code, or do not meet basic requirements to qualify as a <i>DeFi</i> protocol.
+        The <i>Others</i> protocol category thus shines a light on protocols
+        which either fail to disclose the required information publicly, such as
+        documentation (aka a Whitepaper) or software source-code, or do not meet
+        basic requirements to qualify as a <i>DeFi</i> protocol.
       </p>
     </div>
   </>
