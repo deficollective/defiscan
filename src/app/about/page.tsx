@@ -35,7 +35,7 @@ export default function AboutPage() {
             standards and better practices across the entire DeFi space. Read
             more about our framework{" "}
             <a
-              href="/learn-more"
+              href="/framework"
               className="text-primary underline hover:text-primary/80"
             >
               here
