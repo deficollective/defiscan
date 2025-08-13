@@ -2,7 +2,7 @@
 title: Florian Prantl
 email: florian@deficollective.org
 image: "/images/authors/avatar-florian.png"
-description: Board member and legal expert of the DeFi Collective.
+description: Board member and legal expert
 teamMember: true
 social:
   - name: twitter

@@ -2,7 +2,7 @@
 title: Marc Vlad
 email: marc@deficollective.org
 image: "/images/authors/marcvlad.png"
-description: Decentralization Advocate
+description: Contributor, funding
 teamMember: true
 social:
   - name: github

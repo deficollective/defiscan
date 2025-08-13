@@ -2,7 +2,7 @@
 title: Stengarl
 email: stengarl@deficollective.org
 image: "/images/authors/avatar-stengarl.png"
-description: Content creator and DeFi Degen
+description: Contributor, content
 teamMember: true
 social:
   - name: github

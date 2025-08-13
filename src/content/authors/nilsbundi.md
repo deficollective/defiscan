@@ -2,7 +2,7 @@
 title: Nils Bundi
 email: nils@deficollective.org
 image: "/images/authors/nilsbundi_profil.jpeg"
-description: Protocol architect and developer for The DeFi Collective.
+description: Board member and technical expert
 teamMember: true
 social:
   - name: twitter
