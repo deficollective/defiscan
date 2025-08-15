@@ -7,11 +7,26 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "DeFiScan - Transparency on Decentralization in DeFi",
-  description: "Comprehensive DeFi protocol analysis platform. Track decentralization stagesand transparency across DeFi protocols on Ethereum, Base, and other chains. Real-time DeFi transparency data.",
-  keywords: ["DeFi", "decentralization", "protocol analysis", "TVL", "blockchain", "Ethereum", "DeFi stages", "DeFi transparency", "DeFi protocols", "Permissions"],
+  description:
+    "Comprehensive DeFi protocol analysis platform. Track decentralization stagesand transparency across DeFi protocols on Ethereum, Base, and other chains. Real-time DeFi transparency data.",
+  keywords: [
+    "DeFi",
+    "Scan",
+    "DeFiScan",
+    "decentralization",
+    "protocol analysis",
+    "TVL",
+    "blockchain",
+    "Ethereum",
+    "DeFi stages",
+    "DeFi transparency",
+    "DeFi protocols",
+    "Permissions",
+  ],
   openGraph: {
     title: "DeFiScan - DeFi Protocol Decentralization Analysis",
-    description: "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis across multiple blockchains.",
+    description:
+      "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis across multiple blockchains.",
     url: "https://defiscan.info",
     siteName: "DeFiScan",
     type: "website",
@@ -27,7 +42,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "DeFiScan - DeFi Protocol Decentralization Analysis",
-    description: "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis.",
+    description:
+      "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis.",
     images: ["https://defiscan.info/images/logo.png"],
   },
   robots: {
@@ -60,11 +76,14 @@ export default function Home() {
             <ChainCoverageComponent className="w-full" />
           </div>
         </div>
-        <p className="text-sm text-gray-500 -mt-6">TVL Data source: DefiLlama</p>
-        
+
         <div className="mb-32">
           <Table />
         </div>
+
+        <p className="text-sm text-gray-500 -mt-6">
+          TVL Data source: DefiLlama
+        </p>
       </div>
     </section>
   );
