@@ -175,7 +175,7 @@ Most of the margin in perpetual futures positions are denominated in `USDT`. By 
 
 ## USDtb
 
-`USDtb` is an asset in the [Reserve Fund](#security-council) to provide a buffer in case of negative performance of the diversified yield strategy. `USDtb` is a separate project from the `USDe` stablecoin, but is also created and managed by the Ethena Team. `USDtb` is backed by short duration treasury assets inside the BlackRock's BUIDL fund.
+`USDtb` is an asset in the [Reserve Fund](#security-council) to provide a buffer in case of negative performance of the diversified yield strategy. `USDtb` is a separate project from the `USDe` stablecoin, but is also created and managed by the Ethena Team. `USDtb` is backed by short duration treasury assets inside the BlackRock's BUIDL fund. tb inside USDtb stands for "Treasury Bills".
 
 # Governance
 
