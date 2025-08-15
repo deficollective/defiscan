@@ -49,7 +49,7 @@ stage_requirements:
 
 # Summary
 
-Ethena is a synthetic dollar protocol built on Ethereum. Ethena's synthetic dollar, `USDe`, is fully backed by crypto assets (Bitcoin, Ethereum, Solana), yield from staked ETH through LSTs and funding rates earnings from short futures positions on CEXs. `USDe` is minted and redeemed by whitelisted KYCed users. Any user can acquire `USDe` on the open market and stake it to get access to yield sourced from the strategies and passed onto the users of the `USDe` stablecoin. `ENA` the governance token is freely tradeable and can be used to signal the direction of the protocol through offchain governance on [Snapshot](https://snapshot.box/#/s:ethenagovernance.eth).
+Ethena is a synthetic dollar protocol built on Ethereum. Ethena's synthetic dollar, `USDe`, is fully backed by crypto assets (Bitcoin, Ethereum, Solana), yield from staked ETH through Liquid Staking Tokens (LSTs) and funding rates earnings from short futures positions on CEXs. `USDe` is minted and redeemed by whitelisted KYCed users. Any user can acquire `USDe` on the open market and stake it to get access to yield sourced from the strategies and passed onto the users of the `USDe` stablecoin. `ENA` the governance token is freely tradeable and can be used to signal the direction of the protocol through offchain governance on [Snapshot](https://snapshot.box/#/s:ethenagovernance.eth).
 
 # Ratings
 
