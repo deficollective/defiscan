@@ -167,7 +167,7 @@ Ethena allocates parts of their collateral funds into `USDC` to earn yield distr
 
 ## Backing Assets
 
-Ethena holds `BTC`, `ETH`, `SOL` and ETH `LSTs` as collateral for the `USDe` stablecoin. To reduce dependency risk on a single `LST`, Ethena diversifies their collateral assets into Binance Staked ETH (WBETH), [Lido stETH](../lido-v2/ethereum.md) and Mantle's mETH.
+Ethena holds `BTC`, `ETH`, `SOL` and ETH `LSTs` as collateral for the `USDe` stablecoin. To reduce dependency risk on a single `LST`, Ethena diversifies their collateral assets into [Binance Staked ETH (WBETH)](../binance-staked-eth/ethereum.md), [Lido stETH](../lido-v2/ethereum.md) and Mantle's mETH.
 
 ## Margin Collateral
 
