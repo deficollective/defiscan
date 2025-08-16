@@ -4,7 +4,7 @@ description: "Introducing DeFiScan's revamped incentivized review program: join 
 date: 2025-04-23T05:00:00Z
 published: true
 categories: ["Campaign"]
-authors: ["nils"]
+authors: ["nilsbundi"]
 tags: ["Bounty", "Community Review Program"]
 ---
 

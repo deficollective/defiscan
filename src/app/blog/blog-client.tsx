@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { posts } from "#site/content";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { AuthorLink } from "@/components/author";
 
 export default function BlogClient() {
   const router = useRouter();
@@ -140,12 +141,20 @@ export default function BlogClient() {
               )}
               
               <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <div>
-                  By {post.authors.join(", ")}
+                <div className="flex items-center gap-2">
+                  <span>By</span>
+                  <div className="flex items-center gap-1">
+                    {post.authors.map((author, index) => (
+                      <span key={author} className="flex items-center gap-1">
+                        <AuthorLink authorName={author} showAvatar />
+                        {index < post.authors.length - 1 && <span>, </span>}
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div>
                   {new Date(post.date).toLocaleDateString("en-US", {
-                    month: "long",
+                    month: "short",
                     day: "numeric",
                     year: "numeric",
                   })}

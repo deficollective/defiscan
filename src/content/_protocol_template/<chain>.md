@@ -17,7 +17,7 @@ Add a summary of the protocols. What is it? What does it do? etc.
 
 ## Chain
 
-See http://defiscan.info/learn-more#chain for more guidance.
+See http://defiscan.info/framework#chain for more guidance.
 
 > Chain score: Low/Medium/High
 
@@ -25,7 +25,7 @@ See http://defiscan.info/learn-more#chain for more guidance.
 
 In the upgradability section & risk we address bytecode upgrades and parameter changes that are permissioned.
 
-We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/learn-more#upgradability
+We wrote a section explaining the Upgradeability Risk in our framework here: See http://defiscan.info/framework#upgradability
 
 For some practical guidance follow this steps. It will help you in writing a nice report:
 
@@ -48,19 +48,19 @@ For some practical guidance follow this steps. It will help you in writing a nic
 
 ## Autonomy
 
-See http://defiscan.info/learn-more#autonomy for more guidance.
+See http://defiscan.info/framework#autonomy for more guidance.
 
 > Autonomy score: Low/Medium/High
 
 ## Exit Window
 
-See http://defiscan.info/learn-more#exit-window for more guidance.
+See http://defiscan.info/framework#exit-window for more guidance.
 
 > Exit Window score: Low/Medium/High
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+See http://defiscan.info/framework#accessibility for more guidance.
 
 > Accessibility score: Low/Medium/High
 
