@@ -63,12 +63,16 @@ The _Curve DAO_ operates exclusively on Ethereum mainnet. Although Curve product
 
 ## Upgradeability
 
-Governance contracts are upgradeable and its permissions can also be delegated to other entities. Upgrading the contracts could reassign control to any desired account or remove the governance altogether. The _Curve DAO_ manages all upgrades, primarily through the `OwnershipAgentProxy`, which executes successful governance votes. It owns critical permissions that could lead to the _loss of user funds_, which include:
+Governance contracts are upgradeable and its permissions can also be delegated to other entities. The _Curve DAO_ manages all upgrades, primarily through the `OwnershipAgentProxy`, which executes successful governance votes. It owns critical permissions that could lead to the _loss of user funds_, which include:
 
 - Minting arbitrarily `crvUSD` tokens and managing the `scrvUSD` vault by assigning the funds to different strategies. Assigning funds to a malicious strategy could lead to the _loss of user funds_.
-- Changking key parameters, such as interest rate policies in `crvUSD` and lending markets, which only impacts future performances. Interest rates are limitted to 300% on crvUSD and 1000% through Llamalend.
+- Upgrading governance contracts, potentially reassigning control to any desired account or removing the governance altogether.
+
+In addition to those, the _Curve DAO_ can perform low risk changes to the protoco, which can only in result in non-material changes in expected protocol performances, such as:
+
+- Changking parameters like interest rate policies in `crvUSD` and lending markets, which only impacts future performances. Interest rates are limitted to 300% on crvUSD and 1000% through Llamalend.
 - Changing fee settings and liquidity concentration in DEX pools, which only impacts future performances. Fees have an upper bound of 5% in StableSwap pools and 10% in TriCrypto, with 50% of those fees going to the _Curve DAO_.
-- Updating the implementation contracts of the DEX's pools can be updated for future pools only, which does not impact users' funds nor unclaimed yield.
+- Updating the implementation contracts of the DEX's pools can be updated for future pools only, which does not impact existing users' funds nor unclaimed yield.
 
 The [EmergencyDAO](#security-council), a multisig, can stop gauges (`CRV` emission), fee distributors, or pegkeepers, in case of emergency. Stopping gauges will only affect future performances and `CRV` emission in the specific gauge. Furthermore, the [EmergencyDAO](#security-council) meets the security council requirements.
 
