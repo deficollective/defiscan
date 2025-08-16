@@ -118,15 +118,27 @@ Chainlink achieves a _High_ centralization risk score as discussed in a separate
 
 # Governance
 
-A security council called `Pause Guardian` has the power to pause all deposits, withdrawals, and transfers
-in the protocol. The guardian is currently a 4/8 multisig made of Compound DAO community members. The signers announced [on the governance forum](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18) do not match the current [signers set](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c#readProxyContract#F9) . The same multisig is also `Proposal Guardian` and has the power to cancel Governance Proposals before their executions.
+The Compound protocol is governed and upgraded by `COMP` token-holders, using three distinct components; the `COMP` token, governance module (`GovernorBravo`), and Timelock. Together, these contracts allow the community to propose, vote, and implement changes through the administrative functions of a cToken or the `Comptroller`. Proposals can modify system parameters, support new markets, or add entirely new functionality to the protocol.
+
+`COMP` token-holders can delegate their voting rights to themselves, or an address of their choice.
+
+Governor Bravo is the governance module of the protocol; it allows addresses with more than 25,000 `COMP` to propose changes to the protocol; any address can lock 100 `COMP` to create an _Autonomous Proposal_, which becomes a governance proposal after being delegated 25,000 `COMP` .The minimum number of votes required for an account to create a proposal is set via `proposalThreshold`. This can be changed through governance.
+
+When a governance proposal is created, it enters a 2-day review period, after which voting weights are recorded and voting begins. Voting lasts for 3 days, addresses that held voting weight, at the start of the proposal, invoked through the `getpriorvotes` function, can submit their votes. if a majority, and at least 400,000 votes are cast for the proposal, it is queued in the Timelock, and can be implemented 2 days later. In total, any change to the protocol takes at least one week.
+
+[Source](https://docs.compound.finance/v2/governance/)
 
 ## Security Council
 
+A security council called `Pause Guardian` has the power to pause all deposits, withdrawals, and transfers
+in the protocol. The guardian is currently a 4/8 multisig made of Compound DAO community members. The signers announced [on the governance forum](https://www.comp.xyz/t/community-multisig-4-of-6-deployment/134/18). The same multisig is also `Proposal Guardian` and has the power to cancel Governance Proposals before their executions.
+
+&nbsp;
+
 | Name              | Account                                                                                                                                                        | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| Pause Guardian    | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://arbiscan.io/address/0x78E6317DD6D43DdbDa00Dce32C20xbbf3f1421D886E9b2c5D716B5192aC998af2012cCbaFc99361a9d) | Multisig 4/8 | ✅          | ❌              | ❌                | ❌             |
-| Proposal Guardian | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c)                                          | Multisig 4/8 | ✅          | ❌              | ❌                | ❌             |
+| Pause Guardian    | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://arbiscan.io/address/0x78E6317DD6D43DdbDa00Dce32C20xbbf3f1421D886E9b2c5D716B5192aC998af2012cCbaFc99361a9d) | Multisig 4/8 | ✅          | ❌              | ✅                | ✅             |
+| Proposal Guardian | [0xbbf3f1421D886E9b2c5D716B5192aC998af2012c](https://etherscan.io/address/0xbbf3f1421D886E9b2c5D716B5192aC998af2012c)                                          | Multisig 4/8 | ✅          | ❌              | ✅                | ✅             |
 
 # Contracts & Permissions
 

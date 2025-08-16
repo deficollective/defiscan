@@ -1,0 +1,10 @@
+{
+  "id": "binance-staked-eth",
+  "protocol": "Binance Staked ETH",
+  "website": "https://www.binance.com/en/wbeth",
+  "defillama_slug": ["binance-staked-eth"],
+  "socials": {
+    "x": "https://x.com/binance"
+  },
+  "github": ["https://github.com/binance"]
+}

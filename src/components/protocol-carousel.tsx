@@ -24,21 +24,45 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     const fetchProtocols = async () => {
       try {
         const data = await loadReviews();
-        // Filter out protocols without logos, infrastructure reviews, unqualified protocols, and sort by name for consistency
+        // Filter out protocols without logos and infrastructure reviews
         const protocolsWithLogos = data
           .filter(protocol => {
             // Filter out protocols without logos
             if (!protocol.logo) return false;
             
-            // Filter out protocols that only have infrastructure reviews (stages starting with "I") or unqualified ("O")
-            const hasValidReview = protocol.reviews.some(review => 
-              !review.stage?.toString().startsWith("I") && review.stage !== "O"
+            // Filter out protocols that only have infrastructure reviews (stages starting with "I")
+            const hasNonInfrastructureReview = protocol.reviews.some(review => 
+              !review.stage?.toString().startsWith("I")
             );
-            return hasValidReview;
+            return hasNonInfrastructureReview;
+          });
+
+        // Filter protocols based on their reviews: include only if they have valid stages (0,1,2)
+        // OR if they only have "O" stages (no valid stages at all)
+        const filteredProtocols = protocolsWithLogos
+          .filter(protocol => {
+            // Check if this protocol has any valid stage reviews (0, 1, 2)
+            const hasValidStages = protocol.reviews.some(review => 
+              [0, 1, 2].includes(review.stage as number)
+            );
+            
+            if (hasValidStages) {
+              // If it has valid stages, include it
+              return true;
+            }
+            
+            // If it doesn't have valid stages, include it only if it has "O" stages
+            // (meaning it's a protocol that only exists in "Others" category)
+            const hasOnlyOStages = protocol.reviews.some(review => review.stage === "O") &&
+              protocol.reviews.every(review => 
+                review.stage === "O" || review.stage?.toString().startsWith("I")
+              );
+            
+            return hasOnlyOStages;
           })
           .sort((a, b) => a.protocol.localeCompare(b.protocol));
         
-        setProtocols(protocolsWithLogos);
+        setProtocols(filteredProtocols);
       } catch (error) {
         console.error('Error loading protocols:', error);
       } finally {
@@ -139,9 +163,16 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
               }}
             >
               {extendedProtocols.map((protocol, index) => {
-                // Find the first valid review (not infrastructure or unqualified) for this protocol to create the link
-                const firstValidReview = protocol.reviews.find(review => 
-                  !review.stage?.toString().startsWith("I") && review.stage !== "O"
+                // Find the best review for this protocol to create the link
+                // Priority: valid stages (0,1,2) > "O" stages > other stages
+                const validStageReview = protocol.reviews.find(review => 
+                  [0, 1, 2].includes(review.stage as number)
+                );
+                const oStageReview = protocol.reviews.find(review => 
+                  review.stage === "O"
+                );
+                const firstValidReview = validStageReview || oStageReview || protocol.reviews.find(review => 
+                  !review.stage?.toString().startsWith("I")
                 );
                 // Use the same slug approach as the table
                 const protocolSlug = firstValidReview ? firstValidReview.slug : null;

@@ -1,8 +1,8 @@
 {
-  "id": "compound-v3",
-  "protocol": "Compound V3",
+  "id": "compound-v2",
+  "protocol": "Compound V2",
   "website": "https://compound.finance/",
-  "defillama_slug": ["compound-v3"],
+  "defillama_slug": ["compound-v2"],
   "socials": {
     "x": "https://x.com/compoundfinance"
   },
