@@ -182,12 +182,12 @@ However, critical permissions in the `MORPHO` token allow the same multisig acco
 
 ## All Permission owners
 
-| Name                                                                                                                                   | Account                                                                                                               | Type         |
-| -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| morpho.eth                                                                                                                             | [0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa](https://basescan.org/address/0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa) | Multisig 5/9 |
-| MorphoRewards Multisig                                                                                                                 | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://basescan.org/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 |
-| Morpho                                                                                                                                 | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://basescan.org/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) | Contract     |
-| L2StandardBridge [0x4200000000000000000000000000000000000010](https://basescan.org/address/0x4200000000000000000000000000000000000010) | Contract                                                                                                              |
+| Name                   | Account                                                                                                               | Type         |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
+| morpho.eth             | [0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa](https://basescan.org/address/0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa) | Multisig 5/9 |
+| MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://basescan.org/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 |
+| Morpho                 | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://basescan.org/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) | Contract     |
+| L2StandardBridge       | [0x4200000000000000000000000000000000000010](https://basescan.org/address/0x4200000000000000000000000000000000000010) | Contract     |
 
 <!-- potential additional permission owners:
 
