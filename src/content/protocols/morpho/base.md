@@ -122,7 +122,7 @@ We further want to highlight the following observations which did not directly f
 
 An overview of the Morpho protocol can be seen in the diagram below.
 
-![Overview of the Morpho protocol](./diagrams/morpho-overview.png)
+![Overview of the Morpho protocol](../diagrams/morpho-overview.png)
 
 <!-- See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf) -->
 
