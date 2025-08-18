@@ -122,7 +122,7 @@ We further want to highlight the following observations which did not directly f
 
 An overview of the Morpho protocol can be seen in the diagram below.
 
-![Overview of the Morpho protocol](../diagrams/morpho-overview.png)
+![Overview of the Morpho protocol](../diagrams/morpho-overview-base.png)
 
 <!-- See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf) -->
 
@@ -233,5 +233,5 @@ SafeOwner: 0x0b9915C13e8E184951Df0d9C0b104f8f1277648B -->
 | MorphoTokenOptimism (MORPHO) | upgradeToAndCall           | Upgrades the contract to a new implementation. This can potentially change the logic of the token and could be used to steal funds.                                                                                                                 | morpho.eth                       |
 | MorphoTokenOptimism (MORPHO) | transferOwnership          | Transfer ownership of the contract to a new adress. The new owner needs to accept ownership. The new owner has minting right and upgrade right on the `MORPHO` token and therefore extreme power.                                                   | morpho.eth                       |
 | MorphoTokenOptimism (MORPHO) | renounceOwnership          | Unrevokably abandons ownership of the contract. This would make the `MORPHO` contract immutable and prevent further mints.                                                                                                                          | morpho.eth                       |
-| MorphoTokenOptimism (MORPHO) | mint                       | Mints `MORPHO` tokens to a new address and increase the total supply. This can be abused to dillute the value of `MORPHO` or influence governance decisions in the future.                                                                          | Bridge                           |
-| MorphoTokenOptimism (MORPHO) | burn                       | Burns `MORPHO` tokens from a given address. This can be abused to burn from any account holding `MORPHO`.                                                                                                                                           | Bridge                           |
+| MorphoTokenOptimism (MORPHO) | mint                       | Mints `MORPHO` tokens to a new address and increase the total supply. This can be abused to dillute the value of `MORPHO` or influence governance decisions in the future.                                                                          | L2StandardBridge                 |
+| MorphoTokenOptimism (MORPHO) | burn                       | Burns `MORPHO` tokens from a given address. This can be abused to burn from any account holding `MORPHO`.                                                                                                                                           | L2StandardBridge                 |
