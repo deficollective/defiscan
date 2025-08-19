@@ -51,7 +51,7 @@ stage_requirements:
 
 Curve Finance is a protocol consisting of a _Decentralized Exchange (DEX)_ focused on stablecoin and correlated-asset swaps, _Isolated Lending Markets (Llamalend)_, and a _Stablecoin (crvUSD)_.
 
-Governance of all products, as well as the protocol itself, is managed entirely through the _Curve DAO_, using a vote-escrowed token model (veCRV) where voting power is proportional to the amount of `CRV` locked and the remaining lock duration (up to four years).
+Governance of the entire protocol is managed entirely through the _Curve DAO_, using a vote-escrowed token model (veCRV) where voting power is proportional to the amount of `CRV` locked and the remaining lock duration (up to four years).
 
 # Ratings
 
@@ -68,9 +68,9 @@ Governance contracts are upgradeable and its permissions can also be delegated t
 - Minting arbitrarily `crvUSD` tokens and managing the `scrvUSD` vault by assigning the funds to different strategies. Assigning funds to a malicious strategy could lead to the _loss of user funds_.
 - Upgrading governance contracts, potentially reassigning control to any desired account or removing the governance altogether.
 
-In addition to those, the _Curve DAO_ can perform low risk changes to the protoco, which can only in result in non-material changes in expected protocol performances, such as:
+In addition to those, the _Curve DAO_ can perform low risk changes to the protocol, which can only result in non-material changes in expected protocol performances, such as:
 
-- Changking parameters like interest rate policies in `crvUSD` and lending markets, which only impacts future performances. Interest rates are limitted to 300% on crvUSD and 1000% through Llamalend.
+- Changing parameters like interest rate policies in `crvUSD` and lending markets, which only impacts future performances. Interest rates are limitted to 300% on crvUSD and 1000% through Llamalend.
 - Changing fee settings and liquidity concentration in DEX pools, which only impacts future performances. Fees have an upper bound of 5% in StableSwap pools and 10% in TriCrypto, with 50% of those fees going to the _Curve DAO_.
 - Updating the implementation contracts of the DEX's pools can be updated for future pools only, which does not impact existing users' funds nor unclaimed yield.
 
