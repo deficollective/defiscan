@@ -1,0 +1,10 @@
+{
+  "id": "compound-v2",
+  "protocol": "Compound V2",
+  "website": "https://compound.finance/",
+  "defillama_slug": ["compound-v2"],
+  "socials": {
+    "x": "https://x.com/compoundfinance"
+  },
+  "github": ["https://github.com/compound-finance/compound-protocol"]
+}

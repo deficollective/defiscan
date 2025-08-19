@@ -14,6 +14,37 @@ import { StageBadge, StackedStageBadge } from "../stage";
 import { infraScoreToText } from "@/app/protocols/stageToRequisites";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
+// Stage priority mapping - higher numbers = higher priority in sorting
+const STAGE_PRIORITY: Record<string, number> = {
+  "2": 5,
+  "1": 4, 
+  "0": 3,
+  "R": 2,
+  "O": 1,
+  "V": 0,
+  "I0": 1,
+  "I1": 2,
+  "I2": 3
+};
+
+// Helper function to get the highest stage from multiple reviews
+const getHighestStage = (stages: Stage[]): Stage => {
+  if (stages.length === 0) return "V";
+  
+  let highest: Stage = "V";
+  let highestPriority = 0;
+  
+  for (const stage of stages) {
+    const priority = STAGE_PRIORITY[String(stage)] || 0;
+    if (priority > highestPriority) {
+      highest = stage;
+      highestPriority = priority;
+    }
+  }
+  
+  return highest;
+};
+
 export const createColumns = (
   getProtocolLogo: (name: string) => string
 ): ColumnDef<Project>[] => [
@@ -134,7 +165,15 @@ export const createColumns = (
   },
   {
     id: "stage",
-    accessorKey: "stage",
+    // Custom accessor function that returns the highest stage for protocols with multiple reviews
+    // This ensures sorting works correctly while preserving display logic for stacked badges
+    accessorFn: (row) => {
+      if ((row as any).stage === undefined && row.children) {
+        const stages = row.children.map((c: any) => c.stage);
+        return getHighestStage(stages);
+      }
+      return (row as any).stage;
+    },
     header: ({ column }) => {
       return (
         <Button
@@ -155,7 +194,8 @@ export const createColumns = (
       return filterValue.includes(row.getValue(columnId));
     },
     cell: ({ row }) => {
-      let stage = row.getValue("stage") as Stage;
+      // Use the original approach - if there's no direct stage, it means multiple reviews
+      let stage = (row.original as any).stage as Stage;
       const reasons = row.original.reasons as Reason[];
 
       // Don't render infrastructure scores in this column
@@ -171,17 +211,8 @@ export const createColumns = (
         })) || [];
 
       if (stage === undefined) {
-        const getHighestStage = (subStages: Array<{stage: Stage}>): Stage => {
-          if (subStages.length === 0) return "V";
-          
-          const stagePriority: Record<Stage, number> = { "2": 5, "1": 4, "0": 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 };
-          
-          return subStages.reduce((highest, current) => {
-            return (stagePriority[current.stage] || 0) > (stagePriority[highest] || 0) ? current.stage : highest;
-          }, subStages[0]?.stage || ("V" as Stage));
-        };
-        
-        const highestStage = getHighestStage(subStages);
+        const stages = subStages.map(s => s.stage);
+        const highestStage = getHighestStage(stages);
         const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
         const qualifiedStages = uniqueStages.filter(stage => stage !== "O");
         
@@ -226,7 +257,21 @@ export const createColumns = (
         </div>
       );
     },
-    sortingFn: "alphanumeric",
+    sortingFn: (rowA, rowB) => {
+      // Skip child rows - only sort top-level protocols
+      if (rowA.depth > 0 || rowB.depth > 0) {
+        return 0;
+      }
+      
+      const stageA = rowA.getValue("stage") as Stage;
+      const stageB = rowB.getValue("stage") as Stage;
+      
+      const priorityA = STAGE_PRIORITY[String(stageA)] || 0;
+      const priorityB = STAGE_PRIORITY[String(stageB)] || 0;
+      
+      // Sort in descending order (highest stage first)
+      return priorityB - priorityA;
+    },
   },
   {
     id: "reasons",
@@ -424,8 +469,5 @@ export const createColumns = (
       );
     },
     sortingFn: "alphanumeric",
-    meta: {
-      responsiveHidden: true,
-    },
   },
 ];

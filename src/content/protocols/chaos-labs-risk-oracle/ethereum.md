@@ -26,7 +26,7 @@ The `RiskOracle` smart contract allows _authorized senders_ to publish and _upda
 
 The `RiskOracle` contract includes the functions `publishRiskParameterUpdate` and `publishBulkRiskParameterUpdates` to facilitate these updates to parameters. The list of authorized senders can be expanded and reduced by using the functions `addAuthorizedSender` and `removeAuthorizedSender` by [Chaos Labs multisig](#security-council).
 
-Neither the EOA to update parameters nor the Chaos Labs Multisig Account do satisfy our [security council requirements](/learn-more#security-council-requirements).
+Neither the EOA to update parameters nor the Chaos Labs Multisig Account do satisfy our [security council requirements](/framework#security-council-requirements).
 
 ![Overview Risk Oracle](../diagrams/Chaos-labs-Risk-oracle.png)
 

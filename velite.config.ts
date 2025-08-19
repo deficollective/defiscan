@@ -36,6 +36,17 @@ const protocols = defineCollection({
       x: s.string()
     }),
     github: s.array(s.string().url())
+  }).transform((data, context) => {
+    // Extract folder name from the file path
+    const filePath = context.meta.path;
+    const folderName = filePath.split('/').slice(-2, -1)[0]; // Get folder name from path like "protocols/uniswap-v3/data.json"
+    
+    // Check if id matches folder name
+    if (data.id !== folderName) {
+      throw new Error(`Protocol ID "${data.id}" does not match folder name "${folderName}" in ${filePath}`);
+    }
+    
+    return data;
   })
 })
 
@@ -92,6 +103,44 @@ const reviews = defineCollection({
     .transform(computedFields),
 });
 
+const authors = defineCollection({
+  name: "authors",
+  pattern: "authors/**/*.md",
+  schema: s
+    .object({
+      slug: s.path(),
+      title: s.string().max(99),
+      email: s.string().email(),
+      image: s.string(),
+      description: s.string().max(999),
+      teamMember: s.boolean().default(true),
+      social: s.array(s.object({
+        name: s.string(),
+        icon: s.string(),
+        link: s.string().url()
+      })).optional(),
+      body: s.mdx(),
+    })
+    .transform(computedFields),
+});
+
+const posts = defineCollection({
+  name: "posts",
+  pattern: "blog/**/*.md",
+  schema: s
+    .object({
+      slug: s.path(),
+      title: s.string().max(99),
+      description: s.string().max(999),
+      date: s.isodate(),
+      published: s.boolean().default(true),
+      authors: s.array(s.string()),
+      tags: s.array(s.string()).optional(),
+      body: s.mdx(),
+    })
+    .transform(computedFields),
+});
+
 export default defineConfig({
   root: "./src/content",
   output: {
@@ -101,7 +150,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[text]",
     clean: true,
   },
-  collections: { protocols, reviews },
+  collections: { protocols, reviews, authors, posts },
   mdx: {
     rehypePlugins: [
       rehypeSlug as any,

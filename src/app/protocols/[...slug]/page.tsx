@@ -11,6 +11,7 @@ import { cn, getProtocolDisplayName } from "@/lib/utils";
 import { getRiskDescriptions } from "@/components/rosette/data-converter/data-converter";
 import { Mdx } from "@/components/mdx-component";
 import { ProtocolLinks } from "@/components/protocol/links";
+import { RotatingText } from "@/components/rotating-text";
 import { Separator } from "@/components/ui/separator";
 import { Stage } from "@/lib/types";
 import { StageBadge } from "@/components/stage";
@@ -37,6 +38,14 @@ async function getProtocolFromParams(slug: string[]) {
     .map((r) => r.chain);
 
   return { ...protocol, ...review, chains };
+}
+
+export async function generateStaticParams(): Promise<
+  ProtocolPageItemProps["params"][]
+> {
+  return allReviews.map((review) => ({
+    slug: review.slugAsParams.split("/"),
+  }));
 }
 
 export async function generateMetadata({
@@ -120,15 +129,17 @@ export default async function ProtocolPageItem({
   }
 
   return (
-    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl">
+    <article className="container relative mx-auto py-6 lg:py-10 max-w-7xl 2xl:max-w-none">
       <div>
         <div className="grid gap-2 grid-cols-4 lg:grid-rows-1">
           <div className="flex flex-col col-span-full sm:col-span-2 lg:col-span-1">
             <div className="flex flex-col w-full gap-2">
               <div className="flex items-end gap-4 py-2">
-                <h1 className="text-3xl shrink-0 text-primary">
-                  {getProtocolDisplayName(protocol.protocol || 'Unknown Protocol', protocol.instance)}
-                </h1>
+                <RotatingText
+                  text={getProtocolDisplayName(protocol.protocol || 'Unknown Protocol', protocol.instance)}
+                  className="text-3xl text-primary shrink-0"
+                  speed={4}
+                />
               </div>
             </div>
             <div className="mt-auto" />
@@ -151,11 +162,11 @@ export default async function ProtocolPageItem({
                     stage_requirements={protocol.stage_requirements}
                     className="mb-4"
                   />
-                  <StageRequirements 
+                  {!protocol.stage!.toString().startsWith("I") && <StageRequirements 
                     stage={protocol.stage! as Stage}
                     stage_requirements={protocol.stage_requirements}
                     className="mt-4 text-left"
-                  />
+                  />}
                 </div>
               </CardContent>
             </Card>

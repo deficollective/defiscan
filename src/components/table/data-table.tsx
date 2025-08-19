@@ -132,7 +132,7 @@ const getInitialVisibility = (
     risks: true,
     type: true,
     chain: activeView === "defi" || activeView === "others",
-    tvl: true,
+    tvl: activeView === "defi" || activeView === "others",
     infrastructure: activeView === "infrastructure",
     centralization: activeView === "infrastructure",
   };
