@@ -100,7 +100,7 @@ The frontend code is open source and available at the [Curve Frontend GitHub rep
 
 ## Conclusion
 
-Curve received a _Low_ centralization risk score for its _Chain_ and _Autonomy_ criteria. Nonetheless, it received a _High_ centralization risk score for its _Upgradeability_ and _Exit Window_, and _Medium_ for its _Accessibility_. Overall, this grants Curve a rating of **Stage 0**.
+Curve received a _Low_ centralization risk score for its _Chain_ and _Autonomy_ criteria. Nonetheless, it received a _High_ centralization risk score for its _Upgradeability_ and _Exit Window_, and _Medium_ for its _Accessibility_. Overall, this grants Curve a rating of **Stage 0**. It is notable that _Curve DEX_, on its own, would have achied the rating of Stage 1.
 
 There are three primary paths for Curve to advance to Stage 1 under the existing framework:
 
