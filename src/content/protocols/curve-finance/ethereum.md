@@ -216,11 +216,11 @@ This setup has been moved to a 5/9 multisig called [EmergencyDAO](#security-coun
 
 ## Security Council
 
-| Permission Owner                       | At least 7 signers | At least 51% threshold | At least 50% non-insider signers | Signers are publicly announced (with name or pseudonym) |
-| -------------------------------------- | ------------------ | ---------------------- | -------------------------------- | ------------------------------------------------------- |
-| oldEmergencyDAO (EmergencyVotingProxy) | ✅                 | ✅                     | ✅                               | ✅                                                      |
-| EmergencyDAO                           | ✅                 | ✅                     | ✅                               | ✅                                                      |
-| scrvusdEmergencyDAO                    | ❌                 | ❌                     | ❌                               | ❌                                                      |
+| Name                                   | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| oldEmergencyDAO (EmergencyVotingProxy) | [0x1115c9b3168563354137cdc60efb66552dd50678](https://etherscan.io/address/0x1115c9b3168563354137cdc60efb66552dd50678) | Contract     | ✅          | ✅              | ✅                | ✅             |
+| EmergencyDAO                           | [0x467947EE34aF926cF1DCac093870f613C96B1E0c](https://etherscan.io/address/0x467947EE34aF926cF1DCac093870f613C96B1E0c) | Multisig 5/9 | ✅          | ✅              | ✅                | ✅             |
+| scrvusdEmergencyDAO                    | [0xe286b81d16FC7e87eD9dc2a80dd93b1816F4Dcf2](https://etherscan.io/address/0xe286b81d16FC7e87eD9dc2a80dd93b1816F4Dcf2) | Multisig 2/5 | ❌          | ❌              | ❌                | ❌             |
 
 The old `oldEmergencyDAO` was sunset in favor of the current [EmergencyDAO](#security-council). This does reduce friction and increases speed for the members if actions are required, but also increases the risk of malicious actions, as the [EmergencyDAO](#security-council) can add and remove members with a majority vote. There is no oversight or direct control currently possible from the main _Curve DAO_.
 
