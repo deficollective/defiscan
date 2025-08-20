@@ -25,9 +25,7 @@ The protocol is deployed on several chains. This review focuses on the Ethereum 
 
 All contracts in the protocol can be upgraded by a [4-out-of-7 multisig](#security-council) with a delay of 3 days. This includes the `eETH` and `WeETH` tokens and the contracts handling validator withdrawals. Through an upgrade, the multisig could reattribute the ownership of all funds in the protocol, which would lead to the _loss of user funds_ and _loss of unclaimed yield_. As the signers are not announced, it does not qualify for the role of security council.
 
-An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, leading to _loss of user funds_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) execute the corresponding actions through the `EtherFiAdmin`contract.
-
-**Liquifier?**
+An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, leading to _loss of user funds_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin`contract.
 
 > Upgradeability score: High
 
