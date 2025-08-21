@@ -74,11 +74,8 @@ The project additionally could advance to Stage 2 if ...
 
 # Reviewer's Notes
 
-(Here, anything worth mentioning about what critical permissions you excluded from the scope or some elements that xyz protocol does in a unique way. If nothing seems relevant, just say that :)
-
-⚠️ During our analysis, we identified ...
-
-The support for L2 ETH through the ....
+- The support for L2 ETH through the Liquifier
+- EtherFiNode's proxy contract is unverified.
 
 # Protocol Analysis
 
@@ -179,6 +176,8 @@ WeETH: 0x2d10683E941275D502173053927AD6066e6aFd6B
 eETH: 0xCB3D917A965A70214f430a135154Cd5ADdA2ad84
 EtherFiOracle: 0x5eefE6f65a280A6f1Eb1FdFf36Ab9e2af6f38462
 EtherFiAdmin: 0xd50f28485A75A1FdE432BA7d012d0E2543D2f20d
+
+Undeclared EOA who forward eigenpod calls: 0x7835fB36A8143a014A2c381363cD1A4DeE586d2A
 
 Multisig TIMELOCK 3 days: 0xcdd57D11476c22d265722F68390b036f3DA48c21
 
@@ -339,8 +338,8 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | EtherFiNodesManager | allocateEtherFiNode | ... | StakingManager |
 | EtherFiNodesManager | registerValidator | ... | StakingManager |
 | EtherFiNodesManager | unregisterValidator | ... | StakingManager |
-| EtherFiNodesManager | updateAllowedForwardedExternalCalls | ... | Admins (TODO?) |
-| EtherFiNodesManager | updateAllowedForwardedEigenpodCalls | ... | Admins (TODO?) |
+| EtherFiNodesManager | updateAllowedForwardedExternalCalls | [TODO]: critical, list of calls by EtherFiNodes, can be done by EOAs in the name of EtherFiNodes. | Admins (TODO?) |
+| EtherFiNodesManager | updateAllowedForwardedEigenpodCalls | [TODO] | Admins (TODO?) |
 | EtherFiNodesManager | forwardEigenpodCall | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | forwardExternalCall | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | setStakingRewardsSplit | ... | Admins (TODO?) |
@@ -356,6 +355,20 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | EtherFiNodesManager | upgradeToAndCall | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | renounceOwnership | ... | EtherFiTimelock (3 Days) |
 | EtherFiNodesManager | transferOwnership | ... | EtherFiTimelock (3 Days) |
+
+| EtherFiNode (Proxy) | | | |
+
+| EtherFiNode | createEigenPod | Creates the Node's corresponging `EigenPod` using the `EigenPodManager` contract. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | setProofSubmitter | The ProofSubmitter role is an additional permission owner next to the `EigenPod` owner. This role is allowed to call `startCheckpoint`, `verifyCheckpointProofs`, `requestConsolidation` and `requestWithdrawal` functions on the `EigenPod` contract. A compromised role cannot steal funds, but disrupt the Validators activity by requesting a withdrawal. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | startCheckpoint | Starts a checkpoint to register a change of balance in order to withdraw Consensus Layer rewards, register loss of stake through slashing, or when the funds are withdrawn to the `EigenPod` from the Beacon Chain in order to withdraw the stake to a desired address. The correpsonding function in the `EigenPod` contract stores the beacon block root, the ETH balance of the `EigenPod`, and the number of validators for which a proof needs to be submitted. In a second step the `verifyCheckpointProofs` needs to be called. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | verifyCheckpointProofs | This function is called after a checkpoint is started. The function computes all the deltas of each registered validator for this EigenPod, if the delta is positive, the EigenPod receives more shares which are delegated to the current operator, if the delta is negative, the EigenPod loses shares which are delegated to the current operator. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | queueETHWithdrawal | Convenience function to queue a beaconETH withdrawal from eigenlayer. Performs the `queueWithdrawal` function with the correct params. The withdrawal is done through the Eigenlayer's `DelegationManager` contract. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | completeQueuedETHWithdrawals | Completes all queued beaconETH withdrawals that are currently claimable. If there are available rewards, they're sent to the `LiquidityPool`. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | queueWithdrawals | Queues an arbitrary withdrawal from Eigenlayer throught its `DelegationManager` contract. A set amount of time must pass before the withdrawal can be claimed used `completeQueuedWithdrawals`. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | completeQueuedWithdrawals | Completes a previous withdrawal. Simply calls the homonymous function in the `DelegationManager` contract | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | sweepFunds | Transfer any `ETH` held in the node to the `LiquidityPool`. This is not meant to be used in practice, but exists to handle exceptional cases or mistakes. | [ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNode | forwardEigenPodCall | Forwards a call to the `EigenPod` contract. This function can be used to call any whitelisted function in the `EigenPod`. The `EtherFiNodesManager` contains the whitelist of allowed function calls. | [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2) |
+| EtherFiNode | forwardExternalCall | Fowards a call to any arbitrary external contract. The contract and the specific function call has to be whitelisted in the `EtherFiNodesManager`. | [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2) |
 
 | BNFT | mint | ... | StakingManager |
 | BNFT | burnFromWithdrawal | ... | ['onlyEtherFiNodesManager'] |
@@ -550,10 +563,12 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 
 ### RoleRegistry 2
 
-| Role name                                 | ID                                                                 | Role Owners                                                       | Role Admin               |
-| ----------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
-| LIQUIDITY_POOL_ADMIN_ROLE                 | 0x0e8d94121b3383f03d9ae60b39295aa793469d7230d51a3f62cbf47cd45481d9 | EtherFiAdmin, Timelock (8 Hours)                                  | EtherFiTimelock (3 Days) |
-| PROTOCOL_PAUSER                           | 0xe6ff4398839854a2087720a46165c7be195bc9de6f7a3c5a977d3b6917b76af2 |                                                                   | EtherFiTimelock (3 Days) | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council), [Underclared EOA](#security-council) |
-| PROTOCOL_UNPAUSER                         | 0xb72d40a29b0ca5ab6e0b32830618dfdcae56fae676396ff1f7c3fede659935c8 | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council) | EtherFiTimelock (3 Days) |
-| ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE        | 0xf63b1ce674d2cec0dbfcdcc7e504ce31a335c457c363b9fafb6ca524addf1775 | EtherFiTimelock (8 Hours)                                         | EtherFiTimelock (3 Days) |
-| ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE | 0xe9d356a03911100a5418b1829f363128136c30112754cb3dbe73b1674abe2ac8 | [Beacon Depositor EOA](#security-council)                         | EtherFiTimelock (3 Days) |
+| Role name                                 | ID                                                                 | Role Owners                                                                                               | Role Admin               |
+| ----------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| LIQUIDITY_POOL_ADMIN_ROLE                 | 0x0e8d94121b3383f03d9ae60b39295aa793469d7230d51a3f62cbf47cd45481d9 | EtherFiAdmin, Timelock (8 Hours)                                                                          | EtherFiTimelock (3 Days) |
+| PROTOCOL_PAUSER                           | 0xe6ff4398839854a2087720a46165c7be195bc9de6f7a3c5a977d3b6917b76af2 |                                                                                                           | EtherFiTimelock (3 Days) | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council), [Underclared EOA](#security-council) |
+| PROTOCOL_UNPAUSER                         | 0xb72d40a29b0ca5ab6e0b32830618dfdcae56fae676396ff1f7c3fede659935c8 | EtherFiAdmin, [EtherFi Undeclared Multisig #1](#security-council)                                         | EtherFiTimelock (3 Days) |
+| ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE        | 0xf63b1ce674d2cec0dbfcdcc7e504ce31a335c457c363b9fafb6ca524addf1775 | EtherFiTimelock (8 Hours)                                                                                 | EtherFiTimelock (3 Days) |
+| ETHERFI_ORACLE_EXECUTOR_TASK_MANAGER_ROLE | 0xe9d356a03911100a5418b1829f363128136c30112754cb3dbe73b1674abe2ac8 | [Beacon Depositor EOA](#security-council)                                                                 | EtherFiTimelock (3 Days) |
+| ETHERFI_NODE_EIGENLAYER_ADMIN_ROLE        | 0x684a419db2f244d8b47d229bff16baab2feeb29ee4dda8ff5b02b2b030611481 | [Beacon Depositor EOA](#security-council), EtherFiNodesManager, StakingManager, EtherFiTimelock (8 Hours) | EtherFiTimelock (3 Days) |
+| ETHERFI_NODE_CALL_FORWARDER_ROLE          | 0x4d7303560323a086d90c624faaecb72bfa908b0fe627af57cab1e857234bfc3b | [Undeclared EOA](#security-council), EtherFiNodesManager, EtherFiTimelock (8 Hours)                       | EtherFiTimelock (3 Days) |
