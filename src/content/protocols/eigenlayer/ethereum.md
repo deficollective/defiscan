@@ -25,7 +25,7 @@ stage_requirements:
       },
       {
         text: "Frontend backups or self-hosting option exists",
-        status: "fixed",
+        status: "unfixed",
       },
     ],
     [
