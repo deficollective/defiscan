@@ -197,11 +197,7 @@ After users first deposit into the strategies or EigenPods (and the `StrategyMan
 
 Withdrawal as a _Staker_ or _Restaker_ is only possible through the `DelegationManager` contract. When withdrawing the _Stakers_ and _Restakers_ receive the amount of deposit shares minus the amount of slashes suffered by the _AVS_ during their delegation. The slashes suffered during the timeframe of the delegation is again requested from the `AllocationManager` contract. This amount of tokens are called withdrawable shares.
 
-![Queue Withdrawal](../diagrams/eigenlayer-queue-withdrawal.png)
-
 Withdrawal is a 2-step process which requires a `queueWithdrawal` and a `completeQueuedWithdrawal` call to the `DelegationManager` contract. The `queueWithdrawal` call is required to initiate the withdrawal process, and the `completeQueuedWithdrawal` call is required to complete the withdrawal process. The `completeQueuedWithdrawal` call is only possible after a cooldown period (14 days) is over. During this two step process, sufferred slashes by _AVS_ are taken into account to calculate the final amount of ETH to be sent to the _Restaker_.
-
-![Complete Withdrawal](../diagrams/eigenlayer-complete-withdrawal.png)
 
 The contract allows users to register as _Operators_ in the Eigenlayer system, which is a requirement for _Operators_ to register in _Operator Sets_ created by _AVSs_. _Operators_ can configure a _Delegation Approver_, that requires _Stakers_ to first get an approval before they may delegate to the _Operator_ through the `DelegationManager` contract. This way, _Operators_ can prevent _Stakers_ from delegating their funds to them and keep a privileged set of _Stakers_. If the _Delegation Approver_ is set to the 0-address, any _Staker_ can delegate their stake to the respective _Operator_.
 
