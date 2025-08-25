@@ -383,11 +383,11 @@ Signers of the [Community Multisig (9/13)](#security-council) are
 | EigenPod (Implementation)                                       | [0xcb27A4819A64FBA93ABD4D480e4466aEc0503745](https://etherscan.io/address/0xcb27A4819A64FBA93ABD4D480e4466aEc0503745) |
 | Eigen (Token) (Proxy)                                           | [0xec53bf9167f50cdeb3ae105f56099aaab9061f83](https://etherscan.io/address/0xec53bf9167f50cdeb3ae105f56099aaab9061f83) |
 | Eigen (Token) (Implementation)                                  | [0x2c4a81e257381f87f5a5c4bd525116466d972e50](https://etherscan.io/address/0x2c4a81e257381f87f5a5c4bd525116466d972e50) |
-| BackingEigen (Proxy)                                            | [0x83E9115d334D248Ce39a6f36144aEaB5b3456e75](https://etherscan.io/address/0x83E9115d334D248Ce39a6f36144aEaB5b3456e75) |
-| BackingEigen (Implementation)                                   | [0xF2b225815F70c9b327DC9db758A36c92A4279b17](https://etherscan.io/address/0xF2b225815F70c9b327DC9db758A36c92A4279b17) |
+| BackingEigen (bEIGEN) (Proxy)                                   | [0x83E9115d334D248Ce39a6f36144aEaB5b3456e75](https://etherscan.io/address/0x83E9115d334D248Ce39a6f36144aEaB5b3456e75) |
+| BackingEigen (bEIGEN) (Implementation)                          | [0xF2b225815F70c9b327DC9db758A36c92A4279b17](https://etherscan.io/address/0xF2b225815F70c9b327DC9db758A36c92A4279b17) |
 | PauserRegistry                                                  | [0xB8765ed72235d279c3Fb53936E4606db0Ef12806](https://etherscan.io/address/0xB8765ed72235d279c3Fb53936E4606db0Ef12806) |
 | TimelockController (Protocol)                                   | [0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d](https://etherscan.io/address/0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d) |
-| TimelockController (bEigen)                                     | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) |
+| TimelockController (bEIGEN)                                     | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) |
 | ProxyAdmin (Protocol)                                           | [0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444](https://etherscan.io/address/0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444) |
 | ProxyAdmin (bEIGEN)                                             | [0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9](https://etherscan.io/address/0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9) |
 | PermissionController (Proxy)                                    | [0x25E5F8B1E7aDf44518d35D5B2271f114e081f0E5](https://etherscan.io/address/0x25E5F8B1E7aDf44518d35D5B2271f114e081f0E5) |
@@ -398,7 +398,7 @@ Signers of the [Community Multisig (9/13)](#security-council) are
 | Name                          | Account                                                                                                               | Type          |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------- |
 | TimelockController (Protocol) | [0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d](https://etherscan.io/address/0xC06Fd4F821eaC1fF1ae8067b36342899b57BAa2d) | Contract      |
-| TimelockController (bEigen)   | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) | Contract      |
+| TimelockController (bEIGEN)   | [0x738130BC8eADe1Bc65A9c056DEa636835896bc53](https://etherscan.io/address/0x738130BC8eADe1Bc65A9c056DEa636835896bc53) | Contract      |
 | ProxyAdmin (Protocol)         | [0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444](https://etherscan.io/address/0x8b9566AdA63B64d1E1dcF1418b43fd1433b72444) | Contract      |
 | ProxyAdmin (bEIGEN)           | [0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9](https://etherscan.io/address/0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9) | Contract      |
 | bEIGEN Executor Multisig      | [0x942eaF324971440384e4cA0ffA39fC3bb369D67d](https://etherscan.io/address/0x942eaF324971440384e4cA0ffA39fC3bb369D67d) | Multisig 1/2  |
@@ -606,7 +606,7 @@ Signers of the [Community Multisig (9/13)](#security-council) are
 | EXECUTOR_ROLE       | 0xd8aa0f3194971a2a116679f7c2090f6939c8d4e01a2a8d7e41d55e5351469e63 | Protocol Council Multisig                                | TIMELOCK_ADMIN_ROLE |
 | CANCELLER_ROLE      | 0xfd643c72710c63c0180259aba6b2d05451e3591a24e58b62239378085726f783 | Operations Multisig                                      | TIMELOCK_ADMIN_ROLE |
 
-### Role Permission inside `TimelockController` (bEigen)
+### Role Permission inside `TimelockController` (bEIGEN)
 
 | Role name           | ID                                                                 | Role Owners                                              | Role Admin          |
 | ------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- | ------------------- |
