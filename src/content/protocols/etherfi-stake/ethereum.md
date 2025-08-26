@@ -25,26 +25,41 @@ The protocol is deployed on several chains. This review focuses on the Ethereum 
 
 All contracts in the protocol can be upgraded by a [4-out-of-7 multisig](#security-council) with a delay of 3 days. This includes the `eETH` and `WeETH` tokens and the contracts handling validator withdrawals. Through an upgrade, the multisig could reattribute the ownership of all funds in the protocol, which would lead to the _loss of user funds_ and _loss of unclaimed yield_. As the signers are not announced, it does not qualify for the role of security council.
 
-An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, leading to _loss of user funds_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin`contract.
+An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, or wrongfully rebase the token, leading to _loss of user funds_ and/or the _loss of unclaimed yield_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin`contract.
+
+Contracts may also be paused without delay to prevent further deposits and withdrawals. In addition to that, user funds can be trapped in ether.fans NFTs with the possibility of adding withdrawal fees of up to 65 ETH per withdrawal.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-EtherFi Staking has multiple operators.
+### Ethereum staking
 
+EtherFi relies on _Node Operators_ to operate Ethereum validators. Users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds are sent to the dedicated Eigenlayer `Eigenpod` contract. The `Eigenpod` contracts implement EIP7002 which enables withdrawals to be triggered from the contracts directly. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
+
+According to [rated](https://explorer.rated.network/o/Ether.Fi?network=mainnet&timeWindow=1d&viewBy=operator&page=1&pageSize=30&idType=pool) EtherFi has 21 different _Node Operators_ which manage the 2.5M `ETH` staked. It is worth noting that providers of Distributed Validator Techonology (DVT) such as SSV and Obol count as 1 operator each, but are in fact operating validators in a distributed setup, by many different independent actors. The `ETH` is not equally distributed among operators, with the biggest operator handling 177'000 `ETH`.
+
+With the implementation of EIP7002 and the current diversification of node operators discussed in the [dependencies](#dependencies) section, EtherFi would score a _Low_ Autonomy risk score for its dependency on ethereum validator _Node Operators_.
+
+**TODO**:
 Node Operators: operate native ethereum staking validators with the ETH depositted in the liquidity pool.
 Can be Trusted (fixed bid), or Trustless (highest bidder wins).
+
+### Restaking on Eigenlayer
+
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol.
+
+15 operators
+
+20 AVS
+
+https://community.chaoslabs.xyz/etherfi/risk/node-operators
+
+Other liquid staking tokens (LSTs) can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract.
 
 Liquid Staking Tokens: liquid staking tokens are supported and restaked also. + Curve pool or prices for those tokens
 QUESTION: which eigenpod do they use? Who's the staker?
 https://community.chaoslabs.xyz/etherfi/risk/avs
-
-Stakers who are bond holder
-
-Each withdrawal safe has a corresponding Eigenpod for restaking purposes. Is the staker the same as the node operator?¨
-
-Eigenlayer for restaking
 
 > Autonomy score: Low
 
@@ -58,7 +73,7 @@ All contract upgrades are currently subject to a delay of 3 days.
 
 ## Accessibility
 
-See http://defiscan.info/learn-more#accessibility for more guidance.
+The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eETH` and [ether.fan](https://ether.fan/) fans. Both frontends are not open-source and no alternative frontends or self-hosting versions are available.
 
 > Accessibility score: High
 
@@ -85,19 +100,22 @@ The project additionally could advance to Stage 2 if ...
 
 ## ReStaking
 
+## Ether.fan NFTs
+
+Ether.fans are NFTs minted with `ETH` that is staked solely with solo stakers using Distributed Validator
+Technology (DVT). The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 with each NFT's balance being [...**TODO**]. The issuance is managed by `MembershipManager`, .
+
+When minted, Fans are given a random set of traits that are purely visual (gender, background, colors). The NFTs are associated with a flair depending on how much ETH is staked with them and a tier (bronze to platinum) depending on the time that has passed since they were minted. While depositing `ETH` is (currently) free of fees, depositing more than 20% in a period one month can impact the membership tier. Withdrawing `ETH` also impacts the membership tier, and withdrawing more than 50% of the all time value of the NFT will automatically burn it (withdraw the full amount). Minting is currently blocked as the limit of 10'000 mints has been reached. However, the limit can be increased by any admin of the contract.
+
 # Dependencies
 
 Go into more detail of the oracle, bridge, or other dependency the defi protocol is using
 
 # Governance
 
-## Relevant Subsection
-
-Here anything relevant to the governance, in this case it could be what you highlighted in "Upgrade Process"
+EtherFi has no strictly onchain governance. The governance token, `ETHFI`, can used by users to vote on proposals on [Snapchot](https://snapshot.box/#/s:etherfi-dao.eth). Users can also delegate their vote and stake their governance tokens. The proposal outcomes are not enforced onchain and all operating permissions within the EtherFi protocol are held by [EOAs and multisigs](#security-council).
 
 ## Security Council
-
-New table with all the multisigs
 
 | Name                           | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
@@ -163,6 +181,8 @@ EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 | CumulativeMerkleDrop (Implementation) | 0x5e226b1de8b0f387d7c77f78cba2571d2a1be511 |
 | RoleRegistry (Proxy)                  | 0x1d3Af47C1607A2EF33033693A9989D1d1013BB50 |
 | RoleRegistry (Implementation)         | 0x1abfe5b356e8d735d3e363b5df5995a2a1012d0e |
+| RoleRegistry (Proxy) (2)              | 0x62247D29B4B9BECf4BB73E0c722cf6445cfC7cE9 |
+| RoleRegistry (Implementation) (2)     | 0x3a75019f8b09c278d152279d446c97d009e064f3 |
 | EarlyAdopterPool                      | 0x7623e9dc0da6ff821ddb9ebaba794054e078f8c4 |
 | BoringGovernance                      | 0x86B5780b606940Eb59A062aA85a07959518c0161 |
 
@@ -186,7 +206,7 @@ Multisig TIMELOCK 3 days: 0xcdd57D11476c22d265722F68390b036f3DA48c21
 | Name                           | Account                                                                                                               | Type         |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------ |
 | EtherFi Undeclared Multisig #1 | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 |
-| EtherFi Undeclared Multisig #1 | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 |
+| EtherFi Undeclared Multisig #2 | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 |
 | Underclared EOA                | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          |
 | EtherFi Deployer               | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          |
 | Beacon Depositor               | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          |
@@ -270,31 +290,42 @@ AuctionManager LiquidityPool
 | AuctionManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators. | EtherFiTimelock (3 Days) |
 | AuctionManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant or admin privileges to other addresses. | EtherFiTimelock (3 Days) |
 
-| LiquidityPool | depositToRecipient | Deposits `ETH` on behalf of another user. Can mint `eETH` tokens to arbitrary recipients. Malicious use could drain protocol by minting unlimited `eETH`. | Liquifier, EtherFiAdmin |
-| LiquidityPool | withdraw | Burns `eETH` shares and sends `ETH` to the recipient. Directly reduces pool liquidity and burns user shares. Withdrawals using a withdrawRequestNFT are taken directly out of the dedicated `ETH` amount locked for withdrawal. | withdrawRequestNFT, membershipManager, etherFiRedemptionManager |
+| LiquidityPool | DEPRECATED_sendExitRequests | Legacy function for sending exit requests, now only emits events. The events are critical for tracking validator lifecycle but no
+longer functional within the protocol. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | addEthAmountLockedForWithdrawal | Updates amount reserved for withdrawal requests. Critical for withdrawal liquidity management. Malicious admin contract could
+manipulate withdrawal availability, potentially blocking user access to funds or causing liquidity issues. | EtherFiAdmin |
 
-| LiquidityPool | batchDeposit | Initiates validator creation by matching bid IDs with node operators. Allocates 32 `ETH` per validator from pool funds. | ValidatorSpawners (Controlled by [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2)) |
 | LiquidityPool | batchRegister | Registers validator keys and sends 1 `ETH` to beacon chain per validator. Critical step in validator lifecycle that commits pool `ETH`. Malicious use could register invalid keys, waste pool `ETH`, or front-run with malicious withdrawal credentials. | ValidatorSpawners (Controlled by [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2)) |
 
-| LiquidityPool | batchApproveRegistration | Approves validators and triggers the 31 ETH deposit to the beacon chain. Completes validator activation. This is meant to be called by the oracle once it has confirmed that the 1 ETH registered were deposited on validators with the right withdrawal credentials. Malicious oracle could approve invalid validators, drain pool `ETH` to wrong validators. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
-| LiquidityPool | registerValidatorSpawner | Grants permission to spawn validators, critical gatekeeper function. Allows addresses to initiate validator creation and use pool funds. Malicious admin could register compromised spawners. **TODO**: it's not currently used. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
-| LiquidityPool | unregisterValidatorSpawner | Removes validator spawning permissions from addresses. Prevents spawners from creating new validators using pool funds. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
-| LiquidityPool | sendExitRequests | Forwards an exit request to the `NodesManage`, for validators owned by the `LiquidityPool`. Critical for pool liquidity management and validator lifecycle. Malicious use could force premature exits, or disrupt staking operations. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | batchApproveRegistration | Approves validators and triggers the remaining ETH deposit to the beacon chain. Completes validator activation. This is meant to be called by the oracle once it has confirmed that the 1 ETH registered were deposited on validators with the right withdrawal credentials. Malicious oracle could approve invalid validators, drain pool `ETH` to wrong validators. Since the latest version it supports deposits greater than 32 ETH, but future services are meannt to use `confirmAndFundBeaconValidators`. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
 
-| LiquidityPool | rebase | Updates pool's staking rewards balance, core mechanism for distributing validator earnings. Adjusts totalValueOutOfLp affecting all user balances. Malicious use could artificially inflate/deflate all user holdings by manipulating reward calculations. | MembershipManager |
+| LiquidityPool | burnEEthShares | Destroys user shares during withdrawal process. Permanently reduces user token balance and total token supply. Malicious use could burn shares without corresponding `ETH` withdrawal, effectively stealing user funds through token destruction. | etherFiRedemptionManager OR withdrawRequestNFT contracts |
+
+| LiquidityPool | confirmAndFundBeaconValidators | **TODO**: Direct interface to complete validator funding with deposit data. Bypasses legacy validator ID system. Critical for
+completing validator activation with proper withdrawal credentials. | LIQUIDITY_POOL_VALIDATOR_APPROVER_ROLE |
+
+| LiquidityPool | depositToRecipient | Deposits `ETH` on behalf of another user. Can mint `eETH` tokens to arbitrary recipients. Malicious use could drain protocol by minting unlimited `eETH` without corresponding `ETH` backing. | Liquifier, EtherFiAdmin |
+
 | LiquidityPool | payProtocolFees | Distributes protocol fees by minting `eETH` to fee recipient. Directly affects protocol revenue and token supply. The fee recipient receives the entire amount and is trusted to further split it to the right beneficiaries. A malicious use could mint arbitrary amounts of `eETH` and disrupt the protocol's economic viability. | EtherFiAdmin |
-| LiquidityPool | setFeeRecipient | Changes where protocol fees are sent. Determines destination of protocol revenue streams. Malicious admin could redirect all future protocol fees to arbitrary addresses. Also see _payProtocolFees_ for details. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
-| LiquidityPool | setRestakeBnftDeposits | Controls whether new validators are restaked on EigenLayer. Affects protocol's restaking strategy and additional yield generation. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+
+| LiquidityPool | withdraw | Burns `eETH` shares and sends `ETH` to the recipient. Directly reduces pool liquidity and burns user shares. Withdrawals using `withdrawRequestNFT` are taken directly out of the dedicated `ETH` amount locked for withdrawal. | withdrawRequestNFT, membershipManager, etherFiRedemptionManager |
+
+| LiquidityPool | rebase | Updates pool's staking rewards balance, core mechanism for distributing validator earnings. Adjusts `totalValueOutOfLp` affecting all user balances. Malicious use could artificially inflate/deflate all user holdings by manipulating reward calculations. | MembershipManager |
+
+| LiquidityPool | registerValidatorSpawner | Grants permission to spawn validators. Critical gatekeeper function allowing addresses to initiate validator creation using pool funds. Malicious admin could register compromised spawners. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | unregisterValidatorSpawner | Removes validator spawning permissions from addresses. Prevents spawners from creating new validators using pool funds. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+
+| LiquidityPool | setValidatorSizeWei | Sets the validator size for batchApproveRegistration calls. Controls how much ETH is deposited per validator (32-2048 ETH). Critical parameter affecting capital efficiency. Malicious use could set invalid sizes, waste capital, or break validator economics. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+
+| LiquidityPool | setFeeRecipient | Changes where protocol fees are sent. Determines destination of protocol revenue streams. Malicious admin could redirect all future protocol fees to arbitrary addresses. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
+| LiquidityPool | setRestakeBnftDeposits | Controls whether new validators are restaked on EigenLayer. Affects protocol's restaking strategy and additional yield generation. Critical for managing protocol's risk/reward profile. | [LIQUIDITY_POOL_ADMIN_ROLE](#roleregistry-2) |
 
 | LiquidityPool | pauseContract | Emergency function that halts all protocol operations. Stops deposits, withdrawals, and validator operations. Malicious pauser could permanently DoS the protocol, preventing users from accessing funds or new deposits. | [PROTOCOL_PAUSER](#roleregistry-2) |
 | LiquidityPool | unPauseContract | Resumes protocol operations after pause. Restores user access to funds and protocol functionality. Malicious use could unpause during ongoing attacks or before fixes are implemented, exposing users to continued risks. | [PROTOCOL_UNPAUSER](#roleregistry-2) |
-| LiquidityPool | addEthAmountLockedForWithdrawal | Updates amount reserved for withdrawal requests. Critical for withdrawal liquidity management. Malicious admin contract could manipulate withdrawal availability, potentially blocking user access to funds or causing liquidity issues. | EtherFiAdmin |
-| LiquidityPool | burnEEthShares | Destroys user shares during withdrawal process. Permanently reduces user token balance and total token supply. Malicious use could burn shares without corresponding `ETH` withdrawal, effectively stealing user funds through token destruction. | etherFiRedemptionManager OR withdrawRequestNFT contracts |
-
-| LiquidityPool | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how users deposit and withdraw funds. This could also reassign the ownership of all `eETH` tokens. | EtherFiTimelock (3 Days) |
-| LiquidityPool | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
-| LiquidityPool | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. Permissions and roles for specific functions could still be changed through the `RoleRegistry` contract, which handles the access control. | EtherFiTimelock (3 Days) |
-| LiquidityPool | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and bypassing access controls that are delegated to the `RoleRegistry`. | EtherFiTimelock (3 Days) |
+| LiquidityPool | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how users deposit and withdraw funds. This could also reassign the ownership of all `eETH` tokens. | EtherFiTimelock (3 Days) (PROTOCOL*UPGRADER) |
+| LiquidityPool | upgradeToAndCall | Similar to \_upgradeTo*, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) (PROTOCOL_UPGRADER) |
+| LiquidityPool | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address but would not make the contract immutable. Permissions and roles for specific functions could still be changed through the `RoleRegistry` contract, which handles the access control. | EtherFiTimelock (3 Days) |
+| LiquidityPool | transferOwnership | Transfers ownership of contract to a specified address. The new owner will not have the right to upgrade the contract, as the access control is handled in the `RoleRegistry`. | EtherFiTimelock (3 Days) |
 
 | EtherFiAdmin | setValidatorTaskBatchSize | Sets how many validators are processed together in a
 single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTOR_ADMIN_ROLE](#roleregistry-2) |
@@ -324,37 +355,28 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | AddressProvider | removeContract | Removes a contract from the provider. | EtherFiTimelock (3 Days) |
 | AddressProvider | setOwner | Changes the owner of the contract. The owner has the right to add and remove contracts. | EtherFiTimelock (3 Days) |
 
-| EtherFiNodesManager | batchSendExitRequest | Sends a request from the T-NFT owner to exit the corresponding validators. The B-NFT owner must serve the request or their bond will get penalized. | Validators' `TNFT` owner |
-| EtherFiNodesManager | startCheckpoint | Start a PEPE pod checkpoint balance proof. A new proof cannot be started until the previous proof is completed. [TODO] | Admins (TODO?) |
-| EtherFiNodesManager | setProofSubmitter | ... | Admins (TODO?) |
-| EtherFiNodesManager | processNodeExit | ... | Admins (TODO?) |
-| EtherFiNodesManager | batchQueueRestakedWithdrawal | ... | Admins (TODO?) |
-| EtherFiNodesManager | completeQueuedWithdrawals | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | partialWithdraw | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | batchPartialWithdraw | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | fullWithdraw | ... | ['nonReentrant', 'whenNotPaused'] |
-| EtherFiNodesManager | batchFullWithdraw | ... | ['nonReentrant', 'whenNotPaused'] |
-| EtherFiNodesManager | markBeingSlashed | ... | Admins (TODO?) |
-| EtherFiNodesManager | allocateEtherFiNode | ... | StakingManager |
-| EtherFiNodesManager | registerValidator | ... | StakingManager |
-| EtherFiNodesManager | unregisterValidator | ... | StakingManager |
-| EtherFiNodesManager | updateAllowedForwardedExternalCalls | [TODO]: critical, list of calls by EtherFiNodes, can be done by EOAs in the name of EtherFiNodes. | Admins (TODO?) |
-| EtherFiNodesManager | updateAllowedForwardedEigenpodCalls | [TODO] | Admins (TODO?) |
-| EtherFiNodesManager | forwardEigenpodCall | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | forwardExternalCall | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | setStakingRewardsSplit | ... | Admins (TODO?) |
-| EtherFiNodesManager | setNonExitPenalty | ... | Admins (TODO?) |
-| EtherFiNodesManager | setValidatorPhase | ... | StakingManager |
-| EtherFiNodesManager | setMaxEigenLayerWithdrawals | ... | Admins (TODO?) |
-| EtherFiNodesManager | incrementNumberOfValidators | ... | StakingManager |
-| EtherFiNodesManager | updateAdmin | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | updateEigenLayerOperatingAdmin | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | pauseContract | ... | Admins (TODO?) |
-| EtherFiNodesManager | unPauseContract | ... | Admins (TODO?) |
-| EtherFiNodesManager | upgradeTo | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | upgradeToAndCall | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | renounceOwnership | ... | EtherFiTimelock (3 Days) |
-| EtherFiNodesManager | transferOwnership | ... | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | queueETHWithdrawals | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | queueWithdrawals | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | completeQueuedETHWithdrawals | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | completeQueuedWithdrawals | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | forwardEigenPodCall | Forwards whitelisted `EigenPod` calls through multiple `EtherFiNodes`. Enables batch EigenLayer operations. This can call any `EigenPod` whitelisted function with any argument, in particular the withdraw function, with any amount. | [ETHERFI_NODES_MANAGER_CALL_FORWARDER_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | forwardExternalCall | Forwards whitelisted external calls through multiple `EtherFiNodes`. Enables batch operations and flexible integrations. This can call any whitelisted function, with any argument. | [ETHERFI_NODES_MANAGER_CALL_FORWARDER_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | linkLegacyValidatorIds | Links legacy validator IDs to pubkey hashes for migration. Temporary function for protocol migration. Malicious use could incorrectly link legacy validators. **TODO**: effect? | [ETHERFI_NODES_MANAGER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | linkPubkeyToNode | Associates validator pubkey with EtherFiNode instance. Critical for tracking validator ownership. Called automatically during validator creation. **TODO**: new mechanism to now use validato pubkey as ID? | StakingManager |
+| EtherFiNodesManager | setProofSubmitter | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | startCheckpoint | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | verifyCheckpointProof | Calls the function of same name for the given `EtherFiNode` id. (see `EtherFiNode`) | [ETHERFI_NODES_MANAGER_EIGENLAYER_ADMIN_ROLE](#roleregistry-2) |
+
+| EtherFiNodesManager | sweepFunds | Transfers any ETH held by specified `EtherFiNode` to the liquidity pool. Safety mechanism for handling accidentally sent ETH. | [ETHERFI_NODES_MANAGER_ADMIN_ROLE](#roleregistry-2) |
+
+| EtherFiNodesManager | updateAllowedForwardedExternalCalls | Updates whitelist for external calls via `EtherFiNode`. Critical security function controlling what external contracts can be called. Malicious admin could whitelist dangerous contracts or functions. The calls will be made by the `EtherFiNode` contracts directly. | [ETHERFI_NODES_MANAGER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | updateAllowedForwardedEigenpodCalls | Updates whitelist for `EigenPod` calls via `EtherFiNode`. Enables EigenLayer functionality without contract upgrades. The calls will be on functions in the `EigenPod` contract, by the `EtherFiNode`. | [ETHERFI_NODES_MANAGER_ADMIN_ROLE](#roleregistry-2) |
+| EtherFiNodesManager | pauseContract | Pauses the entire contract, including Eigenlayer checkpoints and withdrawals. | [PROTOCOL_PAUSER](#roleregistry-2) |
+| EtherFiNodesManager | unPauseContract | Resumes the contract. | [PROTOCOL_UNPAUSER](#roleregistry-2) |
+| EtherFiNodesManager | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also abuse the interactions with Eigenlayer and trigger withdrawals. | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | upgradeToAndCall | Similar to `upgradeTo`, with an additional call to the newly deployed logic contract. | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). It would not prevent changing the accesses to the contract, as those are handled in the `RoleRegistry (2)`. | EtherFiTimelock (3 Days) |
+| EtherFiNodesManager | transferOwnership | Transfers ownership of contract to a specified address. Only the Owner of the `RoleRegistry (2)` is allowed to upgrade this contract, no matter the current owner. | EtherFiTimelock (3 Days) |
 
 | EtherFiNode (Proxy) | | | |
 
@@ -386,49 +408,40 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | TNFT | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all `TNFT`s already minted. | EtherFiTimelock (3 Days) |
 | TNFT | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
 
-| MembershipManager | wrapEthForEap | ... | ['whenNotPaused'] |
-| MembershipManager | wrapEth | ... | ['whenNotPaused'] |
-| MembershipManager | wrapEth | ... | ['whenNotPaused'] |
-| MembershipManager | unwrapForEEthAndBurn | ... | ['whenNotPaused'] |
-| MembershipManager | topUpDepositWithEth | ... | ['whenNotPaused'] |
-| MembershipManager | requestWithdraw | ... | ['whenNotPaused'] |
-| MembershipManager | requestWithdrawAndBurn | ... | ['whenNotPaused'] |
-| MembershipManager | claim | ... | ['whenNotPaused'] |
-| MembershipManager | rebase | ... | [] |
-| MembershipManager | claimBatch | ... | ['whenNotPaused'] |
-| MembershipManager | addNewTier | ... | [] |
-| MembershipManager | updateTier | ... | [] |
-| MembershipManager | setPoints | ... | [] |
-| MembershipManager | updatePointsParams | ... | [] |
-| MembershipManager | setWithdrawalLockBlocks | ... | [] |
-| MembershipManager | setDepositAmountParams | ... | [] |
-| MembershipManager | setTopUpCooltimePeriod | ... | [] |
-| MembershipManager | setFeeAmounts | ... | [] |
-| MembershipManager | setFanBoostThresholdEthAmount | ... | [] |
-| MembershipManager | updateAdmin | ... | EtherFiTimelock (3 Days) |
-| MembershipManager | pauseContract | ... | ['whenNotPaused'] |
-| MembershipManager | unPauseContract | ... | ['whenPaused'] |
-| MembershipManager | upgradeTo | ... | EtherFiTimelock (3 Days) |
-| MembershipManager | upgradeToAndCall | ... | EtherFiTimelock (3 Days) |
-| MembershipManager | renounceOwnership | ... | EtherFiTimelock (3 Days) |
-| MembershipManager | transferOwnership | ... | EtherFiTimelock (3 Days) |
+| MembershipManager | rebase | Updates the contract's staking rewards balance, core mechanism for distributing validator earnings to different fan tiers. Malicious use could artificially inflate/deflate all user holdings by manipulating reward calculations. The contract protocol relies on this contract to forwards the call to the `LiquidityPool`. | EtherFiAdmin |
+| MembershipManager | addNewTier | Adds a new membership tier. A membership tier is reached when the specified amount of memberhsip points are accumulated by the NFT, the tier has an associated "weight" which is used to compute the portion of rewards captured. | [TODO: admins] |
+| MembershipManager | updateTier | Updates a tier's point threshold and weight, without bounds. Setting an excessive weight could redirect all rewards towards member in a specific tier. | [TODO: admins] |
+| MembershipManager | setPoints | Sets the loaylty and tier points for a given NFT. This is a hard overwrite and could grant any amount of loyalty and tier point to a membership NFT. | [] |
+| MembershipManager | updatePointsParams | Sets the pointsBoostFactor and the pointsGrowthFactor to arbitrary given values. The `pointsBoostFactor` is unused, but the `pointsGrowthFactor` determines the rate at which membership points are accrued. | [] |
+| MembershipManager | setWithdrawalLockBlocks | Sets the delay for an NFT cannot be transferred once a withdrawal is requested. The current delay is 360 blocks. | [] |
+| MembershipManager | setDepositAmountParams | Sets the minimum deposit (0.1 ETH) and the maximum top up that can be performed on an existing deposit without penalties on the memberhsip tier (20%). Topups (additional deposits) above 20% have a penalty that proportionally dillutes the existing membership points (potentially losing tiers). | [] |
+| MembershipManager | setTopUpCooltimePeriod | Sets the time a user must wait between topups. Currently there is a delay of 28 days between each deposit. | [] |
+| MembershipManager | setFeeAmounts | Sets the mint, upgrade, and burn fees that users have to pay. Fees are fixed amounts between 0.001 and 65.535 `ETH`. An additional variable, the `burnFeeWaiverPeriodInDays` can be set using this function. This is the number of days after which the NFT can be burnt with no fees. All fees are currently set to zero. | [] |
+| MembershipManager | setFanBoostThresholdEthAmount | Sets the threshold of `ETH` rewards that need to be accumulated before distribution to the NFT holders according to their tier. The rewards are directly depositted in the `LiquidityPool` during the `rebase`. | [] |
+| MembershipManager | updateAdmin | Grants or revokes admin privileges to a given address. Admins parameter the contract, change tiers and fees. Abuse could lead to _loss of user funds_ through maximal fees or loss of future rewards by creating an exclusive tier tunneling all rewards. | EtherFiTimelock (3 Days) |
+| MembershipManager | pauseContract | Pauses all user facing functions, including deposits and withdrawals. This could trap user funds if not unpaused. Rewards can still be accumulated, but not claimed. | ['whenNotPaused'] |
+| MembershipManager | unPauseContract | Unpauses the contract and resumes user facing functions. | ['whenPaused'] |
+| MembershipManager | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all NFTs already minted through the mint and burn privileges of this contract. | EtherFiTimelock (3 Days) |
+| MembershipManager | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
+| MembershipManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). It would also prevent revoking or granting the admin role to any further addresses. | EtherFiTimelock (3 Days) |
+| MembershipManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic, as well as granting admin permissions to other addresses. | EtherFiTimelock (3 Days) |
 
-| MembershipNFT | mint | ... | ['onlyMembershipManagerContract'] |
-| MembershipNFT | burn | ... | ['onlyMembershipManagerContract'] |
-| MembershipNFT | incrementLock | ... | ['onlyMembershipManagerContract'] |
-| MembershipNFT | processDepositFromEapUser | ... | ['onlyMembershipManagerContract'] |
-| MembershipNFT | setMaxTokenId | ... | ['onlyAdmin'] |
-| MembershipNFT | setUpForEap | ... | ['onlyAdmin'] |
-| MembershipNFT | updateAdmin | ... | EtherFiTimelock (3 Days) |
-| MembershipNFT | setMintingPaused | ... | ['onlyAdmin'] |
-| MembershipNFT | setContractMetadataURI | ... | ['onlyAdmin'] |
-| MembershipNFT | setMetadataURI | ... | ['onlyAdmin'] |
-| MembershipNFT | alertMetadataUpdate | ... | ['onlyAdmin'] |
-| MembershipNFT | alertBatchMetadataUpdate | ... | ['onlyAdmin'] |
-| MembershipNFT | upgradeTo | ... | EtherFiTimelock (3 Days) |
-| MembershipNFT | upgradeToAndCall | ... | EtherFiTimelock (3 Days) |
-| MembershipNFT | renounceOwnership | ... | EtherFiTimelock (3 Days) |
-| MembershipNFT | transferOwnership | ... | EtherFiTimelock (3 Days) |
+| MembershipNFT | mint | Mints a new NFT token and an associated amount of tokens for that specific NFT. Currently only 1 token is minted per NFT. | MembershipManager |
+| MembershipNFT | burn | Burns a given NFT. | MembershipManager |
+| MembershipNFT | incrementLock | Locks a given NFT from being transfered for a given amount of blocks. This is used when withdrawals are triggered (see `setWithdrawalLockBlocks`). | MembershipManager |
+| MembershipNFT | processDepositFromEapUser | Processes a deposit for a user in the EarlyAdopterPool. The deposit must include a merkle proof that is verified in the contract. | MembershipManager |
+| MembershipNFT | setMaxTokenId | Sets the max token (NFT) id. NFT ids are unique and incremented by 1 every mint. This value represents therefore the maximal amount of NFTs that can be minted. | ['onlyAdmin'] |
+| MembershipNFT | setUpForEap | Sets up the EAP migration. This updates the merkle root used to verify proofs. Changing the root could prevent users from claiming their rewards linked to the previous root, or grant arbitrary new rewards to other accounts. | ['onlyAdmin'] |
+| MembershipNFT | updateAdmin | Grants or revokes admin privileges to a given address. Admin privileges include setting NFT metadata, pausing mints, and handling EAP migration. | EtherFiTimelock (3 Days) |
+| MembershipNFT | setMintingPaused | Pauses or resumes minting of new NFTs in this contract. | ['onlyAdmin'] |
+| MembershipNFT | setContractMetadataURI | Sets the metadata URI for NFTs in this contract. | ['onlyAdmin'] |
+| MembershipNFT | setMetadataURI | Sets the ERC1155 specific metadata URI. | ['onlyAdmin'] |
+| MembershipNFT | alertMetadataUpdate | Emits an event to alert offchain services (opensea) of a metadata update for a given NFT. | ['onlyAdmin'] |
+| MembershipNFT | alertBatchMetadataUpdate | Emits an event to alert offchain services (opensea) of metadata updates in a range of NFTs. | ['onlyAdmin'] |
+| MembershipNFT | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all NFTs already minted. | EtherFiTimelock (3 Days) |
+| MembershipNFT | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
+| MembershipNFT | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). It would also prevent revoking or granting the admin role to any further addresses. | EtherFiTimelock (3 Days) |
+| MembershipNFT | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic, as well as granting admin permissions to other addresses. | EtherFiTimelock (3 Days) |
 
 | Treasury | renounceOwnership | Transfers the ownership of the contract to the zero address. This would lock the funds in the treasury irreversibly. There are no protection against this action built in the contract. | EtherFiTimelock (3 Days) |
 | Treasury | transferOwnership | Transfers the ownership of the contract. The new owner has full access to the `ETH` in the treasury and could send it to any address. | EtherFiTimelock (3 Days) |
@@ -540,6 +553,15 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | RoleRegistry | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | RoleRegistry | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | RoleRegistry | setRoleAdmin | ... | ['onlyRole'] |
+
+| RoleRegistry (2) | grantRole | Grants a role to a given address. Roles have critical functions in EtherFi contracts, current roles used are listed in the [Roles Table](#roleregistry-2) below. | EtherFiTimelock (3 Days)|
+| RoleRegistry (2) | revokeRole | Revokes a role from a given address. The address will no longer have the capabilities associated with the role. | EtherFiTimelock (3 Days) |
+| RoleRegistry (2) | setRole | Grants or revokes a role (see `grantRole`, `revokeRole`). | EtherFiTimelock (3 Days) |
+| RoleRegistry (2) | transferOwnership | Transfer ownership over the contract to different address. This address has critical power to grant and revoke EtherFi operating roles to any address. In addition to that, the owner of this contract can upgrade critical contracts such as the `LiquidityPool`, `EtherFiNodesManager`, and `StakingManager`. Granting ownership to a malicious address could put all user funds at risk. | EtherFiTimelock (3 Days) |
+| RoleRegistry (2) | renounceOwnership | Renounces ownership over the contract, effectively changing the owner to the zero address. This would render many contracts in the protocol immutable, as well as fix the current role assignments. No new roles could be granted or revoked. | EtherFiTimelock (3 Days) |
+| RoleRegistry (2) | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how the access control is checked and enforced. This could grant/revoke arbitrary permissions handled by this contract, as well as the upgrade rights over different other critical contracts (eg. `LiquidityPool`, `EtherFiNodesManager`, and `StakingManager`). | EtherFiTimelock (3 Days)|
+| RoleRegistry (2) | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
+
 | EarlyAdopterPool | renounceOwnership | ... | 0xF155a2632Ef263a6A382028B3B33feb29175b8A5 |
 | EarlyAdopterPool | transferOwnership | ... | 0xF155a2632Ef263a6A382028B3B33feb29175b8A5 |
 | EarlyAdopterPool | deposit | ... | ['DepositingOpen', 'OnlyCorrectAmount', 'whenNotPaused'] |
