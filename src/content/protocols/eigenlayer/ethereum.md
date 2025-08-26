@@ -203,13 +203,17 @@ Delegation, undelegation, withdrawal (queueing and completion) and registration 
 
 ### AllocationManager
 
-Through the `AllocationManager` the `AVSs` can manage _Operator Sets_ (creation and changes) and AVS configurations as metadata. The `AllocationManager` allows _Operators_ to register and deregister from _Operator Sets_ and _AVSs_. _Operator Sets_ are isolated pools of staked capital that serve as economic security. _Operator Sets_ allow _AVSs_ to slash certain strategies within an _Operator Set_ and issue rewards in a granular way for each supplied strategy within the _Operator Set_.
+Through the `AllocationManager` the `AVSs` can manage _Operator Sets_ (creation and changes) and AVS configurations as metadata. The `AllocationManager` allows _Operators_ to allocate and deallocate from _Operator Sets_ and _AVSs_. _Operator Sets_ are isolated pools of staked capital that serve as economic security. _Operator Sets_ allow _AVSs_ to differentiate different _Operators_ with regarding to their business requirements and type of stake. Also _AVSs_ can slash certain strategies within an _Operator Set_ and issue rewards in a granular way for each supplied strategy within the _Operator Set_. Slashing is done when the _Operators_ break a certain committments to the _AVS_. _AVSs_ can slash _Operators_ up to the full stake inside the _Operator Sets_.
+
+_Operators_ can change their allocation delay which is the duration until which the allocated stake becomes slashable. A change of allocation delay registered by _Operator_ takes 17.5 days (ALLOCATION_CONFIGURATION_DELAY) until it is effective.
+
+The duration until a deallocation is effective (the capital is not slashable anymore) takes 14 days. This is only changeable through an upgrade of the `AllocationManager` contract.
 
 The `AllocationManager` contract allows _AVSs_ to slash _Operators_ that do not comply with their terms on correct operation of the instructions by the _AVSs_. The `AllocationManager` contract forwards the slashing request by the _AVSs_ to the `DelegationManager` contract, to reduce the delegated amount of the _Operators_.
 
 The _AVSs_ can setup an `AVSRegistrar` contract, which is called by the `AllocationManager` when _Operators_ register to and deregister from _Operator Sets_. If the _AVS_ does not have an `AVSRegistrar` set, the `AllocationManager` will forward the call to the registered _AVS_ contract. If the `AVSRegistrar` or the registered _AVS_ contract reverts the transaction, the `AllocationManager` will revert the transaction as well, and _Operators_ will not be able to register to or deregister from _Operator Sets_. This can create unfair scenarios, where _AVSs_ allow opt-in, but disallow opt-out (see [dependencies](#dependencies) for risks steming from _AVSs_).
 
-The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an _Upgradeability_ risk, as the upgrade could potentially modify slashing logic and the slashing accounting and thus lead to _loss of funds_ of _Stakers_ if the upgrade is malicious or faulty, as the `DelegationManager` contract is informed on suffered slashes by the `AllocationManager` contract.
+The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an _Upgradeability_ risk, as the upgrade could potentially modify slashing logic and the slashing accounting and thus lead to _loss of funds_ of _(Re)Stakers_ if the upgrade is malicious or faulty, as the `DelegationManager` contract is informed on suffered slashes by the `AllocationManager` contract.
 
 Registration and deregistration of _Operators_ from _Operator Sets_, modification of allocations to _Operator Sets_ by _Operators_, slashing by _AVSs_ can be paused by [Pauser Multisig (1/6)](#security-council), [Executor Multisig (1/2)](#security-council) and [Operations Multisig (3/6)](#security-council), only the [Executor Multisig (1/2)](#security-council) can resume the mentioned actions. A pause of deregistration and modification of allocations but not slashing could lead to an unfair situation for _Operators_ and _Stakers_.
 
@@ -251,11 +255,13 @@ Currently `bEIGEN` is minted by the Eigenlayer protocol through the `TokenHopper
 
 ### Programmatic Incentives
 
-Programmatic Incentives (PI) are distributed in `EIGEN` tokens minted by the Eigenlayer protocol and distributed to _Stakers_ and _Operators_ through the `RewardsCoordinator` contract. The permission owner to post the root is again the [rewardsUpdater](#security-council). Read more here on the emission schedule and emission amount in the [official docs](https://docs.eigenfoundation.org/programmatic-incentives/programmatic-incentives-faq).
+Programmatic Incentives (PI) are `EIGEN` tokens minted by the EigenLayer protocol and distributed to _(Re)Stakers_ and _Operators_ to incentivize and bootstrap participants in the Eigenlayer.
+
+PI are distributed in `EIGEN` tokens minted by the Eigenlayer protocol and distributed to _(Re)Stakers_ and _Operators_ through the `RewardsCoordinator` contract. The permission owner to post the root is again the [rewardsUpdater](#security-council). Read more here on the emission schedule and emission amount in the [official docs](https://docs.eigenfoundation.org/programmatic-incentives/programmatic-incentives-faq).
 
 # Dependencies
 
-The Eigenlayer protocol does not depend on a single _AVS_ or _Operator_. However, _AVSs_, _Stakers_ and _Operators_ depend on each other, and as such create dependency risks for each other.
+The Eigenlayer protocol does not depend on a single _AVS_ or _Operator_. However, _AVSs_, _(Re)Stakers_ and _Operators_ depend on each other, and as such create dependency risks for each other.
 
 The following subsections highlight risks potentially coming from _AVSs_ and _Operators_ for respective counterparties.
 
