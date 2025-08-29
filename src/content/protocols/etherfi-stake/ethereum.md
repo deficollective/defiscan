@@ -11,7 +11,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed for yield optimization on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications.
+This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed to increase yield on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications. In addition to this, the protocol introduced Ether.fans NFTs which stake `ETH` exclusively with _Node Operators_ that use _Distributed Validators Technology (DVT)_.
 
 # Ratings
 
@@ -27,7 +27,9 @@ All contracts in the protocol can be upgraded by a [4-out-of-7 multisig](#securi
 
 An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, or wrongfully rebase the token, leading to _loss of user funds_ and/or the _loss of unclaimed yield_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin`contract.
 
-Contracts may also be paused without delay to prevent further deposits and withdrawals. In addition to that, user funds can be trapped in ether.fans NFTs with the possibility of adding withdrawal fees of up to 65 ETH per withdrawal.
+New validators are created in two phases when enough `ETH` has been depositted. First, any 1-of-6 signers of the [ValidatorSpawner multisig](#security-council) can create validators and deposit 1 `ETH` to them using user depositted `ETH` in the `LiquidityPool`. The oracle then confirms the validity of the withdrawal credential and triggers the deposit of the remaining `ETH` (> 31 `ETH` per validator). The initial deposit is at risk of frontrunning and collusion between the signer and _Node Operator_, this is why deposits have to be confirmed by the oracle. In case of an attack, this would allow the signer and _Node Operator_ to steal the 1 `ETH` depositted for each validator. However, this is of limitted impact given that this concerns a minority of protocol funds.
+
+Contracts may also be paused without delay to prevent further deposits and withdrawals. Different multisigs may resume the contracts. In addition to that, user funds can be trapped in ether.fans NFTs with the possibility of adding withdrawal fees of up to 65 `ETH` per withdrawal.
 
 > Upgradeability score: High
 
@@ -35,25 +37,20 @@ Contracts may also be paused without delay to prevent further deposits and withd
 
 ### Ethereum staking
 
-EtherFi relies on _Node Operators_ to operate Ethereum validators. Users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds are sent to the dedicated Eigenlayer `Eigenpod` contract. The `Eigenpod` contracts implement EIP7002 which enables withdrawals to be triggered from the contracts directly. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
+EtherFi relies on _Node Operators_ to operate Ethereum validators. _Node Operators_ are whitelisted by EtherFi and users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds are sent to the dedicated Eigenlayer `Eigenpod` contract. The `Eigenpod` contracts implement EIP7002 which enables withdrawals to be triggered from the contracts directly. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
 
-According to [rated](https://explorer.rated.network/o/Ether.Fi?network=mainnet&timeWindow=1d&viewBy=operator&page=1&pageSize=30&idType=pool) EtherFi has 21 different _Node Operators_ which manage the 2.5M `ETH` staked. It is worth noting that providers of Distributed Validator Techonology (DVT) such as SSV and Obol count as 1 operator each, but are in fact operating validators in a distributed setup, by many different independent actors. The `ETH` is not equally distributed among operators, with the biggest operator handling 177'000 `ETH`.
+According to [rated](https://explorer.rated.network/o/Ether.Fi?network=mainnet&timeWindow=1d&viewBy=operator&page=1&pageSize=30&idType=pool) EtherFi has 21 different _Node Operators_ which manage the 2.5M `ETH` staked. It is worth noting that providers of Distributed Validator Technology (DVT) such as SSV and Obol count as 1 operator each, but are in fact operating validators in a distributed setup, by many different independent actors. The `ETH` is not equally distributed among operators, with the biggest operator handling 177'000 `ETH`.
 
 With the implementation of EIP7002 and the current diversification of node operators discussed in the [dependencies](#dependencies) section, EtherFi would score a _Low_ Autonomy risk score for its dependency on ethereum validator _Node Operators_.
-
-**TODO**:
-Node Operators: operate native ethereum staking validators with the ETH depositted in the liquidity pool.
-Can be Trusted (fixed bid), or Trustless (highest bidder wins).
 
 ### Restaking on Eigenlayer
 
 The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). For the purpose of this report, we note that _AVSs_ could lead to a complete loss of the _Operator_'s delegated staked `ETH` through slashing, which would lead to the _loss of user funds_. On the other hands, _Operators_ could trigger slashing through misbehaviors and bad performances, or operate for malicious _AVSs_.
 
-[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest risk concentration have 17.5% and 9.9% respectively."
+[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest risk concentrations have 17.5% and 9.9% respectively."
 
 Other liquid staking tokens (LSTs) can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract.
 
-Liquid Staking Tokens: liquid staking tokens are supported and restaked also. + Curve pool or prices for those tokens
 QUESTION: which eigenpod do they use? Who's the staker?
 https://community.chaoslabs.xyz/etherfi/risk/avs
 
@@ -77,13 +74,9 @@ The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eE
 
 ## Conclusion
 
-Some text in form of:
+The protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ section. It thus scores **Stage 0**.
 
-The xyz protocol achieves High centralization risk scores for its Upgradeability, Autonomy and Exit Window dimensions. It thus ranks Stage 0.
-
-The protocol could reach Stage 1 by ...
-
-The project additionally could advance to Stage 2 if ...
+The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upgrades and actions that may lead to _loss of user funds_. It should further implement mitigations for its critical dependency on _Eigenlayer_, if _Eigenlayer_ doesn't become a Stage 1 protocol. Finally, it would need to offer either an open-sourced alternative frontend or a possibility for user to self-host the existing app.
 
 # Reviewer's Notes
 
@@ -92,23 +85,30 @@ The project additionally could advance to Stage 2 if ...
 
 # Protocol Analysis
 
-## Liquid Staking
+## Liquid ReStaking
 
-- how the staking works, bids, and whitelist.
-- Reports sent by the oracle
+An overview of the EtherFi protocol can be seen in the diagram below.
 
-## ReStaking
+![Overview of EtherFi](../diagrams/etherfi-liquid-restaking.png)
 
-- Creaiton of Eigenpods
-- Delegation to Eigenlayer operators
-- Through calls to the DelegationManager
+### Node Operators
 
-## Ether.fan NFTs
+First, _Node Operators_ register themselves through the `NodeOperatorManager` contract, providing their IPFS hash containing encrypted validator keys and declaring the total number of keys they can operate. Once registered, these operators must be whitelisted via the _addToWhitelist_ function by the [Depositor EOA](#security-council) or [Multisig #1](#security-council) and approved for specific funding sources through _batchUpdateOperatorsApprovedTags_ to differentiate between standard `eETH` staking and ether.fan membership NFT staking. Ether.fan staking is meant for _Node Operators_ using _Distributed Validator Technology (DVT)_ exclusively.
 
-Ether.fans are NFTs minted with `ETH` that is staked solely with solo stakers using Distributed Validator
-Technology (DVT). The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 with each NFT's balance being [...**TODO**]. The issuance is managed by `MembershipManager`, .
+### Validator Creation
 
-When minted, Fans are given a random set of traits that are purely visual (gender, background, colors). The NFTs are associated with a flair depending on how much ETH is staked with them and a tier (bronze to platinum) depending on the time that has passed since they were minted. While depositing `ETH` is (currently) free of fees, depositing more than 20% in a period one month can impact the membership tier. Withdrawing `ETH` also impacts the membership tier, and withdrawing more than 50% of the all time value of the NFT will automatically burn it (withdraw the full amount). Minting is currently blocked as the limit of 10'000 mints has been reached. However, the limit can be increased by any admin of the contract.
+_Node Operators_ then participate in the auction system by calling the _createBid_ function in the `AuctionManager` contract, where they submit a bid amount per validator. When sufficient `ETH` has accumulated in the `LiquidityPool`, any signer of the [ValidatorSpawner](#security-council) can initiate validator creation by selecting specific bid IDs from the auction and calling the _batchRegister_ function, which transfers one `ETH` per validator from the pool to the `StakingManager` contract where which processes each validator and links the validator's public key to its designated `EtherFiNode` withdrawal safe contract. Each validator has its own `EtherFiNode` contract that will receive rewards and handle withdrawal operations. Finally, one `ETH` is deposited to the official Ethereum beacon chain deposit contract.
+
+Once the initial deposit is confirmed with the correct withdrawal address, the oracle triggers the remaining deposit to complete the validator creation process using `ETH` in the `LiquidityPool`.
+
+### ReStaking
+
+When `EtherFiNode` contracts are created, they deploy automatically a corresponding `EigenPod` using the `EigenPodManager`. `EigenPod` are contracts that enable restaking on Eigenlayer. The validator used for restaking have to have the `Eigenpod` as withdrawal address, this enables the Eigenlayer protocol to handle the withdrawn `ETH` and potentially slash the staker (here the `EtherFiNode`). EtherFi delegates the restaking to _Eigenlayer Node Operators_, as described in the [dependencies](#dependencies) section. This delegation can be done by any holder of the role [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2), which includes an Externally Owner Account (EOA). Delegations and withdrawals can be made by the same role holders through Eigenlayer's `DelegationManager` using the `EtherFiNode` contract's call forwading functions.
+
+### Ether.fan NFTs
+
+Ether.fans are NFTs minted with `ETH` that is staked exclusively with solo stakers using _Distributed Validator
+Technology (DVT)_. The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 with each NFT's balance being set strictly to 1. The issuance is managed by `MembershipManager`. When minted, Fans are given a random set of traits that are purely visual (gender, background, colors). These traits are stored only in offchain metadata, which can be changed by the contract administrators. The NFTs are associated with a flair depending on how much ETH is staked with them and a tier (bronze to platinum) depending on the time that has passed since they were minted. While depositing `ETH` is (currently) free of fees, depositing more than 20% in a period one month can impact the membership tier. Withdrawing `ETH` also impacts the membership tier, and withdrawing more than 50% of the all time value of the NFT will automatically burn it (withdraw the full amount). Minting is currently blocked as the limit of 10'000 mints has been reached. However, the limit can be increased by any admin of the contract.
 
 # Dependencies
 
@@ -116,17 +116,18 @@ Go into more detail of the oracle, bridge, or other dependency the defi protocol
 
 # Governance
 
-EtherFi has no strictly onchain governance. The governance token, `ETHFI`, can used by users to vote on proposals on [Snapchot](https://snapshot.box/#/s:etherfi-dao.eth). Users can also delegate their vote and stake their governance tokens. The proposal outcomes are not enforced onchain and all operating permissions within the EtherFi protocol are held by [EOAs and multisigs](#security-council).
+EtherFi has no strict onchain governance. The governance token, `ETHFI`, can used by users to vote on proposals on [Snapchot](https://snapshot.box/#/s:etherfi-dao.eth). Users can also delegate their vote and stake their governance tokens. The proposal outcomes are not enforced onchain and all operating permissions within the EtherFi protocol are held by [EOAs and multisigs](#security-council).
 
 ## Security Council
 
-| Name                               | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| EtherFi Undeclared Multisig #1     | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
-| EtherFi Undeclared Multisig #2     | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
-| Underclared EOA                    | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          | ❌          | ❌              | ❌                | ❌             |
-| Underclared EOA (EtherFi Deployer) | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          | ❌          | ❌              | ❌                | ❌             |
-| Underclared EOA (Beacon Depositor) | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          | ❌          | ❌              | ❌                | ❌             |
+| Name                                | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| EtherFi Undeclared Multisig #1      | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
+| EtherFi Undeclared Multisig #2      | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
+| EtherFi Undeclared ValidatorSpawner | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | Multisig 1/6 | ❌          | ❌              | ❌                | ❌             |
+| Underclared EOA (Pauser)            | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          | ❌          | ❌              | ❌                | ❌             |
+| Underclared EOA (EtherFi Deployer)  | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          | ❌          | ❌              | ❌                | ❌             |
+| Underclared EOA (Beacon Depositor)  | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          | ❌          | ❌              | ❌                | ❌             |
 
 # Contracts & Permissions
 
@@ -383,17 +384,16 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | EtherFiNode | forwardEigenPodCall | Forwards a call to the `EigenPod` contract. This function can be used to call any whitelisted function in the `EigenPod`. The `EtherFiNodesManager` contains the whitelist of allowed function calls. | [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2) |
 | EtherFiNode | forwardExternalCall | Fowards a call to any arbitrary external contract. The contract and the specific function call has to be whitelisted in the `EtherFiNodesManager`. | [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2) |
 
-| BNFT | mint | ... | StakingManager |
-| BNFT | burnFromWithdrawal | ... | ['onlyEtherFiNodesManager'] |
-| BNFT | burnFromCancelBNftFlow | ... | StakingManager |
+| BNFT | mint | Mints a new `BNFT`. Those NFTs are no longer used and the `StakingManager` contract's implementation no longer calls this function upon validator creation. | StakingManager |
+| BNFT | burnFromWithdrawal | Burns the NFT associated with the given validator ID. Those NFTs are no longer used and the `EtherFiNodesManager` contract's implementation no longer calls this function upon validator creation. | EtherFiNodesManager |
+| BNFT | burnFromCancelBNftFlow | Burns the NFT associated with the given validator ID. Those NFTs are no longer used and the `EtherFiNodesManager` contract's implementation no longer calls this function upon validator creation. | StakingManager |
 | BNFT | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). | EtherFiTimelock (3 Days) |
 | BNFT | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic. | EtherFiTimelock (3 Days) |
 | BNFT | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all `BNFT`s already minted. | EtherFiTimelock (3 Days) |
 | BNFT | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
-
-| TNFT | mint | ... | StakingManager |
-| TNFT | burnFromWithdrawal | ... | ['onlyEtherFiNodesManager'] |
-| TNFT | burnFromCancelBNftFlow | ... | StakingManager|
+| TNFT | mint | Mints a new `TFNT`. Those NFTs are no longer used and the `StakingManager` contract's implementation no longer calls this function upon validator creation. | StakingManager |
+| TNFT | burnFromWithdrawal | Burns the NFT associated with the given validator ID. Those NFTs are no longer used and the `EtherFiNodesManager` contract's implementation no longer calls this function upon validator creation. | EtherFiNodesManager |
+| TNFT | burnFromCancelBNftFlow | Burns the NFT associated with the given validator ID. Those NFTs are no longer used and the `EtherFiNodesManager` contract's implementation no longer calls this function upon validator creation. | StakingManager|
 | TNFT | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable (prevent further ugprades). | EtherFiTimelock (3 Days) |
 | TNFT | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic. | EtherFiTimelock (3 Days) |
 | TNFT | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and could also be used to reassign the ownership of all `TNFT`s already minted. | EtherFiTimelock (3 Days) |
@@ -476,14 +476,14 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | EtherFiRestaker | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how it interacts with the Eigenlayer restaking services. This could also reassign the ownership of all funds in the contract, including its Eigenlayer stake. | EtherFiTimelock (3 Days) |
 | EtherFiRestaker | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
 
-| EtherFiTimelock (3 Days) | schedule | ... | ['onlyRole'] |
-| EtherFiTimelock (3 Days) | scheduleBatch | ... | ['onlyRole'] |
-| EtherFiTimelock (3 Days) | cancel | ... | ['onlyRole'] |
-| EtherFiTimelock (3 Days) | execute | ... | ['onlyRoleOrOpenRole'] |
-| EtherFiTimelock (3 Days) | executeBatch | ... | ['onlyRoleOrOpenRole'] |
-| EtherFiTimelock (3 Days) | updateDelay | ... | [] |
-| EtherFiTimelock (3 Days) | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
-| EtherFiTimelock (3 Days) | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| EtherFiTimelock (3 Days) | schedule | Schedules a transaction to be executed after the mandatory delay has passed. This transaction can perform any action allowed to this contract, including critical contract upgrades. | EtherFi Undeclared Multisig #2 |
+| EtherFiTimelock (3 Days) | scheduleBatch | Similar to _schedule_, for a batch of multiple transactions. | EtherFi Undeclared Multisig #2 |
+| EtherFiTimelock (3 Days) | cancel | Cancels a queued transaction before it has been executed. | EtherFi Undeclared Multisig #2 |
+| EtherFiTimelock (3 Days) | execute | Executes a scheduled transaction once the delay has passed. | EtherFi Undeclared Multisig #2 |
+| EtherFiTimelock (3 Days) | executeBatch | Executes a batch of transactions once the delay has passed. | EtherFi Undeclared Multisig #2 |
+| EtherFiTimelock (3 Days) | updateDelay | Updates the mandatory delay. There are no minimum or maximum delays enforced in the contract. | EtherFiTimelock (3 Days) |
+| EtherFiTimelock (3 Days) | grantRole | Grants a role to a given address. There are different roles to schedule, cancel, and execute transactions. Granting those roles to malicious addresses could have critical impact on the protocol, as this contract can upgrade all contracts in the protocol. | EtherFiTimelock (3 Days) |
+| EtherFiTimelock (3 Days) | revokeRole | Revokes a role from a given address. | EtherFiTimelock (3 Days) |
 
 | EtherFiOracle | submitReport | Called by each committee member to submit their report. The members need to submit the same report a quorum amount of time. Once the quorum is reached the report is considered published. The reports contain information on accrued rewards, validator exited, slashed, liquidity, and status of exit requests. Falsified information could lead to loss of user funds by devaluing `eETH`. | CommitteeMembers |
 | EtherFiOracle | addCommitteeMember | Adds a new committee member. The member can push reports and contribute to the consensus as much as any other member. | EtherFiTimelock (3 Days) |
