@@ -2,7 +2,7 @@
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "H", "L", "H", "H"]
+risks: ["L", "H", "H", "H", "H"]
 author: ["mmilien_"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
@@ -47,13 +47,9 @@ Can be Trusted (fixed bid), or Trustless (highest bidder wins).
 
 ### Restaking on Eigenlayer
 
-The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol.
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). For the purpose of this report, we note that _AVSs_ could lead to a complete loss of the _Operator_'s delegated staked `ETH` through slashing, which would lead to the _loss of user funds_. On the other hands, _Operators_ could trigger slashing through misbehaviors and bad performances, or operate for malicious _AVSs_.
 
-15 operators
-
-20 AVS
-
-https://community.chaoslabs.xyz/etherfi/risk/node-operators
+[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest risk concentration have 17.5% and 9.9% respectively."
 
 Other liquid staking tokens (LSTs) can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract.
 
@@ -61,13 +57,15 @@ Liquid Staking Tokens: liquid staking tokens are supported and restaked also. + 
 QUESTION: which eigenpod do they use? Who's the staker?
 https://community.chaoslabs.xyz/etherfi/risk/avs
 
-> Autonomy score: Low
+> Autonomy score: High
 
 ## Exit Window
 
-All contract upgrades are currently subject to a delay of 3 days.
+All contract upgrades are currently subject to a delay of 3 days. Day-to-day operations related to the EtherFi oracle, which include minting and burning `eETH` according to the data pushed onchain, are executed with a 10 minute delay once the consensus has been reached.
 
-**Repeat upgradeability stuff, with exit windows**
+The protocol can be paused by an [undeclared `EOA`](#security-council), preventing both deposits and withdrawals without delay. The protocol can be resumed by a multisig or the `EtherFiAdmin` contract. Pausing the protocol can be modular, with non-facing user functions remaining accessible.
+
+Ether.fan fees can be changed without delay and with up to 65 `ETH` of fees per operation.
 
 > Exit Window score: High
 
@@ -96,9 +94,14 @@ The project additionally could advance to Stage 2 if ...
 
 ## Liquid Staking
 
-## Stakers and Operators
+- how the staking works, bids, and whitelist.
+- Reports sent by the oracle
 
 ## ReStaking
+
+- Creaiton of Eigenpods
+- Delegation to Eigenlayer operators
+- Through calls to the DelegationManager
 
 ## Ether.fan NFTs
 
@@ -117,35 +120,23 @@ EtherFi has no strictly onchain governance. The governance token, `ETHFI`, can u
 
 ## Security Council
 
-| Name                           | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| EtherFi Undeclared Multisig #1 | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
-| EtherFi Undeclared Multisig #2 | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
+| Name                               | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| EtherFi Undeclared Multisig #1     | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
+| EtherFi Undeclared Multisig #2     | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
+| Underclared EOA                    | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          | ❌          | ❌              | ❌                | ❌             |
+| Underclared EOA (EtherFi Deployer) | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          | ❌          | ❌              | ❌                | ❌             |
+| Underclared EOA (Beacon Depositor) | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          | ❌          | ❌              | ❌                | ❌             |
 
 # Contracts & Permissions
 
 ## Contracts
 
-Missing because of errors:
-
-UUPSProxy LiquidityPool "0x308861A430be4cce5502d0A12724771Fc6DaF216", (impl 0x025911766aEF6fF0C294FD831a2b5c17dC299B3f)
-UUPSProxy EtherFiAdmin "0x0EF8fa4760Db8f5Cd4d993f3e3416f30f942D705", (impl 0xd50f28485A75A1FdE432BA7d012d0E2543D2f20d)
-UUPSProxy WithdrawRequestNFT "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c",
-
 UUPSProxy RedemptionManager "0xdadef1ffbfeaab4f68a9fd181395f68b4e4e7ae0",
-
-UUPSProxy EtherFiRestaker 0x1B7a4C3797236A1C37f8741c0Be35c2c72736fFf
-
 UUPSProxy EtherFiRewardsRouter (ENS = "Fee Recipient"), "0x73f7b1184B5cD361cC0f7654998953E2a251dd58"
-
 UUPSPRoxy "DepositAdapter" 0xcfC6d9Bd7411962Bfe7145451A7EF71A24b6A7A2 (impl 0xe87797a1afb329216811dfa22c87380128ca17d8)
-
 EtherFiTimelock (8 Hours) 0xcd425f44758a08baab3c4908f3e3de5776e45d7a
 TODO: Scan its access control
-
-NEW RoleRegistry: 0x62247D29B4B9BECf4BB73E0c722cf6445cfC7cE9
-
-EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 
 | Contract Name                         | Address                                    |
 | ------------------------------------- | ------------------------------------------ |
@@ -153,6 +144,12 @@ EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 | EETH (Implementation)                 | 0xCB3D917A965A70214f430a135154Cd5ADdA2ad84 |
 | WeETH (Proxy)                         | 0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee |
 | WeETH (Implementation)                | 0x2d10683E941275D502173053927AD6066e6aFd6B |
+| LiquidityPool (Proxy)                 | 0x308861A430be4cce5502d0A12724771Fc6DaF216 |
+| LiquidityPool (Implementation)        | 0x025911766aEF6fF0C294FD831a2b5c17dC299B3f |
+| EtherFiAdmin (Proxy)                  | 0x0EF8fa4760Db8f5Cd4d993f3e3416f30f942D705 |
+| EtherFiAdmin (Implementation)         | 0xd50f28485A75A1FdE432BA7d012d0E2543D2f20d |
+| WithdrawRequestNFT (Proxy)            | 0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c |
+| WithdrawRequestNFT (Implementation)   | 0xc227640c2ffe6568d02a18b95f83fe5bcce9ead1 |
 | EtherFiGovernanceToken                | 0xFe0c30065B384F05761f15d0CC899D4F9F9Cc0eB |
 | AddressProvider                       | 0x8487c5F8550E3C3e7734Fe7DCF77DB2B72E4A848 |
 | AuctionManager (Proxy)                | 0x00C452aFFee3a17d9Cecc1Bcd2B8d5C7635C4CB9 |
@@ -161,6 +158,7 @@ EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 | StakingManager (Implementation)       | 0x433d06fFc5EfE0e93daa22fcEF7eD60e65Bf70b4 |
 | EtherFiNodesManager (Proxy)           | 0x8B71140AD2e5d1E7018d2a7f8a288BD3CD38916F |
 | EtherFiNodesManager (Implementation)  | 0x158B21148E86470E2075926EbD5528Af2D510cAF |
+| EtherFiNode (Implementation)          | 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2 |
 | BNFT (Proxy)                          | 0x6599861e55abd28b91dd9d86A826eC0cC8D72c2c |
 | BNFT (Implementation)                 | 0x6a393848f5d1b8e7dab45f3a7e01f9f0dc687242 |
 | TNFT (Proxy)                          | 0x7B5ae07E2AF1C861BcC4736D23f5f66A61E0cA5e |
@@ -174,7 +172,10 @@ EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 | Treasury                              | 0x6329004E903B7F420245E7aF3f355186f2432466 |
 | Liquifier (Proxy)                     | 0x9ffdf407cde9a93c47611799da23924af3ef764f |
 | Liquifier (Implementation)            | 0xa1a15fb15cbda9e6c480c5bca6e9aba9c5e2ff95 |
+| EtherFiRestaker (Proxy)               | 0x1B7a4C3797236A1C37f8741c0Be35c2c72736fFf |
+| EtherFiRestaker (Implementation)      | 0x0052f731a6bea541843385ffba408f52b74cb624 |
 | EtherFiTimelock (3 Days)              | 0x9f26d4C958fD811A1F59B01B86Be7dFFc9d20761 |
+| EtherFiTimelock (8 Hours)             | 0xcd425f44758a08baab3c4908f3e3de5776e45d7a |
 | EtherFiOracle (Proxy)                 | 0x57AaF0004C716388B21795431CD7D5f9D3Bb6a41 |
 | EtherFiOracle (Implementation)        | 0x5eefE6f65a280A6f1Eb1FdFf36Ab9e2af6f38462 |
 | CumulativeMerkleDrop (Proxy)          | 0x6Db24Ee656843E3fE03eb8762a54D86186bA6B64 |
@@ -187,7 +188,6 @@ EtherFiNode implementation: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 | BoringGovernance                      | 0x86B5780b606940Eb59A062aA85a07959518c0161 |
 
 New deployments on 31.07:
-EtherFiVIewer: 0xF99Cc758a6A42f9A9eDed4Ac86905F8eE3B0d73e
 EtherFiNode: 0x5Dae50e686f7CB980E4d0c5E4492c56bC73eD9a2
 StakingManager: 0x433d06fFc5EfE0e93daa22fcEF7eD60e65Bf70b4
 EtherFiNodesManager: 0x158B21148E86470E2075926EbD5528Af2D510cAF
@@ -249,25 +249,16 @@ AuctionManager LiquidityPool
 | NodeOperatorManager | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how Node Operators are added and allocated funds. | EtherFiTimelock (3 Days) |
 | NodeOperatorManager | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
 
-| StakingManager | batchDepositWithBidIds | ... | ['nonReentrant', 'whenNotPaused'] |
-| StakingManager | batchRegisterValidators | Initial 1ETH deposit to register new validators. Once the validators are registered an oracle needs to confirm their withdrawal addresses before it can be approved for the remaining 31 ETH deposit. | ['nonReentrant', 'verifyDepositState', 'whenNotPaused'] |
-| StakingManager | batchApproveRegistration | Completes the deposit of 31 ETH to validators previously created with `batchRegisterValidators`, this should come with a signature of the pre-submitted root. | [] |
-| StakingManager | batchCancelDeposit | Cancels a user's deposits, if the validators have already been registered, the 1 ETH deposit is lost to the beacon chain as a penalty. It can no longer be cancelled after the full deposit has been made. | Staker |
-| StakingManager | batchCancelDepositAsBnftHolder | Cancels a validator before the full 32 ETH deposit. If the 1 ETH deposit has already been made (the registration phase), this sum is lost to the beacon chain as a penalty. Validators can no longer be cancelled after the full deposit has been made. | BNFT holder (for those validators) |
-| StakingManager | instantiateEtherFiNode | Instantiates a new `EtherFiNode` contract. | EtherFiNodesManager |
-| StakingManager | setEtherFiNodesManagerAddress | Sets the address of the contract used as `EtherFiNodesManager`. This contract is critical as it is used as a reference during validator creation. | EtherFiTimelock (3 Days) |
-| StakingManager | setLiquidityPoolAddress | Sets the address of the contract used as `LiquidityPool`. This contract is critical and changing the address could result in the loss of user funds through multiple attack vectors. | EtherFiTimelock (3 Days) |
-| StakingManager | setMaxBatchDepositSize | Sets the max batch of deposits that can be made in one transaction. The current limit is 60. There are no bounds to this value, setting it to zero would prevent any further deposit. | ['onlyAdmin'] |
+| StakingManager | createBeaconValidators | Creates beacon validators with 1 ETH deposits using compounding withdrawal credentials. The contract also interacts with the EtherFiNodesManager to link the validator public key with its `EtherFiNode`. This is the first step of validator creation, the complete deposit amount will be added in another transaction once the oracle confirms the withdrawal address. | LiquidityPool |
+| StakingManager | confirmAndFundBeaconValidators | Sends remaining ETH to complete validator activation after oracle verification. The validator can hold anywhere between 32 and 2048 ETH. A malicious oracle could confirm the deposit to a compromised validator and steal the funds. | LiquidityPool |
+| StakingManager | instantiateEtherFiNode | Creates new EtherFiNode proxy instance and optionnally a corresponding EigenPod. Those `EtherFiNode` are then used when new validators are created. | **TODO**: STAKING MANAGER NODE CREATOR ROLE |
 | StakingManager | upgradeEtherFiNode | Upgrades the `EtherFiNode` implementation contract. This could reassign all the funds and rewards withdrawn by validators, potentially leading to loss of funds. | EtherFiTimelock (3 Days) |
-| StakingManager | updateFullStakingStatus | Sets full staking to false or true. When full staking is enabled, validators are no longer created in two phases (1 + 31 ETH), but by their full stake directly. | EtherFiTimelock (3 Days) |
-| StakingManager | pauseContract | ... | ['onlyAdmin', 'whenNotPaused'] |
-| StakingManager | unPauseContract | ... | ['onlyAdmin', 'whenPaused'] |
-| StakingManager | updateAdmin | Grants or revokes the admin role to a given address. Admins can change contract parameters such as the max deposit batches and pausing the contract. Those actions could prevent the deposit of further validators in the system and impact its performance. | EtherFiTimelock (3 Days) |
-| StakingManager | setNodeOperatorManager | Sets the address of the `NodeOperatorManager` contract used. The contract is used to validate node operators upon deposits, a malicious contract could prevent further deposits. | ['onlyAdmin'] |
+| StakingManager | pauseContract | Marks the contract as paused. This has no effect in practice, as no function is sensitive to the pause flag. | [PROTOCOL_PAUSER](#roleregistry-2) |
+| StakingManager | unPauseContract | Marks the contract as unpaused. | [PROTOCOL_UNPAUSER](#roleregistry-2) |
 | StakingManager | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how deposits happen. | EtherFiTimelock (3 Days) |
 | StakingManager | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) | EtherFiTimelock (3 Days) |
-| StakingManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators upgrading the `EtherFiNode` contract. | EtherFiTimelock (3 Days) |
-| StakingManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock (3 Days) |
+| StakingManager | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address but would not make the contract immutable, nor impact its access control logic, as those permissions are handled in the `RoleRegistry (2)`. | EtherFiTimelock (3 Days) |
+| StakingManager | transferOwnership | Transfers ownership of contract to a specified address. The new owner will not have any specific privileges in the current implementation, as the access control is handled in the `RoleRegistry (2)`. | EtherFiTimelock (3 Days) |
 
 | AuctionManager | createBid | Create bids to run a given amount of validators. The Node Operator has to be whitelisted but the whitelist may be disabled. The Node Operator needs to pay the entire bid amount upfront, this amount will be collected if the validator is assigned to the bid ot the Node Operator can cancel an active bid to get a full refund. | NodeOperatorManager(Whitelisted Node Operator) |
 | AuctionManager | updateSelectedBidInformation | Marks a bid as selected. This is called by the `StakingManager` when a bid is chosen. It can then no longer be cancelled. | StakingManager |
@@ -466,24 +457,24 @@ single batch when creating validator management tasks. | [ETHERFI_ORACLE_EXECUTO
 | Liquifier | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how it hange liquid staking tokens. This could be used to mint unlimited amounts of `eETH`, through the `LiquidityPool`. | EtherFiTimelock (3 Days) |
 | Liquifier | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
 
-| EtherFiRestaking | stEthRequestWithdrawal | Starts a request to withdraw `stETH` held by this contract into `ETH` using Lido's withdrawal queue. | [ admins ] |
-| EtherFiRestaking | stEthClaimWithdrawals | Claims the specified withdrawals from Lido's withdrawal queue. This is meant to be called once the withdrawals reached the end of the queue and the `ETH` can be claimed by this contract. | [ admins ] |
-| EtherFiRestaking | withdrawEther | Send this contract's entire `ETH` balance to the `LiquidityPool` contract. | [ admins ] |
-| EtherFiRestaking | setRewardsClaimer | Sets the claimer of the restaking rewards throught Eigenlayer's `RewardsCoordinator`. | [] |
-| EtherFiRestaking | delegateTo | Delegates this contract's Eigenlayer stake to an AVS operator. In current Eigenlayer implementation the stake can only be delegated to one operator at a time. **TODO** what are the implications | [] |
-| EtherFiRestaking | undelegate | Undelegates the current Eigenlayer stake from the AVS operator it was previously delegated to. | [] |
+| EtherFiRestaker | stEthRequestWithdrawal | Starts a request to withdraw `stETH` held by this contract into `ETH` using Lido's withdrawal queue. | [ admins ] |
+| EtherFiRestaker | stEthClaimWithdrawals | Claims the specified withdrawals from Lido's withdrawal queue. This is meant to be called once the withdrawals reached the end of the queue and the `ETH` can be claimed by this contract. | [ admins ] |
+| EtherFiRestaker | withdrawEther | Send this contract's entire `ETH` balance to the `LiquidityPool` contract. | [ admins ] |
+| EtherFiRestaker | setRewardsClaimer | Sets the claimer of the restaking rewards throught Eigenlayer's `RewardsCoordinator`. | [] |
+| EtherFiRestaker | delegateTo | Delegates this contract's Eigenlayer stake to an AVS operator. In current Eigenlayer implementation the stake can only be delegated to one operator at a time. **TODO** what are the implications | [] |
+| EtherFiRestaker | undelegate | Undelegates the current Eigenlayer stake from the AVS operator it was previously delegated to. | [] |
 | EtherFiRestaking | depositIntoStrategy | Deposits `stETH` (or the contract's token) into an Eigenlayer strategy defined at the time of contract deployment. The caller only specifies the token and amount to deposit. **TODO** what are the implications | [] |
-| EtherFiRestaking | queueWithdrawals | Queues a withdrawal of a given amount of a token from the Eigenlayer restaking strategy. | [] |
-| EtherFiRestaking | queueWithdrawalsParams | Alternative function to queue a withdrawal from the Eigenlayer restaking strategy. | [] |
-| EtherFiRestaking | completeQueuedWithdrawals | Completes the given list of withdrawals such that the current contract receives the withdrawn tokens. The caller must match the enacter of the withdrawals. | [] |
-| EtherFiRestaking | updateAdmin | ... | [] |
-| EtherFiRestaking | updatePauser | Updates the list of users allowed to pause the contract. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
-| EtherFiRestaking | pauseContract | Pauses the contract by setting the pause flag to true. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
-| EtherFiRestaking | unPauseContract | Unpauses the contract. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
-| EtherFiRestaking | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators. Admin functions would remain accessible to the current admins. | EtherFiTimelock (3 Days) |
-| EtherFiRestaking | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock (3 Days) |
-| EtherFiRestaking | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how it interacts with the Eigenlayer restaking services. This could also reassign the ownership of all funds in the contract, including its Eigenlayer stake. | EtherFiTimelock (3 Days) |
-| EtherFiRestaking | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
+| EtherFiRestaker | queueWithdrawals | Queues a withdrawal of a given amount of a token from the Eigenlayer restaking strategy. | [] |
+| EtherFiRestaker | queueWithdrawalsParams | Alternative function to queue a withdrawal from the Eigenlayer restaking strategy. | [] |
+| EtherFiRestaker | completeQueuedWithdrawals | Completes the given list of withdrawals such that the current contract receives the withdrawn tokens. The caller must match the enacter of the withdrawals. | [] |
+| EtherFiRestaker | updateAdmin | ... | [] |
+| EtherFiRestaker | updatePauser | Updates the list of users allowed to pause the contract. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
+| EtherFiRestaker | pauseContract | Pauses the contract by setting the pause flag to true. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
+| EtherFiRestaker | unPauseContract | Unpauses the contract. The pause functionality is not used and pausing the contract does not influence any of it functionalities. | [] |
+| EtherFiRestaker | renounceOwnership | Renounces ownership of the contract. This would set the owner to the zero address and make the contract immutable. This would also prevent revoking admin rights of the current administrators. Admin functions would remain accessible to the current admins. | EtherFiTimelock (3 Days) |
+| EtherFiRestaker | transferOwnership | Transfers ownership of contract to a specified address. The new owner will have the right to upgrade the contract, potentially changing its entire logic and grant admin privileges to other addresses. | EtherFiTimelock (3 Days) |
+| EtherFiRestaker | upgradeTo | Upgrade the implementation contract. This effectively changes the logic of the contract and how it interacts with the Eigenlayer restaking services. This could also reassign the ownership of all funds in the contract, including its Eigenlayer stake. | EtherFiTimelock (3 Days) |
+| EtherFiRestaker | upgradeToAndCall | Similar to _upgradeTo_, with an additional call to the newly assigned logic. | EtherFiTimelock (3 Days) |
 
 | EtherFiTimelock (3 Days) | schedule | ... | ['onlyRole'] |
 | EtherFiTimelock (3 Days) | scheduleBatch | ... | ['onlyRole'] |
