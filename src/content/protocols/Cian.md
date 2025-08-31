@@ -91,7 +91,7 @@ New table with all the multisigs
 
 | Name          | Account | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| Undeclared Multisig | [0x261090afE1E7305474F4e3eEFCAca9964eBffFf5](https://etherscan.io/address/0x261090afE1E7305474F4e3eEFCAca9964eBffFf5)  | Multisig | ✅          | ❌              | ❌                | ✅             |
+| Owner YlstETH (undeclared) | [0x261090afE1E7305474F4e3eEFCAca9964eBffFf5](https://etherscan.io/address/0x261090afE1E7305474F4e3eEFCAca9964eBffFf5)  | Multisig | ❌          | ✅              | ❌                | ❌             |
 
 # Technical Analysis
 
