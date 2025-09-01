@@ -36,6 +36,9 @@ const StageRequirementSection = ({
   const unfixedCount = normalizedRequirements.filter(req => req.status === 'unfixed').length;
   const totalCount = normalizedRequirements.length;
 
+  // Check if current stage is "O" (Others)
+  const isCurrentStageO = currentStage === 'O';
+  
   // Get numeric stage for infrastructure reviews
   const numericCurrentStage = isInfrastructure && typeof currentStage === 'string' 
     ? parseInt(currentStage.slice(1)) 
@@ -56,7 +59,23 @@ const StageRequirementSection = ({
 
   // Determine colors and status
   let statusColor, statusIcon, statusText;
-  if (typeof numericCurrentStage === 'number' && numericCurrentStage >= stageNumber) {
+  
+  if (isCurrentStageO && stageNumber === 0) {
+    // For stage "O", Stage 0 should show as the next target to achieve
+    statusColor = 'text-red-500';
+    statusIcon = '❌';
+    if (hasRequirements) {
+      if (unfixedCount > 0 && fixedCount > 0) {
+        statusText = `: ${unfixedCount} of ${totalCount} issue${totalCount !== 1 ? 's' : ''} need${unfixedCount === 1 ? 's' : ''} fixing`;
+      } else if (unfixedCount > 0) {
+        statusText = `: ${unfixedCount} issue${unfixedCount !== 1 ? 's' : ''} need${unfixedCount === 1 ? 's' : ''} fixing`;
+      } else {
+        statusText = `: ${totalCount} issue${totalCount !== 1 ? 's' : ''} resolved`;
+      }
+    } else {
+      statusText = '';
+    }
+  } else if (typeof numericCurrentStage === 'number' && numericCurrentStage >= stageNumber) {
     // Stage is completed (current stage >= this stage number)
     statusColor = 'text-green-500';
     statusIcon = '✅';
@@ -126,11 +145,14 @@ export function StageRequirements({ stage, stage_requirements, className }: Stag
   // Check if it's an infrastructure review
   const isInfrastructure = typeof stage === 'string' && stage.startsWith('I');
   
+  // Check if it's stage "O" (Others)
+  const isStageO = stage === 'O';
+  
   // Get numeric stage for infrastructure reviews
   const numericStage = isInfrastructure ? parseInt(stage.slice(1)) : stage;
   
-  // Show for stages 0, 1, or 2 (including I0, I1, I2)
-  if (numericStage !== 0 && numericStage !== 1 && numericStage !== 2) {
+  // Show for stages 0, 1, or 2 (including I0, I1, I2) or stage "O"
+  if (!isStageO && numericStage !== 0 && numericStage !== 1 && numericStage !== 2) {
     return null;
   }
 
@@ -146,7 +168,23 @@ export function StageRequirements({ stage, stage_requirements, className }: Stag
     return []; // For other stages
   };
 
-  const defaultOpenStage = getDefaultOpenStage(numericStage);
+  const defaultOpenStage = typeof numericStage === 'number' ? getDefaultOpenStage(numericStage) : [];
+
+  // For stage "O", only show Stage 0 requirements
+  if (isStageO) {
+    return (
+      <div className={className}>
+        <Accordion type="multiple" defaultValue={["stage-0"]}>
+          <StageRequirementSection 
+            stageNumber={0} 
+            currentStage={stage} 
+            requirements={stage0Requirements}
+            isInfrastructure={isInfrastructure}
+          />
+        </Accordion>
+      </div>
+    );
+  }
 
   return (
     <div className={className}>
