@@ -24,6 +24,10 @@ stage_requirements:
         status: "fixed",
       },
       {
+        text: "Dependency with a High centralization score is mitigated",
+        status: "fixed",
+      },
+      {
         text: "Frontend backups or self-hosting option exists",
         status: "unfixed",
       },
@@ -35,10 +39,9 @@ stage_requirements:
       },
       {
         text: "Dependencies with High or Medium centralization score and no mitigations.",
-        status: "unfixed",
+        status: "fixed",
       },
-      { text: "Contracts are immutable.", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" },
+      { text: "Alternative third-party frontends exist", status: "unfixed" },
     ],
   ]
 ---
@@ -77,13 +80,13 @@ The [Dependencies](#dependencies) section goes into more detail about risks pote
 
 ### Upgrading Contracts
 
-Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days. The upgrade can also be executed immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
+Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days. The upgrade can also be executed immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
 
 For the `bEIGEN` token there is a dedicated parallel upgrading process, which is also controlled by the [Community Council (9/13)](#security-council) signer and a dedicated [bEIGEN TimelockController](#security-council) with an _Exit Window_ of 24 days.
 
 ### Pausing Strategy Contracts
 
-Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/learn-more#security-council-requirements).
+Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
 
 ### Rewards
 
@@ -91,7 +94,7 @@ The `RewardsUpdater` can immediately remove a root and post a new root, claiming
 
 ### Overall Exit Window
 
-The worst _Exit Window_ score of the different vectors is _High_. Immediate upgrade of contracts can only be executed by the [Community Council (9/13)](#security-council) signer, thus the _Exit Window_ score is _High_. However, the impact on the total score is _Medium_ (_Stage 1_), as the [Community Council (9/13)](#security-council) satisfies the [Security Council Requirements](/learn-more#security-council-requirements). Multisigs that are not compliant with the [Security Council Requirements](/learn-more#security-council-requirements) can initiate upgrades as well, but are protected by an _Exit Window_ of more than 7 days and can be overruled by the [Community Council (9/13)](#security-council).
+The worst _Exit Window_ score of the different vectors is _High_. Immediate upgrade of contracts can only be executed by the [Community Council (9/13)](#security-council) signer, thus the _Exit Window_ score is _High_. However, the impact on the total score is _Medium_ (_Stage 1_), as the [Community Council (9/13)](#security-council) satisfies the [Security Council Requirements](/framework#security-council-requirements). Multisigs that are not compliant with the [Security Council Requirements](/framework#security-council-requirements) can initiate upgrades as well, but are protected by an _Exit Window_ of more than 7 days and can be overruled by the [Community Council (9/13)](#security-council).
 
 > Exit Window score: High
 
@@ -307,7 +310,7 @@ The 3 out of 5 multisig has 2 signers from the Eigen Foundation and 3 external s
 
 The [Community Multisig (9/13)](#security-council) can execute calls through the [Executor Multisig (1/2)](#security-council) and [bEIGEN Executor Multisig (1/2)](#security-council) without co-signer. This permission is designed for emergency situations and key compromises. This permission could technically be misused to steal funds from the Eigenlayer protocol with immediate effect (no exit window for the [Community Multisig (9/13)](#security-council)), therefore distribution of signers across the ecosystem with long term alignment is important.
 
-The [Community Multisig (9/13)](#security-council) satisfies our [security council requirements](/learn-more#security-council-requirements).
+The [Community Multisig (9/13)](#security-council) satisfies our [security council requirements](/framework#security-council-requirements).
 
 Signers of the [Community Multisig (9/13)](#security-council) are
 
