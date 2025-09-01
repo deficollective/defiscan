@@ -64,7 +64,7 @@ Contracts which control user funds, the accounting of delegation and slashing ar
 
 The withdrawal process can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds, the [Community Council (9/13)](#security-council) however can resume the pause immediately if misused.
 
-Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by the `RewardsUpdater` role owner, which computes eligibility for each _(Re)Staker_ and _Operator_ based on their stake and _AVS_ rewards specification. If the account that holds the `RewardsUpdater` role is compromised, the rewards can be distributed to the wrong accounts, which leads to _loss of unclaimed yield_.
+Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by an account with the role `RewardsUpdater` , which computes eligibility for each _(Re)Staker_ and _Operator_ based on their stake and _AVS_ rewards specification. If an account with that role is compromised, the rewards can be distributed to the wrong addresses, which leads to _loss of unclaimed yield_.
 
 > Upgradeability score: High
 
