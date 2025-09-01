@@ -102,7 +102,7 @@ The worst _Exit Window_ score of the different vectors is _High_. Immediate upgr
 
 There are no other frontends available for _Stakers_ and _Restakers_ to delegate and initiate withdrawal. The Eigenlayer protocol does not provide a frontend for _AVSs_ to manage their contracts as they can vary on a case by case basis.
 
-For _Operators_ a CLI is available to interact with the Eigenlayer protocol, for configuration allocations, registering to _Operator Sets_ and configuration of rewards. We argue that the option of a CLI is like self hosting (_Medium_), because it's local, but not low risk, because if the CLI has a bug/vulnerability, as there is no diversity in terms of execution of the _Operator_ actions.
+For _Operators_ a CLI is available to interact with the Eigenlayer protocol, for configuration allocations, registering to _Operator Sets_ and configuration of rewards. We argue that the option of a CLI is comparable to self hosting (_Medium_), because it's local, but not low risk, because if the CLI has a bug/vulnerability, as there is no diversity in terms of execution of the _Operator_ actions.
 
 > Accessibility score: High
 
