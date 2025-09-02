@@ -29,6 +29,8 @@ An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on t
 
 New validators are created in two phases when enough `ETH` has been depositted. First, any 1-of-6 signers of the [ValidatorSpawner multisig](#security-council) can create validators and deposit 1 `ETH` to them using user depositted `ETH` in the `LiquidityPool`. The oracle then confirms the validity of the withdrawal credential and triggers the deposit of the remaining `ETH` (> 31 `ETH` per validator). The initial deposit is at risk of frontrunning and collusion between the signer and _Node Operator_, this is why deposits have to be confirmed by the oracle. In case of an attack, this would allow the signer and _Node Operator_ to steal the 1 `ETH` depositted for each validator. However, this is of limitted impact given that this concerns a minority of protocol funds.
 
+Restaking rewards are distributed either through the [KING Protocol](https://kingprotocol.org/) or EtherFi's own distributor contracts. Both solutions requires a multisig to post a merkle root onchain. The KING Protocol's root can be updated at any time by their [multisig](#security-council), which could be used to revoke distributed rewards and lead to the _loss of unclaimed yield_.
+
 Contracts may also be paused without delay to prevent further deposits and withdrawals. Different multisigs may resume the contracts. In addition to that, user funds can be trapped in ether.fans NFTs with the possibility of adding withdrawal fees of up to 65 `ETH` per withdrawal.
 
 > Upgradeability score: High
@@ -37,19 +39,18 @@ Contracts may also be paused without delay to prevent further deposits and withd
 
 ### Ethereum staking
 
-EtherFi relies on _Node Operators_ to operate Ethereum validators. _Node Operators_ are whitelisted by EtherFi and users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing. Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds are sent to the dedicated Eigenlayer `Eigenpod` contract. The `Eigenpod` contracts implement EIP7002 which enables withdrawals to be triggered from the contracts directly. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
+EtherFi relies on _Node Operators_ to operate Ethereum validators. _Node Operators_ are whitelisted by EtherFi and users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing, but they do not control the withdrawal address where the withdrawn funds are sent to. The withdrawal contract implements EIP7002 which allows it to trigger withdrawals onchain. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
 
-According to [rated](https://explorer.rated.network/o/Ether.Fi?network=mainnet&timeWindow=1d&viewBy=operator&page=1&pageSize=30&idType=pool) EtherFi has 21 different _Node Operators_ which manage the 2.5M `ETH` staked. It is worth noting that providers of Distributed Validator Technology (DVT) such as SSV and Obol count as 1 operator each, but are in fact operating validators in a distributed setup, by many different independent actors. The `ETH` is not equally distributed among operators, with the biggest operator handling 177'000 `ETH`.
-
-With the implementation of EIP7002 and the current diversification of node operators discussed in the [dependencies](#dependencies) section, EtherFi would score a _Low_ Autonomy risk score for its dependency on ethereum validator _Node Operators_.
+With the implementation of EIP7002 and the current diversification of node operators discussed in the [dependencies](#dependencies) section, EtherFi would score a _Low_ Autonomy risk score for its dependency on _Node Operators_.
 
 ### Restaking on Eigenlayer
 
-The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). For the purpose of this report, we note that _AVSs_ could lead to a complete loss of the _Operator_'s delegated staked `ETH` through slashing, which would lead to the _loss of user funds_. On the other hands, _Operators_ could trigger slashing through misbehaviors and bad performances, or operate for malicious _AVSs_.
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. Malicious _AVSs_ or _Operators_ could lead to the _loss of user funds_ or _loss of unclaimed yied_, as discussed in the [dependencies](#dependencies) section.
 
-[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest risk concentrations have 17.5% and 9.9% respectively."
+We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). This impacts EtherFi's own score and limits it to a high centralization risk for the _Autonomy_ dimension.
 
-Other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST.
+Finally, other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST. The deposits are currently limited to `stETH` with a cap of 850'000 ETH. Since this represents less
+than 35% of EtherFi's TVL, this grants EtherFi a medium dependency on Lido.
 
 > Autonomy score: High
 
@@ -77,8 +78,9 @@ The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upg
 
 # Reviewer's Notes
 
-- The support for L2 ETH through the Liquifier
-- EtherFiNode's proxy contract is unverified.
+[Starting October 15th](https://etherfi.gitbook.io/etherfi/king-protocol-formerly-lrt), restaking rewards will be distributed in the form of KING tokens using the King protocol. The older distribution contracts are no longer listed in EtherFi's documentation, and were not considered as part of the review.
+
+This review reflects the state of EtherFi to the date of publication. We note that EtherFi is a fast evolving protocol and [implementation addresses](#contracts) should be verified to detect any upgrades since the last changes.
 
 # Protocol Analysis
 
@@ -109,7 +111,23 @@ Technology (DVT)_. The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 wi
 
 # Dependencies
 
-Go into more detail of the oracle, bridge, or other dependency the defi protocol is using
+## Ethereum staking
+
+EtherFi relies on _Node Operators_ to operate Ethereum validators. _Node Operators_ are whitelisted by EtherFi and users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing.
+
+According to [rated](https://explorer.rated.network/o/Ether.Fi?network=mainnet&timeWindow=1d&viewBy=operator&page=1&pageSize=30&idType=pool) EtherFi has 21 different _Node Operators_ which manage the 2.5M `ETH` staked. It is worth noting that providers of Distributed Validator Technology (DVT) such as SSV and Obol count as 1 operator each, but are in fact operating validators in a distributed setup, by many different independent actors. The `ETH` is not equally distributed among operators, with the biggest operator handling 177'000 `ETH`.
+
+Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds are sent to the dedicated Eigenlayer `Eigenpod` contract. The `Eigenpod` contracts implement EIP7002 which enables withdrawals to be triggered from the contracts directly. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
+
+## Eigenlayer
+
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). For the purpose of this report, we note that _AVSs_ could lead to a complete loss of the _Operator_'s delegated staked `ETH` through slashing, which would lead to the _loss of user funds_. On the other hands, _Operators_ could trigger slashing through misbehaviors and bad performances, or operate for malicious _AVSs_.
+
+[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest risk concentrations have 17.5% and 9.9% respectively."
+
+Each EtherFi's Ethereum validator has its withdrawal address set to a dedicated `EigenPod` contract. The `EigenPod` contracts are upgradeable by an [Eigenlayer multisig] which meets the security council requirements. Upgrading this contract could allow the multisig to trigger withdrawals and redirect the funds to an arbitrary address, leading to the _loss of user funds_.
+
+We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). This impacts EtherFi's own score and limits it to a high centralization risk for the _Autonomy_ dimension.
 
 # Governance
 
@@ -121,6 +139,7 @@ EtherFi has no strict onchain governance. The governance token, `ETHFI`, can be 
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | EtherFi Undeclared Multisig #1               | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
 | EtherFi Undeclared Multisig #2               | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
+| KING Undeclared Multisig #3                  | [0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52](https://etherscan.io/address/0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52) | Multisig 3/7 | ✅          | ❌              | ❌                | ❌             |
 | EtherFi Undeclared ValidatorSpawner          | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | Multisig 1/6 | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (Pauser)                     | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (EtherFi Deployer)           | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          | ❌          | ❌              | ❌                | ❌             |
@@ -480,11 +499,11 @@ UUPSProxy EtherFiRewardsRouter (ENS = "Fee Recipient"), "0x73f7b1184B5cD361cC0f7
 | CumulativeMerkleDrop | rollbackDefaultAdminDelay | ... | ['onlyRole'] |
 | CumulativeMerkleDrop | grantRole | ... | ['getRoleAdmin', 'onlyRole'] |
 | CumulativeMerkleDrop | revokeRole | ... | ['getRoleAdmin', 'onlyRole'] |
+| CumulativeMerkleDrop | proxiableUUID | ... | ['notDelegated'] |
 | CumulativeMerkleDrop | upgradeToAndCall | ... | ['onlyProxy', 'onlyRole'] |
-| CumulativeMerkleDrop | initializeLayerZero | ... | ['onlyInitializing', 'onlyRole', 'reinitializer'] |
 | CumulativeMerkleDrop | setMerkleRoot | ... | ['onlyRole'] |
 | CumulativeMerkleDrop | claim | ... | ['nonReentrant', 'whenNotPaused'] |
-| CumulativeMerkleDrop | pause | ... | ['onlyRole', 'whenNotPaused'] |
+| CumulativeMerkleDrop | pause | ... | EtherFi Deployer (EOA), EtherFi Pauser (EOA) |
 | CumulativeMerkleDrop | unpause | ... | ['onlyRole', 'whenPaused'] |
 | CumulativeMerkleDrop | addChain | ... | ['onlyOwner', 'onlyRole'] |
 | CumulativeMerkleDrop | removeChain | ... | ['onlyOwner', 'onlyRole'] |
@@ -498,6 +517,7 @@ UUPSProxy EtherFiRewardsRouter (ENS = "Fee Recipient"), "0x73f7b1184B5cD361cC0f7
 | CumulativeMerkleDrop | setUserChainSwitchingEnabled | ... | ['onlyRole'] |
 | CumulativeMerkleDrop | setBatchMessageGasLimit | ... | ['onlyRole'] |
 | CumulativeMerkleDrop | getExecutorReceiveOptions | ... | ['onlyType3'] |
+| CumulativeMerkleDrop | \_authorizeUpgrade | ... | ['onlyRole'] |
 | CumulativeMerkleDrop | sweepETH | ... | ['onlyRole'] |
 
 | RoleRegistry | transferOwnership | ... | 0x2aCA71020De61bb532008049e1Bd41E451aE8AdC |
