@@ -10,7 +10,7 @@ github:
 defillama_slug: ["uniswap-v3"]
 chain: "Base"
 stage: 1
-reasons: ["Unverified Contracts"]
+reasons: []
 risks: ["M", "L", "L", "L", "L"]
 author: ["mmilien", "CookingCryptos"]
 submission_date: "2025-01-16"
