@@ -82,15 +82,15 @@ The [Dependencies](#dependencies) section goes into more detail about risks pote
 
 Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) which can execute immediately and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days before executing a call on the [Executor Multisig (1/2)](#security-council).
 
-For the `bEIGEN` token there is a dedicated parallel upgrading process, which is also controlled by the [Community Council (9/13)](#security-council) signer and a dedicated [bEIGEN TimelockController](#security-council) with an _Exit Window_ of 24 days.
+For the `bEIGEN` token (the backing token that is wrapped into `EIGEN` and used to control the `EIGEN` supply) there is a dedicated parallel upgrading process, which is also controlled by the [Community Council (9/13)](#security-council) signer and a dedicated [bEIGEN TimelockController](#security-council) with an _Exit Window_ of 24 days.
 
 ### Pausing Strategy Contracts
 
-Single strategies can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
+Deposit contracts of economic stake (Strategies and EigenPods) can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
 
 ### Rewards
 
-The `RewardsUpdater` can immediately remove a root and post a new root, claiming all deposited funds by _AVSs_ instead of distributing them to _Operators_ and _Stakers_. Immediate _loss of unclaimed yield_ leads to _Medium_ _Exit Window_ score.
+The `RewardsUpdater` can immediately remove a root that holds the information of the weekly rewards and post a new root, claiming all deposited funds by _AVSs_ instead of distributing them to _Operators_ and _Stakers_. Immediate _loss of unclaimed yield_ leads to _Medium_ _Exit Window_ score.
 
 ### Overall Exit Window
 
@@ -250,9 +250,11 @@ The `PauserRegistry` contract informs all pausable contracts, who can pause, and
 
 ### EIGEN and bEIGEN
 
-`EIGEN` tokens are created by supplying and wrapping `BackingEigen` tokens into the `EIGEN` token contract through the `wrap` function.
+`bEIGEN` is used to control the supply of `EIGEN` and will serve in the future as intersubjective work token that can be slashed via forking, while `EIGEN` remains slashing unaware to maintain DeFi compatibility (learn more [here](https://blog.eigencloud.xyz/eigen/)).
 
-The `BackingEigen` token contract (`bEIGEN`) is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of `bEIGEN` can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into `EIGEN` tokens.
+`EIGEN` tokens are created by supplying and wrapping `BackingEigen` (or denoted as `bEIGEN`) tokens into the `EIGEN` token contract through the `wrap` function.
+
+The `BackingEigen` token contract is upgradeable, which means that the permissions to upgrade the token contract can have an impact on user funds, such as dilution or change of ownership. New minters of `bEIGEN` can be appointed with the `setIsMinter` function, which could lead to malicious minters mis-using this minting right to wrap it into `EIGEN` tokens.
 
 Currently `bEIGEN` is minted by the Eigenlayer protocol through the `TokenHopper` contract, which mints `bEIGEN` tokens, wraps them into `EIGEN` tokens and deposits them into the `RewardsCoordinator` contract through by calling `createRewardsForAllEarners`. This inflation serves as Programmatic Incentives (PI).
 
