@@ -14,7 +14,7 @@ import { protocols, reviews } from "#site/content";
 import { Project, Review, Stage } from "@/lib/types";
 import { loadReviews } from "@/lib/data/utils";
 
-type ProjectWithReview = Omit<Project, 'tvl'> & Review;
+type ProjectWithReview = Omit<Project, "tvl"> & Review;
 
 interface VisualisedData {
   key: string;
@@ -198,9 +198,9 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const projects = await loadReviews();
+      const { protocols, totalTvl } = await loadReviews();
 
-      const merged = projects
+      const merged = protocols
         .map((project) => {
           const { reviews, ...rest } = project;
           return reviews.map((review) => ({ ...rest, ...review, reviews: [] }));
@@ -208,9 +208,10 @@ export const PieChartComponent: React.FC<PieChartProps> = ({
         .flat();
 
       // Filter out infrastructure stages (I0, I1, I2) when grouping by stage
-      const filteredMerged = groupByKey === "stage" 
-        ? merged.filter((item) => !item.stage?.toString().startsWith("I"))
-        : merged;
+      const filteredMerged =
+        groupByKey === "stage"
+          ? merged.filter((item) => !item.stage?.toString().startsWith("I"))
+          : merged;
 
       const groupedBy = groupBy(filteredMerged, groupByKey);
       const aggregated = aggregateByKey(groupedBy, operation);
