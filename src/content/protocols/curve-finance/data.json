@@ -1,0 +1,10 @@
+{
+  "id": "curve-finance",
+  "protocol": "Curve Finance",
+  "website": "https://curve.finance/",
+  "defillama_slug": ["curve-dex", "crvusd", "curve-llamalend"],
+  "socials": {
+    "x": "https://x.com/CurveFinance"
+  },
+  "github": ["https://github.com/CurveFi"]
+}
