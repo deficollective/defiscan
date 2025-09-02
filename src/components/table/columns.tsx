@@ -280,7 +280,7 @@ export const createColumns = (
     header: ({ column }) => {
       return (
         <Button
-          className="p-0 text-xs md:text-sm justify-start md:w-full"
+          className="p-0 text-xs md:text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >

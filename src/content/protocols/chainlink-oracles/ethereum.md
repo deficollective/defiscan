@@ -3,7 +3,7 @@ chain: "Ethereum"
 type: "Oracles"
 logo: "/images/infrastructure-logos/chainlink-logo.png"
 stage: "I0"
-protocols: ["Morpho", "Aave v3", "Compound V3", "Compound V2", "Liquity"]
+protocols: ["Morpho", "Aave v3", "Compound V3", "Liquity"]
 reasons: []
 risks: ["L", "H", "L", "M", "L"]
 author: ["mmilien_"]
