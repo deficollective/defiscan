@@ -11,7 +11,7 @@ update_date: "1970-01-01"
 
 # Summary
 
-This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed to increase yield on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications. In addition to this, the protocol introduced Ether.fans NFTs which stake `ETH` exclusively with _Node Operators_ that use _Distributed Validators Technology (DVT)_.
+This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed to increase yield on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications. In addition to this, the protocol introduced _Ether.fans_ NFTs which stake `ETH` exclusively with _Node Operators_ that use _Distributed Validators Technology (DVT)_.
 
 # Ratings
 
@@ -31,7 +31,7 @@ New validators are created in two phases when enough `ETH` has been depositted. 
 
 Restaking rewards are distributed either through the [KING Protocol](https://kingprotocol.org/) or EtherFi's own distributor contracts. Both solutions requires a multisig to post a merkle root onchain. The KING Protocol's root can be updated at any time by their [multisig](#security-council), which could be used to revoke distributed rewards and lead to the _loss of unclaimed yield_.
 
-Contracts may also be paused without delay to prevent further deposits and withdrawals. Different multisigs may resume the contracts. In addition to that, user funds can be trapped in ether.fans NFTs with the possibility of adding withdrawal fees of up to 65 `ETH` per withdrawal.
+Contracts may also be paused without delay to prevent further deposits and withdrawals. Different multisigs may resume the contracts. In addition to that, user funds can be trapped in _Ether.fans_ NFTs with the possibility of adding withdrawal fees of up to 65 `ETH` per withdrawal.
 
 > Upgradeability score: High
 
@@ -60,13 +60,13 @@ All contract upgrades are currently subject to a delay of 3 days. Day-to-day ope
 
 The protocol can be paused by an [undeclared `EOA`](#security-council), preventing both deposits and withdrawals without delay. The protocol can be resumed by a multisig or the `EtherFiAdmin` contract. Pausing the protocol can be modular, with non-facing user functions remaining accessible.
 
-Ether.fan fees can be changed without delay and with up to 65 `ETH` of fees per operation.
+_Ether.fan_ fees can be changed without delay and with up to 65 `ETH` of fees per operation.
 
 > Exit Window score: High
 
 ## Accessibility
 
-The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eETH` and [ether.fan](https://ether.fan/) fans. Both frontends are not open-source and no alternative frontends or self-hosting versions are available.
+The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eETH` and [ether.fan](https://ether.fan/) for _Ether.fans_. Neither frontends are open-source and no alternative frontends or self-hosting versions are available.
 
 > Accessibility score: High
 
@@ -81,6 +81,8 @@ The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upg
 [Starting October 15th](https://etherfi.gitbook.io/etherfi/king-protocol-formerly-lrt), restaking rewards will be distributed in the form of KING tokens using the King protocol. The older distribution contracts are no longer listed in EtherFi's documentation, and were not considered as part of the review.
 
 This review reflects the state of EtherFi to the date of publication. We note that EtherFi is a fast evolving protocol and [implementation addresses](#contracts) should be verified to detect any upgrades since the last changes.
+
+As part of their ongoing updates, the access control of most EtherFi contracts is being updated to use the `RoleRegistry (2)` contract for better traceability and auditability. However, some contracts, including the `MemershipManager` and `MembershipNFTs` used for _Ether.fans_ are not yet following this standard and it is not currently possible to audit the holders of the _admin_ role. As it is the case for other operative functions, we assume that those roles are partly granted to undeclared Externally Owned Accounts (EOAs).
 
 # Protocol Analysis
 
@@ -106,8 +108,7 @@ When `EtherFiNode` contracts are created, they deploy automatically a correspond
 
 ### Ether.fan NFTs
 
-Ether.fans are NFTs minted with `ETH` that is staked exclusively with solo stakers using _Distributed Validator
-Technology (DVT)_. The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 with each NFT's balance being set strictly to 1. The issuance is managed by `MembershipManager`. When minted, Fans are given a random set of traits that are purely visual (gender, background, colors). These traits are stored only in offchain metadata, which can be changed by the contract administrators. The NFTs are associated with a flair depending on how much ETH is staked with them and a tier (bronze to platinum) depending on the time that has passed since they were minted. While depositing `ETH` is (currently) free of fees, depositing more than 20% in a period one month can impact the membership tier. Withdrawing `ETH` also impacts the membership tier, and withdrawing more than 50% of the all time value of the NFT will automatically burn it (withdraw the full amount). Minting is currently blocked as the limit of 10'000 mints has been reached. However, the limit can be increased by any admin of the contract.
+_Ether.fans_ are NFTs minted with `ETH` that is staked exclusively with solo stakers using _Distributed Validator Technology (DVT)_. The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 with each NFT's balance being set strictly to 1. The issuance is managed by `MembershipManager`. When minted, Fans are given a random set of traits that are purely visual (gender, background, colors). These traits are stored only in offchain metadata, which can be changed by the contract administrators. The NFTs are associated with a flair depending on how much ETH is staked with them and a tier (bronze to platinum) depending on the time that has passed since they were minted. While depositing `ETH` is (currently) free of fees, depositing more than 20% in a period one month can impact the membership tier. Withdrawing `ETH` also impacts the membership tier, and withdrawing more than 50% of the all time value of the NFT will automatically burn it (withdraw the full amount). Minting is currently blocked as the limit of 10'000 mints has been reached. However, the limit can be increased by any admin of the contract.
 
 # Dependencies
 
