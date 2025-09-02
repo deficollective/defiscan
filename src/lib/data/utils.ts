@@ -7,7 +7,19 @@ export async function loadReviews() {
   const apiData = await defiLlama.getProtocolsWithCache();
 
   const totalTvl = apiData.reduce((sum, project) => {
-    return sum + project.tvl;
+    if (
+      project.category === "Liquid Staking" ||
+      project.category === "Restaking" ||
+      project.category === "Yield" ||
+      project.category === "CDP" ||
+      project.category === "Dexs" ||
+      project.category === "Yield Lottery" ||
+      project.category === "Basis Trading" ||
+      project.category === "Lending"
+    ) {
+      return sum + project.tvl;
+    }
+    return sum;
   }, 0);
 
   const protocols = data.protocols.map((protocol) => {
