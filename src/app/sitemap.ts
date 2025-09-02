@@ -63,16 +63,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic protocol pages
   try {
-    const reviews = await loadReviews();
+    const { protocols, totalTvl } = await loadReviews();
 
-    const protocolPages: MetadataRoute.Sitemap = reviews.flatMap((project) => {
-      return project.reviews.map((review) => ({
-        url: `${baseUrl}/protocols/${project.protocol}/${review.chain}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-      }));
-    });
+    const protocolPages: MetadataRoute.Sitemap = protocols.flatMap(
+      (project) => {
+        return project.reviews.map((review) => ({
+          url: `${baseUrl}/protocols/${project.protocol}/${review.chain}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.8,
+        }));
+      }
+    );
 
     // Blog post pages
     const blogPages: MetadataRoute.Sitemap = posts
@@ -85,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }));
 
     // Author pages
-    const authorPages: MetadataRoute.Sitemap = authors.map((author) => ({
+    const authorPages: MetadataRoute.Sitemap = authors.map((author: any) => ({
       url: `${baseUrl}/about/${author.slugAsParams}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
