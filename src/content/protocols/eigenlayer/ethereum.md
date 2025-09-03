@@ -163,7 +163,7 @@ Repositories that help _AVSs_ to implement their contracts are:
 
 ### Strategies
 
-Each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract, with exception of restaked ETH that remains on the Beacon Chain (Consensus Layer of Ethereum).
+Each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract, with exception of restaked `ETH` that remains on the Beacon Chain (Consensus Layer of Ethereum).
 
 The three types of contracts that are used are:
 
