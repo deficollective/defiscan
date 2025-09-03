@@ -167,7 +167,7 @@ Each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a
 
 The three types of contracts that are used are:
 
-1. **EigenPods**: These contracts are directly connected to the Beacon Chain and they are responsible for managing the deposit/withdrawal of Beacon Chain deposits. The contracts are called `EigenPod`s and each _Restaker_ deploys its own `EigenPod` contract via the `EigenPodManager` contract. The `EigenPod` validates a proof that the withdrawal credentials point to this contract, such that the Eigenlayer protocol can facilitate slashing by AVSs.
+1. **EigenPods**: These contracts are directly connected to the Beacon Chain and they are responsible for managing the deposit/withdrawal of Beacon Chain deposits. Each _Restaker_ deploys its own `EigenPod` contract via the `EigenPodManager` contract. The `EigenPod` validates a proof that the withdrawal credentials point to this contract, such that the Eigenlayer protocol can facilitate slashing by _AVSs_.
 2. **Legacy Strategy Contracts**: These contracts are transparent upgradeable proxy contracts that each hold liquid staking ETH tokens. Each contract needs to be upgraded separately by the `ProxyAdmin` contract.
 3. **Factory based Strategy Contracts**: These contracts are instantiated through the `StrategyFactory` and are responsible for managing tokens added by users themselves. These contracts are upgradeable and share the same implementation contract (beacon proxy), which allows to update the contracts all at once.
 
