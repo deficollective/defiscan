@@ -148,8 +148,7 @@ _AVSs_ are required to deploy their own smart contracts which interact with the 
 - slash operators (calling `slashOperator` on the `AllocationManager` contract)
 - supply and post rewards for _Operators_ and _Stakers_ (calling `createOperatorDirectedOperatorSetRewardsSubmission` on the `RewardsCoordinator` contract)
 - to allow registered operators to post results
-
-among other functions to update and configure _Operator Sets_.
+- Various functions to update and configure _Operator Sets_.
 
 Additionally, _AVSs_ can increase fairness and transparency guarantees by; 1) allowing the Operators to veto a slash (Governance contract that calls `slashOperator` on the `AllocationManager` contract), 2) create protocols to eject _Operators_ (Governance contract that calls `deregisterFromOperatorSets` on the `AllocationManager` contract), 3) to create quorums for task submission or veto and 4) to compute rewards onchain instead of offchain (Smart Contract computing rewards and posting them to the `RewardsCoordinator` contract instead of multisigs/EOAs).
 
