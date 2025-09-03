@@ -106,7 +106,7 @@ For staking `USDe` the protocol does not provide a frontend to self host. The st
 
 ## Conclusion
 
-The `USDe` stablecoin protocol places custody over user funds, the assets that users are promised to redeem the `USDe` stablecoin for, in centralized custody with third-party custodians. The protocol is this classified as **Others**.
+The `USDe` stablecoin protocol places custody over user funds, the assets that users are promised to redeem the `USDe` stablecoin for, in centralized custody with third-party custodians. The protocol is thus classified as **Others**.
 
 # Reviewer's Notes
 
