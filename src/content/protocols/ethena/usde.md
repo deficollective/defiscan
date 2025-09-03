@@ -106,7 +106,7 @@ For staking `USDe` the protocol does not provide a frontend to self host. The st
 
 ## Conclusion
 
-The USDe stablecoin protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. This would mean that the protocol ranks Stage 0, however the funds are stored in centralzed custody and thus is classified as **Others**.
+The `USDe` stablecoin protocol places custody over user funds, the assets that users are promised to redeem the `USDe` stablecoin for, in centralized custody with third-party custodians. The protocol is this classified as **Others**.
 
 # Reviewer's Notes
 
