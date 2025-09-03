@@ -189,7 +189,7 @@ The starting of checkpoints and their verification can be paused by [Pauser Mult
 
 ### DelegationManager
 
-After users first deposit into the strategies or EigenPods (and the `StrategyManager` and `EigenPodManager` keep track of the deposit shares). The `DelegationManager` is the contract that allows _(Re)Stakers_ to delegate their stake to _Operators_. The `DelegationManager` enquiries the amount of deposit shares from the `StrategyManager` or `EigenPodManager` contract, and the scaling factor (how many _AVS_ slashes suffered) from the `AllocationManager` contract (to set the starting point for the _(Re)Stakers_).
+After users first deposit into the strategies or EigenPods (and the `StrategyManager` and `EigenPodManager` keep track of the deposit shares). The `DelegationManager` is the contract that allows _(Re)Stakers_ to delegate their stake to _Operators_. The `DelegationManager` fetches the amount of deposit shares from the `StrategyManager` or `EigenPodManager` contract, and the scaling factor (how many _AVS_ slashes suffered) from the `AllocationManager` contract to set the starting point for the _(Re)Stakers_.
 
 ![Delegation](../diagrams/eigenlayer-delegation.png)
 
