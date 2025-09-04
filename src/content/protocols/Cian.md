@@ -5,7 +5,7 @@ x: "https://x.com/CIAN_protocol"
 github: ["https://github.com/cian-ai/cian-protocol"]
 defillama_slug: ["cian-yield-layer"]
 chain: "Ethereum"
-stage: "0"
+stage: "O"
 reasons: ["Unverified Contracts"]
 risks: ["L", "H", "H", "H", "H"]
 author: ["BowtiedRahman"]
