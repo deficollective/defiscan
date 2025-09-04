@@ -45,7 +45,7 @@ With the implementation of [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002) a
 
 ### Restaking on Eigenlayer
 
-The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. Malicious _AVSs_ or _Operators_ could lead to the _loss of user funds_ or _loss of unclaimed yied_, as discussed in the [dependencies](#dependencies) section.
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. Malicious _AVSs_ or _Operators_ could lead to the _loss of user funds_ or _loss of unclaimed yield_, as discussed in the [dependencies](#dependencies) section.
 
 We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). However, the Eigenlayer protocol would be classified as Stage 1 if the criteria _Accessibility_ was ignored. Since EtherFi interacts programmatically with Eigenlayer, _Accessibility_ does not affect _Dependency_ centralization risks. The Stage 1 equivalent dependency impacts EtherFi's own score and limits it to a _Medium_ centralization risk for the _Autonomy_ dimension.
 
