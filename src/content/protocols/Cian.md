@@ -74,7 +74,9 @@ The protocol could reach **Stage 0** by implementing the security council requir
 
 Users deposit their assets into the Vault contract. In return for their deposits, users receive corresponding LP tokens. These tokens represent their share of the assets held in the Vault. The allocation ratios for strategy funds within the Vault contract are set by the `Operator`, a multi-sig wallet. 
 
-Based on the strategy fund allocation ratios set in the Vault contract, assets from the Vault are transferred to the corresponding strategy contracts. These contracts perform specific asset operations, such as investing, trading, or lending, based on the defined strategies to generate returns for the users. Each strategy operates according to its predefined rules and objectives. The `redeemOperator` contract is mainly used to record user withdrawal request data, handle the withdrawal operations and completes each withdrawal operation in a single transaction.
+Based on the strategy fund allocation ratios set in the Vault contract, assets from the Vault are transferred to the corresponding strategy contracts. These contracts specify operations, such as investing, trading, or lending, based on the defined strategies to generate returns for the users and the `Manager` contract managed by the [operator](#security-council) EOA triggers execution. Each strategy operates according to its predefined rules and objectives.
+
+The `redeemOperator` contract is mainly used to record user withdrawal request data, handle the withdrawal operations and completes each withdrawal operation in a single transaction.
 
 To withdraw funds from the vault, users must send a withdrawal request to the `redeemOperator` contract which also calls the `Manager` contract to batch execute user withdrawals and position adjustments after which a user recieves stETH. The `Operator` approves user withdrawals from the vault through the `Manager` contract.
 
