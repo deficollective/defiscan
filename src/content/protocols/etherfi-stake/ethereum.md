@@ -49,8 +49,7 @@ The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer
 
 We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). However, the Eigenlayer protocol would be classified as Stage 1 if the criteria _Accessibility_ was ignored. Since EtherFi interacts programmatically with Eigenlayer, _Accessibility_ does not affect _Dependency_ centralization risks. The Stage 1 equivalent dependency impacts EtherFi's own score and limits it to a _Medium_ centralization risk for the _Autonomy_ dimension.
 
-Finally, other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST. The deposits are currently limited to `stETH` with a cap of 850'000 ETH. Since this represents less
-than 35% of EtherFi's TVL, this grants EtherFi a medium dependency on Lido.
+Finally, other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST. The deposits are currently limited to `stETH` with a cap of 850'000 ETH. Since this represents less than 35% of EtherFi's TVL, this grants EtherFi a medium dependency on Lido.
 
 > Autonomy score: High
 
@@ -78,7 +77,9 @@ The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upg
 
 # Reviewer's Notes
 
-[Starting October 15th](https://etherfi.gitbook.io/etherfi/king-protocol-formerly-lrt), restaking rewards will be distributed in the form of KING tokens using the King protocol. The older distribution contracts are no longer listed in EtherFi's documentation, and were not considered as part of the review.
+[Starting October 15th](https://etherfi.gitbook.io/etherfi/king-protocol-formerly-lrt), restaking rewards will be distributed in the form of `KING` tokens using the King protocol. The older distribution contracts are no longer listed in EtherFi's documentation, and were not considered as part of the review.
+
+There is an important distinction to be made between Ethereum _Node Operators_ and _Eigenlayer Operators_. The former are operators which run Ethereum validators using staked `ETH`, while the latter act as operators in the _Eigenlayer_ protocol using restaked `ETH`. While some entities perform both tasks, they are different roles in different protocols.
 
 This review reflects the state of EtherFi to the date of publication. We note that EtherFi is a fast evolving protocol and [implementation addresses](#contracts) should be verified to detect any upgrades since the last changes.
 
