@@ -48,7 +48,7 @@ stage_requirements:
 
 # Summary
 
-Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). For the _AVSs_ to trust the _Operators_, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. For economic stake, _(Re)Stakers_ can use a) arbitrary ERC20 tokens, which also includes Liquid Staking Tokens (LSTs), or b) Beacon Chain deposits to increase capital efficiency of staked ETH.
+Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_ with the given tasks, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. For economic stake, _(Re)Stakers_ can use; a) arbitrary ERC20 tokens, which also includes Liquid Staking Tokens (LSTs), or b) Beacon Chain deposits to increase capital efficiency of staked ETH.
 
 # Ratings
 
@@ -60,17 +60,17 @@ The report is concerned with the Eigenlayer protocol deployed on Ethereum mainne
 
 ## Upgradeability
 
-Contracts which control user funds, the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
-
-The withdrawal process can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds, the [Community Council (9/13)](#security-council) however can resume the pause immediately if misused.
+Smart contracts which control user funds, the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
 
 Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by an account with the role `RewardsUpdater` , which computes eligibility for each _(Re)Staker_ and _Operator_ based on their stake and _AVS_ rewards specification. If an account with that role is compromised, the rewards can be distributed to the wrong addresses, which leads to _loss of unclaimed yield_.
+
+The withdrawal process can be paused immediately by pausers registered in the `PauserRegistry` contract. Pausing can lead to temporary loss of access to funds, the [Community Council (9/13)](#security-council) however can resume the pause immediately if misused.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings _AVSs_ and _Operators_ together. Thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks to each other as the respective counterparties.
+The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings _AVSs_ and _Operators_ together. Thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks to each other and to _(Re)Stakers_ as the respective counterparties.
 
 The [Dependencies](#dependencies) section goes into more detail about risks potentially originating from _AVSs_ and _Operators_.
 
@@ -108,7 +108,7 @@ For _Operators_ a CLI is available to interact with the Eigenlayer protocol, for
 
 ## Conclusion
 
-The Eigenlayer protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Exit Window_ and _Accessibility_ dimensions. It achieves _Low_ centralization risk scores for its _Autonomy_ and _Chain_ dimensions. Eigenlayer overall ranks _Stage 0_. The impact of the _Upgradeability_ and _Exit Window_ on the overall score is _Medium_ (_Stage 1_), because the permission owners satisfy the _Security Council Requirements_.
+The Eigenlayer protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Exit Window_ and _Accessibility_ dimensions. It achieves _Low_ centralization risk scores for its _Autonomy_ and _Chain_ dimensions. Eigenlayer overall ranks _Stage 0_. The impact of the _Upgradeability_ and _Exit Window_ on the overall score is _Medium_ (_Stage 1_), because the permission owner satisfies the _Security Council Requirements_.
 
 The protocol could reach _Stage 1_ by offering a self-hosting option for _Stakers_ and _Restakers_ to manage their delegation and withdrawal.
 
@@ -127,7 +127,7 @@ The project additionally could advance to _Stage 2_ if alternative frontends are
 
 ### Stakers and Restakers
 
-A _Staker_ or _Restaker_ is any user who has assets deposited (or "restaked") into EigenLayer. They can stake or restake multiple assets that are accepted as _Economic Security_ to secure _AVSs_.
+A _Staker_ or _Restaker_ is any user who has assets deposited (or "restaked") into EigenLayer. They can stake multiple ERC20 assets that are accepted as _Economic Security_ or restake Beacon Chain ETH to secure _AVSs_.
 
 The _Stakers_ and _Restakers_ have the following actions available; 1) deposit assets into EigenLayer via either the `StrategyManager` (for ERC20s) or the `EigenPodManager` (for Beacon Chain ETH), 2) withdraw assets via the `DelegationManager`, no matter what assets they're withdrawing, 3) delegate to an _Operator_ via the `DelegationManager`, 4) undelegating from an _Operator_ via the `DelegationManager`, 5) and claiming rewards posted by _AVSs_ from the `RewardsCoordinator` contract.
 
@@ -135,7 +135,7 @@ The _Stakers_ and _Restakers_ have the following actions available; 1) deposit a
 
 _Operators_ are entities that opt-in to _Operator Sets_ created by _AVSs_ to execute tasks for the _AVS_. _Operators_ receive economic stake delegated by the _Stakers_ and _Restakers_ and take a cut from the weekly rewards issued by the _AVSs_ (default: 10% _Operator_, 90% _Stakers_ and _Restakers_). _Operators_ can also stake themselves, the roles are not mutually exclusive.
 
-_Operators_ have the following actions available; 1) register to an _Operator Set_ via the `AllocationManager` contract, 2) deregister from an _Operator Set_ via the `AllocationManager` contract, 3) change the reward split via the `RewardsCoordinator` contract, 4) claim rewards posted by _AVSs_ from the `RewardsCoordinator` contract, and 5) change the allocation delay via the `AllocationManager` contract, this affects the delay until the allocation becomes slashable.
+_Operators_ have the following actions available; 1) register and deregister to and from an _Operator Set_ via the `AllocationManager` contract, 2) allocate and deallocate delegated stake to and from the _Operator Set_ via the `AllocationManager`, 3) change the reward split via the `RewardsCoordinator` contract, 4) claim rewards posted by _AVSs_ from the `RewardsCoordinator` contract, and 5) change the allocation delay via the `AllocationManager` contract, this affects the delay until the allocation becomes slashable upon allocation.
 
 ### AVSs
 
@@ -143,16 +143,16 @@ _AVSs_ are entities and protocols that offer services to their end users (e.g. C
 
 _AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts. The details of the implementation are free to choose by the _AVS_, but they must implement the following functions or manually perform them:
 
-- provide a callback to the `AVSRegistrar` contract to notify the `AllocationManager` if the allocation by the _Operator_ is accepted (allows whitelisting, or parameter based acceptance, e.g type of stake etc.)
+- provide a callback to the `AVSRegistrar` contract to notify the `AllocationManager` if the registration and deregistration by the _Operator_ is accepted (allows whitelisting, or parameter based acceptance, e.g type of stake etc.)
 - create _Operator Sets_ (calling `createOperatorSets` or `createRedistributingOperatorSet` on the `AllocationManager` contract)
 - slash operators (calling `slashOperator` on the `AllocationManager` contract)
 - supply and post rewards for _Operators_ and _Stakers_ (calling `createOperatorDirectedOperatorSetRewardsSubmission` on the `RewardsCoordinator` contract)
 - to allow registered operators to post results
-- Various functions to update and configure _Operator Sets_.
+- various functions to update and configure _Operator Sets_.
 
 Additionally, _AVSs_ can increase fairness and transparency guarantees by; 1) allowing the Operators to veto a slash (Governance contract that calls `slashOperator` on the `AllocationManager` contract), 2) create protocols to eject _Operators_ (Governance contract that calls `deregisterFromOperatorSets` on the `AllocationManager` contract), 3) to create quorums for task submission or veto and 4) to compute rewards onchain instead of offchain (Smart Contract computing rewards and posting them to the `RewardsCoordinator` contract instead of multisigs/EOAs).
 
-Regarding rewards, _AVSs_ are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an _AVS_ can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by _Operators_ within a certain time period. Additionally, an _AVS_ can submit multiple reward submissions, denominated in different tokens, to offer more flexibility in the distribution of rewards.
+Regarding rewards, _AVSs_ are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an _AVS_ can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by _Operators_ within a certain time period. Additionally, an _AVS_ can submit multiple reward submissions, denominated in different tokens.
 
 Repositories that help _AVSs_ to implement their contracts are:
 
@@ -177,13 +177,13 @@ The `StrategyFactory` creates new strategies (ie allows to accept new ERC20 toke
 
 ### EigenPods
 
-EigenPods are the contracts that point to Beacon Chain deposits and make them slashable by _AVSs_. To create deposit shares in the `EigenPodManager` contract, which then can be used to delegate to _Operators_ and earn additional rewards from the _AVSs_, a proof of the withdrawal credentials pointing to the `EigenPod` contract address supplied by the _Restaker_ and Owner of the `EigenPod` is required.
+EigenPods are the contracts that point to Beacon Chain deposits and make them slashable by _AVSs_. To create deposit shares in the `EigenPodManager` contract, which then can be used to delegate to _Operators_ and earn additional rewards from the _AVSs_, a proof of the withdrawal credentials pointing to the `EigenPod` contract address supplied by the _Restaker_ and owner of the `EigenPod` is required.
 
 If a _Restaker_ wants to withdraw their funds from the Beacon Chain, they need to start a checkpoint and verify the checkpoint to update their shares in the `EigenPodManager` based on validator rewards they received on the Beacon Chain. Additional shares from validator rewards can be withdrawn or used to delegate to _Operators_. Reduced Beacon Chain deposits through validator slashing, lead to a reduction of the shares. To withdraw ETH from the Beacon Chain, _Restakers_ can use the EIP-7002 execution layer triggereable withdrawals, via calling `requestWithdrawal` on the `EigenPod` contract, or use the Consensus Layer primary key to initiate the withdrawal to the Execution Layer (Ethereum Mainnet). To be able to withdraw the ETH deposited in the `EigenPod` contract through the previous step, _Restakers_ need to queue and complete a withdrawal with the `DelegationManager` contract. (see [DelegationManager](#delegationmanager))
 
 Each `EigenPod` shares the same implementation contract, which allows to update the `EigenPods` contracts all at once by the [Executor Multisig (1/2)](#security-council) with the Beacon-Proxy `UpgradeableBeacon` contract. A malicious upgrade could be used to add a function that allows to withdraw the ETH from the Beacon-Chain by using the EIP-7002 execution layer triggereable withdrawals to a malicious address. However, updates like this can be cancelled by the [Community Multisig (9/13)](#security-council), which is one of the signers in the [Executor Multisig (1/2)](#security-council).
 
-The starting of checkpoints and their verification can be paused by the pausers. A permanent pause of the withdrawal process can lead to _loss of funds_ for the _Restakers_.
+The starting of checkpoints and their verification can be paused by the pausers. A permanent pause of the withdrawal process leads to _loss of funds_ for the _Restakers_.
 
 ![Eigenpod](../diagrams/eigenlayer-eigenpod.png)
 
@@ -211,7 +211,7 @@ Through the `AllocationManager` the `AVSs` can manage _Operator Sets_ (creation 
 
 _Operators_ can change their allocation delay which is the duration until which the allocated stake becomes slashable. A change of allocation delay registered by _Operator_ takes 17.5 days (ALLOCATION_CONFIGURATION_DELAY) until it is effective.
 
-The duration until a deallocation is effective (the capital is not slashable anymore) takes 14 days. This is only changeable through an upgrade of the `AllocationManager` contract.
+The duration until a deallocation is effective (the capital is not slashable anymore) takes 14 days (DEALLOCATION_DELAY). This is only changeable through an upgrade of the `AllocationManager` contract.
 
 The _AVSs_ can setup an `AVSRegistrar` contract, which is called by the `AllocationManager` when _Operators_ register to and deregister from _Operator Sets_. If the _AVS_ does not have an `AVSRegistrar` set, the `AllocationManager` will forward the call to the registered _AVS_ contract. If the `AVSRegistrar` or the registered _AVS_ contract reverts the transaction, the `AllocationManager` will revert the transaction as well, and _Operators_ will not be able to register to or deregister from _Operator Sets_. This can create unfair scenarios, where _AVSs_ allow opt-in, but disallow opt-out (see [dependencies](#dependencies) for risks steming from _AVSs_).
 
@@ -279,7 +279,7 @@ _AVSs_ are allowed to create _Operator Sets_ that have redistribution recipients
 
 ### Preventing Deregistration of Operators from Operator Sets
 
-Deregistration of _Operators_ from _Operator Sets_ can be prevented by _AVSs_ by reverting the callback `deregisterOperator` on the registered `AVSRegistrar` contract. This is a contract specific to each _AVS_ that is controlled by each _AVS_. This could open a greater time window for an _AVS_ to slash _Operators_. However, deallocation from the _Operator Set_ always takes 14 days (DEALLOCATION_DELAY).
+Deregistration of _Operators_ from _Operator Sets_ can be prevented by _AVSs_ by reverting the callback `deregisterOperator` on the registered `AVSRegistrar` contract. This is a contract specific to each _AVS_ that is controlled by each _AVS_. This could open a greater time window for an _AVS_ to slash _Operators_ if deallocation is not triggered as a response. However, deallocation from the _Operator Set_ can not be prevented by the _AVSs_ and it always takes 14 days (DEALLOCATION_DELAY).
 
 ### Breaking Reward Promises
 
@@ -289,7 +289,7 @@ The _AVSs_ can post less rewards than promised to the `RewardsCoordinator` contr
 
 ### Change Reward Split
 
-_Operators_ can change the reward split by calling `setOperatorAVSSplit` on the `RewardsCoordinator` contract. This could lead to reduced yield performance for _Stakers_ and _Restakers_ if the _Operator_ changes the split into their favor. It is only applied for the future and takes at least one week to be applied (set with global variable `activationDelay`).
+_Operators_ can change the reward split by calling `setOperatorAVSSplit` on the `RewardsCoordinator` contract. This could lead to reduced yield performance for _Stakers_ and _Restakers_ if the _Operator_ changes the split to their favor. It is only applied for the future and takes at least one week to be applied (set with global variable `activationDelay`).
 
 ### Slacking duty
 
