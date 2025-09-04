@@ -183,7 +183,7 @@ If a _Restaker_ wants to withdraw their funds from the Beacon Chain, they need t
 
 Each `EigenPod` shares the same implementation contract, which allows to update the `EigenPods` contracts all at once by the [Executor Multisig (1/2)](#security-council) with the Beacon-Proxy `UpgradeableBeacon` contract. A malicious upgrade could be used to add a function that allows to withdraw the ETH from the Beacon-Chain by using the EIP-7002 execution layer triggereable withdrawals to a malicious address. However, updates like this can be cancelled by the [Community Multisig (9/13)](#security-council), which is one of the signers in the [Executor Multisig (1/2)](#security-council).
 
-The starting of checkpoints and their verification can be paused by [Pauser Multisig (1/6)](#security-council), [Executor Multisig (1/2)](#security-council) and [Operations Multisig (3/6)](#security-council), only the [Executor Multisig (1/2)](#security-council) can resume the mentioned actions which are required for a successful withdrawal. A permanent pause of the withdrawal process can lead to _loss of funds_ for the _Restakers_.
+The starting of checkpoints and their verification can be paused by the pausers. A permanent pause of the withdrawal process can lead to _loss of funds_ for the _Restakers_.
 
 ![Eigenpod](../diagrams/eigenlayer-eigenpod.png)
 
@@ -201,7 +201,7 @@ The `DelegationManager` contract also allows users to register as _Operators_ in
 
 The `DelegationManager` contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an _Upgradeability_ risk, as the upgrade could potentially modify core delegation logic, the slashing accounting and thus lead to _loss of funds_ of _(Re)Stakers_ if the upgrade is malicious or faulty, as _(Re)Stakers_ initiate withdrawals of funds through this contract.
 
-Delegation, undelegation, withdrawal (queueing and completion) and registration as _Operators_ can be paused by [Pauser Multisig (1/6)](#security-council), [Executor Multisig (1/2)](#security-council) and [Operations Multisig (3/6)](#security-council), only the [Executor Multisig (1/2)](#security-council) can resume the mentioned actions. A permanent pause of the withdrawal process can lead to _loss of funds_ for the _Restakers_ and _Stakers_.
+Delegation, undelegation, withdrawal (queueing and completion) and registration as _Operators_ can be paused by the pausers. A permanent pause of the withdrawal process can lead to _loss of funds_ for the _Restakers_ and _Stakers_.
 
 ### AllocationManager
 
@@ -217,7 +217,7 @@ The _AVSs_ can setup an `AVSRegistrar` contract, which is called by the `Allocat
 
 The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an _Upgradeability_ risk, as the upgrade could potentially modify slashing logic and the slashing accounting and thus lead to _loss of funds_ of _(Re)Stakers_ if the upgrade is malicious or faulty, as the `DelegationManager` contract is informed on suffered slashes by the `AllocationManager` contract.
 
-Registration and deregistration of _Operators_ from _Operator Sets_, modification of allocations to _Operator Sets_ by _Operators_, slashing by _AVSs_ can be paused by [Pauser Multisig (1/6)](#security-council), [Executor Multisig (1/2)](#security-council) and [Operations Multisig (3/6)](#security-council), only the [Executor Multisig (1/2)](#security-council) can resume the mentioned actions. A pause of deregistration and modification of allocations but not slashing could lead to an unfair situation for _Operators_ and _Stakers_.
+Registration and deregistration of _Operators_ from _Operator Sets_, modification of allocations to _Operator Sets_ by _Operators_, slashing by _AVSs_ can be paused by the pausers. A pause of deregistration and modification of allocations but not slashing could lead to an unfair situation for _Operators_ and _Stakers_.
 
 ![Slashing](../diagrams/eigenlayer-slashing.png)
 
@@ -235,7 +235,7 @@ Rewards are distributed periodically, with a delay period of 7 days before they 
 
 The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that deposited funds by _AVSs_ could be withdrawn and stolen which leads to _loss of unclaimed yield_ for both _Stakers_ and _Operators_. Additionally the 90/10 default split between _Stakers_ and _Operators_ can be modified with a delay of 7 days.
 
-Settings the split between _Stakers_ and _Operators_, claiming of rewards can be paused by [Pauser Multisig (1/6)](#security-council), [Executor Multisig (1/2)](#security-council) and [Operations Multisig (3/6)](#security-council), only the [Executor Multisig (1/2)](#security-council) can resume the mentioned actions. A pause of claiming rewards could lead to _loss of unclaimed yield_ for both _Stakers_ and _Operators_.
+Settings the split between _Stakers_ and _Operators_, claiming of rewards can be paused by the pausers. A pause of claiming rewards could lead to _loss of unclaimed yield_ for both _Stakers_ and _Operators_.
 
 ### PermissionController
 
