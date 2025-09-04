@@ -77,7 +77,7 @@ The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upg
 
 # Reviewer's Notes
 
-[Starting October 15th](https://etherfi.gitbook.io/etherfi/king-protocol-formerly-lrt), restaking rewards will be distributed in the form of `KING` tokens using the King protocol. The older distribution contracts are no longer listed in EtherFi's documentation, and were not considered as part of the review.
+[Starting October 15th](https://etherfi.gitbook.io/etherfi/king-protocol-formerly-lrt), restaking rewards will be distributed in the form of `KING` tokens using the King protocol. The older distribution contracts are no longer listed in EtherFi's documentation.
 
 There is an important distinction to be made between Ethereum _Node Operators_ and _Eigenlayer Operators_. The former are operators which run Ethereum validators using staked `ETH`, while the latter act as operators in the _Eigenlayer_ protocol using restaked `ETH`. While some entities perform both tasks, they are different roles in different protocols.
 
