@@ -41,7 +41,7 @@ Contracts may also be paused without delay to prevent further deposits and withd
 
 EtherFi relies on _Node Operators_ to operate Ethereum validators. _Node Operators_ are whitelisted by EtherFi and users' funds are not in control by the _Node Operators_, as explained in the [protocol analysis](#protocol-analysis). Nonetheless, the _Node Operators_ may misbehave and lose funds due to slashing, but they do not control the withdrawal address where the withdrawn funds are sent to. The withdrawal contract implements EIP7002 which allows it to trigger withdrawals onchain. The protocol can therefore handle both validator deposits and withdrawals without relying on _Node Operators_.
 
-With the implementation of EIP7002 and the current diversification of node operators discussed in the [dependencies](#dependencies) section, EtherFi would score a _Low_ Autonomy risk score for its dependency on _Node Operators_.
+With the implementation of [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002) and the current diversification of node operators discussed in the [dependencies](#dependencies) section, EtherFi would score a _Low_ Autonomy risk score for its dependency on _Node Operators_.
 
 ### Restaking on Eigenlayer
 
