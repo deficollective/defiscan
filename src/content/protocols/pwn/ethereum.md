@@ -23,11 +23,11 @@ PWN v1.3 is deployed on various chains. This review is based on the Ethereum mai
 
 ## Upgradeability
 
-The PWN DAO can change parameters such as fees through the `PWNConfig` contract. Additionally, the PWN DAO can add and deprecate valid contracts in the protocol through the `PWNHub` contract. Note that even after removing a contract from the `PWNHub` existing loans are unaffected, only new ones cannot be created.
+The _PWN DAO_ can change parameters such as fees through the `PWNConfig` contract. Additionally, the _PWN DAO_ can add and deprecate valid contracts in the protocol through the `PWNHub` contract. Note that even after removing a contract from the `PWNHub` existing loans are unaffected, only new ones cannot be created.
 
 No user funds nor unclaimed yield are affected by upgrades.
 
-`TransparentProxy` contract with the PWN DAO as admin is used for the `PWNConfig`. However, this does not impact user funds or otherwise materially change the protocol for already existing loans. Only new loans are affected by the change of parameters in the `PWNConfig`.
+`TransparentProxy` contract with the _PWN DAO_ as admin is used for the `PWNConfig`. However, this does not impact user funds or otherwise materially change the protocol for already existing loans. Only new loans are affected by the change of parameters in the `PWNConfig`.
 
 There's also a timelock for the upgrades made by the DAO which ultimatelly owns `PWNConfig` and `PWNHub` that is currently set to 0 days.
 
@@ -36,13 +36,13 @@ There's also a timelock for the upgrades made by the DAO which ultimatelly owns 
 ## Autonomy
 
 There are no particular dependencies for the PWN protocol. Each proposal type is independent and can be used without the other proposal types. Some proposal types are oracle-less and don't require any external dependencies. Some proposals are using Chainlink price feeds for credit pricing during the loan creation. After a loan is created, it is immutable and oracles are not used anymore.
-Furthermore, users can utilise funds from other protocols with PWN Pool Hooks. All of these are on opt-in basis and their failiure doesn't affect the core protocol in any way.
+Furthermore, users can utilise funds from other protocols with PWN Pool Hooks. All of these are on opt-in basis and their failure doesn't affect the core protocol in any way.
 
 > Autonomy score: Low
 
 ## Exit Window
 
-Permissions are controlled by the PWN DAO and any parameter changes don't affect existing running loans, therefor there isn't a need for an exit window. Once a user starts using the protocol (creates a loan), the rules cannot change for them. 
+Permissions are controlled by the _PWN DAO_ and parameter changes do not affect existing running loans, therefore there is no need for an exit window. Once a user starts using the protocol (creates a loan), the rules cannot change for them. 
 
 > Exit Window score: Low
 
@@ -54,7 +54,7 @@ PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, inter
 
 ## Conclusion
 
-The PWN protocol achieves Low centralization risk scores for its Upgradeability, Autonomy, Exit Window and Medium for the Accessibility dimension. It thus ranks Stage 1.
+The PWN protocol achieves _Low_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Medium_ for the _Accessibility_ dimension. It thus ranks _Stage 1_.
 
 The protocol could reach Stage 2 if it would have multiple independent interfaces and longer timelock for upgrades made by the DAO.
 
@@ -76,14 +76,14 @@ The Chainlink oracle system itself is discussed in a separate report [here](/pro
 
 # Governance
 
-PWN is governed by the PWN DAO, which is built on the Aragon OSx Framework for modular, extensible, and secure protocol management. Governance combines two structures: Optimistic (Steward) governance, where community-elected Stewards can make whitelisted decisions via multisig unless vetoed by 10% of voting power, and Token (Community) governance, where all staked $PWN holders can propose, vote, and veto, with proposals requiring a 20% quorum and 60% approval to pass. This dual system ensures efficient protocol operation while maintaining ultimate community control.
+PWN is governed by the _PWN DAO_, which is built on the Aragon OSx Framework for modular and extensible protocol management. Governance combines two structures: Optimistic (Steward) governance, where community-elected Stewards can make whitelisted decisions via multisig unless vetoed by 10% of voting power, and Token (Community) governance, where all staked $PWN holders can propose, vote, and veto, with proposals requiring a 20% quorum and 60% approval to pass. This dual system ensures efficient protocol operation while maintaining ultimate community control.
 
 ## Security Council
 
 
 | Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
-| Stewards | [0xd56635c0E91D31F88B89F195D3993a9e34516e59](https://etherscan.io/address/0xd56635c0E91D31F88B89F195D3993a9e34516e59) | Multisig | ❌          | ❌              | ❌                | ❌             |
+| Stewards | [0xd56635c0E91D31F88B89F195D3993a9e34516e59](https://etherscan.io/address/0xd56635c0E91D31F88B89F195D3993a9e34516e59) | Multisig 2/5 | ❌          | ❌              | ❌                | ❌             |
 
 # Contracts & Permissions
 
