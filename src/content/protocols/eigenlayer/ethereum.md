@@ -293,7 +293,7 @@ _Operators_ can change the reward split by calling `setOperatorAVSSplit` on the 
 
 ### Slacking duty
 
-Queued _Stakers_ and _Restakers_ are still subject to slashing for their delegated operator for 14 days after they queued their withdrawal, this makes them vulnerable to slacking operators that phase out or become unreliable, but only if the _Operator_ is registered for _AVSs_ that have mandatory duties (the type of tasks that the _Operator_ is required to perform by the _AVSs_ can have different modalities).
+Queued _Stakers_ and _Restakers_ are still subject to slashing for their delegated operator for 14 days after they queued their withdrawal, this makes them vulnerable to slacking operators that phase out or become unreliable, but only if the _Operator_ is registered for _AVSs_ that have mandatory duties (the type of tasks that the _Operator_ is required to perform by the _AVSs_ can have different modalities). This could lead to _loss of funds_ for _(Re)Stakers_.
 
 # Governance
 
