@@ -16,7 +16,7 @@ update_date: "2025-06-01"
 
 # Summary
 
-Cian Yield Layer is a yield aggregator that automates yield optimization — the process of automatically adjusting a yield strategy to maximize returns — by pooling user funds into vaults and depending on the strategy the vault implements deploys them to external protocols (lending, borrowing, staking, and restaking) to achieve the highest possible returns with minimal effort from the user. The Cian protocol provide three products for users to get yield. The cian yield layer which has 80% of the protocol tvl, the Cian strategy mainnet vaults and Cian automation.
+Cian Yield Layer is a yield aggregator that automates yield optimization — the process of automatically adjusting a yield strategy to maximize returns — by pooling user funds into vaults and deploying them to external protocols (lending, borrowing, staking, and restaking) to achieve the highest possible returns with minimal effort from the user. The Cian Protocol provides three products for users to get yield. The Cian Yield Layer, the Cian Strategy Mainnet Vaults and Cian Automation.
 
 # Ratings
 
