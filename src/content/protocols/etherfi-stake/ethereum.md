@@ -3,7 +3,7 @@ chain: "Ethereum"
 stage: 0
 reasons: []
 risks: ["L", "H", "H", "H", "H"]
-author: ["mmilien_"]
+author: ["Mmilien_"]
 submission_date: "2025-08-31"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
