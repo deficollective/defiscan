@@ -56,11 +56,11 @@ PWN can be used on the PWN Platform (app.pwn.xyz). Once a loan is created, inter
 
 The PWN protocol achieves _Low_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Medium_ for the _Accessibility_ dimension. It thus ranks _Stage 1_.
 
-The protocol could reach Stage 2 if it would have multiple independent interfaces and longer timelock for upgrades made by the DAO.
+The protocol could reach Stage 2 if it would have multiple independent interfaces.
 
 # Reviewer's Notes
 
-TODO: Add reviewer's notes
+Nothing to note.
 
 # Protocol Analysis
 
@@ -70,7 +70,7 @@ Detailed description of the contracts and their interactions is available in the
 
 # Dependencies
 
-Some proposal types in PWN are using Chainlink price feeds for credit pricing. This feature is opt-in and not required to use the protocol with other proposal types.
+Some proposal types in PWN are using Chainlink price feeds for credit pricing. This feature is opt-in and not required to use the protocol with other proposal types. Additionally, the oracle is only used during the loan creation and not after the loan is created.
 
 The Chainlink oracle system itself is discussed in a separate report [here](/protocols/chainlink-oracles/ethereum).
 
@@ -102,12 +102,14 @@ PWN is governed by the _PWN DAO_, which is built on the Aragon OSx Framework for
 | PWNSimpleLoanElasticProposal    | [0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626](https://etherscan.io/address/0xeC6390D4B22FFfD22E5C5FDB56DaF653C3Cd0626) |
 | PWNSimpleLoanElasticChainlinkProposal    | [0xBA58E16BE93dAdcBB74a194bDfD9E5933b24016B](https://etherscan.io/address/0xBA58E16BE93dAdcBB74a194bDfD9E5933b24016B) |
 | PWNSimpleLoanDutchAuctionProposal    | [0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369](https://etherscan.io/address/0x1b1394F436cAeaE139131E9bca6f5d5A2A7e1369) |
+| MultiTokenCategoryRegistry | [0xbB2168d5546A94AE2DA9254e63D88F7f137B2534](https://etherscan.io/address/0xbB2168d5546A94AE2DA9254e63D88F7f137B2534) |
 
 ## All Permission Owners
 
 | Name | Account                                       | Type         |
 | ---- | --------------------------------------------- | ------------ |
-| TimelockController | [0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB](https://etherscan.io/address/0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB) | Contract |
+| TimelockController (Protocol) | [0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB](https://etherscan.io/address/0xd8dbdDf1c0FDdf9b5eCFA5C067C38DB66739FBAB) | Contract |
+| TimelockController (Admin) | [0xd57e72A328AB1deC6b374c2babe2dc489819B5Ea](https://etherscan.io/address/0xd57e72A328AB1deC6b374c2babe2dc489819B5Ea) | Contract |
 
 ## Permissions
 
@@ -160,3 +162,19 @@ PWN is governed by the _PWN DAO_, which is built on the Aragon OSx Framework for
 | PWNSimpleLoanElasticChainlinkProposal | makeProposal | Makes an onchain proposal. Checks in this function are derived from _makeProposal. | Proposer |
 | PWNSimpleLoanElasticChainlinkProposal | acceptProposal | Accepts a given proposal. Checks in this function are derived from _acceptProposal. | Loan contract specified in an offer |
 | PWNUtilizedCredit | utilizeCredit | Updates utilised credit for an account. This is used to share credit between different proposal types. Malicious actor could update the utilised credit to go over the credit limit. | Contract with a valid tag in PWNHub |
+| TimelockController (Protocol) | schedule | Schedules a transaction to be executed after the mandatory delay has passed (currently none). This transaction can perform any action that this contract is allowed to, including upgrading PWNConfig and tagging new contracts in PWNHub. | PWNDAO |
+| TimelockController (Protocol) | scheduleBatch | Similar toschedule, for a batch of transactions. | PWNDAO |
+| TimelockController (Protocol) | updateDelay | Updates the mandatory delay. There are no minimum or maximum delays enforced in the contract. | TimelockController |
+| TimelockController (Protocol) | cancel | Cancels a queued transaction before it has been executed. | PWNDAO |
+| TimelockController (Protocol) | grantRole | Grants a role to a given address. There are different roles to schedule, cancel, and execute transactions, currently executing transactions is open to anyone. | TimelockController (Protocol) |
+| TimelockController (Protocol) | revokeRole| Revokes a role from a given address. | TimelockController (Protocol) |
+| TimelockController (Admin) | schedule | Schedules a transaction to be executed after the mandatory delay has passed (currently none). This transaction can perform any action that this contract is allowed to, including changing parameters in PWNConfig. | PWNDAO |
+| TimelockController (Admin) | scheduleBatch | Similar toschedule, for a batch of transactions. | PWNDAO |
+| TimelockController (Admin) | updateDelay | Updates the mandatory delay. There are no minimum or maximum delays enforced in the contract. | TimelockController |
+| TimelockController (Admin) | cancel | Cancels a queued transaction before it has been executed. | PWNDAO |
+| TimelockController (Admin) | grantRole | Grants a role to a given address. There are different roles to schedule, cancel, and execute transactions, currently executing transactions is open to anyone. | TimelockController (Admin) |
+| TimelockController (Admin) | revokeRole| Revokes a role from a given address. | TimelockController (Admin) |
+| MultiTokenCategoryRegistry | transferOwnership | Transfers the MultiTokenCategoryRegistry contract ownership. Malicious owner could register an asset to have a different category than it actually supports and make the asset unusable in the protocol. Does not affect already running loans with these assets. | TimelockController (Protocol) |
+| MultiTokenCategoryRegistry | renounceOwnership | Removes contract owner. No permissioned functions can be called after this function is executed. | TimelockController (Protocol) |
+| MultiTokenCategoryRegistry | registerCategoryValue | Registers a category for an asset. Malicious actor could register an asset to have a different category than it actually supports and make the asset unusable in the protocol. Does not affect already running loans with these assets. | TimelockController (Protocol) |
+| MultiTokenCategoryRegistry | unregisterCategoryValue | Unregisters a category for an asset. Malicious actor could unregister an asset and make it unusable in the protocol. Does not affect already running loans with these assets. | TimelockController (Protocol) |
