@@ -123,6 +123,14 @@ The project additionally could advance to _Stage 2_ if alternative frontends are
 
 ![Eigenlayer](../diagrams/eigenlayer-overview.png)
 
+The top-left shows the governance module. Arrows from the [Executor Multisig (1/2)](#security-council) mostly denote upgrading power or upgrading calls through the `ProxyAdmin` located below.
+
+Left-middle shows the strategy contracts module. There are two types of strategy contracts. Strategy contracts created by users through the factory, they are denoted as `StrategyBaseBeaconProxy` (this contract is deployed for each token, only one is shown). `StrategyTVLLimits` are contracts that were deployed initially and there is one contract per Liquid Staked Token (LST), only one is shown. Both type of contracts and each instance store ERC20 _(Re)Staker_ funds that are referenced from the `StrategyManager`.
+
+Center is the heart-piece of Eigenlayer the `DelegationManager`. The `DelegationManager` interacts with the `StrategyManager` and the `EigenPodManager` below left and below right. These contracts store information on the deposited tokens and restaked Beacon Chain ETH. Above of the `DelegationManager` is the `AllocationManager` which is the contract with which _Operators_ and _AVSs_ allocate and slash staked assets. Next to `AllocationManager` is the `RewardsCoordinator` contract which allows _AVSs_ to post rewards, which then can be claimed by _Operators_ and _(Re)Stakers_ defined on agreed splits.
+
+On the right hand side the contracts deployed by the _AVSs_ are denoted with the pointed box. The contracts by the _AVS_ are highly customizable. DApps possibly interact with this contracts denoted top right. The tasks that need to be validated/executed can then be picked up by _Operators_ from these contracts.
+
 ## Roles
 
 ### Stakers and Restakers
@@ -163,7 +171,7 @@ Repositories that help _AVSs_ to implement their contracts are:
 
 ## Important Eigenlayer Contracts and Concepts
 
-### Strategies
+### Strategies and EigenPods
 
 Each asset that is accepted as _Economic Security_ to secure _AVSs_ is held in a separate contract, with exception of restaked `ETH` that remains on the Beacon Chain (Consensus Layer of Ethereum).
 
