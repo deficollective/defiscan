@@ -50,7 +50,7 @@ stage_requirements:
 
 # Summary
 
-Morpho is a lending protocol with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle. Users may lend funds directly on individual Morpho Markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho Markets. Morpho governance operates within a very limited scope and without direct control over the Morpho protocol.
+Morpho is a lending protocol with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle price feed. Users may lend funds directly on individual Morpho Markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho Markets. Morpho governance operates within a very limited scope and without direct control over the Morpho protocol.
 
 # Ratings
 
