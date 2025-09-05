@@ -102,7 +102,7 @@ Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho o
 
 ## Conclusion
 
-The Morpho protocol on Base achieves _Low_ centralization scores the _Accessibility_ dimension. The _Upgradeability_ of the `MORPHO` token that is not protected with an onchain governance system or _Exit Window_ and its trusted Chainlink dependency result in _Medium_ _Upgradeability_ and _Exit Window_. Due to the _High_ _Autonomy_ risk score coming from 92% of the TVL relying on Chainlink oracle, Morpho scores a **Stage 0** decentralization on Base.
+The Morpho protocol on Base achieves a _Low_ centralization score in the _Accessibility_ dimension. The _Upgradeability_ of the `MORPHO` token results a in _Medium_ _Upgradeability_ risk score. This _Upgradeability_ is not protected with an onchain governance system or delay and as such the _Exit Window_ risk is _Medium_ as well. Due to the _High_ _Autonomy_ risk score coming from 92% of the TVL relying on Chainlink oracle, Morpho scores **Stage 0** decentralization on Base.
 
 The protocol could reach **Stage 1** by integrating protections within their default oracle adapter. This could include slippage limits or multiple price feeds for sanity checking.
 
