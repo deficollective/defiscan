@@ -135,13 +135,13 @@ On the right hand side the contracts deployed by the _AVSs_ are denoted with the
 
 ### Stakers and Restakers
 
-A _Staker_ or _Restaker_ is any user who has assets deposited (or "restaked") into EigenLayer. They can stake multiple ERC20 assets that are accepted as _Economic Security_ or restake Beacon Chain ETH to secure _AVSs_.
+A _Staker_ or _Restaker_ is any user who has assets deposited (or "restaked") into EigenLayer (low center in the main diagram). They can stake multiple ERC20 assets that are accepted as _Economic Security_ or restake Beacon Chain ETH to secure _AVSs_.
 
 The _Stakers_ and _Restakers_ have the following actions available; 1) deposit assets into EigenLayer via either the `StrategyManager` (for ERC20s) or the `EigenPodManager` (for Beacon Chain ETH), 2) withdraw assets via the `DelegationManager`, no matter what assets they're withdrawing, 3) delegate to an _Operator_ via the `DelegationManager`, 4) undelegating from an _Operator_ via the `DelegationManager`, 5) and claiming rewards posted by _AVSs_ from the `RewardsCoordinator` contract.
 
 ### Operators
 
-_Operators_ are entities that opt-in to _Operator Sets_ created by _AVSs_ to execute tasks for the _AVS_. _Operators_ receive economic stake delegated by the _Stakers_ and _Restakers_ and take a cut from the weekly rewards issued by the _AVSs_ (default: 10% _Operator_, 90% _Stakers_ and _Restakers_). _Operators_ can also stake themselves, the roles are not mutually exclusive.
+_Operators_ are entities that opt-in to _Operator Sets_ created by _AVSs_ to execute tasks for the _AVS_ (upper center in the main diagram). _Operators_ receive economic stake delegated by the _Stakers_ and _Restakers_ and take a cut from the weekly rewards issued by the _AVSs_ (default: 10% _Operator_, 90% _Stakers_ and _Restakers_). _Operators_ can also stake themselves, the roles are not mutually exclusive.
 
 _Operators_ have the following actions available; 1) register and deregister to and from an _Operator Set_ via the `AllocationManager` contract, 2) allocate and deallocate delegated stake to and from the _Operator Set_ via the `AllocationManager`, 3) change the reward split via the `RewardsCoordinator` contract, 4) claim rewards posted by _AVSs_ from the `RewardsCoordinator` contract, and 5) change the allocation delay via the `AllocationManager` contract, this affects the delay until the allocation becomes slashable upon allocation.
 
@@ -151,7 +151,7 @@ For conditions and timelines on (de)registering and (de)allocation read the [All
 
 _AVSs_ are entities and protocols that offer services to their end users (e.g. Cryptographic Services, Data Availability, Bridging, Oracles, etc.). These services require task execution by an economically secured and distributed set of nodes, such as a PoS system. This task is required to be objective and verifiable; _Operators_ from the Eigenlayer marketplace opt-in to execute this task such that the _AVS_ can offer its service. Eigenlayer helps thus to make Beacon-Chain deposits more economically efficient by allowing _ETH Stakers_ to restake this economic stake to secure also other services that require validation. Additionally, _Stakers_ can also use arbitrary ERC20 tokens that are accepted by _AVSs_, which includes LSTs.
 
-_AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts. The details of the implementation are free to choose by the _AVS_, but they must implement the following functions or manually perform them:
+_AVSs_ are required to deploy their own smart contracts which interact with the Eigenlayer smart contracts (right hand side in the main diagram). The details of the implementation are free to choose by the _AVS_, but they must implement the following functions or manually perform them:
 
 - provide a callback to the `AVSRegistrar` contract to notify the `AllocationManager` if the registration and deregistration by the _Operator_ is accepted (allows whitelisting, or parameter based acceptance, e.g type of stake etc.)
 - create _Operator Sets_ (calling `createOperatorSets` or `createRedistributingOperatorSet` on the `AllocationManager` contract)
