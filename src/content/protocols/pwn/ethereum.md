@@ -7,6 +7,23 @@ author: ["vojtch"]
 submission_date: "2025-02-07"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
+stage_requirements: [
+      [
+            { text: "Assets are not in custody by a centralized entity", status: "fixed" },
+            { text: "All contracts are verified", status: "fixed" },
+            { text: "Source-available codebase", status: "fixed" },
+            { text: "Public documentation exists", status: "fixed" },
+      ], 
+      [
+            { text: "Upgrades have no potential of “loss of funds“ ", status: "fixed"},
+            { text: "Dependency with a High centralization score is mitigated", status: "fixed" },
+            { text: "Frontend backups or self-hosting option exists", status: "fixed"},
+      ], 
+      [
+            { text: "Contracts are immutable", status: "fixed" },
+            { text: "Dependency with a High or Medium centralization score is mitigated", status: "fixed" },
+            { text: "Alternative third-party frontends exist", status: "unfixed" }  
+      ]]
 ---
 
 # Summary
