@@ -203,7 +203,7 @@ After users first deposit into the strategies or EigenPods (and the `StrategyMan
 
 ![Delegation](../diagrams/eigenlayer-delegation.png)
 
-Withdrawal as a _Staker_ or _Restaker_ is only possible through the `DelegationManager` contract. When withdrawing the _Stakers_ and _Restakers_ receive the amount of deposit shares minus the amount of slashes suffered by the _AVS_ during their delegation. This amount of tokens are called withdrawable shares.
+Withdrawal as a _Staker_ or _Restaker_ is only possible through the `DelegationManager` contract. When withdrawing, the _Stakers_ and _Restakers_ receive the amount of deposit shares minus the amount of slashes suffered by the _AVS_ during their delegation. This amount of tokens is called withdrawable shares.
 
 Withdrawal is a 2-step process which requires a `queueWithdrawal` and a `completeQueuedWithdrawal` call to the `DelegationManager` contract. The `queueWithdrawal` call is required to initiate the withdrawal process, and the `completeQueuedWithdrawal` call is required to complete the withdrawal process. The `completeQueuedWithdrawal` call is only possible after a cooldown period (14 days) is over. During this two step process, sufferred slashes by _AVS_ are taken into account to calculate the final amount of ETH or tokens to be sent to the _(Re)Staker_.
 
