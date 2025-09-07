@@ -227,7 +227,7 @@ Registering and deregistering by an _Operator_ from an _Operator Set_ has to be 
 
 The contract's _Upgradeability_ through the `ProxyAdmin` contract introduces an _Upgradeability_ risk, as the upgrade could potentially modify slashing logic and the slashing accounting and thus lead to _loss of funds_ of _(Re)Stakers_ if the upgrade is malicious or faulty, as the `DelegationManager` contract is informed on suffered slashes by the `AllocationManager` contract.
 
-Registration and deregistration of _Operators_ from _Operator Sets_, modification of allocations to _Operator Sets_ by _Operators_, slashing by _AVSs_ can be paused by the pausers. A pause of deregistration and modification of allocations but not slashing could lead to an unfair situation for _Operators_ and _Stakers_.
+Registration and deregistration of _Operators_ from _Operator Sets_, modification of allocations to _Operator Sets_ by _Operators_, and slashing by _AVSs_ can be paused by the pausers. A pause of deregistration and modification of allocations, but not slashing, could lead to an unfair situation for _Operators_ and _Stakers_.
 
 ![Slashing](../diagrams/eigenlayer-slashing.png)
 
