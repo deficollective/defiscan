@@ -60,7 +60,7 @@ The report is concerned with the Eigenlayer protocol deployed on Ethereum mainne
 
 ## Upgradeability
 
-Smart contracts which control user funds, the accounting of delegation and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
+Smart contracts that control user funds, the accounting of delegation, and slashing are fully _upgradeable_ and this can lead to _loss of user funds_ and _loss of unclaimed yield_.
 
 Rewards committed by _AVSs_ to the `RewardsCoordinator` contract are distributed to _Operators_ and _Stakers_ via a merkle tree root posted by an account with the role `RewardsUpdater` , which computes eligibility for each _(Re)Staker_ and _Operator_ based on their stake and _AVS_ rewards specification. If an account with that role is compromised, the rewards can be distributed to the wrong addresses, which leads to _loss of unclaimed yield_.
 
