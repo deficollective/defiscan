@@ -48,7 +48,7 @@ stage_requirements:
 
 # Summary
 
-Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_ with the given tasks, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, that can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. For economic stake, _(Re)Stakers_ can use; a) arbitrary ERC20 tokens, which also includes Liquid Staking Tokens (LSTs), or b) Beacon Chain deposits to increase capital efficiency of staked ETH.
+Eigenlayer is a marketplace that matches compute (by _Operators_) with tasks (by _AVSs_). In order that _AVSs_ trust the _Operators_ with the given tasks, the _Operators_ need economic security (stake), which is provided by _(Re)Stakers_, who can be slashed in case of shortcoming of operational performance. _(Re)Stakers_ have to trust _Operators_ that they do their tasks according to the requirements stated by the _AVSs_. For economic stake, _(Re)Stakers_ can use; a) arbitrary ERC20 tokens, which also include Liquid Staking Tokens (LSTs), or b) Beacon Chain deposits to increase the capital efficiency of staked ETH.
 
 # Ratings
 
