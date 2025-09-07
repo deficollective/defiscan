@@ -137,7 +137,7 @@ On the right hand side, the contracts deployed by the _AVSs_ are denoted with th
 
 A _Staker_ or _Restaker_ is any user who has assets deposited (or "restaked") into EigenLayer (low center in the main diagram). They can stake multiple ERC20 assets that are accepted as _Economic Security_ or restake Beacon Chain ETH to secure _AVSs_.
 
-The _Stakers_ and _Restakers_ have the following actions available; 1) deposit assets into EigenLayer via either the `StrategyManager` (for ERC20s) or the `EigenPodManager` (for Beacon Chain ETH), 2) withdraw assets via the `DelegationManager`, no matter what assets they're withdrawing, 3) delegate to an _Operator_ via the `DelegationManager`, 4) undelegating from an _Operator_ via the `DelegationManager`, 5) and claiming rewards posted by _AVSs_ from the `RewardsCoordinator` contract.
+The _Stakers_ and _Restakers_ have the following actions available: 1) deposit assets into EigenLayer via either the `StrategyManager` (for ERC20s) or the `EigenPodManager` (for Beacon Chain ETH), 2) withdraw assets via the `DelegationManager`, no matter what assets they're withdrawing, 3) delegate to an _Operator_ via the `DelegationManager`, 4) undelegating from an _Operator_ via the `DelegationManager`, and 5) claiming rewards posted by _AVSs_ from the `RewardsCoordinator` contract.
 
 ### Operators
 
