@@ -243,9 +243,9 @@ This means the `rewardsUpdater` role must be completely trusted in the distribut
 
 Rewards are distributed periodically, with a delay period of 7 days before they become claimable.
 
-The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that deposited funds by _AVSs_ could be withdrawn and stolen which leads to _loss of unclaimed yield_ for both _Stakers_ and _Operators_. Additionally the 90/10 default split between _Stakers_ and _Operators_ can be modified with a delay of 7 days.
+The _Upgradeability_ of the `RewardsCoordinator`, controlled by the `ProxyAdmin`, means that deposited funds by _AVSs_ could be withdrawn and stolen which leads to _loss of unclaimed yield_ for both _Stakers_ and _Operators_. Additionally, the 90/10 default split between _Stakers_ and _Operators_ can be modified with a delay of 7 days.
 
-Settings the split between _Stakers_ and _Operators_, claiming of rewards can be paused by the pausers. A pause of claiming rewards could lead to _loss of unclaimed yield_ for both _Stakers_ and _Operators_.
+Setting the split between _Stakers_ and _Operators_, claiming of rewards can be paused by the pausers. A pause of claiming rewards could lead to _loss of unclaimed yield_ for both _Stakers_ and _Operators_.
 
 ### PermissionController
 
