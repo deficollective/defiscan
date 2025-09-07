@@ -309,7 +309,7 @@ Queued _Stakers_ and _Restakers_ are still subject to slashing for their delegat
 
 The [Executor Multisig (1/2)](#security-council) holds all permissions to upgrade contracts of the protocol through the `ProxyAdmin` contract or directly on the contracts themselves. The [Executor Multisig (1/2)](#security-council)'s signers are the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council).
 
-The [Protocol TimelockController](#security-council) has two admins, the [Community Multisig (9/13)](#security-council) and the contract itself. Additionally three roles exist; proposer, canceler and executor. The proposers are the [Operations Multisig (3/6)](#security-council) and the [Protocol Council (3/5)](#security-council), the canceler is the [Operations Multisig (3/6)](#security-council) and the executor is the [Protocol Council (3/5)](#security-council).
+The [Protocol TimelockController](#security-council) has two admins, the [Community Multisig (9/13)](#security-council) and the contract itself. Additionally, three roles exist: proposer, canceler, and executor. The proposers are the [Operations Multisig (3/6)](#security-council) and the [Protocol Council (3/5)](#security-council), the canceler is the [Operations Multisig (3/6)](#security-council) and the executor is the [Protocol Council (3/5)](#security-council).
 
 For the `bEIGEN` token there is a dedicated parallel upgrade process with the same roles and entities. Instead of the [Protocol TimelockController](#security-council) a dedicated [bEIGEN TimelockController](#security-council) with a sufficient _Exit Window_ of 24 days instead of 10 days is used.
 
