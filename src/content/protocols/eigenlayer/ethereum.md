@@ -86,7 +86,7 @@ For the `bEIGEN` token (the backing token that is wrapped into `EIGEN` and used 
 
 ### Pausing Strategy Contracts
 
-Deposit contracts of economic stake (Strategies and EigenPods) can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council) and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10 day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
+Deposit contracts of economic stake (Strategies and EigenPods) can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council), and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10-day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
 
 ### Rewards
 
