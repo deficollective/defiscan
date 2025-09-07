@@ -80,7 +80,7 @@ The [Dependencies](#dependencies) section goes into more detail about risks pote
 
 ### Upgrading Contracts
 
-Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#security-council) which has two signers, the [Community Multisig (9/13)](#security-council) which can execute immediately and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days before executing a call on the [Executor Multisig (1/2)](#security-council).
+Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#security-council), which has two signers, the [Community Multisig (9/13)](#security-council), which can execute immediately, and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days before executing a call on the [Executor Multisig (1/2)](#security-council).
 
 For the `bEIGEN` token (the backing token that is wrapped into `EIGEN` and used to control the `EIGEN` supply) there is a dedicated parallel upgrading process, which is also controlled by the [Community Council (9/13)](#security-council) signer and a dedicated [bEIGEN TimelockController](#security-council) with an _Exit Window_ of 24 days.
 
