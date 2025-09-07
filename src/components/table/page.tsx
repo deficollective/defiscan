@@ -8,8 +8,8 @@ import { loadReviews } from "@/lib/data/utils";
 import { getProtocolDisplayName } from "@/lib/utils";
 
 export const getData = async (): Promise<Project[]> => {
-  const data_new = await loadReviews();
-  return data_new as Project[];
+  const { protocols } = await loadReviews();
+  return protocols as Project[];
 };
 
 export default function Table() {
@@ -46,22 +46,27 @@ export default function Table() {
   }) as Project[];
 
   // Flatten all reviews for counting purposes only
-  const allReviews = data?.flatMap(project => 
-    project.reviews.map(review => ({
-      ...project,
-      ...review,
-      protocol: getProtocolDisplayName(project.protocol, review.instance),
-      baseProtocol: project.protocol
-    }))
-  ) || [];
+  const allReviews =
+    data?.flatMap((project) =>
+      project.reviews.map((review) => ({
+        ...project,
+        ...review,
+        protocol: getProtocolDisplayName(project.protocol, review.instance),
+        baseProtocol: project.protocol,
+      }))
+    ) || [];
 
   let othersCount = 0;
   let defiCount = 0;
   let infrastructureCount = 0;
-  
+
   allReviews.forEach((review) => {
     if (review.stage === "O") othersCount++;
-    else if (review.stage === "I0" || review.stage === "I1" || review.stage === "I2")
+    else if (
+      review.stage === "I0" ||
+      review.stage === "I1" ||
+      review.stage === "I2"
+    )
       infrastructureCount++;
     else defiCount++;
   });

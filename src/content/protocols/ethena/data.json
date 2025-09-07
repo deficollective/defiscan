@@ -1,0 +1,10 @@
+{
+  "id": "ethena",
+  "protocol": "Ethena",
+  "website": "https://ethena.fi/",
+  "defillama_slug": ["ethena-usde"],
+  "socials": {
+    "x": "https://x.com/ethena_labs"
+  },
+  "github": ["https://github.com/ethena-labs"]
+}
