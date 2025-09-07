@@ -160,7 +160,7 @@ _AVSs_ are required to deploy their own smart contracts which interact with the 
 - to allow registered operators to post results
 - various functions to update and configure _Operator Sets_.
 
-Additionally, _AVSs_ can increase fairness and transparency guarantees by; 1) allowing the Operators to veto a slash (Governance contract that calls `slashOperator` on the `AllocationManager` contract), 2) create protocols to eject _Operators_ (Governance contract that calls `deregisterFromOperatorSets` on the `AllocationManager` contract), 3) to create quorums for task submission or veto and 4) to compute rewards onchain instead of offchain (Smart Contract computing rewards and posting them to the `RewardsCoordinator` contract instead of multisigs/EOAs).
+Additionally, _AVSs_ can increase fairness and transparency guarantees by: 1) allowing the Operators to veto a slash (Governance contract that calls `slashOperator` on the `AllocationManager` contract), 2) create protocols to eject _Operators_ (Governance contract that calls `deregisterFromOperatorSets` on the `AllocationManager` contract), 3) to create quorums for task submission or veto, and 4) to compute rewards onchain instead of offchain (Smart Contract computing rewards and posting them to the `RewardsCoordinator` contract instead of multisigs/EOAs).
 
 Regarding rewards, _AVSs_ are free to design their own reward logic, whether it is based on offchain or onchain data, and can distribute rewards in any ERC20 token. For instance, an _AVS_ can distribute a flat rate of rewards or a performance-based reward structure that is dependent on the work performed by _Operators_ within a certain time period. Additionally, an _AVS_ can submit multiple reward submissions, denominated in different tokens.
 
