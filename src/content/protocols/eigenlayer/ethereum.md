@@ -90,7 +90,7 @@ Deposit contracts of economic stake (Strategies and EigenPods) can be paused imm
 
 ### Rewards
 
-The `RewardsUpdater` can immediately remove a root that holds the information of the weekly rewards and post a new root, claiming all deposited funds by _AVSs_ instead of distributing them to _Operators_ and _Stakers_. Immediate _loss of unclaimed yield_ leads to _Medium_ _Exit Window_ score.
+The `RewardsUpdater` can immediately remove a root that holds the information of the weekly rewards and post a new root, claiming all deposited funds by _AVSs_ instead of distributing them to _Operators_ and _Stakers_. Immediate _loss of unclaimed yield_ leads to a _Medium_ _Exit Window_ score.
 
 ### Overall Exit Window
 
