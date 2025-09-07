@@ -275,7 +275,7 @@ PI are distributed in `EIGEN` tokens minted by the Eigenlayer protocol and distr
 
 # Dependencies
 
-The Eigenlayer protocol does not depend on a single _AVS_ or _Operator_. However, _AVSs_, _(Re)Stakers_ and _Operators_ depend on each other, and as such create dependency risks for each other.
+The Eigenlayer protocol does not depend on a single _AVS_ or _Operator_. However, _AVSs_, _(Re)Stakers_, and _Operators_ depend on each other, and as such create dependency risks for each other.
 
 The following subsections highlight risks potentially coming from _AVSs_ and _Operators_ for respective counterparties.
 
