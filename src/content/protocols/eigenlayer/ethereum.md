@@ -129,7 +129,7 @@ Left-middle shows the strategy contracts module. There are two types of strategy
 
 Center is the heart-piece of Eigenlayer, the `DelegationManager`. The `DelegationManager` interacts with the `StrategyManager` and the `EigenPodManager` below left and below right. These contracts store information on the deposited tokens and restaked Beacon Chain ETH. Above the `DelegationManager` is the `AllocationManager`, which is the contract with which _Operators_ and _AVSs_ allocate and slash staked assets. Next to `AllocationManager` is the `RewardsCoordinator` contract, which allows _AVSs_ to post rewards, which then can be claimed by _Operators_ and _(Re)Stakers_ defined on agreed splits.
 
-On the right hand side the contracts deployed by the _AVSs_ are denoted with the pointed box. The contracts by the _AVS_ are highly customizable. DApps possibly interact with this contracts denoted top right. The tasks that need to be validated/executed can then be picked up by _Operators_ from these contracts.
+On the right hand side, the contracts deployed by the _AVSs_ are denoted with the pointed box. The contracts by the _AVS_ are highly customizable. DApps possibly interact with these contracts, denoted top right. The tasks that need to be validated/executed can then be picked up by _Operators_ from these contracts.
 
 ## Roles
 
