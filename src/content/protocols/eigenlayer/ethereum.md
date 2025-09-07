@@ -249,7 +249,7 @@ Setting the split between _Stakers_ and _Operators_, claiming of rewards can be 
 
 ### PermissionController
 
-The `PermissionController` is a contract that allows _AVSs_ and _Operators_ to appoint general admins to call functions on the `AllocationManager` and `DelegationManager` contracts or appointees (can call only selected addresses and functions) on behalf of them.
+The `PermissionController` is a contract that allows _AVSs_ and _Operators_ to appoint general admins to call functions on the `AllocationManager` and `DelegationManager` contracts or appointees (can call only selected addresses and functions) on their behalf.
 
 The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmin`, means that permissions to slash operators on behalf of AVS (as an appointee) can be hijacked by a permission owner going rogue, leading to _loss of funds_ for _Stakers_ and loss of delegated stake for _Operators_.
 
