@@ -70,7 +70,7 @@ The withdrawal process can be paused immediately by pausers registered in the `P
 
 ## Autonomy
 
-The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings _AVSs_ and _Operators_ together. Thus the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks to each other and to _(Re)Stakers_ as the respective counterparties.
+The Eigenlayer protocol does not rely on a single _Operator_, nor on a single _AVS_ to work since it is a market place that brings _AVSs_ and _Operators_ together. Thus, the overall _Dependency_ risk is _low_. However, single _AVSs_ or _Operators_ can impose risks on each other and on _(Re)Stakers_ as the respective counterparties.
 
 The [Dependencies](#dependencies) section goes into more detail about risks potentially originating from _AVSs_ and _Operators_.
 
