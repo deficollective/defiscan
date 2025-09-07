@@ -112,7 +112,7 @@ The Eigenlayer protocol achieves _High_ centralization risk scores for its _Upgr
 
 The protocol could reach _Stage 1_ by offering a self-hosting option for _Stakers_ and _Restakers_ to manage their delegation and withdrawal.
 
-The project additionally could advance to _Stage 2_ if alternative frontends are available for _Stakers_, _Restakers_ and _Operators_ to manage their delegation, withdrawal and participation in _Operator Sets_. Additionally it is required that the _Upgradeability_ is protected by 30 days _Exit Window_.
+The project additionally could advance to _Stage 2_ if alternative frontends are available for _Stakers_, _Restakers_, and _Operators_ to manage their delegation, withdrawal, and participation in _Operator Sets_. Additionally it is required that the _Upgradeability_ is protected by a 30-day _Exit Window_.
 
 # Reviewer's Notes
 
