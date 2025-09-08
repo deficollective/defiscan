@@ -24,8 +24,9 @@ export default function App({ children }: PropsWithChildren) {
             </a>
           </>
         }
-        backgroundColor="#5cdbd9" // colored background
-        textColor="#434a50ff"
+        backgroundColor="#1A1525" //"#5cdbd9" // colored background
+        useGradientText={true}
+        textColor="#434a50ff" // if no gradient, will use this text color
       />
 
       <Footer />

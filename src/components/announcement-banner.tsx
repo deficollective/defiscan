@@ -9,13 +9,15 @@ interface AnnouncementBannerProps {
   text: string | React.ReactNode;
   backgroundColor: string;
   textColor?: string;
+  useGradientText?: boolean;
 }
 
 const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
   show,
   text,
   backgroundColor,
-  textColor = 'white'
+  textColor = 'white',
+  useGradientText = false
 }) => {
   const [isVisible, setIsVisible] = useState(show);
 
@@ -30,11 +32,19 @@ const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
     >
       <div className="px-4 py-2">
         <div className="flex items-center justify-center relative max-w-7xl mx-auto">
-          <div 
-            className="text-sm font-medium text-center flex-1"
-            style={{ color: textColor }}
-          >
-            {text}
+          <div className="text-sm font-medium text-center flex-1">
+            {useGradientText ? (
+              <span style={{
+                background: 'linear-gradient(90deg, #CDB5F4, #F4B5C9, #F5C89F, #AFCBFA)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                {text}
+              </span>
+            ) : (
+              <span style={{ color: textColor }}>{text}</span>
+            )}
           </div>
           <button
             onClick={() => setIsVisible(false)}
