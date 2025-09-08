@@ -34,12 +34,15 @@ const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
         <div className="flex items-center justify-center relative max-w-7xl mx-auto">
           <div className="text-sm font-medium text-center flex-1">
             {useGradientText ? (
-              <span style={{
-                background: 'linear-gradient(90deg, #CDB5F4, #F4B5C9, #F5C89F, #AFCBFA)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
+              <span 
+                className="transition-all duration-300 hover:brightness-125 hover:saturate-125"
+                style={{
+                  background: 'linear-gradient(90deg, #CDB5F4, #F4B5C9, #F5C89F, #AFCBFA)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
                 {text}
               </span>
             ) : (

@@ -14,17 +14,16 @@ export default function App({ children }: PropsWithChildren) {
         show={true} // Set to true to show the banner
         text={
           <>
-            🌟 Support DeFiScan on
             <a
               href="https://giveth.io/cause/defi-transparency-decentralization"
               target="_blank"
               className="underline hover:no-underline ml-1"
             >
-              Giveth !
+              🌟 Support DeFiScan on Giveth !
             </a>
           </>
         }
-        backgroundColor="#1A1525" //"#5cdbd9" // colored background
+        backgroundColor="#251d35ff" //"#5cdbd9" // colored background
         useGradientText={true}
         textColor="#434a50ff" // if no gradient, will use this text color
       />
