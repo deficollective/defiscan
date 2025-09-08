@@ -14,13 +14,13 @@ export default function App({ children }: PropsWithChildren) {
         show={true} // Set to true to show the banner
         text={
           <>
-            🎉 Support us in the upcoming Gitcoin funding round
+            Support DeFiScan on
             <a
-              href="https://octant.app/projects"
+              href="https://giveth.io/cause/defi-transparency-decentralization"
               target="_blank"
               className="underline hover:no-underline ml-1"
             >
-              here!
+              Giveth!
             </a>
           </>
         }
