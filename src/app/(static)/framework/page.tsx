@@ -63,7 +63,7 @@ const riskData = [
     risks: {
       high: "Dependencies may cause theft or loss of user funds and exhibit Stage 0, or equivalent, centralization",
       medium:
-        "Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization", 
+        "Dependencies may cause theft or loss of unclaimed yield, or may otherwise materially change the expected protocol performance, OR dependencies exhibit Stage 1, or equivalent, decentralization",
       low: "Dependencies (if any) cannot materially change the expected protocol performance, OR dependencies exhibit Stage 2, or equivalent, decentralization",
     },
     anchor: "autonomy",
@@ -138,8 +138,39 @@ const othersData = {
     "❌ Public documentation exists that outlines the protocol components and expected performance",
     "❌ Source-available codebase",
     "❌ Verified contracts",
-  ]
-}
+  ],
+};
+
+const updateData = [
+  {
+    name: "Version 1.2",
+    description:
+      'Shifting security council requirements from "non-team" to "non-insiders". Clarifying security councils\' role in relation to governance. Specifying requirements on the decentralization of dependencies.',
+    date: "Mar. 2025",
+    link: "/blog/defiscan-update-methodology-batch-2",
+  },
+  {
+    name: "Version 1.1",
+    description:
+      'Introducing the "Others" category and different clarifications on the protocols\' scope and exit window.',
+    date: "Dec. 2024",
+    link: "/blog/defiscan-update-methodology",
+  },
+  {
+    name: "Framework Launch",
+    description:
+      "Initial release of the DeFiScan framework with centralization risk scoring and stage definitions.",
+    date: "Oct. 2024",
+    link: "/blog/introducing-defiscan/",
+  },
+  {
+    name: "Protocol Guidelines",
+    description:
+      "Initial release of the guidelines for the characterization of Genuine DeFi systems and the identification of On-chain CeFi services.",
+    date: "Apr. 2024",
+    link: "/blog/tdc-protocol-guidelines",
+  },
+];
 
 function createIdFromTitle(title: string) {
   return title
@@ -337,7 +368,9 @@ const StagesSection = () => (
           <tbody>
             {stagesData.map((stage) => (
               <tr key={stage.stage} className="hover:bg-accent transition">
-                <td className="px-6 py-4 border">{stage.stage}</td>
+                <td className="px-6 py-4 border whitespace-nowrap">
+                  {stage.stage}
+                </td>
                 <td className="px-6 py-4 border">{stage.description}</td>
                 <td className="px-6 py-4 border">
                   <ul className="list-none list-inside">
@@ -369,12 +402,15 @@ const SecurityCouncilSection = () => (
 
     <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
       <p className="mb-4">
-        A Security Council can represent an effective intermediate step of decentralized control over permissions that cannot be revoked or protected with an Exit Window.
-        In particular, a Security Council enables a protocol to mitigate risks of centralized control over such permissions and enter Stage 1.
+        A Security Council can represent an effective intermediate step of
+        decentralized control over permissions that cannot be revoked or
+        protected with an Exit Window. In particular, a Security Council enables
+        a protocol to mitigate risks of centralized control over such
+        permissions and enter Stage 1.
       </p>
       <p className="mb-4">
-        Any multisig account with the following minimal requirements is an acceptable
-        Security Council setup:
+        Any multisig account with the following minimal requirements is an
+        acceptable Security Council setup:
       </p>
       <ul className="list-disc ml-6">
         {securityCouncilRequirements.map((requirement, index) => (
@@ -382,10 +418,15 @@ const SecurityCouncilSection = () => (
         ))}
       </ul>
       <p className="mb-4 mt-4">
-        Note that we refer to an "insider" as any party of the "inner circle" of individuals or entities developing, maintaining and operating the protocol, such as the "team members" or a company mandated to perform certain services.
+        Note that we refer to an "insider" as any party of the "inner circle" of
+        individuals or entities developing, maintaining and operating the
+        protocol, such as the "team members" or a company mandated to perform
+        certain services.
       </p>
       <p className="mb-4">
-        These requirements translate to a set of at least 7 signers, identified through their name or pseudonym, and a threshold qualified by a majority of signers including at least one "outsider". 
+        These requirements translate to a set of at least 7 signers, identified
+        through their name or pseudonym, and a threshold qualified by a majority
+        of signers including at least one "outsider".
       </p>
     </div>
   </>
@@ -405,8 +446,11 @@ const OthersSection = () => (
 
     <div className="flex-1 my-6 text-left text-muted-foreground lg:text-start xl:text-base">
       <p className="mb-4">
-        The stages framework considers a set of basic requirements to enter Stage 0 and qualify as a DeFi protocol. 
-        The <i>Others</i> protocol category captures protocols which are built using blockchain technology and serve a financial use case but do not meet one or more of the Stage 0 requirements:
+        The stages framework considers a set of basic requirements to enter
+        Stage 0 and qualify as a DeFi protocol. The <i>Others</i> protocol
+        category captures protocols which are built using blockchain technology
+        and serve a financial use case but do not meet one or more of the Stage
+        0 requirements:
       </p>
       <ul className="list-none space-y-2">
         {othersData.qualifications.map((requirement, index) => (
@@ -414,8 +458,73 @@ const OthersSection = () => (
         ))}
       </ul>
       <p className="mt-4">
-        The <i>Others</i> protocol category thus shines a light on protocols which either fail to disclose the required information publicly, such as documentation (aka a Whitepaper) or software source-code, or do not meet basic requirements to qualify as a <i>DeFi</i> protocol.
+        The <i>Others</i> protocol category thus shines a light on protocols
+        which either fail to disclose the required information publicly, such as
+        documentation (aka a Whitepaper) or software source-code, or do not meet
+        basic requirements to qualify as a <i>DeFi</i> protocol.
       </p>
+    </div>
+  </>
+);
+
+const FrameworkUpdatesSection = () => (
+  <>
+    <a href={`#${createIdFromTitle("Framework Updates")}`}>
+      <h1
+        id={createIdFromTitle("Framework Updates")}
+        className="mt-10 text-primary font-bold text-2xl sm:text-2xl md:text-3xl lg:text-4xl"
+        style={{ scrollMarginTop: "100px" }}
+      >
+        Framework Updates
+      </h1>
+    </a>
+
+    <div className="flex-1 mt-6 text-center text-muted-foreground lg:text-start xl:text-base">
+      <p className="mb-6">
+        Our framework evolves over time based on community feedback and
+        learnings from protocol reviews. Here you can find a summary of major
+        updates and changes.
+      </p>
+
+      <div className="overflow-x-auto">
+        <table className="table-auto w-full border-collapse border">
+          <thead>
+            <tr>
+              <td className="border px-4 py-2 text-left font-bold">Update</td>
+              <td className="border px-4 py-2 text-left font-bold">
+                Description
+              </td>
+              <td className="border px-4 py-2 text-left font-bold whitespace-nowrap">
+                Date
+              </td>
+              <td className="border px-4 py-2 text-left font-bold whitespace-nowrap">
+                More Info
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {updateData.map((update, index) => (
+              <tr key={index} className="hover:bg-accent transition">
+                <td className="px-4 py-3 border">{update.name}</td>
+                <td className="px-4 py-3 border">{update.description}</td>
+                <td className="px-4 py-3 border whitespace-nowrap">
+                  {update.date}
+                </td>
+                <td className="px-4 py-3 border">
+                  <a
+                    href={update.link}
+                    className="text-primary hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Details
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   </>
 );
@@ -428,6 +537,7 @@ export default function LearnMorePage() {
       <StagesSection />
       <SecurityCouncilSection />
       <OthersSection />
+      <FrameworkUpdatesSection />
     </div>
   );
 }

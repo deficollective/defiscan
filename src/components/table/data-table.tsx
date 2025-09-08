@@ -73,13 +73,12 @@ const renderTableBody = <TData, TValue>(
               {index === 0 ? (
                 <div className="flex items-center">
                   <div className="w-6 flex justify-center mr-2">
-                    {row.getCanExpand() && (
-                      row.getIsExpanded() ? (
+                    {row.getCanExpand() &&
+                      (row.getIsExpanded() ? (
                         <ChevronDown className="h-4 w-4" />
                       ) : (
                         <ChevronRight className="h-4 w-4" />
-                      )
-                    )}
+                      ))}
                   </div>
                   <div className={cn(row.depth > 0 && "pl-4")}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -129,14 +128,14 @@ const getInitialVisibility = (
     protocol: true,
     stage: activeView === "defi" || activeView === "infrastructure",
     reasons: activeView === "others",
-    risks: true,
+    risks: activeView !== "infrastructure",
     type: true,
     chain: activeView === "defi" || activeView === "others",
     tvl: activeView === "defi" || activeView === "others",
     infrastructure: activeView === "infrastructure",
     centralization: activeView === "infrastructure",
   };
-  
+
   return initialState;
 };
 
@@ -148,13 +147,22 @@ const useResponsiveColumns = (
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth < mobileBreakpoint;
-      
+
       table.getAllColumns().forEach((column) => {
         const meta = column.columnDef.meta as ExtendedColumnMeta;
         if (meta?.responsiveHidden) {
           // Special case: show risks column on mobile for DeFi tab
-          if (column.id === "risks" && activeView === "defi") {
-            column.toggleVisibility(true);
+          if (column.id === "risks") {
+            if (activeView === "defi" || activeView === "others") {
+              // Show risks column on mobile for DeFi tab
+              column.toggleVisibility(true);
+            } else if (activeView === "infrastructure") {
+              // Always hide risks column for infrastructure view
+              column.toggleVisibility(false);
+            } else {
+              // Default behavior for other views
+              column.toggleVisibility(!isMobile);
+            }
           } else {
             column.toggleVisibility(!isMobile);
           }
@@ -177,7 +185,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    { id: "stage", value: [0, 1, 2, "R"] } // Initial filter for "defi" view
+    { id: "stage", value: [0, 1, 2, "R"] }, // Initial filter for "defi" view
   ]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [sorting, setSorting] = useState<SortingState>([
@@ -262,7 +270,11 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       <div className="pb-4">
-        <ToggleGroup type="single" value={activeView} onValueChange={(value) => value && setActiveView(value as ViewType)}>
+        <ToggleGroup
+          type="single"
+          value={activeView}
+          onValueChange={(value) => value && setActiveView(value as ViewType)}
+        >
           <ToggleGroupItem
             value="defi"
             aria-label="Toggle DeFi"
@@ -277,7 +289,9 @@ export function DataTable<TData, TValue>({
             className="hover:bg-accent/50 hover:text-accent-foreground"
           >
             Infrastructure
-            <Badge className="px-2 text-xs text-center ml-2">{infrastructureCount}</Badge>
+            <Badge className="px-2 text-xs text-center ml-2">
+              {infrastructureCount}
+            </Badge>
           </ToggleGroupItem>
           <ToggleGroupItem
             value="others"
@@ -285,14 +299,16 @@ export function DataTable<TData, TValue>({
             className="hover:bg-accent/50 hover:text-accent-foreground"
           >
             Others
-            <Badge className="px-2 text-xs text-center ml-2">{othersCount}</Badge>
+            <Badge className="px-2 text-xs text-center ml-2">
+              {othersCount}
+            </Badge>
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
 
       <div className="overflow-hidden">
         <TableToolbar table={table} />
-        
+
         {/* Desktop: Use ScrollArea for styled scrollbars */}
         <div className="hidden md:block">
           <ScrollArea className="w-full">
@@ -319,11 +335,11 @@ export function DataTable<TData, TValue>({
         </div>
 
         {/* Mobile: Use native horizontal scrolling */}
-        <div 
-          className="block md:hidden overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent" 
-          style={{ 
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'thin'
+        <div
+          className="block md:hidden overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+          style={{
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "thin",
           }}
         >
           <Table>
