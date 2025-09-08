@@ -80,13 +80,13 @@ The [Dependencies](#dependencies) section goes into more detail about risks pote
 
 ### Upgrading Contracts
 
-Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#security-council), which has two signers, the [Community Multisig (9/13)](#security-council), which can execute immediately, and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days before executing a call on the [Executor Multisig (1/2)](#security-council).
+Upgrading of all upgradeable Eigenlayer smart contracts can be executed through the [Executor Multisig (1/2)](#permission-owners), which has two signers, the [Community Multisig (9/13)](#security-council), which can execute immediately, and the [Protocol TimelockController](#security-council). The [Protocol TimelockController](#security-council) has an _Exit Window_ of 10 days before executing a call on the [Executor Multisig (1/2)](#permission-owners).
 
 For the `bEIGEN` token (the backing token that is wrapped into `EIGEN` and used to control the `EIGEN` supply) there is a dedicated parallel upgrading process, which is also controlled by the [Community Council (9/13)](#security-council) signer and a dedicated [bEIGEN TimelockController](#security-council) with an _Exit Window_ of 24 days.
 
 ### Pausing Strategy Contracts
 
-Deposit contracts of economic stake (Strategies and EigenPods) can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#security-council), and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#security-council) with a 10-day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
+Deposit contracts of economic stake (Strategies and EigenPods) can be paused immediately by pausers registered in the `PauserRegistry` contract which includes the [Pauser Multisig (1/6)](#security-council), the [Executor Multisig (1/2)](#permission-owners), and the [Operations Multisig (3/6)](#security-council). During a pause, the _(Re)Stakers_ cannot withdraw their funds. Resuming can only be enforced by the [Executor Multisig (1/2)](#permission-owners) with a 10-day _Exit Window_ or immediately through the [Community Council (9/13)](#security-council) signer which adheres to the [Security Council Requirements](/framework#security-council-requirements).
 
 ### Rewards
 
@@ -123,7 +123,7 @@ The project additionally could advance to _Stage 2_ if alternative frontends are
 
 ![Eigenlayer](../diagrams/eigenlayer-overview.png)
 
-The top-left shows the governance module. Arrows from the [Executor Multisig (1/2)](#security-council) mostly denote upgrading power or upgrading calls through the `ProxyAdmin` located below.
+The top-left shows the governance module. Arrows from the [Executor Multisig (1/2)](#permission-owners) mostly denote upgrading power or upgrading calls through the `ProxyAdmin` located below.
 
 Left-middle shows the strategy contracts module. There are two types of strategy contracts. Strategy contracts created by users through the factory are denoted as `StrategyBaseBeaconProxy` (this contract is deployed for each token, only one is shown). `StrategyTVLLimits` are contracts that were deployed initially, and there is one contract per Liquid Staked Token (LST), only one is shown. Both types of contracts and each instance store ERC20 _(Re)Staker_ funds that are referenced from the `StrategyManager`.
 
@@ -191,7 +191,7 @@ EigenPods are the contracts that point to Beacon Chain deposits and make them sl
 
 If a _Restaker_ wants to withdraw their funds from the Beacon Chain, they need to start a checkpoint and verify the checkpoint to update their shares in the `EigenPodManager` based on validator rewards they received on the Beacon Chain. Additional shares from validator rewards can be withdrawn or used to delegate to _Operators_. Reduced Beacon Chain deposits through validator slashing lead to a reduction of the shares. To withdraw `ETH` from the Beacon Chain, _Restakers_ can use the EIP-7002 execution layer triggereable withdrawals, via calling `requestWithdrawal` on the `EigenPod` contract, or use the Consensus Layer primary key to initiate the withdrawal to the Execution Layer (Ethereum Mainnet). To be able to withdraw the `ETH` deposited in the `EigenPod` contract through the previous step, _Restakers_ need to queue and complete a withdrawal with the `DelegationManager` contract. (see [DelegationManager](#delegationmanager))
 
-Each `EigenPod` shares the same implementation contract, which allows updating the `EigenPods` contracts all at once by the [Executor Multisig (1/2)](#security-council) with the Beacon-Proxy `UpgradeableBeacon` contract. A malicious upgrade could be used to add a function that allows for withdrawing the `ETH` from the Beacon-Chain by using the EIP-7002 execution layer triggerable withdrawals to a malicious address. However, updates like this can be cancelled by the [Community Multisig (9/13)](#security-council), which is one of the signers in the [Executor Multisig (1/2)](#security-council).
+Each `EigenPod` shares the same implementation contract, which allows updating the `EigenPods` contracts all at once by the [Executor Multisig (1/2)](#permission-owners) with the Beacon-Proxy `UpgradeableBeacon` contract. A malicious upgrade could be used to add a function that allows for withdrawing the `ETH` from the Beacon-Chain by using the EIP-7002 execution layer triggerable withdrawals to a malicious address. However, updates like this can be cancelled by the [Community Multisig (9/13)](#security-council), which is one of the signers in the [Executor Multisig (1/2)](#permission-owners).
 
 The starting of checkpoints and their verification can be paused by the pausers. A permanent pause of the withdrawal process leads to _loss of funds_ for the _Restakers_.
 
@@ -255,7 +255,7 @@ The _Upgradeability_ of the `PermissionController`, controlled by the `ProxyAdmi
 
 ### PauserRegistry
 
-The `PauserRegistry` contract informs all pausable contracts, who can pause, and who can unpause. The [Executor Multisig (1/2)](#security-council) can assign pausing rights to new accounts. [Community Multisig (9/13)](#security-council) as one of the signers of the [Executor Multisig (1/2)](#security-council) can resume the paused actions.
+The `PauserRegistry` contract informs all pausable contracts, who can pause, and who can unpause. The [Executor Multisig (1/2)](#permission-owners) can assign pausing rights to new accounts. [Community Multisig (9/13)](#security-council) as one of the signers of the [Executor Multisig (1/2)](#permission-owners) can resume the paused actions.
 
 ### EIGEN and bEIGEN
 
@@ -307,7 +307,7 @@ Queued _Stakers_ and _Restakers_ are still subject to slashing for their delegat
 
 # Governance
 
-The [Executor Multisig (1/2)](#security-council) holds all permissions to upgrade contracts of the protocol through the `ProxyAdmin` contract or directly on the contracts themselves. The [Executor Multisig (1/2)](#security-council)'s signers are the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council).
+The [Executor Multisig (1/2)](#permission-owners) holds all permissions to upgrade contracts of the protocol through the `ProxyAdmin` contract or directly on the contracts themselves. The [Executor Multisig (1/2)](#permission-owners)'s signers are the [Community Multisig (9/13)](#security-council) and the [Protocol TimelockController](#security-council).
 
 The [Protocol TimelockController](#security-council) has two admins, the [Community Multisig (9/13)](#security-council) and the contract itself. Additionally, three roles exist: proposer, canceler, and executor. The proposers are the [Operations Multisig (3/6)](#security-council) and the [Protocol Council (3/5)](#security-council), the canceler is the [Operations Multisig (3/6)](#security-council) and the executor is the [Protocol Council (3/5)](#security-council).
 
@@ -319,7 +319,7 @@ The 3 out of 5 multisig has 2 signers from the Eigen Foundation and 3 external s
 
 ## Community Multisig
 
-The [Community Multisig (9/13)](#security-council) can execute calls through the [Executor Multisig (1/2)](#security-council) and [bEIGEN Executor Multisig (1/2)](#security-council) without co-signer. This permission is designed for emergency situations and key compromises. This permission could technically be misused to steal funds from the Eigenlayer protocol with immediate effect (no exit window for the [Community Multisig (9/13)](#security-council)), therefore distribution of signers across the ecosystem with long term alignment is important.
+The [Community Multisig (9/13)](#security-council) can execute calls through the [Executor Multisig (1/2)](#permission-owners) and [bEIGEN Executor Multisig (1/2)](#security-council) without co-signer. This permission is designed for emergency situations and key compromises. This permission could technically be misused to steal funds from the Eigenlayer protocol with immediate effect (no exit window for the [Community Multisig (9/13)](#security-council)), therefore distribution of signers across the ecosystem with long term alignment is important.
 
 The [Community Multisig (9/13)](#security-council) satisfies our [security council requirements](/framework#security-council-requirements).
 
@@ -343,15 +343,13 @@ Signers of the [Community Multisig (9/13)](#security-council) are
 
 ## Security Council
 
-| Name                     | Account                                                                                                               | Type          | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public                                                                                                |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
-| bEIGEN Executor Multisig | [0x942eaF324971440384e4cA0ffA39fC3bb369D67d](https://etherscan.io/address/0x942eaF324971440384e4cA0ffA39fC3bb369D67d) | Multisig 1/2  | ❌          | ❌              | ❌                | ❌                                                                                                            |
-| Executor Multisig        | [0x369e6F597e22EaB55fFb173C6d9cD234BD699111](https://etherscan.io/address/0x369e6F597e22EaB55fFb173C6d9cD234BD699111) | Multisig 1/2  | ❌          | ❌              | ❌                | ❌                                                                                                            |
-| Pauser Multisig          | [0x5050389572f2d220ad927CcbeA0D406831012390](https://etherscan.io/address/0x5050389572f2d220ad927CcbeA0D406831012390) | Multisig 1/6  | ❌          | ❌              | ❌                | ❌                                                                                                            |
-| Community Multisig       | [0xFEA47018D632A77bA579846c840d5706705Dc598](https://etherscan.io/address/0xFEA47018D632A77bA579846c840d5706705Dc598) | Multisig 9/13 | ✅          | ✅              | ✅                | ✅ ([source](https://docs.eigenfoundation.org/protocol-governance/technical-architecture#community-multisig)) |
-| Operations Multisig      | [0xBE1685C81aA44FF9FB319dD389addd9374383e90](https://etherscan.io/address/0xBE1685C81aA44FF9FB319dD389addd9374383e90) | Multisig 3/6  | ❌          | ❌              | ❌                | ❌                                                                                                            |
-| Protocol Council         | [0x461854d84ee845f905e0ecf6c288ddeeb4a9533f](https://etherscan.io/address/0x461854d84ee845f905e0ecf6c288ddeeb4a9533f) | Multisig 3/5  | ❌          | ✅              | ✅                | ✅ ([source](https://docs.eigenfoundation.org/protocol-governance/technical-architecture#protocol-council))   |
-| rewardsUpdater           | [0x8f94F55fD8c9E090296283137C303fE97d32A9e2](https://etherscan.io/address/0x8f94F55fD8c9E090296283137C303fE97d32A9e2) | EOA           | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Name                | Account                                                                                                               | Type          | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public                                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------- | ----------- | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| Pauser Multisig     | [0x5050389572f2d220ad927CcbeA0D406831012390](https://etherscan.io/address/0x5050389572f2d220ad927CcbeA0D406831012390) | Multisig 1/10 | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Community Multisig  | [0xFEA47018D632A77bA579846c840d5706705Dc598](https://etherscan.io/address/0xFEA47018D632A77bA579846c840d5706705Dc598) | Multisig 9/13 | ✅          | ✅              | ✅                | ✅ ([source](https://docs.eigenfoundation.org/protocol-governance/technical-architecture#community-multisig)) |
+| Operations Multisig | [0xBE1685C81aA44FF9FB319dD389addd9374383e90](https://etherscan.io/address/0xBE1685C81aA44FF9FB319dD389addd9374383e90) | Multisig 3/6  | ❌          | ❌              | ❌                | ❌                                                                                                            |
+| Protocol Council    | [0x461854d84ee845f905e0ecf6c288ddeeb4a9533f](https://etherscan.io/address/0x461854d84ee845f905e0ecf6c288ddeeb4a9533f) | Multisig 3/5  | ❌          | ✅              | ✅                | ✅ ([source](https://docs.eigenfoundation.org/protocol-governance/technical-architecture#protocol-council))   |
+| rewardsUpdater      | [0x8f94F55fD8c9E090296283137C303fE97d32A9e2](https://etherscan.io/address/0x8f94F55fD8c9E090296283137C303fE97d32A9e2) | EOA           | ❌          | ❌              | ❌                | ❌                                                                                                            |
 
 # Contracts & Permissions
 
@@ -425,7 +423,7 @@ Signers of the [Community Multisig (9/13)](#security-council) are
 | ProxyAdmin (bEIGEN)           | [0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9](https://etherscan.io/address/0x3f5Ab2D4418d38568705bFd6672630fCC3435CC9) | Contract      |
 | bEIGEN Executor Multisig      | [0x942eaF324971440384e4cA0ffA39fC3bb369D67d](https://etherscan.io/address/0x942eaF324971440384e4cA0ffA39fC3bb369D67d) | Multisig 1/2  |
 | Executor Multisig             | [0x369e6F597e22EaB55fFb173C6d9cD234BD699111](https://etherscan.io/address/0x369e6F597e22EaB55fFb173C6d9cD234BD699111) | Multisig 1/2  |
-| Pauser Multisig               | [0x5050389572f2d220ad927CcbeA0D406831012390](https://etherscan.io/address/0x5050389572f2d220ad927CcbeA0D406831012390) | Multisig 1/6  |
+| Pauser Multisig               | [0x5050389572f2d220ad927CcbeA0D406831012390](https://etherscan.io/address/0x5050389572f2d220ad927CcbeA0D406831012390) | Multisig 1/10 |
 | Community Multisig            | [0xFEA47018D632A77bA579846c840d5706705Dc598](https://etherscan.io/address/0xFEA47018D632A77bA579846c840d5706705Dc598) | Multisig 9/13 |
 | Operations Multisig           | [0xBE1685C81aA44FF9FB319dD389addd9374383e90](https://etherscan.io/address/0xBE1685C81aA44FF9FB319dD389addd9374383e90) | Multisig 3/6  |
 | Protocol Council              | [0x461854d84ee845f905e0ecf6c288ddeeb4a9533f](https://etherscan.io/address/0x461854d84ee845f905e0ecf6c288ddeeb4a9533f) | Multisig 3/5  |
