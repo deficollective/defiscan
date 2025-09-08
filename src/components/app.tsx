@@ -14,18 +14,18 @@ export default function App({ children }: PropsWithChildren) {
         show={true} // Set to true to show the banner
         text={
           <>
-            Support DeFiScan on
+            🌟 Support DeFiScan on
             <a
               href="https://giveth.io/cause/defi-transparency-decentralization"
               target="_blank"
               className="underline hover:no-underline ml-1"
             >
-              Giveth!
+              Giveth !
             </a>
           </>
         }
-        backgroundColor="#ffd34eff" // colored background
-        textColor="black"
+        backgroundColor="#5cdbd9" // colored background
+        textColor="#434a50ff"
       />
 
       <Footer />
