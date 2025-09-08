@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { loadReviews } from '@/lib/data/utils';
-import { Project } from '@/lib/types';
+import React, { useState, useEffect, useRef } from "react";
+import { loadReviews } from "@/lib/data/utils";
+import { Project } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,9 @@ interface ProtocolCarouselProps {
   onSeeAllClick?: () => void;
 }
 
-export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClick }) => {
+export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({
+  onSeeAllClick,
+}) => {
   const [protocols, setProtocols] = useState<Project[]>([]);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -23,24 +25,50 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
   useEffect(() => {
     const fetchProtocols = async () => {
       try {
-        const data = await loadReviews();
-        // Filter out protocols without logos, infrastructure reviews, unqualified protocols, and sort by name for consistency
-        const protocolsWithLogos = data
-          .filter(protocol => {
-            // Filter out protocols without logos
-            if (!protocol.logo) return false;
-            
-            // Filter out protocols that only have infrastructure reviews (stages starting with "I") or unqualified ("O")
-            const hasValidReview = protocol.reviews.some(review => 
-              !review.stage?.toString().startsWith("I") && review.stage !== "O"
+        const { protocols, totalTvl } = await loadReviews();
+        // Filter out protocols without logos and infrastructure reviews
+        const protocolsWithLogos = protocols.filter((protocol) => {
+          // Filter out protocols without logos
+          if (!protocol.logo) return false;
+
+          // Filter out protocols that only have infrastructure reviews (stages starting with "I")
+          const hasNonInfrastructureReview = protocol.reviews.some(
+            (review) => !review.stage?.toString().startsWith("I")
+          );
+          return hasNonInfrastructureReview;
+        });
+
+        // Filter protocols based on their reviews: include only if they have valid stages (0,1,2)
+        // OR if they only have "O" stages (no valid stages at all)
+        const filteredProtocols = protocolsWithLogos
+          .filter((protocol) => {
+            // Check if this protocol has any valid stage reviews (0, 1, 2)
+            const hasValidStages = protocol.reviews.some((review) =>
+              [0, 1, 2].includes(review.stage as number)
             );
-            return hasValidReview;
+
+            if (hasValidStages) {
+              // If it has valid stages, include it
+              return true;
+            }
+
+            // If it doesn't have valid stages, include it only if it has "O" stages
+            // (meaning it's a protocol that only exists in "Others" category)
+            const hasOnlyOStages =
+              protocol.reviews.some((review) => review.stage === "O") &&
+              protocol.reviews.every(
+                (review) =>
+                  review.stage === "O" ||
+                  review.stage?.toString().startsWith("I")
+              );
+
+            return hasOnlyOStages;
           })
           .sort((a, b) => a.protocol.localeCompare(b.protocol));
-        
-        setProtocols(protocolsWithLogos);
+
+        setProtocols(filteredProtocols);
       } catch (error) {
-        console.error('Error loading protocols:', error);
+        console.error("Error loading protocols:", error);
       } finally {
         setLoading(false);
       }
@@ -69,18 +97,18 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     const totalWidth = protocols.length * logoWidth;
     let animationId: number;
     let startTime: number;
-    
+
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
-      
+
       // Only update position when not paused (using ref to get current value)
       if (!isPausedRef.current) {
-        const elapsed = (currentTime - startTime) - totalPausedTimeRef.current;
+        const elapsed = currentTime - startTime - totalPausedTimeRef.current;
         const speed = 30; // pixels per second - adjust this to change speed
-        const newOffset = (elapsed * speed / 1000) % totalWidth;
+        const newOffset = ((elapsed * speed) / 1000) % totalWidth;
         setCurrentOffset(newOffset);
       }
-      
+
       animationId = requestAnimationFrame(animate);
     };
 
@@ -98,11 +126,14 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
       <div className="border-t pt-6">
         <div className="mb-4">
           <p className="text-xs text-center text-muted-foreground">
-            DeFiScan reviews DeFi protocols to assess their decentralization progress and centralization risks. 
-            We score protocols from Stage 0 to Stage 2 to help users make informed decisions.
+            DeFiScan reviews DeFi protocols to assess their decentralization
+            progress and centralization risks. We score protocols from Stage 0
+            to Stage 2 to help users make informed decisions.
           </p>
         </div>
-        <div className="text-center text-muted-foreground">Loading protocols...</div>
+        <div className="text-center text-muted-foreground">
+          Loading protocols...
+        </div>
       </div>
     );
   }
@@ -118,36 +149,49 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
     <div className="border-t pt-6">
       <div className="mb-4">
         <p className="text-xs text-center text-muted-foreground">
-          DeFiScan reviews DeFi protocols to assess their decentralization progress and centralization risks. 
-          We score protocols from Stage 0 to Stage 2 to help users make informed decisions.
+          DeFiScan reviews DeFi protocols to assess their decentralization
+          progress and centralization risks. We score protocols from Stage 0 to
+          Stage 2 to help users make informed decisions.
         </p>
       </div>
-      
+
       {/* Full width carousel */}
-      <div 
+      <div
         className="mb-4"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         <div className="overflow-hidden">
           <div className="relative h-8 my-2">
-            <div 
+            <div
               className="flex gap-2 absolute inset-0"
               style={{
                 transform: `translateX(-${currentOffset}px)`,
-                width: `${extendedProtocols.length * 40}px` // 32px width + 8px gap
+                width: `${extendedProtocols.length * 40}px`, // 32px width + 8px gap
               }}
             >
               {extendedProtocols.map((protocol, index) => {
-                // Find the first valid review (not infrastructure or unqualified) for this protocol to create the link
-                const firstValidReview = protocol.reviews.find(review => 
-                  !review.stage?.toString().startsWith("I") && review.stage !== "O"
+                // Find the best review for this protocol to create the link
+                // Priority: valid stages (0,1,2) > "O" stages > other stages
+                const validStageReview = protocol.reviews.find((review) =>
+                  [0, 1, 2].includes(review.stage as number)
                 );
+                const oStageReview = protocol.reviews.find(
+                  (review) => review.stage === "O"
+                );
+                const firstValidReview =
+                  validStageReview ||
+                  oStageReview ||
+                  protocol.reviews.find(
+                    (review) => !review.stage?.toString().startsWith("I")
+                  );
                 // Use the same slug approach as the table
-                const protocolSlug = firstValidReview ? firstValidReview.slug : null;
-                
+                const protocolSlug = firstValidReview
+                  ? firstValidReview.slug
+                  : null;
+
                 if (!protocolSlug) return null;
-                
+
                 return (
                   <Link
                     key={`${protocol.protocol}-${index}`}
@@ -169,7 +213,7 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
                       onError={(e) => {
                         // Fallback for broken images
                         const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
+                        target.style.display = "none";
                       }}
                     />
                   </Link>
@@ -179,12 +223,12 @@ export const ProtocolCarousel: React.FC<ProtocolCarouselProps> = ({ onSeeAllClic
           </div>
         </div>
       </div>
-      
+
       {/* See all reviews button */}
       {onSeeAllClick && (
         <div className="pt-4 text-center">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={onSeeAllClick}
             className="text-xs border-primary text-primary hover:bg-primary hover:text-primary-foreground"
