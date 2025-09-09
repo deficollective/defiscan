@@ -1,11 +1,11 @@
 ---
-chain: "Ethereum"
-stage: 1
+chain: "Base"
+stage: 0
 reasons: []
-risks: ["L", "M", "M", "M", "L"]
+risks: ["M", "M", "H", "M", "L"]
 author: ["mmilien_"]
-submission_date: "2024-11-27"
-publish_date: "2025-05-21"
+submission_date: "2025-08-17"
+publish_date: "2025-09-08"
 update_date: "1970-01-01"
 stage_requirements:
   [
@@ -22,6 +22,10 @@ stage_requirements:
       {
         text: "Upgrades with potential of “loss of funds” are protected with Exit Window >= 7 days OR a sufficient Security Council",
         status: "fixed",
+      },
+      {
+        text: "Dependency with a High centralization score is mitigated",
+        status: "unfixed",
       },
       {
         text: "Frontend backups or self-hosting option exists",
@@ -45,15 +49,15 @@ stage_requirements:
 
 # Summary
 
-Morpho is a lending protocol with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle. Users may lend funds directly on individual Morpho Markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho Markets. Morpho governance operates within a very limited scope and without direct control over the Morpho protocol.
+Morpho is a lending protocol with permissionless market creation. It enables the deployment of minimal and isolated lending markets by specifying: one collateral asset, one loan asset, a Liquidation Loan To Value (LLTV), an Interest Rate Model (IRM), and an oracle price feed. Users may lend funds directly on individual Morpho Markets or through Morpho Vaults. These vaults are created permissionlessly by third parties, or risk curators, and offer managed lending strategies by aggregating different Morpho Markets. Morpho governance operates within a very limited scope and without direct control over the Morpho protocol.
 
 # Ratings
 
 ## Chain
 
-Morpho is deployed on different chains. This review is based on the Ethereum mainnet deployment.
+Morpho is deployed on different chains. This review is based on the Base chain, an Ethereum L2 in Stage 1 according to L2BEAT.
 
-> Chain score: Low
+> Chain score: Medium
 
 ## Upgradeability
 
@@ -69,13 +73,13 @@ The [morpho.eth](#security-council) multisig is further in control of the `MORPH
 
 Morpho Markets are configured with an external price oracle based on which the solvency of a position is established. Market creators are free in the price oracle choice thus delegating responsibility to users instead of central governance.
 
-However, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 35% of Morpho Markets [(read more)](#dependencies).
+However, the Morpho protocol facilitates oracle creation through a factory, currently `MorphoChainlinkOracleV2Factory`, which is used by more than 16% of Morpho Markets [(read more)](#dependencies).
 
-This factory wraps price feeds compliant with Chainlink's Aggregator interface and assumes that these feeds never fail (liveness and valid prices). Although the price feed is chosen permissionlessly by the market creator, more than 35% of the Morpho Markets rely on a Chainlink curated price feed. Those feeds are controlled in a centralized manner, a multisig account not complying with _Security Council_ requirements, the impact of a failure has to be assessed nonetheless. A complete analysis of Chainlink price feeds can be found in the dedicated [report](/protocols/chainlink-oracles/ethereum).
+This factory wraps price feeds compliant with Chainlink's Aggregator interface and assumes that these feeds never fail (liveness and valid prices). Although the price feed is chosen permissionlessly by the market creator, more than 92% of the TVL lies in Morpho Markets that rely on a Chainlink curated price feed. We assessed that Chainlink price feeds have a _High_ centralization and explain our findings in a dedicated [report](/protocols/chainlink-oracles/ethereum).
 
-An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the _permanent freezing of funds_ in affected markets. With a potential impact on more than 35% of Morpho Markets, or more than 30% of Morpho's TVL. This potential impact on 30% of Morpho's TVL results in a _Medium centralization risk_ from Chainlink.
+An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Morpho oracle reverts on a negative price reported by a Chainlink feed, this failure could result in the _permanent freezing of funds_ in affected markets. With a potential impact on more than 16% of Morpho Markets, or more than 92% of Morpho's TVL on Base. This potential impact on 92% of Morpho's TVL results in a _High centralization risk_ from Chainlink on Base.
 
-> Autonomy score: Medium
+> Autonomy score: High
 
 ## Exit Window
 
@@ -89,7 +93,7 @@ The Morpho protocol exposes critical permissions in the `MORPHO` token that can 
 
 The main morpho interface is [app.morpho.org](https://app.morpho.org/). An RPC-only fallback interface ([fallback.morpho.org](https://fallback.morpho.org)) exists, offering an alternative in case of failure of the main interace. Finally, a backup solution allows users to self-host and access morpho following instructions on [this repository](https://github.com/morpho-org/morpho-blue-offchain-public).
 
-In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.io/metamorpho), and [Contango](https://app.contango.xyz/).
+In addition to that, morpho is also accessible through several interfaces such as [monarchlend](https://www.monarchlend.xyz), [summer.fi](https://summer.fi/borrow?protocol=morphoblue), [DefiSaver](https://app.defisaver.com/morpho), [Instadapp](https://defi.instadapp.org/metamorpho), and [Contango](https://app.contango.xyz/).
 
 Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho on Polygon, Optimism, and World Chain.
 
@@ -97,9 +101,11 @@ Finally, [lite.morpho.org](https://lite.morpho.org/) provides access to Morpho o
 
 ## Conclusion
 
-The Morpho Ethereum mainnet protocol achieves _Low_ centralization scores for the _Chain_ and _Accessibility_ dimensions. The _Upgradeability_ of the `MORPHO` token that is not protected with an onchain governance system or _Exit Window_ and its trusted Chainlink dependency result in _Medium_ _Upgradeability_, _Exit Window_ and _Autonomy_ risks and **Stage 1** decentralization.
+The Morpho protocol on Base achieves a _Low_ centralization score in the _Accessibility_ dimension. The _Upgradeability_ of the `MORPHO` token results a in _Medium_ _Upgradeability_ risk score. This _Upgradeability_ is not protected with an onchain governance system or delay and as such the _Exit Window_ risk is _Medium_ as well. Due to the _High_ _Autonomy_ risk score coming from 92% of the TVL relying on Chainlink oracle, Morpho scores **Stage 0** decentralization on Base.
 
-The protocol could advance to **Stage 2** by; 1) transferring control over the `MORPHO` permissions to onchain governance with a 30-day _Exit Window_ and 2) implementing a fallback mechanism around the Chainlink oracle dependency (or Chainlink taking measures to become a _Low Centralization_ protocol, as highlighted in this [report](/protocols/chainlink-oracles/ethereum)).
+The protocol could reach **Stage 1** by integrating protections within their default oracle adapter. This could include slippage limits or multiple price feeds for sanity checking.
+
+The protocol could further advance to **Stage 2** if Base reaches Stage 2 and: 1) transferring control over the `MORPHO` permissions to onchain governance with a 30-day _Exit Window_ and 2) implementing a fallback mechanism around the Chainlink oracle dependency (or Chainlink taking measures to become a _Low Centralization_ protocol, as highlighted in this [report](/protocols/chainlink-oracles/ethereum)).
 
 > Overall score: Stage 1
 
@@ -109,11 +115,13 @@ We further want to highlight the following observations which did not directly f
 
 - ⚠️ Curators of Morpho Vaults are in control of critical permissions which can result in the _loss of user funds_ and _loss of unclaimed yield_. These permissions only have a direct impact on users in the respective vault and thus do not contribute to the centralization of the Morpho protocol. Vault owners can name guardians with the capability to cancel bad behaviors of curators, when the actions they are taking is increasing the risk towards the end user.
 
+- ⚠️ The `MORPHO` token can be minted by the [morpho.eth](#security-council) multisig on Ethereum Mainnet only and then bridged to Base using the native bridge. Nonetheless, the contract on Base remains upgradeable at all time by this same multisig.
+
 # Protocol Analysis
 
 An overview of the Morpho protocol can be seen in the diagram below.
 
-![Overview of the Morpho protocol](../diagrams/morpho-overview.png)
+![Overview of the Morpho protocol](../diagrams/morpho-overview-base.png)
 
 <!-- See [Whitepaper: Morpho Protocol](https://github.com/morpho-org/morpho-blue/blob/main/morpho-blue-whitepaper.pdf) -->
 
@@ -132,7 +140,7 @@ This factory creates new price oracles which are compliant with Chainlink's Aggr
 
 Note that the price oracle in a Morpho market cannot be updated (markets are immutable). A permanent failure or staleness of the price feed can thus result in user funds being permanently frozen in Morpho Markets.
 
-At the time of writing this review, more than 35% of the live Morpho Markets, or more than 30% of Morpho's TVL, make use of this standard price oracle and a Chainlink curated price feed. An analysis of this with results can be found on our [GitHub](https://github.com/deficollective/morpho-oracles-analysis). Thus, even though technically not enforced, Chainlink forms a critical dependency of the Morpho protocol.
+At the time of writing this review, more than 16% of the live Morpho Markets, or more than 92% of Morpho's TVL, make use of this standard price oracle and a Chainlink curated price feed. An analysis of this with results can be found on our [GitHub](https://github.com/deficollective/morpho-oracles-analysis). Thus, even though technically not enforced, Chainlink forms a critical dependency of the Morpho protocol.
 
 The Chainlink oracle system exhibits a **High centralization score** as reported [here](/protocols/chainlink-oracles/ethereum).
 
@@ -144,10 +152,10 @@ Morpho does not yet have an onchain governance system with control over protocol
 
 &nbsp;
 
-| Name                   | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
-| morpho.eth             | [0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a](https://basescan.org/address/0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a) | Multisig 5/9 | ✅          | ✅              | ❌                | ❌             |
-| MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://etherscan.io/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
+| Name                   | Account                                                                                                                | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
+| morpho.eth             | [0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a](https://basescan.org/address/0xBDE0c70BdC242577c52dFAD53389F82fd149EA5a)  | Multisig 5/9 | ✅          | ✅              | ❌                | ❌             |
+| MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://etherscan.org/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
 
 ## Exit Window
 
@@ -159,28 +167,26 @@ However, critical permissions in the `MORPHO` token allow the same multisig acco
 
 | Contract Name                                      | Address                                                                                                               |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Morpho                                             | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://etherscan.io/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) |
-| Adaptive Curve Interest Rate Model                 | [0x870aC11D48B15DB9a138Cf899d20F13F79Ba00BC](https://etherscan.io/address/0x870aC11D48B15DB9a138Cf899d20F13F79Ba00BC) |
-| Morpho Chainlink Oracle V2 Factory                 | [0x3A7bB36Ee3f3eE32A60e9f2b33c1e5f2E83ad766](https://etherscan.io/address/0x3A7bB36Ee3f3eE32A60e9f2b33c1e5f2E83ad766) |
-| Morpho Vault Factory V1.1                          | [0x1897A8997241C1cD4bD0698647e4EB7213535c24](https://etherscan.io/address/0x1897A8997241C1cD4bD0698647e4EB7213535c24) |
-| Morpho Vault V1.1                                  | [0x1897A8997241C1cD4bD0698647e4EB7213535c24](https://etherscan.io/address/0x1897A8997241C1cD4bD0698647e4EB7213535c24) |
-| EthereumBundlerV2                                  | [0x4095F064B8d3c3548A3bebfd0Bbfd04750E30077](https://etherscan.io/address/0x4095F064B8d3c3548A3bebfd0Bbfd04750E30077) |
-| Public Allocator                                   | [0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D](https://etherscan.io/address/0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D) |
-| PreLiquidation Factory                             | [0x6FF33615e792E35ed1026ea7cACCf42D9BF83476](https://etherscan.io/address/0x6FF33615e792E35ed1026ea7cACCf42D9BF83476) |
-| Universal Rewards Distributor Factory (UrdFactory) | [0x9baA51245CDD28D8D74Afe8B3959b616E9ee7c8D](https://etherscan.io/address/0x9baA51245CDD28D8D74Afe8B3959b616E9ee7c8D) |
-| Universal Rewards Distributor                      | [0x330eefa8a787552dc5cad3c3ca644844b1e61ddb](https://etherscan.io/address/0x330eefa8a787552dc5cad3c3ca644844b1e61ddb) |
-| MORPHO                                             | [0x58D97B57BB95320F9a05dC918Aef65434969c2B2](https://etherscan.io/address/0x58D97B57BB95320F9a05dC918Aef65434969c2B2) |
-| MORPHO wrapper                                     | [0x9D03bb2092270648d7480049d0E58d2FcF0E5123](https://etherscan.io/address/0x9D03bb2092270648d7480049d0E58d2FcF0E5123) |
-
-<!-- | Public Allocator | [0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D](https://etherscan.io/address/0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D) | -->
+| Morpho                                             | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://basescan.org/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) |
+| Adaptive Curve Interest Rate Model                 | [0x46415998764C29aB2a25CbeA6254146D50D22687](https://basescan.org/address/0x46415998764C29aB2a25CbeA6254146D50D22687) |
+| Morpho Chainlink Oracle V2 Factory                 | [0x2DC205F24BCb6B311E5cdf0745B0741648Aebd3d](https://basescan.org/address/0x2DC205F24BCb6B311E5cdf0745B0741648Aebd3d) |
+| Morpho Vault Factory V1.1                          | [0xFf62A7c278C62eD665133147129245053Bbf5918](https://basescan.org/address/0xFf62A7c278C62eD665133147129245053Bbf5918) |
+| Morpho Vault V1.1                                  | [0xFf62A7c278C62eD665133147129245053Bbf5918](https://basescan.org/address/0xFf62A7c278C62eD665133147129245053Bbf5918) |
+| EthereumBundlerV2                                  | [0x4095F064B8d3c3548A3bebfd0Bbfd04750E30077](https://basescan.org/address/0x4095F064B8d3c3548A3bebfd0Bbfd04750E30077) |
+| Public Allocator                                   | [0xA090dD1a701408Df1d4d0B85b716c87565f90467](https://basescan.org/address/0xA090dD1a701408Df1d4d0B85b716c87565f90467) |
+| PreLiquidation Factory                             | [0x8cd16b62E170Ee0bA83D80e1F80E6085367e2aef](https://basescan.org/address/0x8cd16b62E170Ee0bA83D80e1F80E6085367e2aef) |
+| Universal Rewards Distributor Factory (UrdFactory) | [0x7276454fc1cf9C408deeed722fd6b5E7A4CA25D8](https://basescan.org/address/0x7276454fc1cf9C408deeed722fd6b5E7A4CA25D8) |
+| Universal Rewards Distributor                      | [0x5400dbb270c956e8985184335a1c62aca6ce1333](https://basescan.org/address/0x5400dbb270c956e8985184335a1c62aca6ce1333) |
+| MORPHO                                             | [0xBAa5CC21fd487B8Fcc2F632f3F4E8D37262a0842](https://basescan.org/address/0xBAa5CC21fd487B8Fcc2F632f3F4E8D37262a0842) |
 
 ## All Permission owners
 
 | Name                   | Account                                                                                                               | Type         |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| morpho.eth             | [0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa](https://etherscan.io/address/0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa) | Multisig 5/9 |
-| MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://etherscan.io/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 |
-| Morpho                 | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://etherscan.io/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) | Contract     |
+| morpho.eth             | [0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa](https://basescan.org/address/0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa) | Multisig 5/9 |
+| MorphoRewards Multisig | [0xF057afeEc22E220f47AD4220871364e9E828b2e9](https://basescan.org/address/0xF057afeEc22E220f47AD4220871364e9E828b2e9) | Multisig 3/5 |
+| Morpho                 | [0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb](https://basescan.org/address/0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb) | Contract     |
+| L2StandardBridge       | [0x4200000000000000000000000000000000000010](https://basescan.org/address/0x4200000000000000000000000000000000000010) | Contract     |
 
 <!-- potential additional permission owners:
 
@@ -223,7 +229,8 @@ SafeOwner: 0x0b9915C13e8E184951Df0d9C0b104f8f1277648B -->
 | MetaMorphoV1_1               | revokePendingTimelock      | Revokes a timelock before it takes effect.                                                                                                                                                                                                          | Vault Owner, Guardian            |
 | MetaMorphoV1_1               | revokePendingCap           | Cancel a market supply cap before it takes effect                                                                                                                                                                                                   | Vault Owner, Guardian            |
 | MetaMorphoV1_1               | revokePendingMarketRemoval | Cancels a market removal before it takes effect.                                                                                                                                                                                                    | Vault Owner, Guardian            |
-| MorphoTokenEthereum (MORPHO) | upgradeToAndCall           | Upgrades the contract to a new implementation. This can potentially change the logic of the token and could be used to steal funds.                                                                                                                 | morpho.eth                       |
-| MorphoTokenEthereum (MORPHO) | transferOwnership          | Transfer ownership of the contract to a new adress. The new owner needs to accept ownership. The new owner has minting right and upgrade right on the `MORPHO` token and therefore extreme power.                                                   | morpho.eth                       |
-| MorphoTokenEthereum (MORPHO) | renounceOwnership          | Unrevokably abandons ownership of the contract. This would make the `MORPHO` contract immutable and prevent further mints.                                                                                                                          | morpho.eth                       |
-| MorphoTokenEthereum (MORPHO) | mint                       | Mints `MORPHO` tokens to a new address and increase the total supply. This can be abused to dillute the value of `MORPHO` or influence governance decisions in the future.                                                                          | morpho.eth                       |
+| MorphoTokenOptimism (MORPHO) | upgradeToAndCall           | Upgrades the contract to a new implementation. This can potentially change the logic of the token and could be used to steal funds.                                                                                                                 | morpho.eth                       |
+| MorphoTokenOptimism (MORPHO) | transferOwnership          | Transfer ownership of the contract to a new adress. The new owner needs to accept ownership. The new owner has minting right and upgrade right on the `MORPHO` token and therefore extreme power.                                                   | morpho.eth                       |
+| MorphoTokenOptimism (MORPHO) | renounceOwnership          | Unrevokably abandons ownership of the contract. This would make the `MORPHO` contract immutable and prevent further mints.                                                                                                                          | morpho.eth                       |
+| MorphoTokenOptimism (MORPHO) | mint                       | Mints `MORPHO` tokens to a new address and increase the total supply. This can be abused to dillute the value of `MORPHO` or influence governance decisions in the future.                                                                          | L2StandardBridge                 |
+| MorphoTokenOptimism (MORPHO) | burn                       | Burns `MORPHO` tokens from a given address. This can be abused to burn from any account holding `MORPHO`.                                                                                                                                           | L2StandardBridge                 |
