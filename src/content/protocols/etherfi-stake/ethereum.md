@@ -2,7 +2,7 @@
 chain: "Ethereum"
 stage: 0
 reasons: []
-risks: ["L", "H", "H", "H", "H"]
+risks: ["L", "H", "M", "H", "H"]
 author: ["Mmilien_"]
 submission_date: "2025-08-31"
 publish_date: "1970-01-01"
@@ -45,13 +45,13 @@ With the implementation of [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002) a
 
 ### Restaking on Eigenlayer
 
-The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. Malicious _AVSs_ or _Operators_ could lead to the _loss of user funds_ or _loss of unclaimed yield_, as discussed in the [dependencies](#dependencies) section.
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. EtherFi currently uses an implementation that could not lead to the _loss of user funds_ or _loss of unclaimed yield_ because there is no slashing of funds, as discussed in the [dependencies](#dependencies) section.
 
-We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). However, the Eigenlayer protocol would be classified as Stage 1 if the criteria _Accessibility_ was ignored. Since EtherFi interacts programmatically with Eigenlayer, _Accessibility_ does not affect _Dependency_ centralization risks. The Stage 1 equivalent dependency impacts EtherFi's own score and limits it to a _Medium_ centralization risk for the _Autonomy_ dimension.
+We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). However, the Eigenlayer protocol would be classified as Stage 1 if the criteria _Accessibility_ was ignored. Since EtherFi interacts programmatically with Eigenlayer, _Accessibility_ does not affect its centralization risks as a dependency. The Stage 1 equivalent dependency impacts EtherFi's own score and limits it to a _Medium_ centralization risk for the _Autonomy_ dimension.
 
-Finally, other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST. The deposits are currently limited to `stETH` with a cap of 850'000 ETH. Since this represents less than 35% of EtherFi's TVL, this grants EtherFi a medium dependency on Lido.
+Finally, other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST. The deposits are currently limited to `stETH` with a cap of 850'000 ETH. Since this represents less than 35% of EtherFi's TVL, this grants EtherFi a _Medium_ dependency on Lido.
 
-> Autonomy score: High
+> Autonomy score: Medium
 
 ## Exit Window
 
@@ -71,9 +71,9 @@ The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eE
 
 ## Conclusion
 
-The protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ section. It thus scores **Stage 0**.
+The protocol achieves _High_ centralization risk scores for its _Upgradeability_, _Exit Window_, and _Accessibility_ section, as well as _Medium_ for the _Autonomy_ dimension. It thus scores **Stage 0**.
 
-The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upgrades and actions that may lead to _loss of user funds_. It should further implement mitigations for its critical dependency on _Eigenlayer_, if _Eigenlayer_ doesn't become a Stage 1 protocol. Finally, it would need to offer either an open-sourced alternative frontend or a possibility for user to self-host the existing app.
+The protocol could reach Stage 1 by integrating a 7-day _Exit Window_ on all upgrades and actions that may lead to _loss of user funds_. Additionally, it would need to offer either an open-sourced alternative frontend or a possibility for user to self-host the existing app.
 
 # Reviewer's Notes
 
@@ -123,13 +123,18 @@ Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds ar
 
 ## Eigenlayer
 
-The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). For the purpose of this report, we note that _AVSs_ could lead to a complete loss of the _Operator_'s delegated staked `ETH` through slashing, which would lead to the _loss of user funds_. On the other hands, _Operators_ could trigger slashing through misbehaviors and bad performances, or operate for malicious _AVSs_.
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). Nonetheless, in the case of EtherFi, the protocol uses an older version of Eigenlayer with the following particularities:
 
-[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest risk concentrations have 17.5% and 9.9% respectively."
+- The _Operator_ delegate their entire stake to the _AVSs_ they operate for. In practice, this leads to their stake being "duplicated" for each _AVS_.
+- The _AVSs_ cannot slash the _Operators_. As such, misbehaviour from the _AVSs_ or _Operators_ cannot lead to the _loss of user funds_. However, _loss of unclaimed yield_ remains possible as the _AVSs_ are trusted to distribute the rewards fairly and could refuse to do so.
+
+This version of the protocol could be deprecated in the future. The contract addresses of each operator is listed in the [Eigenlayer Operators table](#eigenlayer-operators).
+
+[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest concentrations have 17.5% and 9.9% respectively."
 
 Each EtherFi's Ethereum validator has its withdrawal address set to a dedicated `EigenPod` contract. The `EigenPod` contracts are upgradeable by an [Eigenlayer multisig] which meets the security council requirements. Upgrading this contract could allow the multisig to trigger withdrawals and redirect the funds to an arbitrary address, leading to the _loss of user funds_.
 
-We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). This impacts EtherFi's own score and limits it to a high centralization risk for the _Autonomy_ dimension.
+We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). This impacts EtherFi's own score and limits it to a _Medium_ centralization risk for the _Autonomy_ dimension.
 
 # Governance
 
@@ -225,6 +230,25 @@ UUPSProxy EtherFiRewardsRouter (ENS = "Fee Recipient"), "0x73f7b1184B5cD361cC0f7
 | StakingManager                 | [0x25e821b7197B146F7713C3b89B6A4D83516B912d](https://etherscan.io/address/0x25e821b7197B146F7713C3b89B6A4D83516B912d) | Contract     |
 | EtherFiNodesManager            | [0x8B71140AD2e5d1E7018d2a7f8a288BD3CD38916F](https://etherscan.io/address/0x8B71140AD2e5d1E7018d2a7f8a288BD3CD38916F) | Contract     |
 | Liquifier                      | [0x9ffdf407cde9a93c47611799da23924af3ef764f](https://etherscan.io/address/0x9ffdf407cde9a93c47611799da23924af3ef764f) | Contract     |
+
+## Eigenlayer Operators
+
+Below are are the addresses of the _Operators_ used by EtherFi. Those are controlled through the Beacon contract [0x29b1c223be35ccb6bfbd43154528cd0b881756e9](https://etherscan.io/address/0x29b1c223be35ccb6bfbd43154528cd0b881756e9) and use the implementation contract [0xf4718766a7fc8c81f788669b0985fac03d064d29](https://etherscan.io/address/0xf4718766a7fc8c81f788669b0985fac03d064d29).
+
+| Name             | Address                                                                                                               |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Pier Two         | [0xfb487f216ca24162119c0c6ae015d680d7569c2f](https://etherscan.io/address/0xfb487f216ca24162119c0c6ae015d680d7569c2f) |
+| P2P              | [0x4bd479a34450d0cb1f5ef16a877bee47e1e4cdb9](https://etherscan.io/address/0x4bd479a34450d0cb1f5ef16a877bee47e1e4cdb9) |
+| DSRV(old)        | [0x5b9b3cf0202a1a3dc8f527257b7e6002d23d8c85](https://etherscan.io/address/0x5b9b3cf0202a1a3dc8f527257b7e6002d23d8c85) |
+| Finoa            | [0xea50bb6735703422d2e053452f1f28bff17da51f](https://etherscan.io/address/0xea50bb6735703422d2e053452f1f28bff17da51f) |
+| Validation Cloud | [0x5d4b5ef127c545e5bf8e247f9fcd4e75a0a366b4](https://etherscan.io/address/0x5d4b5ef127c545e5bf8e247f9fcd4e75a0a366b4) |
+| A41              | [0xe0156ef2905c2ea8b1f7571caee85fdf1657ab38](https://etherscan.io/address/0xe0156ef2905c2ea8b1f7571caee85fdf1657ab38) |
+| Cosmostation     | [0x17c5f0cc30bd57b308b7f62600b415fd1335e1fe](https://etherscan.io/address/0x17c5f0cc30bd57b308b7f62600b415fd1335e1fe) |
+| DSRV(New)        | [0xdcae4faf7c7d0f4a78abe147244c6e9d60cfd202](https://etherscan.io/address/0xdcae4faf7c7d0f4a78abe147244c6e9d60cfd202) |
+| Chainnodes       | [0x8e7e7176d3470c6c2efe71004f496a6ef422a56f](https://etherscan.io/address/0x8e7e7176d3470c6c2efe71004f496a6ef422a56f) |
+| Allnodes         | [0x1abdcdd0ec2523dd2c66b8c7d1c734f743e98b4a](https://etherscan.io/address/0x1abdcdd0ec2523dd2c66b8c7d1c734f743e98b4a) |
+| Nethermind       | [0xd972a58b6a582954e578455e4752b12f2c8fcdbc](https://etherscan.io/address/0xd972a58b6a582954e578455e4752b12f2c8fcdbc) |
+| NodeMonster      | [0x67943ae8e07bfc9f5c9a90d608f7923d9c21e051](https://etherscan.io/address/0x67943ae8e07bfc9f5c9a90d608f7923d9c21e051) |
 
 ## Permissions
 
