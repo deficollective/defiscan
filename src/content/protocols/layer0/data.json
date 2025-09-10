@@ -1,12 +1,10 @@
 {
-  "id": "chronicle",
-  "protocol": "Chronicle",
-  "website": "https://chroniclelabs.org/",
+  "id": "layer0",
+  "protocol": "Layer Zero",
+  "website": "https://layerzero.network/",
   "defillama_slug": [""],
   "socials": {
-    "x": "https://x.com/ChronicleLabs"
+    "x": "https://x.com/LayerZero_Core"
   },
-  "github": [
-    "https://github.com/chronicleprotocol"
-  ]
+  "github": ["https://github.com/LayerZero-Labs"]
 }
