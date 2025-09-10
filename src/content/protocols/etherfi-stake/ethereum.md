@@ -142,11 +142,12 @@ EtherFi has no strict onchain governance. The governance token, `ETHFI`, can be 
 
 ## Security Council
 
-| Name                                         | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+ | Name                                         | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | EtherFi Undeclared Multisig #1               | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
 | EtherFi Undeclared Multisig #2               | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
-| KING Undeclared Multisig #3                  | [0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52](https://etherscan.io/address/0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52) | Multisig 3/7 | ✅          | ❌              | ❌                | ❌             |
+| EtherFi Undeclared Multisig #3               | [0xcea8039076e35a825854c5c2f85659430b06ec96](https://etherscan.io/address/0xcea8039076e35a825854c5c2f85659430b06ec96) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
+| KING Undeclared Multisig                     | [0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52](https://etherscan.io/address/0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52) | Multisig 3/7 | ✅          | ❌              | ❌                | ❌             |
 | EtherFi Undeclared ValidatorSpawner          | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | Multisig 1/6 | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (Pauser)                     | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (EtherFi Deployer)           | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          | ❌          | ❌              | ❌                | ❌             |
@@ -572,59 +573,35 @@ Staking of ETHFI
 | AccountantWithRateProviders | setRateProviderData | Updates the exchange rate provider for a given asset. Malicious rate providers could manipulate vault valuations. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
 | AccountantWithRateProviders | updateExchangeRate | Updates vault share exchange rate. Direct manipulation could steal user funds through rate manipulation. An rate outside of the bounds or pushed before the update delay has passed will automatically pause this contract. | (Authority [role 11](#liquid-vault-access-control-authority))|
 | AccountantWithRateProviders | claimFees | Pays out the fees to the predefined payout address. This function must be called through the BoringVault's manage function. The fees are paid in the Vault's base asset, which may require the contract to compute the fee amount using its exchange rate. | BoringVault |
-| LayerZeroTellerWithRateLimiting | lzReceive | ... | [] |
-| LayerZeroTellerWithRateLimiting | setPeer | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | setDelegate | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | setAuthority | ... | [] |
-| LayerZeroTellerWithRateLimiting | transferOwnership | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | depositAndBridge | ... | ['nonReentrant', 'onlyType3', 'requiresAuth', 'revertOnNativeDeposit'] |
-| LayerZeroTellerWithRateLimiting | depositAndBridgeWithPermit | ... | ['nonReentrant', 'onlyType3', 'requiresAuth', 'revertOnNativeDeposit'] |
-| LayerZeroTellerWithRateLimiting | bridge | ... | ['nonReentrant', 'onlyType3', 'requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | previewFee | ... | ['onlyType3'] |
-| LayerZeroTellerWithRateLimiting | \_bridge | ... | ['onlyType3'] |
-| LayerZeroTellerWithRateLimiting | pause | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | unpause | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | updateAssetData | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | setShareLockPeriod | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | denyAll | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | allowAll | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | denyFrom | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | allowFrom | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | denyTo | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | allowTo | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | denyOperator | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | allowOperator | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | refundDeposit | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | deposit | ... | ['nonReentrant', 'requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | depositWithPermit | ... | ['nonReentrant', 'requiresAuth', 'revertOnNativeDeposit'] |
-| LayerZeroTellerWithRateLimiting | bulkDeposit | ... | ['nonReentrant', 'requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | bulkWithdraw | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | \_handlePermit | ... | [] |
-| LayerZeroTellerWithRateLimiting | addChain | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | removeChain | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | allowMessagesFromChain | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | allowMessagesToChain | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | stopMessagesFromChain | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | stopMessagesToChain | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | setOutboundRateLimits | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | setInboundRateLimits | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | setChainGasLimit | ... | ['requiresAuth'] |
-| LayerZeroTellerWithRateLimiting | \_sendMessage | ... | ['onlyType3'] |
-| LayerZeroTellerWithRateLimiting | \_previewFee | ... | ['onlyType3'] |
-| TellerWithMultiAssetSupport | setAuthority | ... | [] |
-| TellerWithMultiAssetSupport | transferOwnership | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | pause | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | unpause | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | addAsset | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | removeAsset | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | setShareLockPeriod | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | denyTransfer | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | allowTransfer | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | refundDeposit | ... | ['requiresAuth'] |
-| TellerWithMultiAssetSupport | deposit | ... | ['nonReentrant', 'requiresAuth'] |
-| TellerWithMultiAssetSupport | depositWithPermit | ... | ['nonReentrant', 'requiresAuth'] |
-| TellerWithMultiAssetSupport | bulkDeposit | ... | ['nonReentrant', 'requiresAuth'] |
-| TellerWithMultiAssetSupport | bulkWithdraw | ... | ['requiresAuth'] |
+| LayerZeroTellerWithRateLimiting | lzReceive | ... | EndpointV2 (LayerZero Endpoint) |
+| LayerZeroTellerWithRateLimiting | setPeer | ... | Authority [role 8, 10](#liquid-vault-access-control-authority) |
+| LayerZeroTellerWithRateLimiting | setDelegate | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setAuthority | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | transferOwnership | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | pause | ... | Pauser EOA, TODO (Authority [role 5, 9, 12, 14](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | unpause | ... | (Authority [role 5, 9, 12](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | updateAssetData | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setShareLockPeriod | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | denyAll | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowAll | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | denyFrom | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowFrom | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | denyTo | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowTo | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority))|
+| LayerZeroTellerWithRateLimiting | denyOperator | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowOperator | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | refundDeposit | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority))|
+| LayerZeroTellerWithRateLimiting | bulkDeposit | ... | Admins TODO (Authority [role 10](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | bulkWithdraw | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | addChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | removeChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority))|
+| LayerZeroTellerWithRateLimiting | allowMessagesFromChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowMessagesToChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | stopMessagesFromChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | stopMessagesToChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setOutboundRateLimits | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setInboundRateLimits | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setChainGasLimit | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
 
 Missing: ManagerWithMerkleVerification
 
