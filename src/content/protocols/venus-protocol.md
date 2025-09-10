@@ -30,7 +30,7 @@ This report is concerned with Venus Core Protocol deployed on Binance Smart Chai
 
 The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the loss of user funds through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. 
 
-The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. 
+The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. These are Venus-deployed wrappers around external price feeds (e.g., Chainlink's BTC/USD at `0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf`) with a governance-controlled `setDirectPrice()` override function. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. 
 
 The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in loss of unclaimed yield if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses.
 
@@ -147,15 +147,15 @@ In the following, the configuration for the top 6 assets by TVL are listed:
 
 ## Oracle Providers
 
-Venus integrates the following oracle types:
-- **Chainlink** (0x1B2103441A0A108daD8848D8F5d790e4D402921F): The primary oracle for most assets
+Venus integrates the following oracle wrapper contracts:
+- **Chainlink** (0x1B2103441A0A108daD8848D8F5d790e4D402921F): The primary oracle for most assets, fetches from official Chainlink feeds
 - **RedStone** (0x8455EFA4D7Ff63b8BFD96AdD889483Ea7d39B70a): Used as the main oracle for BTC-related assets
 - **Binance Oracle** (0x594810b741d136f1960141C0d8Fb4a91bE78A820): Available but not used for top TVL assets
 - **Custom Oracles**: Specialized oracles for specific assets (e.g., SOLVBTC.BBN)
 
 All oracle configurations and boundaries can only be modified through _Governance_ proposals by XVS token holders with a 48-hour timelock delay.
 
-All oracle configurations, including price feed selection and boundary settings, are exclusively controlled by the `accessControlManager` (which is owned by the Normal Timelock, controlled by XVS token holders).
+All oracle configurations, including price feed selection and boundary settings, are exclusively controlled by the `accessControlManager` (which is owned by the Normal Timelock, controlled by XVS token holders). These oracle wrappers include a `setDirectPrice()` function for emergency overrides, though normal operation uses the external provider feeds.
 
 # Governance
 
