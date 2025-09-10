@@ -36,9 +36,9 @@ The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidi
 
 The `VAIController` and related stablecoin contracts are upgradeable. This could change the minting logic, interest rate calculations, or collateral requirements, potentially leading to bad debt that impacts all protocol users. 
 
-All the upgrades above can only be executed through a governance proposal and are associated with the _Normal Timelock_ (see [exit window](#exit-window).
+All the upgrades above can only be executed through a governance proposal by XVS token holders and are associated with the _Normal Timelock_ (controlled by XVS governance with 48-hour delay) (see [exit window](#exit-window)).
 
-Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Timelock (1-hour delay) or emergency [multisigs](#security-council).
+Beyond contract upgrades, Venus Protocol has numerous parameter changes that can significantly impact user funds without requiring code changes. Critical parameters like collateral factors, liquidation incentives, and interest rate models can be modified to cause mass liquidations or reduce user yields. Oracle configurations can be changed to use malicious price feeds. Reward emission rates can be altered to reduce expected yields. Most critical parameters are controlled by the Normal Timelock (owned by XVS token holders through governance) with a 48-hour delay, while some parameters can be adjusted more quickly through the Fast Timelock (also controlled by XVS governance with 1-hour delay) or emergency [multisigs](#security-council) (3/6 threshold).
 
 > Upgradeability score: High
 
@@ -105,24 +105,24 @@ For each market, one `VToken` contract is deployed which contains all the functi
 
 ![Venus Core Lending](./diagrams/venus_lending_core.png)
 
-All privileged functions in the core lending system are controlled by the `admin` role (Normal Timelock) and the `accessControlManager`, which grants specific permissions to timelocks and emergency [multisigs](#security-council) as shown in the diagram above.
+All privileged functions in the core lending system are controlled by the `admin` role (Normal Timelock - owned and executed through governance proposals by XVS token holders with 48-hour delay) and the `accessControlManager` (owned by the Normal Timelock), which grants specific permissions to timelocks (controlled by XVS governance) and emergency [multisigs](#security-council) (3/6 Pause Guardian and Multisig Critical) as shown in the diagram above.
 
 ## Incentives
 
 The `RewardFacet`, which is part of the `Comptroller` Diamond Proxy structure, is responsible for distributing rewards. Users can call the `claimVenus()` function to claim the `XVS` accrued from supplying and borrowing accross all markets. For each market, two parameters can be set that define the reward per block for borrowing and supplying activities, respectively. 
 Furthermore, users can stake their `XVS` in the `XVSVault` for additional `XVS` yield.
 
-The `admin` (Normal Timelock) controls XVS emission parameters and direct grants, while the `accessControlManager` manages operational aspects like pausing, pool configuration, and reward rates.
+The `admin` role (Normal Timelock - controlled by XVS token holders through governance) controls XVS emission parameters and direct grants, while the `accessControlManager` (owned by the Normal Timelock) manages operational aspects like pausing, pool configuration, and reward rates.
 
 ## Treasury
 
-A fraction (`reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol reserves in each `vToken` contract. The `accessControlManager` controls who can withdraw these reserves via `_reduceReserves()` and who can set the `reserveFactor`. The destination address for reserves is set by the `admin` role (Normal Timelock) through `setProtocolShareReserve()`.
+A fraction (`reserveFactor`) of the borrower interest paid is automatically added to the Venus Protocol reserves in each `vToken` contract. The `accessControlManager` (owned by the Normal Timelock, which is controlled by XVS token holders) controls who can withdraw these reserves via `_reduceReserves()` and who can set the `reserveFactor`. The destination address for reserves is set by the `admin` role (Normal Timelock - controlled by XVS governance) through `setProtocolShareReserve()`.
 
-The Venus Treasury contract is owned by the Normal Timelock, which can withdraw any token or native currency to any arbitrary address through governance proposals (48-hour delay). This gives governance complete control over all treasury funds.
+The Venus Treasury contract is owned by the Normal Timelock (controlled by XVS token holders through governance proposals with 48-hour delay). This gives XVS token holders complete control over all treasury funds through the governance process.
 
 # Dependencies
 
-Venus Protocol uses an _Oracle System_ that can support up to three price feeds per asset, though the actual configuration varies by asset. When multiple oracles are configured, prices must agree within defined boundaries or transactions will revert. The configuration of each asset can only be changed through _Governance_.
+Venus Protocol uses an _Oracle System_ that can support up to three price feeds per asset, though the actual configuration varies by asset. When multiple oracles are configured, prices must agree within defined boundaries or transactions will revert. The configuration of each asset can only be changed through _Governance_ (XVS token holders via proposals with timelock delays).
 
 ## Oracle Configuration for Top Assets by TVL
 
@@ -153,14 +153,14 @@ Venus integrates the following oracle types:
 - **Binance Oracle** (0x594810b741d136f1960141C0d8Fb4a91bE78A820): Available but not used for top TVL assets
 - **Custom Oracles**: Specialized oracles for specific assets (e.g., SOLVBTC.BBN)
 
-All oracle configurations and boundaries can only be modified through _Governance_ proposals with a 48-hour timelock delay.
+All oracle configurations and boundaries can only be modified through _Governance_ proposals by XVS token holders with a 48-hour timelock delay.
 
-All oracle configurations, including price feed selection and boundary settings, are exclusively controlled by the `accessControlManager`.
+All oracle configurations, including price feed selection and boundary settings, are exclusively controlled by the `accessControlManager` (which is owned by the Normal Timelock, controlled by XVS token holders).
 
 # Governance
 
 Venus Protocol utilized Compound's `Governor Bravo` framework to implement their _Governance Structure_. 
-Any privileged access role in the entire protocol is either directly or indirectly controlled by the _Governance_. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` has specific access rights through the `accessControlManager`.
+Any privileged access role in the entire protocol is either directly or indirectly controlled by XVS token holders through the _Governance_ system. A three-tiered timelock structure is implemented for different proposal urgencies that can be specified in the proposal. However, only the `Normal Timelock` and `Fast Timelock` contracts are currently utilized. The `Normal Timelock` (controlled by XVS governance) is configured as the `admin` of all contracts with such a privileged role, while the `Fast Timelock` (also controlled by XVS governance) has specific access rights through the `accessControlManager` (owned by the Normal Timelock).
 While their configuration can change, these timelock contracts are currently configured as follows:
 * `Normal Timelock`:
    * `votingDelay`: 1 block
@@ -188,13 +188,13 @@ In the following diagram, the _Governance Structure_ is outlined while abstracti
 
 ![Venus Governance](./diagrams/venus_governance.png)
 
-The governance structure employs three timelocks (Normal: 48-hour delay for critical changes, Fast Track: 1-hour for operational parameters, Critical: 1-hour but unused) with the `accessControlManager` granting specific permissions to these timelocks and emergency [multisigs](#security-council) as detailed in the diagram above.
+The governance structure employs three timelocks (Normal: 48-hour delay for critical changes controlled by XVS token holders, Fast Track: 1-hour for operational parameters controlled by XVS token holders, Critical: 1-hour but unused) with the `accessControlManager` (owned by the Normal Timelock) granting specific permissions to these timelocks and emergency [multisigs](#security-council) (3/6 threshold) as detailed in the diagram above.
 
 ## Security Council
 
 The Venus Protocol has deployed three Gnosis Safe contracts, which are currently 3/6 multisigs. None of these contracts currently adhere to the minimum requirements for a security council.
-The _Multisig_ contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by the _Governance Structure_. 
-The _Multisigs_ can be given access rights to specific functions by the protocol _Governance_ through the `accessControlManager` contract. 
+The _Multisig_ contracts serve the purpose of executing functionalities in the case of an emergency, in which it would not be feasible to wait for a proposal to pass and the timelock delay. The granted access rights can be assigned or revoked by XVS token holders through the _Governance Structure_. 
+The _Multisigs_ can be given access rights to specific functions by XVS token holders through the `accessControlManager` contract (which is owned by the Normal Timelock). 
 
 | Name          | Account                                     | Type     | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | ------------- | ------------------------------------------- | -------- | ----------- | --------------- | ----------------- | -------------- |
@@ -204,27 +204,27 @@ The _Multisigs_ can be given access rights to specific functions by the protocol
 
 ## Upgrade Process
 
-The _Upgrade Process_ for the Venus Protocol is comprehensive and managed entirely by onchain _Governance_. The _Upgrade Process_ can be split into two distinct categories: parameter changes and contract logic upgrades.
+The _Upgrade Process_ for the Venus Protocol is comprehensive and managed entirely by XVS token holders through onchain _Governance_. The _Upgrade Process_ can be split into two distinct categories: parameter changes and contract logic upgrades.
 
 ### Parameter Changes
 Parameter changes are executed by calling privileged functions on various protocol contracts. Control over these functions is managed through a multi-layered permissions structure:
-1.  **Direct `admin` Control**: The most critical parameters are directly alterable by the `admin` role, which is the `Normal Timelock` contract (48-hour delay).
-2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract. This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
-    *   The `Normal Timelock` is granted permission for significant but non-emergency changes.
-    *   The `Fast Timelock` (1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
-    *   Emergency multisigs like [`Pause Guardian` and `Multisig Critical`](#security-council) are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard _Governance_ process.
+1.  **Direct `admin` Control**: The most critical parameters are directly alterable by the `admin` role, which is the `Normal Timelock` contract (controlled by XVS token holders with 48-hour delay).
+2.  **Access Control Manager (`ACM`)**: Most parameters are owned by the `AccessControlManager` contract (which is owned by the Normal Timelock, controlled by XVS token holders). This contract grants specific permissions to different roles, enabling fine-grained control. For instance:
+    *   The `Normal Timelock` (controlled by XVS governance) is granted permission for significant but non-emergency changes.
+    *   The `Fast Timelock` (controlled by XVS governance with 1-hour delay) is granted permission for less critical or more urgent parameter updates (e.g., `VAI` interest rates).
+    *   Emergency multisigs (3/6 threshold) like [`Pause Guardian` and `Multisig Critical`](#security-council) are granted access to functions that pause the protocol or adjust critical risk parameters during emergencies, bypassing the standard _Governance_ process but with limited scope.
 
 ### Contract Upgrades (Code Changes)
-Upgrades to the smart contract logic itself also follow the _Governance_ process, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
+Upgrades to the smart contract logic itself also follow the _Governance_ process controlled by XVS token holders, primarily through the `Normal Timelock` (48-hour delay). Venus employs two main upgrade patterns:
 
-1.  **Diamond Proxy (`Comptroller`)**: The main `Comptroller` uses the Diamond Standard (EIP-2535). Upgrades are performed via `diamondCut` proposals, which allow governance to:
+1.  **Diamond Proxy (`Comptroller`)**: The main `Comptroller` uses the Diamond Standard (EIP-2535). Upgrades are performed via `diamondCut` proposals submitted by XVS token holders, which allow governance to:
     *   Add new facets with additional functionality
     *   Replace existing facets to fix bugs or add features
     *   Remove facets that are no longer needed
     
     Each facet upgrade only affects specific functions mapped to that facet, allowing for surgical precision in upgrades. For example, updating reward logic only requires replacing the `RewardFacet` without touching market operations in `MarketFacet`. This modularity significantly reduces the risk of introducing bugs to unrelated functionality during upgrades.
 
-2.  **Beacon Proxies (`VTokens`)**: The markets (`VToken` contracts) are deployed as proxies pointing to a central `UpgradeableBeacon`. To upgrade all markets at once, a governance proposal simply needs to change the implementation contract address within the beacon. This single transaction atomically upgrades the logic for all `VToken` contracts.
+2.  **Beacon Proxies (`VTokens`)**: The markets (`VToken` contracts) are deployed as proxies pointing to a central `UpgradeableBeacon`. To upgrade all markets at once, XVS token holders must pass a governance proposal to change the implementation contract address within the beacon. This single transaction atomically upgrades the logic for all `VToken` contracts.
 
 # Contracts & Permissions
 
@@ -384,7 +384,7 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 
 ## Permissions
 
-In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in parentheses. If no roles are listed, no roles are currently assigned but can be introduced by _Governance_. The `accessControlManager` itself is managed by the Normal Timelock. These roles have not changed since Oct-26-2022 and can only be adjusted through the _Governance Structure_.
+In the following table, the privileged roles are listed for each function with access control. Particularly, for any function that is access controlled by `accessControlManager`, the currently assigned roles are added in parentheses. If no roles are listed, no roles are currently assigned but can be introduced by _Governance_. The `accessControlManager` itself is owned and managed by the Normal Timelock (controlled by XVS token holders). These roles have not changed since Oct-26-2022 and can only be adjusted by XVS token holders through the _Governance Structure_.
 
 | Contract      | Function     | Impact                                                                                                                                                                                                                                                                                                                                     | Owner                   |
 | ------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
