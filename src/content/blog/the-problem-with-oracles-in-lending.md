@@ -1,7 +1,7 @@
 ---
 title: "The problem with oracles in lending"
 description: "lending protocols rely primarily on oracles, which remain an external dependency despite being indispensable. But when we take a closer look at the topic, we realize that the centralization problem does not necessarily depend on oracles"
-date: 2025-09-9T18:00:00Z
+date: 2025-09-09T18:00:00Z
 published: true
 categories: ["Research"]
 authors: ["Stengarl"]
