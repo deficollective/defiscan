@@ -7,13 +7,50 @@ author: ["Mmilien_"]
 submission_date: "2025-08-31"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
+      { text: "All contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [
+      {
+        text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
+        status: "unfixed",
+      },
+      {
+        text: "Dependency with High centralization are mitigated",
+        status: "fixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "unfixed",
+      },
+    ],
+    [
+      {
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” not protected with onchain governance AND Exit Window >= 30 days",
+        status: "unfixed",
+      },
+      {
+        text: "Dependencies with High or Medium centralization score impact less than 5% of the TVL",
+        status: "unfixed",
+      },
+      { text: "Alternative third-party frontends exist", status: "unfixed" },
+    ],
+  ]
 ---
 
 # Summary
 
-This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed to increase yield on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications. In addition to this, the protocol introduced _Ether.fans_ NFTs which stake `ETH` exclusively with _Node Operators_ that use _Distributed Validators Technology (DVT)_.
+This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token (LRT) designed to increase yield on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications. In addition to this, the protocol introduced _Ether.fans_ NFTs which stake `ETH` exclusively with _Node Operators_ that use _Distributed Validators Technology (DVT)_.
 
-_Liquid Vaults_ further enable users to deposit tokens in exchange for liquid tokens associated with the specific vault. Curators (called "Strategy Providers") execute different strategies and manage the depositted funds in order to produce yield and increase the value of the vault shares.
+_Liquid Vaults_ further enable users to deposit tokens in exchange for liquid tokens associated with the specific vault. Curators (called "Strategy Providers") execute different strategies and manage the deposited funds in order to produce yield and increase the value of the vault shares.
 
 # Ratings
 
@@ -29,9 +66,9 @@ The protocol is deployed on several chains. This review focuses on the Ethereum 
 
 All contracts in the protocol can be upgraded by a [4-out-of-7 multisig](#security-council) with a delay of 3 days. This includes the `eETH` and `WeETH` tokens and the contracts handling validator withdrawals. Through an upgrade, the multisig could reattribute the ownership of all funds in the protocol, which would lead to the _loss of user funds_ and _loss of unclaimed yield_. As the signers are not announced, it does not qualify for the role of security council.
 
-An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, or wrongfully rebase the token, leading to _loss of user funds_ and/or the _loss of unclaimed yield_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin`contract.
+An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, or wrongfully rebase the token, leading to _loss of user funds_ and/or the _loss of unclaimed yield_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited window of 10 minutes to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin` contract.
 
-New validators are created in two phases when enough `ETH` has been depositted. First, any 1-of-6 signers of the [ValidatorSpawner multisig](#security-council) can create validators and deposit 1 `ETH` to them using user deposited `ETH` in the `LiquidityPool`. The oracle then confirms the validity of the withdrawal credential and triggers the deposit of the remaining `ETH` (> 31 `ETH` per validator). The initial deposit is at risk of frontrunning and collusion between the signer and _Node Operator_, this is why deposits have to be confirmed by the oracle. In case of an attack, this would allow the signer and _Node Operator_ to steal the 1 `ETH` depositted for each validator. However, this is of limitted impact given that this concerns a minority of protocol funds.
+New validators are created in two phases: 1) when enough `ETH` has been deposited any 1-of-6 signers of the [ValidatorSpawner multisig](#security-council) can create validators and deposit 1 `ETH` to them using user deposited `ETH` in the `LiquidityPool`. 2) The oracle then confirms the validity of the withdrawal credential and triggers the deposit of the remaining `ETH` (> 31 `ETH` per validator). The initial deposit is at risk of frontrunning and collusion between the signer and _Node Operator_, this is why deposits have to be confirmed by the oracle. In case of an attack, this would allow the signer and _Node Operator_ to steal the 1 `ETH` deposited for each validator. However, this is of limited impact given that this concerns a minority of protocol funds.
 
 Restaking rewards are distributed either through the [KING Protocol](https://kingprotocol.org/) or EtherFi's own distributor contracts. Both solutions requires a multisig to post a merkle root onchain. The KING Protocol's root can be updated at any time by their [multisig](#security-council), which could be used to revoke distributed rewards and lead to the _loss of unclaimed yield_.
 
@@ -39,8 +76,8 @@ Contracts may also be paused without delay to prevent further deposits and withd
 
 ### Liquid Vaults
 
-Contracts related to _Liquid Vaults_ are immutable. Nonetheless, the operators of the vault can manage the entirity of the funds depositted by users.
-[Multisig #3](#security-council) which requries 4-of-6 signers can set which actions are allowed to be performed by which curator. This can include any function call in external contracts, potentially interacting with other DeFi protocols. The curators, which include multisigs and one Externally Owned Account (EOA), can then execute those different management functions, directly utilizing user funds. Allowing interactions with a malicious contract could lead to the _loss of user funds_. In addition to that, the curators have the ability to set the exchange rate, which determine the worth of each vault share. Abusing the exchange rate could lead to the _loss of user funsd_.
+Contracts related to _Liquid Vaults_ are immutable. Nonetheless, the operators of the vault can manage the entirety of the funds deposited by users.
+[Multisig #3](#security-council) which requries 4-of-6 signers can set which actions are allowed to be performed by which curator. This can include any function call in external contracts, potentially interacting with other DeFi protocols. The curators, which include multisigs and one Externally Owned Account (EOA), can then execute those different management functions, directly utilizing user funds. Allowing interactions with a malicious contract could lead to the _loss of user funds_. In addition to that, the curators have the ability to set the exchange rate, which determine the worth of each vault share. Abusing the exchange rate could lead to the _loss of user funds_.
 
 The main admin of the vault, [Multisig #3](#security-council), can set withdrawal restrictions, potentially preventing user from withdrawing their funds, or adding withdrawal delays. The contracts can be paused by indefinitely a [Multisig #3](#security-council) and one [EOA](#security-council). The [Multisig #3](#security-council) is in charge of all the access control on _Liquid Vault_ contracts.
 
@@ -56,7 +93,7 @@ With the implementation of [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002) a
 
 ### Restaking on Eigenlayer
 
-The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. EtherFi currently uses an implementation that could not lead to the _loss of user funds_ or _loss of unclaimed yield_ because there is no slashing of funds, as discussed in the [dependencies](#dependencies) section.
+The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. The restaked ETH is then delegated to EtherFi aligned _Operators_ which choose the _AVSs_ for which they provide compute.
 
 We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/protocols/eigenlayer/ethereum#dependencies). However, the Eigenlayer protocol would be classified as Stage 1 if the criteria _Accessibility_ was ignored. Since EtherFi interacts programmatically with Eigenlayer, _Accessibility_ does not affect its centralization risks as a dependency. The Stage 1 equivalent dependency impacts EtherFi's own score and limits it to a _Medium_ centralization risk for the _Autonomy_ dimension.
 
@@ -84,7 +121,7 @@ _Ether.fan_ fees can be changed without delay and with up to 65 `ETH` of fees pe
 
 [Multisig #3](#security-council) can make any changes to the access control or operations of a liquid vault without delay. This could include enabling malicious strategies, pausing the contracts, or preventing withdrawals.
 
-Users with funds depositted in _Liquid Vaults_ suffer a withdrawal delay currently set to 3 days on most vaults.
+Users with funds deposited in _Liquid Vaults_ suffer a withdrawal delay currently set to 3 days on most vaults.
 
 > Exit Window score: High
 
@@ -108,11 +145,11 @@ There is an important distinction to be made between Ethereum _Node Operators_ a
 
 This review reflects the state of EtherFi to the date of publication. We note that EtherFi is a fast evolving protocol and [implementation addresses](#contracts) should be verified to detect any upgrades since the last changes.
 
-As part of their ongoing updates, the access control of most EtherFi contracts is being updated to use the `RoleRegistry (2)` contract for better traceability and auditability. However, some contracts, including the `MemershipManager` and `MembershipNFTs` used for _Ether.fans_ are not yet following this standard and it is not currently possible to audit the holders of the _admin_ role. As it is the case for other operative functions, we assume that those roles are partly granted to undeclared Externally Owned Accounts (EOAs).
+As part of their ongoing updates, the access control of most EtherFi contracts is being updated to use the `RoleRegistry (2)` contract for better traceability and auditability. However, some contracts, including the `MembershipManager` and `MembershipNFTs` used for _Ether.fans_ are not yet following this standard and it is not currently possible to audit the holders of the _admin_ role. As it is the case for other operative functions, we assume that those roles are partly granted to undeclared Externally Owned Accounts (EOAs).
 
 # Protocol Analysis
 
-## Liquid ReStaking
+## Liquid Restaking
 
 An overview of the EtherFi protocol can be seen in the diagram below.
 
@@ -130,7 +167,7 @@ Once the initial deposit is confirmed with the correct withdrawal address, the o
 
 ### ReStaking
 
-When `EtherFiNode` contracts are created, they deploy automatically a corresponding `EigenPod` using the `EigenPodManager`. `EigenPod` are contracts that enable restaking on Eigenlayer. The validator used for restaking have to have the `Eigenpod` as withdrawal address, this enables the Eigenlayer protocol to handle the withdrawn `ETH` and potentially slash the staker (here the `EtherFiNode`). EtherFi delegates the restaking to _Eigenlayer Node Operators_, as described in the [dependencies](#dependencies) section. This delegation can be done by any holder of the role [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2), which includes an Externally Owner Account (EOA). Delegations and withdrawals can be made by the same role holders through Eigenlayer's `DelegationManager` using the `EtherFiNode` contract's call forwading functions.
+When `EtherFiNode` contracts are created, they deploy automatically a corresponding `EigenPod` using Eigenlayer's `EigenPodManager`. `EigenPod` are contracts that enable restaking on Eigenlayer. The validator used for restaking have to have the `Eigenpod` as withdrawal address, this enables the Eigenlayer protocol to handle the withdrawn `ETH` and potentially slash the staker (here the `EtherFiNode`). EtherFi delegates the restaked `ETH` to _Eigenlayer Operators_, as described in the [dependencies](#dependencies) section. This delegation can be done by any holder of the role [ETHERFI_NODE_CALL_FORWARDER_ROLE](#roleregistry-2), which includes an Externally Owner Account (EOA). Delegations and withdrawals can be made by the same role holders through Eigenlayer's `DelegationManager` using the `EtherFiNode` contract's call forwarding functions.
 
 ### Ether.fan NFTs
 
@@ -156,12 +193,13 @@ Each validator is linked to a `EtherFiNode` contract, and the withdrawn funds ar
 
 The staked `ETH` associated with `eETH` is restaked onchain using the Eigenlayer protocol. EtherFi delegates their staked `ETH` to _Eigenlayer Node Operators_, those operators can choose which _Eigenlayer AVS_ they will operate for. The possible malicious actions of those actors are described in detail in the [DeFiScan Eigenlayer report](/protocols/eigenlayer/ethereum#dependencies). Nonetheless, in the case of EtherFi, the protocol uses an older version of Eigenlayer with the following particularities:
 
-- The _Operator_ delegate their entire stake to the _AVSs_ they operate for. In practice, this leads to their stake being "duplicated" for each _AVS_.
-- The _AVSs_ cannot slash the _Operators_. As such, misbehaviour from the _AVSs_ or _Operators_ cannot lead to the _loss of user funds_. However, _loss of unclaimed yield_ remains possible as the _AVSs_ are trusted to distribute the rewards fairly and could refuse to do so.
+- The _Operators_ allocate their entire delegated stake to all _AVSs_ they operate. If slashing was enabled, this would mean that all AVSs share slashing claims on the same allocation, leading to a first come first serve race to succeed in slashing.
+- Currently, the _AVSs_ cannot slash the EtherFi _Operators_. As such, misbehaviour from the _AVSs_ or _Operators_ cannot lead to the _loss of user funds_.
+- However, _loss of unclaimed yield_ remains possible as the _AVSs_ are trusted to distribute the rewards fairly and could refuse to do so.
 
 This version of the protocol could be deprecated in the future. The contract addresses of each operator is listed in the [Eigenlayer Operators table](#eigenlayer-operators).
 
-[To date](https://community.chaoslabs.xyz/etherfi/risk/avs), the staked `ETH` is restaked through 12 _EigenLayer Node Operators_ across 17 _EigenLayer AVSs_. The funds are not equally distributed among _Operators_ and _AVSs_; the _Operator_ and _AVS_ with the highest concentrations have 17.5% and 9.9% respectively."
+The list of _Eigenlayer Node Operators_ and _Eigenlayer AVSs_ used by EtherFi can be seen [on this dashboard.](https://community.chaoslabs.xyz/etherfi/risk/avs)
 
 Each EtherFi's Ethereum validator has its withdrawal address set to a dedicated `EigenPod` contract. The `EigenPod` contracts are upgradeable by an [Eigenlayer multisig] which meets the security council requirements. Upgrading this contract could allow the multisig to trigger withdrawals and redirect the funds to an arbitrary address, leading to the _loss of user funds_.
 
@@ -192,8 +230,6 @@ EtherFi has no strict onchain governance. The governance token, `ETHFI`, can be 
 # Contracts & Permissions
 
 ## Contracts
-
-UUPSProxy EtherFiRewardsRouter (ENS = "Fee Recipient"), "0x73f7b1184B5cD361cC0f7654998953E2a251dd58"
 
 | Contract Name                             | Etherscan Link                                                                                                        |
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -445,7 +481,7 @@ Below are are the addresses of the _Operators_ used by EtherFi. Those are contro
 | MembershipManager | setDepositAmountParams | Sets the minimum deposit (0.1 ETH) and the maximum top up that can be performed on an existing deposit without penalties on the memberhsip tier (20%). Topups (additional deposits) above 20% have a penalty that proportionally dillutes the existing membership points (potentially losing tiers). | [] |
 | MembershipManager | setTopUpCooltimePeriod | Sets the time a user must wait between topups. Currently there is a delay of 28 days between each deposit. | [] |
 | MembershipManager | setFeeAmounts | Sets the mint, upgrade, and burn fees that users have to pay. Fees are fixed amounts between 0.001 and 65.535 `ETH`. An additional variable, the `burnFeeWaiverPeriodInDays` can be set using this function. This is the number of days after which the NFT can be burnt with no fees. All fees are currently set to zero. | [] |
-| MembershipManager | setFanBoostThresholdEthAmount | Sets the threshold of `ETH` rewards that need to be accumulated before distribution to the NFT holders according to their tier. The rewards are directly depositted in the `LiquidityPool` during the `rebase`. | [] |
+| MembershipManager | setFanBoostThresholdEthAmount | Sets the threshold of `ETH` rewards that need to be accumulated before distribution to the NFT holders according to their tier. The rewards are directly deposited in the `LiquidityPool` during the `rebase`. | [] |
 | MembershipManager | updateAdmin | Grants or revokes admin privileges to a given address. Admins parameter the contract, change tiers and fees. Abuse could lead to _loss of user funds_ through maximal fees or loss of future rewards by creating an exclusive tier tunneling all rewards. | EtherFiTimelock (3 Days) |
 | MembershipManager | pauseContract | Pauses all user facing functions, including deposits and withdrawals. This could trap user funds if not unpaused. Rewards can still be accumulated, but not claimed. | ['whenNotPaused'] |
 | MembershipManager | unPauseContract | Unpauses the contract and resumes user facing functions. | ['whenPaused'] |
