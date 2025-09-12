@@ -13,6 +13,8 @@ update_date: "1970-01-01"
 
 This review focuses on EtherFi's `eETH`/`WeETH` protocol. `eETH` is a liquid restaking token designed to increase yield on top of native staking. `eETH` is backed by staked and restaked `ETH` through EigenLayer. The protocol implements native restaking at the protocol level, allowing holders to earn both staking and restaking rewards simultaneously without requiring separate actions or asset lockups. As such, the tokens can be used in other DeFi applications. In addition to this, the protocol introduced _Ether.fans_ NFTs which stake `ETH` exclusively with _Node Operators_ that use _Distributed Validators Technology (DVT)_.
 
+_Liquid Vaults_ further enable users to deposit tokens in exchange for liquid tokens associated with the specific vault. Curators (called "Strategy Providers") execute different strategies and manage the depositted funds in order to produce yield and increase the value of the vault shares.
+
 # Ratings
 
 ## Chain
@@ -23,6 +25,8 @@ The protocol is deployed on several chains. This review focuses on the Ethereum 
 
 ## Upgradeability
 
+### Liquid Restaking (`eETH`)
+
 All contracts in the protocol can be upgraded by a [4-out-of-7 multisig](#security-council) with a delay of 3 days. This includes the `eETH` and `WeETH` tokens and the contracts handling validator withdrawals. Through an upgrade, the multisig could reattribute the ownership of all funds in the protocol, which would lead to the _loss of user funds_ and _loss of unclaimed yield_. As the signers are not announced, it does not qualify for the role of security council.
 
 An [oracle](#stakers-and-operators) with 2-out-of-3 signers reports onchain on the state of the beacon chain and the performance of the EtherFi validators. This information is critical to the functioning of the protocol and if manipulated could be used to mint excessive `eETH` and dilute users, or wrongfully rebase the token, leading to _loss of user funds_ and/or the _loss of unclaimed yield_. Once the oracle members submit a report, a [3-out-of-5 multisig](#security-council) has a limited 10 minutes window to cancel it, after which a [Depositor EOA](#security-council) can execute the corresponding actions through the `EtherFiAdmin`contract.
@@ -32,6 +36,13 @@ New validators are created in two phases when enough `ETH` has been depositted. 
 Restaking rewards are distributed either through the [KING Protocol](https://kingprotocol.org/) or EtherFi's own distributor contracts. Both solutions requires a multisig to post a merkle root onchain. The KING Protocol's root can be updated at any time by their [multisig](#security-council), which could be used to revoke distributed rewards and lead to the _loss of unclaimed yield_.
 
 Contracts may also be paused without delay to prevent further deposits and withdrawals. Different multisigs may resume the contracts. In addition to that, user funds can be trapped in _Ether.fans_ NFTs with the possibility of adding withdrawal fees of up to 65 `ETH` per withdrawal.
+
+### Liquid Vaults
+
+Contracts related to _Liquid Vaults_ are immutable. Nonetheless, the operators of the vault can manage the entirity of the funds depositted by users.
+[Multisig #3](#security-council) which requries 4-of-6 signers can set which actions are allowed to be performed by which curator. This can include any function call in external contracts, potentially interacting with other DeFi protocols. The curators, which include multisigs and one Externally Owned Account (EOA), can then execute those different management functions, directly utilizing user funds. Allowing interactions with a malicious contract could lead to the _loss of user funds_. In addition to that, the curators have the ability to set the exchange rate, which determine the worth of each vault share. Abusing the exchange rate could lead to the _loss of user funsd_.
+
+The main admin of the vault, [Multisig #3](#security-council), can set withdrawal restrictions, potentially preventing user from withdrawing their funds, or adding withdrawal delays. The contracts can be paused by indefinitely a [Multisig #3](#security-council) and one [EOA](#security-council). The [Multisig #3](#security-council) is in charge of all the access control on _Liquid Vault_ contracts.
 
 > Upgradeability score: High
 
@@ -51,21 +62,35 @@ We analysed the Eigenlayer protocol to be of Stage 0 in a [dedicated report](/pr
 
 Finally, other liquid staking tokens (LSTs), such as Lido's `stETH`, can be restaked on Eigenlayer and transformed into `eETH` using the `Liquifier` contract. In this case, the tokens are also restaked on Eigenlayer using a dedicated and predetermined strategy for each type of LST. The deposits are currently limited to `stETH` with a cap of 850'000 ETH. Since this represents less than 35% of EtherFi's TVL, this grants EtherFi a _Medium_ dependency on Lido.
 
+### Multichain support using LayerZero
+
+_Liquid Vaults_ support cross-chain messaging using LayerZero. It allows users to bridge vault shares to chains chosen by EtherFi. The current configuration requires 2 Distributed Validator Networks (DVNs) to confirm each message, the only accepted DVNs are Google Cloud and LayerZero Labs. One of those DVN could deny cross-chain messages by stopping the validation, and both DVNs together could collude to falsify user operations and lead to excessive minting or burning of shares. In any case, the team will be able to change the configuration or pause the contract.
+
 > Autonomy score: Medium
 
 ## Exit Window
+
+### Liquid Restaking (`eETH`)
 
 All contract upgrades are currently subject to a delay of 3 days. Day-to-day operations related to the EtherFi oracle, which include minting and burning `eETH` according to the data pushed onchain, are executed with a 10 minute delay once the consensus has been reached.
 
 The protocol can be paused by an [undeclared `EOA`](#security-council), preventing both deposits and withdrawals without delay. The protocol can be resumed by a multisig or the `EtherFiAdmin` contract. Pausing the protocol can be modular, with non-facing user functions remaining accessible.
 
+Users who wish to withdraw their funds need may need wait a variable amount of time as the withdrawal is subject to an exit queue. The exit queue is subject to the 14 days Eigenlayer unstaking delay as well as the Ethereum validator exit queue, which can be from several days to multiple weeks. This time can be reduced as new deposits can be matched with withdrawals.
+
 _Ether.fan_ fees can be changed without delay and with up to 65 `ETH` of fees per operation.
+
+### Liquid Vaults
+
+[Multisig #3](#security-council) can make any changes to the access control or operations of a liquid vault without delay. This could include enabling malicious strategies, pausing the contracts, or preventing withdrawals.
+
+Users with funds depositted in _Liquid Vaults_ suffer a withdrawal delay currently set to 3 days on most vaults.
 
 > Exit Window score: High
 
 ## Accessibility
 
-The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eETH` and [ether.fan](https://ether.fan/) for _Ether.fans_. Neither frontends are open-source and no alternative frontends or self-hosting versions are available.
+The official EtherFi frontends are [app.ether.fi](https://app.ether.fi/) for `eETH` and _Liquid Vaults_, and [ether.fan](https://ether.fan/) for _Ether.fans_. Neither frontends are open-source and no alternative frontends or self-hosting versions are available.
 
 > Accessibility score: High
 
@@ -111,6 +136,12 @@ When `EtherFiNode` contracts are created, they deploy automatically a correspond
 
 _Ether.fans_ are NFTs minted with `ETH` that is staked exclusively with solo stakers using _Distributed Validator Technology (DVT)_. The Ether.fan NFT contract, `MembershipNFT`, is an ERC1155 with each NFT's balance being set strictly to 1. The issuance is managed by `MembershipManager`. When minted, Fans are given a random set of traits that are purely visual (gender, background, colors). These traits are stored only in offchain metadata, which can be changed by the contract administrators. The NFTs are associated with a flair depending on how much ETH is staked with them and a tier (bronze to platinum) depending on the time that has passed since they were minted. While depositing `ETH` is (currently) free of fees, depositing more than 20% in a period one month can impact the membership tier. Withdrawing `ETH` also impacts the membership tier, and withdrawing more than 50% of the all time value of the NFT will automatically burn it (withdraw the full amount). Minting is currently blocked as the limit of 10'000 mints has been reached. However, the limit can be increased by any admin of the contract.
 
+### Liquid Vaults
+
+Below is an overview of _Liquid Vaults_ contracts and operators.
+
+![Overview of EtherFi Liquid Vaults](../diagrams/etherfi-liquid-vaults.png)
+
 # Dependencies
 
 ## Ethereum staking
@@ -142,20 +173,21 @@ EtherFi has no strict onchain governance. The governance token, `ETHFI`, can be 
 
 ## Security Council
 
- | Name                                         | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
+| Name                                         | Account                                                                                                               | Type         | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ | ----------- | --------------- | ----------------- | -------------- |
 | EtherFi Undeclared Multisig #1               | [0x2aCA71020De61bb532008049e1Bd41E451aE8AdC](https://etherscan.io/address/0x2aCA71020De61bb532008049e1Bd41E451aE8AdC) | Multisig 3/5 | ❌          | ✅              | ❌                | ❌             |
 | EtherFi Undeclared Multisig #2               | [0xcdd57D11476c22d265722F68390b036f3DA48c21](https://etherscan.io/address/0xcdd57D11476c22d265722F68390b036f3DA48c21) | Multisig 4/7 | ✅          | ✅              | ❌                | ❌             |
 | EtherFi Undeclared Multisig #3               | [0xcea8039076e35a825854c5c2f85659430b06ec96](https://etherscan.io/address/0xcea8039076e35a825854c5c2f85659430b06ec96) | Multisig 4/6 | ❌          | ✅              | ❌                | ❌             |
 | KING Undeclared Multisig                     | [0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52](https://etherscan.io/address/0xa000244b4a36d57ea1ecb39b5f02f255e4c8cd52) | Multisig 3/7 | ✅          | ❌              | ❌                | ❌             |
 | EtherFi Undeclared ValidatorSpawner          | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | Multisig 1/6 | ❌          | ❌              | ❌                | ❌             |
+| EtherFi LiquidVault Undeclared Multisig #4   | [0x41dfc53b13932a2690c9790527c1967d8579a6ae](https://etherscan.io/address/0x41dfc53b13932a2690c9790527c1967d8579a6ae) | Multisig 2/4 | ❌          | ❌              | ❌                | ❌             |
+| EtherFi LiquidVault Undeclared Multisig #5   | [0x71e2d6c34f569cc4df5802d675b208fb8ae3bcd6](https://etherscan.io/address/0x71e2d6c34f569cc4df5802d675b208fb8ae3bcd6) | Multisig 2/4 | ❌          | ❌              | ❌                | ❌             |
+| EtherFi LiquidVault Undeclared Multisig #6   | [0x523455838764e0ECf9adD7eAB8c1DAB86B0c6D7b](https://etherscan.io/address/0x523455838764e0ECf9adD7eAB8c1DAB86B0c6D7b) | Multisig 2/5 | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (Pauser)                     | [0x9af1298993dc1f397973c62a5d47a284cf76844d](https://etherscan.io/address/0x9af1298993dc1f397973c62a5d47a284cf76844d) | EOA          | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (EtherFi Deployer)           | [0xf8a86ea1Ac39EC529814c377Bd484387D395421e](https://etherscan.io/address/0xf8a86ea1Ac39EC529814c377Bd484387D395421e) | EOA          | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (Beacon Depositor)           | [0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f](https://etherscan.io/address/0x12582a27e5e19492b4fcd194a60f8f5e1aa31b0f) | EOA          | ❌          | ❌              | ❌                | ❌             |
 | Underclared EOA (EtherFiNode Call Forwarder) | [0x7835fB36A8143a014A2c381363cD1A4DeE586d2A](https://etherscan.io/address/0x7835fB36A8143a014A2c381363cD1A4DeE586d2A) | EOA          | ❌          | ❌              | ❌                | ❌             |
-
-Multisigs have the right to Pause the LiquidVault Accountant:
-0x41dfc53b13932a2690c9790527c1967d8579a6ae, 0x71e2d6c34f569cc4df5802d675b208fb8ae3bcd6, 0x523455838764e0ECf9adD7eAB8c1DAB86B0c6D7b
+| Underclared EOA (VaultManager)               | [0x18deea881548a592285d9ba63f0f67dc97e28e99](https://etherscan.io/address/0x18deea881548a592285d9ba63f0f67dc97e28e99) | EOA          | ❌          | ❌              | ❌                | ❌             |
 
 # Contracts & Permissions
 
@@ -555,55 +587,60 @@ Staking of ETHFI
 | BoringGovernance | setBeforeTransferHook | ... | ['requiresAuth'] |
 | BoringGovernance | setShareLocker | ... | ['requiresAuth'] |
 
-| BoringVault | setAuthority | Changes the access control system, allowing new authority contract to control all functions. This could enable the takeover of this vault. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| BoringVault | transferOwnership | Transfers contract ownership to new address. New owner gains access to every permissioned function on the contract. This could enable the takeover of this vault. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| BoringVault | setAuthority | Changes the access control system, allowing new authority contract to control all functions. This could enable the takeover of the vault. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| BoringVault | transferOwnership | Transfers contract ownership to new address. New owner gains access to every permissioned function on the contract. This could enable the takeover of this vault. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
 | BoringVault | manage | Executes arbitrary contract calls with vault assets. Can interact with any DeFi protocol, perform strategy operations, or drain all funds. | ManagerWithMerkleVerification (Authority [role 8](#liquid-vault-access-control-authority)) |
 | BoringVault | enter | Mints vault shares to specified address for given assets. Controls who can deposit and receive shares. Could mint unlimited shares if misused. | LayerZeroTellerWithRateLimiting (Authority [role 3](#liquid-vault-access-control-authority)) |
 | BoringVault | exit | Burns vault shares and releases the given underlying assets. Controls withdrawal process and could withdraw arbitrary amount of tokens for any amount of shares. | LayerZeroTellerWithRateLimiting (Authority [role 2](#liquid-vault-access-control-authority)) |
-| BoringVault | setBeforeTransferHook | Sets the hook called before any transfer. The hook is an external contract that is called before any transfer, with the details of the transfer as argument. It could be used to prevent transfers, for example, with rate limiting. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | setAuthority | Changes access control system for this contract. Could allow unauthorized rate or fee manipulation. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | transferOwnership | Transfers contract ownership to new address. New owner gains access to every permissioned function on the contract. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | pause | Halts all rate updates and fee claims. Prevents yield distribution and could lead to loss of unclaimed yield if not unpaused. | EtherFi Multisig #3, Pauser EOA (Authority [role 5, 9, 14](#liquid-vault-access-control-authority)), 0x41dfc53b13932a2690c9790527c1967d8579a6ae, 0x71e2d6c34f569cc4df5802d675b208fb8ae3bcd6, 0x523455838764e0ECf9adD7eAB8c1DAB86B0c6D7b |
-| AccountantWithRateProviders | unpause | Resumes the contract. | EtherFi Multisig #3 (Authority [role 5, 9](#liquid-vault-access-control-authority))|
-| AccountantWithRateProviders | updateDelay | Changes delay for rate updates (time between each update). Could remove safety delays or extend them to halt operations. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | updateUpper | Sets upper bound for rate changes. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | updateLower | Sets lower bound for rate changes. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | updateManagementFee | Updates the management fee (annual). There is an upper bound enforced in the contract of 20% annual fee. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | updatePayoutAddress | Changes where fees are sent. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | setRateProviderData | Updates the exchange rate provider for a given asset. Malicious rate providers could manipulate vault valuations. | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| AccountantWithRateProviders | updateExchangeRate | Updates vault share exchange rate. Direct manipulation could steal user funds through rate manipulation. An rate outside of the bounds or pushed before the update delay has passed will automatically pause this contract. | (Authority [role 11](#liquid-vault-access-control-authority))|
+| BoringVault | setBeforeTransferHook | Sets the hook called before any transfer. The hook is an external contract that is called before any transfer, with the details of the transfer as argument. It could be used to prevent transfers, for example, with rate limiting. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| ManagerWithMerkleVerification | setAuthority | Changes the access control system, allowing new authority contract to control all functions. This could enable the takeover of the vault as this contract has management accesss. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| ManagerWithMerkleVerification | transferOwnership | Transfers contract ownership to new address. New owner gains access to every permissioned function on the contract. This could enable the takeover of this vault. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| ManagerWithMerkleVerification | setManageRoot | Sets the root of the merkle tree used for management. The merkle tree defines exactly which data can be passed on to the `BoringVault` contract, it specifies the actions that can be performed. Allowing malicious strategies could enable the _loss of user funds_. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| ManagerWithMerkleVerification | pause | Prevents temporarily any further call to the function `manageVaultWithMerkleVerification`. This does not pause the vault but only fund management. | Multisig #3 (Authority [role 5](#liquid-vault-access-control-authority)) |
+| ManagerWithMerkleVerification | unpause | Resumes the contract. | Multisig #3 (Authority [role 5](#liquid-vault-access-control-authority)) |
+| ManagerWithMerkleVerification | manageVaultWithMerkleVerification | Calls the manage function of the `BoringVault`. This can only perform pre-approved actions for this specific caller. | Multisig #4, Multisig #5, VaultManager EOA (Authority [role 4, 7](#liquid-vault-access-control-authority)) |
+
+| AccountantWithRateProviders | setAuthority | Changes access control system for this contract. Could allow unauthorized rate or fee manipulation. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | transferOwnership | Transfers contract ownership to new address. New owner gains access to every permissioned function on the contract. | EterFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | pause | Halts all rate updates and fee claims. Prevents yield distribution and could lead to loss of unclaimed yield if not unpaused. | Multisig #3, Pauser EOA (Authority [role 5, 9, 14](#liquid-vault-access-control-authority)), Multisig #4, Multisig #5, Multisig #6 |
+| AccountantWithRateProviders | unpause | Resumes the contract. | Multisig #3 (Authority [role 5, 9](#liquid-vault-access-control-authority))|
+| AccountantWithRateProviders | updateDelay | Changes delay for rate updates (time between each update). Could remove safety delays or extend them to halt operations. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | updateUpper | Sets upper bound for rate changes. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | updateLower | Sets lower bound for rate changes. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | updateManagementFee | Updates the management fee (annual). There is an upper bound enforced in the contract of 20% annual fee. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | updatePayoutAddress | Changes where fees are sent. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | setRateProviderData | Updates the exchange rate provider for a given asset. Malicious rate providers could manipulate vault valuations. | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| AccountantWithRateProviders | updateExchangeRate | Updates vault share exchange rate. Direct manipulation could steal user funds through rate manipulation. An rate outside of the bounds or pushed before the update delay has passed will automatically pause this contract. | Multisig #4, Multisig #5, VaultManager (Authority [role 11](#liquid-vault-access-control-authority))|
 | AccountantWithRateProviders | claimFees | Pays out the fees to the predefined payout address. This function must be called through the BoringVault's manage function. The fees are paid in the Vault's base asset, which may require the contract to compute the fee amount using its exchange rate. | BoringVault |
 | LayerZeroTellerWithRateLimiting | lzReceive | ... | EndpointV2 (LayerZero Endpoint) |
 | LayerZeroTellerWithRateLimiting | setPeer | ... | Authority [role 8, 10](#liquid-vault-access-control-authority) |
-| LayerZeroTellerWithRateLimiting | setDelegate | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | setAuthority | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | transferOwnership | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setDelegate | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setAuthority | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | transferOwnership | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
 | LayerZeroTellerWithRateLimiting | pause | ... | Pauser EOA, TODO (Authority [role 5, 9, 12, 14](#liquid-vault-access-control-authority)) |
 | LayerZeroTellerWithRateLimiting | unpause | ... | (Authority [role 5, 9, 12](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | updateAssetData | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | setShareLockPeriod | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | denyAll | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | allowAll | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | denyFrom | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | allowFrom | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | denyTo | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | allowTo | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority))|
-| LayerZeroTellerWithRateLimiting | denyOperator | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | allowOperator | ... | EtherFi Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | refundDeposit | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority))|
+| LayerZeroTellerWithRateLimiting | updateAssetData | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setShareLockPeriod | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | denyAll | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowAll | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | denyFrom | ... | Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowFrom | ... | Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | denyTo | ... | Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowTo | ... | Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority))|
+| LayerZeroTellerWithRateLimiting | denyOperator | ... | Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowOperator | ... | Multisig #3 (Authority [role 9](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | refundDeposit | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority))|
 | LayerZeroTellerWithRateLimiting | bulkDeposit | ... | Admins TODO (Authority [role 10](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | bulkWithdraw | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | addChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | removeChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority))|
-| LayerZeroTellerWithRateLimiting | allowMessagesFromChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | allowMessagesToChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | stopMessagesFromChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | stopMessagesToChain | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | setOutboundRateLimits | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | setInboundRateLimits | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-| LayerZeroTellerWithRateLimiting | setChainGasLimit | ... | EtherFi Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
-
-Missing: ManagerWithMerkleVerification
+| LayerZeroTellerWithRateLimiting | bulkWithdraw | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | addChain | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | removeChain | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority))|
+| LayerZeroTellerWithRateLimiting | allowMessagesFromChain | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | allowMessagesToChain | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | stopMessagesFromChain | ... | Multisig #3, Multisig #6 (Authority [role 8, 20](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | stopMessagesToChain | ... | Multisig #3 (Authority [role 8, 20](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setOutboundRateLimits | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setInboundRateLimits | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
+| LayerZeroTellerWithRateLimiting | setChainGasLimit | ... | Multisig #3 (Authority [role 8](#liquid-vault-access-control-authority)) |
 
 ## Access Control
 
