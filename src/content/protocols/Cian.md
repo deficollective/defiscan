@@ -421,5 +421,3 @@ New table with all the multisigs
 
 Note: The permissions for all Manager contracts (YlFBTC, YlBTCLst, YlrsETH, YlstETH) are similar; therefore, only Manager (YlstETH) is shown on the permissions page. RedeemOperator contracts of (YlrsETH, YlstETH) have the same functions; only RedeemOperator (YlstETH) is shown on the permissions page. 
 The permissions for StrategyAAVEV3RsETH (Implementation) (YlstETH) and StrategyAAVEV3RsETH (Implementation) (YlrsETH) have similar functions; as a result, only one is shown on the permissions page. Likewise, StrategySolv (Implementation) (YlBTCLST) and StrategyPump (Implementation) have similar functions, so only StrategySolv is shown above.
-
-
