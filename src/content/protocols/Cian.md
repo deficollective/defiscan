@@ -5,7 +5,7 @@ x: "https://x.com/CIAN_protocol"
 github: ["https://github.com/cian-ai/cian-protocol"]
 defillama_slug: ["cian-yield-layer"]
 chain: "Ethereum"
-stage: "0"
+stage: "O"
 reasons: ["Unverified Contracts"]
 risks: ["L", "H", "H", "H", "H"]
 author: ["BowtiedRahman"]
@@ -16,7 +16,7 @@ update_date: "2025-06-01"
 
 # Summary
 
-Cian Yield Layer is a yield aggregator that automates yield optimization — the process of automatically adjusting a yield strategy to maximize returns — by pooling user funds into vaults and depending on the strategy the vault implements deploys them to external protocols (lending, borrowing, staking, and restaking) to achieve the highest possible returns with minimal effort from the user. The Cian protocol provide three products for users to get yield. The cian yield layer which has 80% of the protocol tvl, the Cian strategy mainnet vaults and Cian automation.
+Cian Yield Layer is a yield aggregator that automates yield optimization — the process of automatically adjusting a yield strategy to maximize returns — by pooling user funds into vaults and deploying them to external protocols (lending, borrowing, staking, and restaking) to achieve the highest possible returns with minimal effort from the user. The Cian Protocol provides three products for users to get yield. The Cian Yield Layer, the Cian Strategy Mainnet Vaults and Cian Automation.
 
 # Ratings
 
@@ -29,11 +29,11 @@ Cian Yield Layer deploys yield strategies on various chains, this review focuses
 ## Upgradeability
 
 
-The Cian Yield layer is fully upgradable allowing for the updates of all vaults (`YlFBTC`, `YlBTCLst`, `YlrsETH`, `YlstETH`) and strategy contracts e.g (`StrategyETHConverter`, `StrategyAAVEV3LIDO`). This can result in the loss of funds or unclaimed yield as well as lead to other changes in the expected performance of the protocol.
+The Cian Yield Layer is upgradable allowing for the updates of all vaults (`YlFBTC`, `YlBTCLst`, `YlrsETH`, `YlstETH`) and their associated strategy contracts which are adapters to the yield sources. This can result in the _loss of funds_ or _loss of unclaimed yield_ as well as lead to other changes in the expected performance of the protocol. 
 
+Strategy contracts (protocol adapters) can be added and replaced which can also lead to _loss of funds_ if used maliciously.
 For withdrawals users must first request withdrawals from the Yield layer vaults. The [Operator](#security-council) must then confirm each withdrawal request through the `Manager` and `RedeemOperator` contracts. The `Manager` contract is controlled by the [Owner YlstETH](#security-council) multisig. The [Operator](#security-council) can be replaced.
-
-The permission to upgrade the Cian Yield layer vaults (`YlstETH`, `YlBTCLst`, `YlrsETH`) and strategy contracts e.g (`StrategyAAVEV3LIDO`, `StrategyETHConverter`) is controlled by a 3/4 multisig for some vaults (`YlstETH`, `YlBTCLst`, `YlrsETH`) or an EOA in some e.g (`VaultYieldETH`, `VaultYieldRSETH`).  This makes the upgradeability score High.
+The permission to upgrade the Cian Yield layer vaults (`YlstETH`, `YlBTCLst`, `YlrsETH`) and strategy contracts e.g (`StrategyAAVEV3LIDO`, `StrategyETHConverter`) is controlled by a 3/4 multisig for some vaults (`YlstETH`, `YlBTCLst`, `YlrsETH`) or an EOA in some e.g (VaultYieldETH, VaultYieldRSETH).  This makes the upgradeability score High.
 
 > Upgradeability score: High
 
