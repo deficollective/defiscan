@@ -30,7 +30,7 @@ In an additional step the executor executes the targeted message on the destinat
 
 # Rating
 
-The risk of crosschain messaging lies in the execution of fraudulent messages on the destination chain and in censoring the transaction from moving crosschain. For example, if the bridged message is permissioned to mint tokens, a malicious DVN could mint tokens for themselves instead of the user's intended address on the destination chain. In the case of LayerZero, registering as a DVN is permissionless, thus also malicious DVNs can be registered to the LayerZero protocol. .
+The risk of crosschain messaging lies in the execution of fraudulent messages on the destination chain and in censoring the transaction from moving crosschain. For example, if the bridged message is permissioned to mint tokens, a malicious DVN could mint tokens for themselves instead of the user's intended address on the destination chain. In the case of LayerZero, registering as a DVN is permissionless, thus also malicious DVNs can be registered to the LayerZero protocol.
 
 The following sections examine the roles of LayerZero Labs, DVNs and integrating protocols and risks associated with each role.
 
