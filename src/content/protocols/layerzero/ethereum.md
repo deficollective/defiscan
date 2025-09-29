@@ -1,7 +1,7 @@
 ---
 chain: "Ethereum"
 type: "Bridge"
-logo: "/images/infrastructure-logos/LayerZero.png"
+logo: "/images/infrastructure-logos/layerzero.png"
 stage: "I0"
 protocols: ["maverick-v2"]
 reasons: []
