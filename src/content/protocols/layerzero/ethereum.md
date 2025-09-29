@@ -18,7 +18,7 @@ LayerZero is a crosschain protocol that allows for the transfer of data and asse
 
 # Protocol Analysis
 
-![Architecture](./diagrams/layerZero-overview.png)
+![Architecture](../diagrams/layerZero-overview.png)
 
 For moving messages and tokens across chains, protocol contracts post the message that has to be moved crosschain to the `EndpointV2` contract on the source chain alongside metadata which specifies the source and destination contract as well as endpoints. This `EndpointV2` contract on the source chain subsequently sends the data to a configured sending library that encodes the data and takes care of paying the verifiers (DVNs) and the Executor for verifying and executing the crosschain messages. After that, the `EndpointV2` contract emits an event (`PacketSent`) that has to be picked up by the configured and responsible DVNs.
 
