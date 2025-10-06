@@ -166,7 +166,7 @@ LayerZero Labs manages the default verifier set, which is used by default when a
 
 ## Closing remarks
 
-LayerZero is a powerful tool for crosschain communication, but it also splits centralization risk into each app. It is important to be aware of these risks and to take appropriate measures to mitigate them. We hope this article has helped you understand the risks of centralization in LayerZero and the importance of taking appropriate measures to mitigate them.
+LayerZero is a powerful tool for crosschain communication, but it also splits centralization risk evaluation into each app. It is important to be aware of these risks and to take appropriate measures to mitigate them. We hope this article has helped you understand the risks of centralization in LayerZero and the importance of taking appropriate measures to mitigate them.
 
 ## Disclaimer
 
