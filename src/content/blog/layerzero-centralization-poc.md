@@ -122,7 +122,7 @@ Reference transaction:
 
 ## Step 5
 
-We can call `lzReceive` on the `EndpointV2` contract with a message if hashed is equal to the payload hash we submitted in Step 3 and 4. This will execute the payload on the destination chain.
+We can call `lzReceive` on the `EndpointV2` contract with a message whose hash is equal to the payload hash we submitted in Step 3 and 4. This will execute the payload on the destination chain.
 
 ```solidity
 bytes memory _message = abi.encodePacked(
