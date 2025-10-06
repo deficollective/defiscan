@@ -48,7 +48,9 @@ The default configuration is a set of verifiers that are configured by the [mult
 
 ## Step 1
 
-In a first step the attacker takes control over the account which is the owner of the smart contract that is built on top of LayerZero. To make the PoC easier to follow the attacker transfers the ownership of the smart contract to an EOA spun up by the attacker.
+The ability to update the verifier set is owned by the protocol. If the owner account (whether a single EOA or a multisig) is compromised, an attacker could exploit that power.
+
+In our model the attacker first takes control of the owner account and, to make the PoC easier to follow, transfers contract ownership to an attacker-created EOA.
 
 Reference transactions:
 
@@ -78,7 +80,7 @@ Reference transaction:
 
 ## Step 3
 
-The attacker calls `verify()` on the receiving library with the payload he/she wants to execute. This will verify the payload. If the integrating contract is an OFT, the payload is just the receiving address and the amount scaled by the shared decimals. To complete the payload, a global unique identifier (guid) is added at the beginning, this number can be random. The payload is hashed and submitted.
+The attacker calls `verify()` on the receiving library with the payload they want to execute. This will verify the payload. If the integrating contract is an OFT (a wrapper contract around ERC20 that integrates LayerZero crosschain flow), the payload is just the receiving address and the amount scaled by the shared decimals. To complete the payload, a global unique identifier (guid) is added at the beginning, this number can be random. The payload is hashed and submitted.
 
 Additionally, a `_packetHeader` is supplied which specifies the source and destination contract and chain id of the message path, the nonce of the message, and the packet version.
 
