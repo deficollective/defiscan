@@ -1,6 +1,6 @@
 ---
-title: "Layer Zero Centralization Risk"
-description: "We discuss the centralization risk of Protocols integrating Layer Zero."
+title: "LayerZero Centralization Risk"
+description: "We discuss the centralization risk of Protocols integrating LayerZero."
 date: 2025-09-26T13:00:00Z
 published: true
 categories: ["Research"]
@@ -8,17 +8,17 @@ authors: ["yvesboutellier"]
 tags: ["Research", "Decentralization", "Infrastructure"]
 ---
 
-Few months ago we started releasing reports on the decentralization of infrastructure protocols which DeFi protocols rely upon as dependencies. Today we are releasing a report on the centralization risk of protocols integrating Layer Zero. In this blog article we demonstrate a proof of concept with a link to a repository on how a project that is built on top of Layer Zero can be compromised by centralizing the verifier set within Layer Zero configurations of a protocol. This impacts a single protocol as Layer Zero popularized the isolated security compared to the shared security of canonical bridges. We also referenced Layer Zero in one of our existing reports and assess [Maverick V2](/protocols/maverick-v2/ethereum) with our analysis derived from the PoC and the [infrastructure risk report](/protocols/layerzero/ethereum).
+Few months ago we started releasing reports on the decentralization of infrastructure protocols which DeFi protocols rely upon as dependencies. Today we are releasing a report on the centralization risk of protocols integrating LayerZero. In this blog article we demonstrate a proof of concept with a link to a repository on how a project that is built on top of LayerZero can be compromised by centralizing the verifier set within LayerZero configurations of a protocol. This impacts a single protocol as LayerZero popularized the isolated security compared to the shared security of canonical bridges. We also referenced LayerZero in one of our existing reports and assess [Maverick V2](/protocols/maverick-v2/ethereum) with our analysis derived from the PoC and the [infrastructure risk report](/protocols/layerzero/ethereum).
 
 At DeFiScan we push for transparency and inform the ecosystem on centralization risks by exposing upgradeability and dependencies in the smart contract architecture of DeFi protocols.
 
-## Layer Zero
+## LayerZero
 
-Layer Zero is a cross-chain messaging protocol that enables the transfer of value and data between different blockchains. It is composed of a few building blocks. To be specific, let's say we have Ethereum Mainnet and Arbitrum as our two chains. On each chain, we have an endpoint contract that acts as entry gate for cross-chain communication. 
+LayerZero is a cross-chain messaging protocol that enables the transfer of value and data between different blockchains. It is composed of a few building blocks. To be specific, let's say we have Ethereum Mainnet and Arbitrum as our two chains. On each chain, we have an endpoint contract that acts as entry gate for cross-chain communication.
 
-As an example, we analyse a protocol that is built on top of Layer Zero and our protocol has a contract on each chain, connected to the chain's endpoint contract. If users want to transfer value from Ethereum Mainnet to Arbitrum, our smart contract on Ethereum Mainnet will call the endpoint contract on Ethereum Mainnet and if our contract is a token for example it either burns the tokens or locks it on Ethereum Mainnet.
+As an example, we analyse a protocol that is built on top of LayerZero and our protocol has a contract on each chain, connected to the chain's endpoint contract. If users want to transfer value from Ethereum Mainnet to Arbitrum, our smart contract on Ethereum Mainnet will call the endpoint contract on Ethereum Mainnet and if our contract is a token for example it either burns the tokens or locks it on Ethereum Mainnet.
 
- The call from our token contract to the endpoint contract will emit an event that is picked up by our verifier network or the default verifier network configured by Layer Zero if none has been specified by the protocol. These configured verifier networks run offchain algorithms that listen to these blockchain emitted events and verify the events. Each verifier network, if they deem the transaction as valid, will call on the destination network (here Arbitrum) the receiver library and send a transaction to mark the message as valid (for reference, we use this in step 3 maliciousily). This verification includes the details of the source and destination of the message, and the payload that has to be executed on the destination network. **Crucially**, the validator network is trusted to report the information accurately, there is no cryptographic primitives that bind the transaction on the source chain to the message sent by the validator network on the destination chain. In a next step, if all required verifiers have verified the message, the verification can be committed.  Once comitted, the message is executable on the destination network. Any actor can call the endpoint contract on Arbitrum to execute the message, which calls our token contract with the verified payload, and, for example, mints an equivalent amount of tokens that were locked on Ethereum Mainnet.
+The call from our token contract to the endpoint contract will emit an event that is picked up by our verifier network or the default verifier network configured by LayerZero if none has been specified by the protocol. These configured verifier networks run offchain algorithms that listen to these blockchain emitted events and verify the events. Each verifier network, if they deem the transaction as valid, will call on the destination network (here Arbitrum) the receiver library and send a transaction to mark the message as valid (for reference, we use this in step 3 maliciousily). This verification includes the details of the source and destination of the message, and the payload that has to be executed on the destination network. **Crucially**, the validator network is trusted to report the information accurately, there is no cryptographic primitives that bind the transaction on the source chain to the message sent by the validator network on the destination chain. In a next step, if all required verifiers have verified the message, the verification can be committed. Once comitted, the message is executable on the destination network. Any actor can call the endpoint contract on Arbitrum to execute the message, which calls our token contract with the verified payload, and, for example, mints an equivalent amount of tokens that were locked on Ethereum Mainnet.
 
 ### Example Transcaction bridging from Ethereum Sepolia to Arbitrum Sepolia
 
@@ -32,21 +32,23 @@ https://sepolia.arbiscan.io/tx/0x9a3c2b7dc6212ca62acbe44d33e958ffc82e67955770c0a
 
 ![Normal bridging](../protocols/diagrams/LayerZero-normal-bridging.png)
 
-## Upgradeability within Layer Zero
+## Upgradeability within LayerZero
 
-The configuration of the verifier set within Layer Zero is upgradeable. This means that the verifier set can be changed by the protocol that is built on top of Layer Zero.
+The configuration of the verifier set within LayerZero is upgradeable. This means that the verifier set can be changed by the protocol that uses and is built on top of LayerZero.
+
+Important to note is that, even though LayerZero is a dependency for a project, the permission to update the verifier set lies within the protocol's permission owners, not in the dependency (LayerZero's multisig) - unless the protocol uses the default settings.
 
 ## Proof of Concept
 
-In the upcoming sections we will show a proof of concept on how a project that is built on top of Layer Zero can be compromised by centralizing the verifier set within Layer Zero configurations of a protocol.
+In the upcoming sections we will show a proof of concept on how a project that is built on top of LayerZero can be compromised by centralizing the verifier set within LayerZero configurations of a protocol.
 
-In Layer Zero each project either relies on the default configuration or can configure their own verifier set.
+In LayerZero each project either relies on the default configuration or can configure their own verifier set.
 
-The default configuration is a set of verifiers that are chosen by the Layer Zero team.
+The default configuration is a set of verifiers that are configured by the [multisig](/protocol/layerzero/ethereum#security-council) with the following address [0xBe010A7e3686FdF65E93344ab664D065A0B02478](https://etherscan.io/address/0xBe010A7e3686FdF65E93344ab664D065A0B02478), which is controlled by LayerZero.
 
 ## Step 1
 
-In a first step the attacker takes control over the account which is the owner of the smart contract that is built on top of Layer Zero. To make the PoC easier to follow the attacker transfers the ownership of the smart contract to an EOA spun up by the attacker.
+In a first step the attacker takes control over the account which is the owner of the smart contract that is built on top of LayerZero. To make the PoC easier to follow the attacker transfers the ownership of the smart contract to an EOA spun up by the attacker.
 
 Reference transactions:
 
@@ -140,9 +142,9 @@ ILayerZeroEndpointV2(endpoint).lzReceive(_origin, OFT_ADDRESS_MAINNET, _guid, _m
 
 ## Severity
 
-The severity of the attack vector depends on the contract that is built on top of Layer Zero. If the contract is an OFT, the severity is high as the attacker can steal any amount of tokens.
+The severity of the attack vector depends on the contract that is built on top of LayerZero. If the contract is an OFT, the severity is high as the attacker can steal any amount of tokens.
 
-The severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing Layer Zero integration increases the risk of exploitation through centralization.
+The severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing LayerZero integration increases the risk of exploitation through centralization.
 
 ## Mitigation
 
@@ -154,15 +156,15 @@ In order to prevent this attack vector or it's likelihood, the following options
 
 ## Shared vs isolated security
 
-Layer Zero brought the concept of shared security to crosschain communication, where each DApp can configure their own verifier set and their requirements. This allows for scaling up the security budget when the App grows and change partners who are trusted in a modular way. However it also introduces a new risk of centralization and requires a lot more effort in monitoring to see if the configured DVNs are non-malicious from the side of the DeFi community as in contrast with bridges that are shared between many DApps.
+LayerZero brought the concept of shared security to crosschain communication, where each DApp can configure their own verifier set and their requirements. This allows for scaling up the security budget when the App grows and change partners who are trusted in a modular way. However it also introduces a new risk of centralization and requires a lot more effort in monitoring to see if the configured DVNs are non-malicious from the side of the DeFi community as in contrast with bridges that are shared between many DApps.
 
-## Risk through Layer Zero Labs
+## Risk through LayerZero Labs
 
-Layer Zero Labs manages the default verifier set, which is used by default when an app has no verifier configured. If Layer Zero Labs were to be compromised, the default verifier set could be compromised as well, leading to attacks on all DApps that use the default verifier set.
+LayerZero Labs manages the default verifier set, which is used by default when an app has no verifier configured. If LayerZero Labs were to be compromised, the default verifier set could be compromised as well, leading to attacks on all DApps that use the default verifier set.
 
 ## Closing remarks
 
-Layer Zero is a powerful tool for crosschain communication, but it also splits centralization risk into each app. It is important to be aware of these risks and to take appropriate measures to mitigate them. We hope this article has helped you understand the risks of centralization in Layer Zero and the importance of taking appropriate measures to mitigate them.
+LayerZero is a powerful tool for crosschain communication, but it also splits centralization risk into each app. It is important to be aware of these risks and to take appropriate measures to mitigate them. We hope this article has helped you understand the risks of centralization in LayerZero and the importance of taking appropriate measures to mitigate them.
 
 ## Disclaimer
 
