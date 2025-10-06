@@ -114,7 +114,7 @@ Reference transaction:
 
 The attacker calls `commitVerification` on the receiving library with the same payload hash and packet header as with the verify call. This will commit the verification to the destination chain. That means the payload hash is stored inside the `EndpointV2` contract.
 
-This call will revert if the payload hash or packet header do not match the verify call and if the required verifiers have not verified the payload, but we just did in Step 3.
+This call will revert if the payload hash or packet header do not match the verify call and if the required verifiers have not verified the payload, as we just in Step 3.
 
 Reference transaction:
 
