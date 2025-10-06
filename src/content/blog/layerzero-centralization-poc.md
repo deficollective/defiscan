@@ -78,7 +78,7 @@ Reference transaction:
 
 The attacker calls `verify()` on the receiving library with the payload he/she wants to execute. This will verify the payload. If the integrating contract is an OFT, the payload is just the receiving address and the amount scaled by the shared decimals. To complete the payload, a global unique identifier (guid) is added at the beginning, this number can be random. The payload is hashed and submitted.
 
-Additionally, the a `_packetHeader` is supplied which specifies the source and destination contract and chain id of the message path, the nonce of the message and the packet version.
+Additionally, a `_packetHeader` is supplied which specifies the source and destination contract and chain id of the message path, the nonce of the message, and the packet version.
 
 ```solidity
 // payload hash
