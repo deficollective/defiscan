@@ -33,8 +33,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://defiscan.info/images/defiscan_banner.jpg",
-        width: 800,
-        height: 600,
+        width: 1500,
+        height: 500,
         alt: "DeFiScan - DeFi Protocol Analysis Platform",
       },
     ],
