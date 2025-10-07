@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://defiscan.info/images/logo.png",
-        width: 800,
-        height: 600,
+        url: "https://defiscan.info/images/defiscan_banner.jpg",
+        width: 1500,
+        height: 500,
         alt: "DeFiScan - DeFi Protocol Analysis Platform",
       },
     ],
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     title: "DeFiScan - DeFi Protocol Decentralization Analysis",
     description:
       "Track decentralization progress of DeFi protocols. View stages, TVL, security scores, and infrastructure analysis.",
-    images: ["https://defiscan.info/images/logo.png"],
+    images: ["https://defiscan.info/images/defiscan_banner.jpg"],
   },
   robots: {
     index: true,
