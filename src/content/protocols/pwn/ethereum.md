@@ -5,7 +5,7 @@ reasons: []
 risks: ["L", "L", "L", "L", "M"]
 author: ["vojtch"]
 submission_date: "2025-02-07"
-publish_date: "1970-01-01"
+publish_date: "2025-10-08"
 update_date: "1970-01-01"
 stage_requirements: [
       [
