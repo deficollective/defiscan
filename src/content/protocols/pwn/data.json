@@ -1,0 +1,10 @@
+{
+  "id": "pwn",
+  "protocol": "PWN",
+  "website": "https://pwn.xyz/",
+  "defillama_slug": ["pwn"],
+  "socials": {
+    "x": "https://x.com/pwndao"
+  },
+  "github": ["https://github.com/pwndao"]
+}
