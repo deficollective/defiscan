@@ -146,9 +146,9 @@ ILayerZeroEndpointV2(endpoint).lzReceive(_origin, OFT_ADDRESS_MAINNET, _guid, _m
 
 Ultimately, the severity of the attack vector depends on the contract and the protocol that is built on top of LayerZero. We created a flowchart to interpret the impact on DeFiScan rated DeFi protocols.
 
-![Assessment](../protocols/diagrams/LayerZero-assessment.png)
+The following flowchart demonstrates that LayerZero integration introduces different risk profiles—either in the _Dependency_ dimension or as additional _Upgradeability_ risks.
 
-The flowchart demonstrates that LayerZero integration introduces different risk profiles—either in the _Dependency_ dimension or as additional _Upgradeability_ risks. Everything conditional whether the protocol already has high _Upgradeability_ risk and how DVW settings are configured.
+![Assessment](../protocols/diagrams/LayerZero-assessment.png)
 
 For example if the contract is an OFT, the severity is high as the attacker can steal any amount of tokens. The severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing LayerZero integration increases the risk of exploitation through centralization.
 
