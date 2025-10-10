@@ -10,7 +10,7 @@ tags: ["Research", "Decentralization", "Infrastructure"]
 
 Few months ago we started releasing reports on the decentralization of infrastructure protocols which DeFi protocols rely upon as dependencies. Today we are releasing a report on the centralization risk of protocols integrating LayerZero. In this blog article we demonstrate a proof of concept with a link to a repository on how a project that is built on top of LayerZero can be compromised by centralizing the verifier set within LayerZero configurations of a protocol. This impacts a single protocol as LayerZero popularized the isolated security compared to the shared security of canonical bridges. We also referenced LayerZero in one of our existing reports and assess [Maverick V2](/protocols/maverick-v2/ethereum) with our analysis derived from the PoC and the [infrastructure risk report](/protocols/layerzero/ethereum).
 
-At DeFiScan we push for transparency and inform the ecosystem on centralization risks by exposing upgradeability and dependencies in the smart contract architecture of DeFi protocols.
+At DeFiScan we push for transparency and inform the ecosystem on centralization risks of DeFi projects by exposing upgradeability and dependencies in the smart contract architecture of DeFi protocols.
 
 ## LayerZero
 
@@ -144,9 +144,13 @@ ILayerZeroEndpointV2(endpoint).lzReceive(_origin, OFT_ADDRESS_MAINNET, _guid, _m
 
 ## Severity
 
-The severity of the attack vector depends on the contract that is built on top of LayerZero. If the contract is an OFT, the severity is high as the attacker can steal any amount of tokens.
+Ultimately, the severity of the attack vector depends on the contract and the protocol that is built on top of LayerZero. We created a flowchart to interpret the impact on DeFiScan rated DeFi protocols.
 
-The severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing LayerZero integration increases the risk of exploitation through centralization.
+![Assessment](../protocols/diagrams/LayerZero-assessment.png)
+
+The flowchart demonstrates that LayerZero integration introduces different risk profiles—either in the _Dependency_ dimension or as additional _Upgradeability_ risks. Everything conditional whether the protocol already has high _Upgradeability_ risk and how DVW settings are configured.
+
+For example if the contract is an OFT, the severity is high as the attacker can steal any amount of tokens. The severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing LayerZero integration increases the risk of exploitation through centralization.
 
 ## Mitigation
 
