@@ -146,11 +146,11 @@ ILayerZeroEndpointV2(endpoint).lzReceive(_origin, OFT_ADDRESS_MAINNET, _guid, _m
 
 Ultimately, the severity of the attack vector depends on the contract and the protocol that is built on top of LayerZero. We created a flowchart to interpret the impact on DeFiScan rated DeFi protocols.
 
-The following flowchart demonstrates that LayerZero integration introduces different risk profiles—either in the _Dependency_ dimension or as additional _Upgradeability_ risks.
+The following flowchart demonstrates that LayerZero integration introduces different risk profiles - either in the _Dependency_ dimension or as additional _Upgradeability_ risks.
 
 ![Assessment](../protocols/diagrams/LayerZero-assessment.png)
 
-For example if the contract is an OFT, the severity is high as the attacker can steal any amount of tokens. The severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing LayerZero integration increases the risk of exploitation through centralization.
+For example if the contract is an OFT, the potential severity is high, as the attacker can mint any amount of tokens. This severity is comparable to an upgradeable token contract, as the upgrade can include stealing funds and minting unbacked tokens. However, compared to a non-upgradeable token with fixed supply, introducing LayerZero integration (an cross-chain transfer) increases the risk of exploitation through centralization.
 
 ## Mitigation
 
@@ -187,7 +187,7 @@ LayerZero Labs manages the default verifier set, which is used by default when a
 
 ## Closing remarks
 
-LayerZero is a powerful tool for crosschain communication, but it also splits centralization risk evaluation into each app. It is important to be aware of these risks and to take appropriate measures to mitigate them. We hope this article has helped you understand the risks of centralization in LayerZero and the importance of taking appropriate measures to mitigate them.
+LayerZero is a powerful tool for crosschain communication by allowing modular configuration of verifiers and security settings. However centralization risk evaluation needs to be assessed for each app. It is important to be aware of these risks and to take appropriate measures to mitigate them. We hope this article contributed to assess the centralization risks in DeFi projects that use Layer Zero.
 
 ## Disclaimer
 
