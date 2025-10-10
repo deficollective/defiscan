@@ -154,15 +154,30 @@ For example if the contract is an OFT, the severity is high as the attacker can 
 
 ## Mitigation
 
-Only a designated delegate of an OApp/OFT or the OApp/OFT contract can configure the verifier set as in Step 2.
-In order to prevent this attack vector or it's likelihood, the following options exist
+### Upgradeability
+
+Only a designated delegate of an OApp/OFT or the OApp/OFT contract itself can configure the verifier set as in Step 2. In order to prevent this attack vector or its likelihood, the following options exist
 
 1. the verifier set is immutable, no delegate is configured for the OApp/OFT and no delegate can be configured, this is achieved by overriding `setDelegate` function inside the integrating contract and disable the function. Additionally, the OApp/OFT must not implement a function that calls the `setConfig` function on the Endpoint. This comes with the trade-off that the verifier set cannot be changed in the future and if the verifier stops working or is discontinued, new contracts need to be deployed.
-2. the verifier set is mutable, but the ownership and the registered delegate of the OApp/OFT belongs to a multisig account that satisfies the security council requirements or an onchain governance process that has distributed voting power. This makes compromise and exploit attempts more difficult.
+2. the verifier set is mutable, but the ownership and the registered delegate of the OApp/OFT belongs to a multisig account that satisfies the security council requirements or an onchain governance process that has distributed voting power. This makes exploit attempts more difficult.
+
+### Autonomy
+
+The protocol (OApp/OFT) ultimately depends on the DVNs that are configured, whether this is the default DVN settings or a custom setup.
+
+We analysed the DVN settings of OApps/OFTs built on Ethereum Mainnet that where set in past 6 months.
+
+What we found is that 43% of the contracts using LayerZero have setup only one DVN, this marks ultimate dependency to just one DVN. In most cases this is the LayerZero Labs DVN. In contrast 57% have chosen to reduce dependency to single DVNs by configure two different DVNs (48%) or some have three DVNs configured (9%).
+
+We did not found much diversity in the configurations, each OApp in our analysis had the same DVNs configured for incoming connections for each setup peer.
+
+![DVN Count Distribution](../protocols/diagrams/ethereum_dvn_count_dist.png)
+
+![DVNs as configured as sole DVN](../protocols/diagrams/ethereum_single_dvn.png)
 
 ## Shared vs isolated security
 
-LayerZero brought the concept of shared security to crosschain communication, where each DApp can configure their own verifier set and their requirements. This allows for scaling up the security budget when the App grows and change partners who are trusted in a modular way. However it also introduces a new risk of centralization and requires a lot more effort in monitoring to see if the configured DVNs are non-malicious from the side of the DeFi community as in contrast with bridges that are shared between many DApps.
+LayerZero brought the concept of isolated security to crosschain communication, where each DApp can configure their own verifier set and their requirements. This allows for dynamic changes in accepted verifiers and the security budget when the App grows and change partners who are trusted in a modular way. However it also introduces a new risk of centralization and requires a lot more effort in monitoring the configured DVNs from the side of the DeFi community as in contrast with bridges that are shared between many DApps.
 
 ## Risk through LayerZero Labs
 
