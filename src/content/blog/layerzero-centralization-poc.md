@@ -169,7 +169,7 @@ We analysed the DVN settings of OApps/OFTs built on Ethereum Mainnet that where 
 
 What we found is that 43% of the contracts using LayerZero have setup only one DVN (Fig 1.), this marks ultimate dependency to just one DVN. In most cases this is the LayerZero Labs DVN (Fig 2). In contrast 57% have chosen to reduce dependency to single DVNs by configure two different DVNs (48%) or some have three DVNs configured (9%).
 
-We did not found much diversity in the configurations, each OApp in our analysis had the same DVNs configured for incoming connections for each setup peer.
+We did not found much diversity in the configurations, most OApp/OFTs in our analysis had the same DVNs configured for all incoming connections on Ethereum Mainnet.
 
 Fig 1.
 ![DVN Count Distribution](../protocols/diagrams/ethereum_dvn_count_dist.png)
