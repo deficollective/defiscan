@@ -28,7 +28,7 @@ In an additional step the executor executes the targeted message on the destinat
 
 # Rating
 
-The risk of crosschain messaging lies in the execution of fraudulent messages on the destination chain and in censoring the transaction from moving crosschain. For example, if the bridged message is permissioned to mint tokens, a malicious DVN could mint tokens for themselves instead of the user's intended address on the destination chain. In the case of LayerZero, registering as a DVN is permissionless, thus also malicious DVNs can be registered to the LayerZero protocol.
+The risk of crosschain messaging lies in the execution of fraudulent messages on the destination chain and in censoring the transaction from moving crosschain. For example, if the bridged message is permissioned to mint tokens, a malicious DVN could mint tokens for themselves. In LayerZero, registering as a DVN is permissionless, thus also malicious DVNs can be registered to the LayerZero protocol.
 
 The following sections examine the roles of LayerZero Labs, DVNs and integrating protocols and risks associated with each role.
 
@@ -46,7 +46,7 @@ Currently, the default DVNs for each path can be looked up at this page: https:/
 
 DVNs are trusted to verify the crosschain transaction data, if they choose to not verify, it would block and censor crosschain transactions.
 
-Moreover, if the required DVNs collude (or if just a single DVN is configured) they could collectively verify a fraudulent transaction on the target chain. If a smart contract and protocol integrates LayerZero, it gives Layer Zero's endpoint permission to execute designated function like `lzReceice` upon verified and committed crosschain messages. The colluding DVNs can call this function with any viable parameters, mimicking a valid crosschain transaction for malicious purposes. If the integrating contract is an OFT, it would lead to unbacked minting of the token, as it is shown in our [blog article](/blog/layerzero-centralization-poc).
+Moreover, if the required DVNs collude (or if just a single DVN is configured) they could collectively verify a fraudulent transaction on the target chain. If a smart contract and protocol integrates LayerZero, it gives LayerZero's endpoint permission to execute designated function like `lzReceice` upon verified and committed crosschain messages. The colluding DVNs can call this function with any viable parameters, mimicking a valid crosschain transaction for malicious purposes. If the integrating contract is an OFT, it would lead to unbacked minting of the token, as it is shown in our [blog article](/blog/layerzero-centralization-poc).
 
 Risks from specific DVNs are not included into the score of this infrastructure, but are reviewed on a case-by-case basis for integrating protocols.
 
