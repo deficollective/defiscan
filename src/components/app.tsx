@@ -15,7 +15,7 @@ export default function App({ children }: PropsWithChildren) {
         text={
           <>
             <a
-              href="https://giveth.io/cause/defi-transparency-decentralization"
+              href="https://giveth.io/project/defiscan"
               target="_blank"
               className="underline hover:no-underline ml-1"
             >
