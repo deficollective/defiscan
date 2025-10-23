@@ -307,7 +307,7 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 | VAIVaultProxy                                                          | [0x0667Eed0a0aAb930af74a3dfeDD263A73994f216](https://bscscan.com/address/0x0667Eed0a0aAb930af74a3dfeDD263A73994f216) |
 | VAIVault                                                               | [0xa52f2a56abb7cbdd378bc36c6088fafeaf9ac423](https://bscscan.com/address/0xa52f2a56abb7cbdd378bc36c6088fafeaf9ac423) |
 | VBNBAdmin (Proxy)                                                      | [0x9A7890534d9d91d473F28cB97962d176e2B65f1d](https://bscscan.com/address/0x9A7890534d9d91d473F28cB97962d176e2B65f1d) |
-| VBNBAdmin (Implementation)                                             | [0xaa8d9558d8d45666552a72cecbdd0a746aeacdc9](https://bscscan.com/address/0xaa8d9558d8d45666552a72cecbdd0a746aeacdc9) |
+| VBNBAdmin (Implementation)                                             | [0xae2713fbdf95d914182f7055ec1ff6c64f41c275](https://bscscan.com/address/0xae2713fbdf95d914182f7055ec1ff6c64f41c275) |
 | BinanceOracle (Proxy)                                                  | [0x594810b741d136f1960141C0d8Fb4a91bE78A820](https://bscscan.com/address/0x594810b741d136f1960141C0d8Fb4a91bE78A820) |
 | BinanceOracle (Implementation)                                         | [0x8bf46792022126ae7f3ac8f4914ed66e7deb7388](https://bscscan.com/address/0x8bf46792022126ae7f3ac8f4914ed66e7deb7388) |
 | BoundValidator (Proxy)                                                 | [0x6E332fF0bB52475304494E4AE5063c1051c7d735](https://bscscan.com/address/0x6E332fF0bB52475304494E4AE5063c1051c7d735) |
