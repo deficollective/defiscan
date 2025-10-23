@@ -311,7 +311,7 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 | BinanceOracle (Proxy)                                                  | [0x594810b741d136f1960141C0d8Fb4a91bE78A820](https://bscscan.com/address/0x594810b741d136f1960141C0d8Fb4a91bE78A820) |
 | BinanceOracle (Implementation)                                         | [0x8bf46792022126ae7f3ac8f4914ed66e7deb7388](https://bscscan.com/address/0x8bf46792022126ae7f3ac8f4914ed66e7deb7388) |
 | BoundValidator (Proxy)                                                 | [0x6E332fF0bB52475304494E4AE5063c1051c7d735](https://bscscan.com/address/0x6E332fF0bB52475304494E4AE5063c1051c7d735) |
-| BoundValidator (Implementation)                                        | [0xcf0612ceafd63709d8f7efe71ecd0aabf075f6b1](https://bscscan.com/address/0xcf0612ceafd63709d8f7efe71ecd0aabf075f6b1) |
+| BoundValidator (Implementation)                                        | [0xbE4176749a74320641e24102B2Af2Ca37FAF2DF1](https://bscscan.com/address/0xbE4176749a74320641e24102B2Af2Ca37FAF2DF1) |
 | ChainlinkOracle (Proxy)                                                | [0x1B2103441A0A108daD8848D8F5d790e4D402921F](https://bscscan.com/address/0x1B2103441A0A108daD8848D8F5d790e4D402921F) |
 | ChainlinkOracle (Implementation)                                       | [0x38120f83734f719dc199109e09a822a80cd26ead](https://bscscan.com/address/0x38120f83734f719dc199109e09a822a80cd26ead) |
 | RedstoneOracle (Proxy)                                                 | [0x8455EFA4D7Ff63b8BFD96AdD889483Ea7d39B70a](https://bscscan.com/address/0x8455EFA4D7Ff63b8BFD96AdD889483Ea7d39B70a) |
