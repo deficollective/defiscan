@@ -231,7 +231,7 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 | ------------- | ------------------------------------------- |
 | UpgradeableBeacon (Comptroller Beacon) (Core Pool)                     | [0x38B4Efab9ea1bAcD19dC81f19c4D1C2F9DeAe1B2](https://bscscan.com/address/0x38B4Efab9ea1bAcD19dC81f19c4D1C2F9DeAe1B2) |
 | Comptroller (Proxy)   | [0xfD36E2c2a6789Db23113685031d7F16329158384](https://bscscan.com/address/0xfD36E2c2a6789Db23113685031d7F16329158384) |
-| Diamond    | [0x347ba9559fFC65A94af0F6a513037Cd4982b7b18](https://bscscan.com/address/0x347ba9559fFC65A94af0F6a513037Cd4982b7b18) |
+| Diamond    | [0x6c151A4134006395D41319d713349660259DAB4e](https://bscscan.com/address/0x6c151A4134006395D41319d713349660259DAB4e) |
 | MarketFacet    | [0x4b093a3299F39615bA6b34B7897FDedCe7b83D63](https://bscscan.com/address/0x4b093a3299F39615bA6b34B7897FDedCe7b83D63) |
 | PolicyFacet    | [0x93e7Ff7c87B496aE76fFb22d437c9d46461A9B51](https://bscscan.com/address/0x93e7Ff7c87B496aE76fFb22d437c9d46461A9B51) |
 | RewardFacet    | [0xc2F6bDCEa4907E8CB7480d3d315bc01c125fb63C](https://bscscan.com/address/0xc2F6bDCEa4907E8CB7480d3d315bc01c125fb63C) |
