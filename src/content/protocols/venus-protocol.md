@@ -48,7 +48,6 @@ The oracle risk can be mitigated by integrating several oracles per asset. Only 
 
 Not all markets integrate those mitigations, but they are present for markets representing more than 50% of the TVL. This grants a medium autonomy risk score, as the remaining TVL does not implement mitigation or use oracle providers with high centralization scores (see [dependencies](#dependencies).
 
-
 > Autonomy score: Medium
 
 ## Exit Window
