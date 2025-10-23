@@ -32,7 +32,7 @@ The contracts used for the core lending functionality, including the `Comptrolle
 
 The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. These are Venus-deployed wrappers around external price feeds (e.g., Chainlink's BTC/USD at `0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf`) with a governance-controlled `setDirectPrice()` override function. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and _loss of user funds_. 
 
-The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in loss of unclaimed yield if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses.
+The reward distribution contracts such as `XVSVault`, `Prime`, and `PrimeLiquidityProvider` are upgradeable. This could result in _loss of unclaimed yield_ if the upgrade modifies reward calculation logic or redirects accumulated rewards to different addresses.
 
 The `VAIController` and related stablecoin contracts are upgradeable. This could change the minting logic, interest rate calculations, or collateral requirements, potentially leading to bad debt that impacts all protocol users. 
 
