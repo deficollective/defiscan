@@ -283,7 +283,7 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 | VBep20Delegator (Proxy) (vWBETH) (Core Pool)                           | [0x6CFdEc747f37DAf3b87a35a1D9c8AD3063A1A8A0](https://bscscan.com/address/0x6CFdEc747f37DAf3b87a35a1D9c8AD3063A1A8A0) |
 | VBep20Delegator (Proxy) (vXRP) (Core Pool)                             | [0xB248a295732e0225acd3337607cc01068e3b9c10](https://bscscan.com/address/0xB248a295732e0225acd3337607cc01068e3b9c10) |
 | VBep20Delegator (Proxy) (vXVS) (Core Pool)                             | [0x151B1e2635A717bcDc836ECd6FbB62B674FE3E1D](https://bscscan.com/address/0x151B1e2635A717bcDc836ECd6FbB62B674FE3E1D) |
-| VBep20Delegate (Implementation)                                        | [0x6e5cff66c7b671fa1d5782866d80bd15955d79f6](https://bscscan.com/address/0x6e5cff66c7b671fa1d5782866d80bd15955d79f6) |
+| VBep20Delegate (Implementation)                                        | [0xAF658DF443a937C88c955c737532E9a601ccEF8c](https://bscscan.com/address/0xAF658DF443a937C88c955c737532E9a601ccEF8c) |
 | Venus Treasury                                                         | [0xf322942f644a996a617bd29c16bd7d231d9f35e9](https://bscscan.com/address/0xf322942f644a996a617bd29c16bd7d231d9f35e9) |
 | XVSVault (Proxy)                                                       | [0x051100480289e704d20e9DB4804837068f3f9204](https://bscscan.com/address/0x051100480289e704d20e9DB4804837068f3f9204) |
 | XVSVault (Implementation)                                              | [0x413c1e1b77190bc84717f8cce6eeab0594e0af4e](https://bscscan.com/address/0x413c1e1b77190bc84717f8cce6eeab0594e0af4e) |
