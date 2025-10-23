@@ -302,7 +302,8 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 | RiskFundV2 (Implementation)                                            | [0x7ef5abbcc9a701e728beb7afd4fb5747fab15a28](https://bscscan.com/address/0x7ef5abbcc9a701e728beb7afd4fb5747fab15a28) |
 | Shortfall (Proxy)                                                      | [0xf37530A8a810Fcb501AA0Ecd0B0699388F0F2209](https://bscscan.com/address/0xf37530A8a810Fcb501AA0Ecd0B0699388F0F2209) |
 | Shortfall (Implementation)                                             | [0x916e607af3250ecb2fd4ea82a37eb2756a20e1fc](https://bscscan.com/address/0x916e607af3250ecb2fd4ea82a37eb2756a20e1fc) |
-| VAI Unitroller                                                         | [0x004065D34C6b18cE4370ced1CeBDE94865DbFAFE](https://bscscan.com/address/0x004065D34C6b18cE4370ced1CeBDE94865DbFAFE) |
+| VAIController                                                         | [0x5134C9D11c397efdF36F828eEf23B14F3F399da4](https://bscscan.com/address/0x5134C9D11c397efdF36F828eEf23B14F3F399da4) |
+| VAIUnitroller                                                         | [0x004065D34C6b18cE4370ced1CeBDE94865DbFAFE](https://bscscan.com/address/0x004065D34C6b18cE4370ced1CeBDE94865DbFAFE) |
 | VAIVaultProxy                                                          | [0x0667Eed0a0aAb930af74a3dfeDD263A73994f216](https://bscscan.com/address/0x0667Eed0a0aAb930af74a3dfeDD263A73994f216) |
 | VAIVault                                                               | [0xa52f2a56abb7cbdd378bc36c6088fafeaf9ac423](https://bscscan.com/address/0xa52f2a56abb7cbdd378bc36c6088fafeaf9ac423) |
 | VBNBAdmin (Proxy)                                                      | [0x9A7890534d9d91d473F28cB97962d176e2B65f1d](https://bscscan.com/address/0x9A7890534d9d91d473F28cB97962d176e2B65f1d) |
