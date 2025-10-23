@@ -245,7 +245,6 @@ Upgrades to the smart contract logic itself also follow the _Governance_ process
 | PoolLens                                                               | [0x0461c613433d42C06831C8e60Bf0C86FC9495072](https://bscscan.com/address/0x0461c613433d42C06831C8e60Bf0C86FC9495072) |
 | ProxyAdmin                                                             | [0x6beb6D2695B67FEb73ad4f172E8E2975497187e4](https://bscscan.com/address/0x6beb6D2695B67FEb73ad4f172E8E2975497187e4) |
 | UpgradeableBeacon (Comptroller Beacon) (Core Pool)                     | [0x38B4Efab9ea1bAcD19dC81f19c4D1C2F9DeAe1B2](https://bscscan.com/address/0x38B4Efab9ea1bAcD19dC81f19c4D1C2F9DeAe1B2) |
-| Unitroller (Comptroller) (Core Pool)                                   | [0xfD36E2c2a6789Db23113685031d7F16329158384](https://bscscan.com/address/0xfD36E2c2a6789Db23113685031d7F16329158384) |
 | UpgradeableBeacon (VToken) (Core Pool)                                 | [0x2b8A1C539ABaC89CbF7E2Bc6987A0A38A5e660D4](https://bscscan.com/address/0x2b8A1C539ABaC89CbF7E2Bc6987A0A38A5e660D4) |
 | VToken (Implementation)                                 | [0x228Ea224d62D14a2e2cb9B43083aE43954C39B67](https://bscscan.com/address/0x228Ea224d62D14a2e2cb9B43083aE43954C39B67) |
 | SwapRouter (Core Pool)                                                 | [0x8938E6dA30b59c1E27d5f70a94688A89F7c815a4](https://bscscan.com/address/0x8938E6dA30b59c1E27d5f70a94688A89F7c815a4) |
