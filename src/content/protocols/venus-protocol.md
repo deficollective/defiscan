@@ -186,7 +186,6 @@ In the following diagram, the _Governance Structure_ is outlined while abstracti
 
 ![Venus Governance](./diagrams/venus_governance.png)
 
-The governance structure employs three timelocks (Normal: 48-hour delay for critical changes controlled by `XVS` token holders, Fast Track: 1-hour for operational parameters controlled by `XVS` token holders, Critical: 1-hour but unused) with the `accessControlManager` (owned by the Normal Timelock) granting specific permissions to these timelocks and emergency [multisigs](#security-council) (3/6 threshold) as detailed in the diagram above.
 
 ## Security Council
 
