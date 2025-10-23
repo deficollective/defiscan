@@ -28,7 +28,7 @@ This report is concerned with Venus Core Protocol deployed on Binance Smart Chai
 
 ## Upgradeability
 
-The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the loss of user funds through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. 
+The contracts used for the core lending functionality, including the `Comptroller` (Diamond Proxy) and all market contracts (`VToken`), are upgradeable. This could change the entire logic of these contracts and may lead to the _loss of user funds_ through malicious code changes that could steal deposits, manipulate accounting, or prevent withdrawals. 
 
 The oracle contracts including `ResilientOracle`, `ChainlinkOracle`, `RedstoneOracle`, and other price feed contracts are upgradeable. These are Venus-deployed wrappers around external price feeds (e.g., Chainlink's BTC/USD at `0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf`) with a governance-controlled `setDirectPrice()` override function. This could allow manipulation of asset prices leading to liquidations or enabling attackers to borrow more than their collateral value, resulting in protocol insolvency and loss of user funds. 
 
