@@ -110,7 +110,7 @@ All privileged functions in the core lending system are controlled by the `admin
 The `RewardFacet`, which is part of the `Comptroller` Diamond Proxy structure, is responsible for distributing rewards. Users can call the `claimVenus()` function to claim the `XVS` accrued from supplying and borrowing accross all markets. For each market, two parameters can be set that define the reward per block for borrowing and supplying activities, respectively. 
 Furthermore, users can stake their `XVS` in the `XVSVault` for additional `XVS` yield.
 
-The `admin` role (Normal Timelock - controlled by `XVS` token holders through governance) controls `XVS` emission parameters and direct grants, while the `accessControlManager` (owned by the Normal Timelock) manages operational aspects like pausing, pool configuration, and reward rates.
+The `admin` role (`Normal Timelock` - controlled by `XVS` token holders through governance) controls `XVS` emission parameters and direct grants, while the `accessControlManager` (owned by the `Normal Timelock`) manages operational aspects like pausing, pool configuration, and reward rates.
 
 ## Treasury
 
