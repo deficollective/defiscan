@@ -132,7 +132,7 @@ The `EVC` provides each user address with 256 virtual sub-accounts for position 
 
 The `EVC` enables atomic batching of operations through its `batch` function, which executes multiple calls in a single transaction while deferring solvency and cap checks until completion. This functionality allows users to open leveraged positions, rebalance collateral across vaults, execute flash loans with automatic repayment, and combine lending, borrowing, and swapping operations without intermediate states that would violate solvency requirements. The `EVC` also provides two emergency modes for user protection: `Lockdown Mode` restricts all operations except operator management and nonce updates, while `Permit Disabled Mode` prevents execution of any permits signed by the owner. The `EVC`'s operator delegation system allows users to authorize trusted contracts to act on behalf of their sub-accounts, enabling automated strategies, limit orders, and third-party integrations while maintaining user custody.
 
-![Core Architecture and EVC Mediation](./diagrams/euler-v2-core-architecture.png)
+![Core Architecture and EVC Mediation](../diagrams/Euler_v2_Core_Architecture_and_EVC_Mediation.png)
 
 ## Lending, Borrowing and Liquidation
 
@@ -168,7 +168,7 @@ Liquidators call `batch` on the EVC with a liquidate instruction. The borrow vau
 
 The liquidator receives vault shares at a discounted valuation. The borrow vault calls `emitTransfer` on the DToken to record the debt reduction. The `liquidationCoolOffTime` parameter prevents immediate liquidation after position creation. When bad debt socialization is enabled, insufficient collateral positions have their remaining liabilities distributed across all depositors by reducing the share exchange rate. The vault governor configures these liquidation parameters through `setMaxLiquidationDiscount` and `setLiquidationCoolOffTime`.
 
-![Flowchart 2](./diagrams/euler-v2-flowchart-2.png)
+![Lending Borrowing Liquidation Cycle](../diagrams/Euler_v2_Lending_Borrowing_Liquidation_Cycle.png)
 
 ## Oracle System and Price Feeds
 
@@ -184,7 +184,7 @@ Oracle Adapters are immutable contracts translating external data into ERC-7726 
 
 The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintains approved adapters. Routers verify adapter approval before dispatching queries. [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) controls the registry via `add` and `revoke`. Each router has independent governance controlling `govSetConfig`, `govSetResolvedVault`, and `govSetFallbackOracle`, separate from vault governance.
 
-![Flowchart 3](./diagrams/euler-v2-flowchart-3.png)
+![Oracle System and Price Feeds](../diagrams/Euler_v2_Oracle_System_and_Price_Feeds.png)
 
 ## Governance, Timelocks and Permissions
 
@@ -202,7 +202,7 @@ Each vault stores a `governorAdmin` address controlling vault-specific parameter
 
 `GovernorAccessControlEmergency` implements three emergency roles for immediate risk reduction: `LTV_EMERGENCY_ROLE` (held by `CapRiskSteward`) lowers borrow LTV while maintaining liquidation LTV, `CAPS_EMERGENCY_ROLE` (held by `CapRiskSteward`) reduces caps immediately, and `HOOK_EMERGENCY_ROLE` (unassigned) would pause vault operations. Emergency powers are strictly risk-reducing. Recovery requires normal governance through WildcardTimelock. The DAO and [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) hold `CANCELLER_ROLE` on both timelocks, enabling proposal cancellation during delays.
 
-![Flowchart 4](./diagrams/euler-v2-flowchart-4.png)
+![Governance Timelocks and Permissions](../diagrams/Euler_v2_Governance_Timelocks_and_Permissions.png)
 
 ## Advanced Modules
 ### Tokens & Rewards System
@@ -221,11 +221,15 @@ The protocol implements a balance forwarding system through the [TrackingRewardS
 
 rEUL converts to `EUL` at 1:1 ratio over six months: 20% unlocks immediately, 80% linearly over 180 days. Early redemption forfeits the locked portion to [`0x000000000000000000000000000000000000dEaD`](https://etherscan.io/address/0x000000000000000000000000000000000000dEaD) (configured as `remainderReceiver`). Each rEUL transfer starts a distinct unlock schedule, making each batch non-fungible despite its ERC-20 interface.
 
+![Token Rewards System](../diagrams/Euler_v2_Token_Rewards_System.png)
+
 ### Multiply Strategies (Leverage Looping)
 
 Multiply strategies automate leveraged position creation through the [`EthereumVaultConnector`](https://etherscan.io/address/0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383). Users initiate a `batch()` transaction that deposits collateral into an `EVault`, borrows against it from a debt `EVault`, swaps the borrowed asset via [`Swapper`](https://etherscan.io/address/0x2Bba09866b6F1025258542478C39720A09B728bF) (verified by [`SwapVerifier`](https://etherscan.io/address/0xae26485ACDDeFd486Fe9ad7C2b34169d360737c7)), and redeposits the result as collateral. This loop repeats until reaching the target multiplier. The EVC defers liquidity checks until batch completion, then validates position health via `checkAccountStatus()`.
 
 When a position's health score drops to ≤1, liquidators can call `liquidate()` through the EVC. The debt `EVault` verifies eligibility and invokes `controlCollateral()` on the EVC to seize collateral at a discount proportional to the position's unhealthiness (reverse Dutch auction). The seized collateral transfers to the liquidator, who repays the corresponding debt. All positions and debt are stored in the respective EVaults.
+
+![Multiply Strategies](../diagrams/Euler_v2_Multiply_Strategies.png)
 
 ## EulerEarn System
 
@@ -261,6 +265,8 @@ Withdrawals execute according to the withdrawal queue. The vault attempts redemp
 
 The [PublicAllocator](https://etherscan.io/address/0x533f8D1a0bf97C2ea0eDf27Db808e5776e8FbEfA) enables permissionless optimistic rebalancing in certain vaults, allowing any address to trigger reallocations within cap constraints.
 
+![Euler Earn](../diagrams/Euler_v2_Euler_Earn.png)
+
 ## EulerSwap System
 
 ### Pool Deployment
@@ -287,7 +293,7 @@ Traders initiate swaps via [EulerSwapPeriphery](https://etherscan.io/address/0x2
 
 The DAO controls global protocol fees via `setProtocolFee` and `setProtocolFeeRecipient` on the factory. During swaps, `FundsLib.depositAssets()` deducts the protocol fee portion and transfers it to the designated recipient. Remaining fees accrue to the pool owner's collateral, compounding with lending interest and protocol rewards.
 
-![Flowchart 5](./diagrams/euler-v2-flowchart-5.png)
+![Euler Swap](../diagrams/Euler_v2_Euler_Swap.png)
 
 ## Data Access and Lens Contracts
 
@@ -296,8 +302,6 @@ Euler V2 provides comprehensive data access through specialized lens contracts t
 The [AccountLens](https://etherscan.io/address/0x94B9D29721f0477402162C93d95B3b4e52425844) aggregates user account data across multiple vaults and sub-accounts, providing consolidated views of positions, collateral, and debt. The [VaultLens](https://etherscan.io/address/0xB65C7ac387A45d7b4709166784BB431A58Bc59eB) exposes vault-specific information including total supply, borrow rates, utilization, and caps. The [OracleLens](https://etherscan.io/address/0x0C47736aaBEE757AB8C8F60776741e39DBf3F183) facilitates price queries across multiple asset pairs through configured oracle routers. The [IRMLens](https://etherscan.io/address/0x57B1BB683b109eB0F1e6d9043067C86F0C6c52C1) retrieves interest rate model parameters and projected rates, while the [UtilsLens](https://etherscan.io/address/0xB8cac3e5CaaC2042B79938aFe7FEA3f44e5afcC1) provides utility functions for batch operations and data formatting.
 
 Additional specialized lenses include [EulerEarnVaultLens](https://etherscan.io/address/0xafad3c14f32BD46EB32F7383214f4Af0Cff6285f) for EulerEarn vault analytics and strategy allocation data. The modular lens architecture enables efficient off-chain data indexing and analytics while maintaining compatibility with standard web3 libraries and block explorers.
-
-
 
 # Dependencies
 
