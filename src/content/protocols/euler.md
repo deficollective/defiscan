@@ -28,19 +28,43 @@ Euler V2 is deployed on various chains. This review is based on the Ethereum mai
 
 ## Upgradeability
 
+The Euler V2 protocol can be analyzed in a number of logical modules: _Factory-Level Bytecode Upgrades_, _Per-Vault Parameter Control_, _Oracle System_, _Fee Configuration_, _EulerEarn Vault System_, and _EulerSwap_. These modules contain permissioned functions that could result in the _theft or loss of user funds_, _loss of unclaimed yield_, or otherwise _materially affect the expected performance_ of the protocol. The control vectors are distributed across the DAO multisig (4/8), FactoryGovernor contract, Euler Labs multisig (2/6), vault-specific governors, and various role-based permissions.
 
+### Factory-Level Bytecode Upgrades
+
+The `GenericFactory` contract's `setImplementation` function upgrades the implementation logic for all BeaconProxy vaults simultaneously. Each BeaconProxy queries the factory's `implementation()` function on every call to fetch the current EVault address. The `FactoryGovernor` holds exclusive authority over this function, protected by a 4-day timelock through the eVaultFactoryTimelockController. The factory also exposes `setUpgradeAdmin` to transfer complete factory control.
+
+### Per-Vault Parameter Control
+
+Each EVault stores a `governorAdmin` address controlling vault-specific parameters through functions including `setGovernorAdmin`, `setFeeReceiver`, `setLTV`, `setMaxLiquidationDiscount`, `setLiquidationCoolOffTime`, `setInterestRateModel`, `setHookConfig`, `setConfigFlags`, `setCaps`, and `setInterestFee`. DAO-managed vaults route these permissions through `GovernorAccessControlEmergency` with 48-hour timelock delays via AdminTimelock and WildcardTimelock. Private vault creators can assign governance to an EOA or multisig for direct control. The `CapRiskSteward` multisig (3/5) holds emergency roles that bypass the 48-hour timelock for immediate risk-reducing actions.
+
+### Oracle System
+
+Each `EulerRouter` has independent governance controlling `govSetConfig`, `govSetResolvedVault`, and `govSetFallbackOracle`, which configure price oracles for asset pairs. The `SnapshotRegistry` (oracleAdapterRegistry) maintained by Euler Labs whitelists approved oracle adapters through `add` and `revoke` functions.
+
+### Fee Configuration
+
+The `ProtocolConfig` contract controls global fee settings through `setProtocolFeeShare`, `setInterestFeeRange`, and vault-specific overrides, which affect all existing user positions immediately. Per-vault fee configuration is available through `setFeeReceiver` and `setInterestFee` on individual EVaults.
+
+### EulerEarn Vault System
+
+EulerEarn vaults implement role-based permissions where the vault owner controls `setCurator`, `setIsAllocator`, `setFee`, and `setFeeRecipient`. The curator manages strategy selection through `submitCap` and `submitMarketRemoval`. Allocators control fund distribution via `reallocate`, `setSupplyQueue`, and `updateWithdrawQueue`. The `EulerEarnFactory2` exposes `setPerspective` to update strategy validation rules for all EulerEarn vaults.
+
+### EulerSwap
+
+The `EulerSwapFactory` controls swap fee configuration through `setProtocolFee` and `setProtocolFeeRecipient` for all EulerSwap pools.
+
+With the current setup, the timelock protections (48-hour and 4-day delays) fall below the 7-day minimum threshold required for medium risk classification, and numerous critical functions affecting user funds can be executed by multisigs or role holders.
 
 > Upgradeability score: High
 
 ## Autonomy
 
-Euler V2 relies on external oracle providers selected by vault creators and risk curators for all price data required for collateral valuations and liquidation decisions. Vault creators are free to choose appropriate price oracle implementations from various providers including Chainlink, Pyth, RedStone, Chronicle, and others, thus delegating responsibility to individual actors instead of central governance.
+Euler V2 relies on external oracle providers selected by vault creators and risk curators for all price data required for collateral valuations and liquidation decisions. Vault creators are free to choose appropriate price oracle implementations from various providers including Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, and Resolv, thus delegating responsibility to individual actors.
 
-Analysis of Euler's Oracle Dashboard reveals active usage across multiple providers, with Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Midas, MEV Capital, Idle, and Resolv representing the primary external dependencies chosen by individual vault creators.
+The protocol employs CrossAdapters that derive prices through sequential multiplication of two external oracles sharing a base or quote asset. These create dependency chains where the failure of either component oracle causes complete price feed failure. For ERC-4626 vault collaterals, the system depends on external vaults' `convertToAssets()` functions, which may be vulnerable to manipulation if those vaults lack adequate protections.
 
-The protocol employs CrossAdapters that derive prices through sequential multiplication of two external oracles sharing a common asset. These create dependency chains where the failure of either component oracle causes complete price feed failure. For ERC4626 vault collaterals, the system depends on external vaults' `convertToAssets()` functions, which may be vulnerable to manipulation if those vaults lack adequate protections.
-
-Pull-based oracles like Pyth introduce operational dependencies where transactions can fail if price updates are not fetched within the 2-3 minute validity window. Observable errors in the Oracle Dashboard demonstrate that some price feeds already experience intermittent failures, highlighting the practical risks of external oracle dependencies.
+Pull-based oracles like Pyth introduce operational dependencies where transactions can fail if price updates are not fetched within the 2-3 minute validity window. Observable errors include intermittent failures when querying vault data and operations failing unpredictably based on timing, highlighting the practical risks of external oracle dependencies.
 
 > Autonomy score: High
 
@@ -64,18 +88,23 @@ Users can only access Euler V2 through a single user interface: app.euler.financ
 
 ## Conclusion
 
+Euler V2 receives a _Low centralization risk_ score for _Chain_, and _High centralization risk_ scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
 
+The protocol exposes critical permissions for factory-wide bytecode upgrades and per-vault parameter control that are protected with timelock delays of only 48 hours and 4 days, falling below the 7-day minimum threshold. Furthermore, Euler V2 is exposed to centralization risks from its external oracle dependencies, where vault creators select from multiple providers including Chainlink, Pyth, and RedStone without protocol-level fallback mechanisms to mitigate price feed failures.
+
+Euler V2 thus achieves _Stage 0_.
+
+The protocol could reach _Stage 1_ by: 1) extending timelock protections to at least 7 days for all critical permissions, Or 2) establishing a Security Council with at least 7 signers, at least 51% threshold, at least 50% non-insider signers, and publicly announced signers with ownership of or veto power over critical permissions, And 3) implementing fallback mechanisms for oracle dependencies, And 4) publishing the frontend code to IPFS or developing alternative interfaces.
 
 > Overall score: Stage 0
 
 # Reviewer's Notes
 
+⚠️ Analysis of on-chain deployment events reveals that all observed EVault instances are deployed as upgradeable BeaconProxies. No immutable MinimalProxy deployments were identified in the examined sample, despite the factory supporting both deployment modes. This means all analyzed vaults remain subject to factory-wide implementation upgrades via `setImplementation`, which can affect all vault logic simultaneously through the 4-day timelock.
 
+⚠️ Pull-based oracles like Pyth introduce operational dependencies where transactions can fail if price updates are not fetched within the 2-3 minute validity window. Observable errors include intermittent failures when querying vault data and operations failing unpredictably based on timing. Users and integrators must implement price update mechanisms in their transaction batches to avoid reverts.
 
-
-
-
-
+⚠️ The OFTAdapterUpgradeable proxy (cross-chain EUL bridge) at [0x4d7e09f73843Bd4735AaF7A74b6d877bac75a531](https://etherscan.io/address/0x4d7e09f73843Bd4735AaF7A74b6d877bac75a531) has its `initialize()` function disabled, making all permissioned functions (setMsgInspector, setEnforcedOptions, setPeer, setDelegate) permanently inaccessible. The current configuration is immutable and cannot be updated even during emergencies.
 
 # Protocol Analysis
 
@@ -85,7 +114,7 @@ Euler V2 implements a modular vault-based lending architecture centered around t
 
 ### Vault Creation and Deployment 
 
-Vault creation begins when any user calls `createProxy` on the `GenericFactory`, which deploys a new vault instance as either a BeaconProxy or MinimalProxy that delegates all function execution to the standardized [EVault (Implementation)](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D) via delegatecall. This proxy architecture separates code logic from data storage: EVault contains the reusable function code shared across all vaults, while each proxy stores its own independent state including the governorAdmin address, user balances, collateral configurations, and vault parameters. The factory supports two deployment patterns: when `upgradeable=true`, it deploys a `BeaconProxy` allowing authorized governance to upgrade all vault implementations simultaneously; when `upgradeable=false`, it deploys an immutable `MinimalProxy` whose logic cannot be changed. Analysis of on-chain events reveals predominantly upgradeable `BeaconProxy` deployments, with no immutable `MinimalProxy` instances observed in the examined sample.
+Vault creation begins when any user calls `createProxy` on the `GenericFactory`, which deploys a new vault instance as either a BeaconProxy or MinimalProxy that delegates all function execution to the standardized [EVault (Implementation)](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D) via delegatecall. The BeaconProxy queries the GenericFactory's `implementation()` function on every call to fetch the current EVault address, enabling factory-wide upgrades through a single `setImplementation` transaction. This proxy architecture separates code logic from data storage: EVault contains the reusable function code shared across all vaults, while each proxy stores its own independent state including the governorAdmin address, user balances, collateral configurations, and vault parameters. The factory supports two deployment patterns: when `upgradeable=true`, it deploys a `BeaconProxy` allowing authorized governance to upgrade all vault implementations simultaneously; when `upgradeable=false`, it deploys an immutable `MinimalProxy` whose logic cannot be changed. Analysis of on-chain events reveals predominantly upgradeable `BeaconProxy` deployments, with no immutable `MinimalProxy` instances observed in the examined sample.
 
 During initialization, the newly created vault automatically registers itself with the `EthereumVaultConnector`, establishing itself as a recognized entity within the `EVC`'s authentication framework. The vault simultaneously creates an associated `DToken` contract, an ERC-20 compliant debt token that represents borrowed positions and makes debt modifications visible in block explorers and tax accounting software. The vault creator specifies critical parameters including the underlying asset, oracle router, interest rate model, and governance settings. Once deployed, the vault operates as an independent lending market with its own collateral configuration and risk parameters.
 
@@ -182,7 +211,11 @@ The [`EUL`](https://etherscan.io/address/0xd9Fcd98c322942075A5C3860693e9f4f03AAE
 
 ### rEUL Rewards System
 
-The [`rEUL`](https://etherscan.io/address/0xf3e621395fc714B90dA337AA9108771597b4E696) token is a locked form of `EUL` incentivizing protocol adoption. Merkl calculates rewards every 8-12 hours off-chain. When users claim, Euler Labs calls `depositFor(account, amount)` on the rEUL contract, which transfers `EUL` from Euler Labs to the rEUL contract and mints corresponding rEUL for the user.
+The [`rEUL`](https://etherscan.io/address/0exf3e621395fc714B90dA337AA9108771597b4E696) token is a locked form of `EUL` incentivizing protocol adoption. Merkl calculates rewards every 8-12 hours off-chain. When users claim, Euler Labs calls `depositFor(account, amount)` on the rEUL contract, which transfers `EUL` from Euler Labs to the rEUL contract and mints corresponding rEUL for the user.
+
+### Balance Forwarding and Reward Distribution
+
+The protocol implements a balance forwarding system through the [TrackingRewardStreams](https://etherscan.io/address/0x0D52d06ceB8Dcdeeb40Cfd9f17489B350dD7F8a3) contract, enabling instant and trustless distribution of rewards while keeping gas costs low. When an account opts in via `enableBalanceForwarder`, every balance change in the vault triggers a notification to the TrackingRewardStreams contract. This mechanism allows external reward distributors like Merkl to track user positions in real-time and calculate proportional reward allocations off-chain. The system maintains accuracy without requiring on-chain snapshot mechanisms or manual claim updates, reducing operational overhead for both users and reward distributors.
 
 ### Vesting Mechanism
 
@@ -194,231 +227,75 @@ Multiply strategies automate leveraged position creation through the [`EthereumV
 
 When a position's health score drops to ≤1, liquidators can call `liquidate()` through the EVC. The debt `EVault` verifies eligibility and invokes `controlCollateral()` on the EVC to seize collateral at a discount proportional to the position's unhealthiness (reverse Dutch auction). The seized collateral transfers to the liquidator, who repays the corresponding debt. All positions and debt are stored in the respective EVaults.
 
-![Flowchart 5](./diagrams/euler-v2-flowchart-5.png)
-
-## Integration and Composability
-### ERC-4626 Compatibility
-### Lens Contracts
-### Developer Tools
-
-
-
-
-
-
-## Core Architecture
-
-Euler V2 utilizes a modular vault-based lending system built around the [EthereumVaultConnector (EVC)](https://etherscan.io/address/0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383) and the [GenericFactory (EVault Proxy)](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e). The protocol enables permissionless creation of isolated lending markets where each vault functions as an ERC-4626 compliant tokenized debt market for a specific underlying asset.
-
-The EVC serves as the foundational multicall contract that mediates all cross-vault operations, enabling atomic batching, sub-account management, and sophisticated position isolation. Individual EVaults are deployed through the factory system using the [EVault (Implementation)](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D) as the implementation contract, maintaining full ERC-4626 compatibility for seamless integration with the broader DeFi ecosystem.
-
-## Vault Creation and Management
-
-### Vault Deployment Process
-
-Vaults are created through the [GenericFactory (EVault Proxy)](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e) contract, which deploys proxy instances pointing to the standardized [EVault (Implementation)](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D). The factory supports two deployment modes:
-
-Upgradeable Vaults: Deployed as beacon proxies, allowing the [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) to upgrade implementations in case of critical bugs
-Immutable Vaults: Deployed as minimal proxies, providing complete immutability once deployed
-
-Each vault is configured with specific parameters including underlying asset, oracle router, interest rate model, and governance settings. The factory ensures all vaults are initialized securely and can be verified as originating from a trusted source.
-
-### Governance and Control
-
-Vault governance operates through a modular system where each vault can be assigned a governor address. The protocol supports multiple governance patterns:
-
-- [GovernorAccessControlEmergency](https://etherscan.io/address/0x35400831044167E9E2DE613d26515eeE37e30a1b): Selector-based access control with emergency roles for rapid response
-- [CapRiskSteward](https://etherscan.io/address/0xFE56cAa36DA676364e1a0a97e4f7C07651e89B95): Specialized risk management for delegated parameter adjustments
-- Timelock Integration: Three TimelockController contracts provide time-delayed execution:
-  - [accessControlEmergencyGovernorAdminTimelockController](https://etherscan.io/address/0xBfeE2D937FB9223FFD65b7cDF607bd1DA9B97E59) - 48-hour delays
-  - [accessControlEmergencyGovernorWildcardTimelockController](https://etherscan.io/address/0x1b8C367aE56656b1D0901b2ADd1AD3226fF74f5a) - 48-hour delays  
-  - [eVaultFactoryTimelockController](https://etherscan.io/address/0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968) - 4-day delays
-
-
-
-
-## Lending and Borrowing Mechanics
-
-### Deposit and Withdrawal Process
-
-Users deposit underlying assets into vaults through the standard ERC-4626 interface, receiving vault shares representing proportional ownership. The vault tracks internal balances rather than reading from the underlying asset contract, preventing manipulation through direct transfers and supporting rebasing tokens.
-
-The exchange rate grows deterministically as interest accrues:
-exchangeRate = (cash + totalBorrows + VIRTUAL_DEPOSIT) / (totalShares + VIRTUAL_DEPOSIT)
-
-The VIRTUAL_DEPOSIT mechanism prevents manipulation through rounding-based "stealth deposits" and ensures the exchange rate is well-defined even with zero shares.
-
-### Borrowing and Collateralization
-
-Borrowing requires users to enable specific vaults as collateral and controller through the EVC. The system supports cross-vault collateralization, where assets deposited in one vault can serve as collateral for borrowing from another vault.
-
-Each collateral vault is configured with separate Loan-to-Value (LTV) ratios through the `setLTV` function:
-- `Borrow LTV`: Maximum ratio for new borrowing
-- `Liquidation LTV`: Threshold for liquidation eligibility
-- `Spread LTV`: Buffer between borrow and liquidation thresholds
-
-The EVC defers solvency and cap checks until the end of a batch, enabling complex multi-step workflows while maintaining system integrity.
-
-### Interest Rate Models
-
-Euler V2 supports multiple interest rate model types through specialized factories:
-
-`Kink IRM Factory` at [0xcAe0A39B45Ee9C3213f64392FA6DF30CE034C9F9](https://etherscan.io/address/0xcAe0A39B45Ee9C3213f64392FA6DF30CE034C9F9): Deploys linear kink interest rate models with piecewise-linear curves and "kink" points.
-
-`Adaptive Curve IRM Factory` at [0x3EC2d5af936bBB57DD19C292BAfb89da0E377F42](https://etherscan.io/address/0x3EC2d5af936bBB57DD19C292BAfb89da0E377F42): Deploys adaptive curve models that dynamically adjust rates based on market conditions.
-
-`Fixed Cyclical Binary IRM Factory` at [0xa8F8E82C9Da15A991D7BF2486aE26e22743aC8d0](https://etherscan.io/address/0xa8F8E82C9Da15A991D7BF2486aE26e22743aC8d0): Deploys fixed-rate cyclical binary models.
-
-Interest is compounded deterministically every second using exponentiation, with rates expressed in "second percent yield" (SPY) values scaled by 1e27.
-
-## Sub-Account System
-
-### Account Structure
-
-The EVC provides each user address with 256 virtual sub-accounts, enabling sophisticated position isolation and risk management. Sub-account addresses are derived by XOR-ing the main address with a number from 0 to 255:
-
-```solidity
-function getAccount(address owner, uint8 accountId) public pure returns (address) {
-    return address(uint160(owner) ^ uint160(accountId));
-}
-```
-
-All 256 sub-accounts share the first 19 bytes of their address, making them easily identifiable as belonging to the same owner.
-
-### Position Isolation
-
-Sub-accounts enable users to:
-- Manage multiple isolated positions with different risk parameters
-- Separate strategies and collateral types
-- Implement sophisticated risk management across positions
-- Maintain convenience of using a single wallet
-
-Each sub-account can independently enable/disable collateral and controller vaults, borrow from different vaults, and maintain separate debt positions.
-
-## Liquidation System
-
-### Reverse Dutch Auction Mechanism
-
-Euler V2 implements a reverse dutch auction system for liquidations, where the discount scales proportionally with how deeply in violation a position becomes. The `setMaxLiquidationDiscount` function controls the maximum discount parameter, preventing harmful liquidation spirals.
-
-### Collateral Control
-
-When a position becomes undercollateralized, the controller vault can invoke `controlCollateral` through the EVC to seize collateral from the borrower's enabled collateral vaults. This function allows the controller to withdraw assets on behalf of the violating account, typically to repay outstanding debt.
-
-The liquidation process is atomic and secure, with only the controller vault able to initiate it for accounts that have enabled it as a controller.
-
-
-
-
-
-## EulerSwap Integration
-
-### Capital-Efficient AMM Design
-
-EulerSwap is implemented through three core contracts:
-- `EulerSwapFactory` at [EulerSwapFactory](https://etherscan.io/address/0xb013be1D0D380C13B58e889f412895970A2Cf228)
-- `EulerSwap Implementation` at [0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117](https://etherscan.io/address/0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117)
-- `EulerSwapPeriphery` at [0x208fF5Eb543814789321DaA1B5Eb551881D16b06](https://etherscan.io/address/0x208fF5Eb543814789321DaA1B5Eb551881D16b06)
-
-Unlike traditional AMMs, liquidity remains in the user's Euler account, continuing to earn lending interest and protocol rewards.
-
-### Swap Execution
-
-The swap system operates through two periphery contracts:
-- `Swapper` at [0x2Bba09866b6F1025258542478C39720A09B728bF](https://etherscan.io/address/0x2Bba09866b6F1025258542478C39720A09B728bF): Executes swaps using external DEXs
-- `SwapVerifier` at [0xae26485ACDDeFd486Fe9ad7C2b34169d360737c7](https://etherscan.io/address/0xae26485ACDDeFd486Fe9ad7C2b34169d360737c7): Verifies swap outcomes and enforces slippage limits
-
-## Oracle System
-
-### Modular Oracle Architecture
-
-Euler V2 supports a wide range of oracle providers through the `EulerRouterFactory` at [0x70B3f6F61b7Bf237DF04589DdAA842121072326A](https://etherscan.io/address/0x70B3f6F61b7Bf237DF04589DdAA842121072326A) and `EulerRouter` at [0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57](https://etherscan.io/address/0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57). The system operates through a modular architecture combining immutable Adapters and configurable Routers.
-
-Analysis of Euler's Oracle Adapters Addresses reveals active usage across 12 distinct provider types including Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Midas, MEV Capital, Idle, and Resolv.
-
-### Oracle Registry
-
-The `SnapshotRegistry (oracleAdapterRegistry)` at [0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintains a registry of approved oracle adapters, ensuring only verified price feeds are used by vaults.
-
-## Reward and Incentive System
-
-### Protocol Rewards
-
-Euler V2 implements a comprehensive reward system through:
-- `EUL Token` at [0xd9Fcd98c322942075A5C3860693e9f4f03AAE07b](https://etherscan.io/address/0xd9Fcd98c322942075A5C3860693e9f4f03AAE07b): Protocol governance token
-- `RewardToken (rEUL)` at [0xf3e621395fc714B90dA337AA9108771597b4E696](https://etherscan.io/address/0xf3e621395fc714B90dA337AA9108771597b4E696): Reward token representing earned EUL
-- `TrackingRewardStreams` at [0x0D52d06ceB8Dcdeeb40Cfd9f17489B350dD7F8a3](https://etherscan.io/address/0x0D52d06ceB8Dcdeeb40Cfd9f17489B350dD7F8a3): Manages reward distribution
-
-### Balance Forwarding
-
-The balance forwarding system enables instant and trustless distribution of rewards while keeping gas costs low. When an account opts in, every balance change triggers a notification to the TrackingRewardStreams contract.
-
 ## EulerEarn System
 
-### Yield Aggregation
+### Vault Deployment
 
-EulerEarn provides yield aggregation through:
-- `EulerEarnFactory` at [0x9a20d3C0c283646e9701a049a2f8C152Bc1e3427](https://etherscan.io/address/0x9a20d3C0c283646e9701a049a2f8C152Bc1e3427)
-- `EulerEarnFactory2` at [0x59709B029B140C853FE28d277f83C3a65e308aF4](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4)
-- `EulerEarn Implementation` at [0xBa42141648dFD74388f3541C1d80fa9387043Da9](https://etherscan.io/address/0xBa42141648dFD74388f3541C1d80fa9387043Da9)
+EulerEarn implements a yield aggregation layer through factory-deployed proxy contracts. Observed deployment shows [Address 1](https://etherscan.io/address/0x95058F3d4C69F14f6125ad4602E925845BD5d6A4) calling `createEulerEarn` on [EulerEarnFactory2](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4), specifying the underlying asset, vault name and symbol, initial owner address, and timelock duration. The factory deploys a proxy contract via CREATE2 that delegates all calls to the shared [EulerEarn Implementation](https://etherscan.io/address/0xBa42141648dFD74388f3541C1d80fa9387043Da9).
 
-The system aggregates user deposits into curated sets of underlying lending vaults, optimizing yield while preserving risk isolation per strategy.
+Each proxy maintains independent storage including role addresses, approved strategies, per-strategy caps, and user balances, while the implementation contains shared function code. During initialization, the contract assigns ownership to the specified `initialOwner` and configures the initial timelock to zero seconds.
 
-## Security Features
+The deployer performs immediate setup: `setSupplyQueue` to configure strategy ordering, `submitGuardian` to designate the guardian address, `submitTimelock` to establish security delays, then `transferOwnership` to transfer control to the [DAO multisig](https://etherscan.io/address/0xcAD001c30E96765aC90307669d578219D4fb1DCe).
 
-### Emergency Response
+### Role-Based Permissions
 
-The EVC provides two emergency modes for user protection:
-- `Lockdown Mode`: Restricts all operations except operator management and nonce updates
-- `Permit Disabled Mode`: Prevents execution of any permits signed by the owner
+EulerEarn implements a four-level permission hierarchy via Ownable2Step:
 
-### Access Control
+**Owner** holds supreme authority over all vault parameters. The Owner can call `setCurator` to define who approves strategies, `setIsAllocator` to authorize or revoke allocators, `submitGuardian` to propose a new guardian, `setFee` to adjust performance fees between 0% and 50%, `setFeeRecipient` to direct revenue destination, and `submitTimelock` to modify security delays. The Owner can execute any function available to other roles.
 
-The protocol implements sophisticated access control through:
-- `Operator Delegation`: Users can delegate control of sub-accounts to trusted contracts
-- `Role-Based Governance`: Granular permissions for different governance functions
-- `Timelock Protection`: Time-delayed execution for sensitive operations
+**Curator** controls strategy selection via `submitCap` to set per-strategy supply caps. Cap increases require timelock approval; decreases execute immediately. `submitMarketRemoval` initiates strategy removal from withdrawal queues after reducing caps to zero. Maximum 30 strategies per vault.
 
-### Upgradeability and Immutability
+**Allocator** executes rebalancing operations via `reallocate` to move funds between strategies within cap limits, `setSupplyQueue` to reorder deposit allocation priority, and `updateWithdrawQueue` to configure withdrawal ordering. Multiple allocators can be authorized simultaneously, enabling operational decentralization or automation via contracts.
 
-Vault creators can choose between:
-- `Upgradeable Vaults`: Can be upgraded by `FactoryGovernor` for critical bug fixes
-- `Immutable Vaults`: Completely immutable once deployed
+**Guardian** exercises veto power via `revokePendingTimelock`, `revokePendingGuardian`, `revokePendingCap`, and `revokePendingMarketRemoval`, functioning as a circuit-breaker for timelocked actions.
 
-The `FactoryGovernor` is controlled by the `eVaultFactoryTimelockController` and can only upgrade vault implementations, not individual vault configurations.
+Certain functions accept multiple roles: `setSupplyQueue`, `updateWithdrawQueue`, and `reallocate` accept Allocator, Curator, or Owner. `revokePendingCap` and `revokePendingMarketRemoval` accept Curator, Guardian, or Owner.
 
-## Integration and Composability
+### User Deposits and Withdrawals
 
-### EVC Batching
+Users deposit assets via standard ERC-4626 interface. The vault mints shares proportional to current vault value and allocates deposits according to the supply queue, respecting per-strategy caps. Each strategy corresponds to an underlying EVault eligible to receive allocations up to its individual cap.
 
-The EVC enables atomic batching of operations across multiple vaults and external contracts. This allows complex strategies like:
-- Opening leveraged positions in a single transaction
-- Rebalancing collateral across multiple vaults
-- Executing flash loans with automatic repayment
-- Combining lending, borrowing, and swapping operations
+Yield accrues automatically as underlying EVaults generate lending interest. Share value increases proportionally to aggregated yield. Performance fees (if configured) are charged only on positive yield and minted as shares to the fee recipient address.
 
-### ERC-4626 Compatibility
+Withdrawals execute according to the withdrawal queue. The vault attempts redemption from strategies in configured order. If a strategy lacks liquidity or reverts, the vault continues with the next strategy. Liquidity availability depends on underlying strategy conditions.
 
-All vaults implement the ERC-4626 standard, ensuring seamless integration with:
-- DeFi aggregators and yield farming protocols
-- Portfolio management tools
-- Tax accounting software
-- Standard DeFi interfaces
+The [PublicAllocator](https://etherscan.io/address/0x533f8D1a0bf97C2ea0eDf27Db808e5776e8FbEfA) enables permissionless optimistic rebalancing in certain vaults, allowing any address to trigger reallocations within cap constraints.
 
-### Lens Contracts
+## EulerSwap System
 
-The protocol provides comprehensive data access through specialized lens contracts:
-- `AccountLens` at [0x94B9D29721f0477402162C93d95B3b4e52425844](https://etherscan.io/address/0x94B9D29721f0477402162C93d95B3b4e52425844)
-- `VaultLens` at [0xB65C7ac387A45d7b4709166784BB431A58Bc59eB](https://etherscan.io/address/0xB65C7ac387A45d7b4709166784BB431A58Bc59eB)
-- `OracleLens` at [0x0C47736aaBEE757AB8C8F60776741e39DBf3F183](https://etherscan.io/address/0x0C47736aaBEE757AB8C8F60776741e39DBf3F183)
-- `UtilsLens` at [0xB8cac3e5CaaC2042B79938aFe7FEA3f44e5afcC1](https://etherscan.io/address/0xB8cac3e5CaaC2042B79938aFe7FEA3f44e5afcC1)
+### Pool Deployment
 
-This modular, composable architecture makes Euler V2 a foundational layer for sophisticated DeFi strategies while maintaining security and user control over their positions.
+EulerSwap implements a capital-efficient AMM through factory-deployed meta-proxy contracts. Any user can create a pool by calling `deployPool` on [EulerSwapFactory](https://etherscan.io/address/0xb013be1D0D380C13B58e889f412895970A2Cf228), specifying two EVault addresses, AMM curve parameters, and their Euler account address. The factory deploys a meta-proxy via CREATE2 pointing to the shared [EulerSwap Implementation](https://etherscan.io/address/0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117), encoding parameters directly into bytecode for immutability and gas efficiency.
 
+During activation, the pool approves both EVaults for transfers, enables them as collateral through the `EVC`, and registers in the factory's pool registry. Deployment restricts `_msgSender()` to match the account owner, ensuring only authorized pool creation.
 
+### Single-Owner Pool Model
 
+Each EulerSwap pool is controlled by a single Euler account. The owner deposits assets into underlying EVaults (`EVault Token A` and `EVault Token B`), which simultaneously earn lending interest, serve as swap liquidity, and enable borrowing. The owner installs the pool as an authorized operator via the `EVC`, granting withdrawal and deposit permissions during swaps.
 
+### Just-in-Time (JIT) Liquidity
 
+When swaps require more output tokens than available reserves, EulerSwap automatically borrows the shortfall from the corresponding EVault using incoming input tokens as collateral. This operates through `FundsLib.withdrawAssets()`, which first withdraws available balance, then calls `enableController` and executes `borrow` if needed. Subsequently, `FundsLib.depositAssets()` deposits received input tokens, automatically repaying debt and disabling the controller at zero debt.
+
+This architecture can simulate up to 50x liquidity depth in optimal conditions, particularly for low-volatility pairs. A pool with $20,000 reserves can service trades requiring $1,000,000 in traditional AMMs.
+
+### Trading Execution
+
+Traders initiate swaps via [EulerSwapPeriphery](https://etherscan.io/address/0x208fF5Eb543814789321DaA1B5Eb551881D16b06), which queries EVault balances, calculates routing, and forwards requests to the pool. The pool optimistically transfers output tokens, invokes callbacks for flash swaps, then deposits input tokens with fee deductions. [SwapVerifier](https://etherscan.io/address/0xae26485ACDDeFd486Fe9ad7C2b34169d360737c7) validates slippage constraints and curve compliance.
+
+### Protocol Fees
+
+The DAO controls global protocol fees via `setProtocolFee` and `setProtocolFeeRecipient` on the factory. During swaps, `FundsLib.depositAssets()` deducts the protocol fee portion and transfers it to the designated recipient. Remaining fees accrue to the pool owner's collateral, compounding with lending interest and protocol rewards.
+
+![Flowchart 5](./diagrams/euler-v2-flowchart-5.png)
+
+## Data Access and Lens Contracts
+
+Euler V2 provides comprehensive data access through specialized lens contracts that aggregate and expose protocol state for efficient querying. These read-only contracts enable developers, analytics platforms, and user interfaces to retrieve account positions, vault states, and oracle prices without executing complex multi-call operations.
+
+The [AccountLens](https://etherscan.io/address/0x94B9D29721f0477402162C93d95B3b4e52425844) aggregates user account data across multiple vaults and sub-accounts, providing consolidated views of positions, collateral, and debt. The [VaultLens](https://etherscan.io/address/0xB65C7ac387A45d7b4709166784BB431A58Bc59eB) exposes vault-specific information including total supply, borrow rates, utilization, and caps. The [OracleLens](https://etherscan.io/address/0x0C47736aaBEE757AB8C8F60776741e39DBf3F183) facilitates price queries across multiple asset pairs through configured oracle routers. The [IRMLens](https://etherscan.io/address/0x57B1BB683b109eB0F1e6d9043067C86F0C6c52C1) retrieves interest rate model parameters and projected rates, while the [UtilsLens](https://etherscan.io/address/0xB8cac3e5CaaC2042B79938aFe7FEA3f44e5afcC1) provides utility functions for batch operations and data formatting.
+
+Additional specialized lenses include [EulerEarnVaultLens](https://etherscan.io/address/0xafad3c14f32BD46EB32F7383214f4Af0Cff6285f) for EulerEarn vault analytics and strategy allocation data. The modular lens architecture enables efficient off-chain data indexing and analytics while maintaining compatibility with standard web3 libraries and block explorers.
 
 
 
@@ -497,9 +374,12 @@ Risk Steward: `CapRiskSteward` contract at [0xFE56cAa36DA676364e1a0a97e4f7C07651
 | TrackingRewardStreams                                                         | [0x0D52d06ceB8Dcdeeb40Cfd9f17489B350dD7F8a3](https://etherscan.io/address/0x0D52d06ceB8Dcdeeb40Cfd9f17489B350dD7F8a3) |
 | GenericFactory                                                 | [0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e) |
 | EVault (Implementation)                                                       | [0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D) |
+| BeaconProxy (EVault Proxy)                                                       | [0xdc3f589dc09cc120a1ccf359a3fed22b053eceb7](https://etherscan.io/address/0xdc3f589dc09cc120a1ccf359a3fed22b053eceb7) |
+| DToken (Example)                                                       | [0xc8ae97896685bfda6a14193eb7f42fe5516a9f23](https://etherscan.io/address/0xc8ae97896685bfda6a14193eb7f42fe5516a9f23) |
 | EulerEarnFactory                                                              | [0x9a20d3C0c283646e9701a049a2f8C152Bc1e3427](https://etherscan.io/address/0x9a20d3C0c283646e9701a049a2f8C152Bc1e3427) |
 | EulerEarnFactory2                                                             | [0x59709B029B140C853FE28d277f83C3a65e308aF4](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4) |
 | EulerEarn (Implementation)                                                    | [0xBa42141648dFD74388f3541C1d80fa9387043Da9](https://etherscan.io/address/0xBa42141648dFD74388f3541C1d80fa9387043Da9) |
+| EulerEarn (Proxy Example)                                                    | [0xBa42141648dFD74388f3541C1d80fa9387043Da9](https://etherscan.io/address/0xBa42141648dFD74388f3541C1d80fa9387043Da9) |
 | EthereumVaultConnector (EVC)                                                  | [0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383](https://etherscan.io/address/0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383) |
 | Permit2                                                                       | [0x000000000022D473030F116dDEE9F6B43aC78BA3](https://etherscan.io/address/0x000000000022D473030F116dDEE9F6B43aC78BA3) |
 | ProtocolConfig                                                                | [0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) |
@@ -543,7 +423,7 @@ Risk Steward: `CapRiskSteward` contract at [0xFE56cAa36DA676364e1a0a97e4f7C07651
 | VaultLens                                                                     | [0xB65C7ac387A45d7b4709166784BB431A58Bc59eB](https://etherscan.io/address/0xB65C7ac387A45d7b4709166784BB431A58Bc59eB) |
 | VaultLens2                                                                    | [0xA8695d44EC128136F8Afcd796D6ba3Db3cdA8914](https://etherscan.io/address/0xA8695d44EC128136F8Afcd796D6ba3Db3cdA8914) |
 | Eul                                                                           | [0xd9Fcd98c322942075A5C3860693e9f4f03AAE07b](https://etherscan.io/address/0xd9Fcd98c322942075A5C3860693e9f4f03AAE07b) |
-| Reward Token (rEul)                                                           | [0xf3e621395fc714B90dA337AA9108771597b4E696](https://etherscan.io/address/0xf3e621395fc714B90dA337AA9108771597b4E696) |
+| RewardToken (rEul)                                                           | [0xf3e621395fc714B90dA337AA9108771597b4E696](https://etherscan.io/address/0xf3e621395fc714B90dA337AA9108771597b4E696) |
 | OFTAdapterUpgradeable (Proxy)                                                 | [0x4d7e09f73843Bd4735AaF7A74b6d877bac75a531](https://etherscan.io/address/0x4d7e09f73843Bd4735AaF7A74b6d877bac75a531) |
 | OFTAdapterUpgradeable (Implementation)                                        | [0x3bf1bd5db4457d22a85d45791b6291b98d0fc5b5](https://etherscan.io/address/0x3bf1bd5db4457d22a85d45791b6291b98d0fc5b5) |
 | GovernorAccessControlEmergency (accessControlEmergencyGovernor)               | [0x35400831044167E9E2DE613d26515eeE37e30a1b](https://etherscan.io/address/0x35400831044167E9E2DE613d26515eeE37e30a1b) |
@@ -553,17 +433,8 @@ Risk Steward: `CapRiskSteward` contract at [0xFE56cAa36DA676364e1a0a97e4f7C07651
 | FactoryGovernor  (eVaultFactoryGovernor)                                      | [0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) |
 | TimelockController (eVaultFactoryTimelockController)                          | [0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968](https://etherscan.io/address/0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968) |
 | EulerSwapFactory (eulerSwapV1Factory)                                         | [0xb013be1D0D380C13B58e889f412895970A2Cf228](https://etherscan.io/address/0xb013be1D0D380C13B58e889f412895970A2Cf228) |
-| EulerSwap (eulerSwapV1Implementation)                                         | [0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117](https://etherscan.io/address/0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117) |
+| EulerSwap (eulerSwapV1 Implementation)                                         | [0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117](https://etherscan.io/address/0xc35a0FDA69e9D71e68C0d9CBb541Adfd21D6B117) |
 | EulerSwapPeriphery (eulerSwapV1Periphery)                                     | [0x208fF5Eb543814789321DaA1B5Eb551881D16b06](https://etherscan.io/address/0x208fF5Eb543814789321DaA1B5Eb551881D16b06) |
-
-*********A FAIRE************
-MinimalProxy
-BeaconProxy example 0xdc3f589dc09cc120a1ccf359a3fed22b053eceb7
-DToken example 0xc8ae97896685bfda6a14193eb7f42fe5516a9f23
-Qui est ce multisig 2/4 0xe130ba997b941f159adc597f0d89a328554d4b3e
-et 0x8Da6a996D8f0cf718d1258F30DB731BbceCb01D2
-Qui est ce multisig 4/6 0xc7c5afdb61e08be3e2fb09098412b5706eb5c550
-et 3/5 0x0e33089449606cde00ad767d66c28cf4cfcf0bf5
 
 ## Permission owners
 
@@ -604,6 +475,26 @@ et 3/5 0x0e33089449606cde00ad767d66c28cf4cfcf0bf5
 | EulerEarnFactory2                                                             | renounceOwnership          | Sets _owner to zero address, permanently removing ownership. It prevents all future setPerspective calls, making the perspective immutable. If executed, the perspective contract could never be updated even during emergencies.                                                                                                                                                                                                                                                                 | DAO                                                                                                        |
 | EulerEarnFactory2                                                             | transferOwnership          | Updates _owner to a new address, transferring factory control. It grants the new owner exclusive access to setPerspective calls. A malicious owner could immediately set a compromised perspective that validates dangerous strategies.                                                                                                                                                                                                                                                           | DAO                                                                                                        |
 | EulerEarnFactory2                                                             | setPerspective             | Updates strategy validation rules for all EulerEarn vaults. Malicious change could enable dangerous strategies, but requires BOTH compromised Perspective AND malicious curator to steal user funds. Honest curators provide protection even with bad Perspective.                                                                                                                                                                                                                                | DAO and EthereumVaultConnector                                                                             |
+| EulerEarn (Proxy Example)     | setName                    | Changes the display name of the EulerEarn vault token. This affects how the vault appears in user interfaces and block explorers. A malicious owner could set a misleading name to impersonate other vaults or confuse users about which vault they are interacting with.                                                                                                                                                                                                                        | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | setSymbol                  | Changes the token symbol of the EulerEarn vault. This affects how the vault token is identified in wallets and DeFi interfaces. A malicious owner could set a confusing symbol that makes users believe they hold a different asset, potentially leading to trading errors.                                                                                                                                                                                                                      | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | setCurator                 | Updates the curator address who controls strategy selection and risk parameters. The curator has authority to add/remove strategies and set supply caps. A malicious owner could appoint a compromised curator who enables dangerous strategies or removes protective caps, enabling fund theft.                                                                                                                                                                                                 | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | setIsAllocator             | Grants or revokes allocator permissions for specified addresses. Allocators control fund reallocation between strategies and queue management. A malicious owner could authorize a rogue allocator who redirects all funds to exploitable strategies or manipulates withdrawal queues to prevent user exits.                                                                                                                                                                                     | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | submitTimelock             | Initiates changes to the timelock delay required for sensitive operations. Timelock increases execute immediately while decreases require waiting the current timelock period. A malicious owner could immediately increase the timelock to maximum (30 days), delaying all guardian removals and cap changes, or reduce it to zero after timelock expires, eliminating user exit window protection.                                                                                            | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | setFee                     | Adjusts the performance fee charged on positive yield up to 50%. This directly reduces user returns by redirecting yield to the fee recipient. A malicious owner could set fees to maximum 50%, permanently capturing half of all future vault earnings and significantly reducing user profitability.                                                                                                                                                                                           | DAO                                                                                |
+| EulerEarn (Proxy Example)     | setFeeRecipient            | Changes the address receiving all performance fees from the vault. This controls the destination of protocol revenue extracted from user yields. A malicious owner could redirect the fee recipient to their own address, stealing all accumulated and future performance fees.                                                                                                                                                                                                                  | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | submitGuardian             | Proposes a new guardian address with veto powers over timelocked actions. If no guardian exists, the change is immediate; otherwise it requires timelock. A malicious owner could appoint a compromised guardian who fails to veto malicious cap increases or strategy additions, or remove the guardian entirely to eliminate the circuit-breaker protection.                                                                                                                                     | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | transferOwnership          | Initiates ownership transfer to a new address using two-step process. The new owner must accept ownership to complete the transfer. A malicious owner could transfer control to an attacker's address, granting them all owner permissions including fee manipulation, role assignment, and curator selection.                                                                                                                                                                                    | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | acceptOwnership            | Completes the two-step ownership transfer initiated by transferOwnership. This finalizes the change of vault control to the pending owner address. An attacker who compromised the pending owner address could accept ownership and gain complete control over all owner functions.                                                                                                                                                                                                              | Pending Owner                                                                                              |
+| EulerEarn (Proxy Example)     | renounceOwnership          | Permanently removes the owner, setting ownership to address(0). This makes all onlyOwner functions permanently uncallable and freezes vault configuration. If executed, the vault becomes immutable with no ability to adjust fees, change curators, or update timelocks, potentially leaving users trapped if issues arise.                                                                                                                                                                      | DAO                                                                                 |
+| EulerEarn (Proxy Example)     | submitCap                  | Proposes changes to per-strategy supply caps that limit maximum allocation. Cap decreases execute immediately while increases require timelock approval. A malicious curator could immediately reduce caps to zero blocking further deposits, or submit timelocked cap increases to dangerous strategies, enabling massive fund exposure after timelock expires if guardian doesn't veto.                                                                                                        | Curator or DAO                                                                                           |
+| EulerEarn (Proxy Example)     | submitMarketRemoval        | Initiates timelocked removal of a strategy vault from the withdrawal queue. Requires cap to be zero and strategy to be enabled. A malicious curator could initiate removal of legitimate high-yield strategies, forcing fund reallocation to lower-yielding or riskier alternatives, reducing overall vault returns.                                                                                                                                                                             | Curator or DAO                                                                                           |
+| EulerEarn (Proxy Example)     | setSupplyQueue             | Reorders the priority queue for allocating new deposits across strategies. This determines which strategies receive funds first when users deposit. A malicious allocator could prioritize dangerous or low-yield strategies first, directing all incoming user deposits to exploitable vaults before safe alternatives.                                                                                                                                                                         | Allocator, Curator, or DAO                                                                               |
+| EulerEarn (Proxy Example)     | updateWithdrawQueue        | Reorders the priority queue for sourcing funds during withdrawals and removes strategies with zero cap and no funds. This controls which strategies are tapped first when users withdraw. A malicious allocator could deprioritize liquid strategies, forcing withdrawals from illiquid or reverting strategies first, blocking user exits.                                                                                                                                                       | Allocator, Curator, or DAO                                                                               |
+| EulerEarn (Proxy Example)     | reallocate                 | Moves funds between strategies by withdrawing from some and depositing to others within cap limits. This directly controls vault asset allocation across all strategies. A malicious allocator could reallocate all funds to a compromised strategy vault, concentrating risk and enabling potential fund theft through the external strategy.                                                                                                                                                    | Allocator, Curator, or DAO                                                                               |
+| EulerEarn (Proxy Example)     | revokePendingTimelock      | Cancels a pending timelock change before it executes. This prevents modifications to the timelock delay that protects users. A malicious guardian could revoke legitimate timelock reductions that would improve user protection, keeping the timelock at suboptimal values.                                                                                                                                                                                                                     | Guardian or DAO                                                                                          |
+| EulerEarn (Proxy Example)     | revokePendingGuardian      | Cancels a pending guardian change before it executes. This prevents modifications to who holds veto powers over timelocked actions. A malicious guardian could revoke their own removal, maintaining control indefinitely even if they become compromised or act maliciously.                                                                                                                                                                                                                    | Guardian or DAO                                                                                          |
+| EulerEarn (Proxy Example)     | revokePendingCap           | Cancels a pending strategy cap increase before timelock expires. This prevents risky cap expansions from taking effect. A malicious curator or guardian could revoke legitimate cap increases that would improve vault capacity and user deposit limits, artificially constraining vault growth.                                                                                                                                                                                                | Curator, Guardian, or DAO                                                                                |
+| EulerEarn (Proxy Example)     | revokePendingMarketRemoval | Cancels a pending strategy removal before timelock expires. This keeps a strategy in the withdrawal queue. A malicious curator or guardian could revoke the removal of a dangerous or compromised strategy, forcing the vault to maintain exposure to risky external vaults.                                                                                                                                                                                                                     | Curator, Guardian, or DAO                                                                                |
 | EthereumVaultConnector                                                        | setLockdownMode            | Freezes or unfreezes all 256 accounts under an address prefix. When enabled, it blocks all operations (deposits, withdrawals, borrows) for the entire account group. Only the owner of the address prefix can call this function.                                                                                                                                                                                                                                                                 | onlyOwner (account prefix owner)                                                                           |
 | EthereumVaultConnector                                                        | setPermitDisabledMode      | Enables or disables ERC-2612 permit functionality for an address prefix. When disabled, users must use on-chain approvals instead of gas-efficient off-chain signatures. Only the owner of the address prefix can call this function.                                                                                                                                                                                                                                                             | onlyOwner (account prefix owner)                                                                           |
 | EthereumVaultConnector                                                        | setNonce                   | Updates the nonce value for permit signature replay protection within a specific namespace. Setting it to a high value invalidates all existing signed permits. Only the owner of the address prefix can call this function.                                                                                                                                                                                                                                                                      | onlyOwner (account prefix owner)                                                                           |
@@ -698,3 +589,5 @@ et 3/5 0x0e33089449606cde00ad767d66c28cf4cfcf0bf5
 | TimelockController (eVaultFactoryTimelockController)                          | cancel                     | Modifies the _timestamps mapping by deleting the entry corresponding to the targeted operation ID. Allows cancellation of scheduled factory operations before execution to prevent dangerous changes. A malicious canceller could cancel legitimate critical factory operations like security fixes or urgent implementation updates.                                                                                                                                                             | DAO or Security Council (CANCELLER_ROLE)                                                                   |
 | TimelockController (eVaultFactoryTimelockController)                          | execute                    | Modifies the _timestamps mapping by marking the operation as executed and performs the call to the target contract. Executes only operations previously scheduled by authorized proposers after the mandatory 4-day delay has elapsed. Anyone can trigger execution of valid operations, but only operations pre-approved by the DAO can be executed, providing transparent and predictable governance execution.                                                                                 | Open to all (address(0))                                                                                   |
 | TimelockController (eVaultFactoryTimelockController)                          | executeBatch               | Modifies the _timestamps mapping by marking the batch operation as executed and performs all calls to target contracts. Executes only operation batches previously scheduled by authorized proposers after the mandatory 4-day delay. Anyone can trigger batch execution, but only batches pre-approved by the DAO can be executed, ensuring coordinated governance changes remain under DAO control.                                                                                             | Open to all (address(0))                                                                                   |
+| EulerSwapFactory                          | setProtocolFee               | Modifies the protocol fee percentage charged on all EulerSwap pools. This directly affects the revenue split between LPs and the protocol treasury. A malicious increase to maximum fee would redirect a large portion of swap fees away from LPs, reducing their profitability.	| DAO |
+| EulerSwapFactory                          | setProtocolFeeRecipient               | Changes the address receiving all protocol fees from EulerSwap pools. This controls the destination of protocol revenue extracted from swap fees. A malicious change could redirect all accumulated and future protocol fees to an attacker's address.		| DAO |
