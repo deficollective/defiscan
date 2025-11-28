@@ -1,0 +1,10 @@
+{
+  "id": "euler",
+  "protocol": "Euler V2",
+  "website": "https://www.eulerlabs.com/",
+  "defillama_slug": ["euler-v2"],
+  "socials": {
+    "x": "https://x.com/eulerfinance"
+  },
+  "github": ["https://github.com/euler-xyz"]
+}
