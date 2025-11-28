@@ -1,15 +1,18 @@
 "use client";
 
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  ExpandedState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
-  Table as TableType,
 } from "@tanstack/react-table";
 
 import {
@@ -21,7 +24,85 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { TableToolbar } from "./toolbar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Badge } from "@/components/ui/badge";
+
+type TableType<T> = ReturnType<typeof useReactTable<T>>;
+
+const openProtocolReview = (slug: string) => (window.location.href = slug);
+
+const renderTableBody = <TData, TValue>(
+  table: TableType<TData>,
+  columns: ColumnDef<TData, TValue>[]
+) => {
+  if (table.getRowModel().rows?.length) {
+    return table.getRowModel().rows.map((row) => {
+      const handleClick = () => {
+        // Expand the row if it is expandable.
+        if (row.getCanExpand()) {
+          row.getToggleExpandedHandler()();
+          return;
+        }
+
+        // Go to protocol review page if not.
+        openProtocolReview((row as any).original.slug);
+      };
+
+      const expanded = row.getIsExpanded();
+
+      return (
+        <TableRow
+          key={row.id}
+          onClick={handleClick}
+          className={cn(
+            "hover:bg-accent cursor-pointer transition",
+            expanded && "bg-accent/80 hover:bg-accent/80",
+            row.depth > 0 && "bg-accent/20 hover:bg-accent py-4"
+          )}
+        >
+          {row.getVisibleCells().map((cell, index) => (
+            <TableCell
+              key={cell.id}
+              className={cn("md:first:pl-1", cell.column.id)}
+            >
+              {index === 0 ? (
+                <div className="flex items-center">
+                  <div className="w-6 flex justify-center mr-2">
+                    {row.getCanExpand() &&
+                      (row.getIsExpanded() ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      ))}
+                  </div>
+                  <div className={cn(row.depth > 0 && "pl-4")}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </div>
+                </div>
+              ) : (
+                flexRender(cell.column.columnDef.cell, cell.getContext())
+              )}
+            </TableCell>
+          ))}
+        </TableRow>
+      );
+    });
+  }
+
+  // No Rows found.
+  return (
+    <TableRow>
+      <TableCell colSpan={columns.length} className="h-24 text-center">
+        No results.
+      </TableCell>
+    </TableRow>
+  );
+};
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -32,7 +113,6 @@ interface DataTableProps<TData, TValue> {
   getProtocolLogo?: (name: string) => string;
 }
 
-// Define the extended ColumnMeta type
 type ExtendedColumnMeta = {
   responsiveHidden?: boolean;
 };
@@ -48,10 +128,10 @@ const getInitialVisibility = (
     protocol: true,
     stage: activeView === "defi" || activeView === "infrastructure",
     reasons: activeView === "others",
-    risks: true,
+    risks: activeView !== "infrastructure",
     type: true,
     chain: activeView === "defi" || activeView === "others",
-    tvl: true,
+    tvl: activeView === "defi" || activeView === "others",
     infrastructure: activeView === "infrastructure",
     centralization: activeView === "infrastructure",
   };
@@ -61,27 +141,39 @@ const getInitialVisibility = (
 
 const useResponsiveColumns = (
   table: TableType<any>,
+  activeView: ViewType,
   mobileBreakpoint = 800
 ) => {
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth < mobileBreakpoint;
 
-      // Get all columns that should be responsive
-      const responsiveColumns = table
-        .getAllColumns()
-        .filter((column: any) => column.columnDef.meta?.responsiveHidden);
-
-      // Toggle visibility for all responsive columns
-      responsiveColumns.forEach((column: any) => {
-        column.toggleVisibility(!isMobile);
+      table.getAllColumns().forEach((column) => {
+        const meta = column.columnDef.meta as ExtendedColumnMeta;
+        if (meta?.responsiveHidden) {
+          // Special case: show risks column on mobile for DeFi tab
+          if (column.id === "risks") {
+            if (activeView === "defi" || activeView === "others") {
+              // Show risks column on mobile for DeFi tab
+              column.toggleVisibility(true);
+            } else if (activeView === "infrastructure") {
+              // Always hide risks column for infrastructure view
+              column.toggleVisibility(false);
+            } else {
+              // Default behavior for other views
+              column.toggleVisibility(!isMobile);
+            }
+          } else {
+            column.toggleVisibility(!isMobile);
+          }
+        }
       });
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [table, mobileBreakpoint]);
+  }, [table, activeView, mobileBreakpoint]);
 };
 
 export function DataTable<TData, TValue>({
@@ -91,13 +183,17 @@ export function DataTable<TData, TValue>({
   defiCount,
   infrastructureCount,
 }: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    { id: "stage", value: [0, 1, 2, "R"] }, // Initial filter for "defi" view
+  ]);
+  const [expanded, setExpanded] = useState<ExpandedState>({});
   const [sorting, setSorting] = useState<SortingState>([
     {
       id: "tvl",
       desc: true,
     },
   ]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const [activeView, setActiveView] = useState<ViewType>("defi");
 
@@ -111,17 +207,27 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
+      rowSelection,
+      columnFilters,
+      expanded,
     },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onExpandedChange: setExpanded,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    // @ts-expect-error
+    getSubRows: (row) => row.children,
+    // @ts-expect-error
+    getRowCanExpand: (row) => row?.children,
     initialState: {
       sorting: [
         {
@@ -144,82 +250,103 @@ export function DataTable<TData, TValue>({
       chain: activeView !== "infrastructure",
     }));
 
-    // Reset and set filters based on the active view
     table.resetColumnFilters();
 
     if (activeView === "others") {
-      table.getColumn("stage")?.setFilterValue("O");
+      table.getColumn("stage")?.setFilterValue(["O"]);
     } else if (activeView === "infrastructure") {
       table.getColumn("stage")?.setFilterValue(["I0", "I1", "I2"]);
     } else {
-      // DeFi view
       table.getColumn("stage")?.setFilterValue([0, 1, 2, "R"]);
     }
   }, [activeView, table]);
 
-  useResponsiveColumns(table);
+  useResponsiveColumns(table, activeView);
 
-  // Navigate to the protocol's page when the row is clicked
   const handleRowClick = (slug: string) => {
     window.location.href = slug;
   };
 
   return (
     <div className="w-full">
-      <div className="flex space-x-2">
-        {/* DeFi tab */}
-        <div
-          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
-            activeView === "defi"
-              ? "bg-primary text-white"
-              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
-          }`}
-          onClick={() => setActiveView("defi")}
+      <div className="pb-4">
+        <ToggleGroup
+          type="single"
+          value={activeView}
+          onValueChange={(value) => value && setActiveView(value as ViewType)}
         >
-          <span className="mr-2">DeFi</span>
-          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
-            {defiCount}
-          </span>
-        </div>
-
-        {/* Infrastructure tab */}
-        <div
-          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
-            activeView === "infrastructure"
-              ? "bg-primary text-white"
-              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
-          }`}
-          onClick={() => setActiveView("infrastructure")}
-        >
-          <span className="mr-2">Infrastructure</span>
-          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
-            {infrastructureCount}
-          </span>
-        </div>
-
-        {/* Others tab */}
-        <div
-          className={`flex items-center px-4 py-2 rounded-t-lg cursor-pointer transition-colors ${
-            activeView === "others"
-              ? "bg-primary text-white"
-              : "bg-background border-t border-l border-r border-b text-white-200 hover:bg-primary"
-          }`}
-          onClick={() => setActiveView("others")}
-        >
-          <span className="mr-2">Others</span>
-          <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full bg-purple-500 text-white">
-            {othersCount}
-          </span>
-        </div>
+          <ToggleGroupItem
+            value="defi"
+            aria-label="Toggle DeFi"
+            className="hover:bg-accent/50 hover:text-accent-foreground"
+          >
+            DeFi
+            <Badge className="px-2 text-xs text-center ml-2">{defiCount}</Badge>
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="infrastructure"
+            aria-label="Toggle Infrastructure"
+            className="hover:bg-accent/50 hover:text-accent-foreground"
+          >
+            Infrastructure
+            <Badge className="px-2 text-xs text-center ml-2">
+              {infrastructureCount}
+            </Badge>
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="others"
+            aria-label="Toggle Others"
+            className="hover:bg-accent/50 hover:text-accent-foreground"
+          >
+            Others
+            <Badge className="px-2 text-xs text-center ml-2">
+              {othersCount}
+            </Badge>
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
       <div className="overflow-hidden">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-accent">
-                {headerGroup.headers.map((header, index) => {
-                  return (
+        <TableToolbar table={table} />
+
+        {/* Desktop: Use ScrollArea for styled scrollbars */}
+        <div className="hidden md:block">
+          <ScrollArea className="w-full">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="hover:bg-accent">
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>{renderTableBody(table, columns)}</TableBody>
+            </Table>
+          </ScrollArea>
+        </div>
+
+        {/* Mobile: Use native horizontal scrolling */}
+        <div
+          className="block md:hidden overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+          style={{
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "thin",
+          }}
+        >
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="hover:bg-accent">
+                  {headerGroup.headers.map((header) => (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
@@ -228,44 +355,13 @@ export function DataTable<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody className="">
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  onClick={() => {
-                    handleRowClick((row as any).original.slug);
-                  }}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-accent cursor-pointer transition"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>{renderTableBody(table, columns)}</TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

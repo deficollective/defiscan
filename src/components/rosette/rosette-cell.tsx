@@ -1,8 +1,11 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip/tooltip";
 import { type RosetteValue } from "./types";
 import { PizzaRosetteIcon } from "./rosette-icon";
 import { PizzaRosetteTooltip } from "./rosette-tooltip";
-import { RosetteTooltipContextProvider } from "./rosette-tooltip-context";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
 
 export interface PizzaRosetteCellProps {
   values: RosetteValue[];
@@ -15,21 +18,26 @@ export function PizzaRosetteCell(props: PizzaRosetteCellProps) {
     props.values.some((value) => value.sentiment === "UnderReview");
 
   return (
-    <Tooltip>
-      <TooltipTrigger className="flex size-12/12 items-center justify-start">
+    <HoverCard>
+      <HoverCardTrigger>
         <PizzaRosetteIcon
           values={props.values}
           className="size-8 md:size-10"
           isUnderReview={isUnderReview}
           background={false}
         />
-      </TooltipTrigger>
-      <TooltipContent fitContent>
+      </HoverCardTrigger>
+
+      <HoverCardContent
+        className="z-50 p-4 rounded-md bg-white"
+        side="top"
+        sideOffset={4}
+      >
         <PizzaRosetteTooltip
           values={props.values}
           isUnderReview={isUnderReview}
         />
-      </TooltipContent>
-    </Tooltip>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
