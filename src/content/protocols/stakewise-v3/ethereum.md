@@ -174,77 +174,77 @@ Because no component in StakeWise v3 enforces timelocks or mandatory waiting per
 | Contract | Function | Impact | Owner |
 |------------------|------------------|------------------|------------------|
 | CuratorsRegistry | transferOwnership | Sets a new pending owner for the registry contract. Malicious owner could whitelist curators that list scam vaults or remove legitimate ones. | StakeWise DAO |
-|  | renounceOwnership | Clears the owner so no further owner-only changes are possible. Permanently freezes curator configuration. Accidental renounce blocks the DAO from reacting to new risks or removing malicious curators. | StakeWise DAO |
-|  | addCurator | Marks an address as a curator (or updates curator status). Curators controls who can manage/approve certain vaults or strategies.Malicious curator could promote dangerous vaults or misconfigure parameters for users. | StakeWise DAO |
+| CuratorsRegistry | renounceOwnership | Clears the owner so no further owner-only changes are possible. Permanently freezes curator configuration. Accidental renounce blocks the DAO from reacting to new risks or removing malicious curators. | StakeWise DAO |
+| CuratorsRegistry | addCurator | Marks an address as a curator (or updates curator status). Curators controls who can manage/approve certain vaults or strategies.Malicious curator could promote dangerous vaults or misconfigure parameters for users. | StakeWise DAO |
 | DepositDataRegistry | setDepositDataManager | Sets the address allowed to manage deposit data. Delegates control of validator deposit records. Malicious manager can corrupt mapping between vaults and validators. | ValidVault |
-|  | setDepositDataRoot | Updates Merkle/commitment root for deposit data.Defines canonical source-of-truth for validator deposits. Wrong root can brick accounting or point deposits to attacker validators. | ValidVault |
-|  | registerValidators | Registers new validator pubkeys/credentials. Onboards validators used for staking. Can add attacker validators or mis-assign them, capturing yield or funds. | ValidVault |
-|  | migrate | Moves registry data to a new contract. Enables upgrades/maintenance of validator registry. Migration to malicious/new address can orphan or steal validator state. | ValidVault |
+| DepositDataRegistry | setDepositDataRoot | Updates Merkle/commitment root for deposit data.Defines canonical source-of-truth for validator deposits. Wrong root can brick accounting or point deposits to attacker validators. | ValidVault |
+| DepositDataRegistry | registerValidators | Registers new validator pubkeys/credentials. Onboards validators used for staking. Can add attacker validators or mis-assign them, capturing yield or funds. | ValidVault |
+| DepositDataRegistry | migrate | Moves registry data to a new contract. Enables upgrades/maintenance of validator registry. Migration to malicious/new address can orphan or steal validator state. | ValidVault |
 | EthFoxVault | updateBlocklist | Updates the list of blocked addresses.Enforces who is forbidden from interacting with the protocol. Malicious manager can block honest users, freeze redemptions, or selectively censor. | blocklistManager |
-|  | setBlocklistManager | Sets who controls the blocklist. Delegates censorship power. Assigning malicious owners gives them direct censorship over users. | Stakewise Multisig #2 |
-|  | setMetadata | Updates vault metadata fields. Affects UI/identification of the vault. Misleading metadata can spoof legit vaults and trick users. | Stakewise Multisig #2 |
-|  | receiveFromMevEscrow | Pulls MEV/proceeds from MEV escrow.Routes extra yield into the vault. Malicious owner could mismatch accounting or mask theft of MEV. | mevEscrow |
-|  | setFeeRecipient | Sets address receiving protocol/vault fees. Directs fee revenue stream. Malicious owner could redirected all fees (part of yield) to himself. | Stakewise Multisig #2 |
-|  | setKeysManager | Sets address managing validator keys. Delegates critical validator ops. | Stakewise Multisig #2 |
-|  | setValidatorsRoot | Updates root of validator set. Defines which validators belong to vault. Bad root points to attacker validators, capturing rewards. | keysManager |
-|  | upgradeToAndCall | Upgrades implementation contract. Changes vault logic. Malicious upgrade can instantly drain all funds. | Stakewise Multisig #2 |
-|  | \_authorizeUpgrade | Restricts who may upgrade. Enforces upgrade auth. If compromised, any upgrade (including malicious) becomes possible. | Stakewise Multisig #2 |
-|  | ejectUser | Forces an address out (redeem/blacklist logic). Risk & compliance lever to kick users. Malicious use can grief users or forcibly close positions on bad terms. | blocklistManager |
+| EthFoxVault | setBlocklistManager | Sets who controls the blocklist. Delegates censorship power. Assigning malicious owners gives them direct censorship over users. | Stakewise Multisig #2 |
+| EthFoxVault | setMetadata | Updates vault metadata fields. Affects UI/identification of the vault. Misleading metadata can spoof legit vaults and trick users. | Stakewise Multisig #2 |
+| EthFoxVault | receiveFromMevEscrow | Pulls MEV/proceeds from MEV escrow.Routes extra yield into the vault. Malicious owner could mismatch accounting or mask theft of MEV. | mevEscrow |
+| EthFoxVault | setFeeRecipient | Sets address receiving protocol/vault fees. Directs fee revenue stream. Malicious owner could redirected all fees (part of yield) to himself. | Stakewise Multisig #2 |
+| EthFoxVault | setKeysManager | Sets address managing validator keys. Delegates critical validator ops. | Stakewise Multisig #2 |
+| EthFoxVault | setValidatorsRoot | Updates root of validator set. Defines which validators belong to vault. Bad root points to attacker validators, capturing rewards. | keysManager |
+| EthFoxVault | upgradeToAndCall | Upgrades implementation contract. Changes vault logic. Malicious upgrade can instantly drain all funds. | Stakewise Multisig #2 |
+| EthFoxVault | \_authorizeUpgrade | Restricts who may upgrade. Enforces upgrade auth. If compromised, any upgrade (including malicious) becomes possible. | Stakewise Multisig #2 |
+| EthFoxVault | ejectUser | Forces an address out (redeem/blacklist logic). Risk & compliance lever to kick users. Malicious use can grief users or forcibly close positions on bad terms. | blocklistManager |
 | Keeper | setValidatorsMinOracles | Updates how many oracle signatures are required for validator reports. Tunes oracle security threshold. Too low = easy collusion; too high = liveness risk if oracles are offline. | StakeWise DAO |
-|  | approveValidators | Approves validator sets/changes for a vault (EIP-712 quorum). Controls which validators are recognized. If abused, approvals could route stake to attacker-controlled validators. | Registered Vault (must be in VaultsRegistry) |
-|  | harvest | Realizes rewards for a vault using oracle/Merkle data; updates accounting. Callable only by a registeredvault whose MEV escrow matches the shared escrow and whose Merkle proof verifies. Bad oracle data/roots can mis-credit rewards. | Registered Vault (with valid Merkle + MEV escrow match) |
-|  | setRewardsMinOracles | Sets oracle quorum for rewards. Low = cartel risk; high = can freeze updates. | StakeWise DAO |
-|  | addOracle | Adds a new oracle. Expands trusted data providers. Adding a malicious oracle helps corrupt reports. | StakeWise DAO |
-|  | removeOracle | Removes an oracle. Prunes misbehaving/obsolete oracles. Removing honest oracles concentrates power. | StakeWise DAO |
-|  | updateConfig | Updates Keeper config parameters (e.g., IPFS/config hash). Misconfig can break reward flows or validator recognition. | StakeWise DAO |
-|  | transferOwnership | Two-step handover of Keeper ownership. New owner controls all thresholds, oracle set, and config. | StakeWise DAO |
-|  | renounceOwnership | Clears Keeper owner permanently. Freezes current parameters; unsafe settings may become unfixable. | StakeWise DAO |
+| Keeper | approveValidators | Approves validator sets/changes for a vault (EIP-712 quorum). Controls which validators are recognized. If abused, approvals could route stake to attacker-controlled validators. | Registered Vault (must be in VaultsRegistry) |
+| Keeper | harvest | Realizes rewards for a vault using oracle/Merkle data; updates accounting. Callable only by a registeredvault whose MEV escrow matches the shared escrow and whose Merkle proof verifies. Bad oracle data/roots can mis-credit rewards. | Registered Vault (with valid Merkle + MEV escrow match) |
+| Keeper | setRewardsMinOracles | Sets oracle quorum for rewards. Low = cartel risk; high = can freeze updates. | StakeWise DAO |
+| Keeper | addOracle | Adds a new oracle. Expands trusted data providers. Adding a malicious oracle helps corrupt reports. | StakeWise DAO |
+| Keeper | removeOracle | Removes an oracle. Prunes misbehaving/obsolete oracles. Removing honest oracles concentrates power. | StakeWise DAO |
+| Keeper | updateConfig | Updates Keeper config parameters (e.g., IPFS/config hash). Misconfig can break reward flows or validator recognition. | StakeWise DAO |
+| Keeper | transferOwnership | Two-step handover of Keeper ownership. New owner controls all thresholds, oracle set, and config. | StakeWise DAO |
+| Keeper | renounceOwnership | Clears Keeper owner permanently. Freezes current parameters; unsafe settings may become unfixable. | StakeWise DAO |
 | PoolEscrow | commitOwnershipTransfer | Proposes a new owner. Starts a 2-step secure ownership transfer. Wrong address committed sets up a hostile takeover at apply step. | GenesisVault |
-|  | applyOwnershipTransfer | Finalizes the new owner. Completes control transfer for escrow. Finalize to attacker, they can drain escrow via privileged flows | GenesisVault |
-|  | withdraw | Transfers escrowed funds according to rules. Releases capital from escrow to recipients. Malicious logic might allow excess/unauthorized withdrawals. | GenesisVault |
+| PoolEscrow | applyOwnershipTransfer | Finalizes the new owner. Completes control transfer for escrow. Finalize to attacker, they can drain escrow via privileged flows | GenesisVault |
+| PoolEscrow | withdraw | Transfers escrowed funds according to rules. Releases capital from escrow to recipients. Malicious logic might allow excess/unauthorized withdrawals. | GenesisVault |
 | LegacyRewardToken (proxy) | changeAdmin | Changes proxy admin address. Moves upgrade power. New admin can deploy malicious logic. | StakeWise DAO |
-|  | upgradeTo / upgradeToAndCall | Switches implementation (optionally calls it). Upgrades reward token behavior. Malicious implementation can steal balances or block transfers | StakeWise DAO |
+| LegacyRewardToken (proxy) | upgradeTo / upgradeToAndCall | Switches implementation (optionally calls it). Upgrades reward token behavior. Malicious implementation can steal balances or block transfers | StakeWise DAO |
 | RewardEthToken (implementation) | transferFrom | Moves tokens with allowance. Enables contracts & dApps to move rewards. Bad spender can drain if allowances mis-set. | approved spender |
-|  | pause/ unpause | Stops or resumes token transfers. Emergency brake on reward token. Malicious pauser can freeze all holders or keep token frozen. | PAUSER (null) |
-|  | setRewardsDisabled | Flags rewards as disabled. Can stop accrual/distribution. Misuse halts user rewards. | stakedEthToken contract |
-|  | setProtocolFeeRecipient | Sets fee receiver. Directs protocol fee stream. Malicious owner could redirects fee income to attacker. | StakeWise DAO |
-|  | setProtocolFee | Sets protocol fee rate. Controls how much is skimmed as protocol fee. Set to extreme values redirects most rewards to fee recipient. | StakeWise DAO |
-|  | updateTotalRewards | Updates total distributable rewards. Syncs accounting with vault earnings. Inflated value can cause over-distribution / dilution. | Vault |
+| RewardEthToken (implementation) | pause/ unpause | Stops or resumes token transfers. Emergency brake on reward token. Malicious pauser can freeze all holders or keep token frozen. | PAUSER (null) |
+| RewardEthToken (implementation) | setRewardsDisabled | Flags rewards as disabled. Can stop accrual/distribution. Misuse halts user rewards. | stakedEthToken contract |
+| RewardEthToken (implementation) | setProtocolFeeRecipient | Sets fee receiver. Directs protocol fee stream. Malicious owner could redirects fee income to attacker. | StakeWise DAO |
+| RewardEthToken (implementation) | setProtocolFee | Sets protocol fee rate. Controls how much is skimmed as protocol fee. Set to extreme values redirects most rewards to fee recipient. | StakeWise DAO |
+| RewardEthToken (implementation) | updateTotalRewards | Updates total distributable rewards. Syncs accounting with vault earnings. Inflated value can cause over-distribution / dilution. | Vault |
 | MerkleDistributor | transferOwnership / renounceOwnership | Moves or clears distributor owner. Controls who configures distribution parameters. | Stakewise Multisig #1 |
-|  | setRewardsDelay | Set the new rewards delay. Tunes UX vs safety. Set too large stalls distributions. | Stakewise Multisig #1 |
-|  | setRewardsMinOracles | Sets oracle threshold (if used). Secures reward data source. Too low increase manipulation risk. | Stakewise Multisig #1 |
-|  | setDistributor | Add or remove a distributor. Malicious distributor can front-runs or withholds distributions. | Stakewise Multisig #1 |
+| MerkleDistributor | setRewardsDelay | Set the new rewards delay. Tunes UX vs safety. Set too large stalls distributions. | Stakewise Multisig #1 |
+| MerkleDistributor | setRewardsMinOracles | Sets oracle threshold (if used). Secures reward data source. Too low increase manipulation risk. | Stakewise Multisig #1 |
+| MerkleDistributor | setDistributor | Add or remove a distributor. Malicious distributor can front-runs or withholds distributions. | Stakewise Multisig #1 |
 | EthMetaVaultFactory (proxy) | transferOwnership | Starts the ownership transfer of the contract to a new account. Governs who can create new meta vaults. | Stakewise Multisig #1 |
-|  | renounceOwnership | Leaves the contract without owner. Disable any functionality that is only available to the owner. | Stakewise Multisig #1 |
+| EthMetaVaultFactory (proxy) | renounceOwnership | Leaves the contract without owner. Disable any functionality that is only available to the owner. | Stakewise Multisig #1 |
 | EthMetaVault (implementation) | setAdmin | Assigns a new vault admin. This transfers full control over fee settings, sub-vaults, and configuration. A malicious or compromised admin can seize control of the MetaVault. | VaultAdmin |
-|  | setSubVaultsCurator | Sets the address allowed to add/eject sub-vaults. The curator controls the vault’s composition. A malicious curator can add unsafe sub-vaults or remove good ones. | VaultAdmin |
-|  | addSubVault | Adds a new sub-vault to the strategy. This changes where user assets may be allocated. Adding a malicious or faulty sub-vault can cause loss or misrouting of funds. | VaultAdmin |
-|  | ejectSubVault | Removes a sub-vault and starts its exit flow. Misuse can disrupt yield generation or cause long exit queues. | VaultAdmin |
-|  | setFeeRecipient | Sets the destination address receiving MetaVault fees. Misconfiguration could redirect fees to an attacker. | VaultAdmin |
-|  | setFeePercent | Updates the vault fee rate (bounded by internal caps). Improper increases raise user costs; combined with a malicious recipient, fees can be siphoned. | VaultAdmin |
+| EthMetaVault (implementation) | setSubVaultsCurator | Sets the address allowed to add/eject sub-vaults. The curator controls the vault’s composition. A malicious curator can add unsafe sub-vaults or remove good ones. | VaultAdmin |
+| EthMetaVault (implementation) | addSubVault | Adds a new sub-vault to the strategy. This changes where user assets may be allocated. Adding a malicious or faulty sub-vault can cause loss or misrouting of funds. | VaultAdmin |
+| EthMetaVault (implementation) | ejectSubVault | Removes a sub-vault and starts its exit flow. Misuse can disrupt yield generation or cause long exit queues. | VaultAdmin |
+| EthMetaVault (implementation) | setFeeRecipient | Sets the destination address receiving MetaVault fees. Misconfiguration could redirect fees to an attacker. | VaultAdmin |
+| EthMetaVault (implementation) | setFeePercent | Updates the vault fee rate (bounded by internal caps). Improper increases raise user costs; combined with a malicious recipient, fees can be siphoned. | VaultAdmin |
 | OsToken | transferOwnership / renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Governs who can set controller. Renouncing will disable any functionality that is only available to the owner. | StakeWise DAO |
-|  | mint / burn | Mint or burn new OsToken to an address. Malicious minting or burning can result in direct theft or arbitrary modification of user balances. | Controller (null) |
-|  | setController | Enable or disable the controller, ie who can mint/burn. Critical monetary policy hook. Pointing to malicious controller compromises entire token. | StakeWise DAO |
+| OsToken | mint / burn | Mint or burn new OsToken to an address. Malicious minting or burning can result in direct theft or arbitrary modification of user balances. | Controller (null) |
+| OsToken | setController | Enable or disable the controller, ie who can mint/burn. Critical monetary policy hook. Pointing to malicious controller compromises entire token. | StakeWise DAO |
 | OsTokenConfig | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Governs who can update redemption/params. Wrong owner can set toxic configs. | StakeWise DAO |
-|  | setRedeemer | Sets the OsToken redeemer address. Controls redemption pathway. Malicious redeemer misprices or blocks user exits. | StakeWise DAO |
-|  | updateConfig | Updates the OsToken minting and liquidating configuration values. Directly affects solvency & user safety. Misconfig can cause undercollateralization or forced liquidations. | StakeWise DAO |
+| OsTokenConfig | setRedeemer | Sets the OsToken redeemer address. Controls redemption pathway. Malicious redeemer misprices or blocks user exits. | StakeWise DAO |
+| OsTokenConfig | updateConfig | Updates the OsToken minting and liquidating configuration values. Directly affects solvency & user safety. Misconfig can cause undercollateralization or forced liquidations. | StakeWise DAO |
 | EthOsTokenRedeemer | setPositionsManager | Update the address of the positions manager. Delegates selection of backing positions. Malicious manager can lists junk collateral or removes valid ones. | Stakewise Multisig #1 |
-|  | proposeRedeemablePositions | Proposes new redeemable positions. Starts governance-style flow for redemptions. Spam/bad proposals can confuse or front-run governance. | positionsManager (0x00) |
-|  | acceptRedeemablePositions | Accepts the proposed redeemable positions. Activates a given redemption basket. Accepting bad basket lets insiders redeem against overvalued junk. | Stakewise Multisig #1 |
-|  | denyRedeemablePositions | Rejects proposals. Blocks unsafe baskets. Malicious denial can stall legitimate redemptions. | Stakewise Multisig #1 |
-|  | removeRedeemablePositions | Removes active positions. Updates redemption set over time. Removing good backing harms redeemers’ options. | Stakewise Multisig #1 |
-|  | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Shifts or freezes power over redemption rules. Wrong owner can freeze or rig redemptions. | Stakewise Multisig #1 |
+| EthOsTokenRedeemer | proposeRedeemablePositions | Proposes new redeemable positions. Starts governance-style flow for redemptions. Spam/bad proposals can confuse or front-run governance. | positionsManager (0x00) |
+| EthOsTokenRedeemer | acceptRedeemablePositions | Accepts the proposed redeemable positions. Activates a given redemption basket. Accepting bad basket lets insiders redeem against overvalued junk. | Stakewise Multisig #1 |
+| EthOsTokenRedeemer | denyRedeemablePositions | Rejects proposals. Blocks unsafe baskets. Malicious denial can stall legitimate redemptions. | Stakewise Multisig #1 |
+| EthOsTokenRedeemer | removeRedeemablePositions | Removes active positions. Updates redemption set over time. Removing good backing harms redeemers’ options. | Stakewise Multisig #1 |
+| EthOsTokenRedeemer | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Shifts or freezes power over redemption rules. Wrong owner can freeze or rig redemptions. | Stakewise Multisig #1 |
 | OsTokenVaultController | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Governs mint/burn & capacity of vault shares. Malicious owner can print shares or change economics unfavorably. | StakeWise DAO |
-|  | mintShares | Mint OsToken vault shares. Expands vault liabilities vs backing. Over-minting dilutes backing → insolvency. | StakeWise DAO |
-|  | burnShares | Burn shares for withdrawn assets. Shrinks liabilities. Incorrect burning can break accounting, reduce users balances. | StakeWise DAO |
-|  | setCapacity | Sets total shares / TVL. Risk control on vault size. Too high removes safeguards; too low griefs growth. | StakeWise DAO |
-|  | setTreasury | Sets treasury recipient address. Directs protocol share of yield/fees. Redirecting to attacker could drains protocol revenue. | StakeWise DAO |
-|  | setFeePercent | Adjusts protocol/vault fee percent. Changes yield split. Set to extreme rates effectively seizes yield from users. | StakeWise DAO |
-|  | setAvgRewardPerSecond | Updates average reward per second. Controls streaming rewards logic. Overstated rate = undercollateralization; understated = user underpayment. | Keeper |
-|  | setKeeper | Sets Keeper contract. Links to oracle/harvest logic. Pointing to malicious Keeper injects bad data. | StakeWise DAO |
+| OsTokenVaultController | mintShares | Mint OsToken vault shares. Expands vault liabilities vs backing. Over-minting dilutes backing → insolvency. | StakeWise DAO |
+| OsTokenVaultController | burnShares | Burn shares for withdrawn assets. Shrinks liabilities. Incorrect burning can break accounting, reduce users balances. | StakeWise DAO |
+| OsTokenVaultController | setCapacity | Sets total shares / TVL. Risk control on vault size. Too high removes safeguards; too low griefs growth. | StakeWise DAO |
+| OsTokenVaultController | setTreasury | Sets treasury recipient address. Directs protocol share of yield/fees. Redirecting to attacker could drains protocol revenue. | StakeWise DAO |
+| OsTokenVaultController | setFeePercent | Adjusts protocol/vault fee percent. Changes yield split. Set to extreme rates effectively seizes yield from users. | StakeWise DAO |
+| OsTokenVaultController | setAvgRewardPerSecond | Updates average reward per second. Controls streaming rewards logic. Overstated rate = undercollateralization; understated = user underpayment. | Keeper |
+| OsTokenVaultController | setKeeper | Sets Keeper contract. Links to oracle/harvest logic. Pointing to malicious Keeper injects bad data. | StakeWise DAO |
 | EthOsTokenVaultEscrow | setAuthenticator | Updates the authenticator: address that validates operations. Adds extra auth layer. Malicious authenticator can permit invalid operations. | StakeWise DAO |
-|  | updateLiqConfig | Updates the liquidation configuration. Tunes safety vs capital efficiency. Misconfig can trigger mass liquidations or allow bad debt. | StakeWise DAO |
-|  | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Shifts all above powers. Ownership to malicous adress = full control over liquidations/redemptions. | StakeWise DAO |
+| EthOsTokenVaultEscrow | updateLiqConfig | Updates the liquidation configuration. Tunes safety vs capital efficiency. Misconfig can trigger mass liquidations or allow bad debt. | StakeWise DAO |
+| EthOsTokenVaultEscrow | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Shifts all above powers. Ownership to malicous adress = full control over liquidations/redemptions. | StakeWise DAO |
 | VaultsRegistry | transferOwnership/renounceOwnership | Starts the ownership transfer of the contract to a new account or leaves the contract without owner. Controls master list of allowed vault impls/factories. Malicious owner whitelists could rogue implementations used across ecosystem. | StakeWise DAO |
-|  | addVaultImpl / removeVaultImpl | Add or remove Vault implementation contract. Defines which logic contracts are legitimate. Adding bad impl → users routed into exploitable vaults. | StakeWise DAO |
-|  | addFactory / removeFactory | add or remove the factory to the whitelist. Controls who can spawn official vaults. Malicious factory can mass-deploy backdoored vaults. | StakeWise DAO |
+| VaultsRegistry | addVaultImpl / removeVaultImpl | Add or remove Vault implementation contract. Defines which logic contracts are legitimate. Adding bad impl → users routed into exploitable vaults. | StakeWise DAO |
+| VaultsRegistry | addFactory / removeFactory | add or remove the factory to the whitelist. Controls who can spawn official vaults. Malicious factory can mass-deploy backdoored vaults. | StakeWise DAO |
