@@ -27,6 +27,11 @@ const chains = {
     fallback: "POL",
     alt: "Polygon Logo",
   },
+  Binance: {
+    logo: "https://icons.llamao.fi/icons/chains/rsz_binance?w=48&h=48",
+    fallback: "BNB",
+    alt: "BNB Smart Chain Logo",
+  },
 };
 
 export type ChainNames = keyof typeof chains | string;

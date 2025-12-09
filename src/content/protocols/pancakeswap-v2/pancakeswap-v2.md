@@ -2,7 +2,7 @@
 chain: "Binance"
 stage: 1
 reasons: []
-risks: ["L", "M", "L", "M", "M"]
+risks: ["-", "M", "L", "M", "M"]
 author: ["noemacee"]
 submission_date: "2025-05-13"
 publish_date: "2025-05-19"
@@ -54,9 +54,9 @@ PancakeSwap V2 is an automated market maker on BNB Smart Chain, a fork of [Unisw
 
 ## Chain
 
-This review is based on the BNB chain deployment
+This review is based on the BNB Smart Chain deployment. As an alternative Layer 1 blockchain, the chain criteria is not scored for this review and is not taken into account in the overall risk assessment.
 
-> Chain score: Low
+> Chain score: Unscored
 
 ## Upgradeability
 
