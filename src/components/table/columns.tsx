@@ -157,7 +157,7 @@ export const createColumns = (
     cell: ({ row }) => {
       let stage = row.getValue("stage") as Stage;
       const reasons = row.original.reasons as Reason[];
-      const risks = row.original.risks as RiskArray;
+      const risks = (row.original as Project & { risks?: RiskArray }).risks;
       const hasUnscoredChain = risks?.[0] === "-";
 
       // Don't render infrastructure scores in this column
