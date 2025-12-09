@@ -157,6 +157,8 @@ export const createColumns = (
     cell: ({ row }) => {
       let stage = row.getValue("stage") as Stage;
       const reasons = row.original.reasons as Reason[];
+      const risks = row.original.risks as RiskArray;
+      const hasUnscoredChain = risks?.[0] === "-";
 
       // Don't render infrastructure scores in this column
       if (stage?.toString().startsWith("I")) {
@@ -173,42 +175,43 @@ export const createColumns = (
       if (stage === undefined) {
         const getHighestStage = (subStages: Array<{stage: Stage}>): Stage => {
           if (subStages.length === 0) return "V";
-          
+
           const stagePriority: Record<Stage, number> = { "2": 5, "1": 4, "0": 3, "R": 2, "O": 1, "V": 0, "I0": 0, "I1": 0, "I2": 0 };
-          
+
           return subStages.reduce((highest, current) => {
             return (stagePriority[current.stage] || 0) > (stagePriority[highest] || 0) ? current.stage : highest;
           }, subStages[0]?.stage || ("V" as Stage));
         };
-        
+
         const highestStage = getHighestStage(subStages);
         const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
         const qualifiedStages = uniqueStages.filter(stage => stage !== "O");
-        
+
         // If multiple unique qualified stages, use stacked badges
         if (qualifiedStages.length > 1) {
           return (
             <div className="flex justify-start md:justify-center">
-              <StackedStageBadge 
+              <StackedStageBadge
                 stages={qualifiedStages}
-                reasons={reasons} 
+                reasons={reasons}
                 subStages={subStages}
                 className="scale-75 md:scale-100"
               />
             </div>
           );
         }
-        
+
         // Single stage or use traditional variable badge
         stage = uniqueStages.length === 1 ? highestStage : "V";
-        
+
         return (
           <div className="flex justify-start md:justify-center">
-            <StageBadge 
-              stage={stage} 
-              reasons={reasons} 
+            <StageBadge
+              stage={stage}
+              reasons={reasons}
               subStages={subStages}
               highestStage={highestStage}
+              hasUnscoredChain={hasUnscoredChain}
               className="scale-75 md:scale-100"
             />
           </div>
@@ -217,10 +220,11 @@ export const createColumns = (
 
       return (
         <div className="flex justify-start md:justify-center">
-          <StageBadge 
-            stage={stage} 
-            reasons={reasons} 
+          <StageBadge
+            stage={stage}
+            reasons={reasons}
             subStages={subStages}
+            hasUnscoredChain={hasUnscoredChain}
             className="scale-75 md:scale-100"
           />
         </div>

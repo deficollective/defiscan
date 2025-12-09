@@ -112,6 +112,7 @@ export interface BadgeProps {
   reasons?: Reason[];
   subStages?: SubStage[];
   highestStage?: Stage;
+  hasUnscoredChain?: boolean;
 }
 
 const stage_text = {
@@ -189,6 +190,7 @@ export function StageBadge({
   reasons,
   subStages = [],
   highestStage,
+  hasUnscoredChain,
 }: BadgeProps) {
   // For variable stages, show the highest stage label but keep variable color
   const displayStage = stage === "V" && highestStage ? highestStage : stage;
@@ -197,10 +199,17 @@ export function StageBadge({
   return (
     <HoverCard>
       <HoverCardTrigger className={className}>
-        <Badge 
-          stage={shouldUseVariableColor ? "V" : displayStage} 
-          displayText={shouldUseVariableColor ? stage_text[highestStage] : undefined}
-        />
+        <div className="relative">
+          <Badge
+            stage={shouldUseVariableColor ? "V" : displayStage}
+            displayText={shouldUseVariableColor ? stage_text[highestStage] : undefined}
+          />
+          {hasUnscoredChain && (
+            <span className="absolute -top-1 -right-2 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold leading-none">
+              !
+            </span>
+          )}
+        </div>
       </HoverCardTrigger>
       <HoverCardContent
         className="z-50 p-4 rounded-md bg-white"
@@ -211,6 +220,12 @@ export function StageBadge({
           <h3 className="mr-2">Stage of Decentralisation</h3>
 
           {buildStageInfo(stage, reasons)}
+
+          {hasUnscoredChain && (
+            <p className="mt-2 text-red-600 font-medium text-sm">
+              ⚠️ This stage does not take into account the chain risk, which is unscored for this deployment.
+            </p>
+          )}
 
           <SubStagesTable items={subStages} />
         </div>
