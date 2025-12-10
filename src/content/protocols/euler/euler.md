@@ -59,7 +59,7 @@ Euler V2 is deployed on various chains. This review is based on the Ethereum mai
 
 ## Upgradeability
 
-The Euler V2 protocol can be analyzed in a number of logical modules: _Factory-Level Bytecode Upgrades_, _Per-Vault Parameter Control_, _Oracle System_, _Fee Configuration_, _EulerEarn Vault System_, and _EulerSwap_. These modules contain permissioned functions that could result in the _theft or loss of user funds_, _loss of unclaimed yield_, or otherwise _materially affect the expected performance_ of the protocol. The control vectors are distributed across the [DAO](#security-council) multisig, [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) contract, [Euler Labs](#security-council), vault-specific governors, and various role-based permissions.
+The Euler V2 protocol can be analyzed in a number of logical modules: _Vault Factory_, _Vault Risk Management_, _Oracle System_, _Fee Configuration_, _EulerEarn Vault System_, and _EulerSwap_. These modules contain permissioned functions that could result in the _theft or loss of user funds_, _loss of unclaimed yield_, or otherwise _materially affect the expected performance_ of the protocol. The control vectors are distributed across the [DAO](#security-council) multisig, [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) contract, [Euler Labs](#security-council), vault-specific governors, and various role-based permissions.
 
 ### Factory-Level Bytecode Upgrades
 
