@@ -206,7 +206,7 @@ The liquidator receives vault shares at a discounted valuation. The borrow vault
 
 ### Modular Oracle Architecture
 
-Euler V2 implements a vendor-agnostic oracle system through the [EulerRouterFactory](https://etherscan.io/address/0x70B3f6F61b7Bf237DF04589DdAA842121072326A), enabling permissionless creation of independent oracle routers. Each router instance, such as [EulerRouter](https://etherscan.io/address/0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57), has its own governor and configuration. The architecture combines immutable Adapters implementing ERC-7726 IPriceOracle interface with configurable Routers dispatching vault price queries. Vault creators specify an oracle router address during deployment, which becomes immutable. Vaults call `getQuote(inAmount, base, quote)` on their router, which dispatches to registered adapters and returns price data.
+Euler V2 implements a vendor-agnostic oracle system through the [EulerRouterFactory](https://etherscan.io/address/0x70B3f6F61b7Bf237DF04589DdAA842121072326A), enabling permissionless creation of independent oracle routers. Each `EulerRouter` instance, such as [EulerRouter](https://etherscan.io/address/0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57), has its own governor and configuration. The architecture combines immutable Adapters implementing ERC-7726 IPriceOracle interface with configurable Routers dispatching vault price queries. Vault creators specify an oracle router address during deployment, which becomes immutable. Vaults call `getQuote(inAmount, base, quote)` on their router, which dispatches to registered adapters and returns price data.
 
 ### Oracle Adapters and Providers
 
