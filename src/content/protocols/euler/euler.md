@@ -206,7 +206,11 @@ The liquidator receives vault shares at a discounted valuation. The borrow vault
 
 ### Modular Oracle Architecture
 
-Euler V2 implements a vendor-agnostic oracle system through the [EulerRouterFactory](https://etherscan.io/address/0x70B3f6F61b7Bf237DF04589DdAA842121072326A), enabling permissionless creation of independent oracle routers. Each `EulerRouter` instance, such as [EulerRouter](https://etherscan.io/address/0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57), has its own governor and configuration. The architecture combines immutable Adapters implementing ERC-7726 IPriceOracle interface with configurable Routers dispatching vault price queries. Vault creators specify an oracle router address during deployment, which becomes immutable. Vaults call `getQuote(inAmount, base, quote)` on their router, which dispatches to registered adapters and returns price data.
+Euler V2 implements a vendor-agnostic oracle system through the [EulerRouterFactory](https://etherscan.io/address/0x70B3f6F61b7Bf237DF04589DdAA842121072326A), enabling permissionless creation of independent oracle routers. Each `EulerRouter` instance, such as this [EulerRouter](https://etherscan.io/address/0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57) deployment, has its own governor and configuration.
+
+Vault creators specify an `EulerRouter` address during deployment, which connection becomes immutable. Vaults call `getQuote(inAmount, base, quote)` on their `EulerRouter`, which dispatches to registered adapters and returns price data.
+
+Adapters are immutable contracts translating external data into ERC-7726 format. Active integrations include Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, and Resolv. The system supports push-based oracles like Chainlink with automatic updates, and pull-based oracles like Pyth requiring users to submit fresh data. CrossAdapters derive prices through sequential multiplication of two sources, while ERC-4626 adapters query `convertToAssets()` for share valuations.
 
 ### Oracle Registry and Validation
 
