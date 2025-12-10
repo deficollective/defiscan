@@ -75,7 +75,7 @@ The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e0267
 
 Each Vaults has configured an `EulerRouter` immutably which dispatches calls to get quotes for asset pricing to price adapters which wrap around price feeds from different vendors. Each `EulerRouter` is governed and exposes permissions to update the price adapters and therefore the underlying price feeds and pricing mechanisms. (**who owns the permissions in the EulerRouters?**)
 
- The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) whitelists approved oracle adapters through `add` and `revoke` functions.
+The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) maintains a reference list of approved oracle adapters through add and revoke functions, but the EulerRouter does not verify adapter approval before using configured oracles. However, users are informed on the Euler App if oracle adapters satisfy certain checks.
 
 ### Fee Configuration
 
