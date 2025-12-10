@@ -81,7 +81,7 @@ The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd
 
 ### EulerEarn Vault System
 
-EulerEarn vaults implement role-based permissions where the vault owner controls `setCurator`, `setIsAllocator`, `setFee`, and `setFeeRecipient`. The curator manages strategy selection through `submitCap` and `submitMarketRemoval`. Allocators control fund distribution via `reallocate`, `setSupplyQueue`, and `updateWithdrawQueue`. The [EulerEarnFactory2](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4) exposes `setPerspective` to update strategy validation rules for all EulerEarn vaults.
+EulerEarn Vaults receive user funds and allocate the funds to different EVaults. The EulerEarn Vaults are governed and managed by the respective owner. The owner can assign the role-based permissions to curators and allocators. The curator manages risk of the Earn Vault strategy adding EVaults and supply caps. Allocators control and execute fund distribution to the EVaults that the curator has enabled. The [EulerEarnFactory2](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4) exposes `setPerspective` to update strategy validation rules for all EulerEarn vaults.
 
 ### EulerSwap
 
