@@ -63,7 +63,7 @@ The Euler V2 protocol can be analyzed in a number of logical modules: _Vault Fac
 
 ### Vault Factory
 
-The [GenericFactory](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e) contract's `setImplementation` function upgrades the implementation logic for all BeaconProxy vaults simultaneously. Each BeaconProxy queries the factory's `implementation()` function on every call to fetch the current [EVault](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D) address. The [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) holds exclusive authority over this function, protected by a 4-day timelock through the [eVaultFactoryTimelockController](https://etherscan.io/address/0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968). The factory also exposes `setUpgradeAdmin` to transfer complete factory control.
+Vaults are created through the [GenericFactory](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e). Vaults can be configured to be upgradeable or non-upgradeable. If upgraded, all upgradeable Vaults are upgraded simultaneously. The [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) holds exclusive authority to upgrade, but which is protected by a 4-day timelock through the [eVaultFactoryTimelockController](https://etherscan.io/address/0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968). The permission to upgrade remains transferable.
 
 ### Per-Vault Parameter Control
 
