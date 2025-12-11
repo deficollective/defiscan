@@ -223,9 +223,6 @@ The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA0
 
 Euler V2 implements a multi-layered governance architecture with per-vault governance, factory-level upgrades, and global configuration via [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b). The [DAO multisig](https://etherscan.io/address/0xcAD001c30E96765aC90307669d578219D4fb1DCe) (4/8 threshold) operates through three TimelockController contracts: 48-hour [AdminTimelock](https://etherscan.io/address/0xBfeE2D937FB9223FFD65b7cDF607bd1DA9B97E59) for role management, 48-hour [WildcardTimelock](https://etherscan.io/address/0x1b8C367aE56656b1D0901b2ADd1AD3226fF74f5a) for parameter adjustments, and 4-day [FactoryTimelock](https://etherscan.io/address/0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968) for protocol upgrades.
 
-### Per-Vault Governance Structure
-
-Each vault stores a `governorAdmin` address controlling vault-specific parameters (LTV ratios, interest rate models, caps, hooks, fees) via `governorOnly` protected functions. DAO-managed vaults use [GovernorAccessControlEmergency](https://etherscan.io/address/0x35400831044167E9E2DE613d26515eeE37e30a1b) as `governorAdmin`, enforcing 48-hour timelock delays. Private vaults can use an EOA or multisig for direct control without delays.
 
 ### Risk Management and Stewards
 
