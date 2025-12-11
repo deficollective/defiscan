@@ -81,10 +81,6 @@ The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA0
 
 The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls global fee settings through `setProtocolFeeShare`, `setInterestFeeRange`, and vault-specific overrides, which affect all existing user positions immediately. Per-vault fee configuration is available through `setFeeReceiver` and `setInterestFee` on individual EVaults.
 
-### EulerEarn Vault System
-
-EulerEarn Vaults receive user funds and allocate the funds to different EVaults. The EulerEarn Vaults are governed and managed by the respective owner. The owner can assign the role-based permissions to curators and allocators. The curator manages risk of the Earn Vault strategy adding EVaults and supply caps. Allocators control and execute fund distribution to the EVaults that the curator has enabled. The [EulerEarnFactory2](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4) exposes `setPerspective` to update strategy validation rules for all EulerEarn vaults.
-
 ### EulerSwap
 
 The [EulerSwapFactory](https://etherscan.io/address/0xb013be1D0D380C13B58e889f412895970A2Cf228) controls swap fee configuration through `setProtocolFee` and `setProtocolFeeRecipient` for all EulerSwap pools.
