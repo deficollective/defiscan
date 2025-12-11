@@ -101,6 +101,11 @@ Pull-based oracles like Pyth introduce operational dependencies where transactio
 
 ## Exit Window
 
+Euler V2 implements timelock mechanisms for governance functions, but all protections fall below the 7-day minimum threshold required for _Medium_ _Exit Window_ score. The maximum delay for DAO-managed operations is 4 days for factory upgrades and 48 hours for vault parameter changes, oracle configuration, and EulerEarn governance.
+
+For privately-managed vaults, the _Exit Window_ depends entirely on the controlling entity. Private vault governors can modify risk parameters and oracle settings with potentially no _Exit Window_. Similarly, privately-managed EulerEarn vaults can operate without any _Exit Window_, allowing immediate changes to strategy allocations.
+
+
 Euler V2 implements timelock mechanisms for some governance functions but lacks comprehensive exit window protection for critical operations. While the protocol uses TimelockController contracts with 48-hour and 4-day delays for certain administrative functions, many critical permissions can be executed immediately without any delay.
 
 The most critical function that bypasses exit windows entirely is the `setImplementation` function of the [GenericFactory](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e) contract which can immediately upgrade the implementation for all upgradeable vaults (those deployed as beacon proxies) across the protocol. However, this only affects vaults that were created with the upgradeable flag set to true, not immutable vaults (minimal proxies).
