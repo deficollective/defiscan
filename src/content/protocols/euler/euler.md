@@ -204,7 +204,7 @@ Adapters are immutable contracts translating external data into ERC-7726 format.
 ### Oracle Registry and Validation
 
 The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintains a reference list of approved oracle adapters for informational purposes. This registry is used by [OracleLens](https://etherscan.io/address/0x0C47736aaBEE757AB8C8F60776741e39DBf3F183) to provide approved adapter lists to frontends and dashboards via getValidAdapters(), but each `EulerRouter` does not verify adapter approval before dispatching queries from the `EVault`. Router governors can install unapproved oracle adapters via govSetConfig, users rely on the frontend to get information regarding the passed or not passed checks from the registry whitelist.
- [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) controls the registry via add and revoke. Each router has independent governance controlling govSetConfig, govSetResolvedVault, and govSetFallbackOracle, separate from vault governance.
+[Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) controls the registry via add and revoke. Each router has its own governor controlling govSetConfig, govSetResolvedVault, and govSetFallbackOracle. The router governor and vault governor are often the same entity.
 
 ![Oracle System and Price Feeds](../diagrams/Euler_v2_Oracle_System_and_Price_Feeds.png)
 
