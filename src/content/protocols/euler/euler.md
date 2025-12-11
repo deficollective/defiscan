@@ -101,18 +101,6 @@ Pull-based oracles like Pyth introduce operational dependencies where transactio
 
 ## Exit Window
 
-Euler V2 implements timelock mechanisms for governance functions, but all protections fall below the 7-day minimum threshold required for _Medium_ _Exit Window_ score. The maximum delay for DAO-managed operations is 4 days for factory upgrades and 48 hours for vault parameter changes, oracle configuration, and EulerEarn governance.
-
-For privately-managed vaults, the _Exit Window_ depends entirely on the controlling entity. Private vault governors can modify risk parameters and oracle settings with potentially no _Exit Window_. Similarly, privately-managed EulerEarn vaults can operate without any _Exit Window_, allowing immediate changes to strategy allocations.
-
-
-Euler V2 implements timelock mechanisms for some governance functions but lacks comprehensive exit window protection for critical operations. While the protocol uses TimelockController contracts with 48-hour and 4-day delays for certain administrative functions, many critical permissions can be executed immediately without any delay.
-
-The most critical function that bypasses exit windows entirely is the `setImplementation` function of the [GenericFactory](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e) contract which can immediately upgrade the implementation for all upgradeable vaults (those deployed as beacon proxies) across the protocol. However, this only affects vaults that were created with the upgradeable flag set to true, not immutable vaults (minimal proxies).
-
-Additionally, numerous other functions can be executed immediately without delay, including the `pause` function of the [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) contract which can freeze all vault operations instantly, vault parameter functions like the `setLTV`, `setInterestRateModel` functions of the `EVault` contract that can be modified without delay by vault governors, and protocol-wide configuration functions like the `setProtocolFeeShare` function of the [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract which can redirect all yield to attackers and oracle configuration functions like the `govSetConfig` function of the [EulerRouter](https://etherscan.io/address/0x8ab93f4ee16fb9c0086651a85f941b8a8716cd57) contract which can switch to compromised oracles from the approved registry.
-
-The limited timelock protections (48-hour and 4-day delays) apply only to a subset of administrative functions and fall well below the 7-day minimum threshold required for medium risk classification.
 
 > Exit Window score: High
 
