@@ -63,7 +63,7 @@ The Euler V2 protocol contains permissioned functions across multiple modules th
 
 ### Vault Factory
 
-Vaults are created through the [GenericFactory](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e). Vaults can be configured to be upgradeable or non-upgradeable. If upgraded, all upgradeable Vaults are upgraded simultaneously. The [FactoryGovernor](https://etherscan.io/address/0x2F13256E04022d6356d8CE8C53C7364e13DC1f3d) holds exclusive authority to upgrade, but which is protected by a 4-day timelock through the [eVaultFactoryTimelockController](https://etherscan.io/address/0xfb034c1C6c7F42171b2d1Cb8486E0f43ED07A968). The permission to upgrade remains transferable.
+`EVaults` are created by users via the Factory contract. At creation, users decide whether the newly deployed `EVault` is immutable or upgradeable. The [Euler DAO](#security-council) multisig can do the upgrade of all upgradeable `EVaults`. If maliciously upgraded, this can lead to _loss of funds_ for all users deposited across upgradeable vaults, as upgrades are executed across all upgradeable `EVaults` at once. The upgrade is protected by a 4-day timelock.
 
 ### Per-Vault Parameter Control
 
