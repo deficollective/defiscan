@@ -67,7 +67,7 @@ The Euler V2 protocol contains permissioned functions across multiple modules th
 
 ### Per-Vault Parameter Control
 
-Vaults can either be governed or ungoverned. While ungoverned Vaults have immutable risk parameters, governed Vaults assign the `governorAdmin` role controlling vault-specific risk parameters like borrow and supply caps, LTV, and interest rate models through permissioned functions. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults route these permissions through [GovernorAccessControlEmergency](https://etherscan.io/address/0x35400831044167E9E2DE613d26515eeE37e30a1b) with 48-hour timelock delays via [AdminTimelock](https://etherscan.io/address/0xBfeE2D937FB9223FFD65b7cDF607bd1DA9B97E59) and [WildcardTimelock](https://etherscan.io/address/0x1b8C367aE56656b1D0901b2ADd1AD3226fF74f5a). Private vault creators can assign governance to an EOA or multisig for direct control or deploy their own `GovernorAccessControlEmergency` contract.
+Vaults can either be governed or ungoverned. Governed EVaults allow their governor to accept new collateral types and adjust risk parameters. Misconfiguration or acceptance of malicious collateral can cause _loss of funds_. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults have a 48-hour timelock protection. Privately-managed vaults may have no timelock protection.
 
 The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e02673896a976d) multisig (3/5) holds emergency roles that bypass the 48-hour timelock for immediate risk-reducing actions.
 
