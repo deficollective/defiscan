@@ -47,7 +47,7 @@ stage_requirements:
 
 # Summary
 
-Euler V2 is a permissioned, decentralized lending and borrowing protocol deployed on Ethereum. It allows users to deposit assets as collateral, borrow against them, and earn interest via an on-chain interest rate model. The protocol employs smart contracts such as EVaults, a generic factory, and a router to handle asset flows, and integrates with oracles and governance modules to manage risk and updates.
+Euler V2 is a lending and borrowing protocol deployed on Ethereum. It allows users to deposit assets as collateral, borrow against them, and earn interest via an on-chain interest rate model. The protocol employs smart contracts such as EVaults, a generic factory, and a router to handle asset flows, and integrates with oracles and governance modules to manage risk and updates.
 
 # Ratings
 
