@@ -8,22 +8,26 @@ export default function App({ children }: PropsWithChildren) {
     <div className="flex min-h-dvh flex-col">
       <Navbar />
       <main className="container flex-1 space-y-6 pt-6 pb-16">{children}</main>
-      
+
       {/* Configuration for the announcement banner */}
       <AnnouncementBanner
-        show={false} // Set to true to show the banner
+        show={true} // Set to true to show the banner
         text={
           <>
-            🎉 New feature: This banner shows cool information! 
-            <a href="/learn-more" className="underline hover:no-underline ml-1">
-              Learn more
+            <a
+              href="https://giveth.io/cause/defi-transparency-decentralization"
+              target="_blank"
+              className="underline hover:no-underline ml-1"
+            >
+              🌟 Support DeFiScan on Giveth !
             </a>
           </>
         }
-        backgroundColor="#ffd31b" // Yellow background
-        textColor="black"
+        backgroundColor="#251d35ff" //"#5cdbd9" // colored background
+        useGradientText={true}
+        textColor="#434a50ff" // if no gradient, will use this text color
       />
-      
+
       <Footer />
     </div>
   );

@@ -36,7 +36,9 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/learn-more", label: "Learn more" },
+    { href: "/blog", label: "Blog" },
+    { href: "/about", label: "About" },
+    { href: "/framework", label: "Framework" },
     { href: "/submit-review", label: "Submit review" },
   ];
 

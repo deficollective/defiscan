@@ -74,7 +74,6 @@ At the time of writing there are 26 public oracles curated by Chronicle Labs dep
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | ValidatorRegistry_2          | [0xd7825f22d61e09fffdf49213051044e57e1d0b8d](https://etherscan.io/address/0xd7825f22d61e09fffdf49213051044e57e1d0b8d) |
 | TimelockController           | [0x40c33e796be78148cec983c2202335a0962d172a](https://etherscan.io/address/0x40c33e796be78148cec983c2202335a0962d172a) |
-| Chronicle Name               | Etherscan Link                                                                                                        |
 | Chronicle_BTC_USD_3          | [0x24C392CDbF32Cf911B258981a66d5541d85269ce](https://etherscan.io/address/0x24C392CDbF32Cf911B258981a66d5541d85269ce) |
 | Chronicle_CBBTC_USDC_1       | [0x3131E6a68BFb42976Ef574AF042f67d322098747](https://etherscan.io/address/0x3131E6a68BFb42976Ef574AF042f67d322098747) |
 | Chronicle_EBTCbadger_ETH_1   | [0xEB656424e16a8092592a74e6CD93cFd212204495](https://etherscan.io/address/0xEB656424e16a8092592a74e6CD93cFd212204495) |

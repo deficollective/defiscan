@@ -47,7 +47,7 @@ The report is concerned with the Aave V3 _Core_ instance deployed on Ethereum ma
 ## Upgradeability
 
 The Aave v3 protocol can be analyzed in a number of logical modules: _Core Lend & Borrow_, _Reserve Parameters_, _Treasury, Aave Ecosystem Reserves & Rewards_, _GHO Stablecoin_ and _Aave Governance_. Each module exposes various degrees of control as explained in more detail below. Overall, these control vectors could result in the loss of user funds, loss of unclaimed yield or otherwise materially affect the expected performance of the protocol. All the control vectors, apart from the [Emergency Admin](#security-council)'s priviledge, are behind governance vote or if permissions are given to a multisig account, the permission is successfully restricted to prevent mis-use by using steward contracts.
-If the [Emergency Admin](#security-council) adhered to the [security council standards](/learn-more#security-council-requirements), the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ upgradeability score.
+If the [Emergency Admin](#security-council) adhered to the [security council standards](/framework#security-council-requirements), the _Upgradeability Risk_ would achieve a _medium_ score. With the current setup the Aave V3 _core instance_ achieves a _High_ upgradeability score.
 
 ### Core Lending & Borrowing
 
