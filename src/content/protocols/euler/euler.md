@@ -275,6 +275,13 @@ EulerEarn implements a four-level permission hierarchy via Ownable2Step:
 
 Certain functions accept multiple roles: `setSupplyQueue`, `updateWithdrawQueue`, and `reallocate` accept `Allocator`, `Curator`, or `Owner`. `revokePendingCap` and `revokePendingMarketRemoval` accept `Curator`, `Guardian`, or `Owner`.
 
+### Strategy Whitelisting
+
+The [Euler DAO](#security-council) controls which whitelist (Perspective) is used by all `EulerEarn` vaults via [EulerEarnFactory2](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4). The current configuration uses [OneOfMetaPerspective](https://etherscan.io/address/0x692c65588F3862040D968B362c2d7876a5A2Adb9), which accepts vaults approved by either [GovernedPerspective](https://etherscan.io/address/0x6912E3A7d5a3b26548cEE7BC4663311De9E2c735) or [EVKFactoryPerspective](https://etherscan.io/address/0xB30f23bc5F93F097B3A699f71B0b1718Fc82e182).
+
+[GovernedPerspective](https://etherscan.io/address/0x6912E3A7d5a3b26548cEE7BC4663311De9E2c735) allows [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) to manually whitelist vaults via `perspectiveVerify` and remove them via `perspectiveUnverify`. [EVKFactoryPerspective](https://etherscan.io/address/0xB30f23bc5F93F097B3A699f71B0b1718Fc82e182) automatically approves all vaults deployed by the [GenericFactory](https://etherscan.io/address/0x29a56a1b8214D9Cf7c5561811750D5cBDb45CC8e).
+
+In practice, all factory-deployed `EVaults` are automatically eligible for `EulerEarn` strategies. Curators can only add strategies from `EVaults` that appear on the configured whitelist. A compromised whitelist alone cannot cause _loss of funds_ as it requires both a compromised whitelist and a malicious curator to enable dangerous strategies.
 ### User Deposits and Withdrawals
 
 Users deposit assets via standard ERC-4626 interface. The vault mints shares proportional to current vault value and allocates deposits according to the supply queue, respecting per-strategy caps. Each strategy corresponds to an underlying [EVault (Implementation)](https://etherscan.io/address/0x8Ff1C814719096b61aBf00Bb46EAd0c9A529Dd7D) eligible to receive allocations up to its individual cap.
