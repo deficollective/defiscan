@@ -76,7 +76,9 @@ The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e0267
 Each `EVault` has an oracle router configured at creation. The router dispatches requests to different price sources. The router governor can update which price feeds are used to price assets. The router governor and vault governor are often the same entity. Misconfiguration of oracle settings can lead to _loss of funds_ through unfair liquidations or excessive borrowing.
 
 The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) maintains a reference list of approved oracle adapters through add and revoke functions, but the EulerRouter does not verify adapter approval before using configured oracles. However, users are informed on the Euler App if oracle adapters satisfy certain checks.
+### Listing of EVaults for EulerEarn Vaults
 
+The [Euler DAO](#security-council) controls which whitelist (Perspective) is used by all `EulerEarn` vaults via `EulerEarnFactory2` to check whether an `EVault` is accepted to deposit into. If unsafe `EVaults` are accepted, this can lead to _loss of funds_. The initial configuration uses `EVKFactoryPerspective`, which automatically approves all `EVaults` deployed by the factory. If the DAO switches to `GovernedPerspective`, [Euler Labs](#security-council) would manually control which `EVaults` can be used as strategies.
 ### Fee Configuration
 
 The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls global fee settings through `setProtocolFeeShare`, `setInterestFeeRange`, and vault-specific overrides, which affect all existing user positions immediately. Per-vault fee configuration is available through `setFeeReceiver` and `setInterestFee` on individual EVaults.
