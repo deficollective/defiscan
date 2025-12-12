@@ -417,7 +417,7 @@ Risk Steward: [CapRiskSteward](https://etherscan.io/address/0xFE56cAa36DA676364e
 | EulerEarnFactory                                                              | [0x9a20d3C0c283646e9701a049a2f8C152Bc1e3427](https://etherscan.io/address/0x9a20d3C0c283646e9701a049a2f8C152Bc1e3427) |
 | EulerEarnFactory2                                                             | [0x59709B029B140C853FE28d277f83C3a65e308aF4](https://etherscan.io/address/0x59709B029B140C853FE28d277f83C3a65e308aF4) |
 | EulerEarn (Implementation)                                                    | [0xBa42141648dFD74388f3541C1d80fa9387043Da9](https://etherscan.io/address/0xBa42141648dFD74388f3541C1d80fa9387043Da9) |
-| EulerEarn (Proxy Example)                                                     | [0xBa42141648dFD74388f3541C1d80fa9387043Da9](https://etherscan.io/address/0xBa42141648dFD74388f3541C1d80fa9387043Da9) |
+| EulerEarn (Proxy Example)                                                     | [0xe90e20d25f5c58e5cc960febbdc8815878917cfa](https://etherscan.io/address/0xe90e20d25f5c58e5cc960febbdc8815878917cfa) |
 | EthereumVaultConnector (EVC)                                                  | [0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383](https://etherscan.io/address/0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383) |
 | Permit2                                                                       | [0x000000000022D473030F116dDEE9F6B43aC78BA3](https://etherscan.io/address/0x000000000022D473030F116dDEE9F6B43aC78BA3) |
 | ProtocolConfig                                                                | [0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) |
