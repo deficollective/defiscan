@@ -149,6 +149,7 @@ export default async function ProtocolPageItem({
               stage={protocol.stage! as Stage}
               className="h-8 mb-2 self-start"
               reasons={protocol.reasons}
+              hasUnscoredChain={protocol.risks?.[0] === "-"}
             />
             <ProtocolLinks protocol={protocol} />
           </div>

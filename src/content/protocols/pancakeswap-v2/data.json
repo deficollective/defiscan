@@ -1,0 +1,10 @@
+{
+  "id": "pancakeswap-v2",
+  "protocol": "PancakeSwap V2",
+  "website": "https://pancakeswap.finance/",
+  "defillama_slug": ["pancakeswap-amm"],
+  "socials": {
+    "x": "https://x.com/PancakeSwap"
+  },
+  "github": ["https://github.com/pancakeswap"]
+}

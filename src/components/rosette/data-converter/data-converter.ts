@@ -8,6 +8,7 @@ const riskMatrix = {
     L: "Chain is sufficiently decentralized.",
     M: "Chain is on the journey to become sufficiently decentralized.",
     H: "Chain is not sufficiently decentralized.",
+    "-": "Chain criteria is not scored for this deployment.",
   },
   Upgradeability: {
     L: "Possible updates do not materially change the system (or result in the theft or loss of user funds and unclaimed yield)",
@@ -33,13 +34,14 @@ const riskMatrix = {
 
 // Parse the risks string into an array
 
-type Level = "H" | "M" | "L";
+type Level = "H" | "M" | "L" | "-";
 
 // Define a mapping from Level to Sentiment
 const levelToSentimentMap: Record<Level, Sentiment> = {
   H: "high",
   M: "medium",
   L: "low",
+  "-": "neutral",
 };
 
 type Category =
@@ -61,10 +63,11 @@ export function getRiskDescriptions(risks: RiskArray | undefined): {
   if (!risks) return [];
   return risks.map((level: RiskLevel, index: number) => {
     const category = categories[index];
+    const categoryMatrix = riskMatrix[category] as Record<string, string>;
     return {
       name: category,
       sentiment: levelToSentimentMap[level],
-      description: riskMatrix[category][level], // No more error here
+      description: categoryMatrix[level] ?? "Under review",
     };
   });
 }

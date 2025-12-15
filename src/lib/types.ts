@@ -1,4 +1,4 @@
-export type RiskLevel = "L" | "M" | "H";
+export type RiskLevel = "L" | "M" | "H" | "-";
 export type Stage = "O" | "V" | "R" | 0 | 1 | 2 | "I0" | "I1" | "I2";
 
 export enum STAGE {

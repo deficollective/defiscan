@@ -73,7 +73,7 @@ const reviews = defineCollection({
         .or(s.literal("I1"))
         .or(s.literal("I2")),
       risks: s.tuple([
-        s.literal("L").or(s.literal("M")).or(s.literal("H")),
+        s.literal("L").or(s.literal("M")).or(s.literal("H")).or(s.literal("-")),  // Chain (can be unscored)
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
         s.literal("L").or(s.literal("M")).or(s.literal("H")),
         s.literal("L").or(s.literal("M")).or(s.literal("H")),

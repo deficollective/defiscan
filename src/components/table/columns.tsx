@@ -197,6 +197,8 @@ export const createColumns = (
       // Use the original approach - if there's no direct stage, it means multiple reviews
       let stage = (row.original as any).stage as Stage;
       const reasons = row.original.reasons as Reason[];
+      const risks = (row.original as Project & { risks?: RiskArray }).risks;
+      const hasUnscoredChain = risks?.[0] === "-";
 
       // Don't render infrastructure scores in this column
       if (stage?.toString().startsWith("I")) {
@@ -215,31 +217,32 @@ export const createColumns = (
         const highestStage = getHighestStage(stages);
         const uniqueStages = Array.from(new Set(subStages.map(s => s.stage)));
         const qualifiedStages = uniqueStages.filter(stage => stage !== "O");
-        
+
         // If multiple unique qualified stages, use stacked badges
         if (qualifiedStages.length > 1) {
           return (
             <div className="flex justify-start md:justify-center">
-              <StackedStageBadge 
+              <StackedStageBadge
                 stages={qualifiedStages}
-                reasons={reasons} 
+                reasons={reasons}
                 subStages={subStages}
                 className="scale-75 md:scale-100"
               />
             </div>
           );
         }
-        
+
         // Single stage or use traditional variable badge
         stage = uniqueStages.length === 1 ? highestStage : "V";
-        
+
         return (
           <div className="flex justify-start md:justify-center">
-            <StageBadge 
-              stage={stage} 
-              reasons={reasons} 
+            <StageBadge
+              stage={stage}
+              reasons={reasons}
               subStages={subStages}
               highestStage={highestStage}
+              hasUnscoredChain={hasUnscoredChain}
               className="scale-75 md:scale-100"
             />
           </div>
@@ -248,10 +251,11 @@ export const createColumns = (
 
       return (
         <div className="flex justify-start md:justify-center">
-          <StageBadge 
-            stage={stage} 
-            reasons={reasons} 
+          <StageBadge
+            stage={stage}
+            reasons={reasons}
             subStages={subStages}
+            hasUnscoredChain={hasUnscoredChain}
             className="scale-75 md:scale-100"
           />
         </div>

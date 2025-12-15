@@ -30,6 +30,7 @@ const riskDescriptions: Record<Dimension, Record<string, string>> = {
     low: "Chain is sufficiently decentralized.",
     medium: "Chain is on the journey to become sufficiently decentralized.",
     high: "Chain is not sufficiently decentralized.",
+    neutral: "Chain criteria is not scored for this deployment.",
   },
   Upgradeability: {
     low: "Possible updates do not materially change the system (or result in the theft or loss of user funds and unclaimed yield)",
