@@ -63,7 +63,7 @@ The Euler V2 protocol contains permissioned functions across multiple modules th
 
 ### Vault Factory
 
-`EVaults` are created by users via the Factory contract. At creation, users decide whether the newly deployed `EVault` is immutable or upgradeable. The [Euler DAO](#security-council) multisig can do the upgrade of all upgradeable `EVaults`. If maliciously upgraded, this can lead to _loss of funds_ for all users deposited across upgradeable vaults, as upgrades are executed across all upgradeable `EVaults` at once. The upgrade is protected by a 4-day timelock.
+`EVaults` are created by users via the Factory contract. At creation, users decide whether the newly deployed `EVault` is immutable or upgradeable. The [Euler DAO](#security-council) multisig can upgrade all upgradeable `EVaults`. If maliciously upgraded, this can lead to _loss of funds_ for all users deposited across upgradeable vaults, as upgrades are executed across all upgradeable `EVaults` at once. The upgrade is protected by a 4-day timelock.
 
 ### Per-Vault Parameter Control
 
