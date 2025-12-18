@@ -67,7 +67,7 @@ The Euler V2 protocol contains permissioned functions across multiple modules th
 
 ### Per-Vault Parameter Control
 
-Vaults can either be governed or ungoverned. Governed EVaults allow their governor to accept new collateral types and adjust risk parameters. Misconfiguration or acceptance of malicious collateral can cause _loss of funds_. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults have a 48-hour timelock protection. Privately-managed vaults may have no timelock protection.
+Vaults can either be governed or ungoverned. Governors of Vaults can accept new collateral assets and adjust risk parameters. Misconfiguration or acceptance of malicious collateral can cause _loss of funds_. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults have a 48-hour timelock protection. Privately-managed vaults may have no timelock protection.
 
 The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e02673896a976d) multisig (3/5) holds emergency roles that bypass the 48-hour timelock for immediate risk-reducing actions.
 
