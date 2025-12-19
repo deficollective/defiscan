@@ -95,7 +95,22 @@ With the current setup, the timelock protections (48-hour and 4-day delays) fall
 
 Euler V2 relies on external oracle providers selected by the `EVault` creators and risk curators for all price data required for collateral valuations and liquidation decisions.
 
-Vault creators are free to choose appropriate price oracle implementations from various providers including Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, and Resolv, thus delegating responsibility to individual actors.
+Vault creators are free to choose a price feed from any of the vendors which includes Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, Resolv and many more.
+
+The price feeds are wrapped in an adapter that provides a standardized interface to any of the vaults. Vault creators choose from the existing wrappers or deploy their own around any vendor.
+
+Most wrappers do basic checks as liveness and check if the price is non-negative, but do not provide more checks and thus do not guarantee a true price reflecting active markets.
+
+Adapters used by a Vault can be replaced by the Vault owner or Router Governor, in case the oracle reverts permanently or becomes unreliable, users trust that the permission owners replace the faulty oracle in due time. If the price feed reverts the funds are stuck until the price feed is replaced. This could lead to temporary or permanent _loss of funds_.
+
+** what is the % of adapters that are governed by euler **
+XX % of the adapters are governed by Euler DAO, for the remaining adapters users trust 3rd-parties to choose oracles that are trustworthy and to replace the oracles in case of failure.
+
+For all adapters that point to chainlink price feeds (xx %), a false price could be reported by the chainlink multisig exercising an upgrade on the price feeds. This could lead to wrong prices and _loss of user funds_. Their multisig does not comply with Security Council requirements. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
+
+This potential impact on xx% of Euler's TVL results in a Medium centralization risk from Chainlink.
+
+Overall Euler V2 vaults rely on a manifold of vendors and a manifold of 3rd party permission owner to install and route to these vendors.
 
 
 > Autonomy score: High
