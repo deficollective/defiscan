@@ -97,11 +97,6 @@ Euler V2 relies on external oracle providers selected by the `EVault` creators a
 
 Vault creators are free to choose appropriate price oracle implementations from various providers including Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, and Resolv, thus delegating responsibility to individual actors.
 
-However, around 30% of the available adapters use Chainlink feeds as an underlying source. The adapter do basic checks as liveness and check of price above 0, but do not provide more checks. **this does not reflect the actual usage of the Vaults**
-
-Those feeds are controlled in a centralized manner, a multisig account not complying with Security Council requirements, the impact of a failure has to be assessed nonetheless. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
-
-An unintended upgrade of the Chainlink price feed contracts could result in stale or inaccurate prices being reported. Since the Chainlink adapter provided by Euler reverts on a negative price reported by a Chainlink feed, this failure could result in the permanent freezing of funds in affected vault. With a potential impact on more than xx% of Euler Vaults, or more than xx% of Euler's TVL. This potential impact on xx% of Euler's TVL results in a Medium centralization risk from Chainlink.
 
 > Autonomy score: High
 
