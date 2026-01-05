@@ -81,7 +81,17 @@ With the current setup, the timelock protections (48-hour and 4-day delays) fall
 > Upgradeability score: High
 
 ## Autonomy
+### Per-Vault Parameter Control
 
+Vaults can either be governed or ungoverned. Governors of Vaults can accept new collateral assets and adjust risk parameters. Misconfiguration or acceptance of malicious collateral can cause _loss of funds_. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults have a 48-hour timelock protection. Privately-managed vaults may have no timelock protection.
+
+The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e02673896a976d) multisig (3/5) holds emergency roles that bypass the 48-hour timelock for immediate risk-reducing actions.
+
+### Oracle System
+
+Each `EVault` has an oracle router configured at creation. The router dispatches requests for quotes to different price sources wrapped in adapters. The router governor can update which price feeds are used to price assets. The router governor and vault governor are often the same entity. Misconfiguration of oracle settings can lead to _loss of funds_ through unfair liquidations or excessive borrowing.
+
+The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) maintains a reference list of approved oracle adapters, but during user transactions routers do not verify adapter approval before using configured oracles. However, users are informed on the Euler App if oracle adapters satisfy certain checks.
 Euler V2 relies on external oracle providers selected by the `EVault` creators and risk curators for all price data required for collateral valuations and liquidation decisions.
 
 Router Governor (most times equal to Vault creator/governor) are free to choose a price feed from any of the vendors which includes Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, Resolv and many more.
