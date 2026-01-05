@@ -65,17 +65,6 @@ The Euler V2 protocol contains permissioned functions across multiple modules th
 
 `EVaults` are created by users via the Factory contract. At creation, users decide whether the newly deployed `EVault` is immutable or upgradeable. The [Euler DAO](#security-council) multisig can upgrade all upgradeable `EVaults`. If maliciously upgraded, this can lead to _loss of funds_ for all users deposited across upgradeable vaults, as upgrades are executed across all upgradeable `EVaults` at once. The upgrade is protected by a 4-day timelock.
 
-### Per-Vault Parameter Control
-
-Vaults can either be governed or ungoverned. Governors of Vaults can accept new collateral assets and adjust risk parameters. Misconfiguration or acceptance of malicious collateral can cause _loss of funds_. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults have a 48-hour timelock protection. Privately-managed vaults may have no timelock protection.
-
-The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e02673896a976d) multisig (3/5) holds emergency roles that bypass the 48-hour timelock for immediate risk-reducing actions.
-
-### Oracle System
-
-Each `EVault` has an oracle router configured at creation. The router dispatches requests for quotes to different price sources wrapped in adapters. The router governor can update which price feeds are used to price assets. The router governor and vault governor are often the same entity. Misconfiguration of oracle settings can lead to _loss of funds_ through unfair liquidations or excessive borrowing.
-
-The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) maintains a reference list of approved oracle adapters, but during user transactions routers do not verify adapter approval before using configured oracles. However, users are informed on the Euler App if oracle adapters satisfy certain checks.
 ### Listing of EVaults for EulerEarn Vaults
 
 The [Euler DAO](#security-council) controls which whitelist (Perspective) is used by all `EulerEarn` vaults via `EulerEarnFactory2` to check whether an `EVault` is accepted to deposit into. If unsafe `EVaults` are accepted, this can lead to _loss of funds_. The initial configuration uses `EVKFactoryPerspective`, which automatically approves all `EVaults` deployed by the factory. If the DAO switches to `GovernedPerspective`, [Euler Labs](#security-council) would manually control which `EVaults` can be used as strategies.
