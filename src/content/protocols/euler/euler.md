@@ -93,22 +93,19 @@ The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e0267
 
 ### Oracle System
 
-Each `EVault` has an oracle router configured at creation. The router dispatches requests for quotes to different price sources wrapped in adapters. The router governor can update which price feeds are used to price assets. The router governor and vault governor are often the same entity. Misconfiguration of oracle settings can lead to _loss of funds_ through unfair liquidations or excessive borrowing.
+Each `EVault` configures an oracle router at creation. The router dispatches price requests to external price feeds via adapters, and the router governor often the same entity as the vault governor can update the configured price feeds.
 
-Most TVL (>90%) in Euler V2 lending market is currently controlled by the following entities, sorted by TVL: (1) Usual, (2) Euler DAO and (3) Sentora.
+Vault creators are free to select any oracle adapter or deploy their own. Adapters typically perform only basic checks (e.g., liveness, non-negative prices) and do not guarantee that prices reflect active markets.
 
-The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) maintains a reference list of approved oracle adapters, but during user transactions routers do not verify adapter approval before using configured oracles. However, users are informed on the Euler App if oracle adapters satisfy certain checks.
+Although Euler Labs maintains a registry of approved oracle adapters, routers do not enforce adapter approval during user transactions.
 
-Router Governor (most times equal to Vault creator/governor) are free to choose a price feed from any of the vendors which includes Chainlink, Pyth, RedStone, Chronicle, Lido, Pendle, Uniswap V3, Midas, MEV Capital, Idle, Resolv and many more.
+Oracle misconfiguration (by Router Governance) or oracle failure (by 3rd-party oracle vendor) can result in unfair liquidations, excessive borrowing, or situations where funds are stuck until a price feed is replaced, potentially leading to temporary or permanent _loss of funds_.
 
-The price feeds are wrapped in an adapter that provides a standardized interface to any of the vaults. Vault creators choose from the existing wrappers or deploy their own around any vendor.
+On the Router Governance level more than 90% of Euler V2 TVL is concentrated among a small number of entities, (1) Usual, (2) Euler DAO and (3) Sentora at the time of writing.
 
-Most wrappers do basic checks as liveness and check if the price is non-negative, but do not provide more checks and thus do not guarantee a true price reflecting active markets.
+On the level of price oracle vendors Chainlink ranks number 1 among all used vendors, controlling more than 30% of the current available assets. However most TVL is currently controlled by fixed rate adapters (asset in vault is fixed set to 1:1 USD).
 
-
-Furthermore, over all 3rd party vendors Chainlink ranks number 1 among all used vendors, controlling more than 30% of the current available assets. Most TVL is currently controlled by fixed rate (asset in vault is fixed set to 1:1 USD) adapters.
-
-If the price feed reverts the funds are stuck until the price feed is replaced. This could lead to temporary or permanent _loss of funds_.
+Due to this high concentration on few counterparties, the Dependency Risk is assessed as _High_.
 
 For all adapters that point to chainlink price feeds (xx %), a false price could be reported by the chainlink multisig exercising an upgrade on the price feeds. This could lead to wrong prices and _loss of user funds_. Their multisig does not comply with Security Council requirements. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
 
