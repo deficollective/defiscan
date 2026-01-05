@@ -59,7 +59,9 @@ Euler V2 is deployed on various chains. This review is based on the Ethereum mai
 
 ## Upgradeability
 
-The Euler V2 protocol contains permissioned functions across multiple modules that could result in the theft or loss of user funds, loss of unclaimed yield, or otherwise materially affect the expected performance of the protocol. The control vectors are distributed across the [DAO multisig](#security-council), [Euler Labs](#security-council) and 3rd-party vault-specific governors. Each module carries specific risks as detailed below.
+The Euler V2 protocol contains permissioned functions across multiple modules that could result in the _loss of user funds_, _loss of unclaimed yield_, or otherwise materially affect the expected performance of the protocol.
+
+Assessment of control on the user deployed vaults see the [Autonomy](#autonomy) section.
 
 ### Vault Factory
 
