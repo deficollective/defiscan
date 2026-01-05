@@ -70,6 +70,7 @@ Assessment of control on the user deployed vaults see the [Autonomy](#autonomy) 
 ### Listing of EVaults for EulerEarn Vaults
 
 The [Euler DAO](#security-council) controls which whitelist (Perspective) is used by all `EulerEarn` vaults via `EulerEarnFactory2` to check whether an `EVault` is accepted to deposit into. If unsafe `EVaults` are accepted, this can lead to _loss of funds_. The initial configuration uses `EVKFactoryPerspective`, which automatically approves all `EVaults` deployed by the factory. If the DAO switches to `GovernedPerspective`, [Euler Labs](#security-council) would manually control which `EVaults` can be used as strategies.
+
 ### Fee Configuration
 
 The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls global fee settings through `setProtocolFeeShare`, `setInterestFeeRange`, and vault-specific overrides, which affect all existing user positions immediately. Per-vault fee configuration is available through `setFeeReceiver` and `setInterestFee` on individual EVaults.
