@@ -104,7 +104,6 @@ The price feeds are wrapped in an adapter that provides a standardized interface
 
 Most wrappers do basic checks as liveness and check if the price is non-negative, but do not provide more checks and thus do not guarantee a true price reflecting active markets.
 
-Users trust that the Router Governors, do not install malicious adapters, replace adapters if price feed continuously fails. Most TVL (>90%) in Euler is currently controlled by the following entities, sorted by TVL: (1) Usual, (2) Euler DAO and (3) Sentora.
 
 Furthermore, over all 3rd party vendors Chainlink ranks number 1 among all used vendors, controlling more than 30% of the current available assets. Most TVL is currently controlled by fixed rate (asset in vault is fixed set to 1:1 USD) adapters.
 
