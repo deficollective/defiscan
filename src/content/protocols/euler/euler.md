@@ -81,6 +81,7 @@ With the current setup, the timelock protections (48-hour and 4-day delays) fall
 > Upgradeability score: High
 
 ## Autonomy
+
 ### Per-Vault Parameter Control
 
 Vaults can either be governed or ungoverned. Governors of Vaults can accept new collateral assets and adjust risk parameters. Misconfiguration or acceptance of malicious collateral can cause _loss of funds_. Governed Vaults can either be governed by the Euler DAO or privately by 3rd-parties. DAO-managed vaults have a 48-hour timelock protection. Privately-managed vaults may have no timelock protection.
