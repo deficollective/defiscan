@@ -107,7 +107,6 @@ Furthermore, over all 3rd party vendors Chainlink ranks number 1 among all used 
 
 If the price feed reverts the funds are stuck until the price feed is replaced. This could lead to temporary or permanent _loss of funds_.
 
-
 For all adapters that point to chainlink price feeds (xx %), a false price could be reported by the chainlink multisig exercising an upgrade on the price feeds. This could lead to wrong prices and _loss of user funds_. Their multisig does not comply with Security Council requirements. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
 
 This potential impact on xx% of Euler's TVL results in a Medium centralization risk from Chainlink.
