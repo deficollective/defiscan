@@ -95,6 +95,8 @@ The [riskSteward](https://etherscan.io/address/0xBdAa3FCc9983bD72feE0F7D017e0267
 
 Each `EVault` has an oracle router configured at creation. The router dispatches requests for quotes to different price sources wrapped in adapters. The router governor can update which price feeds are used to price assets. The router governor and vault governor are often the same entity. Misconfiguration of oracle settings can lead to _loss of funds_ through unfair liquidations or excessive borrowing.
 
+Most TVL (>90%) in Euler V2 lending market is currently controlled by the following entities, sorted by TVL: (1) Usual, (2) Euler DAO and (3) Sentora.
+
 The [SnapshotRegistry (oracleAdapterRegistry)](https://etherscan.io/address/0xA084A7F49723E3cc5722E052CF7fce910E7C5Fe6) maintained by [Euler Labs](https://etherscan.io/address/0xB1345E7A4D35FB3E6bF22A32B3741Ae74E5Fba27) maintains a reference list of approved oracle adapters, but during user transactions routers do not verify adapter approval before using configured oracles. However, users are informed on the Euler App if oracle adapters satisfy certain checks.
 Euler V2 relies on external oracle providers selected by the `EVault` creators and risk curators for all price data required for collateral valuations and liquidation decisions.
 
