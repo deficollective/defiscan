@@ -107,8 +107,6 @@ Furthermore, over all 3rd party vendors Chainlink ranks number 1 among all used 
 
 If the price feed reverts the funds are stuck until the price feed is replaced. This could lead to temporary or permanent _loss of funds_.
 
-** what is the % of adapters that are governed by euler **
-XX % of the adapters are governed by Euler DAO, for the remaining adapters users trust 3rd-parties to choose oracles that are trustworthy and to replace the oracles in case of failure.
 
 For all adapters that point to chainlink price feeds (xx %), a false price could be reported by the chainlink multisig exercising an upgrade on the price feeds. This could lead to wrong prices and _loss of user funds_. Their multisig does not comply with Security Council requirements. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
 
