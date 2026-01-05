@@ -101,7 +101,7 @@ The price feeds are wrapped in an adapter that provides a standardized interface
 
 Most wrappers do basic checks as liveness and check if the price is non-negative, but do not provide more checks and thus do not guarantee a true price reflecting active markets.
 
-Adapters used by a Vault can be replaced by the Vault owner or Router Governor, in case the oracle reverts permanently or becomes unreliable, users trust that the permission owners replace the faulty oracle in due time. If the price feed reverts the funds are stuck until the price feed is replaced. This could lead to temporary or permanent _loss of funds_.
+Adapters used by a Vault can be replaced by the Router Governor, in case the oracle reverts permanently or becomes unreliable, users trust that the permission owner replace the faulty oracle in due time. If the price feed reverts the funds are stuck until the price feed is replaced. This could lead to temporary or permanent _loss of funds_.
 
 ** what is the % of adapters that are governed by euler **
 XX % of the adapters are governed by Euler DAO, for the remaining adapters users trust 3rd-parties to choose oracles that are trustworthy and to replace the oracles in case of failure.
