@@ -109,8 +109,6 @@ For all adapters that point to chainlink price feeds (30%), a false price could 
 
 Due to this high concentration on few counterparties, the Dependency Risk is assessed as _High_.
 
-
-
 > Autonomy score: High
 
 ## Exit Window
