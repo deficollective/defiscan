@@ -105,6 +105,8 @@ On the Router Governance level more than 90% of Euler V2 TVL is concentrated amo
 
 On the level of price oracle vendors Chainlink ranks number 1 among all used vendors, controlling more than 30% of the current available assets. However most TVL is currently controlled by fixed rate adapters (asset in vault is fixed set to 1:1 USD).
 
+For all adapters that point to chainlink price feeds (30%), a false price could be reported by the chainlink multisig exercising an upgrade on the price feeds. This could lead to wrong prices and _loss of user funds_. Their multisig does not comply with Security Council requirements. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
+
 Due to this high concentration on few counterparties, the Dependency Risk is assessed as _High_.
 
 
