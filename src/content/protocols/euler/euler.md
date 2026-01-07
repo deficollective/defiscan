@@ -92,7 +92,7 @@ Each `EVault` configures an oracle router at creation. The router dispatches pri
 
 Vault creators are free to select any oracle adapter or deploy their own. Adapters typically perform only basic checks (e.g., liveness, non-negative prices) and do not guarantee that prices reflect active markets.
 
-Although Euler Labs maintains a registry of approved oracle adapters, routers do not enforce adapter approval during user transactions.
+Although [Euler Labs](#security-council) maintains a registry of approved oracle adapters, routers do not enforce adapter approval during user transactions.
 
 Oracle misconfiguration (by Router Governance) or oracle failure (by 3rd-party oracle vendor) can result in unfair liquidations, excessive borrowing, or situations where funds are stuck until a price feed is replaced, potentially leading to temporary or permanent _loss of funds_.
 
