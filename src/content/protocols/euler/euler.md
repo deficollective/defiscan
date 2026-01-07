@@ -73,7 +73,7 @@ The [Euler DAO](#security-council) controls which whitelist (Perspective) is use
 
 ### Fee Configuration
 
-The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls global fee settings through `setProtocolFeeShare`, `setInterestFeeRange`, and vault-specific overrides, which affect all existing user positions immediately. Per-vault fee configuration is available through `setFeeReceiver` and `setInterestFee` on individual EVaults.
+The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls fee settings by changing the protocol/vault governor split, the valid interest rate fee range on a global level or specific per vault. The protocol fee split affects only the distribution of accumulated fees between the protocol and the governor, not depositor yield. Per-vault fee applies only to newly accruing interest as the vault is updated.
 
 ### EulerSwap
 
