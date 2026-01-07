@@ -21,15 +21,15 @@ stage_requirements:
     [
       {
         text: "Upgrades have no potential of “loss of funds“ ",
-        status: "fixed",
+        status: "unfixed",
       },
       {
         text: "Dependency with a High centralization score is mitigated",
-        status: "fixed",
+        status: "unfixed",
       },
       {
         text: "Frontend backups or self-hosting option exists",
-        status: "fixed",
+        status: "unfixed",
       },
     ],
     [
