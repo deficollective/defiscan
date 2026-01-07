@@ -145,7 +145,6 @@ We further want to highlight the following observations which did not directly f
 
 ⚠️ 3rd-party permission owners of `EulerEarn` vaults are in control of critical permissions which can result in the _loss of user funds_ and _loss of unclaimed yield_. Curators manage strategy risk by adding `EVaults` and setting supply caps, while Allocators control fund distribution to enabled strategies. These permissions only have a direct impact on users in the respective `EulerEarn` vault and thus do not contribute to the centralization of the Euler protocol. `EulerEarn` Vault owners can assign Guardians with the capability to revoke pending actions that increase risk towards users. All `EulerEarn` Vault owners listed in the Euler App underwent a KYB process.
 
-⚠️ Each `EVault` uses an `EulerRouter` for price feeds, configured by the vault governor. The `EulerRouter` does not verify oracle adapters against the SnapshotRegistry on-chain, allowing vault governors to configure any oracle adapter including potentially malicious ones. The Euler App however checks the SnapshotRegistry of Routers to assess the checks it passed. Users should verify the oracle configuration of vaults they interact with from the frontend.
 # Protocol Analysis
 
 ## Core Architecture and EVC Mediation
