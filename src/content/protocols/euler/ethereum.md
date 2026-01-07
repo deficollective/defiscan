@@ -133,7 +133,7 @@ The protocol exposes critical permissions for vault contract upgrades and per-va
 
 Euler V2 thus achieves _Stage 0_.
 
-The protocol could reach _Stage 1_ by: 1) extending timelock protections to at least 7 days for all critical permissions, Or 2) establishing a Security Council with at least 7 signers, at least 51% threshold, at least 50% non-insider signers, and publicly announced signers with ownership of or veto power over critical permissions, And 3) implementing fallback mechanisms for oracle dependencies, And 4) publishing the frontend code to IPFS or developing alternative interfaces.
+The protocol could reach _Stage 1_ by: 1) extending timelock protections to at least 7 days for all critical permissions, Or 2) establishing a Security Council with at least 7 signers, at least 51% threshold, at least 50% non-insider signers, and publicly announced signers with ownership of or veto power over critical permissions, And 3) forcing usage of adapters from a factory that implements fallback mechanisms for oracle dependencies, And 4) publishing the frontend code to IPFS or developing alternative interfaces.
 
 > Overall score: Stage 0
 
