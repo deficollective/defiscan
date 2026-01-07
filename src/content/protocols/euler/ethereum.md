@@ -61,7 +61,7 @@ Euler V2 is deployed on various chains. This review is based on the Ethereum mai
 
 The Euler V2 protocol contains permissioned functions that could result in the _loss of user funds_, _loss of unclaimed yield_, or otherwise materially affect the expected performance of the protocol.
 
-Assessment of control on the user deployed vaults see the [Autonomy](#autonomy) section.
+For the assessment of the control on the user deployed vaults see the [Autonomy](#autonomy) section.
 
 ### Vault Factory
 
