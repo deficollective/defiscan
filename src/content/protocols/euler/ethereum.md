@@ -130,7 +130,7 @@ Users can only access Euler V2 through a single user interface: app.euler.financ
 
 Euler V2 receives a _Low centralization risk_ score for _Chain_, and _High centralization risk_ scores for _Upgradeability_, _Autonomy_, _Exit Window_, and _Accessibility_ dimensions.
 
-The protocol exposes critical permissions for factory-wide bytecode upgrades and per-vault parameter control that are protected with timelock delays of only 48 hours and 4 days, falling below the 7-day minimum threshold. Furthermore, Euler V2 is exposed to centralization risks from its external oracle dependencies, where vault creators select from multiple providers including Chainlink, Pyth, and RedStone without protocol-level fallback mechanisms to mitigate price feed failures.
+The protocol exposes critical permissions for vault contract upgrades and per-vault parameter control that are protected with _Exit Windows_ of only 4 days respectively 48 hours, both falling below the 7-day minimum threshold. Furthermore, Euler V2 is exposed to centralization risks from its external oracle dependencies, where vault creators select from multiple oracle vendors, however, showing a clustered risk from Chainlink.
 
 Euler V2 thus achieves _Stage 0_.
 
