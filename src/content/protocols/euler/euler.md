@@ -35,10 +35,10 @@ stage_requirements:
     [
       {
         text: "Upgrades have no potential of “loss of funds or unclaimed yield“",
-        status: "fixed",
+        status: "unfixed",
       },
-      { text: "There are no external dependencies", status: "fixed" },
-      { text: "Alternative third-party frontends exist", status: "fixed" },
+      { text: "There are no external dependencies", status: "unfixed" },
+      { text: "Alternative third-party frontends exist", status: "unfixed" },
     ],
   ]
 ---
