@@ -113,7 +113,15 @@ Due to this high concentration on few counterparties, the Dependency Risk is ass
 
 ## Exit Window
 
+Contract upgrades of `EVaults` (not EulerEarn) are protected with a 4-days _Exit Window_. This falls below the required 7-days _Exit Window_ for this _Upgradeability_ vector to be rated as _Medium_.
 
+Oracle vendors and adapter Oracle Routers controlled by Euler can be updated with a 2-days _Exit Window_. Routers governed by 3rd-parties are not forced to use an _Exit Window_.
+
+Risk management and parameter control on `EVaults` controlled by [Euler Labs](#security-council) and [Gauntlet](#security-council) can be immediate in case of Emergency, otherwise is protected by a 2-days _Exit Window_. `EVaults` governed by 3rd-parties are not forced to use an _Exit Window_.
+
+All `EVaults` can be paused and resumed immediately by [Euler Labs](#security-council).
+
+The [DAO multisig](#security-council) can immediately set the `setProtocolFeeShare` which affects the fees paid out to the governors of the vaults and it does not affect the users accrued interest.
 > Exit Window score: High
 
 ## Accessibility
