@@ -117,6 +117,7 @@ Risk management and parameter control on `EVaults` controlled by [Euler Labs](#s
 All `EVaults` can be paused and resumed immediately by [Euler Labs](#security-council).
 
 The [DAO multisig](#security-council) can immediately set the `setProtocolFeeShare` which affects the fees paid out to the governors of the vaults and it does not affect the users accrued interest.
+
 > Exit Window score: High
 
 ## Accessibility
