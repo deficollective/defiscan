@@ -142,7 +142,6 @@ The protocol could reach _Stage 1_ by: 1) extending timelock protections to at l
 
 We further want to highlight the following observations which did not directly factor into the scoring:
 
-⚠️ Governors of 3rd-party managed `EVaults` are in control of critical permissions which can result in the _loss of user funds_ and _loss of unclaimed yield_. These permissions only have a direct impact on users in the respective vault and thus do not contribute to the centralization of the Euler protocol. 3rd-party managed vaults operate outside the DAO's timelocked governance framework, and users should independently evaluate the trustworthiness and operational security of the vault governor before depositing. All Vault governors are listed in the Euler App and if the entity is listed they underwent a KYB process.
 
 ⚠️ 3rd-party permission owners of `EulerEarn` vaults are in control of critical permissions which can result in the _loss of user funds_ and _loss of unclaimed yield_. Curators manage strategy risk by adding `EVaults` and setting supply caps, while Allocators control fund distribution to enabled strategies. These permissions only have a direct impact on users in the respective `EulerEarn` vault and thus do not contribute to the centralization of the Euler protocol. `EulerEarn` Vault owners can assign Guardians with the capability to revoke pending actions that increase risk towards users. All `EulerEarn` Vault owners listed in the Euler App underwent a KYB process.
 
