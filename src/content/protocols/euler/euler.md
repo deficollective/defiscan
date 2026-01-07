@@ -102,7 +102,7 @@ On the level of price oracle vendors Chainlink ranks number 1 among all used ven
 
 For all adapters that point to chainlink price feeds (30%), a false price could be reported by the chainlink multisig exercising an upgrade on the price feeds. This could lead to wrong prices and _loss of user funds_. Their multisig does not comply with Security Council requirements. A complete analysis of Chainlink price feeds can be found in the dedicated [report](https://www.defiscan.info/protocols/chainlink-oracles/ethereum).
 
-Due to this high concentration on few counterparties, the Dependency Risk is assessed as _High_.
+Due to this high concentration on few counterparties, the _Autonomy_ Risk is assessed as _High_.
 
 > Autonomy score: High
 
