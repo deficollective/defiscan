@@ -75,6 +75,9 @@ The [Euler DAO](#security-council) controls which whitelist (Perspective) is use
 
 The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls fee settings by changing the protocol/vault governor split, the valid interest rate fee range on a global level or specific per vault. The protocol fee split affects only the distribution of accumulated fees between the protocol and the governor, not depositor yield. Fees only apply to newly accruing interest as the settings are updated.
 
+### EUL Incentives
+
+Accrued `rEUL` rewards are recorded on-chain; however, redemption of `EUL` depends on continued funding via `depositFor` by [Euler Labs](#security-council) multisig. If funding is discontinued, users may experience _loss of unclaimed yield_.
 > Upgradeability score: High
 
 ## Autonomy
