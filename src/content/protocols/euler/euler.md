@@ -75,11 +75,6 @@ The [Euler DAO](#security-council) controls which whitelist (Perspective) is use
 
 The [ProtocolConfig](https://etherscan.io/address/0x4cD6BF1D183264c02Be7748Cb5cd3A47d013351b) contract controls fee settings by changing the protocol/vault governor split, the valid interest rate fee range on a global level or specific per vault. The protocol fee split affects only the distribution of accumulated fees between the protocol and the governor, not depositor yield. Fees only apply to newly accruing interest as the settings are updated.
 
-### EulerSwap
-
-The [EulerSwapFactory](https://etherscan.io/address/0xb013be1D0D380C13B58e889f412895970A2Cf228) controls swap fee configuration through `setProtocolFee` and `setProtocolFeeRecipient` for all EulerSwap pools.
-
-With the current setup, the timelock protections (48-hour and 4-day delays) fall below the 7-day minimum threshold required for medium risk classification, and numerous critical functions affecting user funds can be executed by multisigs or role holders.
 
 > Upgradeability score: High
 
