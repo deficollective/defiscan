@@ -10,7 +10,7 @@ DeFiScan is built and maintained by the [DeFi Collective](https://DeFiCollective
 
 💪 Join DeFiScan’s Community Review Program and help enhance the coverage of Decentralization of DeFi protocols!
 
-Read this intro [blog article](https://deficollective.org/blog/defiscan-bounties/) 👈
+Read this intro [blog article](https://www.defiscan.info/blog/defiscan-bounties) 👈
 
 Check details on the program 👉 [here](./campaigns/README.MD) 👈
 
