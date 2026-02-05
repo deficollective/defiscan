@@ -1,5 +1,5 @@
 import { SectionCard } from "./section-card";
-import { ConcentricDonutChart } from "./concentric-donut-chart";
+import { CoinChart } from "./coin-chart";
 import { DynamicContentList } from "./dynamic-content-block";
 import type { ReviewSectionConfig, CollateralData } from "@/lib/review-page/types";
 
@@ -16,7 +16,7 @@ export function CollateralsSection({
 }: CollateralsSectionProps) {
   return (
     <SectionCard title={config.title} description={config.description}>
-      <ConcentricDonutChart data={collaterals} className="mb-6" />
+      <CoinChart data={collaterals} className="mb-6" />
       <div className="space-y-6">
         {config.subsections.map((sub, i) => (
           <div key={i}>

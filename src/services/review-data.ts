@@ -16,19 +16,19 @@ const MOCK_DATA: Record<string, ReviewApiData> = {
         {
           name: "ETH",
           value: 8_700_000,
-          color: "#627EEA",
+          color: "url(#metallic-eth)",
           category: "Native ETH",
         },
         {
           name: "WstETH",
           value: 24_000_000,
-          color: "#00A3FF",
+          color: "url(#metallic-wsteth)",
           category: "WstETH",
         },
         {
           name: "rETH",
           value: 5_400_000,
-          color: "#E8663D",
+          color: "url(#metallic-reth)",
           category: "rETH",
         },
       ],
