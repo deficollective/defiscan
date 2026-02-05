@@ -23,7 +23,7 @@ import type {
   PermissionedFunction,
 } from "@/lib/review-page/types";
 
-function UpgradeabilityBadge({
+function TagBadge({
   variant,
   children,
 }: {
@@ -46,6 +46,12 @@ function UpgradeabilityBadge({
         </span>
       );
     case "eoa":
+      return (
+        <span className={`${baseClasses} bg-red-200 border-red-500 text-red-800`}>
+          {children}
+        </span>
+      );
+    case "external":
       return (
         <span className={`${baseClasses} bg-red-200 border-red-500 text-red-800`}>
           {children}
@@ -162,9 +168,9 @@ export function DynamicContentBlock({
                     const variant = badgeConfig.colorMap?.[cellText] ?? "default";
                     return (
                       <TableCell key={cellIndex}>
-                        <UpgradeabilityBadge variant={variant}>
+                        <TagBadge variant={variant}>
                           {cellText}
-                        </UpgradeabilityBadge>
+                        </TagBadge>
                       </TableCell>
                     );
                   }
@@ -183,7 +189,8 @@ export function DynamicContentBlock({
         </Table>
       );
 
-    case "expandableTable":
+    case "expandableTable": {
+      const externalCallers = block.externalCallers ?? [];
       return (
         <Accordion type="multiple" className="w-full">
           <div className="flex items-center w-full border-b">
@@ -196,6 +203,10 @@ export function DynamicContentBlock({
           </div>
           {block.rows.map((row: ExpandableTableRow, rowIndex: number) => {
             const hasExpandedContent = row.expandedContent?.functions?.length;
+            // Check if any caller in this row has an external dependency
+            const rowHasExternalCaller = row.expandedContent?.functions?.some(
+              (fn) => fn.callers.some((c) => externalCallers.includes(c))
+            ) ?? false;
             return (
               <AccordionItem
                 key={rowIndex}
@@ -226,11 +237,18 @@ export function DynamicContentBlock({
                           className="flex-1 py-3 text-left text-sm"
                         >
                           {badgeConfig ? (
-                            <UpgradeabilityBadge
-                              variant={badgeConfig.colorMap?.[cellText] ?? "default"}
-                            >
-                              {cellText}
-                            </UpgradeabilityBadge>
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <TagBadge
+                                variant={badgeConfig.colorMap?.[cellText] ?? "default"}
+                              >
+                                {cellText}
+                              </TagBadge>
+                              {rowHasExternalCaller && (
+                                <TagBadge variant="external">
+                                  Ext. Dependency
+                                </TagBadge>
+                              )}
+                            </div>
                           ) : (
                             cellText
                           )}
@@ -253,19 +271,27 @@ export function DynamicContentBlock({
                               {fn.name}
                             </div>
                             <div className="ml-6 space-y-0.5">
-                              {fn.callers.map((caller, callerIndex) => (
-                                <div
-                                  key={callerIndex}
-                                  className="text-xs text-muted-foreground flex items-center gap-1"
-                                >
-                                  <span className="font-mono text-gray-600">
-                                    {callerIndex === fn.callers.length - 1
-                                      ? "└─"
-                                      : "├─"}
-                                  </span>
-                                  {caller}
-                                </div>
-                              ))}
+                              {fn.callers.map((caller, callerIndex) => {
+                                const isExternalCaller = externalCallers.includes(caller);
+                                return (
+                                  <div
+                                    key={callerIndex}
+                                    className="text-xs text-muted-foreground flex items-center gap-1"
+                                  >
+                                    <span className="font-mono text-gray-600">
+                                      {callerIndex === fn.callers.length - 1
+                                        ? "└─"
+                                        : "├─"}
+                                    </span>
+                                    {caller}
+                                    {isExternalCaller && (
+                                      <TagBadge variant="external">
+                                        External Dependency
+                                      </TagBadge>
+                                    )}
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         )
@@ -278,6 +304,7 @@ export function DynamicContentBlock({
           })}
         </Accordion>
       );
+    }
 
     case "dropdown":
       return (

@@ -118,7 +118,7 @@
           "content": [
             {
               "type": "expandableTable",
-              "headers": ["Name", "Address", "Upgradeability", "TVS"],
+              "headers": ["Name", "Address", "Tags", "TVS"],
               "rows": [
                 {
                   "cells": ["BoldToken", "0x6440f144...", "Immutable", "{{totalCollateralValue}}"],
@@ -244,10 +244,12 @@
                   "colorMap": {
                     "Immutable": "immutable",
                     "Upgradeable": "upgradeable",
-                    "EOA Upgradeable": "eoa"
+                    "EOA Upgradeable": "eoa",
+                    "External Dependency": "external"
                   }
                 }
-              ]
+              ],
+              "externalCallers": ["BorrowerOperations"]
             }
           ]
         },

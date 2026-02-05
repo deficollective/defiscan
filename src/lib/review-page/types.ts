@@ -82,6 +82,8 @@ export interface ExpandableTableBlock {
   rows: ExpandableTableRow[];
   badgeColumns?: TableBadgeColumn[];
   colorScale?: TableColorScale;
+  /** Callers that have external dependencies (e.g., oracle) */
+  externalCallers?: string[];
 }
 
 export interface DropdownBlock {
