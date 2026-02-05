@@ -1,0 +1,284 @@
+{
+  "protocolSlug": "liquity-v2",
+  "protocolName": "Liquity V2",
+  "tokenName": "BOLD",
+  "chain": "Ethereum",
+  "sections": {
+    "collaterals": {
+      "title": "Collaterals",
+      "description": "BOLD is backed by ETH, WstETH, and rETH deposits.",
+      "subsections": [
+        {
+          "title": "Collateral Breakdown",
+          "content": [
+            {
+              "type": "text",
+              "content": "Total collateral value: {{totalCollateralValue}}. The protocol accepts three collateral types."
+            },
+            {
+              "type": "table",
+              "headers": ["Collateral", "Value", "Share"],
+              "rows": [
+                ["ETH", "{{ethCollateralValue}}", "{{ethCollateralPct}}"],
+                ["WstETH", "{{wstethCollateralValue}}", "{{wstethCollateralPct}}"],
+                ["rETH", "{{rethCollateralValue}}", "{{rethCollateralPct}}"]
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Stability Pool",
+          "content": [
+            {
+              "type": "text",
+              "content": "The Stability Pool acts as the primary liquidation mechanism, holding BOLD deposits ({{stabilityPoolSize}}) that absorb liquidated collateral."
+            }
+          ]
+        }
+      ]
+    },
+    "dependencies": {
+      "title": "Dependencies",
+      "subsections": [
+        {
+          "title": "Oracle - Chainlink",
+          "content": [
+            {
+              "type": "text",
+              "content": "Liquity V2 uses Chainlink as the primary price oracle with a Tellor-based fallback. If both oracles fail, the system falls back to the last known good price."
+            },
+            {
+              "type": "table",
+              "headers": ["Asset", "Oracle", "TVS", "Impacted"],
+              "rows": [
+                ["ETH", "0x5f4...", "{{ethCollateralValue}}", "{{totalCollateralValue}}"],
+                ["WstETH", "0x8A9...", "{{wstethCollateralValue}}", "{{totalCollateralValue}}"],
+                ["rETH", "0xE86...", "{{rethCollateralValue}}", "{{totalCollateralValue}}"]
+              ],
+              "colorScale": {
+                "columns": [2, 3],
+                "referenceMetric": "totalCollateralValueRaw",
+                "valueMetrics": [
+                  ["ethCollateralValueRaw", "totalCollateralValueRaw"],
+                  ["wstethCollateralValueRaw", "totalCollateralValueRaw"],
+                  ["rethCollateralValueRaw", "totalCollateralValueRaw"]
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "actors": {
+      "title": "Actors",
+      "subsections": [
+        {
+          "title": "Governance",
+          "content": [
+            {
+              "type": "text",
+              "content": "Liquity V2 is designed to be governance-free. All protocol parameters are immutable and set at deployment."
+            }
+          ]
+        },
+        {
+          "title": "Liquidators",
+          "content": [
+            {
+              "type": "text",
+              "content": "Anyone can trigger liquidations when a trove's collateral ratio falls below the minimum threshold. Liquidators are incentivized by gas compensation and collateral surplus."
+            }
+          ]
+        },
+        {
+          "title": "Redemptions",
+          "content": [
+            {
+              "type": "text",
+              "content": "Anyone can trigger redemptions by essentially buying the collateral of the troves with the lowest interest rates for BOLD. This is only profitable when the price of BOLD is < $1 (minus the redemption fee)."
+            }
+          ]
+        }
+      ]
+    },
+    "codeAndAudits": {
+      "title": "Contracts & Audits",
+      "subsections": [
+        {
+          "title": "Admin rights",
+          "content": [
+            {
+              "type": "text",
+              "content": "There are no admin rights in Liquity V2. All protocol parameters are immutable and set at deployment."
+            }
+          ]
+        },
+        {
+          "title": "Contracts holding funds",
+          "content": [
+            {
+              "type": "expandableTable",
+              "headers": ["Name", "Address", "Upgradeability", "TVS"],
+              "rows": [
+                {
+                  "cells": ["BoldToken", "0x6440f144...", "Immutable", "{{totalCollateralValue}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "mint()",
+                        "callers": ["ActivePool", "StabilityPool"]
+                      },
+                      {
+                        "name": "burn()",
+                        "callers": ["BorrowerOperations", "StabilityPool"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["StabilityPool (ETH)", "0x5721cbbd...", "Immutable", "{{stabilityPoolSize}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "triggerBoldRewards()",
+                        "callers": ["ActivePool"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["StabilityPool (WstETH)", "0x9502b7c3...", "Immutable", "{{stabilityPoolSize}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "triggerBoldRewards()",
+                        "callers": ["ActivePool"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["StabilityPool (rETH)", "0xd442E410...", "Immutable", "{{stabilityPoolSize}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "triggerBoldRewards()",
+                        "callers": ["ActivePool"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["ActivePool (ETH)", "0xeB5A8C82...", "Immutable", "{{ethCollateralValue}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "sendColl()",
+                        "callers": ["BorrowerOperations", "TroveManager"]
+                      },
+                      {
+                        "name": "receiveColl()",
+                        "callers": ["BorrowerOperations", "TroveManager"]
+                      },
+                      {
+                        "name": "accountForReceivedColl()",
+                        "callers": ["DefaultPool"]
+                      },
+                      {
+                        "name": "setShutdownFlag()",
+                        "callers": ["TroveManager"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["ActivePool (WstETH)", "0x531a8f99...", "Immutable", "{{wstethCollateralValue}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "sendColl()",
+                        "callers": ["BorrowerOperations", "TroveManager"]
+                      },
+                      {
+                        "name": "receiveColl()",
+                        "callers": ["BorrowerOperations", "TroveManager"]
+                      },
+                      {
+                        "name": "accountForReceivedColl()",
+                        "callers": ["DefaultPool"]
+                      },
+                      {
+                        "name": "setShutdownFlag()",
+                        "callers": ["TroveManager"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["ActivePool (rETH)", "0x9074D72c...", "Immutable", "{{rethCollateralValue}}"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "sendColl()",
+                        "callers": ["BorrowerOperations", "TroveManager"]
+                      },
+                      {
+                        "name": "receiveColl()",
+                        "callers": ["BorrowerOperations", "TroveManager"]
+                      },
+                      {
+                        "name": "accountForReceivedColl()",
+                        "callers": ["DefaultPool"]
+                      },
+                      {
+                        "name": "setShutdownFlag()",
+                        "callers": ["TroveManager"]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "badgeColumns": [
+                {
+                  "column": 2,
+                  "colorMap": {
+                    "Immutable": "immutable",
+                    "Upgradeable": "upgradeable",
+                    "EOA Upgradeable": "eoa"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Audits",
+          "content": [
+            {
+              "type": "table",
+              "headers": ["Auditor", "Date"],
+              "rows": [
+                ["ChainSecurity", "Q4-2024"],
+                ["DeDaub", "Q4-2024"],
+                ["Coinspect", "Q4-2024"],
+                ["Recon", "Q4-2024"],
+                ["Cantina", "Q4-2024"]
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Source Code",
+          "content": [
+            {
+              "type": "link",
+              "text": "GitHub Repository",
+              "href": "https://github.com/liquity/bold",
+              "external": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
