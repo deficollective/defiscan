@@ -9,7 +9,7 @@ const MOCK_DATA: Record<string, ReviewApiData> = {
       totalValue: 38_100_000,
       categories: [
         { name: "Native ETH", value: 8_700_000, color: "#627EEA" },
-        { name: "WstETH", value: 24_000_000, color: "#8A92B2" },
+        { name: "WstETH", value: 24_000_000, color: "#00A3FF" },
         { name: "rETH", value: 5_400_000, color: "#E8663D" },
       ],
       assets: [
@@ -22,7 +22,7 @@ const MOCK_DATA: Record<string, ReviewApiData> = {
         {
           name: "WstETH",
           value: 24_000_000,
-          color: "#8A92B2",
+          color: "#00A3FF",
           category: "WstETH",
         },
         {
