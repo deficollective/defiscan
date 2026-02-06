@@ -53,7 +53,7 @@ export function CoinChart({ data, className }: CoinChartProps) {
   const activeAsset = activeIndex !== null ? data.assets[activeIndex] : null;
 
   return (
-    <div className={className}>
+    <div className={className} onClick={() => setActiveIndex(null)}>
       {/* 3D Coin Container */}
       <div
         className="mx-auto relative"
@@ -178,6 +178,24 @@ export function CoinChart({ data, className }: CoinChartProps) {
                 overflow: "hidden",
               }}
             >
+              {/* $ sign overlay with double vertical lines */}
+              <div
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ pointerEvents: "none", zIndex: 10 }}
+              >
+                <span
+                  style={{
+                    fontSize: "12rem",
+                    fontWeight: 300,
+                    color: "rgba(255,255,255,0.35)",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.15)",
+                    lineHeight: 1,
+                    userSelect: "none",
+                  }}
+                >
+                  $
+                </span>
+              </div>
               {/* Metallic gradient definitions */}
               <svg width="0" height="0" style={{ position: "absolute" }}>
                 <defs>
@@ -227,6 +245,10 @@ export function CoinChart({ data, className }: CoinChartProps) {
                     activeShape={renderActiveShape}
                     onMouseEnter={(_, index) => setActiveIndex(index)}
                     onMouseLeave={() => setActiveIndex(null)}
+                    onClick={(_, index, e) => {
+                      e.stopPropagation();
+                      setActiveIndex((prev) => (prev === index ? null : index));
+                    }}
                   >
                     {data.assets.map((entry, index) => (
                       <Cell
