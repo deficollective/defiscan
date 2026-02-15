@@ -6,13 +6,13 @@ import type { ReviewSectionConfig, CollateralData } from "@/lib/review-page/type
 interface CollateralsSectionProps {
   config: ReviewSectionConfig;
   collaterals: CollateralData;
-  metrics: Record<string, string | number>;
+  data: Record<string, string | number>;
 }
 
 export function CollateralsSection({
   config,
   collaterals,
-  metrics,
+  data,
 }: CollateralsSectionProps) {
   return (
     <SectionCard title={config.title} description={config.description}>
@@ -21,7 +21,7 @@ export function CollateralsSection({
         {config.subsections.map((sub, i) => (
           <div key={i}>
             <h3 className="text-sm font-semibold mb-2">{sub.title}</h3>
-            <DynamicContentList blocks={sub.content} metrics={metrics} />
+            <DynamicContentList blocks={sub.content} data={data} />
           </div>
         ))}
       </div>

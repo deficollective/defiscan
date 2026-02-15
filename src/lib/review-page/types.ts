@@ -19,12 +19,27 @@ export interface CollateralData {
   assets: CollateralSlice[];
 }
 
+export interface MarketSlice {
+  name: string;
+  allocation: number;
+  supplyCap: number;
+  apy: number;
+  color: string;
+  lltv: string;
+}
+
+export interface VaultData {
+  totalAllocation: number;
+  markets: MarketSlice[];
+}
+
 export interface ReviewApiData {
   protocolSlug: string;
   tokenName: string;
   tokenSymbol: string;
-  collaterals: CollateralData;
-  metrics: Record<string, string | number>;
+  collaterals?: CollateralData;
+  vault?: VaultData;
+  data: Record<string, string | number>;
 }
 
 // ============================================================
@@ -33,16 +48,16 @@ export interface ReviewApiData {
 
 export interface TextBlock {
   type: "text";
-  /** Supports {{metricKey}} interpolation from API data */
+  /** Supports {{dataKey}} interpolation from API data */
   content: string;
 }
 
 export interface TableColorScale {
   /** Column indices (0-based) to apply coloring to */
   columns: number[];
-  /** Metric key for the reference value (denominator), must be a number */
+  /** Data key for the reference value (denominator), must be a number */
   referenceMetric: string;
-  /** Per-row metric keys for raw numeric values of the colored columns */
+  /** Per-row data keys for raw numeric values of the colored columns */
   valueMetrics: string[][];
 }
 
@@ -56,7 +71,7 @@ export interface TableBadgeColumn {
 export interface TableBlock {
   type: "table";
   headers: string[];
-  /** Each row is an array of strings; supports {{metricKey}} interpolation */
+  /** Each row is an array of strings; supports {{dataKey}} interpolation */
   rows: string[][];
   /** Optional color scale: colors cells green/orange/red based on value share */
   colorScale?: TableColorScale;
@@ -102,7 +117,7 @@ export interface LinkBlock {
 export interface MetricBlock {
   type: "metric";
   label: string;
-  metricKey: string;
+  dataKey: string;
   format?: "usd" | "percent" | "number" | "string";
 }
 
@@ -116,6 +131,10 @@ export type ContentBlock =
 
 export interface SubSection {
   title: string;
+  badge?: string;
+  badgeVariant?: string;
+  /** Supports {{dataKey}} interpolation; shown below the title */
+  subtitle?: string;
   content: ContentBlock[];
 }
 
@@ -125,15 +144,30 @@ export interface ReviewSectionConfig {
   subsections: SubSection[];
 }
 
+export interface StablecoinSections {
+  collaterals: ReviewSectionConfig;
+  dependencies: ReviewSectionConfig;
+  actors: ReviewSectionConfig;
+  codeAndAudits: ReviewSectionConfig;
+}
+
+export interface VaultSections {
+  strategy: ReviewSectionConfig;
+  permissions: ReviewSectionConfig;
+  dependencies: ReviewSectionConfig;
+  codeAndAudits: ReviewSectionConfig;
+}
+
 export interface ReviewConfig {
   protocolSlug: string;
   protocolName: string;
   tokenName: string;
   chain: string;
-  sections: {
-    collaterals: ReviewSectionConfig;
-    dependencies: ReviewSectionConfig;
-    actors: ReviewSectionConfig;
-    codeAndAudits: ReviewSectionConfig;
-  };
+  address?: string;
+  reviewType?: "stablecoin" | "vault";
+  sections: StablecoinSections | VaultSections;
+}
+
+export function isVaultReview(config: ReviewConfig): boolean {
+  return config.reviewType === "vault";
 }

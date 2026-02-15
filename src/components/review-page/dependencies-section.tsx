@@ -4,12 +4,12 @@ import type { ReviewSectionConfig } from "@/lib/review-page/types";
 
 interface DependenciesSectionProps {
   config: ReviewSectionConfig;
-  metrics: Record<string, string | number>;
+  data: Record<string, string | number>;
 }
 
 export function DependenciesSection({
   config,
-  metrics,
+  data,
 }: DependenciesSectionProps) {
   return (
     <SectionCard title={config.title} description={config.description}>
@@ -17,7 +17,7 @@ export function DependenciesSection({
         {config.subsections.map((sub, i) => (
           <div key={i}>
             <h3 className="text-sm font-semibold mb-2">{sub.title}</h3>
-            <DynamicContentList blocks={sub.content} metrics={metrics} />
+            <DynamicContentList blocks={sub.content} data={data} />
           </div>
         ))}
       </div>

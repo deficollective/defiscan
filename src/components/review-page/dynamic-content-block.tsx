@@ -23,7 +23,7 @@ import type {
   PermissionedFunction,
 } from "@/lib/review-page/types";
 
-function TagBadge({
+export function TagBadge({
   variant,
   children,
 }: {
@@ -42,6 +42,36 @@ function TagBadge({
     case "upgradeable":
       return (
         <span className={`${baseClasses} bg-orange-200 border-orange-500 text-orange-800`}>
+          {children}
+        </span>
+      );
+    case "centralized":
+      return (
+        <span className={`${baseClasses} bg-red-200 border-red-500 text-red-800`}>
+          {children}
+        </span>
+      );
+    case "staking":
+      return (
+        <span className={`${baseClasses} bg-orange-200 border-orange-500 text-orange-800`}>
+          {children}
+        </span>
+      );
+    case "canonical":
+      return (
+        <span className={`${baseClasses} bg-green-200 border-green-500 text-green-800`}>
+          {children}
+        </span>
+      );
+    case "timelocked":
+      return (
+        <span className={`${baseClasses} bg-green-200 border-green-500 text-green-800`}>
+          {children}
+        </span>
+      );
+    case "direct":
+      return (
+        <span className={`${baseClasses} bg-amber-200 border-amber-500 text-amber-800`}>
           {children}
         </span>
       );
@@ -66,17 +96,17 @@ function TagBadge({
   }
 }
 
-function interpolateMetrics(
+export function interpolateData(
   text: string,
-  metrics: Record<string, string | number>
+  data: Record<string, string | number>
 ): string {
   return text.replace(
     /\{\{(\w+)\}\}/g,
-    (_, key) => String(metrics[key] ?? `{{${key}}}`)
+    (_, key) => String(data[key] ?? `{{${key}}}`)
   );
 }
 
-function formatMetricValue(
+function formatDataValue(
   value: string | number,
   format?: "usd" | "percent" | "number" | "string"
 ): string {
@@ -96,16 +126,16 @@ function getShareColor(
   rowIndex: number,
   colIndex: number,
   colorScale: TableColorScale | undefined,
-  metrics: Record<string, string | number>
+  data: Record<string, string | number>
 ): string | undefined {
   if (!colorScale) return undefined;
   const colPos = colorScale.columns.indexOf(colIndex);
   if (colPos === -1) return undefined;
 
-  const ref = Number(metrics[colorScale.referenceMetric]);
+  const ref = Number(data[colorScale.referenceMetric]);
   const valueKey = colorScale.valueMetrics[rowIndex]?.[colPos];
   if (!valueKey) return undefined;
-  const val = Number(metrics[valueKey]);
+  const val = Number(data[valueKey]);
   if (isNaN(ref) || isNaN(val) || ref === 0) return undefined;
 
   const share = val / ref;
@@ -123,18 +153,18 @@ function getBadgeConfig(
 
 interface DynamicContentBlockProps {
   block: ContentBlock;
-  metrics: Record<string, string | number>;
+  data: Record<string, string | number>;
 }
 
 export function DynamicContentBlock({
   block,
-  metrics,
+  data,
 }: DynamicContentBlockProps) {
   switch (block.type) {
     case "text":
       return (
         <p className="text-sm text-muted-foreground leading-relaxed">
-          {interpolateMetrics(block.content, metrics)}
+          {interpolateData(block.content, data)}
         </p>
       );
 
@@ -156,13 +186,13 @@ export function DynamicContentBlock({
                     rowIndex,
                     cellIndex,
                     block.colorScale,
-                    metrics
+                    data
                   );
                   const badgeConfig = getBadgeConfig(
                     cellIndex,
                     block.badgeColumns
                   );
-                  const cellText = interpolateMetrics(cell, metrics);
+                  const cellText = interpolateData(cell, data);
 
                   if (badgeConfig) {
                     const variant = badgeConfig.colorMap?.[cellText] ?? "default";
@@ -230,7 +260,7 @@ export function DynamicContentBlock({
                         cellIndex,
                         block.badgeColumns
                       );
-                      const cellText = interpolateMetrics(cell, metrics);
+                      const cellText = interpolateData(cell, data);
                       return (
                         <div
                           key={cellIndex}
@@ -319,7 +349,7 @@ export function DynamicContentBlock({
                   <DynamicContentBlock
                     key={i}
                     block={innerBlock}
-                    metrics={metrics}
+                    data={data}
                   />
                 ))}
               </div>
@@ -342,13 +372,13 @@ export function DynamicContentBlock({
       );
 
     case "metric": {
-      const value = metrics[block.metricKey];
+      const value = data[block.dataKey];
       if (value === undefined) return null;
       return (
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">{block.label}:</span>
           <span className="text-sm font-medium">
-            {formatMetricValue(value, block.format)}
+            {formatDataValue(value, block.format)}
           </span>
         </div>
       );
@@ -361,17 +391,17 @@ export function DynamicContentBlock({
 
 interface DynamicContentListProps {
   blocks: ContentBlock[];
-  metrics: Record<string, string | number>;
+  data: Record<string, string | number>;
 }
 
 export function DynamicContentList({
   blocks,
-  metrics,
+  data,
 }: DynamicContentListProps) {
   return (
     <div className="space-y-3">
       {blocks.map((block, i) => (
-        <DynamicContentBlock key={i} block={block} metrics={metrics} />
+        <DynamicContentBlock key={i} block={block} data={data} />
       ))}
     </div>
   );

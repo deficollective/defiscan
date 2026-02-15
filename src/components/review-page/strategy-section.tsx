@@ -1,18 +1,22 @@
 import { SectionCard } from "./section-card";
+import { VaultChart } from "./vault-chart";
 import { DynamicContentList } from "./dynamic-content-block";
-import type { ReviewSectionConfig } from "@/lib/review-page/types";
+import type { ReviewSectionConfig, VaultData } from "@/lib/review-page/types";
 
-interface CodeAuditsSectionProps {
+interface StrategySectionProps {
   config: ReviewSectionConfig;
+  vault: VaultData;
   data: Record<string, string | number>;
 }
 
-export function CodeAuditsSection({
+export function StrategySection({
   config,
+  vault,
   data,
-}: CodeAuditsSectionProps) {
+}: StrategySectionProps) {
   return (
     <SectionCard title={config.title} description={config.description}>
+      <VaultChart data={vault} className="mb-6" />
       <div className="space-y-6">
         {config.subsections.map((sub, i) => (
           <div key={i}>

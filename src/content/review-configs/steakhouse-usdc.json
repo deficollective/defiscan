@@ -1,0 +1,357 @@
+{
+  "protocolSlug": "steakhouse-usdc",
+  "protocolName": "Morpho",
+  "tokenName": "Steakhouse USDC",
+  "chain": "Ethereum",
+  "address": "0xBEEF01735c132Ada46AA9aA4c54623cAA92A64CB",
+  "reviewType": "vault",
+  "sections": {
+    "strategy": {
+      "title": "Vault",
+      "description": "The Steakhouse USDC vault lends USDC on Morpho Blue markets against different wrapped versions of ETH and BTC.",
+      "subsections": [
+        {
+          "title": "Market Allocation",
+          "content": [
+            {
+              "type": "text",
+              "content": "Total allocation: {{totalAllocation}} across 4 active Morpho Blue lending markets. All markets use an 86% LLTV."
+            },
+            {
+              "type": "table",
+              "headers": ["Market", "Allocation", "Share", "Supply Cap", "APY"],
+              "rows": [
+                ["cbBTC/USDC", "{{cbbtcAllocation}}", "{{cbbtcAllocationPct}}", "{{cbbtcSupplyCap}}", "{{cbbtcApy}}"],
+                ["WBTC/USDC", "{{wbtcAllocation}}", "{{wbtcAllocationPct}}", "{{wbtcSupplyCap}}", "{{wbtcApy}}"],
+                ["wstETH/USDC", "{{wstethAllocation}}", "{{wstethAllocationPct}}", "{{wstethSupplyCap}}", "{{wstethApy}}"],
+                ["WETH/USDC", "{{wethAllocation}}", "{{wethAllocationPct}}", "{{wethSupplyCap}}", "{{wethApy}}"]
+              ],
+              "colorScale": {
+                "columns": [1],
+                "referenceMetric": "totalAllocationRaw",
+                "valueMetrics": [
+                  ["cbbtcAllocationRaw"],
+                  ["wbtcAllocationRaw"],
+                  ["wstethAllocationRaw"],
+                  ["wethAllocationRaw"]
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "Supply Caps",
+          "content": [
+            {
+              "type": "text",
+              "content": "Supply caps are set per market by the curator and enforced on-chain by the MetaMorpho vault contract. They limit the maximum amount the vault can allocate to each market."
+            }
+          ]
+        }
+      ]
+    },
+    "permissions": {
+      "title": "Admin Permissions",
+      "description": "Role-based access control on the MetaMorpho vault. Sensitive changes are subject to a timelock delay, during which the guardian can veto.",
+      "subsections": [
+        {
+          "title": "Owner",
+          "badge": "7 Day Delay",
+          "badgeVariant": "timelocked",
+          "subtitle": "{{owner}} · TVS {{ownerTvs}}",
+          "content": [
+            {
+              "type": "text",
+              "content": "Controls core governance parameters including curator and guardian selection, fee configuration, and timelock duration. Most owner actions are subject to a 7-day timelock."
+            },
+            {
+              "type": "dropdown",
+              "label": "Functions",
+              "content": [
+                {
+                  "type": "table",
+                  "headers": ["Function", "Restriction"],
+                  "rows": [
+                    ["setCurator()", "7 Day Delay"],
+                    ["setGuardian()", "7 Day Delay"],
+                    ["submitTimelock()", "7 Day Delay"],
+                    ["setFee()", "7 Day Delay"],
+                    ["setFeeRecipient()", "No Delay"]
+                  ],
+                  "badgeColumns": [
+                    {
+                      "column": 1,
+                      "colorMap": {
+                        "7 Day Delay": "timelocked",
+                        "No Delay": "direct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Curator",
+          "badge": "7 Day Delay",
+          "badgeVariant": "timelocked",
+          "subtitle": "{{curator}} · TVS {{curatorTvs}}",
+          "content": [
+            {
+              "type": "text",
+              "content": "Manages market selection and supply caps for the vault. Can propose adding new markets or adjusting existing caps, subject to the timelock."
+            },
+            {
+              "type": "dropdown",
+              "label": "Functions",
+              "content": [
+                {
+                  "type": "table",
+                  "headers": ["Function", "Restriction"],
+                  "rows": [
+                    ["submitCap()", "7 Day Delay"],
+                    ["submitMarketRemoval()", "7 Day Delay"]
+                  ],
+                  "badgeColumns": [
+                    {
+                      "column": 1,
+                      "colorMap": {
+                        "7 Day Delay": "timelocked",
+                        "No Delay": "direct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Allocator",
+          "badge": "No Delay",
+          "badgeVariant": "direct",
+          "subtitle": "{{allocator}} · TVS {{allocatorTvs}}",
+          "content": [
+            {
+              "type": "text",
+              "content": "Reallocates funds between approved markets in real-time. Cannot add new markets or change supply caps — only redistribute within existing limits."
+            },
+            {
+              "type": "dropdown",
+              "label": "Functions",
+              "content": [
+                {
+                  "type": "table",
+                  "headers": ["Function", "Restriction"],
+                  "rows": [
+                    ["reallocate()", "No Delay"]
+                  ],
+                  "badgeColumns": [
+                    {
+                      "column": 1,
+                      "colorMap": {
+                        "7 Day Delay": "timelocked",
+                        "No Delay": "direct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Guardian",
+          "badge": "No Delay",
+          "badgeVariant": "direct",
+          "subtitle": "{{guardian}} · TVS {{guardianTvs}}",
+          "content": [
+            {
+              "type": "text",
+              "content": "Can veto any pending timelock action, providing a safety check against malicious or unwanted governance changes. Acts as an emergency brake."
+            },
+            {
+              "type": "dropdown",
+              "label": "Functions",
+              "content": [
+                {
+                  "type": "table",
+                  "headers": ["Function", "Restriction"],
+                  "rows": [
+                    ["revokePendingCap()", "No Delay"],
+                    ["revokePendingTimelock()", "No Delay"],
+                    ["revokePendingGuardian()", "No Delay"]
+                  ],
+                  "badgeColumns": [
+                    {
+                      "column": 1,
+                      "colorMap": {
+                        "7 Day Delay": "timelocked",
+                        "No Delay": "direct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dependencies": {
+      "title": "Dependencies",
+      "subsections": [
+        {
+          "title": "Oracle",
+          "content": [
+            {
+              "type": "text",
+              "content": "Each Morpho Blue market uses its own oracle instance for collateral price feeds. The vault does not directly depend on oracles, but the underlying markets do."
+            },
+            {
+              "type": "table",
+              "headers": ["Market", "Oracle Type", "Allocation"],
+              "rows": [
+                ["cbBTC/USDC", "Chainlink", "{{cbbtcAllocation}}"],
+                ["WBTC/USDC", "Chainlink", "{{wbtcAllocation}}"],
+                ["wstETH/USDC", "Chainlink + Exchange Rate", "{{wstethAllocation}}"],
+                ["WETH/USDC", "Chainlink", "{{wethAllocation}}"]
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Token Dependencies",
+          "content": [
+            {
+              "type": "text",
+              "content": "The vault depends on USDC as the loan asset and accepts wrapped assets as collateral. Each token introduces a dependency on the issuer or protocol responsible for it."
+            },
+            {
+              "type": "table",
+              "headers": ["Token", "Issuer", "Type", "Allocation"],
+              "rows": [
+                ["cbBTC", "Coinbase", "Centralized custodian", "{{cbbtcAllocation}}"],
+                ["WBTC", "BitGo", "Centralized custodian", "{{wbtcAllocation}}"],
+                ["wstETH", "Lido", "Liquid staking protocol", "{{wstethAllocation}}"],
+                ["WETH", "Canonical", "Wrapped ETH", "{{wethAllocation}}"],
+                ["USDC", "Circle", "Centralized stablecoin", "{{totalAllocation}}"]
+              ],
+              "badgeColumns": [
+                {
+                  "column": 2,
+                  "colorMap": {
+                    "Centralized custodian": "centralized",
+                    "Centralized stablecoin": "centralized",
+                    "Liquid staking protocol": "staking",
+                    "Wrapped ETH": "canonical"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Morpho Protocol",
+          "content": [
+            {
+              "type": "text",
+              "content": "The vault depends on the Morpho Blue singleton contract for all lending operations. Morpho Blue is immutable and permissionless."
+            }
+          ]
+        }
+      ]
+    },
+    "codeAndAudits": {
+      "title": "Contracts & Audits",
+      "subsections": [
+        {
+          "title": "Vault Contract",
+          "content": [
+            {
+              "type": "text",
+              "content": "Vault address: {{vaultAddress}}. The MetaMorpho vault contract is immutable (non-upgradeable). Governance parameters (curator, allocator, guardian, timelock) are configurable via the owner role, subject to timelock."
+            }
+          ]
+        },
+        {
+          "title": "Contracts",
+          "content": [
+            {
+              "type": "expandableTable",
+              "headers": ["Name", "Address", "Tags"],
+              "rows": [
+                {
+                  "cells": ["MetaMorpho Vault", "0xBEEF0173...", "Immutable"],
+                  "expandedContent": {
+                    "functions": [
+                      {
+                        "name": "setCurator()",
+                        "callers": ["Owner"]
+                      },
+                      {
+                        "name": "setGuardian()",
+                        "callers": ["Owner"]
+                      },
+                      {
+                        "name": "submitCap()",
+                        "callers": ["Curator", "Owner"]
+                      },
+                      {
+                        "name": "reallocate()",
+                        "callers": ["Allocator", "Owner"]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "cells": ["Morpho Blue", "0xBBBBBBbb...", "Immutable"]
+                }
+              ],
+              "badgeColumns": [
+                {
+                  "column": 2,
+                  "colorMap": {
+                    "Immutable": "immutable",
+                    "Upgradeable": "upgradeable"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Audits",
+          "content": [
+            {
+              "type": "table",
+              "headers": ["Auditor", "Scope", "Date"],
+              "rows": [
+                ["Spearbit", "MetaMorpho", "Q1-2024"],
+                ["Cantina", "Morpho Blue", "Q4-2023"]
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Source Code",
+          "content": [
+            {
+              "type": "link",
+              "text": "MetaMorpho GitHub",
+              "href": "https://github.com/morpho-org/metamorpho",
+              "external": true
+            },
+            {
+              "type": "link",
+              "text": "Morpho Blue GitHub",
+              "href": "https://github.com/morpho-org/morpho-blue",
+              "external": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
