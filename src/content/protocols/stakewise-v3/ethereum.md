@@ -2,16 +2,53 @@
 chain: "ethereum"
 stage: 0
 reasons: []
-risks: ["L", "H", "H", "H", "M"]
+risks: ["L", "H", "M", "H", "M"]
 author: ["eliasbourgon"]
 submission_date: "1970-01-01"
 publish_date: "1970-01-01"
 update_date: "1970-01-01"
+stage_requirements:
+  [
+    [
+      {
+        text: "Assets are not in custody by a centralized entity",
+        status: "fixed",
+      },
+      { text: "Critical contracts are verified", status: "fixed" },
+      { text: "Source-available codebase", status: "fixed" },
+      { text: "Public documentation exists", status: "fixed" },
+    ],
+    [
+      {
+        text: "Upgrades with potential of “loss of funds” not protected with Exit Window >= 7 days OR a sufficient Security Council",
+        status: "unfixed",
+      },
+      {
+        text: "Dependency with a High centralization score without mitigation",
+        status: "unfixed",
+      },
+      {
+        text: "Frontend backups or self-hosting option exists",
+        status: "fixed",
+      },
+    ],
+    [
+      {
+        text: "Upgrades with potential of “loss of funds or unclaimed yield” are protected with onchain governance AND Exit Window >= 30 days",
+        status: "unfixed",
+      },
+      {
+        text: "Dependencies with High or Medium centralization and are mitigated",
+        status: "unfixed",
+      },
+      { text: "Alternative third-party frontends exist", status: "fixed" },
+    ],
+  ]
 ---
 
 # Summary
 
-StakeWise v3 is a liquid-staking protocol that lets users stake ETH and earn rewards while keeping their assets liquid. It tokenizes staking positions into transferable ERC-20–compatible tokens and introduces a modular “vault” architecture that allows anyone , from individuals to DAOs, to create custom staking strategies under unified security and accounting rules.
+StakeWise v3 is a liquid-staking protocol that lets users stake ETH and earn rewards while keeping their assets liquid. It tokenizes staking positions into transferable ERC-20–compatible tokens and introduces a modular “vault” architecture that allows to create custom staking strategies.
 
 # Ratings
 
@@ -19,31 +56,23 @@ StakeWise v3 is a liquid-staking protocol that lets users stake ETH and earn rew
 
 Stakewise V3 is deployed on Ethereum and Gnosis. This review is based on the Ethereum mainnet deployment.
 
-> Chain score: Low
+> Chain score: *Low*
 
 ## Upgradeability
 
-StakeWise v3 relies on a range of upgradeable components, both at the bytecode level and through owner-controlled configuration parameters. Several contracts, such as the vault implementations, the OsToken suite, the Keeper, and the various factories, are deployed behind upgradeable proxy patterns or expose administrative entry points allowing their logic to be replaced. The entities with upgrade permissions (primarily the StakeWise DAO multisig, the Stakewise Multisig #1, and #2) therefore retain the ability to modify how core mechanisms behave, including the handling of deposits, redemptions, reward accounting, validator assignments and the overall minting and burning logic for OsToken.
+StakeWise v3 relies on a range of upgradeable components, both at the bytecode level and through owner-controlled configuration parameters. Several core contracts—including the vault implementations, the OsToken suite, the Keeper, and the various factories—are deployed behind upgradeable proxy patterns or expose administrative entry points that allow their logic to be replaced. The upgrade keys are held by a small set of actors: the [StakeWise DAO multisig](#security-council) controls the `OsToken`, `VaultController`, `VaultsRegistry`, and `Keeper`; [Stakewise Multisig #1](#security-council) controls the `Redeemer`, `MerkleDistributor`, and `MetaVaultFactory`; and [Stakewise Multisig #2](#security-council) manages the `EthFoxVault` logic. These roles can enact upgrades or parameter changes without enforced delays at the protocol layer, allowing them to modify core mechanisms such as deposit handling, redemptions, and validator assignments at any moment.
 
-In addition to full logic upgrades, a large number of parameter changes can be performed without modifying bytecode. These parameters include fee destinations, blocklist administration, validator roots, keeper thresholds, reward delays, liquidation settings, vault capacities, the controller of OsToken, and the set of redeemable positions in the redeemer. Because these parameters influence how assets flow through the system, how user positions evolve over time and how rewards are computed or distributed, changes made through these permissions can materially alter the behaviour users experience, even if the underlying logic contracts remain the same.
+These permissions mean that upgrades can directly influence both the handling of user funds and the treatment of unclaimed staking rewards. A hostile or incorrect upgrade to the vault or controller logic could lead to the direct loss of user funds by obstructing withdrawals, modifying redemption terms, or even triggering the `burn` function (`OsToken` contract) to destroy user balances. Furthermore, administrative control over fee settings, treasury recipients, and reward distribution parameters allows for the loss of unclaimed yield by redirecting staking rewards and fee flows before they are claimed by users. Because these parameters influence how assets flow through the system and how user positions evolve, changes made through these permissions can materially alter protocol behavior, even if the underlying logic contracts remain unchanged.
 
-The upgrade keys are held by a small set of actors, mainly the StakeWise DAO multisig (controlling OsToken, VaultController, VaultsRegistry, and Keeper), and Stakewise Multisig #1 (controlling the Redeemer, MerkleDistributor, and MetaVaultFactory). Additionally, a dedicated 2-of-4 Blocklist Manager handles daily censorship permissions, though its authority is granted by Stakewise Multisig #2. These roles are able to enact upgrades or parameter changes without enforced delays at the protocol layer. As a result, the entities controlling these keys can, at any moment, replace logic contracts or adjust parameters affecting how vault shares are minted or burned, how assets are redeemed, how validators are assigned, how blocklists are managed and how rewards are distributed.
-
-These permissions mean that upgrades can directly influence both the handling of user funds and the treatment of unclaimed staking rewards. Logic upgrades to vaults or controllers can modify withdrawal or redemption behaviour. Changes to validator roots or key managers can reassign the staking infrastructure associated with user deposits. Adjustments to liquidation or redemption configuration can affect how OsToken positions settle. Administrative control over fee settings, treasury recipients and reward distribution parameters can alter how yield flows through the system. In multiple cases, an incorrect or hostile upgrade would allow the responsible administrator to redirect assets, obstruct withdrawals or modify redemption terms in ways that affect users’ positions.
-
-> Upgradeability score: High
+> *Upgradeability* score: *High*
 
 ## Autonomy
 
-StakeWise v3 operates through several external and internal dependencies that influence its behaviour and determine how user funds and rewards are handled. These dependencies include the validator infrastructure managed by privileged entities, the oracle system feeding validator and reward data into the Keeper, and the multi-sig actors controlling key components such as vault implementations, OsToken parameters, the Redeemer, the MerkleDistributor and registry contracts. Because these dependencies provide inputs that the protocol relies on to recognise staking rewards, assign validators, process redemptions and compute vault accounting, their actions directly shape the system’s ongoing operation.
+StakeWise v3 relies on independent Node Operators and an Oracle network to maintain its ongoing operations. User funds are held within isolated *vaults* where withdrawal addresses are fixed to the protocol's smart contracts, preventing operators from directly controlling or siphoning principal. Nonetheless, the protocol's *Autonomy* is significantly dependent on the performance and honesty of the entities managing the underlying infrastructure. Node Operators can cause a loss of principal through slashing or inactivity penalties; however, StakeWise v3 minimizes this risk by localizing these penalties to individual *vaults* rather than the entire protocol. Furthermore, the *osETH* liquid staking token is protected by an overcollateralization buffer, requiring at least 1.1 ETH in a *vault* for every 1 *osETH* minted, which acts as a line of defense against slashing events.
 
-The Keeper contract obtains validator and reward data from a set of approved oracle addresses. The StakeWise DAO multisig determines which oracles participate and how many signatures are required. Any incorrect reporting or coordinated failure of these oracles would affect the accounting of rewards and the system’s view of validator status. Similarly, validator management depends on the keysManager role, the validator root, deposit data registries and the infrastructure operators securing the underlying validators. These actors determine where user stake is deposited and how exited assets are handled. If these dependencies do not behave as expected, user funds or their associated rewards can be misdirected or become inaccessible.
+The second critical layer of autonomy resides in a set of [11 oracles](#dependencies) responsible for synchronizing data between the Ethereum Beacon Layer and the Execution Layer. These oracles report validator rewards and statuses to the *Keeper* contract, which is necessary for users to claim their yield. If this oracle network were to fail or collude, they could submit fraudulent Merkle roots to redirect accumulated staking rewards to unauthorized addresses before they are claimed by users. To mitigate the risk of operators holding funds hostage through unresponsiveness, the protocol relies on the oracle network and the [StakeWise DAO](#security-council) to manage encrypted exit signatures, ensuring that validators can be forcefully exited and funds returned even if an operator disappears.
 
-The protocol further depends on the behaviour of the multisigs controlling OsToken, VaultController, VaultsRegistry, the Redeemer and the MerkleDistributor. These entities may update parameters or logic that influence the solvency and redemption mechanics of OsToken, the whitelisting of vault factories and implementations, the composition of redeemable asset baskets and the distribution timing of staking rewards. Their actions therefore form part of the protocol’s operational dependencies and can materially influence how users interact with the system and how their positions evolve.
-
-These dependencies hold meaningful influence over both principal and yield. Changes or failures in validator operators, oracle sets or the multisigs controlling critical configuration can affect how the system accounts for staking activity, how vaults process redemptions and how OsToken positions settle. Because these dependencies have direct pathways to alter or interfere with the treatment of user funds, StakeWise v3 relies on actors whose behaviour can materially affect both custody and performance.
-
-> Autonomy score: High
+> *Autonomy* score: *Medium*
 
 ## Exit Window
 
@@ -55,45 +84,43 @@ As a result, there is no built-in waiting period that would provide users with a
 
 ## Accessibility
 
-StakeWise v3 can be accessed primarily through the official StakeWise user interface, which enables deposits, vault interactions, OsToken minting and redemption workflows. In addition to this interface, the protocol exposes all core functionality directly through on-chain contracts, allowing users or integrators to interact without relying on a single frontend.
+StakeWise v3 can be accessed primarily through the official StakeWise user interface, which enables deposits, vault interactions, OsToken minting and redemption workflows.
 
-Crucially, the protocol provides an open-source SDK and a public vault-interface repository, which serves as a backup solution that allows users to locally host or deploy their own interface if the official website becomes unavailable. While the official interface remains the dominant access point, these tools—combined with the ability to submit transactions via block explorers guarantee that access to user positions is not dependent solely on the availability of the main domain.
+The protocol provides an [open-source SDK](https://docs.stakewise.io/sdk/) and a public [vault-interface](https://github.com/stakewise/vault-interface) repository, which serves as a backup solution that allows users to locally host or deploy their own interface if the official website becomes unavailable. While the official interface remains the dominant access point, these tools, combined with the ability to submit transactions via block explorers guarantee that access to user positions is not dependent solely on the availability of the main domain.
 
-> Accessibility score: Medium
+> *Accessibility* score: *Medium*
 
 ## Conclusion
 
-StakeWise v3 receives High scores in the Upgradeability, Autonomy, and Exit Window dimensions. This classifies the protocol as Stage 0.
+StakeWise v3 receives *High* scores in the *Upgradeability* and *Exit Window*, and *Medium* scores in *Autonomy* and *Accessibility* . This classifies the protocol as Stage 0.
 
-The protocol could transition to Stage 1 by introducing a governance structure that enforces a mandatory exit window of at least seven days for all upgrades or parameter changes that affect user positions. To achieve this, the "instant upgrade" powers currently held by the Multisigs would need to be revoked or transferred to a time-locked contract, potentially reserving immediate intervention capabilities strictly for a dedicated Security Council handling provable emergencies.
-
-Progress toward Stage 2 would require minimizing reliance on privileged multisigs and external operators to the point where dependencies no longer hold direct influence over user funds. This would involve migrating key components to fully on-chain governance with 30-day delay periods, decentralizing the oracle and validator key management infrastructure, and removing any administrative pathways that allow operators to unilaterally alter system-critical logic.
+The protocol could transition to Stage 1 by enforcing a mandatory *Exit Window* of at least seven days for all upgrades or parameter changes that affect user positions. Alternatively, the protocol can reach Stage 1 if the [StakeWise DAO](#security-council) and other [multisigs](#security-council) are restructured to meet the *Security Council* requirements (typically requiring at least 8 signers with a 50% non-insider threshold). To achieve this, the "instant upgrade" powers currently held by the [multisigs](#security-council) would either need to be revoked in favor of a time-lock or transferred to a compliant *Security Council*.
 
 # Reviewer's Notes
 
-⚠️ During our analysis, we identified ...
+Some contracts (e.g., `EthFoxVault`, `RewardEthToken`) use ERC1967 or UUPS proxies. Upgrades are authorized by admin or `\_authorizeUpgrade`.
 
-Some contracts (e.g., EthFoxVault, RewardEthToken) use ERC1967 or UUPS proxies. Upgrades are authorized by admin or \_authorizeUpgrade.
-
-The OsTokenFlashLoans contract was excluded from the core analysis because it operates as an auxiliary component and does not influence user custody or the protocol’s upgrade paths in a way that fits within the decentralization evaluation criteria.
-
-Because Stakewise is issuing tokens that may be used across external DeFi applications, user funds may become indirectly exposed to the risks of those external protocols. Partial withdrawals typically complete faster (≈27–28 hours), while full exits can take up to one month to finalize.
+The `OsTokenFlashLoans` contract was excluded from the core analysis because it operates as an auxiliary component and does not influence user custody or the protocol’s upgrade paths in a way that fits within the decentralization evaluation criteria.
 
 # Protocol Analysis
 
-Here include the diagram. Please explain what the main contracts are doing within the diagram. graph TD User((User)) DAO[StakeWise DAO / Multisigs]
+![](../diagrams/Stakewise.png)
 
-# Dependencies
+In StakeWise v3, the `EthFoxVault` serves as the primary entry point where users deposit ETH to receive a staking position as `osETH` This vault is an upgradeable implementation managed by [StakeWise Multisig #2](#security-council) , and it coordinates with the `VaultsRegistry`, to ensure it is a legitimate component of the ecosystem. Once ETH is inside the vault, the `DepositDataRegistry` maintains the critical on-chain mapping between the vault and the specific validator keys on the Ethereum Beacon Chain, while Node Operators manage the physical hardware and signing keys for these validators.
 
-StakeWise v3 relies on several operational dependencies that supply data or infrastructure essential to the functioning of the protocol.
+The Keeper contract acts as the protocol's central on-chain oracle, aggregating data from an Oracle Network to update validator performance and verify reward accruals. These verified rewards are then pushed to the `MerkleDistributor`, which allows users to claim their `osETH` through cryptographic proofs. [StakeWise Multisig #1](#security-council) maintains oversight of this distribution pipeline and the `OsTokenRedeemer`, which is the final "exit gate" used when a user wants to exchange their liquid tokens back for underlying ETH-backed positions.
 
-Oracle Mechanism: The most significant dependency is the oracle network responsible for feeding consensus layer data (validator status and reward accruals) to the Keeper contract. This oracle set consists of multiple nodes selected and managed by the StakeWise DAO, with the Keeper contract configured to require a specific threshold of signatures before accepting updates. The accuracy and timeliness of rewards, as well as the recognition of exited validators, depend entirely on the honest and coordinated operation of these off-chain nodes.
+For those seeking liquidity without exiting their stake, the `OsTokenVaultController` allows users to mint or burn `osETH` (represented by the OsToken contract) by locking or unlocking their vault shares. This "liquidity layer" is governed by the [StakeWise DAO](#security-council), which controls the controller's parameters such as minting capacities and protocol fees. Ultimately, the entire system relies on the [StakeWise DAO](#security-council)'s 4-of-7 multisig to manage the sensitive components, including the `Keeper`'s logic and the global configuration of the `osETH` monetary policy.
 
-Validator Infrastructure: The protocol delegates staking duties to distributed Ethereum validators. These are registered in the DepositDataRegistry and managed via the keysManager and validator root parameters. Since these validators are operated by external entities, the protocol depends on them for liveness, correct key management, and slashing prevention. Because vault accounting and OsToken redemption logic rely on the state of these validators, the protocol's performance is intrinsically linked to the reliability of these infrastructure operators.
+# Dependencies {#dependencies}
 
-Governance-Controlled Parameters: The protocol actively depends on the specific multisigs controlling the Redeemer and MerkleDistributor. The Redeemer defines the "baskets" of assets available for OsToken redemption, while the MerkleDistributor relies on an authorized distributor to perform complex off-chain calculations of staking rewards and submit the resulting Merkle roots on-chain. The protocol assumes these inputs are calculated correctly; if these privileged actors submit incorrect configurations or roots, user claimable balances and redemption values will be incorrect.
+StakeWise v3 relies on two primary external dependencies that provide critical data and infrastructure. These are independent entities whose performance directly impacts the safety and accounting of user assets. This section focuses on the 11 Oracles as the primary independent dependency, as validator operators vary across different vaults.
 
-External Integrations: Finally, because StakeWise v3 issues transferable derivative tokens (osETH) that may be integrated by external DeFi protocols, the security of those downstream systems becomes an indirect dependency for users who utilize them. While not part of the core protocol evaluation, users should be aware that interacting with external pools or lending markets introduces risks distinct from the StakeWise smart contracts.
+The protocol relies on a network of 11 Oracles to bridge the gap between the Ethereum Execution Layer and the Beacon Chain. These oracles are the primary independent dependency of the protocol, responsible for monitoring validator performance, calculating rewards, and providing the cryptographic signatures required for core operations. The oracle set consists of infrastructure selected and approved by the [StakeWise DAO](#security-council), including [Chorus One](https://chorus.one), [Stake.fish](https://stake.fish), [Telekom](https://www.telekom-mms.com), [Finoa Consensus Services](https://www.finoa.io), [Bitfly](https://gobitfly.com), [SenseiNode](https://www.senseinode.com), [Gateway.fm](https://gateway.fm), [Gnosis Chain team](https://www.gnosis.io), [P2P](https://docs.stakewise.io/docs/oracles/intro), [DSRV](https://docs.stakewise.io/docs/oracles/intro), and the [StakeWise Lab team](https://x.com/stakewise_io).
+
+These participants perform the following duties: **Validator Registration**: For any vault to spin up new validators, the operator must receive 8-of-11 approvals from the oracles, who verify that the registration request is valid and includes the correct exit signatures. **Reward Distribution**: Oracles reach consensus on the Merkle roots of accrued rewards and validator balances. A threshold of 6-of-11 signatures is required for the `Keeper` to update the global state and allow users to claim yield. **Automated Exits**: Oracles manage the encrypted exit signatures required to trigger validator exits, ensuring that the protocol can recover ETH from the Beacon Chain even if a vault operator becomes unresponsive.
+
+The dependency risk lies within the 11 oracle nodes. If this network fails to reach the required consensus thresholds due to provider downtime or collusion, the protocol’s *Autonomy* is compromised: the `Keeper` will be unable to update rewards, and no new validators can be registered, halting the growth and reward flow of the vaults.
 
 # Governance
 
@@ -101,19 +128,19 @@ External Integrations: Finally, because StakeWise v3 issues transferable derivat
 
 Governance in StakeWise v3 is concentrated in a small set of multisigs that control upgrades, parameter changes and validator configuration across the system.
 
-The StakeWise DAO multisig (4-of-7) governs the core contracts, including the Keeper, VaultsRegistry, the OsToken suite, the liquidation escrow and the reward-token logic. Through these roles it can modify oracle thresholds, update validator and reward reporting rules, adjust minting and redemption mechanics, change fee and treasury settings, whitelist or remove vault implementations and factories, and upgrade logic without delay.
+The [StakeWise DAO multisig](#security-council) governs the core contracts, including the `Keeper`, `VaultsRegistry`, the `OsToken` suite, the liquidation escrow and the reward-token logic. Through these roles it can modify oracle thresholds, update validator and reward reporting rules, adjust minting and redemption mechanics, change fee and treasury settings, whitelist or remove vault implementations and factories, and upgrade logic without delay.
 
-Stakewise Multisig #1 governs the reward-distribution and redemption pipeline: it controls the MerkleDistributor, the OsTokenRedeemer and the MetaVaultFactory, allowing it to decide how rewards are distributed, which baskets back OsToken redemptions and how new meta-vaults are deployed.
+[Stakewise Multisig #1](#security-council) governs the reward-distribution and redemption pipeline: it controls the `MerkleDistributor`, the `OsTokenRedeemer` and the `MetaVaultFactory`, allowing it to decide how rewards are distributed, which baskets back OsToken redemptions and how new meta-vaults are deployed.
 
-Stakewise Multisig #2 manages the main vault-specific controls for EthFoxVault, including metadata, fee routing, blocklist administration, validator-root delegation and logic upgrades. Validator-root updates for affected vaults are executed by the separate keysManager multisig (2-of-4), while certain Keeper and registry operations can only be triggered by registered vaults that meet the protocol’s internal requirements.
+[Stakewise Multisig #2](security-council) manages the main vault-specific controls for `EthFoxVault`, including metadata, fee routing, blocklist administration, validator-root delegation and logic upgrades. Validator-root updates for affected vaults are executed by the separate keysManager multisig (2-of-4), while certain Keeper and registry operations can only be triggered by registered vaults that meet the protocol’s internal requirements.
 
-Because no component in StakeWise v3 enforces timelocks or mandatory waiting periods, governance decisions take effect immediately once executed by the controlling multisig. This gives the DAO and the two Stakewise multisigs direct and continuous influence over how deposits are assigned to validators, how rewards are recognized and distributed, how vaults behave internally, how redemption baskets are structured and how the OsToken monetary policy is applied. As a result, the protocol’s operation—across validator configuration, vault logic, fees, redemptions and upgrades—remains closely tied to the actions and security of these governance actors.
+Because no component in StakeWise v3 enforces timelocks or mandatory waiting periods, governance decisions take effect immediately once executed by the controlling multisig. This gives the DAO and the two Stakewise multisigs direct and continuous influence over how deposits are assigned to validators, how rewards are recognized and distributed, how vaults behave internally, how redemption baskets are structured and how the `OsToken` monetary policy is applied. As a result, the protocol’s operation, across validator configuration, vault logic, fees, redemptions and upgrades, remains closely tied to the actions and security of these governance actors.
 
-## Security Council
+## Security Council {#security-council}
 
 | Name | Account | Type | ≥ 7 signers | ≥ 51% threshold | ≥ 50% non-insider | Signers public |
-|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-| StakeWise DAO | [0x144a98cb1CdBb23610501fE6108858D9B7D24934](https://etherscan.io/address/0x144a98cb1CdBb23610501fE6108858D9B7D24934) | Multisig 4 / 7 | ✅ | ✅ | ❌ | ✅ |
+|----|----|----|----|----|----|----|
+| [StakeWise DAO](https://docs.stakewise.io/docs/governance/dao-treasury) | [0x144a98cb1CdBb23610501fE6108858D9B7D24934](https://etherscan.io/address/0x144a98cb1CdBb23610501fE6108858D9B7D24934) | Multisig 4 / 7 | ✅ | ✅ | ❌ | ✅ |
 | keysManager | [0x9e83c6Bf5540f4296D8532e79636993e9eAeD338](https://etherscan.io/address/0x9e83c6Bf5540f4296D8532e79636993e9eAeD338) | Multisig 2 / 4 | ❌ | ❌ | ❌ | ❌ |
 | Stakewise Multisig #1 (undeclared) | [0x2685C0e39EEAAd383fB71ec3F493991d532A87ae](https://etherscan.io/address/0x2685C0e39EEAAd383fB71ec3F493991d532A87ae) | Multisig 2 / 2 | ❌ | ✅ | ❌ | ❌ |
 | Stakewise Multisig #2 (undeclared) | [0xFD8100AA60F851e0EB585C7c893B8Ef6A7F88788](https://etherscan.io/address/0xFD8100AA60F851e0EB585C7c893B8Ef6A7F88788) | Multisig 3 / 5 | ❌ | ✅ | ❌ | ❌ |
@@ -123,7 +150,7 @@ Because no component in StakeWise v3 enforces timelocks or mandatory waiting per
 ## Contracts
 
 | Contract Name | Address |
-|------------------------------------|------------------------------------|
+|----|----|
 | BalancedCurator | [0xD30E7e4bDbd396cfBe72Ad2f4856769C54eA6b0b](https://etherscan.io/address/0xD30E7e4bDbd396cfBe72Ad2f4856769C54eA6b0b) |
 | BlocklistErc20VaultFactory (EthVaultFactory) | [0x39c6eef5f955bcC280966504bc5c82F2394Fa368](https://etherscan.io/address/0x39c6eef5f955bcC280966504bc5c82F2394Fa368) |
 | BlocklistVaultFactory | [0x608d8Ca6916b96edf63Dd429e62Fe1366ae6f3B5](https://etherscan.io/address/0x608d8Ca6916b96edf63Dd429e62Fe1366ae6f3B5) |
@@ -159,7 +186,7 @@ Because no component in StakeWise v3 enforces timelocks or mandatory waiting per
 ## All Permission Owners
 
 | Name | Account | Type |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | StakeWise DAO | [0x144a98cb1CdBb23610501fE6108858D9B7D24934](https://etherscan.io/address/0x144a98cb1CdBb23610501fE6108858D9B7D24934) | Multisig 4 / 7 |
 | blocklistManager / keysManager | [0x9e83c6Bf5540f4296D8532e79636993e9eAeD338](https://etherscan.io/address/0x9e83c6Bf5540f4296D8532e79636993e9eAeD338) | Multisig 2 / 4 |
 | Stakewise Multisig #1 (undeclared) | [0x2685C0e39EEAAd383fB71ec3F493991d532A87ae](https://etherscan.io/address/0x2685C0e39EEAAd383fB71ec3F493991d532A87ae) | Multisig 2 / 2 |
@@ -172,7 +199,7 @@ Because no component in StakeWise v3 enforces timelocks or mandatory waiting per
 ## Permissions
 
 | Contract | Function | Impact | Owner |
-|------------------|------------------|------------------|------------------|
+|----|----|----|----|
 | CuratorsRegistry | transferOwnership | Sets a new pending owner for the registry contract. Malicious owner could whitelist curators that list scam vaults or remove legitimate ones. | StakeWise DAO |
 | CuratorsRegistry | renounceOwnership | Clears the owner so no further owner-only changes are possible. Permanently freezes curator configuration. Accidental renounce blocks the DAO from reacting to new risks or removing malicious curators. | StakeWise DAO |
 | CuratorsRegistry | addCurator | Marks an address as a curator (or updates curator status). Curators controls who can manage/approve certain vaults or strategies.Malicious curator could promote dangerous vaults or misconfigure parameters for users. | StakeWise DAO |

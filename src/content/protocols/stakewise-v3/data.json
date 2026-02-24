@@ -1,0 +1,11 @@
+{
+    "id": "stakewise-v3",
+    "protocol": "StakeWise V3",
+    "website": "https://app.stakewise.io",
+    "defillama_slug": ["stakewise"],
+    "socials": {
+      "x": "https://x.com/stakewise_io"
+    },
+    "github": ["https://github.com/stakewise/v3-core"]
+  }
+  
