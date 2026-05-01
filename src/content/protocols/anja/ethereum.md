@@ -1,12 +1,12 @@
 ---
 chain: "Ethereum"
-stage: 1
+stage: 2
 reasons: []
-risks: ["L", "L", "L", "L", "M"]
+risks: ["L", "L", "L", "L", "L"]
 author: ["brianmcmichael"]
 submission_date: "2024-11-19"
 publish_date: "2024-11-23"
-update_date: "1970-01-01"
+update_date: "2026-03-23"
 stage_requirements:
   [
     [
@@ -23,7 +23,7 @@ stage_requirements:
     ],
     [
       { text: "There are no external dependencies", status: "fixed" },
-      { text: "No alternative third-party frontends exist", status: "unfixed" },
+      { text: "Alternative third-party frontends exist", status: "fixed" },
       { text: "Contracts are immutable", status: "fixed" }
     ],
   ]
@@ -65,29 +65,27 @@ Ajna Protocol's contracts are fully immutable, no upgrades or changes can be mad
 
 ## Accessibility
 
-Two user interfaces exist and are operated by independent actors. However, these user interfaces are not _interoperable_ meaning that positions created on one cannot be managed or closed through the second frontend. This means that if one of the user interfaces is inaccessible or starts censoring users, users' positions and deposited funds are inaccessible or access is only possible at a large cost.
-
-The reason for this is that one of the interfaces, summer.fi, uses a smart account system in order to offer a better UX to end users. This smart account system effectively results in a smart contract, the smart account, "controlling" positions and users only being able to access their positions through this contract. However, this smart account system is not supported by the second user interface thus making it impossible, or possible only at a high cost, to access positions created through summer.fi on the second interface and vice-versa.
-
-> ℹ️The Ajna community has expressed plans to make available an emergency UI or instructions for emergency withdrawals. This situation will be monitored and the score reassessed if needed.
+Multiple user interfaces exist and are operated by independent actors, such as [ajnafi.com](https://ajnafi.com/) and [ajna.arb.capital](https://ajna.arb.capital/), ensuring access to the protocol and user funds even if one interface is shutdown or censors a user's transactions. Positions created on one interface are interoperable with the other, allowing users to manage or close positions through either frontend.
 
 A list of the third-party user interfaces to access the Ajna protocol can be found [here](https://www.ajna.finance/).
 
-> Accessibility score: Medium
+> Accessibility score: Low
 
 ## Conclusion
 
-The Ajna protocl on Ethereum Mainnet achieves _Medium_ centralization score for _Accessibility_ and _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, and _Exit Window_ dimensions. It thus ranks Stage 1.
+The Ajna protocol on Ethereum Mainnet achieves _Low_ centralization risk score for its _Upgradeability_, _Autonomy_, _Exit Window_ and _Accessibility_ dimensions. It thus ranks _Stage 2_.
 
-To progress to _Stage 2_ the Ajna protocol should make an additional emergency UI available for emergency withdrawals.
+> Overall score: Stage 2
 
-> Overall score: Stage 1
-
-# Reviewer Notes
+# Reviewer's Notes
 
 There were no particular discoveries made during the analysis of this protocol.
 
 # Protocol Analysis
+
+The Ajna protocol is deployed through two immutable factory contracts: the `ERC20PoolFactory` for fungible token pairs and the `ERC721PoolFactory` for NFT-collateralized pools. Anyone can permissionlessly deploy a new pool for any token pair through the appropriate factory. Each pool is a standalone, isolated contract that manages its own lending, borrowing, and liquidation logic without relying on shared state or external contracts.
+
+The `PositionManager` allows lenders to wrap their pool positions into ERC-721 NFTs, enabling composability with other protocols. `PoolInfoUtils` and `PoolInfoUtilsMulticall` are stateless read-only helper contracts for querying pool state. The `GrantFund` manages the distribution of the AJNA token treasury through a community-driven coordination mechanism.
 
 # Dependencies
 
@@ -105,7 +103,7 @@ The protocol is completely immutable, thus no Security Council is required 🎉
 
 ## Exit Window
 
-The protocol is completely immutable, thus no exit window is required. 🎉
+The protocol is completely immutable, thus no exit window is required 🎉
 
 # Contracts & Permissions
 
