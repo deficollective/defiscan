@@ -1,5 +1,5 @@
 {
-  "id": "lowercase name of the protocol appended by the version if multiple versions exist (use an '-' and no whitespace)",
+  "id": "lowercase name of the protocol appended by the version if multiple versions exist (use an '-' and no whitespace). This should be equal to the folder name",
   "protocol": "name of the protocol appended by the version if multiple versions exist (can use whitespace if needed)",
   "website": "https://...",
   "defillama_slug": ["the slug used by https://defillama.com"],
