@@ -1,0 +1,10 @@
+{
+  "id": "layerzero",
+  "protocol": "Layer Zero",
+  "website": "https://layerzero.network/",
+  "defillama_slug": [""],
+  "socials": {
+    "x": "https://x.com/LayerZero_Core"
+  },
+  "github": ["https://github.com/LayerZero-Labs"]
+}
