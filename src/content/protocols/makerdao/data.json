@@ -1,0 +1,10 @@
+{
+  "id": "makerdao",
+  "protocol": "MakerDAO",
+  "website": "https://makerdao.com",
+  "defillama_slug": ["maker"],
+  "socials": {
+    "x": "https://x.com/MakerDAO"
+  },
+  "github": ["https://github.com/makerdao"]
+}

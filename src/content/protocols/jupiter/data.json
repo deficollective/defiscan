@@ -1,0 +1,10 @@
+{
+  "id": "jupiter",
+  "protocol": "Jupiter",
+  "website": "https://jup.ag",
+  "defillama_slug": ["jupiter-exchange"],
+  "socials": {
+    "x": "https://x.com/jup_ag"
+  },
+  "github": ["https://github.com/jup-ag"]
+}

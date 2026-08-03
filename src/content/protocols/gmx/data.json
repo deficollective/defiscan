@@ -1,0 +1,10 @@
+{
+  "id": "gmx",
+  "protocol": "GMX",
+  "website": "https://gmx.io",
+  "defillama_slug": ["gmx"],
+  "socials": {
+    "x": "https://x.com/gmx_io"
+  },
+  "github": ["https://github.com/gmx-io"]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "balancer",
+  "protocol": "Balancer",
+  "website": "https://balancer.fi",
+  "defillama_slug": ["balancer"],
+  "socials": {
+    "x": "https://x.com/balancer"
+  },
+  "github": ["https://github.com/balancer"]
+}

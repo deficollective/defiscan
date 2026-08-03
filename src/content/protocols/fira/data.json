@@ -1,0 +1,10 @@
+{
+  "id": "fira",
+  "protocol": "Fira",
+  "website": "https://fira.fi",
+  "defillama_slug": ["fira"],
+  "socials": {
+    "x": "https://x.com/firadefi"
+  },
+  "github": ["https://github.com/fira-fi"]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "river",
+  "protocol": "River",
+  "website": "https://river.co",
+  "defillama_slug": ["river"],
+  "socials": {
+    "x": "https://x.com/riverprotocol"
+  },
+  "github": ["https://github.com/river-protocol"]
+}

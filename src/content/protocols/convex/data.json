@@ -1,0 +1,10 @@
+{
+  "id": "convex",
+  "protocol": "Convex Finance",
+  "website": "https://convexfinance.com",
+  "defillama_slug": ["convex-finance"],
+  "socials": {
+    "x": "https://x.com/ConvexFinance"
+  },
+  "github": ["https://github.com/convex-community"]
+}

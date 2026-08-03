@@ -1,10 +1,10 @@
 {
   "id": "morpho",
   "protocol": "Morpho",
-  "website": "https://morpho.org/",
-  "defillama_slug": ["morpho-blue"],
+  "website": "https://morpho.org",
+  "defillama_slug": ["morpho"],
   "socials": {
-    "x": "https://x.com/MorphoLabs"
+    "x": "https://x.com/MorphoOrg"
   },
-  "github": ["https://github.com/morpho-org"]
+  "github": ["https://github.com/morpho-xyz"]
 }

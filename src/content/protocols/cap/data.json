@@ -1,0 +1,10 @@
+{
+  "id": "cap",
+  "protocol": "Cap",
+  "website": "https://cap.fi",
+  "defillama_slug": ["cap"],
+  "socials": {
+    "x": "https://x.com/capdotfi"
+  },
+  "github": ["https://github.com/cap-xyz"]
+}
