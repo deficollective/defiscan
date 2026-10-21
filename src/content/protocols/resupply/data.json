@@ -1,0 +1,10 @@
+{
+  "id": "resupply",
+  "protocol": "Resupply",
+  "website": "https://resupply.fi/",
+  "defillama_slug": ["resupply"],
+  "socials": {
+    "x": "https://x.com/ResupplyFi"
+  },
+  "github": ["https://github.com/resupplyfi"]
+}
