@@ -12,6 +12,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/protocols/anja/:path*",
+        destination: "/protocols/ajna/:path*",
+        permanent: true,
+      },
+    ];
+  },
   webpack: (config) => {
     config.plugins.push(new VeliteWebpackPlugin());
     return config;
